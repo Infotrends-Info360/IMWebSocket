@@ -149,10 +149,20 @@ public class WebSocketPool {
 			setUsers.add(u);
 		}
 		*/
+		/*
 		Collection<String> setUsername = usernameconnections.values();
 		for (String u : setUsername) {
 			setUsers.add(u);
 		}
+		*/
+		
+//		Set<WebSocket> userconns = userallconnections.keySet();
+		Collection<Map<String,String>> userinfos = userallconnections.values();
+//		userinfo.put("username", username);
+		for (Map<String,String> userinfo : userinfos){
+			setUsers.add(userinfo.get("username"));
+		}
+		
 		return setUsers;
 	}
 

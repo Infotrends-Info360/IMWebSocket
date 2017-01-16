@@ -889,7 +889,7 @@ public class WebSocket extends WebSocketServer {
 		
 		Collection<String> onlineUserNames = WebSocketPool.getOnlineUserName();
 		for (String name: onlineUserNames ){
-			System.out.println("name: " + name + "\n");
+			System.out.println("Name: " + name);
 		}
 		
 	}
