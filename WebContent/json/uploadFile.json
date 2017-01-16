@@ -1,0 +1,8 @@
+{
+  "code": 0 //0表示成功，其它表示失败
+  ,"msg": "" //失败信息
+  ,"data": {
+    "src": "http://cdn.xxx.com/upload/file/LayIM.zip" //文件url
+    ,"name": "LayIM.zip" //文件名
+  }
+}

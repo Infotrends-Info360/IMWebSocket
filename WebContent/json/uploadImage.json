@@ -1,0 +1,7 @@
+{
+  "code": 0 //0表示成功，其它表示失败
+  ,"msg": "" //失败信息
+  ,"data": {
+    "src": "http://cdn.xxx.com/upload/images/a.jpg" //图片url
+  }
+}

@@ -1,0 +1,132 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+
+       Copyright 2009-2016 the original author or authors.
+
+       Licensed under the Apache License, Version 2.0 (the "License");
+       you may not use this file except in compliance with the License.
+       You may obtain a copy of the License at
+
+          http://www.apache.org/licenses/LICENSE-2.0
+
+       Unless required by applicable law or agreed to in writing, software
+       distributed under the License is distributed on an "AS IS" BASIS,
+       WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+       See the License for the specific language governing permissions and
+       limitations under the License.
+
+-->
+<!DOCTYPE mapper
+    PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+    "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="interaction">
+
+<resultMap type="com.Info360.bean.Interaction" id="interactionResult">
+  
+    <id     column="DBID" 					jdbcType="INTEGER" property="dbid"/>
+    <result column="CONTACTID" 				jdbcType="VARCHAR" property="contactid"/>
+    <result column="IXNID" 					jdbcType="VARCHAR" property="ixnid"/>
+    <result column="AGENTID"     			jdbcType="VARCHAR" property="agentid"/>
+    <result column="STARTDATE" 				jdbcType="VARCHAR" property="startdate"/>
+    <result column="ENDDATE"     			jdbcType="VARCHAR" property="enddate"/>
+ 	<result column="STATUS" 				jdbcType="INTEGER" property="status"/>
+    <result column="TYPEID" 				jdbcType="VARCHAR" property="typeid"/>
+    <result column="ENTITYTYPEID"     		jdbcType="VARCHAR" property="entitytypeid"/>
+    <result column="SUBTYPEID" 				jdbcType="VARCHAR" property="subtypeid"/>
+    <result column="SUBJECT"     			jdbcType="VARCHAR" property="subject"/> 
+    <result column="TEXT" 					jdbcType="VARCHAR" property="text"/>
+    <result column="STRUCTUREDTEXT" 		jdbcType="VARCHAR" property="structuredtext"/>
+    <result column="STRUCTUREDMIMETYPE"     jdbcType="VARCHAR" property="structuredmimetype"/>
+	<result column="THECOMMENT"     		jdbcType="VARCHAR" property="thecomment"/>
+	
+	<result column="PAGE" 					jdbcType="INTEGER" property="page"/>
+    
+</resultMap>	
+
+<!--   <resultMap type="com.Info360.bean.ContactData" id="contactdataResult"> -->
+<!--     <id     column="DBID" jdbcType="INTEGER" property="dbid"/> -->
+<!--     <result column="CONTACTID" jdbcType="VARCHAR" property="contactid"/> -->
+<!--     <result column="CREATEDATE" jdbcType="VARCHAR" property="createdate"/> -->
+<!--     <result column="MODIFIEDDATE"     jdbcType="VARCHAR" property="modifieddate"/> -->
+<!--   </resultMap> -->
+  
+<!--  	<select id="Query_Interaction" parameterType="com.Info360.bean.ContactData"  resultType="string"> -->
+<!--   		SELECT CONTACTID FROM TBLCONTACTDATA WHERE ${searchkey} = #{searchvalue} and ${pkey} = #{pvalue} -->
+<!--   	</select> -->
+
+<select id="Selcet_interaction" parameterType="com.Info360.bean.Interaction"  resultMap="interactionResult">
+<!-- Select CONTACTID,IXNID,AGENTID,STARTDATE,ENDDATE,STATUS,TYPEID,ENTITYTYPEID,SUBTYPEID  -->
+<!-- SUBJECT,TEXT,STRUCTUREDTEXT,STRUCTUREDMIMETYPE,THECOMMENT,STOPPEDREASON,ACTIVITYCODE  -->
+<!--  from tblInteraction  -->
+ 
+select top 10 DBID,CONTACTID,IXNID,AGENTID,STARTDATE,ENDDATE,STATUS,TYPEID,ENTITYTYPEID,SUBTYPEID,SUBJECT,TEXT,STRUCTUREDTEXT,STRUCTUREDMIMETYPE,THECOMMENT from 
+( select row_number() over(order by dbid asc) as rownumber,DBID,CONTACTID,IXNID,AGENTID,STARTDATE,ENDDATE,STATUS,TYPEID,ENTITYTYPEID,SUBTYPEID,SUBJECT,TEXT,STRUCTUREDTEXT,STRUCTUREDMIMETYPE,THECOMMENT from (select DBID,CONTACTID,IXNID,AGENTID,STARTDATE,ENDDATE,STATUS,TYPEID,ENTITYTYPEID,SUBTYPEID,SUBJECT,TEXT,STRUCTUREDTEXT,STRUCTUREDMIMETYPE,THECOMMENT FROM tblInteraction where 1=1
+
+
+<if test="agentid!=&quot;&quot;">
+ 	and 
+ 		AGENTID =#{agentid}
+</if>
+<if test="startdate!=&quot;&quot;">
+	and
+ 		<![CDATA[ Convert(DateTime,StartDate) >=Convert(DateTime,#{startdate})]]>
+</if>
+<if test="enddate!=&quot;&quot;">
+    and  
+   		<![CDATA[ Convert(DateTime,EndDate) <= Convert(DateTime,DATEADD(day,1,#{enddate}))  ]]>
+</if>
+) as comImg)
+as numComImg where rownumber>#{page}
+</select>
+
+<select id="SelcetAll_interaction" parameterType="com.Info360.bean.Interaction"  resultMap="interactionResult">
+Select DBID,CONTACTID,IXNID,AGENTID,STARTDATE,ENDDATE,STATUS,TYPEID,ENTITYTYPEID,SUBTYPEID
+SUBJECT,TEXT,STRUCTUREDTEXT,STRUCTUREDMIMETYPE,THECOMMENT
+from tblInteraction where 1=1
+
+<if test="agentid!=&quot;&quot;">
+ 	and 
+ 		AGENTID =#{agentid}
+</if>
+<if test="startdate!=&quot;&quot;">
+	and
+ 		<![CDATA[ Convert(DateTime,StartDate) >=Convert(DateTime,#{startdate})]]>
+</if>
+<if test="enddate!=&quot;&quot;">
+    and  
+   		<![CDATA[ Convert(DateTime,EndDate) <= Convert(DateTime,DATEADD(day,1,#{enddate}))  ]]>
+</if>
+</select>
+
+
+
+	<insert id="Insert_Interaction" parameterType="com.Info360.bean.Interaction">
+  	
+		insert into TBLINTERACTION 
+ 	<foreach item="value" index="key" collection="interactionlist"
+     open="(" separator="," close=")">
+        ${key}
+   	</foreach>
+      values 
+    <foreach item="value" index="key" collection="interactionlist"
+     open="(" separator="," close=")">
+        #{value}
+   	</foreach>
+   	 
+  	</insert>
+  	
+<!--   	<update id="Update_Interaction" parameterType="com.Info360.bean.ContactData"> -->
+    
+<!--     update  TBLCONTACTDATA  set modifieddate=#{modifieddate} -->
+    
+<!-- 	<foreach item="value" index="key" collection="userdata" -->
+<!--      open="," separator="," close=""> -->
+<!--         ${key}=#{value} -->
+<!--    	</foreach> -->
+    
+<!--     where contactid=#{contactid} and ${pkey}=#{pvalue} -->
+  
+<!--   </update> -->
+  
+</mapper>

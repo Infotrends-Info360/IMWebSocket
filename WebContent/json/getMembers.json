@@ -1,0 +1,33 @@
+{
+  "code": 0
+  ,"msg": ""
+  ,"data": {
+    "owner": {
+      "username": "Alex"
+      ,"id": "100001"
+      ,"avatar": "http://tp2.sinaimg.cn/5488749285/50/5719808192/1"
+      ,"sign": "這些都是測試資料，實際使用請嚴格按照該格式返回"
+    }
+    ,"list": [{
+      "username": "Holy"
+      ,"id": "100002"
+      ,"avatar": "http://tp2.sinaimg.cn/5488749285/50/5719808192/1"
+      ,"sign": "Architecture King"
+    },{
+      "username": "Lin"
+      ,"id": "100003"
+      ,"avatar": "http://tp2.sinaimg.cn/5488749285/50/5719808192/1"
+      ,"sign": "Technical Genius"
+    },{
+      "username": "Peter"
+      ,"id": "100004"
+      ,"avatar": "http://tp2.sinaimg.cn/5488749285/50/5719808192/1"
+      ,"sign": "System God"
+    },{
+      "username": "Sam"
+      ,"id": "100005"
+      ,"avatar": "http://tp2.sinaimg.cn/5488749285/50/5719808192/1"
+      ,"sign": "OD King"
+    }]
+  }
+}

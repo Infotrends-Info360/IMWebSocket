@@ -1,0 +1,20 @@
+{
+  "code": 0
+  ,"msg": ""
+  ,"data": {
+    "mine": {
+      "username": "My Account"
+      ,"id": "100000"
+      ,"status": "online"
+      ,"sign": "This is User testing Account."
+      ,"avatar": "http://tp2.sinaimg.cn/5488749285/50/5719808192/1"
+    }
+    ,"friend": [{
+      "groupname": "Agent"
+      ,"id": 1
+      ,"online": 2
+      ,"list": []
+    }]
+    ,"group": []
+  }
+}
