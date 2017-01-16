@@ -9,6 +9,7 @@ import java.net.InetSocketAddress;
 import java.net.URL;
 import java.net.UnknownHostException;
 import java.text.SimpleDateFormat;
+import java.util.Collection;
 import java.util.Date;
 import java.util.Set;
 
@@ -39,8 +40,9 @@ public class WebSocket extends WebSocketServer {
 	/** * trigger Exception Event */
 	@Override
 	public void onError(org.java_websocket.WebSocket conn, Exception message) {
-		System.out.println("Socket Exception:" + message.toString());
-		message.printStackTrace();
+// 先註解調,debug其他問題用
+//		System.out.println("Socket Exception:" + message.toString());
+//		message.printStackTrace();
 		e++;
 	}
 
@@ -148,11 +150,14 @@ public class WebSocket extends WebSocketServer {
 			break;
 		case "heartbeattoserver":
 			this.heartbeattoserver(message.toString(), conn);
-			break;	
+			break;
+		case "test":
+			this.test();
+			break;
 		}
 	}
-	
-	
+
+
 
 	/** * create a groupId * @param message */
 	public void creategroupId(String message, org.java_websocket.WebSocket conn) {
@@ -876,6 +881,20 @@ public class WebSocket extends WebSocketServer {
 			}
 		}
 	}
+	
+	
+	private void test() {
+		// TODO Auto-generated method stub
+		System.out.println("test method");
+		
+		Collection<String> onlineUserNames = WebSocketPool.getOnlineUserName();
+		for (String name: onlineUserNames ){
+			System.out.println("name: " + name + "\n");
+		}
+		
+	}
+	
+	
 }
 
 

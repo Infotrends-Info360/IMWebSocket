@@ -808,3 +808,50 @@ function addlayim() {
 		  layimswitch = true;
 		});
 }
+
+
+//測試按鈕
+function test() {
+	console.log("test method called");
+	//切換為未就緒
+//	notready();
+//	var UserID = document.getElementById('UserID').value;
+//	//向websocket送出變更狀態至party remove指令
+//	var now = new Date();
+	var testmsg = {
+		    type: "test"
+//		    ,
+//		    ACtype: "Agent",
+//		    id: UserID,
+//			UserName: UserName,
+//			status: "party remove",
+//			reason: "no reason",
+//		    date: now.getHours()+":"+now.getMinutes()+":"+now.getSeconds()
+		    //date: Date.now()
+		  };
+	
+	//發送消息 
+	ws.send(JSON.stringify(testmsg));
+//	
+//	//向websocket送出關閉對談指令
+//	var Eventform = document.getElementById('Eventform').value;
+//	var Eventmsg = {
+//		    type: "ReleaseEvent",
+//		    ACtype: "Agent",
+//		    id: UserID,
+//			UserName: UserName,
+//		    sendto: Eventform,
+//		    channel: "chat",
+////		    Event: "ReleaseEvent",
+//		    date: now.getHours()+":"+now.getMinutes()+":"+now.getSeconds()
+//		  };
+//	//發送消息 
+//	ws.send(JSON.stringify(Eventmsg));
+//	
+//	//離開群組
+//	leaveGroup(UserID);
+//	
+//	document.getElementById("ReleaseEvent").disabled = true;
+}
+
+

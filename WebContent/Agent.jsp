@@ -60,6 +60,7 @@
 	<br>
 	message : <input type="text" id="message">
 	<button type="submit" onclick="sendtoGroup();" id="sendtoGroup" disabled>send to Group</button>
+	<button type="submit" onclick="test();" id="TestHere">TestHere</button>
 	<span id="span"> </span>
 	<br>訊息: <br>
 	<span id="text"> </span>
