@@ -148,7 +148,7 @@ public class WebSocket extends WebSocketServer {
 			break;
 		case "heartbeattoserver":
 			this.heartbeattoserver(message.toString(), conn);
-			break;
+			break;	
 		}
 	}
 	

@@ -23,6 +23,13 @@ public class WebSocketPool {
 	private static final Map<WebSocket, String> usernameconnections = new HashMap<WebSocket, String>();
 	
 	/**
+	 * online User ID/NAME Map
+	 */
+	private static final Map<WebSocket, Map<String,String>> userallconnections = new HashMap<WebSocket, Map<String,String>>();	
+	
+	
+	
+	/**
 	 * online User Group Map
 	 */
 	private static final Map<WebSocket, String> usergroupconnections = new HashMap<WebSocket, String>();
@@ -85,6 +92,21 @@ public class WebSocketPool {
 	public static void addUser(String username,String userid, WebSocket conn) {
 		userconnections.put(conn, userid);
 		usernameconnections.put(conn, username);
+		
+		Map<String,String> userinfo = new HashMap<String,String>();
+		userinfo.put("userid", userid);
+		userinfo.put("username", username);
+		userallconnections.put(conn, userinfo); // 每一個client的connection配一個map
+////		Map<String,String> clientmap = userallconnections.get(conn); 
+//		if(clientmap != null && !clientmap.isEmpty()){
+////			clientmap.put(conn, userinfo);
+//			userallconnections.put(conn, userinfo);
+//		}else{
+////			clientmap = new HashMap<String,String>();
+////			Map<WebSocket, Map<String,String>> userconnections = new HashMap<WebSocket, Map<String,String>>();
+////			userconnections.put(conn, userinfo);
+//			userallconnections.put(conn, userconnections);
+//		}		
 	}
 	
 	/** * Add User to WebSocket Pool* @param inbound */
