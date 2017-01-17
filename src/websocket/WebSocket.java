@@ -861,8 +861,9 @@ public class WebSocket extends WebSocketServer {
 		Set<String> keySet = obj.keySet();
 		synchronized (keySet) {
 			for (String key : keySet) {
+				// 若有"heartbeat"的key,代表這個send是由Client發出的
 				if(key.equals("heartbeat")){
-					value = obj.getString("heartbeat");
+					value = obj.getString("heartbeat"); 
 					//WebSocketPool.addUserheartbeat(value, conn);
 					heartbeat = true;
 				}
@@ -918,48 +919,60 @@ public class WebSocket extends WebSocketServer {
 //			System.out.println("Name: " + WebSocketPool.getUserNameByKey(conn));			
 //		}		
 		/************* userconnections *************/
-		System.out.println("\n************ getUserNByKey *************");
-		Set<org.java_websocket.WebSocket> conns3 = WebSocketPool.userallconnections.keySet();
-		System.out.println("conns.size(): " + conns3.size());
-		for (org.java_websocket.WebSocket conn : conns3){
+//		System.out.println("\n************ getUserNByKey *************");
+//		Set<org.java_websocket.WebSocket> conns3 = WebSocketPool.userallconnections.keySet();
+//		System.out.println("conns.size(): " + conns3.size());
+//		for (org.java_websocket.WebSocket conn : conns3){
+//			System.out.println("Id: " + WebSocketPool.getUserByKey(conn));			
+//		}
+//		System.out.println("\n************ getUserCount *************");
+//		System.out.println("WebSocketPool.getUserCount(): " + WebSocketPool.getUserCount());
+//		
+//		
+//		System.out.println("\n************ getWebSocketByUser *************");
+//		Set<org.java_websocket.WebSocket> conns4 = WebSocketPool.userallconnections.keySet();
+//		System.out.println("conns.size(): " + conns4.size());
+//		for (org.java_websocket.WebSocket conn : conns4){
+////			System.out.println("Id: " + WebSocketPool.getUserByKey(conn));
+//			String userid = WebSocketPool.getUserByKey(conn);
+//			org.java_websocket.WebSocket tmpconn = WebSocketPool.getWebSocketByUser(userid);
+//			System.out.println("tmpconn: " + tmpconn);
+//			
+//		}		
+//		System.out.println("\n************ getOnlineUser *************");
+//		Collection<String> userids = WebSocketPool.getOnlineUser();
+//		System.out.println("userids.size(): " + userids.size());
+//		for (String userid: userids){
+//			System.out.println("userid: " + userid);
+//		}	
+//		
+//		System.out.println("\n************ sendMessage *************");
+//		WebSocketPool.sendMessage("Hello Everybody!");		
+//		
+//		System.out.println("\n************ removeUser *************");
+//		Set<org.java_websocket.WebSocket> conns5 = WebSocketPool.userallconnections.keySet();
+//		System.out.println("conns.size(): " + conns5.size());
+//		Iterator<org.java_websocket.WebSocket> itr = conns5.iterator();
+//		while(itr.hasNext()){
+//			org.java_websocket.WebSocket conn = itr.next();
+//			WebSocketPool.removeUser(conn); // 注意此removeUser方法非用iterator刪除,所以不能一次刪兩個或以上的內容物件
+////			itr.remove();
+//			if (WebSocketPool.userallconnections.get(conn) == null){
+//				System.out.println(conn + " has been deleted");
+//			}
+//		}		
+		
+		/*********** user整體測試 **************/
+		System.out.println("\n************ getXXX*************");
+		Set<org.java_websocket.WebSocket> conns6 = WebSocketPool.userallconnections.keySet();
+		System.out.println("conns.size(): " + conns6.size());
+		for (org.java_websocket.WebSocket conn : conns6){
 			System.out.println("Id: " + WebSocketPool.getUserByKey(conn));			
+			System.out.println("name: " + WebSocketPool.getUserNameByKey(conn));			
+			System.out.println("group: " + WebSocketPool.getUserGroupByKey(conn));			
+			System.out.println("Interaction: " + WebSocketPool.getUserInteractionByKey(conn));			
+			System.out.println("heartbeat: " + WebSocketPool.getUserheartbeatByKey(conn));			
 		}
-		System.out.println("\n************ getUserCount *************");
-		System.out.println("WebSocketPool.getUserCount(): " + WebSocketPool.getUserCount());
-		
-		
-		System.out.println("\n************ getWebSocketByUser *************");
-		Set<org.java_websocket.WebSocket> conns4 = WebSocketPool.userallconnections.keySet();
-		System.out.println("conns.size(): " + conns4.size());
-		for (org.java_websocket.WebSocket conn : conns4){
-//			System.out.println("Id: " + WebSocketPool.getUserByKey(conn));
-			String userid = WebSocketPool.getUserByKey(conn);
-			org.java_websocket.WebSocket tmpconn = WebSocketPool.getWebSocketByUser(userid);
-			System.out.println("tmpconn: " + tmpconn);
-			
-		}		
-		System.out.println("\n************ getOnlineUser *************");
-		Collection<String> userids = WebSocketPool.getOnlineUser();
-		System.out.println("userids.size(): " + userids.size());
-		for (String userid: userids){
-			System.out.println("userid: " + userid);
-		}	
-		
-		System.out.println("\n************ sendMessage *************");
-		WebSocketPool.sendMessage("Hello Everybody!");		
-		
-		System.out.println("\n************ removeUser *************");
-		Set<org.java_websocket.WebSocket> conns5 = WebSocketPool.userallconnections.keySet();
-		System.out.println("conns.size(): " + conns5.size());
-		Iterator<org.java_websocket.WebSocket> itr = conns5.iterator();
-		while(itr.hasNext()){
-			org.java_websocket.WebSocket conn = itr.next();
-			WebSocketPool.removeUser(conn); // 注意此removeUser方法非用iterator刪除,所以不能一次刪兩個或以上的內容物件
-//			itr.remove();
-			if (WebSocketPool.userallconnections.get(conn) == null){
-				System.out.println(conn + " has been deleted");
-			}
-		}		
 		
 	}
 	
