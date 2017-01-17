@@ -16,6 +16,7 @@ public class WebSocketPool {
 	private static final String USERID = "userid";
 	private static final String USERGROUP = "usergroup";
 	private static final String USERINTERACTION = "userinteraction";
+	private static final String USERHEARTBEAT = "userheartbeat";
 	
 	/**
 	 * online User ID Map
@@ -76,7 +77,7 @@ public class WebSocketPool {
 	/** * Get User By Key * @param session */
 	public static String getUserheartbeatByKey(WebSocket conn) {
 //		return userheartbeatconnections.get(conn);
-		return userallconnections.get(conn).get("userheartbeat");
+		return userallconnections.get(conn).get(USERHEARTBEAT);
 	}
 
 	/** * Get Online User Count * @param */
@@ -150,7 +151,7 @@ public class WebSocketPool {
 	/** * Add User to WebSocket Pool* @param inbound */
 	public static void addUserheartbeat(String userheartbeat, WebSocket conn) {
 //		userheartbeatconnections.put(conn, userheartbeat);
-		userallconnections.get(conn).put("userheartbeat", userheartbeat);
+		userallconnections.get(conn).put(USERHEARTBEAT, userheartbeat);
 	}
 	
 	/** * Get Online User Name * @return */
@@ -287,7 +288,7 @@ public class WebSocketPool {
 		
 		if (userallconnections.containsKey(conn)) {
 //			userheartbeatconnections.remove(conn);
-			userallconnections.get(conn).remove("userheartbeat");
+			userallconnections.get(conn).remove(USERHEARTBEAT);
 			return true;
 		} else {
 			return false;
