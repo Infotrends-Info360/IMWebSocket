@@ -14,9 +14,11 @@ import org.java_websocket.WebSocket;
 
 public class WebSocketPool {
 	private static final String USERID = "userid";
+	private static final String USERNAME = "username";
 	private static final String USERGROUP = "usergroup";
 	private static final String USERINTERACTION = "userinteraction";
 	private static final String USERHEARTBEAT = "userheartbeat";
+	
 	
 	/**
 	 * online User ID Map
@@ -59,7 +61,7 @@ public class WebSocketPool {
 	/** * Get User By Key * @param session */ /* Done */
 	public static String getUserNameByKey(WebSocket conn) {
 //		return usernameconnections.get(conn);
-		return userallconnections.get(conn).get("username");
+		return userallconnections.get(conn).get(USERNAME);
 	}
 	
 	/** * Get User By Key * @param session */ /* Done */
@@ -122,7 +124,7 @@ public class WebSocketPool {
 		
 		Map<String,String> userinfo = new HashMap<String,String>();
 		userinfo.put(USERID, userid);
-		userinfo.put("username", username);
+		userinfo.put(USERNAME, username);
 		userallconnections.put(conn, userinfo); // 每一個client的connection配一個map
 ////		Map<String,String> clientmap = userallconnections.get(conn); 
 //		if(clientmap != null && !clientmap.isEmpty()){
@@ -200,7 +202,7 @@ public class WebSocketPool {
 		Collection<Map<String,String>> userinfos = userallconnections.values();
 //		userinfo.put("username", username);
 		for (Map<String,String> userinfo : userinfos){
-			setUsers.add(userinfo.get("username"));
+			setUsers.add(userinfo.get(USERNAME));
 		}
 		
 		return setUsers;
@@ -209,11 +211,14 @@ public class WebSocketPool {
 	/** * Remove User WebSocket from WebSocket Pool * @param inbound */ /* Done */
 	public static boolean removeUser(WebSocket conn){
 		if (userallconnections.containsKey(conn)) {
-			userallconnections.remove(conn);
+			userallconnections.remove(conn); // 注意此處非用iterator刪除,所以不能一次刪兩個或以上的內容物件
 			return true;
 		} else {
 			return false;
 		}		
+		
+		
+		
 	}
 	
 	/** * Remove User ID from WebSocket Pool * @param inbound */
@@ -328,6 +333,8 @@ public class WebSocketPool {
 	}
 	
 	
+	//--------------------------------------------------------------------------
+	
 	/**
 	 * Group Members Map
 	 */
@@ -337,7 +344,7 @@ public class WebSocketPool {
 	public static void addUseringroup(String group,String username,String userid, WebSocket conn) {
 		Map<String,String> userinfo = new HashMap<String,String>();
 		userinfo.put(USERID, userid);
-		userinfo.put("username", username);
+		userinfo.put(USERNAME, username);
 		Map<WebSocket, Map<String,String>> groupmap = groupuserconnections.get(group);
 		if(groupmap != null && !groupmap.isEmpty()){
 			groupmap.put(conn, userinfo);
@@ -380,7 +387,7 @@ public class WebSocketPool {
 		List<String> setUsers = new ArrayList<String>();
 		Collection<Map<String,String>> setUser = groupmap.values();
 		for (Map<String,String> u : setUser) {
-			setUsers.add(u.get("username"));
+			setUsers.add(u.get(USERNAME));
 		}
 		return setUsers;
 	}
@@ -393,7 +400,7 @@ public class WebSocketPool {
 	/** * Get User Name By WebSocket Key from Group * @param session */
 	public static String getUserByKeyingroup(String group, WebSocket conn) {
 		Map<WebSocket, Map<String,String>> groupmap = groupuserconnections.get(group);
-		return groupmap.get(conn).get("username");
+		return groupmap.get(conn).get(USERNAME);
 	}
 
 	/** * Get Online Group Count * @param */
@@ -440,7 +447,7 @@ public class WebSocketPool {
 		Map<String, Object> TYPEdatamap = new HashMap<String, Object>();
 		if(TYPEmap != null && !TYPEmap.isEmpty()){
 			TYPEdatamap.put(USERID, userid);
-			TYPEdatamap.put("username", username);
+			TYPEdatamap.put(USERNAME, username);
 			if(TYPE.equals("Agent")){
 				TYPEdatamap.put("status", "not ready");
 			}else if(TYPE.equals("Client")){
@@ -452,7 +459,7 @@ public class WebSocketPool {
 		}else{
 			Map<WebSocket, Map<String, Object>> TYPEuserconnections = new HashMap<WebSocket, Map<String, Object>>();
 			TYPEdatamap.put(USERID, userid);
-			TYPEdatamap.put("username", username);
+			TYPEdatamap.put(USERNAME, username);
 			if(TYPE.equals("Agent")){
 				TYPEdatamap.put("status", "not ready");
 			}else if(TYPE.equals("Client")){
@@ -539,7 +546,7 @@ public class WebSocketPool {
 		List<String> setUsers = new ArrayList<String>();
 		Collection<Map<String, Object>> setUser = TYPEmap.values();
 		for (Map<String, Object> u : setUser) {
-			setUsers.add(u.get("username").toString());
+			setUsers.add(u.get(USERNAME).toString());
 		}
 		return setUsers;
 	}

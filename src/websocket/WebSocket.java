@@ -11,6 +11,7 @@ import java.net.UnknownHostException;
 import java.text.SimpleDateFormat;
 import java.util.Collection;
 import java.util.Date;
+import java.util.Iterator;
 import java.util.Set;
 
 import org.java_websocket.WebSocketImpl;
@@ -917,17 +918,17 @@ public class WebSocket extends WebSocketServer {
 //			System.out.println("Name: " + WebSocketPool.getUserNameByKey(conn));			
 //		}		
 		/************* userconnections *************/
-		System.out.println("************ getUserNByKey *************");
+		System.out.println("\n************ getUserNByKey *************");
 		Set<org.java_websocket.WebSocket> conns3 = WebSocketPool.userallconnections.keySet();
 		System.out.println("conns.size(): " + conns3.size());
 		for (org.java_websocket.WebSocket conn : conns3){
 			System.out.println("Id: " + WebSocketPool.getUserByKey(conn));			
 		}
-		System.out.println("************ getUserCount *************");
+		System.out.println("\n************ getUserCount *************");
 		System.out.println("WebSocketPool.getUserCount(): " + WebSocketPool.getUserCount());
 		
 		
-		System.out.println("************ getWebSocketByUser *************");
+		System.out.println("\n************ getWebSocketByUser *************");
 		Set<org.java_websocket.WebSocket> conns4 = WebSocketPool.userallconnections.keySet();
 		System.out.println("conns.size(): " + conns4.size());
 		for (org.java_websocket.WebSocket conn : conns4){
@@ -937,15 +938,28 @@ public class WebSocket extends WebSocketServer {
 			System.out.println("tmpconn: " + tmpconn);
 			
 		}		
-		System.out.println("************ getOnlineUser *************");
+		System.out.println("\n************ getOnlineUser *************");
 		Collection<String> userids = WebSocketPool.getOnlineUser();
 		System.out.println("userids.size(): " + userids.size());
 		for (String userid: userids){
 			System.out.println("userid: " + userid);
-		}
+		}	
 		
-		System.out.println("************ sendMessage *************");
+		System.out.println("\n************ sendMessage *************");
 		WebSocketPool.sendMessage("Hello Everybody!");		
+		
+		System.out.println("\n************ removeUser *************");
+		Set<org.java_websocket.WebSocket> conns5 = WebSocketPool.userallconnections.keySet();
+		System.out.println("conns.size(): " + conns5.size());
+		Iterator<org.java_websocket.WebSocket> itr = conns5.iterator();
+		while(itr.hasNext()){
+			org.java_websocket.WebSocket conn = itr.next();
+			WebSocketPool.removeUser(conn); // 注意此removeUser方法非用iterator刪除,所以不能一次刪兩個或以上的內容物件
+//			itr.remove();
+			if (WebSocketPool.userallconnections.get(conn) == null){
+				System.out.println(conn + " has been deleted");
+			}
+		}		
 		
 	}
 	
