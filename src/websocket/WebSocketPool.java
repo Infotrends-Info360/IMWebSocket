@@ -109,7 +109,7 @@ public class WebSocketPool {
 
 	/** * Add User to WebSocket Pool* @param inbound */ /* Done */
 	public static void addUser(String username,String userid, WebSocket conn) {
-		userconnections.put(conn, userid);
+		userconnections.put(conn, userid); // 最後再註解掉
 //		usernameconnections.put(conn, username);
 		
 		Map<String,String> userinfo = new HashMap<String,String>();
@@ -152,10 +152,20 @@ public class WebSocketPool {
 			setUsers.add(u);
 		}
 		*/
+		/* 原方法
 		Collection<String> setUserid = userconnections.values();
 		for (String u : setUserid) {
 			setUsers.add(u);
 		}
+		*/
+		
+		Set<org.java_websocket.WebSocket> conns3 = WebSocketPool.userallconnections.keySet();
+//		System.out.println("conns.size(): " + conns3.size());
+		for (org.java_websocket.WebSocket conn : conns3){
+			String userid = WebSocketPool.getUserByKey(conn);
+			setUsers.add(userid);
+		}
+		
 		return setUsers;
 	}
 

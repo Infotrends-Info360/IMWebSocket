@@ -933,6 +933,13 @@ public class WebSocket extends WebSocketServer {
 			System.out.println("tmpconn: " + tmpconn);
 			
 		}		
+		System.out.println("************ getOnlineUser *************");
+		Collection<String> userids = WebSocketPool.getOnlineUser();
+		for (String userid: userids){
+			System.out.println("userid: " + userid);
+		}
+		
+		
 		
 		
 	}
