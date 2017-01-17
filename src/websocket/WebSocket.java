@@ -887,30 +887,38 @@ public class WebSocket extends WebSocketServer {
 		// TODO Auto-generated method stub
 		System.out.println("test method");
 		
-		System.out.println("************* getOnlineUserName ************");
-		Collection<String> onlineUserNames = WebSocketPool.getOnlineUserName();
-		for (String name: onlineUserNames ){
-			System.out.println("Name: " + name);
+		/*********** username ************/
+//		System.out.println("************* getOnlineUserName ************");
+//		Collection<String> onlineUserNames = WebSocketPool.getOnlineUserName();
+//		for (String name: onlineUserNames ){
+//			System.out.println("Name: " + name);
+//		}
+//		System.out.println("************ getUserNameByKey *************");
+//		Set<org.java_websocket.WebSocket> conns = WebSocketPool.userallconnections.keySet();
+//		System.out.println("conns.size(): " + conns.size());
+//		for (org.java_websocket.WebSocket conn : conns){
+//			System.out.println("Name: " + WebSocketPool.getUserNameByKey(conn));			
+//		}
+//		System.out.println("************ removeKey *************");
+//		Set<org.java_websocket.WebSocket> conns2 = WebSocketPool.userallconnections.keySet();
+//		System.out.println("conns.size(): " + conns2.size());
+//		for (org.java_websocket.WebSocket conn : conns2){
+//			if (WebSocketPool.getUserNameByKey(conn).equals("agent07")){
+//				WebSocketPool.removeUserName(conn);
+//				System.out.println("agent07 deleted");
+//			}
+//			if (WebSocketPool.getUserNameByKey(conn) == null){
+//				System.out.println("conn: " + conn + ": username not found.");
+//			}
+//			System.out.println("Name: " + WebSocketPool.getUserNameByKey(conn));			
+//		}		
+		/************* userid *************/
+		System.out.println("************ getUserNByKey *************");
+		Set<org.java_websocket.WebSocket> conns3 = WebSocketPool.userallconnections.keySet();
+		System.out.println("conns.size(): " + conns3.size());
+		for (org.java_websocket.WebSocket conn : conns3){
+			System.out.println("Id: " + WebSocketPool.getUserByKey(conn));			
 		}
-		System.out.println("************ getUserNameByKey *************");
-		Set<org.java_websocket.WebSocket> conns = WebSocketPool.userallconnections.keySet();
-		System.out.println("conns.size(): " + conns.size());
-		for (org.java_websocket.WebSocket conn : conns){
-			System.out.println("Name: " + WebSocketPool.getUserNameByKey(conn));			
-		}
-		System.out.println("************ removeKey *************");
-		Set<org.java_websocket.WebSocket> conns2 = WebSocketPool.userallconnections.keySet();
-		System.out.println("conns.size(): " + conns2.size());
-		for (org.java_websocket.WebSocket conn : conns2){
-			if (WebSocketPool.getUserNameByKey(conn).equals("agent07")){
-				WebSocketPool.removeUserName(conn);
-				System.out.println("agent07 deleted");
-			}
-			if (WebSocketPool.getUserNameByKey(conn) == null){
-				System.out.println("conn: " + conn + ": username not found.");
-			}
-			System.out.println("Name: " + WebSocketPool.getUserNameByKey(conn));			
-		}		
 	
 	}
 	

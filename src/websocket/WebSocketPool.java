@@ -45,9 +45,10 @@ public class WebSocketPool {
 	 */
 	private static final Map<WebSocket, String> userheartbeatconnections = new HashMap<WebSocket, String>();
 	
-	/** * Get User By Key * @param session */
+	/** * Get User By Key * @param session */ /* Done */
 	public static String getUserByKey(WebSocket conn) {
-		return userconnections.get(conn);
+//		return userconnections.get(conn);
+		return userallconnections.get(conn).get("userid");
 	}
 	
 	/** * Get User By Key * @param session */ /* Done */
