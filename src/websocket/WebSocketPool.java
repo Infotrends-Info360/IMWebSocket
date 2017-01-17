@@ -33,7 +33,7 @@ public class WebSocketPool {
 	 * online User ID/NAME Map
 	 * 暫時先設為public,測試用
 	 */
-	public static final Map<WebSocket, Map<String,String>> userallconnections = new HashMap<WebSocket, Map<String,String>>();	
+	public static final Map<WebSocket, UserInfo> userallconnections = new HashMap<WebSocket,UserInfo>();	
 	
 	
 	
@@ -55,31 +55,36 @@ public class WebSocketPool {
 	/** * Get User By Key * @param session */ /* Done */
 	public static String getUserByKey(WebSocket conn) {
 //		return userconnections.get(conn);
-		return userallconnections.get(conn).get(USERID);
+//		return userallconnections.get(conn).get(USERID);
+		return userallconnections.get(conn).getUserid();
 	}
 	
 	/** * Get User By Key * @param session */ /* Done */
 	public static String getUserNameByKey(WebSocket conn) {
 //		return usernameconnections.get(conn);
-		return userallconnections.get(conn).get(USERNAME);
+//		return userallconnections.get(conn).get(USERNAME);
+		return userallconnections.get(conn).getUsername();
 	}
 	
 	/** * Get User By Key * @param session */ /* Done */
 	public static String getUserGroupByKey(WebSocket conn) {
 //		return usergroupconnections.get(conn);
-		return userallconnections.get(conn).get(USERGROUP);
+//		return userallconnections.get(conn).get(USERGROUP);
+		return userallconnections.get(conn).getUsergroup();
 	}
 
 	/** * Get User By Key * @param session */ /* Done */
 	public static String getUserInteractionByKey(WebSocket conn) {
 //		return userinteractionconnections.get(conn);
-		return userallconnections.get(conn).get(USERINTERACTION);
+//		return userallconnections.get(conn).get(USERINTERACTION);
+		return userallconnections.get(conn).getUserinteraction();
 	}
 	
 	/** * Get User By Key * @param session */ /* Done */
 	public static String getUserheartbeatByKey(WebSocket conn) {
 //		return userheartbeatconnections.get(conn);
-		return userallconnections.get(conn).get(USERHEARTBEAT);
+//		return userallconnections.get(conn).get(USERHEARTBEAT);
+		return userallconnections.get(conn).getUserheartbeat();
 	}
 
 	/** * Get Online User Count * @param */ /* Done */
@@ -106,7 +111,8 @@ public class WebSocketPool {
 		synchronized (conns) {
 			for (WebSocket conn : conns) {
 //				String cuser = userconnections.get(conn);
-				String cuser = userallconnections.get(conn).get(USERID);
+//				String cuser = userallconnections.get(conn).get(USERID);
+				String cuser = userallconnections.get(conn).getUserid();
 				if (cuser.equals(user)) {
 					System.out.println("(getWebSocketByUser)found user id: " + cuser + "的connection");
 					return conn;
@@ -122,9 +128,12 @@ public class WebSocketPool {
 //		userconnections.put(conn, userid); // 最後再註解掉
 //		usernameconnections.put(conn, username);
 		
-		Map<String,String> userinfo = new HashMap<String,String>();
-		userinfo.put(USERID, userid);
-		userinfo.put(USERNAME, username);
+//		Map<String,String> userinfo = new HashMap<String,String>();
+		UserInfo userinfo = new UserInfo();
+		userinfo.setUserid(userid);
+		userinfo.setUsername(username);
+//		userinfo.put(USERID, userid);
+//		userinfo.put(USERNAME, username);
 		userallconnections.put(conn, userinfo); // 每一個client的connection配一個map
 ////		Map<String,String> clientmap = userallconnections.get(conn); 
 //		if(clientmap != null && !clientmap.isEmpty()){
@@ -141,19 +150,22 @@ public class WebSocketPool {
 	/** * Add User to WebSocket Pool* @param inbound */ /* Done */
 	public static void addUserGroup(String usergroup, WebSocket conn) {
 //		usergroupconnections.put(conn, usergroup);
-		userallconnections.get(conn).put(USERGROUP, usergroup);
+//		userallconnections.get(conn).put(USERGROUP, usergroup);
+		userallconnections.get(conn).setUsergroup(usergroup);
 	}
 	
 	/** * Add User to WebSocket Pool* @param inbound */ /* Done */
 	public static void addUserInteraction(String userinteraction, WebSocket conn) {
 //		userinteractionconnections.put(conn, userinteraction);
-		userallconnections.get(conn).put(USERINTERACTION, userinteraction);
+//		userallconnections.get(conn).put(USERINTERACTION, userinteraction);
+		userallconnections.get(conn).setUserinteraction(userinteraction);
 	}
 	
 	/** * Add User to WebSocket Pool* @param inbound */ /* Done */
 	public static void addUserheartbeat(String userheartbeat, WebSocket conn) {
 //		userheartbeatconnections.put(conn, userheartbeat);
-		userallconnections.get(conn).put(USERHEARTBEAT, userheartbeat);
+//		userallconnections.get(conn).put(USERHEARTBEAT, userheartbeat);
+		userallconnections.get(conn).setUserheartbeat(userheartbeat);
 	}
 	
 	/** * Get Online User Name * @return */ /* Done */
@@ -199,10 +211,11 @@ public class WebSocketPool {
 		*/
 		
 //		Set<WebSocket> userconns = userallconnections.keySet();
-		Collection<Map<String,String>> userinfos = userallconnections.values();
+		Collection<UserInfo> userinfos = userallconnections.values();
 //		userinfo.put("username", username);
-		for (Map<String,String> userinfo : userinfos){
-			setUsers.add(userinfo.get(USERNAME));
+		for (UserInfo userinfo : userinfos){
+//			setUsers.add(userinfo.get(USERNAME));
+			setUsers.add(userinfo.getUsername());
 		}
 		
 		return setUsers;
@@ -273,7 +286,8 @@ public class WebSocketPool {
 //		}
 		
 		if (userallconnections.containsKey(conn)) {
-			userallconnections.get(conn).remove(USERGROUP);
+//			userallconnections.get(conn).remove(USERGROUP);
+			userallconnections.get(conn).setUsergroup(null); // 看是要null還是"",目前覺得null比較同於原本的Map.remove(USERGROUP)
 			return true;
 		} else {
 			return false;
@@ -293,7 +307,8 @@ public class WebSocketPool {
 		
 		if (userallconnections.containsKey(conn)) {
 //			userheartbeatconnections.remove(conn);
-			userallconnections.get(conn).remove(USERHEARTBEAT);
+//			userallconnections.get(conn).remove(USERHEARTBEAT);
+			userallconnections.get(conn).setUserheartbeat(null);
 			return true;
 		} else {
 			return false;
@@ -324,7 +339,8 @@ public class WebSocketPool {
 		Set<WebSocket> conns = userallconnections.keySet();
 		synchronized (conns) {
 			for (WebSocket conn : conns) {
-				String user = userallconnections.get(conn).get(USERID);
+//				String user = userallconnections.get(conn).get(USERID);
+				String user = userallconnections.get(conn).getUserid();
 				if (user != null) {
 					conn.send(message);
 				}
@@ -620,5 +636,49 @@ public class WebSocketPool {
 	/** * Get leaveClient * @param */
 	public static int getleaveClient() {
 		return leaveClient;
+	}
+	
+	
+
+	
+}
+
+// 此類別給WebSocketPool.userallconnections使用
+class UserInfo{
+	private String userid;
+	private String username;
+	private String usergroup;
+	private String userinteraction;
+	private String userheartbeat;
+	public String getUserid() {
+		return userid;
+	}
+	public void setUserid(String userid) {
+		this.userid = userid;
+	}
+	
+	public String getUsername() {
+		return username;
+	}
+	public void setUsername(String username) {
+		this.username = username;
+	}
+	public String getUsergroup() {
+		return usergroup;
+	}
+	public void setUsergroup(String usergroup) {
+		this.usergroup = usergroup;
+	}
+	public String getUserinteraction() {
+		return userinteraction;
+	}
+	public void setUserinteraction(String userinteraction) {
+		this.userinteraction = userinteraction;
+	}
+	public String getUserheartbeat() {
+		return userheartbeat;
+	}
+	public void setUserheartbeat(String userheartbeat) {
+		this.userheartbeat = userheartbeat;
 	}
 }
