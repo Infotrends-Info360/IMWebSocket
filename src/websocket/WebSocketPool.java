@@ -62,25 +62,25 @@ public class WebSocketPool {
 		return userallconnections.get(conn).get("username");
 	}
 	
-	/** * Get User By Key * @param session */
+	/** * Get User By Key * @param session */ /* Done */
 	public static String getUserGroupByKey(WebSocket conn) {
 //		return usergroupconnections.get(conn);
 		return userallconnections.get(conn).get(USERGROUP);
 	}
 
-	/** * Get User By Key * @param session */
+	/** * Get User By Key * @param session */ /* Done */
 	public static String getUserInteractionByKey(WebSocket conn) {
 //		return userinteractionconnections.get(conn);
 		return userallconnections.get(conn).get(USERINTERACTION);
 	}
 	
-	/** * Get User By Key * @param session */
+	/** * Get User By Key * @param session */ /* Done */
 	public static String getUserheartbeatByKey(WebSocket conn) {
 //		return userheartbeatconnections.get(conn);
 		return userallconnections.get(conn).get(USERHEARTBEAT);
 	}
 
-	/** * Get Online User Count * @param */
+	/** * Get Online User Count * @param */ /* Done */
 	public static int getUserCount() {
 //		return userconnections.size();
 		return userallconnections.size();
@@ -136,25 +136,25 @@ public class WebSocketPool {
 //		}		
 	}
 	
-	/** * Add User to WebSocket Pool* @param inbound */
+	/** * Add User to WebSocket Pool* @param inbound */ /* Done */
 	public static void addUserGroup(String usergroup, WebSocket conn) {
 //		usergroupconnections.put(conn, usergroup);
 		userallconnections.get(conn).put(USERGROUP, usergroup);
 	}
 	
-	/** * Add User to WebSocket Pool* @param inbound */
+	/** * Add User to WebSocket Pool* @param inbound */ /* Done */
 	public static void addUserInteraction(String userinteraction, WebSocket conn) {
 //		userinteractionconnections.put(conn, userinteraction);
 		userallconnections.get(conn).put(USERINTERACTION, userinteraction);
 	}
 	
-	/** * Add User to WebSocket Pool* @param inbound */
+	/** * Add User to WebSocket Pool* @param inbound */ /* Done */
 	public static void addUserheartbeat(String userheartbeat, WebSocket conn) {
 //		userheartbeatconnections.put(conn, userheartbeat);
 		userallconnections.get(conn).put(USERHEARTBEAT, userheartbeat);
 	}
 	
-	/** * Get Online User Name * @return */
+	/** * Get Online User Name * @return */ /* Done */
 	public static Collection<String> getOnlineUser() {
 		List<String> setUsers = new ArrayList<String>();
 		/*
@@ -206,7 +206,7 @@ public class WebSocketPool {
 		return setUsers;
 	}
 
-	/** * Remove User WebSocket from WebSocket Pool * @param inbound */
+	/** * Remove User WebSocket from WebSocket Pool * @param inbound */ /* Done */
 	public static boolean removeUser(WebSocket conn){
 		if (userallconnections.containsKey(conn)) {
 			userallconnections.remove(conn);
@@ -257,7 +257,7 @@ public class WebSocketPool {
 //		
 //	}
 	
-	/** * Remove User Group from WebSocket Pool * @param inbound */
+	/** * Remove User Group from WebSocket Pool * @param inbound */ /* Done */
 	public static boolean removeUserGroup(WebSocket conn) {
 		// 原方法
 //		if (usergroupconnections.containsKey(conn)) {
@@ -276,7 +276,7 @@ public class WebSocketPool {
 		
 	}
 	
-	/** * Remove User heartbeat from WebSocket Pool * @param inbound */
+	/** * Remove User heartbeat from WebSocket Pool * @param inbound */ /* Done */
 	public static boolean removeUserheartbeat(WebSocket conn) {
 		// 原方法
 //		if (userheartbeatconnections.containsKey(conn)) {
@@ -296,14 +296,14 @@ public class WebSocketPool {
 		
 	}
 
-	/** * Send Message to a User * @param user * @param message */
+	/** * Send Message to a User * @param user * @param message */ /* Done */
 	public static void sendMessageToUser(WebSocket conn, String message)  {
 		if (null != conn) {
 			conn.send(message);
 		}
 	}
 
-	/** * Send Message to all of User * @param message */
+	/** * Send Message to all of User * @param message */ /* Done */
 	public static void sendMessage(String message) {
 		/* 原方法
 		Set<WebSocket> keySet = userconnections.keySet();
