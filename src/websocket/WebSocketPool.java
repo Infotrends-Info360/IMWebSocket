@@ -20,7 +20,7 @@ public class WebSocketPool {
 	/**
 	 * online User Name Map
 	 */
-	private static final Map<WebSocket, String> usernameconnections = new HashMap<WebSocket, String>();
+//	private static final Map<WebSocket, String> usernameconnections = new HashMap<WebSocket, String>();
 	
 	/**
 	 * online User ID/NAME Map
@@ -50,7 +50,7 @@ public class WebSocketPool {
 		return userconnections.get(conn);
 	}
 	
-	/** * Get User By Key * @param session */
+	/** * Get User By Key * @param session */ /* Done */
 	public static String getUserNameByKey(WebSocket conn) {
 //		return usernameconnections.get(conn);
 		return userallconnections.get(conn).get("username");
@@ -90,10 +90,10 @@ public class WebSocketPool {
 		return null;
 	}
 
-	/** * Add User to WebSocket Pool* @param inbound */
+	/** * Add User to WebSocket Pool* @param inbound */ /* Done */
 	public static void addUser(String username,String userid, WebSocket conn) {
 		userconnections.put(conn, userid);
-		usernameconnections.put(conn, username);
+//		usernameconnections.put(conn, username);
 		
 		Map<String,String> userinfo = new HashMap<String,String>();
 		userinfo.put("userid", userid);
@@ -142,7 +142,7 @@ public class WebSocketPool {
 		return setUsers;
 	}
 
-	/** * Get Online User Name * @return */
+	/** * Get Online User Name * @return */ /* Done */
 	public static Collection<String> getOnlineUserName() {
 		List<String> setUsers = new ArrayList<String>();
 		/*
@@ -178,7 +178,7 @@ public class WebSocketPool {
 		}
 	}
 	
-	/** * Remove User Name from WebSocket Pool * @param inbound */
+	/** * Remove User Name from WebSocket Pool * @param inbound */ /* Done */
 	public static boolean removeUserName(WebSocket conn) {
 		/* 原來方法 
 		if (usernameconnections.containsKey(conn)) {
