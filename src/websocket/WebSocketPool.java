@@ -16,7 +16,7 @@ public class WebSocketPool {
 	/**
 	 * online User ID Map
 	 */
-	private static final Map<WebSocket, String> userconnections = new HashMap<WebSocket, String>();
+//	private static final Map<WebSocket, String> userconnections = new HashMap<WebSocket, String>();
 	/**
 	 * online User Name Map
 	 */
@@ -109,7 +109,7 @@ public class WebSocketPool {
 
 	/** * Add User to WebSocket Pool* @param inbound */ /* Done */
 	public static void addUser(String username,String userid, WebSocket conn) {
-		userconnections.put(conn, userid); // 最後再註解掉
+//		userconnections.put(conn, userid); // 最後再註解掉
 //		usernameconnections.put(conn, username);
 		
 		Map<String,String> userinfo = new HashMap<String,String>();
