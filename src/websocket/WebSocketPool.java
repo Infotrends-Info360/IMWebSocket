@@ -143,7 +143,7 @@ public class WebSocketPool {
 		userheartbeatconnections.put(conn, userheartbeat);
 	}
 	
-	/** * Get Online User Name * @return */
+	/** * Get Online User Name * @return */ /* Done */
 	public static Collection<String> getOnlineUser() {
 		List<String> setUsers = new ArrayList<String>();
 		/*
@@ -197,8 +197,9 @@ public class WebSocketPool {
 
 	/** * Remove User ID from WebSocket Pool * @param inbound */
 	public static boolean removeUserID(WebSocket conn) {
-		if (userconnections.containsKey(conn)) {
-			userconnections.remove(conn);
+		if (userallconnections.containsKey(conn)) {
+//			userconnections.remove(conn);
+			userallconnections.get(conn).remove("userid");
 			return true;
 		} else {
 			return false;
