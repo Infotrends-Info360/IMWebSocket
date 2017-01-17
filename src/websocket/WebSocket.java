@@ -17,9 +17,9 @@ import org.java_websocket.handshake.ClientHandshake;
 import org.java_websocket.server.WebSocketServer;
 import org.json.JSONObject;
 
-import websocket.WebSocketGroupPool;
-import websocket.WebSocketTypePool;
-import websocket.WebSocketUserPool;
+import websocket.pools.WebSocketGroupPool;
+import websocket.pools.WebSocketTypePool;
+import websocket.pools.WebSocketUserPool;
 
 public class WebSocket extends WebSocketServer {
 	public WebSocket(InetSocketAddress address) {
@@ -249,8 +249,8 @@ public class WebSocket extends WebSocketServer {
 		String group = obj.getString("group");
 		String username = obj.getString("UserName");
 		String joinMsg = "[Server]" + username + " leave " + group + " group";
-		WebSocketGroupPool.removeGroup(group);
 		WebSocketGroupPool.sendMessageingroup(group, joinMsg);
+		WebSocketGroupPool.removeGroup(group);
 	}
 
 	/** * user join group */
@@ -376,8 +376,7 @@ public class WebSocket extends WebSocketServer {
 		sendjson.put("from", obj.getString("id"));
 		sendjson.put("fromName",  obj.getString("UserName"));
 		sendjson.put("channel", obj.getString("channel"));
-		WebSocketGroupPool.sendMessageingroup(
-				group,sendjson.toString());
+		WebSocketGroupPool.sendMessageingroup(group,sendjson.toString());
 	}
 
 	/** * send Accept Event */

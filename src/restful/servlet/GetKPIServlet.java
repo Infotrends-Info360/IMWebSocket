@@ -11,9 +11,9 @@ import org.json.JSONArray;
 import org.json.JSONObject;
 import org.java_websocket.WebSocket;
 
-import websocket.WebSocketUserPool;
-import websocket.WebSocketGroupPool;
-import websocket.WebSocketTypePool;
+import websocket.pools.WebSocketGroupPool;
+import websocket.pools.WebSocketTypePool;
+import websocket.pools.WebSocketUserPool;
 
 /**
  * RESTful Get KPI

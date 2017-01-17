@@ -6,6 +6,8 @@ import java.util.TimerTask;
 
 import org.json.JSONObject;
 
+import websocket.pools.WebSocketUserPool;
+
 public class HeartBeat {
 	private String healthStatus = "GREEN";
 
