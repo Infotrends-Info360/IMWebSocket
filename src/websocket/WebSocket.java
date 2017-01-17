@@ -898,6 +898,20 @@ public class WebSocket extends WebSocketServer {
 		for (org.java_websocket.WebSocket conn : conns){
 			System.out.println("Name: " + WebSocketPool.getUserNameByKey(conn));			
 		}
+		System.out.println("************ removeKey *************");
+		Set<org.java_websocket.WebSocket> conns2 = WebSocketPool.userallconnections.keySet();
+		System.out.println("conns.size(): " + conns2.size());
+		for (org.java_websocket.WebSocket conn : conns2){
+			if (WebSocketPool.getUserNameByKey(conn).equals("agent07")){
+				WebSocketPool.removeUserName(conn);
+				System.out.println("agent07 deleted");
+			}
+			if (WebSocketPool.getUserNameByKey(conn) == null){
+				System.out.println("conn: " + conn + ": username not found.");
+			}
+			System.out.println("Name: " + WebSocketPool.getUserNameByKey(conn));			
+		}		
+	
 	}
 	
 	

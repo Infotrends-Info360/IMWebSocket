@@ -180,12 +180,23 @@ public class WebSocketPool {
 	
 	/** * Remove User Name from WebSocket Pool * @param inbound */
 	public static boolean removeUserName(WebSocket conn) {
+		/* 原來方法 
 		if (usernameconnections.containsKey(conn)) {
 			usernameconnections.remove(conn);
 			return true;
 		} else {
 			return false;
 		}
+		*/
+		
+		if (userallconnections.containsKey(conn)) {
+			userallconnections.get(conn).remove("username");
+			return true;
+		} else {
+			return false;
+		}
+		
+		
 	}
 	
 	/** * Remove User Group from WebSocket Pool * @param inbound */
