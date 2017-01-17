@@ -73,8 +73,8 @@ class TimerTaskSendHeartBeat extends TimerTask {
 			e.printStackTrace();
 		}
 
-		String heartbeat = WebSocketPool.getUserheartbeatByKey(conn);
-		String User = WebSocketPool.getUserByKey(conn);
+		String heartbeat = WebSocketUserPool.getUserheartbeatByKey(conn);
+		String User = WebSocketUserPool.getUserByKey(conn);
 //		System.out.println("heartbeat: "+heartbeat);
 		if (User != null && !"".equals(User)) {
 			if (heartbeat.equals("ap")) {
@@ -82,9 +82,9 @@ class TimerTaskSendHeartBeat extends TimerTask {
 				System.out.println("HeartBeat Get " + User + " Online");
 
 			} else {
-				String message = WebSocketPool.getUserInteractionByKey(conn);
+				String message = WebSocketUserPool.getUserInteractionByKey(conn);
 				System.out.println(message);
-				WebSocketPool.removeUserheartbeat(conn);
+				WebSocketUserPool.removeUserheartbeat(conn);
 				if (message != null && !"".equals(message)) {
 					JSONObject obj = new JSONObject(message);
 					String closefrom = obj.getString("closefrom");
@@ -100,9 +100,9 @@ class TimerTaskSendHeartBeat extends TimerTask {
 				}
 			}
 		} else {
-			String message = WebSocketPool.getUserInteractionByKey(conn);
+			String message = WebSocketUserPool.getUserInteractionByKey(conn);
 			System.out.println("message: "+message);
-			WebSocketPool.removeUserheartbeat(conn);
+			WebSocketUserPool.removeUserheartbeat(conn);
 			if (message != null && !"".equals(message)) {
 				JSONObject obj = new JSONObject(message);
 				String closefrom = obj.getString("closefrom");
