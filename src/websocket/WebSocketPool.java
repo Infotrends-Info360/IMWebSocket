@@ -16,7 +16,7 @@ public class WebSocketPool {
 	/**
 	 * online User ID Map
 	 */
-	private static final Map<WebSocket, String> userconnections = new HashMap<WebSocket, String>();
+//	private static final Map<WebSocket, String> userconnections = new HashMap<WebSocket, String>();
 	/**
 	 * online User Name Map
 	 */
@@ -33,7 +33,7 @@ public class WebSocketPool {
 	/**
 	 * online User Group Map
 	 */
-	private static final Map<WebSocket, String> usergroupconnections = new HashMap<WebSocket, String>();
+//	private static final Map<WebSocket, String> usergroupconnections = new HashMap<WebSocket, String>();
 	
 	/**
 	 * online User Interaction Map
@@ -59,7 +59,8 @@ public class WebSocketPool {
 	
 	/** * Get User By Key * @param session */
 	public static String getUserGroupByKey(WebSocket conn) {
-		return usergroupconnections.get(conn);
+//		return usergroupconnections.get(conn);
+		return userallconnections.get(conn).get("usergroup");
 	}
 
 	/** * Get User By Key * @param session */
@@ -109,7 +110,7 @@ public class WebSocketPool {
 
 	/** * Add User to WebSocket Pool* @param inbound */ /* Done */
 	public static void addUser(String username,String userid, WebSocket conn) {
-		userconnections.put(conn, userid); // 最後再註解掉
+//		userconnections.put(conn, userid); // 最後再註解掉
 //		usernameconnections.put(conn, username);
 		
 		Map<String,String> userinfo = new HashMap<String,String>();
@@ -130,7 +131,8 @@ public class WebSocketPool {
 	
 	/** * Add User to WebSocket Pool* @param inbound */
 	public static void addUserGroup(String usergroup, WebSocket conn) {
-		usergroupconnections.put(conn, usergroup);
+//		usergroupconnections.put(conn, usergroup);
+		userallconnections.get(conn).put("usergroup", usergroup);
 	}
 	
 	/** * Add User to WebSocket Pool* @param inbound */
@@ -197,8 +199,8 @@ public class WebSocketPool {
 
 	/** * Remove User WebSocket from WebSocket Pool * @param inbound */
 	public static boolean removeUser(WebSocket conn){
-		if (userconnections.containsKey(conn)) {
-			userconnections.remove(conn);
+		if (userallconnections.containsKey(conn)) {
+			userallconnections.remove(conn);
 			return true;
 		} else {
 			return false;
@@ -248,12 +250,21 @@ public class WebSocketPool {
 	
 	/** * Remove User Group from WebSocket Pool * @param inbound */
 	public static boolean removeUserGroup(WebSocket conn) {
-		if (usergroupconnections.containsKey(conn)) {
-			usergroupconnections.remove(conn);
+		// 原方法
+//		if (usergroupconnections.containsKey(conn)) {
+//			usergroupconnections.remove(conn);
+//			return true;
+//		} else {
+//			return false;
+//		}
+		
+		if (userallconnections.containsKey(conn)) {
+			userallconnections.get(conn).remove("usergroup");
 			return true;
 		} else {
 			return false;
 		}
+		
 	}
 	
 	/** * Remove User heartbeat from WebSocket Pool * @param inbound */
@@ -313,9 +324,9 @@ public class WebSocketPool {
 			groupmap.put(conn, userinfo);
 			groupuserconnections.put(group, groupmap);
 		}else{
-			Map<WebSocket, Map<String,String>> userconnections = new HashMap<WebSocket, Map<String,String>>();
-			userconnections.put(conn, userinfo);
-			groupuserconnections.put(group, userconnections);
+			Map<WebSocket, Map<String,String>> userconnections_tmp = new HashMap<WebSocket, Map<String,String>>();
+			userconnections_tmp.put(conn, userinfo);
+			groupuserconnections.put(group, userconnections_tmp);
 		}
 	}
 	
