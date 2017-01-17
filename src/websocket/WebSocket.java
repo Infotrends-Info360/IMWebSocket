@@ -887,11 +887,17 @@ public class WebSocket extends WebSocketServer {
 		// TODO Auto-generated method stub
 		System.out.println("test method");
 		
+		System.out.println("************* getOnlineUserName ************");
 		Collection<String> onlineUserNames = WebSocketPool.getOnlineUserName();
 		for (String name: onlineUserNames ){
 			System.out.println("Name: " + name);
 		}
-		
+		System.out.println("************ getUserNameByKey *************");
+		Set<org.java_websocket.WebSocket> conns = WebSocketPool.userallconnections.keySet();
+		System.out.println("conns.size(): " + conns.size());
+		for (org.java_websocket.WebSocket conn : conns){
+			System.out.println("Name: " + WebSocketPool.getUserNameByKey(conn));			
+		}
 	}
 	
 	

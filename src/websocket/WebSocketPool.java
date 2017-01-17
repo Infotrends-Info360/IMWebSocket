@@ -24,8 +24,9 @@ public class WebSocketPool {
 	
 	/**
 	 * online User ID/NAME Map
+	 * 暫時先設為public,測試用
 	 */
-	private static final Map<WebSocket, Map<String,String>> userallconnections = new HashMap<WebSocket, Map<String,String>>();	
+	public static final Map<WebSocket, Map<String,String>> userallconnections = new HashMap<WebSocket, Map<String,String>>();	
 	
 	
 	
@@ -51,7 +52,8 @@ public class WebSocketPool {
 	
 	/** * Get User By Key * @param session */
 	public static String getUserNameByKey(WebSocket conn) {
-		return usernameconnections.get(conn);
+//		return usernameconnections.get(conn);
+		return userallconnections.get(conn).get("username");
 	}
 	
 	/** * Get User By Key * @param session */
