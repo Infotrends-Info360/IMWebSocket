@@ -38,12 +38,12 @@ public class WebSocketPool {
 	/**
 	 * online User Interaction Map
 	 */
-	private static final Map<WebSocket, String> userinteractionconnections = new HashMap<WebSocket, String>();
+//	private static final Map<WebSocket, String> userinteractionconnections = new HashMap<WebSocket, String>();
 	
 	/**
 	 * online User heartbeat Map
 	 */
-	private static final Map<WebSocket, String> userheartbeatconnections = new HashMap<WebSocket, String>();
+//	private static final Map<WebSocket, String> userheartbeatconnections = new HashMap<WebSocket, String>();
 	
 	/** * Get User By Key * @param session */ /* Done */
 	public static String getUserByKey(WebSocket conn) {
@@ -65,12 +65,14 @@ public class WebSocketPool {
 
 	/** * Get User By Key * @param session */
 	public static String getUserInteractionByKey(WebSocket conn) {
-		return userinteractionconnections.get(conn);
+//		return userinteractionconnections.get(conn);
+		return userallconnections.get(conn).get("userinteraction");
 	}
 	
 	/** * Get User By Key * @param session */
 	public static String getUserheartbeatByKey(WebSocket conn) {
-		return userheartbeatconnections.get(conn);
+//		return userheartbeatconnections.get(conn);
+		return userallconnections.get(conn).get("userheartbeat");
 	}
 
 	/** * Get Online User Count * @param */
@@ -137,12 +139,14 @@ public class WebSocketPool {
 	
 	/** * Add User to WebSocket Pool* @param inbound */
 	public static void addUserInteraction(String userinteraction, WebSocket conn) {
-		userinteractionconnections.put(conn, userinteraction);
+//		userinteractionconnections.put(conn, userinteraction);
+		userallconnections.get(conn).put("userinteraction", userinteraction);
 	}
 	
 	/** * Add User to WebSocket Pool* @param inbound */
 	public static void addUserheartbeat(String userheartbeat, WebSocket conn) {
-		userheartbeatconnections.put(conn, userheartbeat);
+//		userheartbeatconnections.put(conn, userheartbeat);
+		userallconnections.get(conn).put("userheartbeat", userheartbeat);
 	}
 	
 	/** * Get Online User Name * @return */
@@ -269,12 +273,22 @@ public class WebSocketPool {
 	
 	/** * Remove User heartbeat from WebSocket Pool * @param inbound */
 	public static boolean removeUserheartbeat(WebSocket conn) {
-		if (userheartbeatconnections.containsKey(conn)) {
-			userheartbeatconnections.remove(conn);
+		// 原方法
+//		if (userheartbeatconnections.containsKey(conn)) {
+//			userheartbeatconnections.remove(conn);
+//			return true;
+//		} else {
+//			return false;
+//		}
+		
+		if (userallconnections.containsKey(conn)) {
+//			userheartbeatconnections.remove(conn);
+			userallconnections.get(conn).remove("userheartbeat");
 			return true;
 		} else {
 			return false;
 		}
+		
 	}
 
 	/** * Send Message to a User * @param user * @param message */
