@@ -221,15 +221,17 @@ public class WebSocket extends WebSocketServer {
 		user = WebSocketPool.getUserByKey(conn);
 		String joinMsg = "[Server]" + username + " Offline";
 		WebSocketPool.sendMessage(joinMsg);
-		WebSocketPool.removeUserID(conn);
-		WebSocketPool.removeUserName(conn);
+		WebSocketPool.removeUser(conn);
+//		WebSocketPool.removeUserID(conn);
+//		WebSocketPool.removeUserName(conn);
 	}
 
 	/** * user leave websocket (Demo) */
 	public void userLeave(org.java_websocket.WebSocket conn) {
 		String user = WebSocketPool.getUserByKey(conn);
-		boolean b = WebSocketPool.removeUserID(conn);
-		WebSocketPool.removeUserName(conn);
+//		boolean b = WebSocketPool.removeUserID(conn);
+//		WebSocketPool.removeUserName(conn);
+		boolean b = WebSocketPool.removeUser(conn);
 		if (b) {
 			WebSocketPool.sendMessage(user.toString());
 			String joinMsg = "[Server]" + user + "Offline";
@@ -837,8 +839,9 @@ public class WebSocket extends WebSocketServer {
 			WebSocketPool.sendMessageToUser(conn, sendjson.toString());
 //					"{ \"Event\": \"heartbeattouser\", \"heartbeat\": \"AP\" }");
 		}else{
-			WebSocketPool.removeUserID(conn);
-			WebSocketPool.removeUserName(conn);
+//			WebSocketPool.removeUserID(conn);
+//			WebSocketPool.removeUserName(conn);
+			WebSocketPool.removeUser(conn);
 			WebSocketPool.removeUserinTYPE("Client", conn);
 			WebSocketPool.removeUserheartbeat(conn);
 			String groupid = WebSocketPool.getUserGroupByKey(conn);
@@ -870,8 +873,9 @@ public class WebSocket extends WebSocketServer {
 		if(heartbeat){
 			WebSocketPool.addUserheartbeat(value, conn);
 		}else{
-			WebSocketPool.removeUserID(conn);
-			WebSocketPool.removeUserName(conn);
+//			WebSocketPool.removeUserID(conn);
+//			WebSocketPool.removeUserName(conn);
+			WebSocketPool.removeUser(conn);
 			WebSocketPool.removeUserinTYPE("Client", conn);
 			WebSocketPool.removeUserheartbeat(conn);
 			String groupid = WebSocketPool.getUserGroupByKey(conn);
@@ -935,6 +939,7 @@ public class WebSocket extends WebSocketServer {
 		}		
 		System.out.println("************ getOnlineUser *************");
 		Collection<String> userids = WebSocketPool.getOnlineUser();
+		System.out.println("userids.size(): " + userids.size());
 		for (String userid: userids){
 			System.out.println("userid: " + userid);
 		}

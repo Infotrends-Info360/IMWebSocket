@@ -16,7 +16,7 @@ public class WebSocketPool {
 	/**
 	 * online User ID Map
 	 */
-//	private static final Map<WebSocket, String> userconnections = new HashMap<WebSocket, String>();
+	private static final Map<WebSocket, String> userconnections = new HashMap<WebSocket, String>();
 	/**
 	 * online User Name Map
 	 */
@@ -109,7 +109,7 @@ public class WebSocketPool {
 
 	/** * Add User to WebSocket Pool* @param inbound */ /* Done */
 	public static void addUser(String username,String userid, WebSocket conn) {
-//		userconnections.put(conn, userid); // 最後再註解掉
+		userconnections.put(conn, userid); // 最後再註解掉
 //		usernameconnections.put(conn, username);
 		
 		Map<String,String> userinfo = new HashMap<String,String>();
@@ -195,46 +195,56 @@ public class WebSocketPool {
 		return setUsers;
 	}
 
+	/** * Remove User WebSocket from WebSocket Pool * @param inbound */
+	public static boolean removeUser(WebSocket conn){
+		if (userconnections.containsKey(conn)) {
+			userconnections.remove(conn);
+			return true;
+		} else {
+			return false;
+		}		
+	}
+	
 	/** * Remove User ID from WebSocket Pool * @param inbound */
-	public static boolean removeUserID(WebSocket conn) {
-		// 原方法
-//		if (userconnections.containsKey(conn)) {
-//			userconnections.remove(conn);
+//	public static boolean removeUserID(WebSocket conn) {
+//		// 原方法
+////		if (userconnections.containsKey(conn)) {
+////			userconnections.remove(conn);
+////			return true;
+////		} else {
+////			return false;
+////		}
+////		
+//		// 修改方法:
+//		if (userallconnections.containsKey(conn)) {
+//			userallconnections.get(conn).remove("userid"); // 須再測試,牽涉範圍廣
 //			return true;
 //		} else {
 //			return false;
 //		}
-		
-		// 修改方法:
-		if (userallconnections.containsKey(conn)) {
-			userallconnections.get(conn).remove("userid"); // 須再測試,牽涉範圍廣
-			return true;
-		} else {
-			return false;
-		}
-		
-	}
+//		
+//	}
 	
 	/** * Remove User Name from WebSocket Pool * @param inbound */ /* Done */
-	public static boolean removeUserName(WebSocket conn) {
-		/* 原來方法 
-		if (usernameconnections.containsKey(conn)) {
-			usernameconnections.remove(conn);
-			return true;
-		} else {
-			return false;
-		}
-		*/
-		
-		if (userallconnections.containsKey(conn)) {
-			userallconnections.get(conn).remove("username");
-			return true;
-		} else {
-			return false;
-		}
-		
-		
-	}
+//	public static boolean removeUserName(WebSocket conn) {
+//		/* 原來方法 
+//		if (usernameconnections.containsKey(conn)) {
+//			usernameconnections.remove(conn);
+//			return true;
+//		} else {
+//			return false;
+//		}
+//		*/
+//		
+//		if (userallconnections.containsKey(conn)) {
+//			userallconnections.get(conn).remove("username");
+//			return true;
+//		} else {
+//			return false;
+//		}
+//		
+//		
+//	}
 	
 	/** * Remove User Group from WebSocket Pool * @param inbound */
 	public static boolean removeUserGroup(WebSocket conn) {
