@@ -177,7 +177,6 @@ public class WebSocketPool {
 	
 	
 	//--------------------------------------------------------------------------
-	
 	/**
 	 * Group Members Map
 	 */
@@ -186,16 +185,27 @@ public class WebSocketPool {
 	/** * Add User to Group Map * @param inbound */
 	public static void addUseringroup(String group,String username,String userid, WebSocket conn) {
 		Map<String,String> userinfo = new HashMap<String,String>();
-		userinfo.put(USERID, userid);
-		userinfo.put(USERNAME, username);
+		userinfo.put("userid", userid);
+		userinfo.put("username", username);
 		Map<WebSocket, Map<String,String>> groupmap = groupuserconnections.get(group);
 		if(groupmap != null && !groupmap.isEmpty()){
 			groupmap.put(conn, userinfo);
 			groupuserconnections.put(group, groupmap);
 		}else{
-			Map<WebSocket, Map<String,String>> userconnections_tmp = new HashMap<WebSocket, Map<String,String>>();
-			userconnections_tmp.put(conn, userinfo);
-			groupuserconnections.put(group, userconnections_tmp);
+			Map<WebSocket, Map<String,String>> userconnections = new HashMap<WebSocket, Map<String,String>>();
+			userconnections.put(conn, userinfo);
+			groupuserconnections.put(group, userconnections);
+		}
+	}
+	
+	/** * Remove User from Group * @param inbound */
+	public static boolean removeGroup(String group) {
+		//Map<WebSocket, Map<String,String>> groupmap = groupuserconnections.get(group);
+		if (groupuserconnections.containsKey(group)) {
+			groupuserconnections.remove(group);
+			return true;
+		} else {
+			return false;
 		}
 	}
 	
@@ -216,7 +226,7 @@ public class WebSocketPool {
 		Set<WebSocket> keySet = groupmap.keySet();
 		synchronized (keySet) {
 			for (WebSocket conn : keySet) {
-				String user = groupmap.get(conn).get(USERID);
+				String user = groupmap.get(conn).get("userid");
 				if (user != null) {
 					conn.send(message);
 				}
@@ -230,7 +240,7 @@ public class WebSocketPool {
 		List<String> setUsers = new ArrayList<String>();
 		Collection<Map<String,String>> setUser = groupmap.values();
 		for (Map<String,String> u : setUser) {
-			setUsers.add(u.get(USERNAME));
+			setUsers.add(u.get("username"));
 		}
 		return setUsers;
 	}
@@ -243,7 +253,7 @@ public class WebSocketPool {
 	/** * Get User Name By WebSocket Key from Group * @param session */
 	public static String getUserByKeyingroup(String group, WebSocket conn) {
 		Map<WebSocket, Map<String,String>> groupmap = groupuserconnections.get(group);
-		return groupmap.get(conn).get(USERNAME);
+		return groupmap.get(conn).get("username");
 	}
 
 	/** * Get Online Group Count * @param */
@@ -268,7 +278,7 @@ public class WebSocketPool {
 		Set<WebSocket> keySet = groupmap.keySet();
 		synchronized (keySet) {
 			for (WebSocket conn : keySet) {
-				String cuser = groupmap.get(conn).get(USERID);
+				String cuser = groupmap.get(conn).get("userid");
 				if (cuser.equals(user)) {
 					return conn;
 				}
@@ -289,8 +299,8 @@ public class WebSocketPool {
 		Map<WebSocket, Map<String, Object>> TYPEmap = TYPEconnections.get(TYPE);
 		Map<String, Object> TYPEdatamap = new HashMap<String, Object>();
 		if(TYPEmap != null && !TYPEmap.isEmpty()){
-			TYPEdatamap.put(USERID, userid);
-			TYPEdatamap.put(USERNAME, username);
+			TYPEdatamap.put("userid", userid);
+			TYPEdatamap.put("username", username);
 			if(TYPE.equals("Agent")){
 				TYPEdatamap.put("status", "not ready");
 			}else if(TYPE.equals("Client")){
@@ -301,8 +311,8 @@ public class WebSocketPool {
 			TYPEconnections.put(TYPE, TYPEmap);
 		}else{
 			Map<WebSocket, Map<String, Object>> TYPEuserconnections = new HashMap<WebSocket, Map<String, Object>>();
-			TYPEdatamap.put(USERID, userid);
-			TYPEdatamap.put(USERNAME, username);
+			TYPEdatamap.put("userid", userid);
+			TYPEdatamap.put("username", username);
 			if(TYPE.equals("Agent")){
 				TYPEdatamap.put("status", "not ready");
 			}else if(TYPE.equals("Client")){
@@ -377,7 +387,7 @@ public class WebSocketPool {
 			}
 			if(userdate.getTime() <= UserStayTime && u.get("status").toString().trim().equals("ready")){
 				UserStayTime = userdate.getTime();
-				settingUser = u.get(USERID).toString();
+				settingUser = u.get("userid").toString();
 			}
 		}
 		return settingUser;
@@ -389,7 +399,7 @@ public class WebSocketPool {
 		List<String> setUsers = new ArrayList<String>();
 		Collection<Map<String, Object>> setUser = TYPEmap.values();
 		for (Map<String, Object> u : setUser) {
-			setUsers.add(u.get(USERNAME).toString());
+			setUsers.add(u.get("username").toString());
 		}
 		return setUsers;
 	}
@@ -400,7 +410,7 @@ public class WebSocketPool {
 		List<String> setUsers = new ArrayList<String>();
 		Collection<Map<String, Object>> setUser = TYPEmap.values();
 		for (Map<String, Object> u : setUser) {
-			setUsers.add(u.get(USERID).toString());
+			setUsers.add(u.get("userid").toString());
 		}
 		return setUsers;
 	}
@@ -425,7 +435,7 @@ public class WebSocketPool {
 	/** * Get User ID By Key in Agent or Client * @param session */
 	public static String getUserByKeyinTYPE(String TYPE, WebSocket conn) {
 		Map<WebSocket,  Map<String, Object>> TYPEmap = TYPEconnections.get(TYPE);
-		return TYPEmap.get(conn).get(USERID).toString();
+		return TYPEmap.get(conn).get("userid").toString();
 	}
 
 	/** * Get Agent or Client Count * @param */
@@ -439,7 +449,7 @@ public class WebSocketPool {
 		Set<WebSocket> keySet = TYPEmap.keySet();
 		synchronized (keySet) {
 			for (WebSocket conn : keySet) {
-				String cuser = TYPEmap.get(conn).get(USERID).toString();
+				String cuser = TYPEmap.get(conn).get("userid").toString();
 				if (cuser.equals(user)) {
 					return conn;
 				}
@@ -464,8 +474,5 @@ public class WebSocketPool {
 	public static int getleaveClient() {
 		return leaveClient;
 	}
-	
-	
-
 	
 }

@@ -9,9 +9,7 @@ import java.net.InetSocketAddress;
 import java.net.URL;
 import java.net.UnknownHostException;
 import java.text.SimpleDateFormat;
-import java.util.Collection;
 import java.util.Date;
-import java.util.Iterator;
 import java.util.Set;
 
 import org.java_websocket.WebSocketImpl;
@@ -41,9 +39,8 @@ public class WebSocket extends WebSocketServer {
 	/** * trigger Exception Event */
 	@Override
 	public void onError(org.java_websocket.WebSocket conn, Exception message) {
-// 先註解調,debug其他問題用
-//		System.out.println("Socket Exception:" + message.toString());
-//		message.printStackTrace();
+		System.out.println("Socket Exception:" + message.toString());
+		message.printStackTrace();
 		e++;
 	}
 
@@ -152,23 +149,17 @@ public class WebSocket extends WebSocketServer {
 		case "heartbeattoserver":
 			this.heartbeattoserver(message.toString(), conn);
 			break;
-		case "test":
-			this.test();
-			break;
 		}
 	}
-
-
+	
+	
 
 	/** * create a groupId * @param message */
 	public void creategroupId(String message, org.java_websocket.WebSocket conn) {
 		String groupId = java.util.UUID.randomUUID().toString();
-//		String sendjson = "{ \"Event\": \"creategroupId\", \"groupId\": \""
-//				+ groupId + "\" }";
 		JSONObject sendjson = new JSONObject();
 		sendjson.put("Event", "creategroupId");
 		sendjson.put("groupId", groupId);
-		//sendjson.put("channel", "chat");
 		WebSocketPool.sendMessageToUser(conn, sendjson.toString());
 	}
 
@@ -181,8 +172,6 @@ public class WebSocket extends WebSocketServer {
 		String joinMsg = "[Server]" + username + " Online";
 		WebSocketPool.addUser(username, userId, conn);
 		WebSocketPool.sendMessage(joinMsg);
-//		String sendjson = "{ \"Event\": \"userjoin\", \"from\": \"" + userId
-//				+ "\" }";
 		JSONObject sendjson = new JSONObject();
 		sendjson.put("Event", "userjoin");
 		sendjson.put("from", userId);
@@ -247,10 +236,6 @@ public class WebSocket extends WebSocketServer {
 		String group = obj.getString("group");
 		WebSocketPool.sendMessageToUser(conn, "group people: "
 				+ WebSocketPool.getOnlineUseringroup(group).toString());
-		/*
-		WebSocketPool.sendMessageingroup(group, "group people: "
-				+ WebSocketPool.getOnlineUseringroup(group).toString());
-				*/
 	}
 
 	/** * user leave group */
@@ -258,12 +243,10 @@ public class WebSocket extends WebSocketServer {
 			org.java_websocket.WebSocket conn) {
 		JSONObject obj = new JSONObject(message);
 		String group = obj.getString("group");
-		// String userId = WebSocketPool.getUserByKey(conn);
 		String username = obj.getString("UserName");
 		String joinMsg = "[Server]" + username + " leave " + group + " group";
-		WebSocketPool.removeUserGroup(conn);
+		WebSocketPool.removeGroup(group);
 		WebSocketPool.sendMessageingroup(group, joinMsg);
-		WebSocketPool.removeUseringroup(group, conn);
 	}
 
 	/** * user join group */
@@ -288,11 +271,7 @@ public class WebSocket extends WebSocketServer {
 		String group = obj.getString("group");
 		String userid = obj.getString("id");
 		String username = obj.getString("UserName");
-		// String date = obj.get("date").toString();
 		String text = obj.getString("text");
-//		String sendjson = "{ \"Event\": \"groupmessage\", \"from\": \""
-//				+ userid + "\", \"username\": \"" + username
-//				+ "\", \"message\": \"" + text + "\" }";
 		JSONObject sendjson = new JSONObject();
 		sendjson.put("Event", "groupmessage");
 		sendjson.put("from", userid);
@@ -308,8 +287,6 @@ public class WebSocket extends WebSocketServer {
 		String ACtype = obj.getString("ACtype");
 		WebSocketPool.sendMessageToUser(conn, ACtype + " people: "
 				+ WebSocketPool.getOnlineUserNameinTYPE(ACtype).toString());
-		
-		
 		JSONObject sendjson = new JSONObject();
 		sendjson.put("Event", "onlineinTYPE");
 		sendjson.put("from", WebSocketPool.getOnlineUserIDinTYPE(ACtype)
@@ -337,9 +314,6 @@ public class WebSocket extends WebSocketServer {
 		sendjson.put("ACtype", ACtype);
 		sendjson.put("channel", obj.getString("channel"));
 		WebSocketPool.sendMessageinTYPE(ACtype,sendjson.toString());
-//				"{ \"Event\": \"userExitfromTYPE\", \"from\": \"" + userid
-//						+ "\", \"username\": \"" + username
-//						+ "\", \"ACtype\": \"" + ACtype + "\" }");
 		WebSocketPool.removeUserinTYPE(ACtype, conn);
 	}
 
@@ -355,9 +329,6 @@ public class WebSocket extends WebSocketServer {
 		WebSocketPool.sendMessageinTYPE(ACtype, joinMsg);
 		WebSocketPool.sendMessageinTYPE(ACtype, ACtype + " people: "
 				+ WebSocketPool.getOnlineUserNameinTYPE(ACtype).toString());
-//		String sendjson = "{ \"Event\": \"userjointoTYPE\", \"from\": \""
-//				+ userid + "\", \"username\": \"" + username
-//				+ "\", \"ACtype\": \"" + ACtype + "\" }";
 		JSONObject sendjson = new JSONObject();
 		sendjson.put("Event", "userjointoTYPE");
 		sendjson.put("from", userid);
@@ -372,7 +343,6 @@ public class WebSocket extends WebSocketServer {
 			org.java_websocket.WebSocket conn) {
 		JSONObject obj = new JSONObject(message);
 		String ACtype = obj.getString("ACtype");
-		// String userId = obj.getString("id");
 		String username = obj.getString("UserName");
 		String text = obj.getString("text");
 		WebSocketPool.sendMessageinTYPE(ACtype, username + ": " + text);
@@ -390,9 +360,6 @@ public class WebSocket extends WebSocketServer {
 		sendjson.put("channel", obj.getString("channel"));
 		WebSocketPool.sendMessageingroup(
 				group,sendjson.toString());
-//				"{ \"Event\": \"Agentclosegroup\", \"from\": \""
-//						+ obj.getString("id") + "\", \"fromName\": \""
-//						+ obj.getString("UserName") + "\" }");
 	}
 
 	/** * Client close Group */
@@ -407,9 +374,6 @@ public class WebSocket extends WebSocketServer {
 		sendjson.put("channel", obj.getString("channel"));
 		WebSocketPool.sendMessageingroup(
 				group,sendjson.toString());
-//				"{ \"Event\": \"Clientclosegroup\", \"from\": \""
-//						+ obj.getString("id") + "\", \"fromName\": \""
-//						+ obj.getString("UserName") + "\" }");
 	}
 
 	/** * send Accept Event */
@@ -426,16 +390,11 @@ public class WebSocket extends WebSocketServer {
 		sendjson.put("channel", obj.getString("channel"));
 		WebSocketPool.sendMessageToUser(
 				sendto,sendjson.toString());
-//				"{ \"Event\": \"AcceptEvent\", \"from\": \""
-//						+ obj.getString("id") + "\", \"fromName\": \""
-//						+ obj.getString("UserName") + "\", \"group\": \""
-//						+ group + "\" }");
 	}
 	
 	/** * RejectEvent */
 	public void RejectEvent(String message, org.java_websocket.WebSocket conn) {
 		JSONObject obj = new JSONObject(message);
-//		String Event = obj.getString("Event");
 		org.java_websocket.WebSocket sendto = WebSocketPool
 				.getWebSocketByUser(obj.getString("sendto"));
 		JSONObject sendjson = new JSONObject();
@@ -444,15 +403,11 @@ public class WebSocket extends WebSocketServer {
 		sendjson.put("fromName",  obj.getString("UserName"));
 		sendjson.put("channel", obj.getString("channel"));
 		WebSocketPool.sendMessageToUser(sendto, sendjson.toString());
-//				"{ \"Event\": \"" + Event
-//				+ "\", \"from\": \"" + obj.getString("id")
-//				+ "\", \"fromName\": \"" + obj.getString("UserName") + "\" }");
 	}
 	
 	/** * ReleaseEvent */
 	public void ReleaseEvent(String message, org.java_websocket.WebSocket conn) {
 		JSONObject obj = new JSONObject(message);
-//		String Event = obj.getString("Event");
 		org.java_websocket.WebSocket sendto = WebSocketPool
 				.getWebSocketByUser(obj.getString("sendto"));
 		JSONObject sendjson = new JSONObject();
@@ -461,15 +416,11 @@ public class WebSocket extends WebSocketServer {
 		sendjson.put("fromName",  obj.getString("UserName"));
 		sendjson.put("channel", obj.getString("channel"));
 		WebSocketPool.sendMessageToUser(sendto, sendjson.toString());
-//				"{ \"Event\": \"" + Event
-//				+ "\", \"from\": \"" + obj.getString("id")
-//				+ "\", \"fromName\": \"" + obj.getString("UserName") + "\" }");
 	}
 	
 	/** * findAgentEvent */
 	public void findAgentEvent(String message, org.java_websocket.WebSocket conn) {
 		JSONObject obj = new JSONObject(message);
-//		String Event = obj.getString("Event");
 		org.java_websocket.WebSocket sendto = WebSocketPool
 				.getWebSocketByUser(obj.getString("sendto"));
 		JSONObject sendjson = new JSONObject();
@@ -478,27 +429,8 @@ public class WebSocket extends WebSocketServer {
 		sendjson.put("fromName",  obj.getString("UserName"));
 		sendjson.put("channel", obj.getString("channel"));
 		WebSocketPool.sendMessageToUser(sendto, sendjson.toString());
-//				"{ \"Event\": \"" + Event
-//				+ "\", \"from\": \"" + obj.getString("id")
-//				+ "\", \"fromName\": \"" + obj.getString("UserName") + "\" }");
 	}
 	
-//	/** * other Event */
-//	public void Event(String message, org.java_websocket.WebSocket conn) {
-//		JSONObject obj = new JSONObject(message);
-//		String Event = obj.getString("Event");
-//		org.java_websocket.WebSocket sendto = WebSocketPool
-//				.getWebSocketByUser(obj.getString("sendto"));
-//		JSONObject sendjson = new JSONObject();
-//		sendjson.put("Event", Event);
-//		sendjson.put("from", obj.getString("id"));
-//		sendjson.put("fromName",  obj.getString("UserName"));
-//		WebSocketPool.sendMessageToUser(sendto, sendjson.toString());
-////				"{ \"Event\": \"" + Event
-////				+ "\", \"from\": \"" + obj.getString("id")
-////				+ "\", \"fromName\": \"" + obj.getString("UserName") + "\" }");
-//	}
-
 	/** * update Agent Status */
 	public void updateStatus(String message, org.java_websocket.WebSocket conn) {
 		JSONObject obj = new JSONObject(message);
@@ -507,13 +439,9 @@ public class WebSocket extends WebSocketServer {
 		String userid = obj.getString("id");
 		String date = obj.getString("date");
 		String status = obj.getString("status");
-		if(status == "lose"){
+		if(status.equals("lose")){
 			WebSocketPool.addleaveClient();
 		}
-//		String reason = "";
-//		if(!status.equals("ready")){
-//			reason = obj.getString("reason");
-//		}
 		String reason = obj.getString("reason");
 		WebSocketPool.UserUpdate(ACtype, username, userid, date, status, reason, conn);
 	}
@@ -532,15 +460,11 @@ public class WebSocket extends WebSocketServer {
 		sendjson.put("channel", obj.getString("channel"));
 		WebSocketPool.sendMessageToUser(
 				conn, sendjson.toString());
-//				"{ \"Event\": \"getUserStatus\", \"from\": \""
-//						+ obj.getString("id") + "\", \"Status\": \"" + status
-//						+ "\" }");
 	}
 
 	/** * find online Longest Agent */
 	public void findAgent(String message, org.java_websocket.WebSocket conn) {
 		JSONObject obj = new JSONObject(message);
-//		String Event = obj.getString("Event");
 		String Agent;
 		try {
 			Agent = WebSocketPool.getOnlineLongestUserinTYPE("Agent");
@@ -553,9 +477,6 @@ public class WebSocket extends WebSocketServer {
 		sendjson.put("Agent",  Agent);
 		sendjson.put("channel", obj.getString("channel"));
 		WebSocketPool.sendMessageToUser(conn, sendjson.toString());
-//				"{ \"Event\": \"" + Event
-//				+ "\", \"from\": \"" + obj.getString("id")
-//				+ "\", \"Agent\": \"" + Agent + "\" }");
 	}
 
 	/** * Get user data */
@@ -563,8 +484,6 @@ public class WebSocket extends WebSocketServer {
 		System.out.println(message);
 		JSONObject obj = new JSONObject(message);
 		String lang = obj.getString("lang");
-		//String searchkey = obj.getString("searchkey");
-		//String pkey = obj.getString("pkey");
 		String searchtype = obj.getString("searchtype");
 		JSONObject attributes = obj.getJSONObject("attributes");
 		String attributenames = obj.getJSONObject("attributes").getString(
@@ -573,9 +492,6 @@ public class WebSocket extends WebSocketServer {
 		try {
 			// Encode the query
 			String postData = 
-//					"searchkey=" + searchkey
-//					+ "&pkey=" + pkey
-//					+ 
 					"&searchtype=" + searchtype
 					+ "&attributes=" + attributes.toString()
 					+ "&attributenames=" + attributenames
@@ -618,13 +534,7 @@ public class WebSocket extends WebSocketServer {
 		sendjson.put("userdata",  responseSBjson);
 		sendjson.put("channel", obj.getString("channel"));
 		WebSocketPool.sendMessageToUser(conn, sendjson.toString());
-//				"{ \"Event\": \"searchuserdata\", \"from\": \""
-//						+ obj.getJSONObject("attributes").getString("id")
-//						+ "\", \"userdata\": " + responseSB + " }");
 		WebSocketPool.sendMessageToUser(sendto, sendjson.toString());
-//				"{ \"Event\": \"searchuserdata\", \"from\": \""
-//						+ obj.getJSONObject("attributes").getString("id")
-//						+ "\", \"userdata\": " + responseSB + " }");
 	}
 
 	/** * send entry log */
@@ -642,7 +552,6 @@ public class WebSocket extends WebSocketServer {
 		SimpleDateFormat sdf = new SimpleDateFormat("yyyy/MM/dd HH:mm:ss");
 		Date now = new Date();
 		String entertime = sdf.format(now);
-		// String entertime = obj.getString("entertime");
 		StringBuilder responseSB = null;
 		try {
 			// Encode the query
@@ -680,10 +589,6 @@ public class WebSocket extends WebSocketServer {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-		// org.java_websocket.WebSocket sendto = WebSocketPool
-		// .getWebSocketByUser(obj.getString("sendto"));
-		// WebSocketPool.sendMessageToUser(sendto,
-		// "{ \"Event\": \"searchuserdata\", \"from\": \""+obj.getJSONObject("attributes").getString("id")+"\", \"userdata\": "+responseSB+" }");
 	}
 
 	/** * send interaction log */
@@ -709,8 +614,6 @@ public class WebSocket extends WebSocketServer {
 		Set<String> keySet = obj.keySet();
 		synchronized (keySet) {
 			for (String key : keySet) {
-				// String value = obj.getString(key);
-				// userdatamap.put(key, value);
 				switch (key) {
 				case "contactid":
 					contactid = obj.getString(key);
@@ -780,7 +683,6 @@ public class WebSocket extends WebSocketServer {
 			e.printStackTrace();
 		}
 		String startdate = sdf.format(startdated);
-		// String entertime = obj.getString("entertime");
 		StringBuilder responseSB = null;
 		try {
 			// Encode the query
@@ -836,9 +738,7 @@ public class WebSocket extends WebSocketServer {
 			JSONObject sendjson = new JSONObject();
 			sendjson.put("Event", "heartbeattouser");
 			sendjson.put("heartbeat", "AP");
-			//sendjson.put("channel", "chat");
 			WebSocketPool.sendMessageToUser(conn, sendjson.toString());
-//					"{ \"Event\": \"heartbeattouser\", \"heartbeat\": \"AP\" }");
 		}else{
 //			WebSocketPool.removeUserID(conn);
 //			WebSocketPool.removeUserName(conn);
@@ -856,20 +756,14 @@ public class WebSocket extends WebSocketServer {
 	public void heartbeattoserver(String message, org.java_websocket.WebSocket conn){
 		JSONObject obj = new JSONObject(message);
 		String value = null;
-		//String groupid = null;
 		Boolean heartbeat = false;
 		Set<String> keySet = obj.keySet();
 		synchronized (keySet) {
 			for (String key : keySet) {
-				// 若有"heartbeat"的key,代表這個send是由Client發出的
 				if(key.equals("heartbeat")){
-					value = obj.getString("heartbeat"); 
-					//WebSocketPool.addUserheartbeat(value, conn);
+					value = obj.getString("heartbeat");
 					heartbeat = true;
 				}
-//				if(key.equals("groupid")){
-//					groupid = obj.getString("groupid");
-//				}
 			}
 		}
 		if(heartbeat){
@@ -887,83 +781,6 @@ public class WebSocket extends WebSocketServer {
 			}
 		}
 	}
-	
-	
-	private void test() {
-		// TODO Auto-generated method stub
-		System.out.println("test method");
-		
-		/*********** usernameconnections ************/
-//		System.out.println("************* getOnlineUserName ************");
-//		Collection<String> onlineUserNames = WebSocketPool.getOnlineUserName();
-//		for (String name: onlineUserNames ){
-//			System.out.println("Name: " + name);
-//		}
-//		System.out.println("************ getUserNameByKey *************");
-//		Set<org.java_websocket.WebSocket> conns = WebSocketPool.userallconnections.keySet();
-//		System.out.println("conns.size(): " + conns.size());
-//		for (org.java_websocket.WebSocket conn : conns){
-//			System.out.println("Name: " + WebSocketPool.getUserNameByKey(conn));			
-//		}	
-		/************* userconnections *************/
-//		System.out.println("\n************ getUserNByKey *************");
-//		Set<org.java_websocket.WebSocket> conns3 = WebSocketPool.userallconnections.keySet();
-//		System.out.println("conns.size(): " + conns3.size());
-//		for (org.java_websocket.WebSocket conn : conns3){
-//			System.out.println("Id: " + WebSocketPool.getUserByKey(conn));			
-//		}
-//		System.out.println("\n************ getUserCount *************");
-//		System.out.println("WebSocketPool.getUserCount(): " + WebSocketPool.getUserCount());
-//		
-//		
-//		System.out.println("\n************ getWebSocketByUser *************");
-//		Set<org.java_websocket.WebSocket> conns4 = WebSocketPool.userallconnections.keySet();
-//		System.out.println("conns.size(): " + conns4.size());
-//		for (org.java_websocket.WebSocket conn : conns4){
-////			System.out.println("Id: " + WebSocketPool.getUserByKey(conn));
-//			String userid = WebSocketPool.getUserByKey(conn);
-//			org.java_websocket.WebSocket tmpconn = WebSocketPool.getWebSocketByUser(userid);
-//			System.out.println("tmpconn: " + tmpconn);
-//			
-//		}		
-//		System.out.println("\n************ getOnlineUser *************");
-//		Collection<String> userids = WebSocketPool.getOnlineUser();
-//		System.out.println("userids.size(): " + userids.size());
-//		for (String userid: userids){
-//			System.out.println("userid: " + userid);
-//		}	
-//		
-//		System.out.println("\n************ sendMessage *************");
-//		WebSocketPool.sendMessage("Hello Everybody!");		
-//		
-//		System.out.println("\n************ removeUser *************");
-//		Set<org.java_websocket.WebSocket> conns5 = WebSocketPool.userallconnections.keySet();
-//		System.out.println("conns.size(): " + conns5.size());
-//		Iterator<org.java_websocket.WebSocket> itr = conns5.iterator();
-//		while(itr.hasNext()){
-//			org.java_websocket.WebSocket conn = itr.next();
-//			WebSocketPool.removeUser(conn); // 注意此removeUser方法非用iterator刪除,所以不能一次刪兩個或以上的內容物件
-////			itr.remove();
-//			if (WebSocketPool.userallconnections.get(conn) == null){
-//				System.out.println(conn + " has been deleted");
-//			}
-//		}		
-		
-		/*********** user整體測試 **************/
-//		System.out.println("\n************ getXXX*************");
-//		Set<org.java_websocket.WebSocket> conns6 = WebSocketPool.userallconnections.keySet();
-//		System.out.println("conns.size(): " + conns6.size());
-//		for (org.java_websocket.WebSocket conn : conns6){
-//			System.out.println("Id: " + WebSocketPool.getUserByKey(conn));			
-//			System.out.println("name: " + WebSocketPool.getUserNameByKey(conn));			
-//			System.out.println("group: " + WebSocketPool.getUserGroupByKey(conn));			
-//			System.out.println("Interaction: " + WebSocketPool.getUserInteractionByKey(conn));			
-//			System.out.println("heartbeat: " + WebSocketPool.getUserheartbeatByKey(conn));			
-//		}
-		
-	}
-	
-	
 }
 
 
