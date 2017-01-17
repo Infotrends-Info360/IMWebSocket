@@ -904,20 +904,7 @@ public class WebSocket extends WebSocketServer {
 //		System.out.println("conns.size(): " + conns.size());
 //		for (org.java_websocket.WebSocket conn : conns){
 //			System.out.println("Name: " + WebSocketPool.getUserNameByKey(conn));			
-//		}
-//		System.out.println("************ removeKey *************");
-//		Set<org.java_websocket.WebSocket> conns2 = WebSocketPool.userallconnections.keySet();
-//		System.out.println("conns.size(): " + conns2.size());
-//		for (org.java_websocket.WebSocket conn : conns2){
-//			if (WebSocketPool.getUserNameByKey(conn).equals("agent07")){
-//				WebSocketPool.removeUserName(conn);
-//				System.out.println("agent07 deleted");
-//			}
-//			if (WebSocketPool.getUserNameByKey(conn) == null){
-//				System.out.println("conn: " + conn + ": username not found.");
-//			}
-//			System.out.println("Name: " + WebSocketPool.getUserNameByKey(conn));			
-//		}		
+//		}	
 		/************* userconnections *************/
 //		System.out.println("\n************ getUserNByKey *************");
 //		Set<org.java_websocket.WebSocket> conns3 = WebSocketPool.userallconnections.keySet();
@@ -963,16 +950,16 @@ public class WebSocket extends WebSocketServer {
 //		}		
 		
 		/*********** user整體測試 **************/
-		System.out.println("\n************ getXXX*************");
-		Set<org.java_websocket.WebSocket> conns6 = WebSocketPool.userallconnections.keySet();
-		System.out.println("conns.size(): " + conns6.size());
-		for (org.java_websocket.WebSocket conn : conns6){
-			System.out.println("Id: " + WebSocketPool.getUserByKey(conn));			
-			System.out.println("name: " + WebSocketPool.getUserNameByKey(conn));			
-			System.out.println("group: " + WebSocketPool.getUserGroupByKey(conn));			
-			System.out.println("Interaction: " + WebSocketPool.getUserInteractionByKey(conn));			
-			System.out.println("heartbeat: " + WebSocketPool.getUserheartbeatByKey(conn));			
-		}
+//		System.out.println("\n************ getXXX*************");
+//		Set<org.java_websocket.WebSocket> conns6 = WebSocketPool.userallconnections.keySet();
+//		System.out.println("conns.size(): " + conns6.size());
+//		for (org.java_websocket.WebSocket conn : conns6){
+//			System.out.println("Id: " + WebSocketPool.getUserByKey(conn));			
+//			System.out.println("name: " + WebSocketPool.getUserNameByKey(conn));			
+//			System.out.println("group: " + WebSocketPool.getUserGroupByKey(conn));			
+//			System.out.println("Interaction: " + WebSocketPool.getUserInteractionByKey(conn));			
+//			System.out.println("heartbeat: " + WebSocketPool.getUserheartbeatByKey(conn));			
+//		}
 		
 	}
 	

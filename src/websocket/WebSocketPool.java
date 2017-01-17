@@ -76,7 +76,7 @@ public class WebSocketPool {
 		UserInfo userinfo = new UserInfo();
 		userinfo.setUserid(userid);
 		userinfo.setUsername(username);
-		userallconnections.put(conn, userinfo); // 每一個client的connection配一個map	
+		userallconnections.put(conn, userinfo); // 每一個client的connection配一個vo
 	}
 	
 	/** * Add User to WebSocket Pool* @param inbound */ /* Done */
