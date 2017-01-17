@@ -197,12 +197,22 @@ public class WebSocketPool {
 
 	/** * Remove User ID from WebSocket Pool * @param inbound */
 	public static boolean removeUserID(WebSocket conn) {
-		if (userconnections.containsKey(conn)) {
-			userconnections.remove(conn);
+		// 原方法
+//		if (userconnections.containsKey(conn)) {
+//			userconnections.remove(conn);
+//			return true;
+//		} else {
+//			return false;
+//		}
+		
+		// 修改方法:
+		if (userallconnections.containsKey(conn)) {
+			userallconnections.get(conn).remove("userid"); // 須再測試,牽涉範圍廣
 			return true;
 		} else {
 			return false;
 		}
+		
 	}
 	
 	/** * Remove User Name from WebSocket Pool * @param inbound */ /* Done */
