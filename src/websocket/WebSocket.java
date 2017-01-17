@@ -931,24 +931,13 @@ public class WebSocket extends WebSocketServer {
 			String userid = WebSocketPool.getUserByKey(conn);
 			org.java_websocket.WebSocket tmpconn = WebSocketPool.getWebSocketByUser(userid);
 			System.out.println("tmpconn: " + tmpconn);
+			
 		}		
 		System.out.println("************ getOnlineUser *************");
 		Collection<String> userids = WebSocketPool.getOnlineUser();
-		System.out.println("userids.size(): " + userids.size());
 		for (String userid: userids){
 			System.out.println("userid: " + userid);
 		}
-//		System.out.println("************ removeUserID *************");
-//		Set<org.java_websocket.WebSocket> conns5 = WebSocketPool.userallconnections.keySet();
-//		System.out.println("conns.size(): " + conns5.size());
-//		for (org.java_websocket.WebSocket conn : conns5){
-//			WebSocketPool.removeUserID(conn);
-//			System.out.println("conn: " + conn + " deleted");
-//		}
-//		for (org.java_websocket.WebSocket conn : conns5){
-//			WebSocketPool.removeUserID(conn);
-//			System.out.println(WebSocketPool.getUserByKey(conn)); // 應該要是null
-//		}
 		
 		
 		
