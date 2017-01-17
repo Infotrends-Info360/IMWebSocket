@@ -15,6 +15,7 @@ import org.java_websocket.WebSocket;
 public class WebSocketPool {
 	private static final String USERID = "userid";
 	private static final String USERGROUP = "usergroup";
+	private static final String USERINTERACTION = "userinteraction";
 	
 	/**
 	 * online User ID Map
@@ -69,7 +70,7 @@ public class WebSocketPool {
 	/** * Get User By Key * @param session */
 	public static String getUserInteractionByKey(WebSocket conn) {
 //		return userinteractionconnections.get(conn);
-		return userallconnections.get(conn).get("userinteraction");
+		return userallconnections.get(conn).get(USERINTERACTION);
 	}
 	
 	/** * Get User By Key * @param session */
@@ -143,7 +144,7 @@ public class WebSocketPool {
 	/** * Add User to WebSocket Pool* @param inbound */
 	public static void addUserInteraction(String userinteraction, WebSocket conn) {
 //		userinteractionconnections.put(conn, userinteraction);
-		userallconnections.get(conn).put("userinteraction", userinteraction);
+		userallconnections.get(conn).put(USERINTERACTION, userinteraction);
 	}
 	
 	/** * Add User to WebSocket Pool* @param inbound */
