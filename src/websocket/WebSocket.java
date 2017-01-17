@@ -887,7 +887,7 @@ public class WebSocket extends WebSocketServer {
 		// TODO Auto-generated method stub
 		System.out.println("test method");
 		
-		/*********** username ************/
+		/*********** usernameconnections ************/
 //		System.out.println("************* getOnlineUserName ************");
 //		Collection<String> onlineUserNames = WebSocketPool.getOnlineUserName();
 //		for (String name: onlineUserNames ){
@@ -912,13 +912,17 @@ public class WebSocket extends WebSocketServer {
 //			}
 //			System.out.println("Name: " + WebSocketPool.getUserNameByKey(conn));			
 //		}		
-		/************* userid *************/
+		/************* userconnections *************/
 		System.out.println("************ getUserNByKey *************");
 		Set<org.java_websocket.WebSocket> conns3 = WebSocketPool.userallconnections.keySet();
 		System.out.println("conns.size(): " + conns3.size());
 		for (org.java_websocket.WebSocket conn : conns3){
 			System.out.println("Id: " + WebSocketPool.getUserByKey(conn));			
 		}
+		System.out.println("************ getUserCount *************");
+		System.out.println("WebSocketPool.getUserCount(): " + WebSocketPool.getUserCount());
+		
+		
 	
 	}
 	

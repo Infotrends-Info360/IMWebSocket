@@ -74,7 +74,8 @@ public class WebSocketPool {
 
 	/** * Get Online User Count * @param */
 	public static int getUserCount() {
-		return userconnections.size();
+//		return userconnections.size();
+		return userallconnections.size();
 	}
 
 	/** * Get WebSocket By User ID * @param user */
