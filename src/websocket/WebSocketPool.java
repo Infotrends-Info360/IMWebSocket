@@ -92,7 +92,7 @@ public class WebSocketPool {
 		}
 		*/
 		
-		Set<WebSocket> conns = userconnections.keySet();
+		Set<WebSocket> conns = userallconnections.keySet();
 		synchronized (conns) {
 			for (WebSocket conn : conns) {
 //				String cuser = userconnections.get(conn);
