@@ -265,10 +265,21 @@ public class WebSocketPool {
 
 	/** * Send Message to all of User * @param message */
 	public static void sendMessage(String message) {
+		/* 原方法
 		Set<WebSocket> keySet = userconnections.keySet();
 		synchronized (keySet) {
 			for (WebSocket conn : keySet) {
 				String user = userconnections.get(conn);
+				if (user != null) {
+					conn.send(message);
+				}
+			}
+		}
+		*/		
+		Set<WebSocket> conns = userallconnections.keySet();
+		synchronized (conns) {
+			for (WebSocket conn : conns) {
+				String user = userallconnections.get(conn).get("userid");
 				if (user != null) {
 					conn.send(message);
 				}

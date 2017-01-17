@@ -939,8 +939,8 @@ public class WebSocket extends WebSocketServer {
 			System.out.println("userid: " + userid);
 		}
 		
-		
-		
+		System.out.println("************ sendMessage *************");
+		WebSocketPool.sendMessage("Hello Everybody!");		
 		
 	}
 	
