@@ -78,8 +78,9 @@ public class WebSocketPool {
 		return userallconnections.size();
 	}
 
-	/** * Get WebSocket By User ID * @param user */
+	/** * Get WebSocket By User ID * @param user */ /* Done */
 	public static WebSocket getWebSocketByUser(String user) {
+		/* 原方法
 		Set<WebSocket> keySet = userconnections.keySet();
 		synchronized (keySet) {
 			for (WebSocket conn : keySet) {
@@ -89,6 +90,20 @@ public class WebSocketPool {
 				}
 			}
 		}
+		*/
+		
+		Set<WebSocket> conns = userconnections.keySet();
+		synchronized (conns) {
+			for (WebSocket conn : conns) {
+//				String cuser = userconnections.get(conn);
+				String cuser = userallconnections.get(conn).get("userid");
+				if (cuser.equals(user)) {
+					System.out.println("(getWebSocketByUser)found user id: " + cuser + "的connection");
+					return conn;
+				}
+			}
+		}
+		
 		return null;
 	}
 

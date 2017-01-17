@@ -923,7 +923,18 @@ public class WebSocket extends WebSocketServer {
 		System.out.println("WebSocketPool.getUserCount(): " + WebSocketPool.getUserCount());
 		
 		
-	
+		System.out.println("************ getWebSocketByUser *************");
+		Set<org.java_websocket.WebSocket> conns4 = WebSocketPool.userallconnections.keySet();
+		System.out.println("conns.size(): " + conns4.size());
+		for (org.java_websocket.WebSocket conn : conns4){
+//			System.out.println("Id: " + WebSocketPool.getUserByKey(conn));
+			String userid = WebSocketPool.getUserByKey(conn);
+			org.java_websocket.WebSocket tmpconn = WebSocketPool.getWebSocketByUser(userid);
+			System.out.println("tmpconn: " + tmpconn);
+			
+		}		
+		
+		
 	}
 	
 	
