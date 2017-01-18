@@ -17,6 +17,7 @@ import org.java_websocket.handshake.ClientHandshake;
 import org.java_websocket.server.WebSocketServer;
 import org.json.JSONObject;
 
+import websocket.function.CommonFunction;
 import websocket.pools.WebSocketGroupPool;
 import websocket.pools.WebSocketTypePool;
 import websocket.pools.WebSocketUserPool;
@@ -76,37 +77,48 @@ public class WebSocket extends WebSocketServer {
 		JSONObject obj = new JSONObject(message);
 		switch (obj.getString("type").trim()) {
 		case "message":
-			this.getMessage(message.toString(), conn);
+//			this.getMessage(message.toString(), conn);
+			CommonFunction.getMessage(message.toString(), conn);
 			break;
 		case "login":
-			this.userjoin(message.toString(), conn);
+//			this.userjoin(message.toString(), conn);
+			CommonFunction.userjoin(message.toString(), conn);
 			break;
 		case "online":
-			this.online(message.toString(), conn);
+//			this.online(message.toString(), conn);
+			CommonFunction.online(message.toString(), conn);
 			break;
 		case "Exit":
-			this.userExit(message.toString(), conn);
+//			this.userExit(message.toString(), conn);
+			CommonFunction.userExit(message.toString(), conn);
 			break;
 		case "addGroup":
-			this.userjointogroup(message.toString(), conn);
+//			this.userjointogroup(message.toString(), conn);
+			CommonFunction.userjointogroup(message.toString(), conn);
 			break;
 		case "leaveGroup":
-			this.userExitfromgroup(message.toString(), conn);
+//			this.userExitfromgroup(message.toString(), conn);
+			CommonFunction.userExitfromgroup(message.toString(), conn);
 			break;
 		case "messagetogroup":
-			this.getMessageingroup(message.toString(), conn);
+//			this.getMessageingroup(message.toString(), conn);
+			CommonFunction.getMessageingroup(message.toString(), conn);
 			break;
 		case "grouponline":
-			this.onlineingroup(message.toString(), conn);
+//			this.onlineingroup(message.toString(), conn);
+			CommonFunction.onlineingroup(message.toString(), conn);
 			break;
 		case "typeonline":
-			this.onlineinTYPE(message.toString(), conn);
+//			this.onlineinTYPE(message.toString(), conn);
+			CommonFunction.onlineinTYPE(message.toString(), conn);
 			break;
 		case "typein":
-			this.userjointoTYPE(message.toString(), conn);
+//			this.userjointoTYPE(message.toString(), conn);
+			CommonFunction.userjointoTYPE(message.toString(), conn);
 			break;
 		case "typeout":
-			this.userExitfromTYPE(message.toString(), conn);
+//			this.userExitfromTYPE(message.toString(), conn);
+			CommonFunction.userExitfromTYPE(message.toString(), conn);
 			break;
 		case "Agentclosegroup":
 			this.Agentclosegroup(message.toString(), conn);
@@ -127,7 +139,8 @@ public class WebSocket extends WebSocketServer {
 			this.findAgentEvent(message.toString(), conn);
 			break;
 		case "updateStatus":
-			this.updateStatus(message.toString(), conn);
+//			this.updateStatus(message.toString(), conn);
+			CommonFunction.updateStatus(message.toString(), conn);
 			break;
 		case "getUserStatus":
 			this.getUserStatus(message.toString(), conn);
@@ -171,58 +184,10 @@ public class WebSocket extends WebSocketServer {
 		WebSocketUserPool.sendMessageToUser(conn, sendjson.toString());
 	}
 
-	/** * user join websocket * @param user */
-	public void userjoin(String user, org.java_websocket.WebSocket conn) {
-		JSONObject obj = new JSONObject(user);
-		String userId = java.util.UUID.randomUUID().toString();
-		String username = obj.getString("UserName");
-		String ACtype = obj.getString("ACtype");
-		String joinMsg = "[Server]" + username + " Online";
-		WebSocketUserPool.addUser(username, userId, conn);
-		WebSocketUserPool.sendMessage(joinMsg);
-		JSONObject sendjson = new JSONObject();
-		sendjson.put("Event", "userjoin");
-		sendjson.put("from", userId);
-		sendjson.put("channel", obj.getString("channel"));
-		WebSocketUserPool.sendMessageToUser(conn, sendjson.toString());
-		WebSocketUserPool.sendMessage("online people: "
-				+ WebSocketUserPool.getOnlineUser().toString());
-		if(ACtype.equals("Client")){
-			HeartBeat heartbeat = new HeartBeat();
-			heartbeat.heartbeating(conn);
-		}
-	}
 
-	/** get private messages **/
-	public void getMessage(String message, org.java_websocket.WebSocket conn) {
-		JSONObject obj = new JSONObject(message);
-		String username = obj.getString("UserName");
-		org.java_websocket.WebSocket sendto = WebSocketUserPool
-				.getWebSocketByUser(obj.getString("sendto"));
-		WebSocketUserPool.sendMessageToUser(sendto,
-				username + " private message to " + obj.getString("sendto")
-						+ ": " + obj.getString("text"));
-		WebSocketUserPool.sendMessageToUser(conn, username + " private message to "
-				+ obj.getString("sendto") + ": " + obj.getString("text"));
-	}
 
-	/** ask online people **/
-	public void online(String message, org.java_websocket.WebSocket conn) {
-		WebSocketUserPool.sendMessageToUser(conn, "online people: "
-				+ WebSocketUserPool.getOnlineUser().toString());
-	}
 
-	/** * user leave websocket */
-	public void userExit(String user, org.java_websocket.WebSocket conn) {
-		JSONObject obj = new JSONObject(user);
-		String username = obj.getString("UserName");
-		user = WebSocketUserPool.getUserByKey(conn);
-		String joinMsg = "[Server]" + username + " Offline";
-		WebSocketUserPool.sendMessage(joinMsg);
-		WebSocketUserPool.removeUser(conn);
-//		WebSocketPool.removeUserID(conn);
-//		WebSocketPool.removeUserName(conn);
-	}
+
 
 	/** * user leave websocket (Demo) */
 	public void userLeave(org.java_websocket.WebSocket conn) {
@@ -237,114 +202,13 @@ public class WebSocket extends WebSocketServer {
 		}
 	}
 
-	// group
-	/** * ask online people in group */
-	public void onlineingroup(String message, org.java_websocket.WebSocket conn) {
-		JSONObject obj = new JSONObject(message);
-		String group = obj.getString("group");
-		WebSocketUserPool.sendMessageToUser(conn, "group people: "
-				+ WebSocketGroupPool.getOnlineUseringroup(group).toString());
-	}
 
-	/** * user leave group */
-	public void userExitfromgroup(String message,
-			org.java_websocket.WebSocket conn) {
-		JSONObject obj = new JSONObject(message);
-		String group = obj.getString("group");
-		String username = obj.getString("UserName");
-		String joinMsg = "[Server]" + username + " leave " + group + " group";
-		WebSocketGroupPool.sendMessageingroup(group, joinMsg);
-		WebSocketGroupPool.removeGroup(group);
-	}
 
-	/** * user join group */
-	public void userjointogroup(String message,
-			org.java_websocket.WebSocket conn) {
-		JSONObject obj = new JSONObject(message);
-		String group = obj.getString("group");
-		String userid = obj.getString("id");
-		String username = obj.getString("UserName");
-		String joinMsg = "[Server]" + username + " join " + group + " group";
-		WebSocketGroupPool.addUseringroup(group, username, userid, conn);
-		WebSocketUserPool.addUserGroup(group, conn);
-		WebSocketGroupPool.sendMessageingroup(group, joinMsg);
-		WebSocketGroupPool.sendMessageingroup(group, "group people: "
-				+ WebSocketGroupPool.getOnlineUseringroup(group).toString());
-	}
 
-	/** * Get Message from Group */
-	public void getMessageingroup(String message,
-			org.java_websocket.WebSocket conn) {
-		JSONObject obj = new JSONObject(message);
-		String group = obj.getString("group");
-		String userid = obj.getString("id");
-		String username = obj.getString("UserName");
-		String text = obj.getString("text");
-		JSONObject sendjson = new JSONObject();
-		sendjson.put("Event", "groupmessage");
-		sendjson.put("from", userid);
-		sendjson.put("username", username);
-		sendjson.put("message", text);
-		sendjson.put("channel", obj.getString("channel"));
-		WebSocketGroupPool.sendMessageingroup(group, sendjson.toString());
-	}
 
-	/** * search online people from Agent or client */
-	public void onlineinTYPE(String message, org.java_websocket.WebSocket conn) {
-		JSONObject obj = new JSONObject(message);
-		String ACtype = obj.getString("ACtype");
-		WebSocketUserPool.sendMessageToUser(conn, ACtype + " people: "
-				+ WebSocketTypePool.getOnlineUserNameinTYPE(ACtype).toString());
-		JSONObject sendjson = new JSONObject();
-		sendjson.put("Event", "onlineinTYPE");
-		sendjson.put("from", WebSocketTypePool.getOnlineUserIDinTYPE(ACtype)
-				.toString().replace("[", "").replace("]", ""));
-		sendjson.put("username",  WebSocketTypePool.getOnlineUserNameinTYPE(ACtype)
-				.toString().replace("[", "").replace("]", ""));
-		sendjson.put("ACtype", ACtype);
-		sendjson.put("channel", obj.getString("channel"));
-		WebSocketTypePool.sendMessageinTYPE(ACtype,sendjson.toString());
-	}
 
-	/** * user leave from Agent or Client list */
-	public void userExitfromTYPE(String message,
-			org.java_websocket.WebSocket conn) {
-		JSONObject obj = new JSONObject(message);
-		String ACtype = obj.getString("ACtype");
-		String userid = obj.getString("id");
-		String username = obj.getString("UserName");
-		String joinMsg = "[Server]" + username + " leave " + ACtype;
-		WebSocketTypePool.sendMessageinTYPE(ACtype, joinMsg);
-		JSONObject sendjson = new JSONObject();
-		sendjson.put("Event", "userExitfromTYPE");
-		sendjson.put("from", userid);
-		sendjson.put("username",  username);
-		sendjson.put("ACtype", ACtype);
-		sendjson.put("channel", obj.getString("channel"));
-		WebSocketTypePool.sendMessageinTYPE(ACtype,sendjson.toString());
-		WebSocketTypePool.removeUserinTYPE(ACtype, conn);
-	}
 
-	/** * user join from Agent or Client list */
-	public void userjointoTYPE(String message, org.java_websocket.WebSocket conn) {
-		JSONObject obj = new JSONObject(message);
-		String ACtype = obj.getString("ACtype");
-		String userid = obj.getString("id");
-		String username = obj.getString("UserName");
-		String date = obj.get("date").toString();
-		String joinMsg = "[Server]" + username + " join " + ACtype;
-		WebSocketTypePool.addUserinTYPE(ACtype, username, userid, date, conn);
-		WebSocketTypePool.sendMessageinTYPE(ACtype, joinMsg);
-		WebSocketTypePool.sendMessageinTYPE(ACtype, ACtype + " people: "
-				+ WebSocketTypePool.getOnlineUserNameinTYPE(ACtype).toString());
-		JSONObject sendjson = new JSONObject();
-		sendjson.put("Event", "userjointoTYPE");
-		sendjson.put("from", userid);
-		sendjson.put("username",  username);
-		sendjson.put("ACtype", ACtype);
-		sendjson.put("channel", obj.getString("channel"));
-		WebSocketUserPool.sendMessage(sendjson.toString());
-	}
+
 
 	/** * Get Message from Agent or Client list */
 	public void getMessageinTYPE(String message,
@@ -416,7 +280,7 @@ public class WebSocket extends WebSocketServer {
 	public void ReleaseEvent(String message, org.java_websocket.WebSocket conn) {
 		JSONObject obj = new JSONObject(message);
 		org.java_websocket.WebSocket sendto = WebSocketUserPool
-				.getWebSocketByUser(obj.getString("sendto"));
+				.getWebSocketByUser(obj.getString("sendto")); // "sendto" 紀錄的是此Agent要關閉的Client UserId
 		JSONObject sendjson = new JSONObject();
 		sendjson.put("Event", "ReleaseEvent");
 		sendjson.put("from", obj.getString("id"));
@@ -438,20 +302,6 @@ public class WebSocket extends WebSocketServer {
 		WebSocketUserPool.sendMessageToUser(sendto, sendjson.toString());
 	}
 	
-	/** * update Agent Status */
-	public void updateStatus(String message, org.java_websocket.WebSocket conn) {
-		JSONObject obj = new JSONObject(message);
-		String ACtype = obj.getString("ACtype");
-		String username = obj.getString("UserName");
-		String userid = obj.getString("id");
-		String date = obj.getString("date");
-		String status = obj.getString("status");
-		if(status.equals("lose")){
-			WebSocketTypePool.addleaveClient();
-		}
-		String reason = obj.getString("reason");
-		WebSocketTypePool.UserUpdate(ACtype, username, userid, date, status, reason, conn);
-	}
 
 	/** * get Agent Status */
 	public void getUserStatus(String message, org.java_websocket.WebSocket conn) {
