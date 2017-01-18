@@ -16,6 +16,7 @@ import websocket.pools.WebSocketGroupPool;
 import websocket.pools.WebSocketTypePool;
 import websocket.pools.WebSocketUserPool;
 
+//此類別給WebSocjet.java使用
 public class ClientFunction {
 	/** * Client close Group */
 	public static void Clientclosegroup(String message,

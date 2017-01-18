@@ -272,16 +272,16 @@ public class WebSocket extends WebSocketServer {
 //	}		
 	
 	/*********** user整體測試 **************/
-	System.out.println("\n************ getXXX*************");
-	Set<org.java_websocket.WebSocket> conns6 = WebSocketUserPool.userallconnections.keySet();
-	System.out.println("conns.size(): " + conns6.size());
-	for (org.java_websocket.WebSocket conn : conns6){
-		System.out.println("Id: " + WebSocketUserPool.getUserByKey(conn));			
-		System.out.println("name: " + WebSocketUserPool.getUserNameByKey(conn));			
-		System.out.println("group: " + WebSocketGroupPool.getUserGroupByKey(conn));			
-		System.out.println("Interaction: " + WebSocketTypePool.getUserInteractionByKey(conn));			
-		System.out.println("heartbeat: " + WebSocketUserPool.getUserheartbeatByKey(conn));			
-	}
+//	System.out.println("\n************ getXXX*************");
+//	Set<org.java_websocket.WebSocket> conns6 = WebSocketUserPool.userallconnections.keySet();
+//	System.out.println("conns.size(): " + conns6.size());
+//	for (org.java_websocket.WebSocket conn : conns6){
+//		System.out.println("Id: " + WebSocketUserPool.getUserByKey(conn));			
+//		System.out.println("name: " + WebSocketUserPool.getUserNameByKey(conn));			
+//		System.out.println("group: " + WebSocketGroupPool.getUserGroupByKey(conn));			
+//		System.out.println("Interaction: " + WebSocketTypePool.getUserInteractionByKey(conn));			
+//		System.out.println("heartbeat: " + WebSocketUserPool.getUserheartbeatByKey(conn));			
+//	}
 	
 }
 	

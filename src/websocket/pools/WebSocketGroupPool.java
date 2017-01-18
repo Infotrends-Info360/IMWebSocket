@@ -15,7 +15,13 @@ import org.java_websocket.WebSocket;
 import websocket.bean.GroupInfo;
 import websocket.bean.UserInfo;
 
-public class WebSocketGroupPool extends WebSocketUserPool{
+//此類別給AgentFunction.java共同使用
+//此類別給ClientFunction.java共同使用
+//此類別給CommonFunction.java共同使用
+
+//此類別給HeartBeat.java使用
+//此類別給GetKPIServlet.java使用
+public class WebSocketGroupPool{
 	/**********************************************************************************/
 	/**
 	 * Group Members Map

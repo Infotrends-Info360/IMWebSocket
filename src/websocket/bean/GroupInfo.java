@@ -1,6 +1,6 @@
 package websocket.bean;
 
-//此類別給WebSocketPool.userallconnections使用
+//此類別給WebSocketGroupPool.groupuserconnections使用
 public class GroupInfo {
 	private String userid;
 	private String username;
