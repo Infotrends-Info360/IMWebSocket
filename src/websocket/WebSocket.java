@@ -278,8 +278,8 @@ public class WebSocket extends WebSocketServer {
 //	for (org.java_websocket.WebSocket conn : conns6){
 //		System.out.println("Id: " + WebSocketUserPool.getUserByKey(conn));			
 //		System.out.println("name: " + WebSocketUserPool.getUserNameByKey(conn));			
-//		System.out.println("group: " + WebSocketGroupPool.getUserGroupByKey(conn));			
-//		System.out.println("Interaction: " + WebSocketTypePool.getUserInteractionByKey(conn));			
+//		System.out.println("group: " + WebSocketUserPool.getUserGroupByKey(conn));			
+//		System.out.println("Interaction: " + WebSocketUserPool.getUserInteractionByKey(conn));			
 //		System.out.println("heartbeat: " + WebSocketUserPool.getUserheartbeatByKey(conn));			
 //	}
 	
