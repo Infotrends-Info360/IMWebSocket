@@ -87,4 +87,15 @@ public class AgentFunction {
 		sendjson.put("groupId", groupId);
 		WebSocketUserPool.sendMessageToUser(conn, sendjson.toString());
 	}
+	
+	/** * Get Message from Agent or Client list */
+	// 此方法尚未用到,廣播用途,給Agent呼叫,功用為發給所有Agent
+	public static void getMessageinTYPE(String message,
+			org.java_websocket.WebSocket conn) {
+		JSONObject obj = new JSONObject(message);
+		String ACtype = obj.getString("ACtype");
+		String username = obj.getString("UserName");
+		String text = obj.getString("text");
+		WebSocketTypePool.sendMessageinTYPE(ACtype, username + ": " + text);
+	}
 }

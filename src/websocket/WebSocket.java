@@ -39,6 +39,7 @@ public class WebSocket extends WebSocketServer {
 	@Override
 	public void onClose(org.java_websocket.WebSocket conn, int message,
 			String reason, boolean remote) {
+		// 此方法沒有用到,先放著,並不會影響到主流程
 		userLeave(conn);
 		System.out.println("Someone unlink in Socket conn:" + conn);
 	}
@@ -197,6 +198,7 @@ public class WebSocket extends WebSocketServer {
 
 
 	/** * user leave websocket (Demo) */
+	// 此方法沒有用到,先放著,並不會影響到主流程
 	public void userLeave(org.java_websocket.WebSocket conn) {
 		String user = WebSocketUserPool.getUserByKey(conn);
 //		boolean b = WebSocketPool.removeUserID(conn);
@@ -208,31 +210,6 @@ public class WebSocket extends WebSocketServer {
 			WebSocketUserPool.sendMessage(joinMsg);
 		}
 	}
-
-
-
-
-
-
-
-
-
-	/** * Get Message from Agent or Client list */
-	public void getMessageinTYPE(String message,
-			org.java_websocket.WebSocket conn) {
-		JSONObject obj = new JSONObject(message);
-		String ACtype = obj.getString("ACtype");
-		String username = obj.getString("UserName");
-		String text = obj.getString("text");
-		WebSocketTypePool.sendMessageinTYPE(ACtype, username + ": " + text);
-	}
-
-
-
-
-
-
-	
 	
 	private void test() {
 	// TODO Auto-generated method stub
