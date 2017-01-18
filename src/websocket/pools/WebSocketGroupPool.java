@@ -20,36 +20,21 @@ public class WebSocketGroupPool extends WebSocketUserPool{
 	/**
 	 * Group Members Map
 	 */
-//	private static final Map<String, Map<WebSocket, Map<String,String>>> groupuserconnections = new HashMap<String, Map<WebSocket, Map<String,String>>>();
 	private static final Map<String, Map<WebSocket, GroupInfo>> groupuserconnections = new HashMap<String, Map<WebSocket, GroupInfo>>();
 	
 	/** * Add User to Group Map * @param inbound */
 	public static void addUseringroup(String group,String username,String userid, WebSocket conn) {
-//		Map<String,String> userinfo = new HashMap<String,String>();
-//		userinfo.put("userid", userid);
-//		userinfo.put("username", username);
 		
 		GroupInfo groupinfo = new GroupInfo();
 		groupinfo.setUserid(userid);
 		groupinfo.setUsername(username);
 		
-//		Map<WebSocket, Map<String,String>> groupmap = groupuserconnections.get(group);
 		Map<WebSocket, GroupInfo> groupmap = groupuserconnections.get(group);
 		if (groupmap == null || groupmap.isEmpty()){
 			groupmap = new HashMap<WebSocket, GroupInfo>();			
 		}
 		groupmap.put(conn, groupinfo);
 		groupuserconnections.put(group, groupmap);
-//		if(groupmap != null && !groupmap.isEmpty()){
-//			groupmap.put(conn, groupinfo);
-//			groupuserconnections.put(group, groupmap);
-//		}else{
-////			Map<WebSocket, Map<String,String>> userconnections = new HashMap<WebSocket, Map<String,String>>();
-//			groupmap = new HashMap<WebSocket, GroupInfo>();
-////			userconnections.put(conn, groupinfo);
-//			groupmap.put(conn, groupinfo);
-//			groupuserconnections.put(group, groupmap);
-//		}
 	}
 	
 	/** * Remove User from Group * @param inbound */
