@@ -1,11 +1,14 @@
 package websocket;
 
 import java.util.Calendar;
+import java.util.Set;
 import java.util.Timer;
 import java.util.TimerTask;
 
 import org.json.JSONObject;
 
+import websocket.pools.WebSocketGroupPool;
+import websocket.pools.WebSocketTypePool;
 import websocket.pools.WebSocketUserPool;
 
 public class HeartBeat {
@@ -46,6 +49,57 @@ public class HeartBeat {
 	public void setHealthStatus(String healthStatus) {
 		this.healthStatus = healthStatus;
 	}
+	
+	public static void heartbeattouser(org.java_websocket.WebSocket conn){
+		String User = WebSocketUserPool.getUserByKey(conn);
+		if (User != null && !"".equals(User)) {
+			JSONObject sendjson = new JSONObject();
+			sendjson.put("Event", "heartbeattouser");
+			sendjson.put("heartbeat", "AP");
+			WebSocketUserPool.sendMessageToUser(conn, sendjson.toString());
+		}else{
+//			WebSocketPool.removeUserID(conn);
+//			WebSocketPool.removeUserName(conn);
+			WebSocketUserPool.removeUser(conn);
+			WebSocketTypePool.removeUserinTYPE("Client", conn);
+			WebSocketUserPool.removeUserheartbeat(conn);
+			String groupid = WebSocketUserPool.getUserGroupByKey(conn);
+			if (groupid != null && !"".equals(groupid)) {
+				WebSocketUserPool.removeUserGroup(conn);
+				WebSocketGroupPool.removeUseringroup(groupid, conn);
+			}
+		}
+	}// end of heartbeattouser
+	
+	public static void heartbeattoserver(String message, org.java_websocket.WebSocket conn){
+		JSONObject obj = new JSONObject(message);
+		String value = null;
+		Boolean heartbeat = false;
+		Set<String> keySet = obj.keySet();
+		synchronized (keySet) {
+			for (String key : keySet) {
+				if(key.equals("heartbeat")){
+					value = obj.getString("heartbeat");
+					heartbeat = true;
+				}
+			}
+		}
+		if(heartbeat){
+			WebSocketUserPool.addUserheartbeat(value, conn);
+		}else{
+//			WebSocketPool.removeUserID(conn);
+//			WebSocketPool.removeUserName(conn);
+			WebSocketUserPool.removeUser(conn);
+			WebSocketTypePool.removeUserinTYPE("Client", conn);
+			WebSocketUserPool.removeUserheartbeat(conn);
+			String groupid = WebSocketUserPool.getUserGroupByKey(conn);
+			if (groupid != null && !"".equals(groupid)) {
+				WebSocketUserPool.removeUserGroup(conn);
+				WebSocketGroupPool.removeUseringroup(groupid, conn);
+			}
+		}
+	}// end of heartbeattoserver
+	
 }
 
 class TimerTaskSendHeartBeat extends TimerTask {
@@ -66,7 +120,8 @@ class TimerTaskSendHeartBeat extends TimerTask {
 	@Override
 	public void run() {
 
-		WebSocket.heartbeattouser(conn);
+//		WebSocket.heartbeattouser(conn);
+		HeartBeat.heartbeattouser(conn);
 
 		try {
 			Thread.sleep(6000);
@@ -120,5 +175,6 @@ class TimerTaskSendHeartBeat extends TimerTask {
 			}
 		}
 
-	}
+	}// end of run()
+	
 }
