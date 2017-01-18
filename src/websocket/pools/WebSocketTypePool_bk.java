@@ -11,54 +11,59 @@ import java.util.Map;
 import java.util.Set;
 
 import org.java_websocket.WebSocket;
-
-import websocket.bean.TypeInfo;
 import websocket.bean.UserInfo;
 
-public class WebSocketTypePool extends WebSocketGroupPool{
+public class WebSocketTypePool_bk extends WebSocketGroupPool{
 	/**********************************************************************************/
 	/**
 	 * Agent & Client Members Map
 	 */
-	// TYPEconnections第一層Map: 用來區分type是Agent or Client
-	// TYPEconnections第二層Map: 用來區分每個WebSocket所對應到的Bean
-	private static final Map<String, Map<WebSocket, TypeInfo>> TYPEconnections = new HashMap<>();
+	private static final Map<String, Map<WebSocket, Map<String, Object>>> TYPEconnections = new HashMap<String, Map<WebSocket, Map<String, Object>>>();
 
 	/** * Add User to Agent or Client * @param inbound */
 	public static void addUserinTYPE(String TYPE,String username, String userid,String date, WebSocket conn) {
-		Map<WebSocket, TypeInfo> TYPEmap = TYPEconnections.get(TYPE);
-		
-		if (TYPEmap == null || TYPEmap.isEmpty()){
-			TYPEmap = new HashMap<>();
+		Map<WebSocket, Map<String, Object>> TYPEmap = TYPEconnections.get(TYPE);
+		Map<String, Object> TYPEdatamap = new HashMap<String, Object>();
+		if(TYPEmap != null && !TYPEmap.isEmpty()){
+			TYPEdatamap.put("userid", userid);
+			TYPEdatamap.put("username", username);
+			if(TYPE.equals("Agent")){
+				TYPEdatamap.put("status", "not ready");
+			}else if(TYPE.equals("Client")){
+				TYPEdatamap.put("status", "wait");
+			}
+			TYPEdatamap.put("time", date);
+			TYPEmap.put(conn, TYPEdatamap);
+			TYPEconnections.put(TYPE, TYPEmap);
+		}else{
+			Map<WebSocket, Map<String, Object>> TYPEuserconnections = new HashMap<WebSocket, Map<String, Object>>();
+			TYPEdatamap.put("userid", userid);
+			TYPEdatamap.put("username", username);
+			if(TYPE.equals("Agent")){
+				TYPEdatamap.put("status", "not ready");
+			}else if(TYPE.equals("Client")){
+				TYPEdatamap.put("status", "wait");
+			}
+			TYPEdatamap.put("time", date);
+			TYPEuserconnections.put(conn, TYPEdatamap);
+			TYPEconnections.put(TYPE, TYPEuserconnections);
 		}
-		
-		TypeInfo typeinfo = new TypeInfo();
-		typeinfo.setUserid(userid);
-		typeinfo.setUsername(username);
-		if(TYPE.equals("Agent")){
-			typeinfo.setStatus("not ready");
-		}else if(TYPE.equals("Client")){
-			typeinfo.setStatus("wait");
-		}
-		typeinfo.setTime(date);
-		TYPEmap.put(conn, typeinfo);
-		TYPEconnections.put(TYPE, TYPEmap);
 	}
 	
 	/** * Agent or Client User Information Update */
 	public static void UserUpdate(String TYPE,String username, String userid,String date,String status,String reason, WebSocket conn) {
-		Map<WebSocket, TypeInfo> TYPEmap = TYPEconnections.get(TYPE);
-		TypeInfo TYPEdatamap = TYPEmap.get(conn);
-		TYPEdatamap.setStatus(status);
-		TYPEdatamap.setReason(reason);
-		TYPEdatamap.setTime(date);
+		Map<WebSocket, Map<String, Object>> TYPEmap = TYPEconnections.get(TYPE);
+		Map<String, Object> TYPEdatamap = TYPEmap.get(conn);
+		TYPEdatamap.put("status", status);
+		TYPEdatamap.put("reason", reason);
+		TYPEdatamap.put("time", date);
 		TYPEmap.put(conn, TYPEdatamap);
 		TYPEconnections.put(TYPE, TYPEmap);
 	}
 	
 	/** * Remove User from Agent or Client* @param inbound */
 	public static boolean removeUserinTYPE(String TYPE,WebSocket conn) {
-		Map<WebSocket,  TypeInfo> TYPEmap = TYPEconnections.get(TYPE);
+		Map<WebSocket,  Map<String, Object>> TYPEmap = TYPEconnections.get(TYPE);
 		if (TYPEmap.containsKey(conn)) {
 			TYPEmap.remove(conn);
 			return true;
@@ -69,7 +74,7 @@ public class WebSocketTypePool extends WebSocketGroupPool{
 	
 	/** * Send Message to all of User in Agent or Client * @param message */
 	public static void sendMessageinTYPE(String TYPE,String message) {
-		Map<WebSocket,  TypeInfo> TYPEmap = TYPEconnections.get(TYPE);
+		Map<WebSocket,  Map<String, Object>> TYPEmap = TYPEconnections.get(TYPE);
 		Set<WebSocket> keySet = TYPEmap.keySet();
 		synchronized (keySet) {
 			for (WebSocket conn : keySet) {
@@ -79,7 +84,7 @@ public class WebSocketTypePool extends WebSocketGroupPool{
 					conn.send(message);
 				}
 				*/
-				TypeInfo userdata = TYPEmap.get(conn);
+				Map<String, Object> userdata = TYPEmap.get(conn);
 				if (userdata != null) {
 					conn.send(message);
 				}
@@ -89,16 +94,16 @@ public class WebSocketTypePool extends WebSocketGroupPool{
 	
 	/** * Get Online Longest User(Agent) * @return */
 	public static String getOnlineLongestUserinTYPE(String TYPE) {
-		Map<WebSocket,  TypeInfo> TYPEmap = TYPEconnections.get(TYPE);
+		Map<WebSocket,  Map<String, Object>> TYPEmap = TYPEconnections.get(TYPE);
 		//List<String> setUsers = new ArrayList<String>();
 		String settingUser = null;
 		Date date = new Date();
 		long UserStayTime = date.getTime();
-		Collection<TypeInfo> setUser = TYPEmap.values();
-		for (TypeInfo u : setUser) {
+		Collection<Map<String, Object>> setUser = TYPEmap.values();
+		for (Map<String, Object> u : setUser) {
 			//setUsers.add(u.get("userid").toString());
 			SimpleDateFormat sdf = new SimpleDateFormat("HH:mm:ss");
-			String userdatestring = u.getTime();
+			String userdatestring = u.get("time").toString();
 			Date userdate = null;
 			try {
 				userdate = sdf.parse(userdatestring);
@@ -106,9 +111,9 @@ public class WebSocketTypePool extends WebSocketGroupPool{
 				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
-			if(userdate.getTime() <= UserStayTime && u.getStatus().trim().equals("ready")){
-				UserStayTime = userdate.getTime(); // 每次都會將UserStayTime拿去當作"上一個"Uset的等待時間
-				settingUser = u.getUserid();
+			if(userdate.getTime() <= UserStayTime && u.get("status").toString().trim().equals("ready")){
+				UserStayTime = userdate.getTime();
+				settingUser = u.get("userid").toString();
 			}
 		}
 		return settingUser;
@@ -116,22 +121,22 @@ public class WebSocketTypePool extends WebSocketGroupPool{
 	
 	/** * Get Online User Name in Agent or Client * @return */
 	public static Collection<String> getOnlineUserNameinTYPE(String TYPE) {
-		Map<WebSocket,  TypeInfo> TYPEmap = TYPEconnections.get(TYPE);
+		Map<WebSocket,  Map<String, Object>> TYPEmap = TYPEconnections.get(TYPE);
 		List<String> setUsers = new ArrayList<String>();
-		Collection<TypeInfo> setUser = TYPEmap.values();
-		for (TypeInfo u : setUser) {
-			setUsers.add(u.getUsername());
+		Collection<Map<String, Object>> setUser = TYPEmap.values();
+		for (Map<String, Object> u : setUser) {
+			setUsers.add(u.get("username").toString());
 		}
 		return setUsers;
 	}
 	
 	/** * Get Online User ID in Agent or Client * @return */
 	public static Collection<String> getOnlineUserIDinTYPE(String TYPE) {
-		Map<WebSocket,  TypeInfo> TYPEmap = TYPEconnections.get(TYPE);
+		Map<WebSocket,  Map<String, Object>> TYPEmap = TYPEconnections.get(TYPE);
 		List<String> setUsers = new ArrayList<String>();
-		Collection<TypeInfo> setUser = TYPEmap.values();
-		for (TypeInfo u : setUser) {
-			setUsers.add(u.getUserid());
+		Collection<Map<String, Object>> setUser = TYPEmap.values();
+		for (Map<String, Object> u : setUser) {
+			setUsers.add(u.get("userid").toString());
 		}
 		return setUsers;
 	}
@@ -143,20 +148,20 @@ public class WebSocketTypePool extends WebSocketGroupPool{
 	
 	/** * Get User Status in Agent or Client * ready * not ready * established * party remove * @param session */
 	public static String getUserStatusByKeyinTYPE(String TYPE, WebSocket conn) {
-		Map<WebSocket,  TypeInfo> TYPEmap = TYPEconnections.get(TYPE);
-		return TYPEmap.get(conn).getStatus();
+		Map<WebSocket,  Map<String, Object>> TYPEmap = TYPEconnections.get(TYPE);
+		return TYPEmap.get(conn).get("status").toString();
 	}
 	
 	/** * Get User Status in Agent or Client * ready * not ready * established * party remove * @param session */
 	public static String getUserReasonByKeyinTYPE(String TYPE, WebSocket conn) {
-		Map<WebSocket,  TypeInfo> TYPEmap = TYPEconnections.get(TYPE);
-		return TYPEmap.get(conn).getReason();
+		Map<WebSocket,  Map<String, Object>> TYPEmap = TYPEconnections.get(TYPE);
+		return TYPEmap.get(conn).get("reason").toString();
 	}
 	
 	/** * Get User ID By Key in Agent or Client * @param session */
 	public static String getUserByKeyinTYPE(String TYPE, WebSocket conn) {
-		Map<WebSocket,  TypeInfo> TYPEmap = TYPEconnections.get(TYPE);
-		return TYPEmap.get(conn).getUserid();
+		Map<WebSocket,  Map<String, Object>> TYPEmap = TYPEconnections.get(TYPE);
+		return TYPEmap.get(conn).get("userid").toString();
 	}
 
 	/** * Get Agent or Client Count * @param */
@@ -166,11 +171,11 @@ public class WebSocketTypePool extends WebSocketGroupPool{
 
 	/** * Get WebSocket By User ID in Agent or Client * @param user */
 	public static WebSocket getWebSocketByUserinTYPE(String TYPE,String user) {
-		Map<WebSocket,  TypeInfo> TYPEmap = TYPEconnections.get(TYPE);
+		Map<WebSocket,  Map<String, Object>> TYPEmap = TYPEconnections.get(TYPE);
 		Set<WebSocket> keySet = TYPEmap.keySet();
 		synchronized (keySet) {
 			for (WebSocket conn : keySet) {
-				String cuser = TYPEmap.get(conn).getUserid();
+				String cuser = TYPEmap.get(conn).get("userid").toString();
 				if (cuser.equals(user)) {
 					return conn;
 				}
