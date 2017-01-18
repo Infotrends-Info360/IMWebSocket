@@ -17,6 +17,7 @@ import org.java_websocket.handshake.ClientHandshake;
 import org.java_websocket.server.WebSocketServer;
 import org.json.JSONObject;
 
+import websocket.function.AgentFunction;
 import websocket.function.CommonFunction;
 import websocket.pools.WebSocketGroupPool;
 import websocket.pools.WebSocketTypePool;
@@ -121,19 +122,23 @@ public class WebSocket extends WebSocketServer {
 			CommonFunction.userExitfromTYPE(message.toString(), conn);
 			break;
 		case "Agentclosegroup":
-			this.Agentclosegroup(message.toString(), conn);
+//			this.Agentclosegroup(message.toString(), conn);
+			AgentFunction.Agentclosegroup(message.toString(), conn);
 			break;
 		case "Clientclosegroup":
 			this.Clientclosegroup(message.toString(), conn);
 			break;
 		case "AcceptEvent":
-			this.AcceptEvent(message.toString(), conn);
+//			this.AcceptEvent(message.toString(), conn);
+			AgentFunction.AcceptEvent(message.toString(), conn);
 			break;
 		case "RejectEvent":
-			this.RejectEvent(message.toString(), conn);
+//			this.RejectEvent(message.toString(), conn);
+			AgentFunction.RejectEvent(message.toString(), conn);
 			break;
 		case "ReleaseEvent":
-			this.ReleaseEvent(message.toString(), conn);
+//			this.ReleaseEvent(message.toString(), conn);
+			AgentFunction.ReleaseEvent(message.toString(), conn);
 			break;
 		case "findAgentEvent":
 			this.findAgentEvent(message.toString(), conn);
@@ -143,13 +148,15 @@ public class WebSocket extends WebSocketServer {
 			CommonFunction.updateStatus(message.toString(), conn);
 			break;
 		case "getUserStatus":
-			this.getUserStatus(message.toString(), conn);
+//			this.getUserStatus(message.toString(), conn);
+			AgentFunction.getUserStatus(message.toString(), conn);
 			break;
 		case "findAgent":
 			this.findAgent(message.toString(), conn);
 			break;
 		case "creategroupId":
-			this.creategroupId(message.toString(), conn);
+//			this.creategroupId(message.toString(), conn);
+			AgentFunction.creategroupId(message.toString(), conn);
 			break;
 		case "senduserdata":
 			this.senduserdata(message.toString(), conn);
@@ -175,14 +182,6 @@ public class WebSocket extends WebSocketServer {
 	
 	
 
-	/** * create a groupId * @param message */
-	public void creategroupId(String message, org.java_websocket.WebSocket conn) {
-		String groupId = java.util.UUID.randomUUID().toString();
-		JSONObject sendjson = new JSONObject();
-		sendjson.put("Event", "creategroupId");
-		sendjson.put("groupId", groupId);
-		WebSocketUserPool.sendMessageToUser(conn, sendjson.toString());
-	}
 
 
 
@@ -220,19 +219,7 @@ public class WebSocket extends WebSocketServer {
 		WebSocketTypePool.sendMessageinTYPE(ACtype, username + ": " + text);
 	}
 
-	/** * Agent close Group */
-	public void Agentclosegroup(String message,
-			org.java_websocket.WebSocket conn) {
-		JSONObject obj = new JSONObject(message);
-		String group = obj.getString("group");
-		JSONObject sendjson = new JSONObject();
-		sendjson.put("Event", "Agentclosegroup");
-		sendjson.put("from", obj.getString("id"));
-		sendjson.put("fromName",  obj.getString("UserName"));
-		sendjson.put("channel", obj.getString("channel"));
-		WebSocketGroupPool.sendMessageingroup(
-				group,sendjson.toString());
-	}
+
 
 	/** * Client close Group */
 	public void Clientclosegroup(String message,
@@ -247,47 +234,9 @@ public class WebSocket extends WebSocketServer {
 		WebSocketGroupPool.sendMessageingroup(group,sendjson.toString());
 	}
 
-	/** * send Accept Event */
-	public void AcceptEvent(String message, org.java_websocket.WebSocket conn) {
-		JSONObject obj = new JSONObject(message);
-		String group = obj.getString("group");
-		org.java_websocket.WebSocket sendto = WebSocketUserPool
-				.getWebSocketByUser(obj.getString("sendto"));
-		JSONObject sendjson = new JSONObject();
-		sendjson.put("Event", "AcceptEvent");
-		sendjson.put("from", obj.getString("id"));
-		sendjson.put("fromName",  obj.getString("UserName"));
-		sendjson.put("group",  group);
-		sendjson.put("channel", obj.getString("channel"));
-		WebSocketUserPool.sendMessageToUser(
-				sendto,sendjson.toString());
-	}
 	
-	/** * RejectEvent */
-	public void RejectEvent(String message, org.java_websocket.WebSocket conn) {
-		JSONObject obj = new JSONObject(message);
-		org.java_websocket.WebSocket sendto = WebSocketUserPool
-				.getWebSocketByUser(obj.getString("sendto"));
-		JSONObject sendjson = new JSONObject();
-		sendjson.put("Event", "RejectEvent");
-		sendjson.put("from", obj.getString("id"));
-		sendjson.put("fromName",  obj.getString("UserName"));
-		sendjson.put("channel", obj.getString("channel"));
-		WebSocketUserPool.sendMessageToUser(sendto, sendjson.toString());
-	}
 	
-	/** * ReleaseEvent */
-	public void ReleaseEvent(String message, org.java_websocket.WebSocket conn) {
-		JSONObject obj = new JSONObject(message);
-		org.java_websocket.WebSocket sendto = WebSocketUserPool
-				.getWebSocketByUser(obj.getString("sendto")); // "sendto" 紀錄的是此Agent要關閉的Client UserId
-		JSONObject sendjson = new JSONObject();
-		sendjson.put("Event", "ReleaseEvent");
-		sendjson.put("from", obj.getString("id"));
-		sendjson.put("fromName",  obj.getString("UserName"));
-		sendjson.put("channel", obj.getString("channel"));
-		WebSocketUserPool.sendMessageToUser(sendto, sendjson.toString());
-	}
+
 	
 	/** * findAgentEvent */
 	public void findAgentEvent(String message, org.java_websocket.WebSocket conn) {
@@ -303,21 +252,6 @@ public class WebSocket extends WebSocketServer {
 	}
 	
 
-	/** * get Agent Status */
-	public void getUserStatus(String message, org.java_websocket.WebSocket conn) {
-		JSONObject obj = new JSONObject(message);
-		String ACtype = obj.getString("ACtype");
-		String status = WebSocketTypePool.getUserStatusByKeyinTYPE(ACtype, conn);
-		String reason = WebSocketTypePool.getUserReasonByKeyinTYPE(ACtype, conn);
-		JSONObject sendjson = new JSONObject();
-		sendjson.put("Event", "getUserStatus");
-		sendjson.put("from", obj.getString("id"));
-		sendjson.put("Status",  status);
-		sendjson.put("Reason",  reason);
-		sendjson.put("channel", obj.getString("channel"));
-		WebSocketUserPool.sendMessageToUser(
-				conn, sendjson.toString());
-	}
 
 	/** * find online Longest Agent */
 	public void findAgent(String message, org.java_websocket.WebSocket conn) {
