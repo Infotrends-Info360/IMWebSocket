@@ -7,6 +7,7 @@ import java.util.TimerTask;
 
 import org.json.JSONObject;
 
+import websocket.function.ClientFunction;
 import websocket.pools.WebSocketGroupPool;
 import websocket.pools.WebSocketTypePool;
 import websocket.pools.WebSocketUserPool;
@@ -151,7 +152,7 @@ class TimerTaskSendHeartBeat extends TimerTask {
 						obj.put("closefrom", "server:HeartBeatLose");
 						message = obj.toString();
 					}
-					WebSocket.interactionlog(message, conn);
+					ClientFunction.interactionlog(message, conn);
 					System.out.println("Heartbeat lose Timer Cleanly and set Interaction log, conn:" + conn);
 					timer.cancel();
 				}
@@ -169,7 +170,7 @@ class TimerTaskSendHeartBeat extends TimerTask {
 					obj.put("closefrom", "server:UserNotFind");
 					message = obj.toString();
 				}
-				WebSocket.interactionlog(message, conn);
+				ClientFunction.interactionlog(message, conn);
 				System.out.println("User unfind Timer Cleanly and set Interaction log, conn:" + conn);
 				timer.cancel();
 			}
