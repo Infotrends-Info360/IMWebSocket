@@ -10,6 +10,7 @@ import java.net.URL;
 import java.net.UnknownHostException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.List;
 import java.util.Set;
 
 import org.java_websocket.WebSocketImpl;
@@ -42,7 +43,11 @@ public class WebSocket extends WebSocketServer {
 		// 此方法沒有用到,先放著,並不會影響到主流程
 		//userLeave(conn);
 		System.out.println("Someone unlink in Socket conn:" + conn);
+		// 將Heartbeat功能移轉到這裡:
+		inputInteractionLog(conn,reason);
+		clearUserData(conn); // 包含removeUser, removerUserinTYPE, removeUseringroup
 	}
+
 
 	/** * trigger Exception Event */
 	@Override
@@ -181,7 +186,7 @@ public class WebSocket extends WebSocketServer {
 			break;
 		case "heartbeattoserver":
 //			this.heartbeattoserver(message.toString(), conn);
-			HeartBeat.heartbeattoserver(message.toString(), conn);
+//			HeartBeat.heartbeattoserver(message.toString(), conn);
 			break;
 		case "test":
 			this.test();
@@ -209,6 +214,32 @@ public class WebSocket extends WebSocketServer {
 			String joinMsg = "[Server]" + user + "Offline";
 			WebSocketUserPool.sendMessage(joinMsg);
 		}
+	}
+	
+	private void clearUserData(org.java_websocket.WebSocket conn) {
+		System.out.println("clearUserData() called");
+		WebSocketUserPool.removeUser(conn);
+		WebSocketTypePool.removeUserinTYPE("Client", conn);
+		// 取得一個user所屬的所有groupid
+		List<String> groupids = WebSocketUserPool.getUserGroupByKey(conn);
+		for (String groupid: groupids){
+			//使用每個groupid,並找出相對應的group,再將其中的conn remove掉
+			WebSocketGroupPool.removeUseringroup(groupid, conn); // 這邊是否須考慮如果此user退出group,只剩下agent在的狀況? 還是此狀況交由其他處來做處理?				
+		}
+	}
+	
+	private void inputInteractionLog(org.java_websocket.WebSocket conn, String reason) {
+		System.out.println("inputInteractionLog() called");
+		String message = WebSocketUserPool.getUserInteractionByKey(conn); // 一定取得到: 1. 在user login時就會呼叫setUserInteraction, 2. 在user logut or 重整時也會呼叫setUserInteraction
+		JSONObject obj = new JSONObject(message);
+		String closefrom = obj.getString("closefrom");
+		if (closefrom.equals("default")) {
+			obj.put("status", 3);
+			obj.put("stoppedreason", "server:HeartBeatLose"); // 看之後是否考慮更改為變數reason
+			obj.put("closefrom", "server:HeartBeatLose"); 
+			message = obj.toString();
+		}
+		ClientFunction.interactionlog(message, conn);
 	}
 	
 	private void test() {

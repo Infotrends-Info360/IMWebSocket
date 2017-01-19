@@ -2,7 +2,7 @@ package websocket.function;
 
 import org.json.JSONObject;
 
-import websocket.HeartBeat;
+//import websocket.HeartBeat;
 import websocket.pools.WebSocketGroupPool;
 import websocket.pools.WebSocketTypePool;
 import websocket.pools.WebSocketUserPool;
@@ -41,10 +41,10 @@ public class CommonFunction {
 		WebSocketUserPool.sendMessage("online people: "
 				+ WebSocketUserPool.getOnlineUser().toString());
 		// 把下面取消掉:
-		if(ACtype.equals("Client")){
-			HeartBeat heartbeat = new HeartBeat();
-			heartbeat.heartbeating(conn);
-		}
+//		if(ACtype.equals("Client")){
+//			HeartBeat heartbeat = new HeartBeat();
+//			heartbeat.heartbeating(conn);
+//		}
 	}
 	
 	/** ask online people **/

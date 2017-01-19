@@ -39,7 +39,7 @@ public class WebSocketUserPool {
 	
 	/** * Get User By Key * @param session */ /* Done */
 	public static List<String> getUserGroupByKey(WebSocket conn) {
-		System.out.println("getUserGroupByKey(WebSocket conn) called");
+//		System.out.println("getUserGroupByKey(WebSocket conn) called");
 		return userallconnections.get(conn).getUsergroup();
 	}
 
@@ -65,7 +65,7 @@ public class WebSocketUserPool {
 			for (WebSocket conn : conns) {
 				String cuser = userallconnections.get(conn).getUserid();
 				if (cuser.equals(user)) {
-					System.out.println("(getWebSocketByUser)found user id: " + cuser + "的connection");
+//					System.out.println("(getWebSocketByUser)found user id: " + cuser + "的connection");
 					return conn;
 				}
 			}
