@@ -62,6 +62,7 @@ public class HeartBeat {
 //			WebSocketPool.removeUserID(conn);
 //			WebSocketPool.removeUserName(conn);
 			WebSocketUserPool.removeUser(conn);
+			// 以下可省略
 			WebSocketTypePool.removeUserinTYPE("Client", conn);
 			WebSocketUserPool.removeUserheartbeat(conn);
 			String groupid = WebSocketUserPool.getUserGroupByKey(conn);

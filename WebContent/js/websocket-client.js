@@ -168,7 +168,7 @@ function Login() {
 				document.getElementById("text").innerHTML += e.data + "<br>";
 			}
 			console.log(e.data);
-		};
+		};// end of ws.onMessage()
 
 		// 當websocket關閉時
 		ws.onclose = function() {

@@ -80,6 +80,7 @@ public class WebSocketGroupPool{
 	}
 	
 	/** * Get Online User Name in group * @return */
+	// 先預留著,以後判斷須不須保留
 	public static Collection<String> getOnlineUseringroup(String group) {
 		Map<WebSocket, GroupInfo> groupmap = groupuserconnections.get(group);
 		List<String> setUsers = new ArrayList<String>();
@@ -91,11 +92,13 @@ public class WebSocketGroupPool{
 	}
 	
 	/** * Get Online count in group * @return */
+	// 先預留著,以後判斷須不須保留
 	public static int getOnlineUseringroupCount(String group) {
 		return groupuserconnections.get(group).size();
 	}
 	
 	/** * Get User Name By WebSocket Key from Group * @param session */
+	// 先預留著,以後判斷須不須保留
 	public static String getUserByKeyingroup(String group, WebSocket conn) {
 		Map<WebSocket, GroupInfo> groupmap = groupuserconnections.get(group);
 		return groupmap.get(conn).getUsername();
@@ -106,7 +109,7 @@ public class WebSocketGroupPool{
 		return groupuserconnections.size();
 	}
 	
-	/** * Get Online Group Count * @param */
+	/** * Get Online Group * @param */
 	public static Collection<String> getGroups() {
 		List<String> setGroups = new ArrayList<String>();
 		Collection<String> setGroup = groupuserconnections.keySet();
@@ -118,6 +121,7 @@ public class WebSocketGroupPool{
 	}
 
 	/** * Get WebSocket Key By User ID from Group * @param user */
+	// 先預留著,以後判斷須不須保留
 	public static WebSocket getWebSocketByUseringroup(String group,String user) {
 		Map<WebSocket, GroupInfo> groupmap = groupuserconnections.get(group);
 		Set<WebSocket> keySet = groupmap.keySet();
