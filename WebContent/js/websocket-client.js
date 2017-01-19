@@ -345,7 +345,7 @@ function Logout() {
 
 // 離開WebSocket Pool列表
 function Logoutaction(UserID) {
-	
+	 
 	interactionLogDemo(ixnstatus, ixnactivitycode)
 	
 	var now = new Date();
