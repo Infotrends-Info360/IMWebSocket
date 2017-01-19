@@ -1,6 +1,7 @@
 package websocket;
 
 import java.util.Calendar;
+import java.util.List;
 import java.util.Set;
 import java.util.Timer;
 import java.util.TimerTask;
@@ -21,7 +22,7 @@ public class HeartBeat {
 		hb.setHealthStatus(conn.toString());
 		Timer timer = new Timer(conn.toString());
 		TimerTask taskToExecute = new TimerTaskSendHeartBeat(hb, conn, timer);
-		timer.scheduleAtFixedRate(taskToExecute, 1000, 10000);
+		timer.scheduleAtFixedRate(taskToExecute, 1000, 1000);
 
 		// Wait for 60 seconds and then cancel the timer cleanly
 		// try {
@@ -59,16 +60,15 @@ public class HeartBeat {
 			sendjson.put("heartbeat", "AP");
 			WebSocketUserPool.sendMessageToUser(conn, sendjson.toString());
 		}else{
-//			WebSocketPool.removeUserID(conn);
-//			WebSocketPool.removeUserName(conn);
+			System.out.println("heartbeattouser - 呼叫WebSocketGroupPool.removeUseringroup之前");
+			// 建議: 如果此就發現User連線已斷,在這邊就結束TimerTaskSendHeartBeat這個Thread
 			WebSocketUserPool.removeUser(conn);
-			// 以下可省略
 			WebSocketTypePool.removeUserinTYPE("Client", conn);
-			WebSocketUserPool.removeUserheartbeat(conn);
-			String groupid = WebSocketUserPool.getUserGroupByKey(conn);
-			if (groupid != null && !"".equals(groupid)) {
-				WebSocketUserPool.removeUserGroup(conn);
-				WebSocketGroupPool.removeUseringroup(groupid, conn);
+			// 取得一個user所屬的所有groupid
+			List<String> groupids = WebSocketUserPool.getUserGroupByKey(conn);
+			for (String groupid: groupids){
+				//使用每個groupid,並找出相對應的group,再將其中的conn remove掉
+				WebSocketGroupPool.removeUseringroup(groupid, conn); // 這邊是否須考慮如果此user退出group,只剩下agent在的狀況? 還是此狀況交由其他處來做處理?				
 			}
 		}
 	}// end of heartbeattouser
@@ -86,18 +86,17 @@ public class HeartBeat {
 				}
 			}
 		}
+		// 原則上,client.js會呼叫到這個方法時,通常都有拿到heartbeat="ap"這對key-value,此判斷是為了未來準備,暫時無特別用途
 		if(heartbeat){
 			WebSocketUserPool.addUserheartbeat(value, conn);
 		}else{
-//			WebSocketPool.removeUserID(conn);
-//			WebSocketPool.removeUserName(conn);
 			WebSocketUserPool.removeUser(conn);
 			WebSocketTypePool.removeUserinTYPE("Client", conn);
-			WebSocketUserPool.removeUserheartbeat(conn);
-			String groupid = WebSocketUserPool.getUserGroupByKey(conn);
-			if (groupid != null && !"".equals(groupid)) {
-				WebSocketUserPool.removeUserGroup(conn);
-				WebSocketGroupPool.removeUseringroup(groupid, conn);
+			// 取得一個user所屬的所有groupid
+			List<String> groupids = WebSocketUserPool.getUserGroupByKey(conn);
+			for (String groupid: groupids){
+				//使用每個groupid,並找出相對應的group,再將其中的conn remove掉
+				WebSocketGroupPool.removeUseringroup(groupid, conn); // 這邊是否須考慮如果此user退出group,只剩下agent在的狀況? 還是此狀況交由其他處來做處理?				
 			}
 		}
 	}// end of heartbeattoserver

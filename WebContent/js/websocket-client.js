@@ -32,7 +32,9 @@ function Login() {
 		alert("請輸入UserName");
 	} else {
 		// 開啟WebSocket的通道
-		ws = new WebSocket('ws://127.0.0.1:8888')
+		console.log("window.location.hostname: " + window.location.hostname);
+		var hostname = window.location.hostname;
+		ws = new WebSocket('ws://' + hostname +':8888');
 		// 當websocket連接建立成功時
 		ws.onopen = function() {
 			console.log('websocket 打開成功');

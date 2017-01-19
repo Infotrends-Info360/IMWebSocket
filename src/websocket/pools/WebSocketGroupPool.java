@@ -56,8 +56,10 @@ public class WebSocketGroupPool{
 	
 	/** * Remove User from Group * @param inbound */
 	public static boolean removeUseringroup(String group,WebSocket conn) {
+		System.out.println("removeUseringroup(String group,WebSocket conn) called");
 		Map<WebSocket, GroupInfo> groupmap = groupuserconnections.get(group);
 		if (groupmap.containsKey(conn)) {
+			System.out.println(conn + "'s group is " + " removed");
 			groupmap.remove(conn);
 			return true;
 		} else {

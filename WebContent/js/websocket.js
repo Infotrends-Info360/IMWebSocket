@@ -28,7 +28,9 @@ function Login() {
 		alert("請輸入UserName");
 	}else{
 	//連上websocket
-	ws = new WebSocket('ws://127.0.0.1:8888')
+	console.log("window.location.hostname: " + window.location.hostname);
+	var hostname = window.location.hostname;	
+	ws = new WebSocket('ws://' + hostname +':8888');
 	
 	//當websocket連接建立成功時
 	ws.onopen = function() {

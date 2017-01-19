@@ -40,7 +40,7 @@ public class WebSocket extends WebSocketServer {
 	public void onClose(org.java_websocket.WebSocket conn, int message,
 			String reason, boolean remote) {
 		// 此方法沒有用到,先放著,並不會影響到主流程
-		userLeave(conn);
+		//userLeave(conn);
 		System.out.println("Someone unlink in Socket conn:" + conn);
 	}
 
@@ -48,7 +48,7 @@ public class WebSocket extends WebSocketServer {
 	@Override
 	public void onError(org.java_websocket.WebSocket conn, Exception message) {
 		System.out.println("Socket Exception:" + message.toString());
-		message.printStackTrace();
+		//message.printStackTrace();
 		e++;
 	}
 

@@ -11,6 +11,7 @@ import java.util.Map;
 import java.util.Set;
 
 import org.java_websocket.WebSocket;
+
 import websocket.bean.UserInfo;
 
 //此類別給AgentFunction.java共同使用
@@ -37,7 +38,8 @@ public class WebSocketUserPool {
 	}
 	
 	/** * Get User By Key * @param session */ /* Done */
-	public static String getUserGroupByKey(WebSocket conn) {
+	public static List<String> getUserGroupByKey(WebSocket conn) {
+		System.out.println("getUserGroupByKey(WebSocket conn) called");
 		return userallconnections.get(conn).getUsergroup();
 	}
 
@@ -81,7 +83,7 @@ public class WebSocketUserPool {
 	
 	/** * Add User to WebSocket Pool* @param inbound */ /* Done */
 	public static void addUserGroup(String usergroup, WebSocket conn) {
-		userallconnections.get(conn).setUsergroup(usergroup);
+		userallconnections.get(conn).getUsergroup().add(usergroup);
 	}
 	
 	/** * Add User to WebSocket Pool* @param inbound */ /* Done */

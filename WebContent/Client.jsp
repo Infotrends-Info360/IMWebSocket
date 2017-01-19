@@ -47,7 +47,7 @@
 <!-- <script src="js/layimClient.js"></script> -->
 </head>
 <body onbeforeunload="checktoLeave()"> 
-	UserName : <input type="text" name="UserName" id="UserName">
+	UserName : <input type="text" name="UserName" id="UserName" value="A123456789">
 	UserID : <input type="text" name="UserID" id="UserID" disabled>
 	<!--sendto : <input type="text" name="sendto" id="sendto">-->
 	<button type="submit" onclick="Login();" id="Login">Login</button>
