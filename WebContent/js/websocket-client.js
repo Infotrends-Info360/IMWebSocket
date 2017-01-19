@@ -345,6 +345,9 @@ function Logout() {
 
 // 離開WebSocket Pool列表
 function Logoutaction(UserID) {
+	
+	interactionLogDemo(ixnstatus, ixnactivitycode)
+	
 	var now = new Date();
 	// 組成離開WebSocket Pool列表JSON指令
 	var msg = {
@@ -356,8 +359,6 @@ function Logoutaction(UserID) {
 
 	// 發送消息給WebSocket
 	ws.send(JSON.stringify(msg));
-
-	interactionLogDemo(ixnstatus, ixnactivitycode)
 }
 
 // 送出私訊
@@ -743,9 +744,9 @@ function interactionLogDemo(status, activitycode) {
 	var stoppedreason = 'stoppedreason';
 	// var activitycode = 'activitycode';
 	var AgentID = document.getElementById('findAgent').value;
-	// interactionlog(contactID, GroupID, AgentID, status, 'Inbound', 2,
-	// 'InBound New', text, structuredtext, thecomment, stoppedreason,
-	// activitycode, startdate);
+	 interactionlog(contactID, GroupID, AgentID, status, 'Inbound', 2,
+	 'InBound New', text, structuredtext, thecomment, stoppedreason,
+	 activitycode, startdate);
 	setinteraction(contactID, GroupID, AgentID, status, 'Inbound', 2,
 			'InBound New', text, structuredtext, thecomment, stoppedreason,
 			activitycode, startdate, 'client');

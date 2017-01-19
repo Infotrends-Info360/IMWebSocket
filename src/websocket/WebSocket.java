@@ -48,7 +48,7 @@ public class WebSocket extends WebSocketServer {
 	@Override
 	public void onError(org.java_websocket.WebSocket conn, Exception message) {
 		System.out.println("Socket Exception:" + message.toString());
-		//message.printStackTrace();
+		message.printStackTrace();
 		e++;
 	}
 

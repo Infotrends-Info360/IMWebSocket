@@ -119,6 +119,7 @@ public class InteractionServlet {
 		try{
 			MaintainService maintainService = new MaintainService();
 			int interactionInt = maintainService.insert_Interaction(interaction);
+			System.out.println("interaction insertcount: "+interactionInt);
 			jsonObject.put("insertcount", interactionInt);
 	        	
 		} catch (Exception e) {

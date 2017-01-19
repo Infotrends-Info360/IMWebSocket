@@ -30,8 +30,9 @@ public class CommonFunction {
 		String username = obj.getString("UserName");
 		String ACtype = obj.getString("ACtype");
 		String joinMsg = "[Server]" + username + " Online";
-		WebSocketUserPool.addUser(username, userId, conn);
+		WebSocketUserPool.addUser(username, userId, conn); // 在此刻,已將user conn加入倒Pool中
 		WebSocketUserPool.sendMessage(joinMsg);
+		
 		JSONObject sendjson = new JSONObject();
 		sendjson.put("Event", "userjoin");
 		sendjson.put("from", userId);
@@ -39,6 +40,7 @@ public class CommonFunction {
 		WebSocketUserPool.sendMessageToUser(conn, sendjson.toString());
 		WebSocketUserPool.sendMessage("online people: "
 				+ WebSocketUserPool.getOnlineUser().toString());
+		// 把下面取消掉:
 		if(ACtype.equals("Client")){
 			HeartBeat heartbeat = new HeartBeat();
 			heartbeat.heartbeating(conn);
