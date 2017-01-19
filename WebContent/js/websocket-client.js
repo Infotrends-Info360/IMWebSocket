@@ -681,11 +681,11 @@ function addlayim(UserID, UserName) {
 				}
 			}
 			,uploadImage: {
-		      url: './json/uploadImage. json' //（返回的資料格式見下文）
+		      url: 'http://ws.crm.com.tw:8080/JAXRS-FileUpload/rest/upload/images' //（返回的資料格式見下文）
 		      //,type: '' //默認post
 		    }
 		    ,uploadFile: {
-		      url: './json/uploadFile.json' //（返回的資料格式見下文）
+		      url: 'http://ws.crm.com.tw:8080/JAXRS-FileUpload/rest/upload/files' //（返回的資料格式見下文）
 		      //,type: '' //默認post
 		    }
 			// 開啟客服模式
