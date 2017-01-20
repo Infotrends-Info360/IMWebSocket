@@ -23,7 +23,7 @@
 <script src="layui/layui.js"></script>
 </head>
 <body onbeforeunload="checktoLeave()"> 
-	UserName : <input type="text" name="UserName" id="UserName">
+	UserName : <input type="text" name="UserName" id="UserName" value="agent01">
 	UserID : <input type="text" name="UserID" id="UserID" disabled>
 	<br>
 	<button type="submit" onclick="Login();" id="Login">Login</button>

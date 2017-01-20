@@ -151,19 +151,20 @@ function Login() {
 				} else if ("userjoin" == obj.Event) {
 					// 控制前端傳值
 					document.getElementById("UserID").value = obj.from;
-				} else if ("heartbeattouser" == obj.Event) {
-					var now = new Date();
-					var msg = {
-						type : "heartbeattoserver",
-						heartbeat : 'ap',
-						groupid : GroupID,
-						date : now.getHours() + ":" + now.getMinutes() + ":"
-								+ now.getSeconds()
-					};
-
-					// 發送消息給WebSocket
-					ws.send(JSON.stringify(msg));
-				}
+				} 
+//				else if ("heartbeattouser" == obj.Event) {
+//					var now = new Date();
+//					var msg = {
+//						type : "heartbeattoserver",
+//						heartbeat : 'ap',
+//						groupid : GroupID,
+//						date : now.getHours() + ":" + now.getMinutes() + ":"
+//								+ now.getSeconds()
+//					};
+//
+//					// 發送消息給WebSocket
+//					ws.send(JSON.stringify(msg));
+//				}
 
 			} else {
 				// 控制前端傳值

@@ -175,10 +175,6 @@ public class WebSocket extends WebSocketServer {
 //			this.setinteraction(message.toString(), conn);
 			ClientFunction.setinteraction(message.toString(), conn);
 			break;
-		case "heartbeattoserver":
-//			this.heartbeattoserver(message.toString(), conn);
-//			HeartBeat.heartbeattoserver(message.toString(), conn);
-			break;
 		case "test":
 			this.test();
 			break;
