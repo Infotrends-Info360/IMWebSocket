@@ -1,9 +1,12 @@
 package websocket.bean;
 
+import java.util.Date;
+
 //此類別給WebSocketGroupPool.groupuserconnections使用
 public class GroupInfo {
 	private String userid;
 	private String username;
+	private Date starttime;
 	public String getUserid() {
 		return userid;
 	}
@@ -16,5 +19,10 @@ public class GroupInfo {
 	public void setUsername(String username) {
 		this.username = username;
 	}
-	
+	public Date getStarttime() {
+		return starttime;
+	}
+	public void setStarttime(Date starttime) {
+		this.starttime = starttime;
+	}
 }

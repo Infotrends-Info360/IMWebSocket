@@ -34,15 +34,6 @@
 		<servlet-name>ClientServlet</servlet-name> 
 		<url-pattern>/ClientServlet</url-pattern> 
 	</servlet-mapping>
-	
-	<servlet> 
-		<servlet-name>ViewKPIServlet</servlet-name> 
-		<servlet-class>servlet.ViewKPIServlet</servlet-class> 
-	</servlet> 
-	<servlet-mapping> 
-		<servlet-name>ViewKPIServlet</servlet-name> 
-		<url-pattern>/ViewKPIServlet</url-pattern> 
-	</servlet-mapping>
 
 	<servlet>
 		<servlet-name>Jersey Web Application</servlet-name>

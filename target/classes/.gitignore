@@ -1,7 +1,2 @@
-/com/
-/filter/
-/main/
-/restful/
-/servlet/
 /websocket/
-/pools/
+/restful/
