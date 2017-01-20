@@ -23,6 +23,7 @@ public class ClientFunction {
 			org.java_websocket.WebSocket conn) {
 		JSONObject obj = new JSONObject(message);
 		String group = obj.getString("group");
+		System.out.println("Clientclosegroup() - group " + group);
 		JSONObject sendjson = new JSONObject();
 		sendjson.put("Event", "Clientclosegroup");
 		sendjson.put("from", obj.getString("id"));

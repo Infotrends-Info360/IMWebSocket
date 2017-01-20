@@ -216,12 +216,13 @@ public class WebSocket extends WebSocketServer {
 	}
 	
 	private void inputInteractionLog(org.java_websocket.WebSocket conn, String reason) {
-		System.out.println("inputInteractionLog() called");
-		System.out.println("conn: " + conn);
+//		System.out.println("inputInteractionLog() called");
+//		System.out.println("conn: " + conn);
+		
 		String message = WebSocketUserPool.getUserInteractionByKey(conn); // 一定取得到: 1. 在user login時就會呼叫setUserInteraction, 2. 在user logut or 重整時也會呼叫setUserInteraction
 		String username = WebSocketUserPool.getUserNameByKey(conn);
-		System.out.println("message: " + message);
-		System.out.println("username: " + username);
+//		System.out.println("message: " + message);
+//		System.out.println("username: " + username);
 		
 		JSONObject obj = new JSONObject(message);
 		String closefrom = obj.getString("closefrom");

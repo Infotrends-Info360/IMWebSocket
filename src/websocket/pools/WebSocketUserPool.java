@@ -45,7 +45,9 @@ public class WebSocketUserPool {
 
 	/** * Get User Interaction By Key * @param session */ /* Done */
 	public static String getUserInteractionByKey(WebSocket conn) {
-		return userallconnections.get(conn).getUserinteraction();
+		UserInfo tmpUserInfo = userallconnections.get(conn);
+		return tmpUserInfo.getUserinteraction();
+//		return userallconnections.get(conn).getUserinteraction();
 	}
 	
 	/** * Get User heartbeat By Key * @param session */ /* Done */
@@ -164,9 +166,9 @@ public class WebSocketUserPool {
 
 	/** * Send Message to a User * @param user * @param message */ /* Done */
 	public static void sendMessageToUser(WebSocket conn, String message)  {
-		System.out.println("sendMessageToUser() called");
+//		System.out.println("sendMessageToUser() called");
 		if (null != conn) {
-			System.out.println("conn.send(message) called");
+//			System.out.println("conn.send(message) called");
 			conn.send(message);
 		}
 	}

@@ -51,6 +51,7 @@ function Login() {
 					var UserID = document.getElementById('UserID').value;
 					// var group = 'G'+document.getElementById('group').value;
 					GroupID = obj.group;
+					console.log("GroupID: " + GroupID);
 					var now = new Date();
 					// 組成增加群組的JSON指令
 					var Clientaddgroupmsg = {
@@ -346,7 +347,7 @@ function Logout() {
 
 // 離開WebSocket Pool列表
 function Logoutaction(UserID) {
-	 
+	// 在登出前,將要存入的log資訊先放到userallconnections中,此方法最後會呼叫adduserinteraction() 
 	interactionLogDemo(ixnstatus, ixnactivitycode)
 	
 	var now = new Date();

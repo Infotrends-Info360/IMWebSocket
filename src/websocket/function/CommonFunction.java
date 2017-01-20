@@ -62,7 +62,8 @@ public class CommonFunction {
 		user = WebSocketUserPool.getUserByKey(conn);
 		String joinMsg = "[Server]" + username + " Offline";
 		WebSocketUserPool.sendMessage(joinMsg);
-		WebSocketUserPool.removeUser(conn);
+//		WebSocketUserPool.removeUser(conn);
+		conn.close();
 //		WebSocketPool.removeUserID(conn);
 //		WebSocketPool.removeUserName(conn);
 	}
@@ -90,7 +91,7 @@ public class CommonFunction {
 		String username = obj.getString("UserName");
 		String joinMsg = "[Server]" + username + " leave " + group + " group";
 		WebSocketGroupPool.sendMessageingroup(group, joinMsg);
-		WebSocketGroupPool.removeGroup(group);
+		WebSocketGroupPool.removeGroup(group); // 這邊要改成removeUseringroup()
 	}
 	
 	/** * Get Message from Group */
