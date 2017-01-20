@@ -11,6 +11,7 @@ import java.util.Map;
 import java.util.Set;
 
 import org.java_websocket.WebSocket;
+import org.java_websocket.exceptions.WebsocketNotConnectedException;
 
 import websocket.bean.UserInfo;
 
@@ -165,7 +166,7 @@ public class WebSocketUserPool {
 	}
 
 	/** * Send Message to a User * @param user * @param message */ /* Done */
-	public static void sendMessageToUser(WebSocket conn, String message)  {
+	public static void sendMessageToUser(WebSocket conn, String message) throws WebsocketNotConnectedException{
 //		System.out.println("sendMessageToUser() called");
 		if (null != conn) {
 //			System.out.println("conn.send(message) called");

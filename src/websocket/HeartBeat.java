@@ -6,6 +6,7 @@ import java.util.Set;
 import java.util.Timer;
 import java.util.TimerTask;
 
+import org.java_websocket.exceptions.WebsocketNotConnectedException;
 import org.json.JSONObject;
 
 import websocket.function.ClientFunction;
@@ -19,7 +20,7 @@ public class HeartBeat {
 	public void heartbeating(org.java_websocket.WebSocket conn) {
 		// String User = WebSocketPool.getUserByKey(conn);
 		HeartBeat hb = new HeartBeat();
-		hb.setHealthStatus(conn.toString());
+//		hb.setHealthStatus(conn.toString());
 		Timer timer = new Timer(conn.toString());
 		TimerTask taskToExecute = new TimerTaskSendHeartBeat(hb, conn, timer);
 		timer.scheduleAtFixedRate(taskToExecute, 1000, 1000);
@@ -52,11 +53,19 @@ public class HeartBeat {
 		this.healthStatus = healthStatus;
 	}
 	
-	public static void heartbeattouser(org.java_websocket.WebSocket conn){
+	public static void heartbeattouser(org.java_websocket.WebSocket conn, HeartBeat healthStatusHolder){
 		System.out.println("conn " + conn + " is still online. ********************");
 //		System.out.println("heartbeattouser() called");
 		JSONObject sendjson = new JSONObject();
-		WebSocketUserPool.sendMessageToUser(conn, sendjson.toString()); // 透過此去偵測使用者連線sessiong是否還在
+//		WebSocketUserPool.sendMessageToUser(conn, sendjson.toString()); // 透過此去偵測使用者連線sessiong是否還在
+		
+		try{
+			WebSocketUserPool.sendMessageToUser(conn, sendjson.toString()); // 透過此去偵測使用者連線sessiong是否還在
+		}catch(WebsocketNotConnectedException e){
+			healthStatusHolder.setHealthStatus("RED"); // 透過此flag關掉HeartBeat排程
+			conn.close();
+		}
+		
 	}// end of heartbeattouser
 	
 //	public static void heartbeattoserver(String message, org.java_websocket.WebSocket conn){
@@ -106,7 +115,13 @@ class TimerTaskSendHeartBeat extends TimerTask {
 
 	@Override
 	public void run() {
-		HeartBeat.heartbeattouser(conn);
+		System.out.println("this.healthStatusHolder.getHealthStatus():" + this.healthStatusHolder.getHealthStatus());
+		if ("GREEN".equals(this.healthStatusHolder.getHealthStatus())){
+			HeartBeat.heartbeattouser(conn,this.healthStatusHolder);
+		}else{
+			timer.cancel();
+		}
+		
 	}
 	
 }

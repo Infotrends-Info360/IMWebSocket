@@ -33,7 +33,8 @@ public class WebSocket extends WebSocketServer {
 			String reason, boolean remote) {
 		// 此方法沒有用到,先放著,並不會影響到主流程
 		//userLeave(conn);
-		System.out.println("Someone unlink in Socket conn:" + conn);
+//		System.out.println("Someone unlink in Socket conn:" + conn);
+		System.out.println("conn: " + conn + " is disconnected. !!!!!");
 		// 將Heartbeat功能移轉到這裡:
 		inputInteractionLog(conn,reason);
 		clearUserData(conn); // 包含removeUser, removerUserinTYPE, removeUseringroup
@@ -216,7 +217,7 @@ public class WebSocket extends WebSocketServer {
 	}
 	
 	private void inputInteractionLog(org.java_websocket.WebSocket conn, String reason) {
-//		System.out.println("inputInteractionLog() called");
+		System.out.println("inputInteractionLog() called");
 //		System.out.println("conn: " + conn);
 		
 		String message = WebSocketUserPool.getUserInteractionByKey(conn); // 一定取得到: 1. 在user login時就會呼叫setUserInteraction, 2. 在user logut or 重整時也會呼叫setUserInteraction
