@@ -43,7 +43,7 @@ public class WebSocket extends WebSocketServer {
 	/** * trigger Exception Event */
 	@Override
 	public void onError(org.java_websocket.WebSocket conn, Exception message) {
-		System.out.println("Socket Exception:" + message.toString());
+		System.out.println("On Error: Socket Exception:" + message.toString());
 		message.printStackTrace();
 		e++;
 	}
@@ -212,16 +212,21 @@ public class WebSocket extends WebSocketServer {
 		WebSocketUserPool.removeUser(conn);
 		WebSocketTypePool.removeUserinTYPE("Client", conn);
 		// 取得一個user所屬的所有groupid
-		List<String> groupids = WebSocketUserPool.getUserGroupByKey(conn);
-		for (String groupid: groupids){
-			//使用每個groupid,並找出相對應的group,再將其中的conn remove掉
-			WebSocketGroupPool.removeUseringroup(groupid, conn); // 這邊是否須考慮如果此user退出group,只剩下agent在的狀況? 還是此狀況交由其他處來做處理?				
-		}
+//		List<String> groupids = WebSocketUserPool.getUserGroupByKey(conn);
+//		for (String groupid: groupids){
+//			//使用每個groupid,並找出相對應的group,再將其中的conn remove掉
+//			WebSocketGroupPool.removeUseringroup(groupid, conn); // 這邊是否須考慮如果此user退出group,只剩下agent在的狀況? 還是此狀況交由其他處來做處理?				
+//		}
 	}
 	
 	private void inputInteractionLog(org.java_websocket.WebSocket conn, String reason) {
 		System.out.println("inputInteractionLog() called");
+		System.out.println("conn: " + conn);
 		String message = WebSocketUserPool.getUserInteractionByKey(conn); // 一定取得到: 1. 在user login時就會呼叫setUserInteraction, 2. 在user logut or 重整時也會呼叫setUserInteraction
+		String username = WebSocketUserPool.getUserNameByKey(conn);
+		System.out.println("message: " + message);
+		System.out.println("username: " + username);
+		
 		JSONObject obj = new JSONObject(message);
 		String closefrom = obj.getString("closefrom");
 		if (closefrom.equals("default")) {

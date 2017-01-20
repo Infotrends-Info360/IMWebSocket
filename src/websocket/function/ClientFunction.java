@@ -107,15 +107,18 @@ public class ClientFunction {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-		org.java_websocket.WebSocket sendto = WebSocketUserPool
-				.getWebSocketByUser(obj.getString("sendto"));
+
 		JSONObject responseSBjson = new JSONObject(responseSB.toString());
 		JSONObject sendjson = new JSONObject();
+		
 		sendjson.put("Event", "searchuserdata");
 		sendjson.put("from", obj.getJSONObject("attributes").getString("id"));
 		sendjson.put("userdata",  responseSBjson);
 		sendjson.put("channel", obj.getString("channel"));
 		WebSocketUserPool.sendMessageToUser(conn, sendjson.toString());
+		// 掉換順序
+		org.java_websocket.WebSocket sendto = WebSocketUserPool
+				.getWebSocketByUser(obj.getString("sendto"));
 		WebSocketUserPool.sendMessageToUser(sendto, sendjson.toString());
 	}
 	
