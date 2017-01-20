@@ -164,7 +164,9 @@ public class WebSocketUserPool {
 
 	/** * Send Message to a User * @param user * @param message */ /* Done */
 	public static void sendMessageToUser(WebSocket conn, String message)  {
+		System.out.println("sendMessageToUser() called");
 		if (null != conn) {
+			System.out.println("conn.send(message) called");
 			conn.send(message);
 		}
 	}
