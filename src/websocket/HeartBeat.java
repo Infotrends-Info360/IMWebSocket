@@ -24,6 +24,7 @@ public class HeartBeat {
 		Timer timer = new Timer(conn.toString());
 		TimerTask taskToExecute = new TimerTaskSendHeartBeat(hb, conn, timer);
 		timer.scheduleAtFixedRate(taskToExecute, 1000, 1000);
+		WebSocketUserPool.addUserHeartbeatTimer(timer, conn);
 
 		// Wait for 60 seconds and then cancel the timer cleanly
 		// try {

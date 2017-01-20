@@ -9,6 +9,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+import java.util.Timer;
 
 import org.java_websocket.WebSocket;
 import org.java_websocket.exceptions.WebsocketNotConnectedException;
@@ -55,6 +56,8 @@ public class WebSocketUserPool {
 	public static String getUserheartbeatByKey(WebSocket conn) {
 		return userallconnections.get(conn).getUserheartbeat();
 	}
+	
+	
 
 	/** * Get Online User Count * @param */ /* Done */
 	public static int getUserCount() {
@@ -137,9 +140,6 @@ public class WebSocketUserPool {
 		} else {
 			return false;
 		}		
-		
-		
-		
 	}
 	
 	/** * Remove User Group from WebSocket Pool * @param inbound */ /* Done */
@@ -186,5 +186,17 @@ public class WebSocketUserPool {
 			}
 		}
 	}
+	
+	/** * Get heartbeatTimer By Key * @param session */ /* Done */
+	public static Timer getUserHeartbeatTimerByKey(WebSocket conn) {
+//		System.out.println("getUserGroupByKey(WebSocket conn) called");
+		return userallconnections.get(conn).getHeartbeatTimer();
+	}
+	
+	/** * Add heartbeatTimer WebSocket Pool* @param inbound */ /* Done */
+	public static void addUserHeartbeatTimer(Timer heartbeatTimer, WebSocket conn) {
+		userallconnections.get(conn).setHeartbeatTimer(heartbeatTimer);
+	}
+	
 	
 }

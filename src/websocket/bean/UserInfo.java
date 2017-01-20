@@ -2,6 +2,7 @@ package websocket.bean;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Timer;
 
 //此類別給WebSocketPool.userallconnections使用
 public class UserInfo {
@@ -10,6 +11,7 @@ public class UserInfo {
 	private List<String> usergroup = new ArrayList();
 	private String userinteraction;
 	private String userheartbeat;
+	private Timer heartbeatTimer;
 	public String getUserid() {
 		return userid;
 	}
@@ -40,4 +42,11 @@ public class UserInfo {
 	public void setUserheartbeat(String userheartbeat) {
 		this.userheartbeat = userheartbeat;
 	}
+	public Timer getHeartbeatTimer() {
+		return heartbeatTimer;
+	}
+	public void setHeartbeatTimer(Timer heartbeatTimer) {
+		this.heartbeatTimer = heartbeatTimer;
+	}
+	
 }

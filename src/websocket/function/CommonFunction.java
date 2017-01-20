@@ -1,6 +1,9 @@
 package websocket.function;
 
+import java.util.Timer;
+
 import org.json.JSONObject;
+
 
 
 import websocket.HeartBeat;
@@ -63,6 +66,8 @@ public class CommonFunction {
 		String joinMsg = "[Server]" + username + " Offline";
 		WebSocketUserPool.sendMessage(joinMsg);
 //		WebSocketUserPool.removeUser(conn);
+		Timer timer = WebSocketUserPool.getUserHeartbeatTimerByKey(conn);
+		timer.cancel();
 		conn.close();
 //		WebSocketPool.removeUserID(conn);
 //		WebSocketPool.removeUserName(conn);
