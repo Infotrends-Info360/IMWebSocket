@@ -27,28 +27,28 @@ public class WebSocketUserPool {
 	 */
 	public static final Map<WebSocket, UserInfo> userallconnections = new HashMap<WebSocket,UserInfo>();	
 	
-	/** * Get User By Key * @param session */ /* Done */
+	/** * Get User ID By Key * @param session */ /* Done */
 	public static String getUserByKey(WebSocket conn) {
 		return userallconnections.get(conn).getUserid();
 	}
 	
-	/** * Get User By Key * @param session */ /* Done */
+	/** * Get User Name By Key * @param session */ /* Done */
 	public static String getUserNameByKey(WebSocket conn) {
 		return userallconnections.get(conn).getUsername();
 	}
 	
-	/** * Get User By Key * @param session */ /* Done */
+	/** * Get User Group By Key * @param session */ /* Done */
 	public static List<String> getUserGroupByKey(WebSocket conn) {
 //		System.out.println("getUserGroupByKey(WebSocket conn) called");
 		return userallconnections.get(conn).getUsergroup();
 	}
 
-	/** * Get User By Key * @param session */ /* Done */
+	/** * Get User Interaction By Key * @param session */ /* Done */
 	public static String getUserInteractionByKey(WebSocket conn) {
 		return userallconnections.get(conn).getUserinteraction();
 	}
 	
-	/** * Get User By Key * @param session */ /* Done */
+	/** * Get User heartbeat By Key * @param session */ /* Done */
 	public static String getUserheartbeatByKey(WebSocket conn) {
 		return userallconnections.get(conn).getUserheartbeat();
 	}
@@ -56,6 +56,11 @@ public class WebSocketUserPool {
 	/** * Get Online User Count * @param */ /* Done */
 	public static int getUserCount() {
 		return userallconnections.size();
+	}
+	
+	/** * Get Online User Group Count * @param */ /* Done */
+	public static int getUsergroupCount(WebSocket conn) {
+		return userallconnections.get(conn).getUsergroup().size();
 	}
 
 	/** * Get WebSocket By User ID * @param user */ /* Done */
@@ -96,7 +101,7 @@ public class WebSocketUserPool {
 		userallconnections.get(conn).setUserheartbeat(userheartbeat);
 	}
 	
-	/** * Get Online User Name * @return */ /* Done */
+	/** * Get Online User ID * @return */ /* Done */
 	public static Collection<String> getOnlineUser() {
 		List<String> setUsers = new ArrayList<String>();
 		

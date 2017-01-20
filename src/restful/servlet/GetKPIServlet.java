@@ -3,7 +3,9 @@ package restful.servlet;
 import java.io.IOException;
 import java.util.Collection;
 
+import javax.ws.rs.FormParam;
 import javax.ws.rs.GET;
+import javax.ws.rs.POST;
 import javax.ws.rs.Path;
 import javax.ws.rs.core.Response;
 
@@ -23,8 +25,9 @@ import websocket.pools.WebSocketUserPool;
 @Path("/GetKPI")
 public class GetKPIServlet {
 	
-	@GET
-	public Response GetFromPath() throws IOException {
+	@POST
+	public Response GetFromPath(@FormParam("user")
+			String user) throws IOException {
 		
 		Collection<String> CollectionUsers = WebSocketUserPool.getOnlineUser();
 		JSONArray usersjsonarray = new JSONArray();
@@ -85,6 +88,23 @@ public class GetKPIServlet {
 		
 		jsonObject.put("leaveclientcount", WebSocketTypePool.getleaveClient());
 		
+		if(user!=null && !"".equals(user)){
+			JSONObject usergroupjsonObject = new JSONObject();
+			WebSocket conn = WebSocketUserPool.getWebSocketByUser(user);
+			//WebSocketUserPool.getUsergroupCount(conn);
+			jsonObject.put("userid", user);
+			jsonObject.put("username", WebSocketUserPool.getUserNameByKey(conn));
+			jsonObject.put("usergroupcount", WebSocketUserPool.getUsergroupCount(conn));
+			Collection<String> UserGroups = WebSocketUserPool.getUserGroupByKey(conn);
+			JSONArray usergroupjsonarray = new JSONArray();
+			for (String group : UserGroups) {
+				usergroupjsonObject.put("groupid", group);
+				usergroupjsonObject.put("ProcessTime", WebSocketGroupPool.getProcessTimeCount(group, conn));
+				usergroupjsonarray.put(usergroupjsonObject);
+			}
+			jsonObject.put("usergroups", usergroupjsonarray);
+			
+		}
 
 		return Response.status(200).entity(jsonObject.toString())
 				.header("Access-Control-Allow-Origin", "*")

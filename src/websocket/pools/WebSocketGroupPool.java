@@ -34,6 +34,8 @@ public class WebSocketGroupPool{
 		GroupInfo groupinfo = new GroupInfo();
 		groupinfo.setUserid(userid);
 		groupinfo.setUsername(username);
+		Date starttime = new Date();
+		groupinfo.setStarttime(starttime);
 		
 		Map<WebSocket, GroupInfo> groupmap = groupuserconnections.get(group);
 		if (groupmap == null || groupmap.isEmpty()){
@@ -109,6 +111,20 @@ public class WebSocketGroupPool{
 	/** * Get Online Group Count * @param */
 	public static int getGroupCount() {
 		return groupuserconnections.size();
+	}
+	
+	/** * Get Process Time Count * @param */
+	public static String getProcessTimeCount(String group, WebSocket conn) {
+		Date nowtime = new Date();
+		Date starttime = groupuserconnections.get(group).get(conn).getStarttime();
+		long ProcessTime = starttime.getTime()-nowtime.getTime();
+		long seconds = 0, minutes = 0, hours = 0;
+	    seconds = ProcessTime / 1000;
+	    hours = seconds / 3600;
+	    seconds = seconds % 3600;
+	    seconds = seconds / 60;
+	    minutes = minutes % 60;
+		return hours + ":" + minutes + ":" + seconds;
 	}
 	
 	/** * Get Online Group * @param */
