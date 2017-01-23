@@ -4,6 +4,7 @@ import java.net.InetSocketAddress;
 import java.net.UnknownHostException;
 import java.util.List;
 
+import org.apache.log4j.Logger;
 import org.java_websocket.WebSocketImpl;
 import org.java_websocket.handshake.ClientHandshake;
 import org.java_websocket.server.WebSocketServer;
@@ -307,6 +308,16 @@ public class WebSocket extends WebSocketServer {
 //		System.out.println("Interaction: " + WebSocketUserPool.getUserInteractionByKey(conn));			
 //		System.out.println("heartbeat: " + WebSocketUserPool.getUserheartbeatByKey(conn));			
 //	}
+	/*********** log4j測試 **************/
+	Logger logger = Logger.getLogger(WebSocket.class);
+
+	// 對應的 Log4j.properties 設定要在等級 Info 之上才會顯示，所以logger.debug 不會出現
+	logger.debug("Hello Log4j, this is debug message");
+
+	// 以下的訊息會出現在 console 和 log file 中
+	logger.info("Hi Log4j, this will appear in console and log file");
+	logger.error("This is error message!!!");
+	
 	
 }
 	
