@@ -3,13 +3,16 @@ package websocket;
 import java.net.InetSocketAddress;
 import java.net.UnknownHostException;
 import java.util.List;
+import java.util.Map;
 
 import org.apache.log4j.Logger;
+//import org.java_websocket.WebSocket;
 import org.java_websocket.WebSocketImpl;
 import org.java_websocket.handshake.ClientHandshake;
 import org.java_websocket.server.WebSocketServer;
 import org.json.JSONObject;
 
+import websocket.bean.GroupInfo;
 import websocket.function.AgentFunction;
 import websocket.function.ClientFunction;
 import websocket.function.CommonFunction;
@@ -212,7 +215,14 @@ public class WebSocket extends WebSocketServer {
 		List<String> groupids = WebSocketUserPool.getUserGroupByKey(conn);
 		for (String groupid: groupids){
 			//使用每個groupid,並找出相對應的group,再將其中的conn remove掉
-			WebSocketGroupPool.removeUseringroup(groupid, conn); // 這邊是否須考慮如果此user退出group,只剩下agent在的狀況? 還是此狀況交由其他處來做處理?				
+			WebSocketGroupPool.removeUseringroup(groupid, conn); // 這邊是否須考慮如果此user退出group,只剩下agent在的狀況? 還是此狀況交由其他處來做處理?
+			// 當去掉之後只剩下一個人在group中
+//			Map<String, Map<org.java_websocket.WebSocket, GroupInfo>> groupuserconnections = WebSocketGroupPool.getGroupuserconnections();
+//			Map<org.java_websocket.WebSocket, GroupInfo> currGroup = groupuserconnections.get(groupid);
+//			System.out.println("groupId: " + groupid + " size " + currGroup.size());
+//			if (currGroup.size() == 1){
+//				System.out.println("groupId: " + groupid + " size " + currGroup.size());
+//			}
 		}
 		// 清TYPE:
 		WebSocketTypePool.removeUserinTYPE("Client", conn);

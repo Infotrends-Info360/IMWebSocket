@@ -268,11 +268,11 @@ function Logout() {
 	// ws.close()
 	var UserID = document.getElementById('UserID').value;
 	// 離開Agent列表
-	LeaveType(UserID);
+//	LeaveType(UserID);
 	// 執行登出
-	Logoutaction(UserID);
+	Logoutaction(UserID); // onClose()會全部清: Group, Type, User conn
 	// 離開Group
-	leaveGroup(UserID);
+//	leaveGroup(UserID);
 	// 關閉上線開關
 	isonline = false;
 

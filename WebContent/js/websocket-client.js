@@ -100,7 +100,9 @@ function Login() {
 				} else if ("ReleaseEvent" == obj.Event) {
 					var UserID = document.getElementById('UserID').value;
 					// 離開群組
-					leaveGroup(UserID);
+					if (isonline){
+						leaveGroup(UserID);						
+					}
 					// 收到尋找Agent的指令
 				} else if ("findAgent" == obj.Event) {
 					
@@ -320,27 +322,28 @@ function Login() {
 function Logout() {
 	// 關閉socket
 	// ws.close()
-	var UserID = document.getElementById('UserID').value;
-	var now = new Date();
-	var closegroupsmsg = {
-		type : "Clientclosegroup",
-		ACtype : "Client",
-		id : UserID,
-		group : GroupID,
-		UserName : UserName,
-		channel : "chat",
-		date : now.getHours() + ":" + now.getMinutes() + ":" + now.getSeconds()
-	// date: Date.now()
-	};
+	isonline = false; // 給"Clientclosegroup" -> .java - "Clientclosegroup" -> .js - ReleaseEvent() -> notready -> "Agentclosegroup" -> .java -> client.js - if(isonlone){} 
+						// 也給"ReleaseEvent"用
+//	var UserID = document.getElementById('UserID').value;
+//	var now = new Date();
+//	var closegroupsmsg = {
+//		type : "Clientclosegroup",
+//		ACtype : "Client",
+//		id : UserID,
+//		group : GroupID,
+//		UserName : UserName,
+//		channel : "chat",
+//		date : now.getHours() + ":" + now.getMinutes() + ":" + now.getSeconds()
+//	// date: Date.now()
+//	};
 
 	// 發送消息
-	ws.send(JSON.stringify(closegroupsmsg));
+//	ws.send(JSON.stringify(closegroupsmsg));
 
 	// 離開Client列表
-	LeaveType(UserID);
+//	LeaveType(UserID);
 	// 離開WebSocket Pool列表
-	Logoutaction(UserID);
-	isonline = false;
+	Logoutaction(UserID); // 這邊會全部清: Group, Type, User conn
 	// 控制前端傳值
 	document.getElementById("status").innerHTML = "狀態: Logout";
 	document.getElementById("Logout").disabled = true;

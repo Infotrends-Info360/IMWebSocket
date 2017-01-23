@@ -58,11 +58,35 @@ public class WebSocketGroupPool{
 	
 	/** * Remove User from Group * @param inbound */
 	public static boolean removeUseringroup(String group,WebSocket conn) {
-//		System.out.println("removeUseringroup(String group,WebSocket conn) called");
+		// 把離開的邏輯坐在這裡
+		// 1. 若是Client離開 -> 則把所有人都踢出此group
+		// 2. 若是Agent離開 && 剩餘人數 > 1 -> 自己退出就好
+		// 3. 若是Agent離開 && 剩餘人數 == 1 -> 則把所有人都踢出此group
+		System.out.println("removeUseringroup(String group,WebSocket conn) called");
 		Map<WebSocket, GroupInfo> groupmap = groupuserconnections.get(group);
 		if (groupmap.containsKey(conn)) {
 //			System.out.println(conn + "'s group is " + " removed");
-			groupmap.remove(conn);
+			String currACType = WebSocketUserPool.getACTypeByKey(conn);
+			System.out.println("ACType: " + WebSocketUserPool.getACTypeByKey(conn));
+			if ("Client".equals(currACType)){
+				System.out.println("Client 全清");
+				//全清:
+				groupmap.clear();
+			}else if (groupmap.size() == 2){
+				System.out.println("groupmap.size() == 2 全清");
+				//也全清:
+				groupmap.clear();
+			}else if (groupmap.size() > 2){
+				System.out.println("groupmap.size() > 2  清自己");
+				//清Agent自己
+				groupmap.remove(conn);
+			}
+			System.out.println("groupId: " + group + " size: " + groupmap.size());
+//			groupmap.remove(conn);
+//			// debugging
+//			if (groupmap.size() == 0){
+//				System.out.println("groupId: " + group + " is empty() now.");
+//			}
 			return true;
 		} else {
 			return false;
@@ -153,5 +177,11 @@ public class WebSocketGroupPool{
 		}
 		return null;
 	}
+
+	public static Map<String, Map<WebSocket, GroupInfo>> getGroupuserconnections() {
+		return groupuserconnections;
+	}
+	
+	
 	
 }

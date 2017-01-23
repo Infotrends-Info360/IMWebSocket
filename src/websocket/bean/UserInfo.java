@@ -12,6 +12,7 @@ public class UserInfo {
 	private String userinteraction;
 	private String userheartbeat;
 	private Timer heartbeatTimer;
+	private String ACType;
 	public String getUserid() {
 		return userid;
 	}
@@ -47,6 +48,12 @@ public class UserInfo {
 	}
 	public void setHeartbeatTimer(Timer heartbeatTimer) {
 		this.heartbeatTimer = heartbeatTimer;
+	}
+	public String getACType() {
+		return ACType;
+	}
+	public void setACType(String aACType) {
+		ACType = aACType;
 	}
 	
 }

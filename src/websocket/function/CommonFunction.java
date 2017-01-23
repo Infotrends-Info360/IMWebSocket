@@ -46,7 +46,7 @@ public class CommonFunction {
 		String username = obj.getString("UserName");
 		String ACtype = obj.getString("ACtype");
 		String joinMsg = "[Server]" + username + " Online";
-		WebSocketUserPool.addUser(username, userId, conn); // 在此刻,已將user conn加入倒Pool中
+		WebSocketUserPool.addUser(username, userId, conn, ACtype); // 在此刻,已將user conn加入倒Pool中
 		WebSocketUserPool.sendMessage(joinMsg);
 		
 		JSONObject sendjson = new JSONObject();
@@ -73,6 +73,7 @@ public class CommonFunction {
 	
 	/** * user leave websocket */
 	public static void userExit(String user, org.java_websocket.WebSocket conn) {
+		System.out.println("userExit() called");
 		JSONObject obj = new JSONObject(user);
 		String username = obj.getString("UserName");
 //		user = WebSocketUserPool.getUserByKey(conn);
