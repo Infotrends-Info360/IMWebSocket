@@ -93,8 +93,9 @@ function Login() {
 			//接收到Client離開群組的訊息
 			}else if("Clientclosegroup"==obj.Event){
 				document.getElementById("Event").innerHTML = obj.Event;
-				alert("客戶離開對談");
-				ReleaseEvent();
+				//alert("客戶離開對談"); // 此alert會影響到程式執行順序,若打開會因此產生sendMessageingroupserExitfromgroup
+				console.log("客戶離開對談"); //
+				ReleaseEvent(); // 這邊會產生迴圈,可能需要確認要留下哪些處理,避免再使用ReleaseEvent()方法
 			//接收到產生GroupID的訊息
 			}else if("creategroupId"==obj.Event){
 				//GroupID = 'G'+document.getElementById('UserID').value;

@@ -116,7 +116,7 @@ class TimerTaskSendHeartBeat extends TimerTask {
 
 	@Override
 	public void run() {
-		System.out.println("this.healthStatusHolder.getHealthStatus():" + this.healthStatusHolder.getHealthStatus());
+//		System.out.println("this.healthStatusHolder.getHealthStatus():" + this.healthStatusHolder.getHealthStatus());
 		if ("GREEN".equals(this.healthStatusHolder.getHealthStatus())){
 			HeartBeat.heartbeattouser(conn,this.healthStatusHolder);
 		}else{

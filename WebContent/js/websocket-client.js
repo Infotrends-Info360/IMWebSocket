@@ -47,7 +47,7 @@ function Login() {
 			if ("{" == e.data.substring(0, 1)) {
 				var obj = jQuery.parseJSON(e.data);
 				// 收到同意交談指令
-				if (" " == obj.Event) {
+				if ("AcceptEvent" == obj.Event) {
 					var UserID = document.getElementById('UserID').value;
 					// var group = 'G'+document.getElementById('group').value;
 					GroupID = obj.group;
@@ -143,7 +143,8 @@ function Login() {
 					// document.getElementById("userdata").innerHTML =
 					// JSON.stringify(obj.userdata);
 				} else if ("Agentclosegroup" == obj.Event) {
-					alert("對談已關閉");
+					// alert("對談已關閉");
+					console.log("對談已關閉");
 					if (isonline) {
 						Logout();
 					}

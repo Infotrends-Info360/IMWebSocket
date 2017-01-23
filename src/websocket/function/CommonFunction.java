@@ -62,7 +62,7 @@ public class CommonFunction {
 	public static void userExit(String user, org.java_websocket.WebSocket conn) {
 		JSONObject obj = new JSONObject(user);
 		String username = obj.getString("UserName");
-		user = WebSocketUserPool.getUserByKey(conn);
+//		user = WebSocketUserPool.getUserByKey(conn);
 		String joinMsg = "[Server]" + username + " Offline";
 		WebSocketUserPool.sendMessage(joinMsg);
 //		WebSocketUserPool.removeUser(conn);
@@ -96,7 +96,8 @@ public class CommonFunction {
 		String username = obj.getString("UserName");
 		String joinMsg = "[Server]" + username + " leave " + group + " group";
 		WebSocketGroupPool.sendMessageingroup(group, joinMsg);
-		WebSocketGroupPool.removeGroup(group); // 這邊要改成removeUseringroup()
+//		WebSocketGroupPool.removeGroup(group); // 這邊要改成removeUseringroup()
+		WebSocketGroupPool.removeUseringroup(group, conn);
 	}
 	
 	/** * Get Message from Group */
