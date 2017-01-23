@@ -104,7 +104,7 @@ public class WebSocket extends WebSocketServer {
 		case "messagetogroup":
 //			this.getMessageingroup(message.toString(), conn);
 			CommonFunction.getMessageingroup(message.toString(), conn);
-			break;
+			break; 
 		case "grouponline":
 //			this.onlineingroup(message.toString(), conn);
 			CommonFunction.onlineingroup(message.toString(), conn);

@@ -1,5 +1,6 @@
 package websocket.function;
 
+import java.util.Collection;
 import java.util.List;
 import java.util.Map;
 import java.util.Timer;
@@ -7,6 +8,7 @@ import java.util.Timer;
 import org.java_websocket.WebSocket;
 import org.json.JSONArray;
 import org.json.JSONObject;
+
 
 
 
@@ -58,6 +60,8 @@ public class CommonFunction {
 		if(ACtype.equals("Client")){
 			HeartBeat heartbeat = new HeartBeat();
 			heartbeat.heartbeating(conn);
+			// 告訴所有Agents更新等待的ClientList
+			refreshClientList(user);
 		}
 	}
 	
@@ -102,13 +106,20 @@ public class CommonFunction {
 				+ WebSocketGroupPool.getOnlineUseringroup(group).toString());
 		
 		// 之後可做更詳細的判斷-如為Agent才執行就好
-		String TYPE = "Agent";
-		Map<String, Map<WebSocket, TypeInfo>> TYPEconnections = WebSocketTypePool.getTypeconnections();
-		Map<WebSocket,  TypeInfo> TYPEmap = TYPEconnections.get(TYPE);
-		if (TYPEmap.containsKey(conn)){
+		// 尚有例外: JSONObject["ACtype"] not found.
+		String ACtype = obj.getString("ACtype");
+		if ("Agent".equals(ACtype)){
 			System.out.println("userjointogroup - one Agent joined");
-			refreshGroupList(conn);			
+			refreshGroupList(conn);						
 		}
+		
+//		String TYPE = "Agent";
+//		Map<String, Map<WebSocket, TypeInfo>> TYPEconnections = WebSocketTypePool.getTypeconnections();
+//		Map<WebSocket,  TypeInfo> TYPEmap = TYPEconnections.get(TYPE);
+//		if (TYPEmap.containsKey(conn)){
+//			System.out.println("userjointogroup - one Agent joined");
+//			refreshGroupList(conn);			
+//		}
 		
 	}
 	
@@ -246,4 +257,21 @@ public class CommonFunction {
 		// end of 將此Agent所屬的Group list塞入json中
 		WebSocketUserPool.sendMessageToUser(conn, sendjson.toString());
 	}
+	
+	private static void refreshClientList(String user){
+		JSONObject obj = new JSONObject(user);
+//		String userId = java.util.UUID.randomUUID().toString();
+//		String username = obj.getString("UserName");
+//		String ACtype = obj.getString("ACtype");
+		// 再來把所有client list放入JsonArray
+		
+		// end of 再來把所有client list放入JsonArray
+		Collection<String> agentList = WebSocketTypePool.getOnlineUserIDinTYPE("Agent");
+		for (String agent : agentList){
+			System.out.println("agent: " + agent);
+			// 再來跟每個Agent講要更新client list了
+		}
+		
+	}
+	
 }

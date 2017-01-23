@@ -339,6 +339,7 @@ function addGroup(aGroupID) {
 		type : "addGroup",
 		group : aGroupID,
 		id : UserID,
+		ACtype : "Agent",
 		UserName : UserName,
 		date : now.getHours() + ":" + now.getMinutes() + ":" + now.getSeconds()
 	};

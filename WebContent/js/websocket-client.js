@@ -54,16 +54,17 @@ function Login() {
 					console.log("GroupID: " + GroupID);
 					var now = new Date();
 					// 組成增加群組的JSON指令
-					var Clientaddgroupmsg = {
-						type : "addGroup",
-						group : GroupID,
-						id : UserID,
-						UserName : UserName,
-						date : now.getHours() + ":" + now.getMinutes() + ":"
-								+ now.getSeconds()
-					};
-					// 發送消息給WebSocket
-					ws.send(JSON.stringify(Clientaddgroupmsg));
+					addGroup(GroupID); //取代下面的Code
+//					var Clientaddgroupmsg = {
+//						type : "addGroup",
+//						group : GroupID,
+//						id : UserID,
+//						UserName : UserName,
+//						date : now.getHours() + ":" + now.getMinutes() + ":"
+//								+ now.getSeconds()
+//					};
+//					// 發送消息給WebSocket
+//					ws.send(JSON.stringify(Clientaddgroupmsg));
 					
 					var updateAgentStatusmsg = {
 						    type: "updateStatus",
@@ -402,15 +403,16 @@ function online() {
 }
 
 // 新增人員至group
-function addGroup() {
+function addGroup(aGroupID) {
 	var UserID = document.getElementById('UserID').value;
 	// var group = 'G'+document.getElementById('group').value;
 	var now = new Date();
 	// 組成新增人員至group JSON指令
 	var msg = {
 		type : "addGroup",
-		group : GroupID,
+		group : aGroupID,
 		id : UserID,
+		ACtype : "Client",
 		UserName : UserName,
 		date : now.getHours() + ":" + now.getMinutes() + ":" + now.getSeconds()
 	};
