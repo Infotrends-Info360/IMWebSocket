@@ -80,6 +80,7 @@ public class CommonFunction {
 	/** * user join group */
 	public static void userjointogroup(String message,
 			org.java_websocket.WebSocket conn) {
+		System.out.println("userjointogroup() called - conn: " + conn);
 		JSONObject obj = new JSONObject(message);
 		String group = obj.getString("group");
 		String userid = obj.getString("id");

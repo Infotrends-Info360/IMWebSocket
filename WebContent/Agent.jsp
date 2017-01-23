@@ -48,12 +48,12 @@
 <!-- 	<button type="submit" onclick="send();" id="send" disabled>send</button> -->
 	<br>
 	群組 : <input type="text" name="group" id="group" disabled>
-<!-- 	<button type="submit" onclick="addGroup();" id="addGroup" >加入群組</button> -->
+	<button type="submit" onclick="addGroup();" id="addGroup" >加入群組</button>
 	<button type="submit" onclick="leaveGroup();" id="leaveGroup" disabled>離開群組</button>
 	<span id="groupstatus"> </span>
 	Event : <span id="Event"> </span>
 	<br>
-	<button type="submit" onclick="AcceptEvent();" id="AcceptEvent" disabled>Accept</button>
+	<button type="submit" onclick="AcceptEventInit();" id="AcceptEvent" disabled>Accept</button>
 	<button type="submit" onclick="RejectEvent();" id="RejectEvent" disabled>Reject</button>
 	<button type="submit" onclick="ReleaseEvent();" id="ReleaseEvent" disabled>Release</button>
 	Event From : <input type="text" name="Eventform" id="Eventform" disabled>

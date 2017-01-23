@@ -107,7 +107,7 @@ function Login() {
 					if ("null" == obj.Agent || null == obj.Agent) {
 						if (isonline) {
 							var UserID = document.getElementById('UserID').value;
-							console.log("no Agent...");
+							console.log(UserName + " is looking for an agent ... ");
 							findingAgent(UserID, UserName);
 						}
 					} else {
