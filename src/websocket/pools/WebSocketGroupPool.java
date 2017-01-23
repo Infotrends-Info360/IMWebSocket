@@ -71,14 +71,20 @@ public class WebSocketGroupPool{
 			if ("Client".equals(currACType)){
 				System.out.println("Client 全清");
 				//全清:
+				//補上清WebSocketUserPool
+				//補上告知相關人員的迴圈.send
 				groupmap.clear();
 			}else if (groupmap.size() == 2){
 				System.out.println("groupmap.size() == 2 全清");
 				//也全清:
+				//補上清WebSocketUserPool
+				//補上告知相關人員的迴圈.send
 				groupmap.clear();
 			}else if (groupmap.size() > 2){
 				System.out.println("groupmap.size() > 2  清自己");
 				//清Agent自己
+				//補上清WebSocketUserPool
+				//補上告知相關人員的迴圈.send
 				groupmap.remove(conn);
 			}
 			System.out.println("groupId: " + group + " size: " + groupmap.size());
