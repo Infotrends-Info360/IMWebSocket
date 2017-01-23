@@ -207,14 +207,19 @@ public class WebSocket extends WebSocketServer {
 	
 	private void clearUserData(org.java_websocket.WebSocket conn) {
 		System.out.println("clearUserData() called");
-		WebSocketUserPool.removeUser(conn);
-		WebSocketTypePool.removeUserinTYPE("Client", conn);
+		// 清GROUP:
 		// 取得一個user所屬的所有groupid
-//		List<String> groupids = WebSocketUserPool.getUserGroupByKey(conn);
-//		for (String groupid: groupids){
-//			//使用每個groupid,並找出相對應的group,再將其中的conn remove掉
-//			WebSocketGroupPool.removeUseringroup(groupid, conn); // 這邊是否須考慮如果此user退出group,只剩下agent在的狀況? 還是此狀況交由其他處來做處理?				
-//		}
+		List<String> groupids = WebSocketUserPool.getUserGroupByKey(conn);
+		for (String groupid: groupids){
+			//使用每個groupid,並找出相對應的group,再將其中的conn remove掉
+			WebSocketGroupPool.removeUseringroup(groupid, conn); // 這邊是否須考慮如果此user退出group,只剩下agent在的狀況? 還是此狀況交由其他處來做處理?				
+		}
+		// 清TYPE:
+		WebSocketTypePool.removeUserinTYPE("Client", conn);
+		// 清USER:
+		WebSocketUserPool.removeUser(conn);
+		
+
 	}
 	
 	private void inputInteractionLog(org.java_websocket.WebSocket conn, String reason) {
