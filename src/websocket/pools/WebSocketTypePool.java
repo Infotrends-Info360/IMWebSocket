@@ -201,5 +201,11 @@ public class WebSocketTypePool{
 	public static int getleaveClient() {
 		return leaveClient;
 	}
+
+	public static Map<String, Map<WebSocket, TypeInfo>> getTypeconnections() {
+		return TYPEconnections;
+	}
+	
+	
 	
 }

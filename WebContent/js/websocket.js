@@ -98,6 +98,7 @@ function Login() {
 				} else if ("creategroupId" == obj.Event) {
 					// GroupID = 'G'+document.getElementById('UserID').value;
 					GroupID = obj.groupId; // 之後要改成local variable
+					var myGroupID = obj.groupId;
 					// SinglyList.prototype.add();
 					GroupIDLinkedList.add(obj.groupId);
 					// GroupIDLinkedList.prototype.add("test"); // 錯
@@ -107,7 +108,7 @@ function Login() {
 					document.getElementById("Event").innerHTML = obj.Event;
 
 					AcceptEventAction();
-					addGroup();
+					addGroup(myGroupID); // 改AcceptEvent()架構的目的在這
 					updateStatusAction("Established", "Established");
 
 					layuiUse01(); // 先暫時這樣隔開,之後有需要細改再看此部分
@@ -176,9 +177,22 @@ function Login() {
 				// //發送消息給WebSocket
 				// ws.send(JSON.stringify(msg));
 				// }
-			}
+				else if ("refreshGroupList" == obj.Event) {
+					document.getElementById("UserID").value = obj.from;
+					document.getElementById("Event").innerHTML = obj.Event;
+					console.log(obj.Event + "***********************");
+					var groupList = obj.groupList;
+					var groupListToUpdate = document.getElementById("groupList");
+//					console.log("groupList: "+obj.groupList[0]);
+					for (var i in groupList) {
+						console.log("groupList[i]" + groupList[i]);
+						groupListToUpdate.innerHTML += "<br>" + "(" + i + ") - " +  groupList[i];
+					}
+					//JSONArray groupList = obj.groupList;
+//					document.getElementById("groupList").innerHTML = "Test - new group list here!!!";
+				}
 			// 非指令訊息
-			else {
+			}else {
 				document.getElementById("text").innerHTML += e.data + "<br>";
 			}
 			console.log("onMessage(): " + e.data);
@@ -317,13 +331,13 @@ function online() {
 }
 
 // 加入群組
-function addGroup() {
+function addGroup(aGroupID) {
 	var UserID = document.getElementById('UserID').value;
 	// 向websocket送出加入群組指令
 	var now = new Date();
 	var msg = {
 		type : "addGroup",
-		group : GroupID,
+		group : aGroupID,
 		id : UserID,
 		UserName : UserName,
 		date : now.getHours() + ":" + now.getMinutes() + ":" + now.getSeconds()

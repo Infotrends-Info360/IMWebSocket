@@ -1,12 +1,21 @@
 package websocket.function;
 
+import java.util.List;
+import java.util.Map;
 import java.util.Timer;
 
+import org.java_websocket.WebSocket;
+import org.json.JSONArray;
 import org.json.JSONObject;
 
 
 
+
+
+
+
 import websocket.HeartBeat;
+import websocket.bean.TypeInfo;
 //import websocket.HeartBeat;
 import websocket.pools.WebSocketGroupPool;
 import websocket.pools.WebSocketTypePool;
@@ -91,6 +100,16 @@ public class CommonFunction {
 		WebSocketGroupPool.sendMessageingroup(group, joinMsg);
 		WebSocketGroupPool.sendMessageingroup(group, "group people: "
 				+ WebSocketGroupPool.getOnlineUseringroup(group).toString());
+		
+		// 之後可做更詳細的判斷-如為Agent才執行就好
+		String TYPE = "Agent";
+		Map<String, Map<WebSocket, TypeInfo>> TYPEconnections = WebSocketTypePool.getTypeconnections();
+		Map<WebSocket,  TypeInfo> TYPEmap = TYPEconnections.get(TYPE);
+		if (TYPEmap.containsKey(conn)){
+			System.out.println("userjointogroup - one Agent joined");
+			refreshGroupList(conn);			
+		}
+		
 	}
 	
 	/** * user leave group */
@@ -203,4 +222,28 @@ public class CommonFunction {
 		WebSocketTypePool.UserUpdate(ACtype, username, userid, date, status, reason, conn);
 	}
 	
+	private static void refreshGroupList(org.java_websocket.WebSocket conn){
+		System.out.println("refreshGroupList() called");
+		JSONObject sendjson = new JSONObject();
+		sendjson.put("Event", "refreshGroupList");
+		sendjson.put("UserID", conn);
+		// 將此Agent所屬的Group list塞入json中
+		JSONArray groupList_json = new JSONArray();
+		List<String> groupList = WebSocketUserPool.getUserGroupByKey(conn);
+		//JSONObject groupList_json = new JSONObject();
+		for (String group: groupList){
+			groupList_json.put(group);
+		}
+		// 測試用-新增幾個group
+//		groupList_json.put("2982ebfa-0359-4777-8746-e6de5e493712");
+//		groupList_json.put("2982ebfa-0359-4777-8746-e6de5e493778");
+		
+		sendjson.put("groupList", groupList_json);
+		System.out.println("groupList_json.length(): " + groupList_json.length());
+		System.out.println("sendjson: " + sendjson);
+		
+		
+		// end of 將此Agent所屬的Group list塞入json中
+		WebSocketUserPool.sendMessageToUser(conn, sendjson.toString());
+	}
 }
