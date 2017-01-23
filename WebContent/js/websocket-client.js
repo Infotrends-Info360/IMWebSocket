@@ -102,7 +102,7 @@ function Login() {
 					leaveGroup(UserID);
 					// 收到尋找Agent的指令
 				} else if ("findAgent" == obj.Event) {
-					senduserdata(UserID, UserName, obj.Agent);
+					
 
 					if ("null" == obj.Agent || null == obj.Agent) {
 						if (isonline) {
@@ -120,6 +120,9 @@ function Login() {
 						var UserID = document.getElementById('UserID').value;
 						
 						waittingAgent = true;
+						// 寫入log
+						senduserdata(UserID, UserName, obj.Agent);
+						console.log("UserID - " + UserID);
 						
 						// 找尋Agent
 						find();
@@ -172,7 +175,7 @@ function Login() {
 				// 控制前端傳值
 				document.getElementById("text").innerHTML += e.data + "<br>";
 			}
-			console.log(e.data);
+			console.log("onMessage() - " + e.data);
 		};// end of ws.onMessage()
 
 		// 當websocket關閉時
