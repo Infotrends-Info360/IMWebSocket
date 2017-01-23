@@ -226,15 +226,19 @@ public class WebSocket extends WebSocketServer {
 //		System.out.println("message: " + message);
 //		System.out.println("username: " + username);
 		
-		JSONObject obj = new JSONObject(message);
-		String closefrom = obj.getString("closefrom");
-		if (closefrom.equals("default")) {
-			obj.put("status", 3);
-			obj.put("stoppedreason", "server:HeartBeatLose"); // 看之後是否考慮更改為變數reason
-			obj.put("closefrom", "server:HeartBeatLose"); 
-			message = obj.toString();
+		// 目前只有client端會再登入時、登出時、重整時寫入Log
+		if (message != null){
+			JSONObject obj = new JSONObject(message);
+			String closefrom = obj.getString("closefrom");
+			if (closefrom.equals("default")) {
+				obj.put("status", 3);
+				obj.put("stoppedreason", "server:HeartBeatLose"); // 看之後是否考慮更改為變數reason
+				obj.put("closefrom", "server:HeartBeatLose"); 
+				message = obj.toString();
+			}
+			ClientFunction.interactionlog(message, conn);			
 		}
-		ClientFunction.interactionlog(message, conn);
+
 	}
 	
 	private void test() {
