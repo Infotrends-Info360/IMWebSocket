@@ -88,13 +88,6 @@ function Login() {
 					 * ,remark: FromArray[i] }); }); }
 					 */
 					// 接收到Client離開群組的訊息
-				} else if ("Clientclosegroup" == obj.Event) {
-					document.getElementById("Event").innerHTML = obj.Event;
-					// alert("客戶離開對談"); //
-					// 此alert會影響到程式執行順序,若打開會因此產生sendMessageingroupserExitfromgroup
-					console.log("客戶離開對談"); //
-					ReleaseEvent(); // 這邊會產生迴圈,可能需要確認要留下哪些處理,避免再使用ReleaseEvent()方法
-					// 接收到產生RoomID的訊息
 				} else if ("createroomId" == obj.Event) {
 					// RoomID = 'G'+document.getElementById('UserID').value;
 					RoomID = obj.roomId; // 之後要改成local variable
@@ -435,60 +428,6 @@ function ready() {
 	document.getElementById("Agentonline").disabled = false;
 }
 
-// Agent切換為未就緒
-function notready() {
-	updateStatus("not ready","no reason");
-//	var UserID = document.getElementById('UserID').value;
-//	// 向websocket送出變更狀態至未就緒指令
-//	var now = new Date();
-//	var updateAgentStatusmsg = {
-//		type : "updateStatus",
-//		ACtype : "Agent",
-//		id : UserID,
-//		UserName : UserName,
-//		status : "not ready",
-//		reason : "no reason",
-//		date : now.getHours() + ":" + now.getMinutes() + ":" + now.getSeconds()
-//	};
-//
-//	// 發送消息
-//	ws.send(JSON.stringify(updateAgentStatusmsg));
-
-	// 向websocket送出關閉群組指令
-//	var closegroupsmsg = {
-//		type : "Agentclosegroup",
-//		ACtype : "Agent",
-//		id : UserID,
-//		group : RoomID,
-//		UserName : UserName,
-//		channel : "chat",
-//		date : now.getHours() + ":" + now.getMinutes() + ":" + now.getSeconds()
-//	// date: Date.now()
-//	};
-//
-//	// 發送消息
-//	ws.send(JSON.stringify(closegroupsmsg));
-
-	// 取得狀態
-	getUserStatus();
-
-	// 將group移除layim列表
-	layui.use('layim', function(layim) {
-		layim.removeList({
-			type : 'group' // 或者group
-			,
-			id : RoomID
-		// 好友或者群组ID
-		});
-	});
-
-	document.getElementById("status").innerHTML = "狀態: not ready";
-	document.getElementById("ready").disabled = false;
-	document.getElementById("notready").disabled = true;
-	document.getElementById("Clientonline").disabled = true;
-	document.getElementById("Agentonline").disabled = true;
-}
-
 // 查詢client線上人數
 function Clientonline() {
 	// 向websocket送出查詢client線上人數指令
@@ -594,7 +533,6 @@ function RejectEvent() {
 // 關閉交談
 function ReleaseEvent() {
 	// 切換為未就緒
-	// notready();
 	// 更新狀態
 	updateStatus("not ready","no reason");
 	// 取得狀態
@@ -620,41 +558,6 @@ function ReleaseEvent() {
 	document.getElementById("notready").disabled = true;
 	document.getElementById("Clientonline").disabled = true;
 	document.getElementById("Agentonline").disabled = true;
-	// end of notready();
-
-	
-//	var UserID = document.getElementById('UserID').value;
-//	// 向websocket送出變更狀態至party remove指令
-//	var now = new Date();
-//	var updateAgentStatusmsg = {
-//		type : "updateStatus",
-//		ACtype : "Agent",
-//		id : UserID,
-//		UserName : UserName,
-//		status : "party remove",
-//		reason : "no reason",
-//		date : now.getHours() + ":" + now.getMinutes() + ":" + now.getSeconds()
-//	// date: Date.now()
-//	};
-//
-//	// 發送消息
-//	ws.send(JSON.stringify(updateAgentStatusmsg));
-
-	// 向websocket送出關閉對談指令
-//	var Eventform = document.getElementById('Eventform').value;
-//	var Eventmsg = {
-//		type : "ReleaseEvent",
-//		ACtype : "Agent",
-//		id : UserID,
-//		UserName : UserName,
-//		sendto : Eventform,
-//		channel : "chat",
-//		// Event: "ReleaseEvent",
-//		date : now.getHours() + ":" + now.getMinutes() + ":" + now.getSeconds()
-//	};
-//	// 發送消息
-//	ws.send(JSON.stringify(Eventmsg));
-
 
 }
 

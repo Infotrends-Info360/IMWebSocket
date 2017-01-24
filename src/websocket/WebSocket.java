@@ -124,16 +124,6 @@ public class WebSocket extends WebSocketServer {
 //			this.userExitfromTYPE(message.toString(), conn);
 			CommonFunction.userExitfromTYPE(message.toString(), conn);
 			break;
-			// 目前此方法沒有用到,以後可能再removeUserinroom中用到
-		case "Agentclosegroup":
-//			this.Agentclosegroup(message.toString(), conn);
-			AgentFunction.Agentclosegroup(message.toString(), conn);
-			break;
-			// 目前此方法沒有用到,以後可能再removeUserinroom中用到
-		case "Clientclosegroup":
-//			this.Clientclosegroup(message.toString(), conn);
-			ClientFunction.Clientclosegroup(message.toString(), conn);
-			break;
 		case "AcceptEvent":
 //			this.AcceptEvent(message.toString(), conn);
 			AgentFunction.AcceptEvent(message.toString(), conn);
@@ -141,10 +131,6 @@ public class WebSocket extends WebSocketServer {
 		case "RejectEvent":
 //			this.RejectEvent(message.toString(), conn);
 			AgentFunction.RejectEvent(message.toString(), conn);
-			break;
-		case "ReleaseEvent":
-//			this.ReleaseEvent(message.toString(), conn);
-			AgentFunction.ReleaseEvent(message.toString(), conn);
 			break;
 		case "findAgentEvent":
 //			this.findAgentEvent(message.toString(), conn);

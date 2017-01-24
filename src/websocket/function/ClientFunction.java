@@ -18,19 +18,6 @@ import websocket.pools.WebSocketUserPool;
 
 //此類別給WebSocjet.java使用
 public class ClientFunction {
-	/** * Client close Group */
-	public static void Clientclosegroup(String message,
-			org.java_websocket.WebSocket conn) {
-		JSONObject obj = new JSONObject(message);
-		String group = obj.getString("group");
-		System.out.println("Clientclosegroup() - group " + group);
-		JSONObject sendjson = new JSONObject();
-		sendjson.put("Event", "Clientclosegroup");
-		sendjson.put("from", obj.getString("id"));
-		sendjson.put("fromName",  obj.getString("UserName"));
-		sendjson.put("channel", obj.getString("channel"));
-		WebSocketRoomPool.sendMessageinroom(group,sendjson.toString());
-	}
 	
 	/** * findAgentEvent */
 	public static void findAgentEvent(String message, org.java_websocket.WebSocket conn) {

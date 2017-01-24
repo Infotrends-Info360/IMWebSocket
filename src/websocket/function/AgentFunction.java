@@ -8,20 +8,7 @@ import websocket.pools.WebSocketUserPool;
 
 //此類別給WebSocjet.java使用
 public class AgentFunction {
-	/** * Agent close Group */
-	public static void Agentclosegroup(String message,
-			org.java_websocket.WebSocket conn) {
-		JSONObject obj = new JSONObject(message);
-		String group = obj.getString("group");
-		JSONObject sendjson = new JSONObject();
-		sendjson.put("Event", "Agentclosegroup");
-		sendjson.put("from", obj.getString("id"));
-		sendjson.put("fromName",  obj.getString("UserName"));
-		sendjson.put("channel", obj.getString("channel"));
-		WebSocketRoomPool.sendMessageinroom(
-				group,sendjson.toString());
-	}
-	
+
 	/** * send Accept Event */
 	public static void AcceptEvent(String message, org.java_websocket.WebSocket conn) {
 		JSONObject obj = new JSONObject(message);
@@ -45,19 +32,6 @@ public class AgentFunction {
 				.getWebSocketByUser(obj.getString("sendto"));
 		JSONObject sendjson = new JSONObject();
 		sendjson.put("Event", "RejectEvent");
-		sendjson.put("from", obj.getString("id"));
-		sendjson.put("fromName",  obj.getString("UserName"));
-		sendjson.put("channel", obj.getString("channel"));
-		WebSocketUserPool.sendMessageToUser(sendto, sendjson.toString());
-	}
-	
-	/** * ReleaseEvent */
-	public static void ReleaseEvent(String message, org.java_websocket.WebSocket conn) {
-		JSONObject obj = new JSONObject(message);
-		org.java_websocket.WebSocket sendto = WebSocketUserPool
-				.getWebSocketByUser(obj.getString("sendto")); // "sendto" 紀錄的是此Agent要關閉的Client UserId
-		JSONObject sendjson = new JSONObject();
-		sendjson.put("Event", "ReleaseEvent");
 		sendjson.put("from", obj.getString("id"));
 		sendjson.put("fromName",  obj.getString("UserName"));
 		sendjson.put("channel", obj.getString("channel"));

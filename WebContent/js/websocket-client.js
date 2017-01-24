@@ -96,13 +96,6 @@ function Login() {
 					// 控制前端傳值
 					document.getElementById("Event").value = obj.Event;
 					document.getElementById("Eventform").value = obj.from;
-					// 交談中收到Agent端關閉對談指令
-				} else if ("ReleaseEvent" == obj.Event) {
-					var UserID = document.getElementById('UserID').value;
-					// 離開群組
-					if (isonline){
-						leaveRoom(UserID);						
-					}
 					// 收到尋找Agent的指令
 				} else if ("findAgent" == obj.Event) {
 					
@@ -148,14 +141,6 @@ function Login() {
 					// alert(obj.userdata.SetContactLog.contactID);
 					// document.getElementById("userdata").innerHTML =
 					// JSON.stringify(obj.userdata);
-				} else if ("Agentclosegroup" == obj.Event) {
-					// alert("對談已關閉");
-					console.log("對談已關閉");
-					if (isonline) {
-						Logout();
-					}
-
-					// 收到加入WebSocket的指令
 				} else if ("userjoin" == obj.Event) {
 					// 控制前端傳值
 					document.getElementById("UserID").value = obj.from;
@@ -324,24 +309,6 @@ function Logout() {
 	// ws.close()
 	isonline = false; // 給"Clientclosegroup" -> .java - "Clientclosegroup" -> .js - ReleaseEvent() -> notready -> "Agentclosegroup" -> .java -> client.js - if(isonlone){} 
 						// 也給"ReleaseEvent"用
-//	var UserID = document.getElementById('UserID').value;
-//	var now = new Date();
-//	var closegroupsmsg = {
-//		type : "Clientclosegroup",
-//		ACtype : "Client",
-//		id : UserID,
-//		group : RoomID,
-//		UserName : UserName,
-//		channel : "chat",
-//		date : now.getHours() + ":" + now.getMinutes() + ":" + now.getSeconds()
-//	// date: Date.now()
-//	};
-
-	// 發送消息
-//	ws.send(JSON.stringify(closegroupsmsg));
-
-	// 離開Client列表
-//	LeaveType(UserID);
 	// 離開WebSocket Pool列表
 	Logoutaction(UserID); // 這邊會全部清: Group, Type, User conn
 	// 控制前端傳值
