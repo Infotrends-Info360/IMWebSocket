@@ -41,14 +41,14 @@ public class GetKPIServlet {
 		}
 		
 		
-		Collection<String> CollectionGroups = WebSocketRoomPool.getRooms();
-		JSONArray groupsjsonarray = new JSONArray();
-		for (String group : CollectionGroups) {
-			JSONObject groupsjsonobject = new JSONObject();
-			groupsjsonobject.put("groupname", group);
-			groupsjsonobject.put("groupmember", WebSocketRoomPool.getOnlineUserinroom(group));
-			groupsjsonobject.put("groupmembercount", WebSocketRoomPool.getOnlineUserInRoomCount(group));
-			groupsjsonarray.put(groupsjsonobject);
+		Collection<String> CollectionRooms = WebSocketRoomPool.getRooms();
+		JSONArray roomsjsonarray = new JSONArray();
+		for (String room : CollectionRooms) {
+			JSONObject roomsjsonobject = new JSONObject();
+			roomsjsonobject.put("roomname", room);
+			roomsjsonobject.put("roommember", WebSocketRoomPool.getOnlineUserinroom(room));
+			roomsjsonobject.put("roommembercount", WebSocketRoomPool.getOnlineUserInRoomCount(room));
+			roomsjsonarray.put(roomsjsonobject);
 		}
 		
 		
@@ -78,31 +78,31 @@ public class GetKPIServlet {
 		
 		JSONObject jsonObject = new JSONObject();
 		jsonObject.put("Users", usersjsonarray);
-		jsonObject.put("Groups", groupsjsonarray);
+		jsonObject.put("Rooms", roomsjsonarray);
 		jsonObject.put("Agents", agentsjsonarray);
 		jsonObject.put("Clients", clientsjsonarray);
 		jsonObject.put("usercount", WebSocketUserPool.getUserCount());
-		jsonObject.put("groupcount", WebSocketRoomPool.getRoomCount());
+		jsonObject.put("roomcount", WebSocketRoomPool.getRoomCount());
 		jsonObject.put("agentcount", WebSocketTypePool.getOnlineUserIDinTYPECount("Agent"));
 		jsonObject.put("clientcount", WebSocketTypePool.getOnlineUserIDinTYPECount("Client"));
 		
 		jsonObject.put("leaveclientcount", WebSocketTypePool.getleaveClient());
 		
 		if(user!=null && !"".equals(user)){
-			JSONObject usergroupjsonObject = new JSONObject();
+			JSONObject userroomjsonObject = new JSONObject();
 			WebSocket conn = WebSocketUserPool.getWebSocketByUser(user);
-			//WebSocketUserPool.getUsergroupCount(conn);
+			//WebSocketUserPool.getUserroomCount(conn);
 			jsonObject.put("userid", user);
 			jsonObject.put("username", WebSocketUserPool.getUserNameByKey(conn));
-			jsonObject.put("usergroupcount", WebSocketUserPool.getUserRoomCount(conn));
-			Collection<String> UserGroups = WebSocketUserPool.getUserRoomByKey(conn);
-			JSONArray usergroupjsonarray = new JSONArray();
-			for (String group : UserGroups) {
-				usergroupjsonObject.put("groupid", group);
-				usergroupjsonObject.put("ProcessTime", WebSocketRoomPool.getProcessTimeCount(group, conn));
-				usergroupjsonarray.put(usergroupjsonObject);
+			jsonObject.put("userroomcount", WebSocketUserPool.getUserRoomCount(conn));
+			Collection<String> UserRooms = WebSocketUserPool.getUserRoomByKey(conn);
+			JSONArray userroomjsonarray = new JSONArray();
+			for (String room : UserRooms) {
+				userroomjsonObject.put("roomid", room);
+				userroomjsonObject.put("ProcessTime", WebSocketRoomPool.getProcessTimeCount(room, conn));
+				userroomjsonarray.put(userroomjsonObject);
 			}
-			jsonObject.put("usergroups", usergroupjsonarray);
+			jsonObject.put("userrooms", userroomjsonarray);
 			
 		}
 
