@@ -96,7 +96,7 @@ public class WebSocket extends WebSocketServer {
 //			this.userExit(message.toString(), conn);
 			CommonFunction.userExit(message.toString(), conn);
 			break;
-		case "addGroup":
+		case "addRoom":
 //			this.userjointogroup(message.toString(), conn);
 			CommonFunction.userjointogroup(message.toString(), conn);
 			break;

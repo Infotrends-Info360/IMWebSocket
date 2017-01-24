@@ -54,9 +54,9 @@ function Login() {
 					console.log("GroupID: " + GroupID);
 					var now = new Date();
 					// 組成增加群組的JSON指令
-					addGroup(GroupID); //取代下面的Code
+					addRoom(GroupID); //取代下面的Code
 //					var Clientaddgroupmsg = {
-//						type : "addGroup",
+//						type : "addRoom",
 //						group : GroupID,
 //						id : UserID,
 //						UserName : UserName,
@@ -406,13 +406,13 @@ function online() {
 }
 
 // 新增人員至group
-function addGroup(aGroupID) {
+function addRoom(aGroupID) {
 	var UserID = document.getElementById('UserID').value;
 	// var group = 'G'+document.getElementById('group').value;
 	var now = new Date();
 	// 組成新增人員至group JSON指令
 	var msg = {
-		type : "addGroup",
+		type : "addRoom",
 		group : aGroupID,
 		id : UserID,
 		ACtype : "Client",
@@ -426,7 +426,7 @@ function addGroup(aGroupID) {
 	// 控制前端傳值
 	document.getElementById("groupstatus").innerHTML = "加入" + GroupID + "群組";
 	document.getElementById("leaveGroup").disabled = false;
-	document.getElementById("addGroup").disabled = true;
+	document.getElementById("addRoom").disabled = true;
 	document.getElementById("grouponline").disabled = false;
 }
 
@@ -448,7 +448,7 @@ function leaveGroup(UserID) {
 
 	// 控制前端傳值
 	document.getElementById("groupstatus").innerHTML = "離開" + GroupID + "群組";
-	// document.getElementById("addGroup").disabled = false;
+	// document.getElementById("addRoom").disabled = false;
 	document.getElementById("leaveGroup").disabled = true;
 	document.getElementById("grouponline").disabled = true;
 }

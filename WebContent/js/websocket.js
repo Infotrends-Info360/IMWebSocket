@@ -108,7 +108,7 @@ function Login() {
 					document.getElementById("Event").innerHTML = obj.Event;
 
 					AcceptEventAction();
-					addGroup(myGroupID); // 改AcceptEvent()架構的目的在這
+					addRoom(myGroupID); // 改AcceptEvent()架構的目的在這
 					updateStatusAction("Established", "Established");
 
 					layuiUse01(); // 先暫時這樣隔開,之後有需要細改再看此部分
@@ -331,12 +331,12 @@ function online() {
 }
 
 // 加入群組
-function addGroup(aGroupID) {
+function addRoom(aGroupID) {
 	var UserID = document.getElementById('UserID').value;
 	// 向websocket送出加入群組指令
 	var now = new Date();
 	var msg = {
-		type : "addGroup",
+		type : "addRoom",
 		group : aGroupID,
 		id : UserID,
 		ACtype : "Agent",
@@ -349,7 +349,7 @@ function addGroup(aGroupID) {
 
 	document.getElementById("groupstatus").innerHTML = "加入" + GroupID + "群組";
 	document.getElementById("leaveGroup").disabled = false;
-	document.getElementById("addGroup").disabled = true;
+	document.getElementById("addRoom").disabled = true;
 	document.getElementById("grouponline").disabled = false;
 }
 
