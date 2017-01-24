@@ -55,16 +55,6 @@ function Login() {
 					var now = new Date();
 					// 組成增加群組的JSON指令
 					addRoom(RoomID); //取代下面的Code
-//					var Clientaddgroupmsg = {
-//						type : "addRoom",
-//						group : RoomID,
-//						id : UserID,
-//						UserName : UserName,
-//						date : now.getHours() + ":" + now.getMinutes() + ":"
-//								+ now.getSeconds()
-//					};
-//					// 發送消息給WebSocket
-//					ws.send(JSON.stringify(Clientaddgroupmsg));
 					
 					var updateAgentStatusmsg = {
 						    type: "updateStatus",
@@ -145,20 +135,6 @@ function Login() {
 					// 控制前端傳值
 					document.getElementById("UserID").value = obj.from;
 				} 
-//				else if ("heartbeattouser" == obj.Event) {
-//					var now = new Date();
-//					var msg = {
-//						type : "heartbeattoserver",
-//						heartbeat : 'ap',
-//						groupid : RoomID,
-//						date : now.getHours() + ":" + now.getMinutes() + ":"
-//								+ now.getSeconds()
-//					};
-//
-//					// 發送消息給WebSocket
-//					ws.send(JSON.stringify(msg));
-//				}
-
 			} else {
 				// 控制前端傳值
 				document.getElementById("text").innerHTML += e.data + "<br>";

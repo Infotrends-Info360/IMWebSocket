@@ -157,20 +157,7 @@ function Login() {
 				} else if ("userjoin" == obj.Event) {
 					document.getElementById("UserID").value = obj.from;
 					document.getElementById("Event").innerHTML = obj.Event;
-				}
-				// else if("heartbeattouser"==obj.Event){
-				// var now = new Date();
-				// var msg = {
-				// type: "heartbeattoserver",
-				// heartbeat: 'ap',
-				// date:
-				// now.getHours()+":"+now.getMinutes()+":"+now.getSeconds()
-				// };
-				//				
-				// //發送消息給WebSocket
-				// ws.send(JSON.stringify(msg));
-				// }
-				else if ("refreshGroupList" == obj.Event) {
+				} else if ("refreshGroupList" == obj.Event) {
 					document.getElementById("UserID").value = obj.from;
 					document.getElementById("Event").innerHTML = obj.Event;
 					console.log(obj.Event + "***********************");

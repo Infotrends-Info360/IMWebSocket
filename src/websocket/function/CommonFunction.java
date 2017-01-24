@@ -114,14 +114,6 @@ public class CommonFunction {
 			refreshGroupList(conn);						
 		}
 		
-//		String TYPE = "Agent";
-//		Map<String, Map<WebSocket, TypeInfo>> TYPEconnections = WebSocketTypePool.getTypeconnections();
-//		Map<WebSocket,  TypeInfo> TYPEmap = TYPEconnections.get(TYPE);
-//		if (TYPEmap.containsKey(conn)){
-//			System.out.println("userjointogroup - one Agent joined");
-//			refreshGroupList(conn);			
-//		}
-		
 	}
 	
 	/** * user leave group */
