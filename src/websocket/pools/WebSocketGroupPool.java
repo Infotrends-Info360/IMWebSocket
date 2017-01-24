@@ -84,7 +84,7 @@ public class WebSocketGroupPool{
 				System.out.println("groupmap.size() > 2  清自己");
 				//清Agent自己
 				//補上清WebSocketUserPool
-				//補上告知相關人員的迴圈.send
+				//補上告知相關人員的迴圈.send // 有人離開了就好
 				groupmap.remove(conn);
 			}
 			System.out.println("groupId: " + group + " size: " + groupmap.size());
