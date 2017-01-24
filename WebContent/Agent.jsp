@@ -63,13 +63,13 @@
 	<button type="submit" onclick="test();" id="TestHere">TestHere</button>
 	<span id="span"> </span>
 	<br>三方/轉接: <br>
-	線上請求Clients:
-	<table border='2' id='clientList'>
-		<tr><td>Client名稱</td><td>動作(Event)</td></tr>
-		<tr><td>C1</td><td>Accept</td></tr>
-		<tr><td>C2</td><td>Accept</td></tr>
-	</table>
-	線上Agents:
+<!-- 	<b>線上請求Clients:</b> -->
+<!-- 	<table border='2' id='clientList'> -->
+<!-- 		<tr><td>Client名稱</td><td>動作(Event)</td></tr> -->
+<!-- 		<tr><td>C1</td><td>Accept</td></tr> -->
+<!-- 		<tr><td>C2</td><td>Accept</td></tr> -->
+<!-- 	</table> -->
+	<b>線上Agents:</b>
 	<button type="submit" onclick="Agentonline();" id="inviteAgent3way">show Agent List</button>
 	<table border='2' id='agentList' style="visibility: hidden;" >
 		<tr>

@@ -1,8 +1,9 @@
 var ws; // websocket
 var UserName; // 使用者名稱
+var UserID_g;
 var RoomID; // 接通後產生Group的ID
-var GroupIDList = []; // 接通後產生Group的ID List
-var GroupIDLinkedList = new SinglyList(); // 接通後產生Group的ID Linked List
+var RoomIDList = []; // 接通後產生Group的ID List
+var RoomIDLinkedList = new SinglyList(); // 接通後產生Group的ID Linked List
 var AgentID; // Agent的ID
 var AgentName; // Agent的名稱
 var ClientID; // 服務的Client的ID // 有可能會需要也改成List
@@ -120,10 +121,10 @@ function Login() {
 					RoomID = obj.roomId; // 之後要改成local variable
 					var myRoomID = obj.roomId;
 					// SinglyList.prototype.add();
-					GroupIDLinkedList.add(myRoomID);
+					RoomIDLinkedList.add(myRoomID);
 					// GroupIDLinkedList.prototype.add("test"); // 錯
 					console.log("GroupIDLinkedList._length: "
-							+ GroupIDLinkedList._length);
+							+ RoomIDLinkedList._length);
 					document.getElementById("group").value = RoomID;
 					document.getElementById("Event").innerHTML = obj.Event;
 
@@ -182,7 +183,9 @@ function Login() {
 					}
 					// 接收到有人登入的訊息
 				} else if ("userjoin" == obj.Event) {
+					console.log("userjoin - UserID: " + obj.from);
 					document.getElementById("UserID").value = obj.from;
+					UserID_g = obj.from;
 					document.getElementById("Event").innerHTML = obj.Event;
 				} else if ("refreshRoomList" == obj.Event) {
 					document.getElementById("UserID").value = obj.from;
@@ -197,6 +200,8 @@ function Login() {
 					}
 					//JSONArray groupList = obj.groupList;
 //					document.getElementById("roomList").innerHTML = "Test - new group list here!!!";
+				} else if ("inviteAgent3way" == obj.Event){
+					console.log("received inviteAgent3way event");
 				}
 			// 非指令訊息
 			}else {
@@ -927,6 +932,28 @@ function updateStatus(aStatus, aReason){
 	};
 	// 發送消息
 	ws.send(JSON.stringify(updateAgentStatusmsg));
+}
+
+function inviteAgent3way(){
+	var myInvitedAgentID = document.getElementById("AgentID").value;
+	var UserID = document.getElementById('UserID').value;
+	console.log("inviteAgent3way() called - myInvitedAgentID: " + myInvitedAgentID);
+	
+	if (RoomID == null){
+		console.log("there is no roomID for this agent");
+		return;
+	}
+	console.log("inviteAgent3way(): UserID: " + UserID);
+	var inviteAgent3waymsg = {
+			type : "inviteAgent3way",
+			ACtype : "Agent",
+			roomID : RoomID, //先預設目前每個Agent最多也就只有一個RoomID,之後會再調整
+			fromAgentID : UserID_g, // 使用全域變數
+			invitedAgentID : myInvitedAgentID,
+			fromAgentName : UserName
+		};
+		// 發送消息
+		ws.send(JSON.stringify(inviteAgent3waymsg));
 }
 
 // 測試按鈕

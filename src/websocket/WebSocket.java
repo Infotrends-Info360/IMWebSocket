@@ -10,6 +10,7 @@ import org.apache.log4j.Logger;
 import org.java_websocket.WebSocketImpl;
 import org.java_websocket.handshake.ClientHandshake;
 import org.java_websocket.server.WebSocketServer;
+import org.json.JSONArray;
 import org.json.JSONObject;
 
 import websocket.bean.RoomInfo;
@@ -146,6 +147,10 @@ public class WebSocket extends WebSocketServer {
 		case "setinteraction":
 			ClientFunction.setinteraction(message.toString(), conn);
 			break;
+		case "inviteAgent3way":
+//			ClientFunction.setinteraction(message.toString(), conn);
+			inviteAgent3way(message.toString(), conn);
+			break;
 		case "test":
 			this.test();
 			break;
@@ -213,6 +218,39 @@ public class WebSocket extends WebSocketServer {
 			ClientFunction.interactionlog(message, conn);			
 		}
 
+	}
+	
+	private void inviteAgent3way(String message, org.java_websocket.WebSocket conn){
+		// 讀出送進來的JSON物件
+		System.out.println("inviteAgent3way() called");
+		JSONObject obj = new JSONObject(message);
+		String ACtype = obj.getString("ACtype");
+		String roomID = obj.getString("roomID");
+		String fromAgentID = obj.getString("fromAgentID");
+		String invitedAgentID = obj.getString("invitedAgentID");
+		String fromAgentName = obj.getString("fromAgentName");
+		
+		
+		//籌備要寄出的JSON物件
+		JSONObject sendjson = new JSONObject();
+		sendjson.put("Event", "inviteAgent3way");
+		sendjson.put("roomID", roomID);
+		sendjson.put("fromAgentID", fromAgentID);
+		sendjson.put("invitedAgentID", invitedAgentID);
+		sendjson.put("fromAgentName", fromAgentName);
+		
+		System.out.println("sendjson: " + sendjson);
+		
+		// 寄給invitedAgent:
+		org.java_websocket.WebSocket invitedAgent_conn = WebSocketUserPool.getWebSocketByUser(invitedAgentID);
+		WebSocketUserPool.sendMessageToUser(invitedAgent_conn, sendjson.toString());
+		
+//		type : "inviteAgent3way",
+//		ACtype : "Agent",
+//		roomID : RoomID, //先預設目前每個Agent最多也就只有一個RoomID,之後會再調整
+//		fromAgentID : UserID,
+//		invitedAgentID : myInvitedAgentID,
+//		fromAgentName : UserName
 	}
 
 	
