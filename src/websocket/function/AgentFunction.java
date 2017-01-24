@@ -2,7 +2,7 @@ package websocket.function;
 
 import org.json.JSONObject;
 
-import websocket.pools.WebSocketGroupPool;
+import websocket.pools.WebSocketRoomPool;
 import websocket.pools.WebSocketTypePool;
 import websocket.pools.WebSocketUserPool;
 
@@ -18,7 +18,7 @@ public class AgentFunction {
 		sendjson.put("from", obj.getString("id"));
 		sendjson.put("fromName",  obj.getString("UserName"));
 		sendjson.put("channel", obj.getString("channel"));
-		WebSocketGroupPool.sendMessageingroup(
+		WebSocketRoomPool.sendMessageinroom(
 				group,sendjson.toString());
 	}
 	

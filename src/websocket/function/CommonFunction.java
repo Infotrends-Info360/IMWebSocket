@@ -19,7 +19,7 @@ import org.json.JSONObject;
 import websocket.HeartBeat;
 import websocket.bean.TypeInfo;
 //import websocket.HeartBeat;
-import websocket.pools.WebSocketGroupPool;
+import websocket.pools.WebSocketRoomPool;
 import websocket.pools.WebSocketTypePool;
 import websocket.pools.WebSocketUserPool;
 
@@ -100,11 +100,11 @@ public class CommonFunction {
 		String userid = obj.getString("id");
 		String username = obj.getString("UserName");
 		String joinMsg = "[Server]" + username + " join " + group + " group";
-		WebSocketGroupPool.addUseringroup(group, username, userid, conn);
+		WebSocketRoomPool.addUserinroom(group, username, userid, conn);
 		WebSocketUserPool.addUserGroup(group, conn);
-		WebSocketGroupPool.sendMessageingroup(group, joinMsg);
-		WebSocketGroupPool.sendMessageingroup(group, "group people: "
-				+ WebSocketGroupPool.getOnlineUseringroup(group).toString());
+		WebSocketRoomPool.sendMessageinroom(group, joinMsg);
+		WebSocketRoomPool.sendMessageinroom(group, "group people: "
+				+ WebSocketRoomPool.getOnlineUserinroom(group).toString());
 		
 		// 之後可做更詳細的判斷-如為Agent才執行就好
 		// 尚有例外: JSONObject["ACtype"] not found.
@@ -131,9 +131,9 @@ public class CommonFunction {
 		String group = obj.getString("group");
 		String username = obj.getString("UserName");
 		String joinMsg = "[Server]" + username + " leave " + group + " group";
-		WebSocketGroupPool.sendMessageingroup(group, joinMsg);
+		WebSocketRoomPool.sendMessageinroom(group, joinMsg);
 //		WebSocketGroupPool.removeGroup(group); // 這邊要改成removeUseringroup()
-		WebSocketGroupPool.removeUseringroup(group, conn);
+		WebSocketRoomPool.removeUserinroom(group, conn);
 	}
 	
 	/** * Get Message from Group */
@@ -150,7 +150,7 @@ public class CommonFunction {
 		sendjson.put("username", username);
 		sendjson.put("message", text);
 		sendjson.put("channel", obj.getString("channel"));
-		WebSocketGroupPool.sendMessageingroup(group, sendjson.toString());
+		WebSocketRoomPool.sendMessageinroom(group, sendjson.toString());
 	}
 	
 	// group
@@ -159,7 +159,7 @@ public class CommonFunction {
 		JSONObject obj = new JSONObject(message);
 		String group = obj.getString("group");
 		WebSocketUserPool.sendMessageToUser(conn, "group people: "
-				+ WebSocketGroupPool.getOnlineUseringroup(group).toString());
+				+ WebSocketRoomPool.getOnlineUserinroom(group).toString());
 	}
 	
 	/** * search online people from Agent or client */

@@ -12,7 +12,7 @@ import java.util.Set;
 
 import org.json.JSONObject;
 
-import websocket.pools.WebSocketGroupPool;
+import websocket.pools.WebSocketRoomPool;
 import websocket.pools.WebSocketTypePool;
 import websocket.pools.WebSocketUserPool;
 
@@ -29,7 +29,7 @@ public class ClientFunction {
 		sendjson.put("from", obj.getString("id"));
 		sendjson.put("fromName",  obj.getString("UserName"));
 		sendjson.put("channel", obj.getString("channel"));
-		WebSocketGroupPool.sendMessageingroup(group,sendjson.toString());
+		WebSocketRoomPool.sendMessageinroom(group,sendjson.toString());
 	}
 	
 	/** * findAgentEvent */

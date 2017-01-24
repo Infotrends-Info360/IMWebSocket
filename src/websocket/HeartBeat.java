@@ -10,7 +10,7 @@ import org.java_websocket.exceptions.WebsocketNotConnectedException;
 import org.json.JSONObject;
 
 import websocket.function.ClientFunction;
-import websocket.pools.WebSocketGroupPool;
+import websocket.pools.WebSocketRoomPool;
 import websocket.pools.WebSocketTypePool;
 import websocket.pools.WebSocketUserPool;
 

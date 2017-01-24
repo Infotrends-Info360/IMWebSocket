@@ -13,7 +13,7 @@ import org.json.JSONArray;
 import org.json.JSONObject;
 import org.java_websocket.WebSocket;
 
-import websocket.pools.WebSocketGroupPool;
+import websocket.pools.WebSocketRoomPool;
 import websocket.pools.WebSocketTypePool;
 import websocket.pools.WebSocketUserPool;
 
@@ -41,13 +41,13 @@ public class GetKPIServlet {
 		}
 		
 		
-		Collection<String> CollectionGroups = WebSocketGroupPool.getGroups();
+		Collection<String> CollectionGroups = WebSocketRoomPool.getRooms();
 		JSONArray groupsjsonarray = new JSONArray();
 		for (String group : CollectionGroups) {
 			JSONObject groupsjsonobject = new JSONObject();
 			groupsjsonobject.put("groupname", group);
-			groupsjsonobject.put("groupmember", WebSocketGroupPool.getOnlineUseringroup(group));
-			groupsjsonobject.put("groupmembercount", WebSocketGroupPool.getOnlineUseringroupCount(group));
+			groupsjsonobject.put("groupmember", WebSocketRoomPool.getOnlineUserinroom(group));
+			groupsjsonobject.put("groupmembercount", WebSocketRoomPool.getOnlineUserInRoomCount(group));
 			groupsjsonarray.put(groupsjsonobject);
 		}
 		
@@ -82,7 +82,7 @@ public class GetKPIServlet {
 		jsonObject.put("Agents", agentsjsonarray);
 		jsonObject.put("Clients", clientsjsonarray);
 		jsonObject.put("usercount", WebSocketUserPool.getUserCount());
-		jsonObject.put("groupcount", WebSocketGroupPool.getGroupCount());
+		jsonObject.put("groupcount", WebSocketRoomPool.getRoomCount());
 		jsonObject.put("agentcount", WebSocketTypePool.getOnlineUserIDinTYPECount("Agent"));
 		jsonObject.put("clientcount", WebSocketTypePool.getOnlineUserIDinTYPECount("Client"));
 		
@@ -99,7 +99,7 @@ public class GetKPIServlet {
 			JSONArray usergroupjsonarray = new JSONArray();
 			for (String group : UserGroups) {
 				usergroupjsonObject.put("groupid", group);
-				usergroupjsonObject.put("ProcessTime", WebSocketGroupPool.getProcessTimeCount(group, conn));
+				usergroupjsonObject.put("ProcessTime", WebSocketRoomPool.getProcessTimeCount(group, conn));
 				usergroupjsonarray.put(usergroupjsonObject);
 			}
 			jsonObject.put("usergroups", usergroupjsonarray);
