@@ -486,7 +486,7 @@ function AcceptEventAction() {
 		id : UserID,
 		UserName : UserName,
 		sendto : Eventform,
-		group : RoomID,
+		roomID : RoomID,
 		channel : "chat",
 		date : now.getHours() + ":" + now.getMinutes() + ":" + now.getSeconds()
 	};

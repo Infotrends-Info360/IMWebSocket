@@ -124,7 +124,7 @@ public class CommonFunction {
 		String username = obj.getString("UserName");
 		String joinMsg = "[Server]" + username + " leave " + roomID + " room";
 		WebSocketRoomPool.sendMessageinroom(roomID, joinMsg);
-//		WebSocketGroupPool.removeGroup(room); // 這邊要改成removeUserinroom()
+//		WebSocketRoomPool.removeRoom(room); // 這邊要改成removeUserinroom()
 		WebSocketRoomPool.removeUserinroom(roomID, conn);
 	}
 	
@@ -145,8 +145,8 @@ public class CommonFunction {
 		WebSocketRoomPool.sendMessageinroom(roomID, sendjson.toString());
 	}
 	
-	// group
-	/** * ask online people in group */
+	// room
+	/** * ask online people in room */
 	public static void onlineinRoom(String message, org.java_websocket.WebSocket conn) {
 		JSONObject obj = new JSONObject(message);
 		String roomID = obj.getString("roomID");
@@ -231,10 +231,10 @@ public class CommonFunction {
 		JSONObject sendjson = new JSONObject();
 		sendjson.put("Event", "refreshRoomList");
 		sendjson.put("UserID", conn);
-		// 將此Agent所屬的Group list塞入json中
+		// 將此Agent所屬的Room list塞入json中
 		JSONArray roomList_json = new JSONArray();
 		List<String> roomList = WebSocketUserPool.getUserRoomByKey(conn);
-		//JSONObject groupList_json = new JSONObject();
+		//JSONObject roomList_json = new JSONObject();
 		for (String room: roomList){
 			roomList_json.put(room);
 		}
@@ -247,7 +247,7 @@ public class CommonFunction {
 		System.out.println("sendjson: " + sendjson);
 		
 		
-		// end of 將此Agent所屬的Group list塞入json中
+		// end of 將此Agent所屬的Room list塞入json中
 		WebSocketUserPool.sendMessageToUser(conn, sendjson.toString());
 	}
 	

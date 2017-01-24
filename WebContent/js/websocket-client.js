@@ -2,7 +2,7 @@ var ws;
 var layimswitch = false; // layim開關參數
 var layim;
 var UserName;
-var RoomID;
+var roomID;
 var contactID;
 var isonline = false;
 var startdate = new Date();
@@ -50,11 +50,11 @@ function Login() {
 				if ("AcceptEvent" == obj.Event) {
 					var UserID = document.getElementById('UserID').value;
 					// var group = 'G'+document.getElementById('group').value;
-					RoomID = obj.group;
-					console.log("RoomID: " + RoomID);
+					roomID = obj.roomID;
+					console.log("roomID: " + roomID);
 					var now = new Date();
 					// 組成增加群組的JSON指令
-					addRoom(RoomID); //取代下面的Code
+					addRoom(roomID); //取代下面的Code
 					
 					var updateAgentStatusmsg = {
 						    type: "updateStatus",
@@ -75,7 +75,7 @@ function Login() {
 					addlayim(UserID, UserName);
 
 					// 控制前端傳值
-					document.getElementById("group").value = RoomID;
+					document.getElementById("roomID").value = roomID;
 					document.getElementById("roomonline").disabled = false;
 					document.getElementById("Event").value = obj.Event;
 					document.getElementById("Eventform").value = obj.from;
@@ -367,7 +367,7 @@ function addRoom(aRoomID) {
 	ws.send(JSON.stringify(msg));
 
 	// 控制前端傳值
-	document.getElementById("groupstatus").innerHTML = "加入" + RoomID + "群組";
+	document.getElementById("groupstatus").innerHTML = "加入" + roomID + "群組";
 	document.getElementById("leaveRoom").disabled = false;
 	document.getElementById("addRoom").disabled = true;
 	document.getElementById("roomonline").disabled = false;
@@ -380,7 +380,7 @@ function leaveRoom(UserID) {
 	// 組成離開group JSON指令
 	var msg = {
 		type : "leaveRoom",
-		roomID : RoomID,
+		roomID : roomID,
 		id : UserID,
 		UserName : UserName,
 		date : now.getHours() + ":" + now.getMinutes() + ":" + now.getSeconds()
@@ -390,7 +390,7 @@ function leaveRoom(UserID) {
 	ws.send(JSON.stringify(msg));
 
 	// 控制前端傳值
-	document.getElementById("groupstatus").innerHTML = "離開" + RoomID + "群組";
+	document.getElementById("groupstatus").innerHTML = "離開" + roomID + "群組";
 	// document.getElementById("addRoom").disabled = false;
 	document.getElementById("leaveRoom").disabled = true;
 	document.getElementById("roomonline").disabled = true;
@@ -408,7 +408,7 @@ function sendtoRoom() {
 		text : message,
 		id : UserID,
 		UserName : UserName,
-		roomID : RoomID,
+		roomID : roomID,
 		channel : "chat",
 		date : now.getHours() + ":" + now.getMinutes() + ":" + now.getSeconds()
 	};
@@ -424,7 +424,7 @@ function roomonline() {
 	// 組成查詢群組內人員JSON指令
 	var msg = {
 		type : "roomonline",
-		roomID : RoomID,
+		roomID : roomID,
 		UserName : UserName,
 		date : now.getHours() + ":" + now.getMinutes() + ":" + now.getSeconds()
 	};
@@ -577,7 +577,7 @@ function sendtoRoomonlay(text) {
 		text : text,
 		id : UserID,
 		UserName : UserName,
-		roomID : RoomID,
+		roomID : roomID,
 		channel : "chat",
 		date : now.getHours() + ":" + now.getMinutes() + ":" + now.getSeconds()
 	};
@@ -598,7 +598,7 @@ function getmessagelayim(text, UserID, UserName) {
 		,
 		avatar : './layui/images/git.jpg' // 頭像
 		,
-		id : RoomID // 定義唯一的id方便你處理資訊
+		id : roomID // 定義唯一的id方便你處理資訊
 		,
 		content : text,
 		timestamp : new Date().getTime()
@@ -613,7 +613,7 @@ function addlayim(UserID, UserName) {
 
 	console.log(UserID);
 	console.log(UserName);
-	console.log(RoomID);
+	console.log(roomID);
 
 	// 開啟layui
 	layui.use('layim', function(elayim) {
@@ -655,7 +655,7 @@ function addlayim(UserID, UserName) {
 			,
 			avatar : './layui/images/git.jpg' // 頭像
 			,
-			id : RoomID
+			id : roomID
 		// 定義唯一的id方便你處理資訊
 		})
 		// layim.setChatMin(); //收縮聊天面板
@@ -686,7 +686,7 @@ function setinteractionDemo(status, activitycode) {
 	var stoppedreason = 'stoppedreason';
 	// var activitycode = 'activitycode';
 	var AgentID = document.getElementById('findAgent').value;
-	setinteraction(contactID, RoomID, AgentID, status, 'Inbound', 2,
+	setinteraction(contactID, roomID, AgentID, status, 'Inbound', 2,
 			'InBound New', text, structuredtext, thecomment, stoppedreason,
 			activitycode, startdate, 'default');
 }
@@ -698,10 +698,10 @@ function interactionLogDemo(status, activitycode) {
 	var stoppedreason = 'stoppedreason';
 	// var activitycode = 'activitycode';
 	var AgentID = document.getElementById('findAgent').value;
-	 interactionlog(contactID, RoomID, AgentID, status, 'Inbound', 2,
+	 interactionlog(contactID, roomID, AgentID, status, 'Inbound', 2,
 	 'InBound New', text, structuredtext, thecomment, stoppedreason,
 	 activitycode, startdate);
-	setinteraction(contactID, RoomID, AgentID, status, 'Inbound', 2,
+	setinteraction(contactID, roomID, AgentID, status, 'Inbound', 2,
 			'InBound New', text, structuredtext, thecomment, stoppedreason,
 			activitycode, startdate, 'client');
 }

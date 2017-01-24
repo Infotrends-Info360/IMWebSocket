@@ -64,7 +64,7 @@
 	<button type="submit" onclick="Agentonline();" id="Agentonline" disabled>查詢Agent在線人數</button>
 	<span id="typeonline"> </span>
 	<br>
-	群組 : <input type="text" name="group" id="group" disabled>
+	群組 : <input type="text" name="roomID" id="roomID" disabled>
 	<button type="submit" onclick="addRoom();" id="addRoom" >加入群組</button>
 	<button type="submit" onclick="leaveRoom();" id="leaveRoom" disabled>離開群組</button>
 	<span id="groupstatus"> </span>

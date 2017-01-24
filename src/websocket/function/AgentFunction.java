@@ -12,14 +12,14 @@ public class AgentFunction {
 	/** * send Accept Event */
 	public static void AcceptEvent(String message, org.java_websocket.WebSocket conn) {
 		JSONObject obj = new JSONObject(message);
-		String group = obj.getString("group");
+		String roomID = obj.getString("roomID");
 		org.java_websocket.WebSocket sendto = WebSocketUserPool
 				.getWebSocketByUser(obj.getString("sendto"));
 		JSONObject sendjson = new JSONObject();
 		sendjson.put("Event", "AcceptEvent");
 		sendjson.put("from", obj.getString("id"));
 		sendjson.put("fromName",  obj.getString("UserName"));
-		sendjson.put("group",  group);
+		sendjson.put("roomID",  roomID);
 		sendjson.put("channel", obj.getString("channel"));
 		WebSocketUserPool.sendMessageToUser(
 				sendto,sendjson.toString());
