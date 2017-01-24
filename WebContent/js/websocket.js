@@ -116,7 +116,7 @@ function Login() {
 					// 取得狀態
 					getUserStatus();
 
-					document.getElementById("grouponline").disabled = false;
+					document.getElementById("roomonline").disabled = false;
 					document.getElementById("ReleaseEvent").disabled = false;
 					document.getElementById("AcceptEvent").disabled = true;
 					document.getElementById("RejectEvent").disabled = true;
@@ -350,7 +350,7 @@ function addRoom(aRoomID) {
 	document.getElementById("groupstatus").innerHTML = "加入" + RoomID + "群組";
 	document.getElementById("leaveRoom").disabled = false;
 	document.getElementById("addRoom").disabled = true;
-	document.getElementById("grouponline").disabled = false;
+	document.getElementById("roomonline").disabled = false;
 }
 
 // 離開群組
@@ -370,7 +370,7 @@ function leaveRoom(UserID) {
 
 	document.getElementById("groupstatus").innerHTML = "離開" + RoomID + "群組";
 	document.getElementById("leaveRoom").disabled = true;
-	document.getElementById("grouponline").disabled = true;
+	document.getElementById("roomonline").disabled = true;
 }
 
 // 送出訊息至群組
@@ -394,12 +394,12 @@ function sendtoRoom() {
 }
 
 // 查詢群組線上人數
-function grouponline() {
+function roomonline() {
 	// 向websocket送出查詢群組線上人數指令
 	var now = new Date();
 	var msg = {
-		type : "grouponline",
-		group : RoomID,
+		type : "roomonline",
+		roomID : RoomID,
 		UserName : UserName,
 		date : now.getHours() + ":" + now.getMinutes() + ":" + now.getSeconds()
 	};

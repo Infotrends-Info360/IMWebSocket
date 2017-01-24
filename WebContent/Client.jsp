@@ -58,7 +58,7 @@
 	用戶ID : <span id="showUserID"> </span>
 	<br>
 	<button type="submit" onclick="online();" id="online" disabled>查詢在線人數</button>
-	<button type="submit" onclick="grouponline();" id="grouponline" disabled>查詢群組在線人數</button>
+	<button type="submit" onclick="roomonline();" id="roomonline" disabled>查詢群組在線人數</button>
 	<br>
 	<button type="submit" onclick="Clientonline();" id="Clientonline" disabled>查詢Client在線人數</button>
 	<button type="submit" onclick="Agentonline();" id="Agentonline" disabled>查詢Agent在線人數</button>

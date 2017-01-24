@@ -155,11 +155,11 @@ public class CommonFunction {
 	
 	// group
 	/** * ask online people in group */
-	public static void onlineingroup(String message, org.java_websocket.WebSocket conn) {
+	public static void onlineinRoom(String message, org.java_websocket.WebSocket conn) {
 		JSONObject obj = new JSONObject(message);
-		String group = obj.getString("group");
-		WebSocketUserPool.sendMessageToUser(conn, "group people: "
-				+ WebSocketRoomPool.getOnlineUserinroom(group).toString());
+		String roomID = obj.getString("roomID");
+		WebSocketUserPool.sendMessageToUser(conn, "room people: "
+				+ WebSocketRoomPool.getOnlineUserinroom(roomID).toString());
 	}
 	
 	/** * search online people from Agent or client */

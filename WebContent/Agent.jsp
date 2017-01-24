@@ -36,7 +36,7 @@
 	<span id="status"> </span>
 	<br>
 	<button type="submit" onclick="online();" id="online" disabled>查詢在線人數</button>
-	<button type="submit" onclick="grouponline();" id="grouponline" disabled>查詢群組在線人數</button>
+	<button type="submit" onclick="roomonline();" id="roomonline" disabled>查詢群組在線人數</button>
 	<br>
 	<button type="submit" onclick="Clientonline();" id="Clientonline" disabled>查詢Client在線人數</button>
 	<button type="submit" onclick="Agentonline();" id="Agentonline" disabled>查詢Agent在線人數</button>
@@ -59,7 +59,7 @@
 	Event From : <input type="text" name="Eventform" id="Eventform" disabled>
 	<br>
 	message : <input type="text" id="message">
-	<button type="submit" onclick="sendtoRoom();" id="sendtoGroup" disabled>send to Group</button>
+	<button type="submit" onclick="sendtoRoom();" id="sendtoRoom" disabled>send to Group</button>
 	<button type="submit" onclick="test();" id="TestHere">TestHere</button>
 	<span id="span"> </span>
 	<br>三方/轉接: <br>

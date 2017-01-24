@@ -86,7 +86,7 @@ function Login() {
 
 					// 控制前端傳值
 					document.getElementById("group").value = RoomID;
-					document.getElementById("grouponline").disabled = false;
+					document.getElementById("roomonline").disabled = false;
 					document.getElementById("Event").value = obj.Event;
 					document.getElementById("Eventform").value = obj.from;
 					// 收到拒絕交談指令
@@ -427,7 +427,7 @@ function addRoom(aRoomID) {
 	document.getElementById("groupstatus").innerHTML = "加入" + RoomID + "群組";
 	document.getElementById("leaveRoom").disabled = false;
 	document.getElementById("addRoom").disabled = true;
-	document.getElementById("grouponline").disabled = false;
+	document.getElementById("roomonline").disabled = false;
 }
 
 // 離開group
@@ -450,7 +450,7 @@ function leaveRoom(UserID) {
 	document.getElementById("groupstatus").innerHTML = "離開" + RoomID + "群組";
 	// document.getElementById("addRoom").disabled = false;
 	document.getElementById("leaveRoom").disabled = true;
-	document.getElementById("grouponline").disabled = true;
+	document.getElementById("roomonline").disabled = true;
 }
 
 // 傳送訊息至群組
@@ -475,13 +475,13 @@ function sendtoRoom() {
 }
 
 // 查詢群組內人員
-function grouponline() {
+function roomonline() {
 	// var group = 'G'+document.getElementById('group').value;
 	var now = new Date();
 	// 組成查詢群組內人員JSON指令
 	var msg = {
-		type : "grouponline",
-		group : RoomID,
+		type : "roomonline",
+		roomID : RoomID,
 		UserName : UserName,
 		date : now.getHours() + ":" + now.getMinutes() + ":" + now.getSeconds()
 	};
