@@ -81,11 +81,11 @@ public class AgentFunction {
 	}
 	
 	/** * create a groupId * @param message */
-	public static void creategroupId(String message, org.java_websocket.WebSocket conn) {
-		String groupId = java.util.UUID.randomUUID().toString();
+	public static void createRoomId(String message, org.java_websocket.WebSocket conn) {
+		String roomId = java.util.UUID.randomUUID().toString();
 		JSONObject sendjson = new JSONObject();
-		sendjson.put("Event", "creategroupId");
-		sendjson.put("groupId", groupId);
+		sendjson.put("Event", "createroomId");
+		sendjson.put("roomId", roomId);
 		WebSocketUserPool.sendMessageToUser(conn, sendjson.toString());
 	}
 	

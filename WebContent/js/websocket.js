@@ -95,12 +95,12 @@ function Login() {
 					console.log("客戶離開對談"); //
 					ReleaseEvent(); // 這邊會產生迴圈,可能需要確認要留下哪些處理,避免再使用ReleaseEvent()方法
 					// 接收到產生RoomID的訊息
-				} else if ("creategroupId" == obj.Event) {
+				} else if ("createroomId" == obj.Event) {
 					// RoomID = 'G'+document.getElementById('UserID').value;
-					RoomID = obj.groupId; // 之後要改成local variable
-					var myRoomID = obj.groupId;
+					RoomID = obj.roomId; // 之後要改成local variable
+					var myRoomID = obj.roomId;
 					// SinglyList.prototype.add();
-					GroupIDLinkedList.add(obj.groupId);
+					GroupIDLinkedList.add(myRoomID);
 					// GroupIDLinkedList.prototype.add("test"); // 錯
 					console.log("GroupIDLinkedList._length: "
 							+ GroupIDLinkedList._length);
@@ -121,7 +121,7 @@ function Login() {
 					document.getElementById("AcceptEvent").disabled = true;
 					document.getElementById("RejectEvent").disabled = true;
 					document.getElementById("leaveRoom").disabled = false;
-					document.getElementById("sendtoGroup").disabled = false;
+					document.getElementById("sendtoRoom").disabled = false;
 
 					// 接收到Agent狀態更新的訊息
 				} else if ("getUserStatus" == obj.Event) {
@@ -539,13 +539,13 @@ function LeaveType(UserID) {
 function AcceptEventInit() {
 	// 向websocket送出產生groupId指令
 	var now = new Date();
-	var creategroupIdmsg = {
-		type : "creategroupId",
+	var createroomIdmsg = {
+		type : "createroomId",
 		date : now.getHours() + ":" + now.getMinutes() + ":" + now.getSeconds()
 	};
 
 	// 發送消息
-	ws.send(JSON.stringify(creategroupIdmsg));
+	ws.send(JSON.stringify(createroomIdmsg));
 }
 
 function AcceptEventAction() {

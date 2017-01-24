@@ -160,9 +160,9 @@ public class WebSocket extends WebSocketServer {
 //			this.findAgent(message.toString(), conn);
 			ClientFunction.findAgent(message.toString(), conn);
 			break;
-		case "creategroupId":
+		case "createroomId":
 //			this.creategroupId(message.toString(), conn);
-			AgentFunction.creategroupId(message.toString(), conn);
+			AgentFunction.createRoomId(message.toString(), conn);
 			break;
 		case "senduserdata":
 //			this.senduserdata(message.toString(), conn);
