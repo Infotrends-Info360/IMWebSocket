@@ -111,7 +111,7 @@ public class CommonFunction {
 		String ACtype = obj.getString("ACtype");
 		if ("Agent".equals(ACtype)){
 			System.out.println("userjointogroup - one Agent joined");
-			refreshGroupList(conn);						
+			refreshRoomList(conn);						
 		}
 		
 	}
@@ -226,24 +226,24 @@ public class CommonFunction {
 		WebSocketTypePool.UserUpdate(ACtype, username, userid, date, status, reason, conn);
 	}
 	
-	private static void refreshGroupList(org.java_websocket.WebSocket conn){
-		System.out.println("refreshGroupList() called");
+	private static void refreshRoomList(org.java_websocket.WebSocket conn){
+		System.out.println("refreshRoomList() called");
 		JSONObject sendjson = new JSONObject();
-		sendjson.put("Event", "refreshGroupList");
+		sendjson.put("Event", "refreshRoomList");
 		sendjson.put("UserID", conn);
 		// 將此Agent所屬的Group list塞入json中
-		JSONArray groupList_json = new JSONArray();
-		List<String> groupList = WebSocketUserPool.getUserRoomByKey(conn);
+		JSONArray roomList_json = new JSONArray();
+		List<String> roomList = WebSocketUserPool.getUserRoomByKey(conn);
 		//JSONObject groupList_json = new JSONObject();
-		for (String group: groupList){
-			groupList_json.put(group);
+		for (String room: roomList){
+			roomList_json.put(room);
 		}
-		// 測試用-新增幾個group
-//		groupList_json.put("2982ebfa-0359-4777-8746-e6de5e493712");
-//		groupList_json.put("2982ebfa-0359-4777-8746-e6de5e493778");
+		// 測試用-新增幾個room
+//		roomList_json.put("2982ebfa-0359-4777-8746-e6de5e493712");
+//		roomList_json.put("2982ebfa-0359-4777-8746-e6de5e493778");
 		
-		sendjson.put("groupList", groupList_json);
-		System.out.println("groupList_json.length(): " + groupList_json.length());
+		sendjson.put("roomList", roomList_json);
+		System.out.println("roomList_json.length(): " + roomList_json.length());
 		System.out.println("sendjson: " + sendjson);
 		
 		

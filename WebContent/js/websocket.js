@@ -157,19 +157,19 @@ function Login() {
 				} else if ("userjoin" == obj.Event) {
 					document.getElementById("UserID").value = obj.from;
 					document.getElementById("Event").innerHTML = obj.Event;
-				} else if ("refreshGroupList" == obj.Event) {
+				} else if ("refreshRoomList" == obj.Event) {
 					document.getElementById("UserID").value = obj.from;
 					document.getElementById("Event").innerHTML = obj.Event;
 					console.log(obj.Event + "***********************");
-					var groupList = obj.groupList;
-					var groupListToUpdate = document.getElementById("groupList");
-//					console.log("groupList: "+obj.groupList[0]);
-					for (var i in groupList) {
-						console.log("groupList[i]" + groupList[i]);
-						groupListToUpdate.innerHTML += "<br>" + "(" + i + ") - " +  groupList[i];
+					var roomList = obj.roomList;
+					var roomListToUpdate = document.getElementById("roomList");
+//					console.log("roomList: "+obj.roomList[0]);
+					for (var i in roomList) {
+						console.log("roomList[i]" + roomList[i]);
+						roomListToUpdate.innerHTML += "<br>" + "(" + i + ") - " +  roomList[i];
 					}
 					//JSONArray groupList = obj.groupList;
-//					document.getElementById("groupList").innerHTML = "Test - new group list here!!!";
+//					document.getElementById("roomList").innerHTML = "Test - new group list here!!!";
 				}
 			// 非指令訊息
 			}else {

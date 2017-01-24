@@ -41,7 +41,7 @@ public class WebSocket extends WebSocketServer {
 		System.out.println("conn: " + conn + " is disconnected. !!!!!");
 		// 將Heartbeat功能移轉到這裡:
 		inputInteractionLog(conn,reason);
-		clearUserData(conn); // 包含removeUser, removerUserinTYPE, removeUseringroup
+		clearUserData(conn); // 包含removeUser, removerUserinTYPE, removeUserinroom
 	}
 
 
@@ -70,9 +70,9 @@ public class WebSocket extends WebSocketServer {
 	/**
 	 * WebSocket GetMessage
 	 * 
-	 * message login online Exit addGroup leaveGroup messagetogroup grouponline
-	 * typeonline typein typeout Agentclosegroup Clientclosegroup AcceptEvent
-	 * Event updateStatus getUserStatus findAgent creategroupId senduserdata
+	 * message login online Exit addRoom leaveRoom messagetoRoom roomonline
+	 * typeonline typein typeout AcceptEvent
+	 * Event updateStatus getUserStatus findAgent createroomId senduserdata
 	 */
 	@Override
 	public void onMessage(org.java_websocket.WebSocket conn, String message) {
@@ -81,91 +81,69 @@ public class WebSocket extends WebSocketServer {
 		JSONObject obj = new JSONObject(message);
 		switch (obj.getString("type").trim()) {
 		case "message":
-//			this.getMessage(message.toString(), conn);
 			CommonFunction.getMessage(message.toString(), conn);
 			break;
 		case "login":
-//			this.userjoin(message.toString(), conn);
 			CommonFunction.userjoin(message.toString(), conn);
 			break;
 		case "online":
-//			this.online(message.toString(), conn);
 			CommonFunction.online(message.toString(), conn);
 			break;
 		case "Exit":
-//			this.userExit(message.toString(), conn);
 			CommonFunction.userExit(message.toString(), conn);
 			break;
 		case "addRoom":
-//			this.userjointogroup(message.toString(), conn);
 			CommonFunction.userjointoRoom(message.toString(), conn);
 			break;
 		case "leaveRoom":
-//			this.userExitfromgroup(message.toString(), conn);
 			CommonFunction.userExitfromRoom(message.toString(), conn);
 			break;
 		case "messagetoRoom":
-//			this.getMessageingroup(message.toString(), conn);
 			CommonFunction.getMessageinRoom(message.toString(), conn);
 			break; 
 		case "roomonline":
-//			this.onlineingroup(message.toString(), conn);
 			CommonFunction.onlineinRoom(message.toString(), conn);
 			break;
 		case "typeonline":
-//			this.onlineinTYPE(message.toString(), conn);
 			CommonFunction.onlineinTYPE(message.toString(), conn);
 			break;
 		case "typein":
-//			this.userjointoTYPE(message.toString(), conn);
 			CommonFunction.userjointoTYPE(message.toString(), conn);
 			break;
 		case "typeout":
-//			this.userExitfromTYPE(message.toString(), conn);
 			CommonFunction.userExitfromTYPE(message.toString(), conn);
 			break;
 		case "AcceptEvent":
-//			this.AcceptEvent(message.toString(), conn);
 			AgentFunction.AcceptEvent(message.toString(), conn);
 			break;
 		case "RejectEvent":
-//			this.RejectEvent(message.toString(), conn);
 			AgentFunction.RejectEvent(message.toString(), conn);
 			break;
 		case "findAgentEvent":
-//			this.findAgentEvent(message.toString(), conn);
 			ClientFunction.findAgentEvent(message.toString(), conn);
 			break;
 		case "updateStatus":
-//			this.updateStatus(message.toString(), conn);
 			CommonFunction.updateStatus(message.toString(), conn);
 			break;
 		case "getUserStatus":
-//			this.getUserStatus(message.toString(), conn);
 			AgentFunction.getUserStatus(message.toString(), conn);
 			break;
 		case "findAgent":
-//			this.findAgent(message.toString(), conn);
 			ClientFunction.findAgent(message.toString(), conn);
 			break;
 		case "createroomId":
-//			this.creategroupId(message.toString(), conn);
 			AgentFunction.createRoomId(message.toString(), conn);
 			break;
 		case "senduserdata":
-//			this.senduserdata(message.toString(), conn);
 			ClientFunction.senduserdata(message.toString(), conn);			
 			break;
 		case "entrylog":
-//			this.entrylog(message.toString(), conn);
 			ClientFunction.entrylog(message.toString(), conn);
 			break;
 		case "interactionlog":
-//			this.interactionlog(message.toString(), conn);
 			ClientFunction.interactionlog(message.toString(), conn);
 			break;
 		case "setinteraction":
-//			this.setinteraction(message.toString(), conn);
 			ClientFunction.setinteraction(message.toString(), conn);
 			break;
 		case "test":
@@ -199,18 +177,11 @@ public class WebSocket extends WebSocketServer {
 	private void clearUserData(org.java_websocket.WebSocket conn) {
 		System.out.println("clearUserData() called");
 		// 清GROUP:
-		// 取得一個user所屬的所有groupid
-		List<String> groupids = WebSocketUserPool.getUserRoomByKey(conn);
-		for (String groupid: groupids){
-			//使用每個groupid,並找出相對應的group,再將其中的conn remove掉
-			WebSocketRoomPool.removeUserinroom(groupid, conn); // 這邊是否須考慮如果此user退出group,只剩下agent在的狀況? 還是此狀況交由其他處來做處理?
-			// 當去掉之後只剩下一個人在group中
-//			Map<String, Map<org.java_websocket.WebSocket, GroupInfo>> groupuserconnections = WebSocketGroupPool.getGroupuserconnections();
-//			Map<org.java_websocket.WebSocket, GroupInfo> currGroup = groupuserconnections.get(groupid);
-//			System.out.println("groupId: " + groupid + " size " + currGroup.size());
-//			if (currGroup.size() == 1){
-//				System.out.println("groupId: " + groupid + " size " + currGroup.size());
-//			}
+		// 取得一個user所屬的所有roomid
+		List<String> roomids = WebSocketUserPool.getUserRoomByKey(conn);
+		for (String roomid: roomids){
+			//使用每個roomid,並找出相對應的room,再將其中的conn remove掉
+			WebSocketRoomPool.removeUserinroom(roomid, conn);
 		}
 		// 清TYPE:
 		WebSocketTypePool.removeUserinTYPE("Client", conn);
@@ -313,7 +284,7 @@ public class WebSocket extends WebSocketServer {
 //	for (org.java_websocket.WebSocket conn : conns6){
 //		System.out.println("Id: " + WebSocketUserPool.getUserByKey(conn));			
 //		System.out.println("name: " + WebSocketUserPool.getUserNameByKey(conn));			
-//		System.out.println("group: " + WebSocketUserPool.getUserGroupByKey(conn));			
+//		System.out.println("room: " + WebSocketUserPool.getUserRoomByKey(conn));			
 //		System.out.println("Interaction: " + WebSocketUserPool.getUserInteractionByKey(conn));			
 //		System.out.println("heartbeat: " + WebSocketUserPool.getUserheartbeatByKey(conn));			
 //	}

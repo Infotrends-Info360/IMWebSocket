@@ -69,9 +69,9 @@
 		<tr><td>C1</td><td>Accept</td></tr>
 		<tr><td>C2</td><td>Accept</td></tr>
 	</table>
-	<b>現有Group群組</b>: <span id="currGroups"></span>	
-	<table border='2' id='groupListTable'>
-	<span id="groupList"></span>
+	<b>現有Group群組</b>: <span id="currRooms"></span>	
+	<table border='2' id='roomListTable'>
+	<span id="roomList"></span>
 <!-- 		<tr><td>Group Id</td><td>成員</td></tr> -->
 <!-- 		<tr><td>G1</td><td>C1,A1,A2</td></tr> -->
 <!-- 		<tr><td>G2</td><td>C2,A2</td></tr> -->
