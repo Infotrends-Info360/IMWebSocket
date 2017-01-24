@@ -1,6 +1,6 @@
 var ws; // websocket
 var UserName; // 使用者名稱
-var GroupID; // 接通後產生Group的ID
+var RoomID; // 接通後產生Group的ID
 var GroupIDList = []; // 接通後產生Group的ID List
 var GroupIDLinkedList = new SinglyList(); // 接通後產生Group的ID Linked List
 var AgentID; // Agent的ID
@@ -17,7 +17,7 @@ function checktoLeave() {
 	event.returnValue = "確定要離開當前頁面嗎？";
 	LeaveType(UserID);
 	Logoutaction(UserID);
-	leaveGroup(UserID);
+	leaveRoom(UserID);
 }
 
 // 連上websocket
@@ -94,21 +94,21 @@ function Login() {
 					// 此alert會影響到程式執行順序,若打開會因此產生sendMessageingroupserExitfromgroup
 					console.log("客戶離開對談"); //
 					ReleaseEvent(); // 這邊會產生迴圈,可能需要確認要留下哪些處理,避免再使用ReleaseEvent()方法
-					// 接收到產生GroupID的訊息
+					// 接收到產生RoomID的訊息
 				} else if ("creategroupId" == obj.Event) {
-					// GroupID = 'G'+document.getElementById('UserID').value;
-					GroupID = obj.groupId; // 之後要改成local variable
-					var myGroupID = obj.groupId;
+					// RoomID = 'G'+document.getElementById('UserID').value;
+					RoomID = obj.groupId; // 之後要改成local variable
+					var myRoomID = obj.groupId;
 					// SinglyList.prototype.add();
 					GroupIDLinkedList.add(obj.groupId);
 					// GroupIDLinkedList.prototype.add("test"); // 錯
 					console.log("GroupIDLinkedList._length: "
 							+ GroupIDLinkedList._length);
-					document.getElementById("group").value = GroupID;
+					document.getElementById("group").value = RoomID;
 					document.getElementById("Event").innerHTML = obj.Event;
 
 					AcceptEventAction();
-					addRoom(myGroupID); // 改AcceptEvent()架構的目的在這
+					addRoom(myRoomID); // 改AcceptEvent()架構的目的在這
 					updateStatusAction("Established", "Established");
 
 					layuiUse01(); // 先暫時這樣隔開,之後有需要細改再看此部分
@@ -120,7 +120,7 @@ function Login() {
 					document.getElementById("ReleaseEvent").disabled = false;
 					document.getElementById("AcceptEvent").disabled = true;
 					document.getElementById("RejectEvent").disabled = true;
-					document.getElementById("leaveGroup").disabled = false;
+					document.getElementById("leaveRoom").disabled = false;
 					document.getElementById("sendtoGroup").disabled = false;
 
 					// 接收到Agent狀態更新的訊息
@@ -272,7 +272,7 @@ function Logout() {
 	// 執行登出
 	Logoutaction(UserID); // onClose()會全部清: Group, Type, User conn
 	// 離開Group
-//	leaveGroup(UserID);
+//	leaveRoom(UserID);
 	// 關閉上線開關
 	isonline = false;
 
@@ -347,19 +347,19 @@ function addRoom(aRoomID) {
 	// 發送消息
 	ws.send(JSON.stringify(msg));
 
-	document.getElementById("groupstatus").innerHTML = "加入" + GroupID + "群組";
-	document.getElementById("leaveGroup").disabled = false;
+	document.getElementById("groupstatus").innerHTML = "加入" + RoomID + "群組";
+	document.getElementById("leaveRoom").disabled = false;
 	document.getElementById("addRoom").disabled = true;
 	document.getElementById("grouponline").disabled = false;
 }
 
 // 離開群組
-function leaveGroup(UserID) {
+function leaveRoom(UserID) {
 	// 向websocket送出離開群組指令
 	var now = new Date();
 	var msg = {
-		type : "leaveGroup",
-		group : GroupID,
+		type : "leaveRoom",
+		roomID : RoomID,
 		id : UserID,
 		UserName : UserName,
 		date : now.getHours() + ":" + now.getMinutes() + ":" + now.getSeconds()
@@ -368,8 +368,8 @@ function leaveGroup(UserID) {
 	// 發送消息
 	ws.send(JSON.stringify(msg));
 
-	document.getElementById("groupstatus").innerHTML = "離開" + GroupID + "群組";
-	document.getElementById("leaveGroup").disabled = true;
+	document.getElementById("groupstatus").innerHTML = "離開" + RoomID + "群組";
+	document.getElementById("leaveRoom").disabled = true;
 	document.getElementById("grouponline").disabled = true;
 }
 
@@ -384,7 +384,7 @@ function sendtoGroup() {
 		text : message,
 		id : UserID,
 		UserName : UserName,
-		group : GroupID,
+		group : RoomID,
 		channel : "chat",
 		date : now.getHours() + ":" + now.getMinutes() + ":" + now.getSeconds()
 	};
@@ -399,7 +399,7 @@ function grouponline() {
 	var now = new Date();
 	var msg = {
 		type : "grouponline",
-		group : GroupID,
+		group : RoomID,
 		UserName : UserName,
 		date : now.getHours() + ":" + now.getMinutes() + ":" + now.getSeconds()
 	};
@@ -458,7 +458,7 @@ function notready() {
 		type : "Agentclosegroup",
 		ACtype : "Agent",
 		id : UserID,
-		group : GroupID,
+		group : RoomID,
 		UserName : UserName,
 		channel : "chat",
 		date : now.getHours() + ":" + now.getMinutes() + ":" + now.getSeconds()
@@ -476,7 +476,7 @@ function notready() {
 		layim.removeList({
 			type : 'group' // 或者group
 			,
-			id : GroupID
+			id : RoomID
 		// 好友或者群组ID
 		});
 	});
@@ -559,7 +559,7 @@ function AcceptEventAction() {
 		id : UserID,
 		UserName : UserName,
 		sendto : Eventform,
-		group : GroupID,
+		group : RoomID,
 		channel : "chat",
 		date : now.getHours() + ":" + now.getMinutes() + ":" + now.getSeconds()
 	};
@@ -627,7 +627,7 @@ function ReleaseEvent() {
 	ws.send(JSON.stringify(Eventmsg));
 
 	// 離開群組
-	leaveGroup(UserID);
+	leaveRoom(UserID);
 
 	document.getElementById("ReleaseEvent").disabled = true;
 }
@@ -659,7 +659,7 @@ function sendtoGrouponlay(text) {
 		text : text,
 		id : UserID,
 		UserName : UserName,
-		group : GroupID,
+		group : RoomID,
 		channel : "chat",
 		date : now.getHours() + ":" + now.getMinutes() + ":" + now.getSeconds()
 	};
@@ -676,7 +676,7 @@ function getclientmessagelayim(text, UserID, UserName) {
 		,
 		avatar : './layui/images/git.jpg' // 消息來源使用者頭像
 		,
-		id : GroupID // 聊天視窗來源ID（如果是私聊，則是用戶id，如果是群聊，則是群組id）
+		id : RoomID // 聊天視窗來源ID（如果是私聊，則是用戶id，如果是群聊，則是群組id）
 		,
 		type : "group" // 聊天視窗來源類型，從發送消息傳遞的to裡面獲取
 		,
@@ -862,7 +862,7 @@ function layuiUse01() {
 											avatar : "./layui/images/git.jpg",
 											groupname : 'Client: ' + ClientName
 													+ ', Agent: ' + UserName,
-											id : GroupID,
+											id : RoomID,
 											members : 0
 										}).chat(
 										{
@@ -871,7 +871,7 @@ function layuiUse01() {
 											type : 'group' // 群组类型
 											,
 											avatar : "./layui/images/git.jpg",
-											id : GroupID // 定义唯一的id方便你处理信息
+											id : RoomID // 定义唯一的id方便你处理信息
 											,
 											members : 0
 										// 成员数，不好获取的话，可以设置为0
@@ -1008,7 +1008,7 @@ function test() {
 	// ws.send(JSON.stringify(Eventmsg));
 	//	
 	// //離開群組
-	// leaveGroup(UserID);
+	// leaveRoom(UserID);
 	//	
 	// document.getElementById("ReleaseEvent").disabled = true;
 }

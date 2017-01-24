@@ -125,15 +125,15 @@ public class CommonFunction {
 	}
 	
 	/** * user leave group */
-	public static void userExitfromgroup(String message,
+	public static void userExitfromRoom(String message,
 			org.java_websocket.WebSocket conn) {
 		JSONObject obj = new JSONObject(message);
-		String group = obj.getString("group");
+		String roomID = obj.getString("roomID");
 		String username = obj.getString("UserName");
-		String joinMsg = "[Server]" + username + " leave " + group + " group";
-		WebSocketRoomPool.sendMessageinroom(group, joinMsg);
+		String joinMsg = "[Server]" + username + " leave " + roomID + " room";
+		WebSocketRoomPool.sendMessageinroom(roomID, joinMsg);
 //		WebSocketGroupPool.removeGroup(group); // 這邊要改成removeUseringroup()
-		WebSocketRoomPool.removeUserinroom(group, conn);
+		WebSocketRoomPool.removeUserinroom(roomID, conn);
 	}
 	
 	/** * Get Message from Group */

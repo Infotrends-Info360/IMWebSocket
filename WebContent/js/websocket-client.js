@@ -2,7 +2,7 @@ var ws;
 var layimswitch = false; // layim開關參數
 var layim;
 var UserName;
-var GroupID;
+var RoomID;
 var contactID;
 var isonline = false;
 var startdate = new Date();
@@ -21,7 +21,7 @@ function checktoLeave() {
 	// 離開WebSocket Pool列表
 	Logoutaction(UserID);
 	// 離開群組列表
-	leaveGroup(UserID);
+	leaveRoom(UserID);
 }
 
 // 連上websocket
@@ -50,14 +50,14 @@ function Login() {
 				if ("AcceptEvent" == obj.Event) {
 					var UserID = document.getElementById('UserID').value;
 					// var group = 'G'+document.getElementById('group').value;
-					GroupID = obj.group;
-					console.log("GroupID: " + GroupID);
+					RoomID = obj.group;
+					console.log("RoomID: " + RoomID);
 					var now = new Date();
 					// 組成增加群組的JSON指令
-					addRoom(GroupID); //取代下面的Code
+					addRoom(RoomID); //取代下面的Code
 //					var Clientaddgroupmsg = {
 //						type : "addRoom",
-//						group : GroupID,
+//						group : RoomID,
 //						id : UserID,
 //						UserName : UserName,
 //						date : now.getHours() + ":" + now.getMinutes() + ":"
@@ -85,7 +85,7 @@ function Login() {
 					addlayim(UserID, UserName);
 
 					// 控制前端傳值
-					document.getElementById("group").value = GroupID;
+					document.getElementById("group").value = RoomID;
 					document.getElementById("grouponline").disabled = false;
 					document.getElementById("Event").value = obj.Event;
 					document.getElementById("Eventform").value = obj.from;
@@ -101,7 +101,7 @@ function Login() {
 					var UserID = document.getElementById('UserID').value;
 					// 離開群組
 					if (isonline){
-						leaveGroup(UserID);						
+						leaveRoom(UserID);						
 					}
 					// 收到尋找Agent的指令
 				} else if ("findAgent" == obj.Event) {
@@ -115,9 +115,9 @@ function Login() {
 						}
 					} else {
 						// 控制前端傳值
-						// GroupID = 'G'+obj.Agent;
+						// RoomID = 'G'+obj.Agent;
 						document.getElementById("findAgent").value = obj.Agent;
-						// document.getElementById("group").value = GroupID;
+						// document.getElementById("group").value = RoomID;
 						document.getElementById("Event").value = obj.Event;
 						document.getElementById("Eventform").value = obj.from;
 						var UserID = document.getElementById('UserID').value;
@@ -165,7 +165,7 @@ function Login() {
 //					var msg = {
 //						type : "heartbeattoserver",
 //						heartbeat : 'ap',
-//						groupid : GroupID,
+//						groupid : RoomID,
 //						date : now.getHours() + ":" + now.getMinutes() + ":"
 //								+ now.getSeconds()
 //					};
@@ -330,7 +330,7 @@ function Logout() {
 //		type : "Clientclosegroup",
 //		ACtype : "Client",
 //		id : UserID,
-//		group : GroupID,
+//		group : RoomID,
 //		UserName : UserName,
 //		channel : "chat",
 //		date : now.getHours() + ":" + now.getMinutes() + ":" + now.getSeconds()
@@ -424,20 +424,20 @@ function addRoom(aRoomID) {
 	ws.send(JSON.stringify(msg));
 
 	// 控制前端傳值
-	document.getElementById("groupstatus").innerHTML = "加入" + GroupID + "群組";
-	document.getElementById("leaveGroup").disabled = false;
+	document.getElementById("groupstatus").innerHTML = "加入" + RoomID + "群組";
+	document.getElementById("leaveRoom").disabled = false;
 	document.getElementById("addRoom").disabled = true;
 	document.getElementById("grouponline").disabled = false;
 }
 
 // 離開group
-function leaveGroup(UserID) {
+function leaveRoom(UserID) {
 	// var group = 'G'+document.getElementById('group').value;
 	var now = new Date();
 	// 組成離開group JSON指令
 	var msg = {
-		type : "leaveGroup",
-		group : GroupID,
+		type : "leaveRoom",
+		roomID : RoomID,
 		id : UserID,
 		UserName : UserName,
 		date : now.getHours() + ":" + now.getMinutes() + ":" + now.getSeconds()
@@ -447,9 +447,9 @@ function leaveGroup(UserID) {
 	ws.send(JSON.stringify(msg));
 
 	// 控制前端傳值
-	document.getElementById("groupstatus").innerHTML = "離開" + GroupID + "群組";
+	document.getElementById("groupstatus").innerHTML = "離開" + RoomID + "群組";
 	// document.getElementById("addRoom").disabled = false;
-	document.getElementById("leaveGroup").disabled = true;
+	document.getElementById("leaveRoom").disabled = true;
 	document.getElementById("grouponline").disabled = true;
 }
 
@@ -465,7 +465,7 @@ function sendtoGroup() {
 		text : message,
 		id : UserID,
 		UserName : UserName,
-		group : GroupID,
+		group : RoomID,
 		channel : "chat",
 		date : now.getHours() + ":" + now.getMinutes() + ":" + now.getSeconds()
 	};
@@ -481,7 +481,7 @@ function grouponline() {
 	// 組成查詢群組內人員JSON指令
 	var msg = {
 		type : "grouponline",
-		group : GroupID,
+		group : RoomID,
 		UserName : UserName,
 		date : now.getHours() + ":" + now.getMinutes() + ":" + now.getSeconds()
 	};
@@ -634,7 +634,7 @@ function sendtoGrouponlay(text) {
 		text : text,
 		id : UserID,
 		UserName : UserName,
-		group : GroupID,
+		group : RoomID,
 		channel : "chat",
 		date : now.getHours() + ":" + now.getMinutes() + ":" + now.getSeconds()
 	};
@@ -655,7 +655,7 @@ function getmessagelayim(text, UserID, UserName) {
 		,
 		avatar : './layui/images/git.jpg' // 頭像
 		,
-		id : GroupID // 定義唯一的id方便你處理資訊
+		id : RoomID // 定義唯一的id方便你處理資訊
 		,
 		content : text,
 		timestamp : new Date().getTime()
@@ -670,7 +670,7 @@ function addlayim(UserID, UserName) {
 
 	console.log(UserID);
 	console.log(UserName);
-	console.log(GroupID);
+	console.log(RoomID);
 
 	// 開啟layui
 	layui.use('layim', function(elayim) {
@@ -712,7 +712,7 @@ function addlayim(UserID, UserName) {
 			,
 			avatar : './layui/images/git.jpg' // 頭像
 			,
-			id : GroupID
+			id : RoomID
 		// 定義唯一的id方便你處理資訊
 		})
 		// layim.setChatMin(); //收縮聊天面板
@@ -743,7 +743,7 @@ function setinteractionDemo(status, activitycode) {
 	var stoppedreason = 'stoppedreason';
 	// var activitycode = 'activitycode';
 	var AgentID = document.getElementById('findAgent').value;
-	setinteraction(contactID, GroupID, AgentID, status, 'Inbound', 2,
+	setinteraction(contactID, RoomID, AgentID, status, 'Inbound', 2,
 			'InBound New', text, structuredtext, thecomment, stoppedreason,
 			activitycode, startdate, 'default');
 }
@@ -755,10 +755,10 @@ function interactionLogDemo(status, activitycode) {
 	var stoppedreason = 'stoppedreason';
 	// var activitycode = 'activitycode';
 	var AgentID = document.getElementById('findAgent').value;
-	 interactionlog(contactID, GroupID, AgentID, status, 'Inbound', 2,
+	 interactionlog(contactID, RoomID, AgentID, status, 'Inbound', 2,
 	 'InBound New', text, structuredtext, thecomment, stoppedreason,
 	 activitycode, startdate);
-	setinteraction(contactID, GroupID, AgentID, status, 'Inbound', 2,
+	setinteraction(contactID, RoomID, AgentID, status, 'Inbound', 2,
 			'InBound New', text, structuredtext, thecomment, stoppedreason,
 			activitycode, startdate, 'client');
 }

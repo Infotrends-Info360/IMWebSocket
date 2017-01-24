@@ -49,7 +49,7 @@
 	<br>
 	群組 : <input type="text" name="group" id="group" disabled>
 	<button type="submit" onclick="addRoom();" id="addRoom" >加入群組</button>
-	<button type="submit" onclick="leaveGroup();" id="leaveGroup" disabled>離開群組</button>
+	<button type="submit" onclick="leaveRoom();" id="leaveRoom" disabled>離開群組</button>
 	<span id="groupstatus"> </span>
 	Event : <span id="Event"> </span>
 	<br>
