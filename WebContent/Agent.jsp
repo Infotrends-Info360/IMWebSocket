@@ -63,11 +63,32 @@
 	<button type="submit" onclick="test();" id="TestHere">TestHere</button>
 	<span id="span"> </span>
 	<br>三方/轉接: <br>
-	線上請求Clients:
-	<table border='2' id='clientList'>
-		<tr><td>Client名稱</td><td>動作(Event)</td></tr>
-		<tr><td>C1</td><td>Accept</td></tr>
-		<tr><td>C2</td><td>Accept</td></tr>
+<!-- 	<b>線上請求Clients:</b> -->
+<!-- 	<table border='2' id='clientList'> -->
+<!-- 		<tr><td>Client名稱</td><td>動作(Event)</td></tr> -->
+<!-- 		<tr><td>C1</td><td>Accept</td></tr> -->
+<!-- 		<tr><td>C2</td><td>Accept</td></tr> -->
+<!-- 	</table> -->
+	<b>線上Agents:</b>
+	<button type="submit" onclick="Agentonline();" id="inviteAgent3way">show Agent List</button>
+	<table border='2' id='agentList' style="visibility: hidden;" >
+		<tr>
+			<td>Agent名稱</td>
+			<td>AgentID</td>
+			<td>動作(Event)</td>
+			<td>動作(Event)</td>
+		</tr>
+		<tr>
+			<td id="AgentName">A2</td>
+			<td id="AgentID" value=""></td>
+			<td><button type="submit" onclick="inviteAgent3way();" id="inviteAgent3way">邀請加入(三方)</button></td>
+			<td><button type="submit" onclick="inviteAgent();" id="inviteAgent">邀請加入(加入後自己退出)</button></td>
+		</tr>
+<!-- 		<tr> -->
+<!-- 			<td>A2</td> -->
+<!-- 			<td><button type="submit" onclick="inviteAgent3way();" id="inviteAgent3way">邀請加入(三方)</button></td> -->
+<!-- 			<td><button type="submit" onclick="inviteAgent();" id="inviteAgent">邀請加入(加入後自己退出)</button></td> -->
+<!-- 		</tr> -->
 	</table>
 	<b>現有Group群組</b>: <span id="currRooms"></span>	
 	<table border='2' id='roomListTable'>
