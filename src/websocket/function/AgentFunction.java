@@ -54,7 +54,7 @@ public class AgentFunction {
 				conn, sendjson.toString());
 	}
 	
-	/** * create a groupId * @param message */
+	/** * create a roomId * @param message */
 	public static void createRoomId(String message, org.java_websocket.WebSocket conn) {
 		String roomId = java.util.UUID.randomUUID().toString();
 		JSONObject sendjson = new JSONObject();

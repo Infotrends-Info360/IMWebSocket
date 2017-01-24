@@ -2,7 +2,7 @@ package websocket.bean;
 
 import java.util.Date;
 
-//此類別給WebSocketGroupPool.groupuserconnections使用
+//此類別給WebSocketRoomPool.roomuserconnections使用
 public class RoomInfo {
 	private String userid;
 	private String username;
