@@ -331,13 +331,13 @@ function online() {
 }
 
 // 加入群組
-function addRoom(aGroupID) {
+function addRoom(aRoomID) {
 	var UserID = document.getElementById('UserID').value;
 	// 向websocket送出加入群組指令
 	var now = new Date();
 	var msg = {
 		type : "addRoom",
-		group : aGroupID,
+		roomID : aRoomID,
 		id : UserID,
 		ACtype : "Agent",
 		UserName : UserName,

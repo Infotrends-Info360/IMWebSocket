@@ -92,19 +92,19 @@ public class CommonFunction {
 	}
 	
 	/** * user join group */
-	public static void userjointogroup(String message,
+	public static void userjointoRoom(String message,
 			org.java_websocket.WebSocket conn) {
-		System.out.println("userjointogroup() called - conn: " + conn);
+		System.out.println("userjointoRoom() called - conn: " + conn);
 		JSONObject obj = new JSONObject(message);
-		String group = obj.getString("group");
+		String roomID = obj.getString("roomID");
 		String userid = obj.getString("id");
 		String username = obj.getString("UserName");
-		String joinMsg = "[Server]" + username + " join " + group + " group";
-		WebSocketRoomPool.addUserinroom(group, username, userid, conn);
-		WebSocketUserPool.addUserRoom(group, conn);
-		WebSocketRoomPool.sendMessageinroom(group, joinMsg);
-		WebSocketRoomPool.sendMessageinroom(group, "group people: "
-				+ WebSocketRoomPool.getOnlineUserinroom(group).toString());
+		String joinMsg = "[Server]" + username + " join " + roomID + " group";
+		WebSocketRoomPool.addUserinroom(roomID, username, userid, conn);
+		WebSocketUserPool.addUserRoom(roomID, conn);
+		WebSocketRoomPool.sendMessageinroom(roomID, joinMsg);
+		WebSocketRoomPool.sendMessageinroom(roomID, "group people: "
+				+ WebSocketRoomPool.getOnlineUserinroom(roomID).toString());
 		
 		// 之後可做更詳細的判斷-如為Agent才執行就好
 		// 尚有例外: JSONObject["ACtype"] not found.

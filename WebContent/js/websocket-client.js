@@ -406,14 +406,14 @@ function online() {
 }
 
 // 新增人員至group
-function addRoom(aGroupID) {
+function addRoom(aRoomID) {
 	var UserID = document.getElementById('UserID').value;
 	// var group = 'G'+document.getElementById('group').value;
 	var now = new Date();
 	// 組成新增人員至group JSON指令
 	var msg = {
 		type : "addRoom",
-		group : aGroupID,
+		roomID : aRoomID,
 		id : UserID,
 		ACtype : "Client",
 		UserName : UserName,
