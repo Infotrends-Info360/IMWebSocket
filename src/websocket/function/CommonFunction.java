@@ -91,7 +91,7 @@ public class CommonFunction {
 //		WebSocketPool.removeUserName(conn);
 	}
 	
-	/** * user join group */
+	/** * user join room */
 	public static void userjointoRoom(String message,
 			org.java_websocket.WebSocket conn) {
 		System.out.println("userjointoRoom() called - conn: " + conn);
@@ -99,24 +99,24 @@ public class CommonFunction {
 		String roomID = obj.getString("roomID");
 		String userid = obj.getString("id");
 		String username = obj.getString("UserName");
-		String joinMsg = "[Server]" + username + " join " + roomID + " group";
+		String joinMsg = "[Server]" + username + " join " + roomID + " room";
 		WebSocketRoomPool.addUserinroom(roomID, username, userid, conn);
 		WebSocketUserPool.addUserRoom(roomID, conn);
 		WebSocketRoomPool.sendMessageinroom(roomID, joinMsg);
-		WebSocketRoomPool.sendMessageinroom(roomID, "group people: "
+		WebSocketRoomPool.sendMessageinroom(roomID, "room people: "
 				+ WebSocketRoomPool.getOnlineUserinroom(roomID).toString());
 		
 		// 之後可做更詳細的判斷-如為Agent才執行就好
 		// 尚有例外: JSONObject["ACtype"] not found.
 		String ACtype = obj.getString("ACtype");
 		if ("Agent".equals(ACtype)){
-			System.out.println("userjointogroup - one Agent joined");
+			System.out.println("userjointoroom - one Agent joined");
 			refreshRoomList(conn);						
 		}
 		
 	}
 	
-	/** * user leave group */
+	/** * user leave room */
 	public static void userExitfromRoom(String message,
 			org.java_websocket.WebSocket conn) {
 		JSONObject obj = new JSONObject(message);
@@ -124,11 +124,11 @@ public class CommonFunction {
 		String username = obj.getString("UserName");
 		String joinMsg = "[Server]" + username + " leave " + roomID + " room";
 		WebSocketRoomPool.sendMessageinroom(roomID, joinMsg);
-//		WebSocketGroupPool.removeGroup(group); // 這邊要改成removeUseringroup()
+//		WebSocketGroupPool.removeGroup(room); // 這邊要改成removeUserinroom()
 		WebSocketRoomPool.removeUserinroom(roomID, conn);
 	}
 	
-	/** * Get Message from Group */
+	/** * Get Message from Room */
 	public static void getMessageinRoom(String message,
 			org.java_websocket.WebSocket conn) {
 		JSONObject obj = new JSONObject(message);
@@ -137,7 +137,7 @@ public class CommonFunction {
 		String username = obj.getString("UserName");
 		String text = obj.getString("text");
 		JSONObject sendjson = new JSONObject();
-		sendjson.put("Event", "groupmessage");
+		sendjson.put("Event", "roommessage");
 		sendjson.put("from", userid);
 		sendjson.put("username", username);
 		sendjson.put("message", text);

@@ -114,7 +114,7 @@ function Login() {
 						find();
 					}
 					// 收到群組訊息
-				} else if ("groupmessage" == obj.Event) {
+				} else if ("roommessage" == obj.Event) {
 					var UserID = document.getElementById('UserID').value;
 					// 判斷是否有開啟layim與是否為自己傳送的訊息
 					if (true == layimswitch && obj.from != UserID) {

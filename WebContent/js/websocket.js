@@ -50,7 +50,7 @@ function Login() {
 					document.getElementById("Eventform").value = obj.from;
 					document.getElementById("Event").innerHTML = obj.Event;
 					// 接收到group訊息
-				} else if ("groupmessage" == obj.Event) {
+				} else if ("roommessage" == obj.Event) {
 					var UserID = document.getElementById('UserID').value;
 					// 判斷是否有開啟layim與是否為自己傳送的訊息
 					if (true == layimswitch && obj.from != UserID) {
