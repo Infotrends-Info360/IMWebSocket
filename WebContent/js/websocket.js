@@ -75,8 +75,35 @@ function Login() {
 				} else if ("onlineinTYPE" == obj.Event) {
 					AgentID = obj.from;
 					AgentName = obj.username;
-					console.log('AgentID: ' + AgentID);
-					console.log('AgentName: ' + AgentName);
+					console.log('AgentID: ' + AgentID); // 2d51031b-26e1-4ff4-98ad-fc7301e6c885, 9c802b70-998a-4552-9bfd-afe1426104ea
+					console.log('AgentName: ' + AgentName); // agent01, agent02
+
+					
+					//在此做三方/轉接Demo:
+					var UserID = document.getElementById('UserID').value;
+					console.log("UserID: "+UserID);
+					var agentIDList = AgentID.split(",")
+					var agentNameList = AgentName.split(",")
+				    var i;
+					
+					if (agentIDList.length > 1){
+						document.getElementById("agentList").style.visibility = "visible";
+					}
+
+					for (i = 0; i < agentIDList.length; i++) {
+						var agentID = agentIDList[i].trim();
+						var agentName = agentNameList[i].trim();
+						console.log("a[i]:" + agentID);
+						if (agentID != UserID){
+							console.log("a new Agent : " + agentID);
+							document.getElementById("AgentID").value = agentID;
+							document.getElementById("AgentID").innerHTML = agentID;
+							document.getElementById("AgentName").value = agentName;
+							document.getElementById("AgentName").innerHTML = agentName;
+						}
+//					    document.getElementById("updateAvailable_" + a[i]).style.visibility = "visible";
+					}
+					
 					/*
 					 * var UserID = document.getElementById('UserID').value; var
 					 * FromArray = obj.from.trim().split(","); var UsernameArray =

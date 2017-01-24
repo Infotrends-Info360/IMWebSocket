@@ -69,6 +69,27 @@
 		<tr><td>C1</td><td>Accept</td></tr>
 		<tr><td>C2</td><td>Accept</td></tr>
 	</table>
+	線上Agents:
+	<button type="submit" onclick="Agentonline();" id="inviteAgent3way">show Agent List</button>
+	<table border='2' id='agentList' style="visibility: hidden;" >
+		<tr>
+			<td>Agent名稱</td>
+			<td>AgentID</td>
+			<td>動作(Event)</td>
+			<td>動作(Event)</td>
+		</tr>
+		<tr>
+			<td id="AgentName">A2</td>
+			<td id="AgentID" value=""></td>
+			<td><button type="submit" onclick="inviteAgent3way();" id="inviteAgent3way">邀請加入(三方)</button></td>
+			<td><button type="submit" onclick="inviteAgent();" id="inviteAgent">邀請加入(加入後自己退出)</button></td>
+		</tr>
+<!-- 		<tr> -->
+<!-- 			<td>A2</td> -->
+<!-- 			<td><button type="submit" onclick="inviteAgent3way();" id="inviteAgent3way">邀請加入(三方)</button></td> -->
+<!-- 			<td><button type="submit" onclick="inviteAgent();" id="inviteAgent">邀請加入(加入後自己退出)</button></td> -->
+<!-- 		</tr> -->
+	</table>
 	<b>現有Group群組</b>: <span id="currRooms"></span>	
 	<table border='2' id='roomListTable'>
 	<span id="roomList"></span>
