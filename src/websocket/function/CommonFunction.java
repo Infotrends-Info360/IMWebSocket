@@ -101,7 +101,7 @@ public class CommonFunction {
 		String username = obj.getString("UserName");
 		String joinMsg = "[Server]" + username + " join " + group + " group";
 		WebSocketRoomPool.addUserinroom(group, username, userid, conn);
-		WebSocketUserPool.addUserGroup(group, conn);
+		WebSocketUserPool.addUserRoom(group, conn);
 		WebSocketRoomPool.sendMessageinroom(group, joinMsg);
 		WebSocketRoomPool.sendMessageinroom(group, "group people: "
 				+ WebSocketRoomPool.getOnlineUserinroom(group).toString());
@@ -241,7 +241,7 @@ public class CommonFunction {
 		sendjson.put("UserID", conn);
 		// 將此Agent所屬的Group list塞入json中
 		JSONArray groupList_json = new JSONArray();
-		List<String> groupList = WebSocketUserPool.getUserGroupByKey(conn);
+		List<String> groupList = WebSocketUserPool.getUserRoomByKey(conn);
 		//JSONObject groupList_json = new JSONObject();
 		for (String group: groupList){
 			groupList_json.put(group);

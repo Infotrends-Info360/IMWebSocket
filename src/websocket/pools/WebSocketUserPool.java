@@ -39,10 +39,10 @@ public class WebSocketUserPool {
 		return userallconnections.get(conn).getUsername();
 	}
 	
-	/** * Get User Group By Key * @param session */ /* Done */
-	public static List<String> getUserGroupByKey(WebSocket conn) {
-//		System.out.println("getUserGroupByKey(WebSocket conn) called");
-		return userallconnections.get(conn).getUsergroup();
+	/** * Get User Room By Key * @param session */ /* Done */
+	public static List<String> getUserRoomByKey(WebSocket conn) {
+//		System.out.println("getUserRoomByKey(WebSocket conn) called");
+		return userallconnections.get(conn).getUserRoom();
 	}
 
 	/** * Get User Interaction By Key * @param session */ /* Done */
@@ -64,9 +64,9 @@ public class WebSocketUserPool {
 		return userallconnections.size();
 	}
 	
-	/** * Get Online User Group Count * @param */ /* Done */
-	public static int getUsergroupCount(WebSocket conn) {
-		return userallconnections.get(conn).getUsergroup().size();
+	/** * Get Online User Room Count * @param */ /* Done */
+	public static int getUserRoomCount(WebSocket conn) {
+		return userallconnections.get(conn).getUserRoom().size();
 	}
 
 	/** * Get WebSocket By User ID * @param user */ /* Done */
@@ -94,8 +94,8 @@ public class WebSocketUserPool {
 	}
 	
 	/** * Add User to WebSocket Pool* @param inbound */ /* Done */
-	public static void addUserGroup(String usergroup, WebSocket conn) {
-		userallconnections.get(conn).getUsergroup().add(usergroup);
+	public static void addUserRoom(String userRoom, WebSocket conn) {
+		userallconnections.get(conn).getUserRoom().add(userRoom);
 	}
 	
 	/** * Add User to WebSocket Pool* @param inbound */ /* Done */
@@ -143,11 +143,11 @@ public class WebSocketUserPool {
 		}		
 	}
 	
-	/** * Remove User Group from WebSocket Pool * @param inbound */ /* Done */
-	public static boolean removeUserGroup(WebSocket conn) {
+	/** * Remove User Room from WebSocket Pool * @param inbound */ /* Done */
+	public static boolean removeUserRoom(WebSocket conn) {
 		
 		if (userallconnections.containsKey(conn)) {
-			userallconnections.get(conn).setUsergroup(null); // 看是要null還是"",目前覺得null比較同於原本的Map.remove(USERGROUP)
+			userallconnections.get(conn).setUserRoom(null); // 看是要null還是"",目前覺得null比較同於原本的Map.remove(USERGROUP)
 			return true;
 		} else {
 			return false;
@@ -190,7 +190,6 @@ public class WebSocketUserPool {
 	
 	/** * Get heartbeatTimer By Key * @param session */ /* Done */
 	public static Timer getUserHeartbeatTimerByKey(WebSocket conn) {
-//		System.out.println("getUserGroupByKey(WebSocket conn) called");
 		return userallconnections.get(conn).getHeartbeatTimer();
 	}
 	

@@ -8,7 +8,7 @@ import java.util.Timer;
 public class UserInfo {
 	private String userid;
 	private String username;
-	private List<String> usergroup = new ArrayList();
+	private List<String> userRoom = new ArrayList();
 	private String userinteraction;
 	private String userheartbeat;
 	private Timer heartbeatTimer;
@@ -19,11 +19,11 @@ public class UserInfo {
 	public void setUserid(String userid) {
 		this.userid = userid;
 	}
-	public List<String> getUsergroup() {
-		return usergroup;
+	public List<String> getUserRoom() {
+		return userRoom;
 	}
-	public void setUsergroup(List<String> usergroup) {
-		this.usergroup = usergroup;
+	public void setUserRoom(List<String> userroom) {
+		this.userRoom = userroom;
 	}
 	public String getUsername() {
 		return username;

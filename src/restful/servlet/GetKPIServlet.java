@@ -94,8 +94,8 @@ public class GetKPIServlet {
 			//WebSocketUserPool.getUsergroupCount(conn);
 			jsonObject.put("userid", user);
 			jsonObject.put("username", WebSocketUserPool.getUserNameByKey(conn));
-			jsonObject.put("usergroupcount", WebSocketUserPool.getUsergroupCount(conn));
-			Collection<String> UserGroups = WebSocketUserPool.getUserGroupByKey(conn);
+			jsonObject.put("usergroupcount", WebSocketUserPool.getUserRoomCount(conn));
+			Collection<String> UserGroups = WebSocketUserPool.getUserRoomByKey(conn);
 			JSONArray usergroupjsonarray = new JSONArray();
 			for (String group : UserGroups) {
 				usergroupjsonObject.put("groupid", group);
