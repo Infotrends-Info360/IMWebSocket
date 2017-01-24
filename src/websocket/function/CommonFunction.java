@@ -137,10 +137,10 @@ public class CommonFunction {
 	}
 	
 	/** * Get Message from Group */
-	public static void getMessageingroup(String message,
+	public static void getMessageinRoom(String message,
 			org.java_websocket.WebSocket conn) {
 		JSONObject obj = new JSONObject(message);
-		String group = obj.getString("group");
+		String roomID = obj.getString("roomID");
 		String userid = obj.getString("id");
 		String username = obj.getString("UserName");
 		String text = obj.getString("text");
@@ -150,7 +150,7 @@ public class CommonFunction {
 		sendjson.put("username", username);
 		sendjson.put("message", text);
 		sendjson.put("channel", obj.getString("channel"));
-		WebSocketRoomPool.sendMessageinroom(group, sendjson.toString());
+		WebSocketRoomPool.sendMessageinroom(roomID, sendjson.toString());
 	}
 	
 	// group

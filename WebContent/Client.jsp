@@ -77,7 +77,7 @@
 	<br>
 	<!--message : <input type="text" id="message">-->
 	<!--<button type="submit" onclick="send();">send</button>-->
-	<!--<button type="submit" onclick="sendtoGroup();" id="sendtoGroup">send to Group</button>-->
+	<!--<button type="submit" onclick="sendtoRoom();" id="sendtoGroup">send to Group</button>-->
 	<span id="span"> </span>
 	<br>訊息: <br>
 	<span id="text"> </span>

@@ -59,7 +59,7 @@
 	Event From : <input type="text" name="Eventform" id="Eventform" disabled>
 	<br>
 	message : <input type="text" id="message">
-	<button type="submit" onclick="sendtoGroup();" id="sendtoGroup" disabled>send to Group</button>
+	<button type="submit" onclick="sendtoRoom();" id="sendtoGroup" disabled>send to Group</button>
 	<button type="submit" onclick="test();" id="TestHere">TestHere</button>
 	<span id="span"> </span>
 	<br>三方/轉接: <br>

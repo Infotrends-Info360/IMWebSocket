@@ -374,17 +374,17 @@ function leaveRoom(UserID) {
 }
 
 // 送出訊息至群組
-function sendtoGroup() {
+function sendtoRoom() {
 	var message = document.getElementById('message').value;
 	var UserID = document.getElementById('UserID').value;
 	// 向websocket送出送至訊息群組指令
 	var now = new Date();
 	var msg = {
-		type : "messagetogroup",
+		type : "messagetoRoom",
 		text : message,
 		id : UserID,
 		UserName : UserName,
-		group : RoomID,
+		roomID : RoomID,
 		channel : "chat",
 		date : now.getHours() + ":" + now.getMinutes() + ":" + now.getSeconds()
 	};
@@ -650,16 +650,16 @@ function getUserStatus() {
 }
 
 // 傳送群組訊息至layim視窗上
-function sendtoGrouponlay(text) {
+function sendtoRoomonlay(text) {
 	var UserID = document.getElementById('UserID').value;
 	var now = new Date();
 	// 組成傳送群組訊息至layim視窗上的JSON指令
 	var msg = {
-		type : "messagetogroup",
+		type : "messagetoRoom",
 		text : text,
 		id : UserID,
 		UserName : UserName,
-		group : RoomID,
+		roomID : RoomID,
 		channel : "chat",
 		date : now.getHours() + ":" + now.getMinutes() + ":" + now.getSeconds()
 	};
@@ -744,7 +744,7 @@ function addlayim() {
 			console.log('sendMessage log');
 			console.log(data);
 			// 傳送群組訊息至layim視窗上
-			sendtoGrouponlay(data.mine.content);
+			sendtoRoomonlay(data.mine.content);
 		});
 		// 監聽線上狀態的切換事件
 		layim.on('online', function(data) {

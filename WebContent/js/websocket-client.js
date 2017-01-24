@@ -454,18 +454,18 @@ function leaveRoom(UserID) {
 }
 
 // 傳送訊息至群組
-function sendtoGroup() {
+function sendtoRoom() {
 	var message = document.getElementById('message').value;
 	var UserID = document.getElementById('UserID').value;
 	// var group = 'G'+document.getElementById('group').value;
 	var now = new Date();
 	// 組成傳送訊息至群組JSON指令
 	var msg = {
-		type : "messagetogroup",
+		type : "messagetoRoom",
 		text : message,
 		id : UserID,
 		UserName : UserName,
-		group : RoomID,
+		roomID : RoomID,
 		channel : "chat",
 		date : now.getHours() + ":" + now.getMinutes() + ":" + now.getSeconds()
 	};
@@ -624,17 +624,17 @@ function senduserdata(UserID, phone, sendto) {
 }
 
 // 傳送群組訊息至layim視窗上
-function sendtoGrouponlay(text) {
+function sendtoRoomonlay(text) {
 	var UserID = document.getElementById('UserID').value;
 	// var group = 'G'+document.getElementById('group').value;
 	var now = new Date();
 	// 組成傳送群組訊息至layim視窗上的JSON指令
 	var msg = {
-		type : "messagetogroup",
+		type : "messagetoRoom",
 		text : text,
 		id : UserID,
 		UserName : UserName,
-		group : RoomID,
+		roomID : RoomID,
 		channel : "chat",
 		date : now.getHours() + ":" + now.getMinutes() + ":" + now.getSeconds()
 	};
@@ -724,7 +724,7 @@ function addlayim(UserID, UserName) {
 			console.log(data);
 
 			// 傳送群組訊息至layim視窗上
-			sendtoGrouponlay(data.mine.content);
+			sendtoRoomonlay(data.mine.content);
 
 		});
 
