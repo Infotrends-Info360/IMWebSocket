@@ -159,15 +159,16 @@ public class CommonFunction {
 //		System.out.println("onlineinTYPE");
 		JSONObject obj = new JSONObject(message);
 		String ACtype = obj.getString("ACtype"); // 請求者的TYPE
-		Collection<String> agentList = WebSocketTypePool.getOnlineUserNameinTYPE(ACtype);
 
 		/**** 告知現在在線Agent有誰 - 放在訊息中 ****/
-		WebSocketUserPool.sendMessageToUser(conn, ACtype + " people: " + agentList.toString());
+		Collection<String> agentNameList = WebSocketTypePool.getOnlineUserNameinTYPE(ACtype);
+		WebSocketUserPool.sendMessageToUser(conn, ACtype + " people: " + agentNameList.toString());
 		
 		/**** 告知現在在線Agent有誰 - 顯示在'線上Agents'表格中 ****/
 		JSONObject sendjson = new JSONObject();
+		Collection<String> agentIDList = WebSocketTypePool.getOnlineUserIDinTYPE(ACtype);
 		sendjson.put("Event", "onlineinTYPE");
-		sendjson.put("from", agentList.toString().replace("[", "").replace("]", ""));
+		sendjson.put("from", agentIDList.toString().replace("[", "").replace("]", ""));
 		sendjson.put("username",  WebSocketTypePool.getOnlineUserNameinTYPE(ACtype)
 				.toString().replace("[", "").replace("]", ""));
 		sendjson.put("ACtype", ACtype);

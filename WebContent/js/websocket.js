@@ -938,14 +938,14 @@ function updateStatus(aStatus, aReason){
 
 function inviteAgent3way(){
 	var myInvitedAgentID = document.getElementById("AgentID").value;
-	var UserID = document.getElementById('UserID').value;
+//	var UserID = document.getElementById('UserID').value;
 	console.log("inviteAgent3way() called - myInvitedAgentID: " + myInvitedAgentID);
 	
 	if (RoomID == null){
 		console.log("there is no roomID for this agent");
 		return;
 	}
-	console.log("inviteAgent3way(): UserID: " + UserID);
+	console.log("inviteAgent3way(): UserID_g: " + UserID_g);
 	var inviteAgent3waymsg = {
 			type : "inviteAgent3way",
 			ACtype : "Agent",

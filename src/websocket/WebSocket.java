@@ -242,6 +242,7 @@ public class WebSocket extends WebSocketServer {
 		
 		// 寄給invitedAgent:
 		org.java_websocket.WebSocket invitedAgent_conn = WebSocketUserPool.getWebSocketByUser(invitedAgentID);
+		System.out.println("invitedAgent_conn: " + invitedAgent_conn);
 		WebSocketUserPool.sendMessageToUser(invitedAgent_conn, sendjson.toString());
 		
 //		type : "inviteAgent3way",

@@ -90,13 +90,28 @@
 <!-- 			<td><button type="submit" onclick="inviteAgent();" id="inviteAgent">邀請加入(加入後自己退出)</button></td> -->
 <!-- 		</tr> -->
 	</table>
-	<b>現有Group群組</b>: <span id="currRooms"></span>	
+	<b>現有Room房間</b>: <span id="currRooms"></span>	
 	<table border='2' id='roomListTable'>
 	<span id="roomList"></span>
 <!-- 		<tr><td>Group Id</td><td>成員</td></tr> -->
 <!-- 		<tr><td>G1</td><td>C1,A1,A2</td></tr> -->
 <!-- 		<tr><td>G2</td><td>C2,A2</td></tr> -->
 	</table>	
+	<b>受邀加入Room房間(三方)</b>: <span id="invitedRooms"></span>	
+	<table border='2' id='invitedRoomListTable'>
+		<tr>
+			<td>RoomId</td>
+			<td>動作(Event)</td>
+			<td>動作(Event)</td>
+		</tr>
+		<tr>
+			<td id="invitedRoomID" value=""></td>
+			<td><button type="submit" onclick="acceptThirdParty();" id="acceptThirdParty">接受</button></td>
+			<td><button type="submit" onclick="rejectThirdParty();" id="rejectThirdParty">拒絕</button></td>
+		</tr>
+	</table>	
+	
+	
 	<br>訊息: <br>
 	<span id="text"> </span>
 </body>
