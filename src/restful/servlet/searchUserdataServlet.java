@@ -161,7 +161,8 @@ public class searchUserdataServlet {
         		+ "&bSelect="+bSelect;
     			
         // Connect to URL
-        URL url = new URL("http://192.168.10.7/infoacd/infoCenterWebService.asmx/GetCustomerLevel");
+//        URL url = new URL("http://192.168.10.7/infoacd/infoCenterWebService.asmx/GetCustomerLevel");
+        URL url = new URL("http://192.168.10.40:8080/infoacd/infoCenterWebService.asmx/GetCustomerLevel");
         HttpURLConnection connection = (HttpURLConnection) url.openConnection();
         connection.setDoOutput(true);
         connection.setRequestMethod("POST");
