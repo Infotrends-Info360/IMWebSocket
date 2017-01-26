@@ -156,20 +156,24 @@ public class CommonFunction {
 	
 	/** * search online people from Agent or client */
 	public static void onlineinTYPE(String message, org.java_websocket.WebSocket conn) {
+//		System.out.println("onlineinTYPE");
 		JSONObject obj = new JSONObject(message);
 		String ACtype = obj.getString("ACtype"); // 請求者的TYPE
-		WebSocketUserPool.sendMessageToUser(conn, ACtype + " people: "
-				+ WebSocketTypePool.getOnlineUserNameinTYPE(ACtype).toString());
+		Collection<String> agentList = WebSocketTypePool.getOnlineUserNameinTYPE(ACtype);
+
+		/**** 告知現在在線Agent有誰 - 放在訊息中 ****/
+		WebSocketUserPool.sendMessageToUser(conn, ACtype + " people: " + agentList.toString());
+		
+		/**** 告知現在在線Agent有誰 - 顯示在'線上Agents'表格中 ****/
 		JSONObject sendjson = new JSONObject();
 		sendjson.put("Event", "onlineinTYPE");
-		sendjson.put("from", WebSocketTypePool.getOnlineUserIDinTYPE(ACtype)
-				.toString().replace("[", "").replace("]", ""));
+		sendjson.put("from", agentList.toString().replace("[", "").replace("]", ""));
 		sendjson.put("username",  WebSocketTypePool.getOnlineUserNameinTYPE(ACtype)
 				.toString().replace("[", "").replace("]", ""));
 		sendjson.put("ACtype", ACtype);
 		sendjson.put("channel", obj.getString("channel"));
 		// 修正為只跟要求知道現在在線人員的user就好,而非整個user都要知道:
-		WebSocketUserPool.sendMessageToUser(conn, message);
+		WebSocketUserPool.sendMessageToUser(conn, sendjson.toString());
 //		WebSocketTypePool.sendMessageinTYPE(ACtype,sendjson.toString());
 	}
 	
