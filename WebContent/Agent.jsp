@@ -84,18 +84,10 @@
 			<td><button type="submit" onclick="inviteAgentThirdParty(this.value);" value="thirdParty">邀請加入(三方)</button></td>
 			<td><button type="submit" onclick="inviteAgentThirdParty(this.value);" value="transfer">邀請加入(加入後自己退出)</button></td>
 		</tr>
-<!-- 		<tr> -->
-<!-- 			<td>A2</td> -->
-<!-- 			<td><button type="submit" onclick="inviteAgentThirdParty();" id="inviteAgentThirdParty">邀請加入(三方)</button></td> -->
-<!-- 			<td><button type="submit" onclick="inviteAgent();" id="inviteAgent">邀請加入(加入後自己退出)</button></td> -->
-<!-- 		</tr> -->
 	</table>
 	<b>現有Room房間</b>: <span id="currRooms"></span>	
 	<table border='2' id='roomListTable'>
 	<span id="roomList"></span>
-<!-- 		<tr><td>Group Id</td><td>成員</td></tr> -->
-<!-- 		<tr><td>G1</td><td>C1,A1,A2</td></tr> -->
-<!-- 		<tr><td>G2</td><td>C2,A2</td></tr> -->
 	</table>	
 	<b>受邀加入Room房間(三方)</b>: <span id="invitedRooms"  style="visibility: hidden;"></span>	
 	<table border='2' id='invitedRoomListTable'>

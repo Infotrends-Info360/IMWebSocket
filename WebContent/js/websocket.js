@@ -4,7 +4,6 @@ var UserID_g;
 var RoomID; // 接通後產生Group的ID
 var RoomIDList = []; // 接通後產生Group的ID List
 var RoomIDLinkedList = new SinglyList(); // 接通後產生Group的ID Linked List
-var RoomIDAgentToAgentList = new SinglyList(); // 三方邀請送出時,一併建立私訊
 var AgentID; // Agent的ID
 var AgentName; // Agent的名稱
 var ClientID; // 服務的Client的ID // 有可能會需要也改成List
@@ -229,35 +228,15 @@ function Login() {
 					console.log("invitedAgentID: " + invitedAgentID);
 					document.getElementById("sendA2A").value = fromAgentID;
 					document.getElementById("sendA2A").innerHTML += " to - " + fromAgentID;
-//					if (fromAgentID != UserID_g){
-//						document.getElementById("sendA2A").value = fromAgentID;
-//						document.getElementById("sendA2A").innerHTML += " to - " + fromAgentID;
-//
-//					}else if (invitedAgentID != UserID_g){
-//						document.getElementById("sendA2A").value = invitedAgentID;						
-//						document.getElementById("sendA2A").innerHTML += " to - " + invitedAgentID;						
-//					}
-					
-//					sendjson.put("Event", "inviteAgentThirdParty");
-//					sendjson.put("roomID", roomID);
-//					sendjson.put("fromAgentID", fromAgentID);
-//					sendjson.put("invitedAgentID", invitedAgentID);
-//					sendjson.put("fromAgentName", fromAgentName);
+
 				} else if ("responseThirdParty" == obj.Event){
 					document.getElementById("currUsers").innerHTML = obj.roomMembers;
-//					var fromAgentID = obj.fromAgentID;
-//					var invitedAgentID = obj.invitedAgentID;
 
 				} else if ("privateMsg" == obj.Event){
 					console.log("onMessage - privateMsg");
 					console.log("onMessage - privateMsg" + obj.UserName + ": " + obj.text + "&#13;&#10");
 					document.getElementById("chatAgentContentHistory").innerHTML += obj.UserName + ": " + obj.text + "&#13;&#10";
 					
-//					type : "message",
-//					text : aMessage,
-//					id : UserID,
-//					UserName : UserName,
-//					sendto : aSendto,
 				}
 			// 非指令訊息
 			}else {
@@ -1059,45 +1038,4 @@ function responseThirdParty(aResponse){
 }
 
 // 測試按鈕
-function test() {
-	console.log("test method called");
-	// 切換為未就緒
-	// notready();
-	// var UserID = document.getElementById('UserID').value;
-	// //向websocket送出變更狀態至party remove指令
-	// var now = new Date();
-	var testmsg = {
-		type : "test"
-	// ,
-	// ACtype: "Agent",
-	// id: UserID,
-	// UserName: UserName,
-	// status: "party remove",
-	// reason: "no reason",
-	// date: now.getHours()+":"+now.getMinutes()+":"+now.getSeconds()
-	// date: Date.now()
-	};
-
-	// 發送消息
-	ws.send(JSON.stringify(testmsg));
-	//	
-	// //向websocket送出關閉對談指令
-	// var Eventform = document.getElementById('Eventform').value;
-	// var Eventmsg = {
-	// type: "ReleaseEvent",
-	// ACtype: "Agent",
-	// id: UserID,
-	// UserName: UserName,
-	// sendto: Eventform,
-	// channel: "chat",
-	// // Event: "ReleaseEvent",
-	// date: now.getHours()+":"+now.getMinutes()+":"+now.getSeconds()
-	// };
-	// //發送消息
-	// ws.send(JSON.stringify(Eventmsg));
-	//	
-	// //離開群組
-	// leaveRoom(UserID);
-	//	
-	// document.getElementById("ReleaseEvent").disabled = true;
-}
+function test() {}
