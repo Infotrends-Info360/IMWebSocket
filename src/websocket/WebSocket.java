@@ -226,6 +226,9 @@ public class WebSocket extends WebSocketServer {
 		String fromAgentID = obj.getString("fromAgentID");
 		String invitedAgentID = obj.getString("invitedAgentID");
 		String fromAgentName = obj.getString("fromAgentName");
+		String inviteType = obj.getString("inviteType");
+		
+		
 		
 		
 		//籌備要寄出的JSON物件
@@ -235,6 +238,7 @@ public class WebSocket extends WebSocketServer {
 		sendjson.put("fromAgentID", fromAgentID);
 		sendjson.put("invitedAgentID", invitedAgentID);
 		sendjson.put("fromAgentName", fromAgentName);
+		sendjson.put("inviteType", inviteType);
 		
 		System.out.println("sendjson: " + sendjson);
 		
@@ -260,6 +264,7 @@ public class WebSocket extends WebSocketServer {
 		String invitedAgentID = obj.getString("invitedAgentID");
 		String invitedAgentName = WebSocketUserPool.getUserNameByKey(conn);
 		String response = obj.getString("response");
+		String inviteType = obj.getString("inviteType");
 		
 		if ("accept".equals(response)){
 			System.out.println("responseThirdParty() - accept");
@@ -271,6 +276,12 @@ public class WebSocket extends WebSocketServer {
 			sendJson.put("fromAgentID", fromAgentID);
 			sendJson.put("invitedAgentID", invitedAgentID);
 			sendJson.put("roomMembers", WebSocketRoomPool.getOnlineUserinroom(roomID).toString());
+			
+			// 若是屬於轉接的要求,則將原Agent(邀請者)踢出
+			if ("transfer".equals(inviteType)){
+				System.out.println("responseThirdParty() - transfer");
+				WebSocketRoomPool.removeUserinroom(roomID, WebSocketUserPool.getWebSocketByUser(fromAgentID));
+			}
 			
 			WebSocketRoomPool.sendMessageinroom(roomID, sendJson.toString());
 			

@@ -211,6 +211,7 @@ function Login() {
 					var tmpRoomID = obj.roomID;
 					var fromAgentID = obj.fromAgentID;
 					var invitedAgentID = obj.invitedAgentID;
+					var inviteType = obj.inviteType;
 					
 					document.getElementById("invitedRoomID").innerHTML = tmpRoomID;
 					RoomID = tmpRoomID;
@@ -219,6 +220,9 @@ function Login() {
 					document.getElementById("fromAgentID").innerHTML = fromAgentID;
 					document.getElementById("invitedRoomID").style.visibility = "visible";					
 //					document.getElementById("agentList").style.visibility = "visible";
+					
+					document.getElementById("inviteType").innerHTML = inviteType;
+					
 					
 					// 判斷要寄送私訊的對方是誰(只要不是自己就對了)
 					console.log("fromAgentID: " + fromAgentID);
@@ -1003,7 +1007,7 @@ function updateStatus(aStatus, aReason){
 	ws.send(JSON.stringify(updateAgentStatusmsg));
 }
 
-function inviteAgent3way(){
+function inviteAgent3way(aInviteType){
 	var myInvitedAgentID = document.getElementById("AgentID").value;
 //	var UserID = document.getElementById('UserID').value;
 	console.log("inviteAgent3way() called - myInvitedAgentID: " + myInvitedAgentID);
@@ -1021,7 +1025,8 @@ function inviteAgent3way(){
 			roomID : RoomID, //先預設目前每個Agent最多也就只有一個RoomID,之後會再調整
 			fromAgentID : UserID_g, // 使用全域變數
 			invitedAgentID : myInvitedAgentID,
-			fromAgentName : UserName
+			fromAgentName : UserName,
+			inviteType: aInviteType
 		};
 		// 發送消息
 		ws.send(JSON.stringify(inviteAgent3waymsg));
@@ -1037,13 +1042,15 @@ function responseThirdParty(aResponse){
 	console.log("aResponse: " + aResponse);
 	var roomID = document.getElementById("invitedRoomID").innerHTML;
 	var myfromAgentID = document.getElementById("fromAgentID").innerHTML;
+	var inviteType = document.getElementById("inviteType").innerHTML;
 	var responseThirdPartyMsg = {
 			type : "responseThirdParty",
 			ACtype : "Agent",
 			roomID : roomID, 
 			fromAgentID : myfromAgentID, 
 			invitedAgentID : UserID_g,
-			response: aResponse
+			response: aResponse,
+			inviteType: inviteType
 //			fromAgentName : UserName
 		};
 	// 發送消息

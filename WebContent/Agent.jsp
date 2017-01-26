@@ -81,8 +81,8 @@
 		<tr>
 			<td id="AgentName">A2</td>
 			<td id="AgentID" value=""></td>
-			<td><button type="submit" onclick="inviteAgent3way();" id="inviteAgent3way">邀請加入(三方)</button></td>
-			<td><button type="submit" onclick="inviteAgent();" id="inviteAgent">邀請加入(加入後自己退出)</button></td>
+			<td><button type="submit" onclick="inviteAgent3way(this.value);" id="inviteAgent3way" value="thirdParty">邀請加入(三方)</button></td>
+			<td><button type="submit" onclick="inviteAgent3way(this.value);" id="inviteAgent" value="transfer">邀請加入(加入後自己退出)</button></td>
 		</tr>
 <!-- 		<tr> -->
 <!-- 			<td>A2</td> -->
@@ -102,12 +102,14 @@
 		<tr>
 			<td>RoomId</td>
 			<td>邀請者</td>
+			<td>類型</td>
 			<td>動作(Event)</td>
 			<td>動作(Event)</td>
 		</tr>
 		<tr>
 			<td id="invitedRoomID" value=""></td>
 			<td id="fromAgentID" value=""></td>
+			<td id="inviteType" value=""></td>
 			<td><button type="submit" onclick="responseThirdParty(this.value);" id="acceptThirdParty" value="accept">接受</button></td>
 			<td><button type="submit" onclick="responseThirdParty(this.value);" id="rejectThirdParty" value="reject">拒絕</button></td>
 		</tr>
