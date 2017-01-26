@@ -118,8 +118,7 @@
 		</tr>
 		<tr>
 			<td colspan="4">
-			<textarea rows="10" cols="50" id="chatContent">
-			</textarea>
+			<textarea rows="10" cols="50" id="chatContent"></textarea>
 			</td>
 		</tr>
 	</table>	

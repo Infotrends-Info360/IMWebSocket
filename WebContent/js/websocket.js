@@ -58,6 +58,9 @@ function Login() {
 						// 將收到訊息顯示到layim上
 						getclientmessagelayim(obj.message, obj.from,
 								obj.username);
+						// 將訊息顯示到測試訊息框
+						document.getElementById("chatContent").innerHTML += (obj.message + "&#13;&#10");
+						
 					}
 					document.getElementById("text").innerHTML += obj.username
 							+ ": " + obj.message + "<br>";
