@@ -204,6 +204,7 @@ function Login() {
 //					document.getElementById("roomList").innerHTML = "Test - new group list here!!!";
 				} else if ("inviteAgent3way" == obj.Event){
 					console.log("received inviteAgent3way event");
+					document.getElementById("invitedRoomID").innerHTML = obj.roomID;
 				}
 			// 非指令訊息
 			}else {
