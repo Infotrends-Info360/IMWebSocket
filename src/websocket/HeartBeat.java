@@ -21,10 +21,12 @@ public class HeartBeat {
 		// String User = WebSocketPool.getUserByKey(conn);
 		HeartBeat hb = new HeartBeat();
 //		hb.setHealthStatus(conn.toString());
+		System.out.println("conn: " + conn + " is connected. (HeartBeat)");
 		Timer timer = new Timer(conn.toString());
 		TimerTask taskToExecute = new TimerTaskSendHeartBeat(hb, conn, timer);
 		timer.scheduleAtFixedRate(taskToExecute, 1000, 1000);
 		WebSocketUserPool.addUserHeartbeatTimer(timer, conn);
+		
 
 		// Wait for 60 seconds and then cancel the timer cleanly
 		// try {
@@ -55,7 +57,7 @@ public class HeartBeat {
 	}
 	
 	public static void heartbeattouser(org.java_websocket.WebSocket conn, HeartBeat healthStatusHolder){
-		System.out.println("conn " + conn + " is still online. ********************");
+//		System.out.println("conn " + conn + " is still online. ********************");
 //		System.out.println("heartbeattouser() called");
 		JSONObject sendjson = new JSONObject();
 //		WebSocketUserPool.sendMessageToUser(conn, sendjson.toString()); // 透過此去偵測使用者連線sessiong是否還在
@@ -120,6 +122,7 @@ class TimerTaskSendHeartBeat extends TimerTask {
 		if ("GREEN".equals(this.healthStatusHolder.getHealthStatus())){
 			HeartBeat.heartbeattouser(conn,this.healthStatusHolder);
 		}else{
+			System.out.println("conn: " + conn + " is disconnected. (HeartBeat)");
 			timer.cancel();
 		}
 		
