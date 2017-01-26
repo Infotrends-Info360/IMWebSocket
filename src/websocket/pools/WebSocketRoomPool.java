@@ -43,6 +43,8 @@ public class WebSocketRoomPool{
 		}
 		roommap.put(conn, roominfo);
 		roomuserconnections.put(room, roommap);
+		
+		System.out.println("room: " + room + " now has " + roomuserconnections.get(room).size() + " users online");
 	}
 	
 	/** * Remove User from Room * @param inbound */

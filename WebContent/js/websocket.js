@@ -205,6 +205,9 @@ function Login() {
 				} else if ("inviteAgent3way" == obj.Event){
 					console.log("received inviteAgent3way event");
 					document.getElementById("invitedRoomID").innerHTML = obj.roomID;
+					document.getElementById("fromAgentID").innerHTML = obj.fromAgentID;
+					document.getElementById("invitedRoomID").style.visibility = "visible";					
+//					document.getElementById("agentList").style.visibility = "visible";
 				}
 			// 非指令訊息
 			}else {
@@ -957,6 +960,24 @@ function inviteAgent3way(){
 		};
 		// 發送消息
 		ws.send(JSON.stringify(inviteAgent3waymsg));
+}
+
+function responseThirdParty(aResponse){
+	console.log("aResponse: " + aResponse);
+	var roomID = document.getElementById("invitedRoomID").innerHTML;
+	var myfromAgentID = document.getElementById("fromAgentID").innerHTML;
+	var responseThirdPartyMsg = {
+			type : "responseThirdParty",
+			ACtype : "Agent",
+			roomID : roomID, 
+			fromAgentID : myfromAgentID, 
+			invitedAgentID : UserID_g,
+			response: aResponse
+//			fromAgentName : UserName
+		};
+	// 發送消息
+	ws.send(JSON.stringify(responseThirdPartyMsg));	
+	
 }
 
 // 測試按鈕

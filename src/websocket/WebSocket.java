@@ -148,21 +148,18 @@ public class WebSocket extends WebSocketServer {
 			ClientFunction.setinteraction(message.toString(), conn);
 			break;
 		case "inviteAgent3way":
-//			ClientFunction.setinteraction(message.toString(), conn);
 			inviteAgent3way(message.toString(), conn);
 			break;
+		case "responseThirdParty":
+			System.out.println("responseThirdParty got here!");
+			responseThirdParty(message.toString(), conn);			
+			break;			
 		case "test":
 			this.test();
 			break;
 		}
 	}
 	
-	
-
-
-
-
-
 
 
 	/** * user leave websocket (Demo) */
@@ -253,10 +250,27 @@ public class WebSocket extends WebSocketServer {
 //		fromAgentName : UserName
 	}
 
+	private void responseThirdParty(String message, org.java_websocket.WebSocket conn) {
+		// TODO Auto-generated method stub
+		JSONObject obj = new JSONObject(message);
+		String ACtype = obj.getString("ACtype");
+		String roomID = obj.getString("roomID");
+		String fromAgentID = obj.getString("fromAgentID");
+		String invitedAgentID = obj.getString("invitedAgentID");
+		String invitedAgentName = WebSocketUserPool.getUserNameByKey(conn);
+		String response = obj.getString("response");
+		
+		if ("accept".equals(response)){
+			System.out.println("responseThirdParty() - accept");
+			WebSocketRoomPool.addUserinroom(roomID, invitedAgentName, invitedAgentID, conn);
+		}else if("reject".equals(response)){
+			System.out.println("responseThirdParty() - reject");			
+		}
+	
+	}
 	
 	
 	private void test() {
-	// TODO Auto-generated method stub
 	System.out.println("test method");
 	
 	/*********** usernameconnections ************/

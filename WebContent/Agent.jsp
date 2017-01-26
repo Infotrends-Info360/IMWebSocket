@@ -97,17 +97,19 @@
 <!-- 		<tr><td>G1</td><td>C1,A1,A2</td></tr> -->
 <!-- 		<tr><td>G2</td><td>C2,A2</td></tr> -->
 	</table>	
-	<b>受邀加入Room房間(三方)</b>: <span id="invitedRooms"></span>	
+	<b>受邀加入Room房間(三方)</b>: <span id="invitedRooms"  style="visibility: hidden;"></span>	
 	<table border='2' id='invitedRoomListTable'>
 		<tr>
 			<td>RoomId</td>
+			<td>邀請者</td>
 			<td>動作(Event)</td>
 			<td>動作(Event)</td>
 		</tr>
 		<tr>
 			<td id="invitedRoomID" value=""></td>
-			<td><button type="submit" onclick="acceptThirdParty();" id="acceptThirdParty">接受</button></td>
-			<td><button type="submit" onclick="rejectThirdParty();" id="rejectThirdParty">拒絕</button></td>
+			<td id="fromAgentID" value=""></td>
+			<td><button type="submit" onclick="responseThirdParty(this.value);" id="acceptThirdParty" value="accept">接受</button></td>
+			<td><button type="submit" onclick="responseThirdParty(this.value);" id="rejectThirdParty" value="reject">拒絕</button></td>
 		</tr>
 	</table>	
 	
