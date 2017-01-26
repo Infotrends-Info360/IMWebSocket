@@ -135,9 +135,11 @@ public class WebSocketTypePool{
 	public static Collection<String> getOnlineUserIDinTYPE(String TYPE) {
 		Map<WebSocket,  TypeInfo> TYPEmap = TYPEconnections.get(TYPE);
 		List<String> setUsers = new ArrayList<String>();
-		Collection<TypeInfo> setUser = TYPEmap.values();
-		for (TypeInfo u : setUser) {
-			setUsers.add(u.getUserid());
+		if (TYPEmap != null && !TYPEmap.isEmpty()){
+			Collection<TypeInfo> setUser = TYPEmap.values();
+			for (TypeInfo u : setUser) {
+				setUsers.add(u.getUserid());
+			}			
 		}
 		return setUsers;
 	}

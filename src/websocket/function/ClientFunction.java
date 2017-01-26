@@ -59,6 +59,8 @@ public class ClientFunction {
 		String attributenames = obj.getJSONObject("attributes").getString(
 				"attributenames");
 		StringBuilder responseSB = null;
+//		System.out.println("http://127.0.0.1:8080/IMWebSocket/RESTful/searchUserdata start ****");
+		long startTime = System.currentTimeMillis();
 		try {
 			// Encode the query
 			String postData = 
@@ -95,6 +97,9 @@ public class ClientFunction {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
+		long endTime = System.currentTimeMillis();
+		System.out.println("RESTful searchUserdata search time: " + (endTime - startTime)/1000 + "s" );
+//		System.out.println("http://127.0.0.1:8080/IMWebSocket/RESTful/searchUserdata done ****");
 
 		JSONObject responseSBjson = new JSONObject(responseSB.toString());
 		JSONObject sendjson = new JSONObject();

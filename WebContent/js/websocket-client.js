@@ -108,7 +108,7 @@ function Login() {
 						waittingAgent = true;
 						// 寫入log
 						senduserdata(UserID, UserName, obj.Agent);
-						console.log("UserID - " + UserID);
+						console.log("senduserdata done ******************* ");
 						
 						// 找尋Agent
 						find();

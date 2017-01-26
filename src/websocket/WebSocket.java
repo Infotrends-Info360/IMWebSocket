@@ -192,8 +192,6 @@ public class WebSocket extends WebSocketServer {
 		WebSocketTypePool.removeUserinTYPE("Client", conn);
 		// 清USER:
 		WebSocketUserPool.removeUser(conn);
-		
-
 	}
 	
 	private void inputInteractionLog(org.java_websocket.WebSocket conn, String reason) {
