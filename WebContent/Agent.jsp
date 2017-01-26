@@ -59,7 +59,7 @@
 	Event From : <input type="text" name="Eventform" id="Eventform" disabled>
 	<br>
 	message : <input type="text" id="message">
-	<button type="submit" onclick="sendtoRoom();" id="sendtoRoom" disabled>send to Group</button>
+	<button type="submit" onclick="sendtoRoom();" id="sendtoRoom">send to Group</button>
 	<button type="submit" onclick="test();" id="TestHere">TestHere</button>
 	<span id="span"> </span>
 	<br>三方/轉接: <br>
@@ -118,8 +118,9 @@
 		</tr>
 		<tr>
 			<td colspan="4">
-			<textarea rows="10" cols="50" id="chatContent"></textarea>
+				<textarea rows="10" cols="50" id="chatContent"></textarea>
 			</td>
+			
 		</tr>
 	</table>	
 	

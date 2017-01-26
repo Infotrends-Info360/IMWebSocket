@@ -207,7 +207,11 @@ function Login() {
 //					document.getElementById("roomList").innerHTML = "Test - new group list here!!!";
 				} else if ("inviteAgent3way" == obj.Event){
 					console.log("received inviteAgent3way event");
-					document.getElementById("invitedRoomID").innerHTML = obj.roomID;
+					var tmpRoomID = obj.roomID;
+					document.getElementById("invitedRoomID").innerHTML = tmpRoomID;
+					RoomID = tmpRoomID;
+					RoomIDList.add(tmpRoomID);
+					
 					document.getElementById("fromAgentID").innerHTML = obj.fromAgentID;
 					document.getElementById("invitedRoomID").style.visibility = "visible";					
 //					document.getElementById("agentList").style.visibility = "visible";
@@ -610,6 +614,11 @@ function getUserStatus() {
 
 // 傳送群組訊息至layim視窗上
 function sendtoRoomonlay(text) {
+	// 暫時保留此方法,以後若要讓Agent能同時開多個視窗,則不能再用RoomID此全域變數
+	sendtoRoomonlay01(text, RoomID);
+}
+
+function sendtoRoomonlay01(text, aRoomID) {
 	var UserID = document.getElementById('UserID').value;
 	var now = new Date();
 	// 組成傳送群組訊息至layim視窗上的JSON指令
@@ -618,7 +627,7 @@ function sendtoRoomonlay(text) {
 		text : text,
 		id : UserID,
 		UserName : UserName,
-		roomID : RoomID,
+		roomID : aRoomID,
 		channel : "chat",
 		date : now.getHours() + ":" + now.getMinutes() + ":" + now.getSeconds()
 	};
