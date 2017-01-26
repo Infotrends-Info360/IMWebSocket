@@ -189,7 +189,8 @@ public class WebSocket extends WebSocketServer {
 			WebSocketRoomPool.removeUserinroom(roomid, conn);
 		}
 		// 清TYPE:
-		WebSocketTypePool.removeUserinTYPE("Client", conn);
+		String ACType = WebSocketUserPool.getACTypeByKey(conn);
+		WebSocketTypePool.removeUserinTYPE(ACType, conn);
 		// 清USER:
 		WebSocketUserPool.removeUser(conn);
 	}

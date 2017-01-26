@@ -157,7 +157,7 @@ public class CommonFunction {
 	/** * search online people from Agent or client */
 	public static void onlineinTYPE(String message, org.java_websocket.WebSocket conn) {
 		JSONObject obj = new JSONObject(message);
-		String ACtype = obj.getString("ACtype");
+		String ACtype = obj.getString("ACtype"); // 請求者的TYPE
 		WebSocketUserPool.sendMessageToUser(conn, ACtype + " people: "
 				+ WebSocketTypePool.getOnlineUserNameinTYPE(ACtype).toString());
 		JSONObject sendjson = new JSONObject();
@@ -168,7 +168,9 @@ public class CommonFunction {
 				.toString().replace("[", "").replace("]", ""));
 		sendjson.put("ACtype", ACtype);
 		sendjson.put("channel", obj.getString("channel"));
-		WebSocketTypePool.sendMessageinTYPE(ACtype,sendjson.toString());
+		// 修正為只跟要求知道現在在線人員的user就好,而非整個user都要知道:
+		WebSocketUserPool.sendMessageToUser(conn, message);
+//		WebSocketTypePool.sendMessageinTYPE(ACtype,sendjson.toString());
 	}
 	
 	/** * user join from Agent or Client list */
