@@ -206,8 +206,8 @@ function Login() {
 					}
 					//JSONArray groupList = obj.groupList;
 //					document.getElementById("roomList").innerHTML = "Test - new group list here!!!";
-				} else if ("inviteAgent3way" == obj.Event){
-					console.log("received inviteAgent3way event");
+				} else if ("inviteAgentThirdParty" == obj.Event){
+					console.log("received inviteAgentThirdParty event");
 					var tmpRoomID = obj.roomID;
 					var fromAgentID = obj.fromAgentID;
 					var invitedAgentID = obj.invitedAgentID;
@@ -238,7 +238,7 @@ function Login() {
 //						document.getElementById("sendA2A").innerHTML += " to - " + invitedAgentID;						
 //					}
 					
-//					sendjson.put("Event", "inviteAgent3way");
+//					sendjson.put("Event", "inviteAgentThirdParty");
 //					sendjson.put("roomID", roomID);
 //					sendjson.put("fromAgentID", fromAgentID);
 //					sendjson.put("invitedAgentID", invitedAgentID);
@@ -1007,20 +1007,20 @@ function updateStatus(aStatus, aReason){
 	ws.send(JSON.stringify(updateAgentStatusmsg));
 }
 
-function inviteAgent3way(aInviteType){
+function inviteAgentThirdParty(aInviteType){
 	var myInvitedAgentID = document.getElementById("AgentID").value;
 //	var UserID = document.getElementById('UserID').value;
-	console.log("inviteAgent3way() called - myInvitedAgentID: " + myInvitedAgentID);
+	console.log("inviteAgentThirdParty() called - myInvitedAgentID: " + myInvitedAgentID);
 	
 	if (RoomID == null){
 		console.log("there is no roomID for this agent");
 		return;
 	}
-	console.log("inviteAgent3way(): UserID_g: " + UserID_g);
+	console.log("inviteAgentThirdParty(): UserID_g: " + UserID_g);
 	
 	/**** 寄出邀請 *****/
 	var inviteAgent3waymsg = {
-			type : "inviteAgent3way",
+			type : "inviteAgentThirdParty",
 			ACtype : "Agent",
 			roomID : RoomID, //先預設目前每個Agent最多也就只有一個RoomID,之後會再調整
 			fromAgentID : UserID_g, // 使用全域變數

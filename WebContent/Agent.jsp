@@ -70,7 +70,7 @@
 <!-- 		<tr><td>C2</td><td>Accept</td></tr> -->
 <!-- 	</table> -->
 	<b>線上Agents:</b>
-	<button type="submit" onclick="Agentonline();" id="inviteAgent3way">show Agent List</button>
+	<button type="submit" onclick="Agentonline();" id="inviteAgentThirdParty">show Agent List</button>
 	<table border='2' id='agentList' style="visibility: hidden;" >
 		<tr>
 			<td>Agent名稱</td>
@@ -81,12 +81,12 @@
 		<tr>
 			<td id="AgentName">A2</td>
 			<td id="AgentID" value=""></td>
-			<td><button type="submit" onclick="inviteAgent3way(this.value);" id="inviteAgent3way" value="thirdParty">邀請加入(三方)</button></td>
-			<td><button type="submit" onclick="inviteAgent3way(this.value);" id="inviteAgent" value="transfer">邀請加入(加入後自己退出)</button></td>
+			<td><button type="submit" onclick="inviteAgentThirdParty(this.value);" value="thirdParty">邀請加入(三方)</button></td>
+			<td><button type="submit" onclick="inviteAgentThirdParty(this.value);" value="transfer">邀請加入(加入後自己退出)</button></td>
 		</tr>
 <!-- 		<tr> -->
 <!-- 			<td>A2</td> -->
-<!-- 			<td><button type="submit" onclick="inviteAgent3way();" id="inviteAgent3way">邀請加入(三方)</button></td> -->
+<!-- 			<td><button type="submit" onclick="inviteAgentThirdParty();" id="inviteAgentThirdParty">邀請加入(三方)</button></td> -->
 <!-- 			<td><button type="submit" onclick="inviteAgent();" id="inviteAgent">邀請加入(加入後自己退出)</button></td> -->
 <!-- 		</tr> -->
 	</table>

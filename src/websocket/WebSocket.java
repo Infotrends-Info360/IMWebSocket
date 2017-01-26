@@ -148,8 +148,8 @@ public class WebSocket extends WebSocketServer {
 		case "setinteraction":
 			ClientFunction.setinteraction(message.toString(), conn);
 			break;
-		case "inviteAgent3way":
-			inviteAgent3way(message.toString(), conn);
+		case "inviteAgentThirdParty":
+			inviteAgentThirdParty(message.toString(), conn);
 			break;
 		case "responseThirdParty":
 			System.out.println("responseThirdParty got here!");
@@ -217,9 +217,9 @@ public class WebSocket extends WebSocketServer {
 
 	}
 	
-	private void inviteAgent3way(String message, org.java_websocket.WebSocket conn){
+	private void inviteAgentThirdParty(String message, org.java_websocket.WebSocket conn){
 		// 讀出送進來的JSON物件
-		System.out.println("inviteAgent3way() called");
+		System.out.println("inviteAgentThirdParty() called");
 		JSONObject obj = new JSONObject(message);
 		String ACtype = obj.getString("ACtype");
 		String roomID = obj.getString("roomID");
@@ -233,7 +233,7 @@ public class WebSocket extends WebSocketServer {
 		
 		//籌備要寄出的JSON物件
 		JSONObject sendjson = new JSONObject();
-		sendjson.put("Event", "inviteAgent3way");
+		sendjson.put("Event", "inviteAgentThirdParty");
 		sendjson.put("roomID", roomID);
 		sendjson.put("fromAgentID", fromAgentID);
 		sendjson.put("invitedAgentID", invitedAgentID);
@@ -247,7 +247,7 @@ public class WebSocket extends WebSocketServer {
 		System.out.println("invitedAgent_conn: " + invitedAgent_conn);
 		WebSocketUserPool.sendMessageToUser(invitedAgent_conn, sendjson.toString());
 		
-//		type : "inviteAgent3way",
+//		type : "inviteAgentThirdParty",
 //		ACtype : "Agent",
 //		roomID : RoomID, //先預設目前每個Agent最多也就只有一個RoomID,之後會再調整
 //		fromAgentID : UserID,
