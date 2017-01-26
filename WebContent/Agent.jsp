@@ -111,6 +111,17 @@
 			<td><button type="submit" onclick="responseThirdParty(this.value);" id="acceptThirdParty" value="accept">接受</button></td>
 			<td><button type="submit" onclick="responseThirdParty(this.value);" id="rejectThirdParty" value="reject">拒絕</button></td>
 		</tr>
+		<tr>
+			<td colspan="4">
+			房間成員: <span id="currUsers"></span><br>
+			</td>
+		</tr>
+		<tr>
+			<td colspan="4">
+			<textarea rows="10" cols="50" id="chatContent">
+			</textarea>
+			</td>
+		</tr>
 	</table>	
 	
 	

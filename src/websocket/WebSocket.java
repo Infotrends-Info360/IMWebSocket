@@ -2,6 +2,7 @@ package websocket;
 
 import java.net.InetSocketAddress;
 import java.net.UnknownHostException;
+import java.util.Collection;
 import java.util.List;
 import java.util.Map;
 
@@ -263,6 +264,14 @@ public class WebSocket extends WebSocketServer {
 		if ("accept".equals(response)){
 			System.out.println("responseThirdParty() - accept");
 			WebSocketRoomPool.addUserinroom(roomID, invitedAgentName, invitedAgentID, conn);
+			// 通知各房間成員成員數改變了
+			JSONObject sendJson = new JSONObject();
+			sendJson.put("Event", "updateRoomMembers");
+			sendJson.put("roomID", roomID);
+			sendJson.put("roomMembers", WebSocketRoomPool.getOnlineUserinroom(roomID).toString());
+			
+			WebSocketRoomPool.sendMessageinroom(roomID, sendJson.toString());
+			
 		}else if("reject".equals(response)){
 			System.out.println("responseThirdParty() - reject");			
 		}

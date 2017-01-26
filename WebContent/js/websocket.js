@@ -208,6 +208,8 @@ function Login() {
 					document.getElementById("fromAgentID").innerHTML = obj.fromAgentID;
 					document.getElementById("invitedRoomID").style.visibility = "visible";					
 //					document.getElementById("agentList").style.visibility = "visible";
+				} else if ("updateRoomMembers" == obj.Event){
+					document.getElementById("currUsers").innerHTML = obj.roomMembers;
 				}
 			// 非指令訊息
 			}else {
