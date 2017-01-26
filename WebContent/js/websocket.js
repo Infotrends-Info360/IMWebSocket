@@ -4,6 +4,7 @@ var UserID_g;
 var RoomID; // 接通後產生Group的ID
 var RoomIDList = []; // 接通後產生Group的ID List
 var RoomIDLinkedList = new SinglyList(); // 接通後產生Group的ID Linked List
+var RoomIDAgentToAgentList = new SinglyList(); // 三方邀請送出時,一併建立私訊
 var AgentID; // Agent的ID
 var AgentName; // Agent的名稱
 var ClientID; // 服務的Client的ID // 有可能會需要也改成List
@@ -208,15 +209,51 @@ function Login() {
 				} else if ("inviteAgent3way" == obj.Event){
 					console.log("received inviteAgent3way event");
 					var tmpRoomID = obj.roomID;
+					var fromAgentID = obj.fromAgentID;
+					var invitedAgentID = obj.invitedAgentID;
+					
 					document.getElementById("invitedRoomID").innerHTML = tmpRoomID;
 					RoomID = tmpRoomID;
-					RoomIDList.add(tmpRoomID);
+					RoomIDLinkedList.add(tmpRoomID);
 					
-					document.getElementById("fromAgentID").innerHTML = obj.fromAgentID;
+					document.getElementById("fromAgentID").innerHTML = fromAgentID;
 					document.getElementById("invitedRoomID").style.visibility = "visible";					
 //					document.getElementById("agentList").style.visibility = "visible";
-				} else if ("updateRoomMembers" == obj.Event){
+					
+					// 判斷要寄送私訊的對方是誰(只要不是自己就對了)
+					console.log("fromAgentID: " + fromAgentID);
+					console.log("invitedAgentID: " + invitedAgentID);
+					document.getElementById("sendA2A").value = fromAgentID;
+					document.getElementById("sendA2A").innerHTML += " to - " + fromAgentID;
+//					if (fromAgentID != UserID_g){
+//						document.getElementById("sendA2A").value = fromAgentID;
+//						document.getElementById("sendA2A").innerHTML += " to - " + fromAgentID;
+//
+//					}else if (invitedAgentID != UserID_g){
+//						document.getElementById("sendA2A").value = invitedAgentID;						
+//						document.getElementById("sendA2A").innerHTML += " to - " + invitedAgentID;						
+//					}
+					
+//					sendjson.put("Event", "inviteAgent3way");
+//					sendjson.put("roomID", roomID);
+//					sendjson.put("fromAgentID", fromAgentID);
+//					sendjson.put("invitedAgentID", invitedAgentID);
+//					sendjson.put("fromAgentName", fromAgentName);
+				} else if ("responseThirdParty" == obj.Event){
 					document.getElementById("currUsers").innerHTML = obj.roomMembers;
+//					var fromAgentID = obj.fromAgentID;
+//					var invitedAgentID = obj.invitedAgentID;
+
+				} else if ("privateMsg" == obj.Event){
+					console.log("onMessage - privateMsg");
+					console.log("onMessage - privateMsg" + obj.UserName + ": " + obj.text + "&#13;&#10");
+					document.getElementById("chatAgentContentHistory").innerHTML += obj.UserName + ": " + obj.text + "&#13;&#10";
+					
+//					type : "message",
+//					text : aMessage,
+//					id : UserID,
+//					UserName : UserName,
+//					sendto : aSendto,
 				}
 			// 非指令訊息
 			}else {
@@ -327,22 +364,34 @@ function Logoutaction(UserID) {
 
 // 送出私訊
 function send() {
+	var sendto = document.getElementById('sendto').value;	
 	var message = document.getElementById('message').value;
+	send01(sendto,message);
+
+}
+
+function send01(aSendto,aMessage){
 	var UserID = document.getElementById('UserID').value;
-	var sendto = document.getElementById('sendto').value;
 	// 向websocket送出私訊指令
 	var now = new Date();
 	var msg = {
 		type : "message",
-		text : message,
+		text : aMessage,
 		id : UserID,
 		UserName : UserName,
-		sendto : sendto,
+		sendto : aSendto,
 		date : now.getHours() + ":" + now.getMinutes() + ":" + now.getSeconds()
 	};
 	// 發送消息
-	ws.send(JSON.stringify(msg));
+	ws.send(JSON.stringify(msg));	
 }
+
+function sendA2A(aSendto){
+	var msg = document.getElementById("chatAgentContent").value;
+	console.log("sendA2A() - msg: " + msg);
+	send01(aSendto,msg);
+}
+
 
 // 查詢線上人數
 function online() {
@@ -964,6 +1013,8 @@ function inviteAgent3way(){
 		return;
 	}
 	console.log("inviteAgent3way(): UserID_g: " + UserID_g);
+	
+	/**** 寄出邀請 *****/
 	var inviteAgent3waymsg = {
 			type : "inviteAgent3way",
 			ACtype : "Agent",
@@ -974,6 +1025,12 @@ function inviteAgent3way(){
 		};
 		// 發送消息
 		ws.send(JSON.stringify(inviteAgent3waymsg));
+
+	/**** 建立私訊 *****/
+	document.getElementById("sendA2A").value = myInvitedAgentID;
+	document.getElementById("sendA2A").innerHTML += " to - " + myInvitedAgentID;	
+
+
 }
 
 function responseThirdParty(aResponse){

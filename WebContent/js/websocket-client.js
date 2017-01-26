@@ -399,23 +399,27 @@ function leaveRoom(UserID) {
 // 傳送訊息至群組
 function sendtoRoom() {
 	var message = document.getElementById('message').value;
+	sendtoRoom01(roomID, message);
+}
+
+function sendtoRoom01(aRoomID,aMessage){
 	var UserID = document.getElementById('UserID').value;
 	// var group = 'G'+document.getElementById('group').value;
 	var now = new Date();
 	// 組成傳送訊息至群組JSON指令
 	var msg = {
 		type : "messagetoRoom",
-		text : message,
+		text : aMessage,
 		id : UserID,
 		UserName : UserName,
-		roomID : roomID,
+		roomID : aRoomID,
 		channel : "chat",
 		date : now.getHours() + ":" + now.getMinutes() + ":" + now.getSeconds()
 	};
 
 	// 發送消息給WebSocket
 	ws.send(JSON.stringify(msg));
-}
+} 
 
 // 查詢群組內人員
 function roomonline() {

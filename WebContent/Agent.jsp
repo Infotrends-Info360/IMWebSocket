@@ -111,16 +111,29 @@
 			<td><button type="submit" onclick="responseThirdParty(this.value);" id="acceptThirdParty" value="accept">接受</button></td>
 			<td><button type="submit" onclick="responseThirdParty(this.value);" id="rejectThirdParty" value="reject">拒絕</button></td>
 		</tr>
-		<tr>
+		<tr> 
 			<td colspan="4">
 			房間成員: <span id="currUsers"></span><br>
 			</td>
 		</tr>
 		<tr>
-			<td colspan="4">
-				<textarea rows="10" cols="50" id="chatContent"></textarea>
+			<td colspan="2">
+				<textarea rows="15" cols="40" id="chatContent"></textarea>
 			</td>
-			
+			<td>
+				Agent talks to Agent
+				<button type="submit" onclick="sendA2A(this.value);" id="sendA2A" value="">send</button>
+				<input type="text" name="chatAgentContent" id="chatAgentContent">
+<!-- 				<textarea rows="15" cols="40" id="chatAgentContent"></textarea> -->
+			</td>
+			<td>
+				<textarea rows="15" cols="40" id="chatAgentContentHistory"></textarea>
+			</td>
+<!-- 			<td colspan="2"> -->
+<!-- 				<tr> -->
+<!-- 					<td>Agent to Agent</td> -->
+<!-- 				</tr> -->
+<!-- 			</td>			 -->
 		</tr>
 	</table>	
 	

@@ -266,8 +266,10 @@ public class WebSocket extends WebSocketServer {
 			WebSocketRoomPool.addUserinroom(roomID, invitedAgentName, invitedAgentID, conn);
 			// 通知各房間成員成員數改變了
 			JSONObject sendJson = new JSONObject();
-			sendJson.put("Event", "updateRoomMembers");
+			sendJson.put("Event", "responseThirdParty");
 			sendJson.put("roomID", roomID);
+			sendJson.put("fromAgentID", fromAgentID);
+			sendJson.put("invitedAgentID", invitedAgentID);
 			sendJson.put("roomMembers", WebSocketRoomPool.getOnlineUserinroom(roomID).toString());
 			
 			WebSocketRoomPool.sendMessageinroom(roomID, sendJson.toString());

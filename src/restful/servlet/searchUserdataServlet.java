@@ -161,8 +161,9 @@ public class searchUserdataServlet {
         		+ "&bSelect="+bSelect;
     			
         // Connect to URL
-//        URL url = new URL("http://192.168.10.7/infoacd/infoCenterWebService.asmx/GetCustomerLevel");
-        URL url = new URL("http://192.168.10.40:8080/infoacd/infoCenterWebService.asmx/GetCustomerLevel");
+        // 小林哥表示: 須建立判斷機制log,設定timeout協助以後判斷問題來源: 
+        URL url = new URL("http://192.168.10.7/infoacd/infoCenterWebService.asmx/GetCustomerLevel"); 
+//        URL url = new URL("http://192.168.10.40:8080/infoacd/infoCenterWebService.asmx/GetCustomerLevel"); // 當192.168.10.7掛點時,使用此server
         HttpURLConnection connection = (HttpURLConnection) url.openConnection();
         connection.setDoOutput(true);
         connection.setRequestMethod("POST");

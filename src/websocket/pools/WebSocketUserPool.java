@@ -168,7 +168,7 @@ public class WebSocketUserPool {
 
 	/** * Send Message to a User * @param user * @param message */ /* Done */
 	public static void sendMessageToUser(WebSocket conn, String message) throws WebsocketNotConnectedException{
-//		System.out.println("sendMessageToUser() called");
+//		System.out.println("sendMessageToUser() called - to - conn: " + conn);
 		if (null != conn) {
 //			System.out.println("conn.send(message) called");
 			conn.send(message);

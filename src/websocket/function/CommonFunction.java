@@ -29,14 +29,24 @@ public class CommonFunction {
 	/** get private messages **/
 	public static void getMessage(String message, org.java_websocket.WebSocket conn) {
 		JSONObject obj = new JSONObject(message);
+		
+		/*** 原方法內容 ***/
 		String username = obj.getString("UserName");
 		org.java_websocket.WebSocket sendto = WebSocketUserPool
 				.getWebSocketByUser(obj.getString("sendto"));
+		
 		WebSocketUserPool.sendMessageToUser(sendto,
 				username + " private message to " + obj.getString("sendto")
 						+ ": " + obj.getString("text"));
 		WebSocketUserPool.sendMessageToUser(conn, username + " private message to "
 				+ obj.getString("sendto") + ": " + obj.getString("text"));
+		
+		/*** 三方-私訊: A2A ***/
+		obj.put("Event", "privateMsg");
+		System.out.println("conn" +  conn);
+		System.out.println("sendto" +  sendto);
+		WebSocketUserPool.sendMessageToUser(conn, obj.toString());
+		WebSocketUserPool.sendMessageToUser(sendto, obj.toString());
 	}
 	
 	/** * user join websocket * @param user */
