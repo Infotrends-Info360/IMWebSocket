@@ -82,7 +82,7 @@
 			<td id="AgentName">A2</td>
 			<td id="AgentID" value=""></td>
 			<td><button type="submit" onclick="inviteAgentThirdParty(this.value);" value="thirdParty">邀請加入(三方)</button></td>
-			<td><button type="submit" onclick="inviteAgentThirdParty(this.value);" value="transfer">邀請加入(加入後自己退出)</button></td>
+			<td><button type="submit" onclick="inviteAgentThirdParty(this.value);" value="transfer">邀請加入(轉接)</button></td>
 		</tr>
 	</table>
 	<b>現有Room房間</b>: <span id="currRooms"></span>	
