@@ -200,7 +200,9 @@ public class WebSocketUserPool {
 	
 	/** * get ACType By UserID* @param inbound */ /* Done */
 	public static String getACTypeByKey(WebSocket conn) {
-		return userallconnections.get(conn).getACType();
+		UserInfo userInfo = userallconnections.get(conn);
+		if (userInfo == null) return null;
+		return userInfo.getACType();
 	}
 	
 	

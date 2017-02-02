@@ -293,7 +293,7 @@ function Login() {
 				};
 				setTimeout(function() {
 					// 發送消息
-					ws.send(JSON.stringify(msg));
+//					ws.send(JSON.stringify(msg)); //
 
 					setTimeout(function() {
 						addlayim();

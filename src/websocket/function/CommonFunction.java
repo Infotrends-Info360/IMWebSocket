@@ -1,5 +1,6 @@
 package websocket.function;
 
+import java.text.SimpleDateFormat;
 import java.util.Collection;
 import java.util.List;
 import java.util.Map;
@@ -8,6 +9,7 @@ import java.util.Timer;
 import org.java_websocket.WebSocket;
 import org.json.JSONArray;
 import org.json.JSONObject;
+
 
 
 
@@ -56,23 +58,41 @@ public class CommonFunction {
 		String username = obj.getString("UserName");
 		String ACtype = obj.getString("ACtype");
 		String joinMsg = "[Server]" + username + " Online";
+		String channel = obj.getString("channel");
 		WebSocketUserPool.addUser(username, userId, conn, ACtype); // 在此刻,已將user conn加入倒Pool中
 		WebSocketUserPool.sendMessage(joinMsg);
 		
+		/*** 告知user其成功登入的UserID ***/
 		JSONObject sendjson = new JSONObject();
 		sendjson.put("Event", "userjoin");
 		sendjson.put("from", userId);
-		sendjson.put("channel", obj.getString("channel"));
+		sendjson.put("channel", channel);
 		WebSocketUserPool.sendMessageToUser(conn, sendjson.toString());
 		WebSocketUserPool.sendMessage("online people: "
 				+ WebSocketUserPool.getOnlineUser().toString());
-		// 把下面取消掉:
-		if(ACtype.equals("Client")){
-			HeartBeat heartbeat = new HeartBeat();
-			heartbeat.heartbeating(conn);
-			// 告訴所有Agents更新等待的ClientList(進行中)
-//			refreshClientList(user);
-		}
+		
+		/*** 將user加入到各自的TYPEmap ***/
+		SimpleDateFormat sdf = new SimpleDateFormat("HH:mm:ss");
+		String date = sdf.format(new java.util.Date());
+		WebSocketTypePool.addUserinTYPE(ACtype, username, userId, date, conn);
+		
+		/** 告訴Agent開啟layui **/
+		JSONObject sendjson2 = new JSONObject();
+		sendjson2.put("Event", "userjointoTYPE");
+		sendjson2.put("from", userId);
+		sendjson2.put("username",  username);
+		sendjson2.put("ACtype", ACtype);
+		sendjson2.put("channel", channel);
+		WebSocketUserPool.sendMessage(sendjson2.toString());
+		
+		/*** 讓Agent與Client都有Heartbeat ***/
+		HeartBeat heartbeat = new HeartBeat();
+		heartbeat.heartbeating(conn);
+//		if(ACtype.equals("Client")){
+//
+//			// 告訴所有Agents更新等待的ClientList(進行中)
+////			refreshClientList(user);
+//		}
 	}
 	
 	/** ask online people **/
@@ -196,7 +216,7 @@ public class CommonFunction {
 		String username = obj.getString("UserName");
 		String date = obj.get("date").toString();
 		String joinMsg = "[Server]" + username + " join " + ACtype;
-		WebSocketTypePool.addUserinTYPE(ACtype, username, userid, date, conn);
+		WebSocketTypePool.addUserinTYPE(ACtype, username, userid, date, conn); // 
 		WebSocketTypePool.sendMessageinTYPE(ACtype, joinMsg);
 		WebSocketTypePool.sendMessageinTYPE(ACtype, ACtype + " people: "
 				+ WebSocketTypePool.getOnlineUserNameinTYPE(ACtype).toString());

@@ -38,6 +38,22 @@ function Login() {
 		// 當websocket連接建立成功時
 		ws.onopen = function() {
 			console.log('websocket 打開成功');
+			/** 登入 **/
+			var now = new Date();
+			// 組成登入WebSocket Pool列表JSON指令
+			var msg = {
+				type : "login",
+				UserName : UserName,
+				ACtype : "Client",
+				channel : "chat",
+				date : now.getHours() + ":" + now.getMinutes() + ":"
+						+ now.getSeconds()
+			};
+
+			// 發送消息給WebSocket
+			ws.send(JSON.stringify(msg));			
+			
+			
 		};
 		// 當收到服務端的消息時
 		ws.onmessage = function(e) {
@@ -134,6 +150,92 @@ function Login() {
 				} else if ("userjoin" == obj.Event) {
 					// 控制前端傳值
 					document.getElementById("UserID").value = obj.from;
+					var UserID = document.getElementById('UserID').value;
+					/** 成功登入後,開始找尋Agent **/
+					var now = new Date();
+					// 組成找尋Agent JSON指令
+					var findAgentmsg = {
+						type : "findAgent",
+						id : UserID,
+						UserName : UserName,
+						channel : "chat",
+						// Event: "findAgent",
+						date : now.getHours() + ":" + now.getMinutes() + ":"
+								+ now.getSeconds()
+					};
+
+					// 發送消息給WebSocket
+					ws.send(JSON.stringify(findAgentmsg));
+					
+					/** 寫入Log **/
+					now = new Date();
+					// 組成寫入entry log指令
+					var entrylogmsg = {
+						type : "entrylog",
+						userid : UserID,
+						username : UserName,
+						ipaddress : '127.0.0.1',
+						browser : 'IE',
+						platfrom : 'Windows',
+						channel : 'Web',
+						language : 'chiname',
+						enterkey : 'Phone'
+					};
+
+					// 發送消息給WebSocket
+					ws.send(JSON.stringify(entrylogmsg));
+					
+					/** 更新前端資料 **/
+					document.getElementById("showUserID").innerHTML = UserID;
+					document.getElementById("status").innerHTML = "狀態: Login";
+					document.getElementById("Login").disabled = true;
+					document.getElementById("Logout").disabled = false;
+					document.getElementById("online").disabled = false;
+					document.getElementById("Clientonline").disabled = false;
+					document.getElementById("Agentonline").disabled = false;
+
+					isonline = true;
+					
+					//Jack
+					var LoginTime = document.getElementById("Login_time").value;
+					var browserversion = document.getElementById("Browser_Version").value;
+					var Channeltype = document.getElementById("Channeltype").value;
+					var language = document.getElementById("web_language").value;
+					var platfrom = document.getElementById("Platfrom").value;
+					var Cli_IP = document.getElementById("Cli_IP").value;
+					
+					/** ServiceEntry console log **/
+				     $.ajax({
+				         //告訴程式表單要傳送到哪裡                                         
+				         url:"/IMWebSocket/RESTful/ServiceEntry",
+				         //需要傳送的資料
+				         data:{
+				        	 username:UserName,
+				        	 userid:UserID,
+				        	 browserversion:browserversion,
+				        	 language:language,
+				        	 entertime:LoginTime,
+				        	 channeltype:Channeltype,
+				        	 platfrom:platfrom,
+				        	 ipaddress:Cli_IP
+				        	 },
+				          //使用POST方法     
+				         type : "POST",                                                                    
+				         //接收回傳資料的格式，在這個例子中，只要是接收true就可以了
+				         dataType:'json', 
+				          //傳送失敗則跳出失敗訊息          
+				         error:function(e){                                                                 
+				         alert("失敗");
+				         callback(data);
+				         },
+				         success:function(data){                                                           
+				        	 console.log("login",data)
+			    
+				         },
+				      
+				     }); 
+				   //Jack	
+					
 				} 
 			} else {
 				// 控制前端傳值
@@ -154,127 +256,6 @@ function Login() {
 		ws.onerror = function() {
 			console.log("出現錯誤");
 		};
-
-		setTimeout(function() {
-			var now = new Date();
-			// 組成登入WebSocket Pool列表JSON指令
-			var msg = {
-				type : "login",
-				UserName : UserName,
-				ACtype : "Client",
-				channel : "chat",
-				date : now.getHours() + ":" + now.getMinutes() + ":"
-						+ now.getSeconds()
-			};
-
-			// 發送消息給WebSocket
-			ws.send(JSON.stringify(msg));
-
-			setTimeout(function() {
-
-				var UserID = document.getElementById('UserID').value;
-				now = new Date();
-				// 組成登入Client列表JSON指令
-				var Clientmsg = {
-					type : "typein",
-					ACtype : "Client",
-					id : UserID,
-					UserName : UserName,
-					channel : "chat",
-					date : now.getHours() + ":" + now.getMinutes() + ":"
-							+ now.getSeconds()
-				};
-
-				// 發送消息給WebSocket
-				ws.send(JSON.stringify(Clientmsg));
-
-				now = new Date();
-				// 組成找尋Agent JSON指令
-				var findAgentmsg = {
-					type : "findAgent",
-					id : UserID,
-					UserName : UserName,
-					channel : "chat",
-					// Event: "findAgent",
-					date : now.getHours() + ":" + now.getMinutes() + ":"
-							+ now.getSeconds()
-				};
-
-				// 發送消息給WebSocket
-				ws.send(JSON.stringify(findAgentmsg));
-
-				now = new Date();
-				// 組成寫入entry log指令
-				var entrylogmsg = {
-					type : "entrylog",
-					userid : UserID,
-					username : UserName,
-					ipaddress : '127.0.0.1',
-					browser : 'IE',
-					platfrom : 'Windows',
-					channel : 'Web',
-					language : 'chiname',
-					enterkey : 'Phone'
-				};
-
-				// 發送消息給WebSocket
-				ws.send(JSON.stringify(entrylogmsg));
-
-				// 控制前端傳值
-				document.getElementById("showUserID").innerHTML = UserID;
-				document.getElementById("status").innerHTML = "狀態: Login";
-				document.getElementById("Login").disabled = true;
-				document.getElementById("Logout").disabled = false;
-				document.getElementById("online").disabled = false;
-				document.getElementById("Clientonline").disabled = false;
-				document.getElementById("Agentonline").disabled = false;
-
-				isonline = true;
-				
-				//Jack
-				var LoginTime = document.getElementById("Login_time").value;
-				var browserversion = document.getElementById("Browser_Version").value;
-				var Channeltype = document.getElementById("Channeltype").value;
-				var language = document.getElementById("web_language").value;
-				var platfrom = document.getElementById("Platfrom").value;
-				var Cli_IP = document.getElementById("Cli_IP").value;
-				
-		//ServiceEntry console log
-			     $.ajax({
-			         //告訴程式表單要傳送到哪裡                                         
-			         url:"/IMWebSocket/RESTful/ServiceEntry",
-			         //需要傳送的資料
-			         data:{
-			        	 username:UserName,
-			        	 userid:UserID,
-			        	 browserversion:browserversion,
-			        	 language:language,
-			        	 entertime:LoginTime,
-			        	 channeltype:Channeltype,
-			        	 platfrom:platfrom,
-			        	 ipaddress:Cli_IP
-			        	 },
-			          //使用POST方法     
-			         type : "POST",                                                                    
-			         //接收回傳資料的格式，在這個例子中，只要是接收true就可以了
-			         dataType:'json', 
-			          //傳送失敗則跳出失敗訊息          
-			         error:function(e){                                                                 
-			         alert("失敗");
-			         callback(data);
-			         },
-			         success:function(data){                                                           
-			        	 console.log("login",data)
-		    
-			         },
-			      
-			     }); 
-			   //Jack	
-				
-				
-			}, 500);
-		}, 500);
-
 	}
 
 }
