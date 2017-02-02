@@ -58,7 +58,7 @@ public class HeartBeat {
 	
 	public static void heartbeattouser(org.java_websocket.WebSocket conn, HeartBeat healthStatusHolder){
 //		System.out.println("conn " + conn + " is still online. ********************");
-		System.out.println(WebSocketUserPool.getACTypeByKey(conn) + " conn: " + conn + " is still online. (HeartBeat)");
+//		System.out.println(WebSocketUserPool.getACTypeByKey(conn) + " conn: " + conn + " is still online. (HeartBeat)");
 //		System.out.println("heartbeattouser() called");
 		JSONObject sendjson = new JSONObject();
 //		WebSocketUserPool.sendMessageToUser(conn, sendjson.toString()); // 透過此去偵測使用者連線sessiong是否還在

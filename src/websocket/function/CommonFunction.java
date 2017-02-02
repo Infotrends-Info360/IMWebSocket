@@ -88,11 +88,6 @@ public class CommonFunction {
 		/*** 讓Agent與Client都有Heartbeat ***/
 		HeartBeat heartbeat = new HeartBeat();
 		heartbeat.heartbeating(conn);
-//		if(ACtype.equals("Client")){
-//
-//			// 告訴所有Agents更新等待的ClientList(進行中)
-////			refreshClientList(user);
-//		}
 	}
 	
 	/** ask online people **/

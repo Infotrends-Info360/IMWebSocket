@@ -184,6 +184,7 @@ public class WebSocket extends WebSocketServer {
 		// 清GROUP:
 		// 取得一個user所屬的所有roomid
 		List<String> roomids = WebSocketUserPool.getUserRoomByKey(conn);
+		System.out.println("roomids.size(): " + roomids.size());
 		for (String roomid: roomids){
 			//使用每個roomid,並找出相對應的room,再將其中的conn remove掉
 			WebSocketRoomPool.removeUserinroom(roomid, conn);
@@ -270,7 +271,11 @@ public class WebSocket extends WebSocketServer {
 		
 		if ("accept".equals(response)){
 			System.out.println("responseThirdParty() - accept");
+			/** 新增room成員 **/
 			WebSocketRoomPool.addUserinroom(roomID, invitedAgentName, invitedAgentID, conn);
+			/** 新增user所加入的room list **/
+			WebSocketUserPool.addUserRoom(roomID, conn);
+			
 			// 通知各房間成員成員數改變了
 			JSONObject sendJson = new JSONObject();
 			sendJson.put("Event", "responseThirdParty");

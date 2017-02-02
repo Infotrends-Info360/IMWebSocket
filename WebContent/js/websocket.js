@@ -269,6 +269,8 @@ function Login() {
 					console.log("onMessage - privateMsg" + obj.UserName + ": " + obj.text + "&#13;&#10");
 					document.getElementById("chatAgentContentHistory").innerHTML += obj.UserName + ": " + obj.text + "&#13;&#10";
 					
+				} else if ("removeUserinroom" == obj.Event){
+					console.log("onMessage - removeUserinroom");
 				}
 			// 非指令訊息
 			}else {

@@ -6,11 +6,14 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Date;
 import java.util.HashMap;
+import java.util.HashSet;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
 import org.java_websocket.WebSocket;
+import org.json.JSONObject;
 
 import websocket.bean.RoomInfo;
 import websocket.bean.UserInfo;
@@ -66,12 +69,24 @@ public class WebSocketRoomPool{
 		// 3. 若是Agent離開 && 剩餘人數 == 1 -> 則把所有人都踢出此room
 		System.out.println("removeUserinroom(String room,WebSocket conn) called");
 		Map<WebSocket, RoomInfo> roommap = roomuserconnections.get(room);
+//		Set<WebSocket> memberConns = roommap.keySet();
+		Set<WebSocket> tmpMemberConns = new HashSet(roommap.keySet());
+		JSONObject sendJson = new JSONObject();
+		sendJson.put("Event", "removeUserinroom");
+		
+		
+		
 		if (roommap.containsKey(conn)) {
 //			System.out.println(conn + "'s room is " + " removed");
 			String currACType = WebSocketUserPool.getACTypeByKey(conn);
 			System.out.println("ACType: " + WebSocketUserPool.getACTypeByKey(conn));
 			if ("Client".equals(currACType)){
 				System.out.println("Client 全清");
+//				Iterator<Map.Entry<WebSocket, RoomInfo>> itr = roomMembers.iterator();
+//				while(itr.hasNext()){
+//					itr.next();
+//					itr.remove();
+//				}
 				//全清:
 				//補上清WebSocketUserPool
 				//補上告知相關人員的迴圈.send
@@ -90,11 +105,21 @@ public class WebSocketRoomPool{
 				roommap.remove(conn);
 			}
 			System.out.println("roomId: " + room + " size: " + roommap.size());
-//			roommap.remove(conn);
+			sendJson.put("roomMembers", WebSocketRoomPool.getOnlineUserinroom(room).toString());
+			
+			/** 告知所有成員有人離開room,請更新前端頁面 **/
+			for (WebSocket memberConn: tmpMemberConns){
+				// 若是Logout()觸發的,則跳過
+				if (memberConn.isClosed() || memberConn.isClosing()){
+					continue;
+				}
+				WebSocketUserPool.sendMessageToUser(memberConn, sendJson.toString());
+			}
+			
 			return true;
-		} else {
-			return false;
 		}
+		
+		return false;
 	}
 	
 	/** * Send Message to all of User in Room * @param message */
