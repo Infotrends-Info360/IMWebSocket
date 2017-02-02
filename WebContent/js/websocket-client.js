@@ -691,9 +691,11 @@ function interactionLogDemo(status, activitycode) {
 	var stoppedreason = 'stoppedreason';
 	// var activitycode = 'activitycode';
 	var AgentID = document.getElementById('findAgent').value;
-	 interactionlog(contactID, roomID, AgentID, status, 'Inbound', 2,
-	 'InBound New', text, structuredtext, thecomment, stoppedreason,
-	 activitycode, startdate);
+	// 因為onClose()時就會呼叫interactionlog(),所以不用再這邊又呼叫一次
+//	 interactionlog(contactID, roomID, AgentID, status, 'Inbound', 2,
+//	 'InBound New', text, structuredtext, thecomment, stoppedreason,
+//	 activitycode, startdate);
+	// 此處可能會有"Exit"事件先發生,而此'setinteraction'會後發生,但因為目前有太多的全域變數,調動上過大,暫時先註解著
 	setinteraction(contactID, roomID, AgentID, status, 'Inbound', 2,
 			'InBound New', text, structuredtext, thecomment, stoppedreason,
 			activitycode, startdate, 'client');

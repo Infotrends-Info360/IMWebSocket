@@ -171,6 +171,7 @@ public class ClientFunction {
 	
 	/** * send interaction log */
 	public static void interactionlog(String message, org.java_websocket.WebSocket conn) {
+		System.out.println("interactionlog() called");
 		JSONObject obj = new JSONObject(message);
 
 		String contactid = null;
@@ -253,16 +254,9 @@ public class ClientFunction {
 
 		SimpleDateFormat getsdf = new SimpleDateFormat(
 				"yyyy-MM-dd'T'HH:mm:ss.SSS'Z'");
-		///
-		Date startdated = null;
-		try {
-			startdated = getsdf.parse(obj.getString("startdate"));
-		} catch (Exception e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-		String startdate = sdf.format(startdated);
-		///
+		// 抓取使用者登入時間
+		String startdate = sdf.format(WebSocketUserPool.getStartdateByKey(conn));
+
 		StringBuilder responseSB = null;
 		try {
 			// Encode the query

@@ -106,7 +106,7 @@ public class CommonFunction {
 		WebSocketUserPool.sendMessage(joinMsg);
 //		WebSocketUserPool.removeUser(conn);
 		Timer timer = WebSocketUserPool.getUserHeartbeatTimerByKey(conn);
-		// 只有client有timer(HeartBeat)
+		// 取消HeartBeat
 		if (timer != null){
 			timer.cancel();			
 		}

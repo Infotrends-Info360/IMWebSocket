@@ -13,6 +13,7 @@ public class UserInfo {
 	private String userheartbeat;
 	private Timer heartbeatTimer;
 	private String ACType;
+	private java.util.Date startdate;
 	public String getUserid() {
 		return userid;
 	}
@@ -55,5 +56,12 @@ public class UserInfo {
 	public void setACType(String aACType) {
 		ACType = aACType;
 	}
+	public java.util.Date getStartdate() {
+		return startdate;
+	}
+	public void setStartdate(java.util.Date startdate) {
+		this.startdate = startdate;
+	}
+	
 	
 }

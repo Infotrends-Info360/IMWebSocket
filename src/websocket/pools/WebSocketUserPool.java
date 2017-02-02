@@ -90,6 +90,7 @@ public class WebSocketUserPool {
 		userinfo.setUserid(userid);
 		userinfo.setUsername(username);
 		userinfo.setACType(ACType);
+		userinfo.setStartdate(new java.util.Date());
 		userallconnections.put(conn, userinfo); // 每一個client的connection配一個vo
 	}
 	
@@ -203,6 +204,13 @@ public class WebSocketUserPool {
 		UserInfo userInfo = userallconnections.get(conn);
 		if (userInfo == null) return null;
 		return userInfo.getACType();
+	}
+	
+	/** * get LoginDate By UserID* @param inbound */ /* Done */
+	public static java.util.Date getStartdateByKey(WebSocket conn) {
+		UserInfo userInfo = userallconnections.get(conn);
+		if (userInfo == null) return null;
+		return userInfo.getStartdate();
 	}
 	
 	
