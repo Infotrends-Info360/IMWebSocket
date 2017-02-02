@@ -66,7 +66,7 @@ public class HeartBeat {
 			WebSocketUserPool.sendMessageToUser(conn, sendjson.toString()); // 透過此去偵測使用者連線sessiong是否還在
 		}catch(WebsocketNotConnectedException e){
 			healthStatusHolder.setHealthStatus("RED"); // 透過此flag關掉HeartBeat排程
-			conn.close();
+//			conn.close();
 		}
 		
 	}// end of heartbeattouser
@@ -122,8 +122,9 @@ class TimerTaskSendHeartBeat extends TimerTask {
 		if ("GREEN".equals(this.healthStatusHolder.getHealthStatus())){
 			HeartBeat.heartbeattouser(conn,this.healthStatusHolder);
 		}else{
-			System.out.println("conn: " + conn + " is disconnected. (HeartBeat)");
+			System.out.println("conn: " + conn + " is disconnected. (HeartBeat)");				
 			timer.cancel();
+//			conn.close(); // 似乎用不到,當出現On Error: Socket Exception:java.io.IOException: 遠端主機已強制關閉一個現存的連線,ws server會自動呼叫onClose
 		}
 		
 	}

@@ -70,8 +70,8 @@ public class CommonFunction {
 		if(ACtype.equals("Client")){
 			HeartBeat heartbeat = new HeartBeat();
 			heartbeat.heartbeating(conn);
-			// 告訴所有Agents更新等待的ClientList
-			refreshClientList(user);
+			// 告訴所有Agents更新等待的ClientList(進行中)
+//			refreshClientList(user);
 		}
 	}
 	

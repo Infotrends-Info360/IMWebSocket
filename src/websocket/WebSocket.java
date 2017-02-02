@@ -40,7 +40,9 @@ public class WebSocket extends WebSocketServer {
 		// 此方法沒有用到,先放著,並不會影響到主流程
 		//userLeave(conn);
 //		System.out.println("Someone unlink in Socket conn:" + conn);
-		System.out.println("conn: " + conn + " is disconnected. !!!!!");
+//		System.out.println("conn: " + conn + " is disconnected. !!!!!");
+		System.out.println(WebSocketUserPool.getACTypeByKey(conn) + " conn: " + conn + " is disconnected. (HeartBeat)");				
+
 		// 將Heartbeat功能移轉到這裡:
 		inputInteractionLog(conn,reason);
 		clearUserData(conn); // 包含removeUser, removerUserinTYPE, removeUserinroom

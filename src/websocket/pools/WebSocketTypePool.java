@@ -32,6 +32,7 @@ public class WebSocketTypePool{
 
 	/** * Add User to Agent or Client * @param inbound */
 	public static void addUserinTYPE(String TYPE,String username, String userid,String date, WebSocket conn) {
+		System.out.println("addUserinTYPE() called");
 		Map<WebSocket, TypeInfo> TYPEmap = TYPEconnections.get(TYPE);
 		
 		if (TYPEmap == null || TYPEmap.isEmpty()){
@@ -63,13 +64,18 @@ public class WebSocketTypePool{
 	}
 	
 	/** * Remove User from Agent or Client* @param inbound */
-	public static boolean removeUserinTYPE(String TYPE,WebSocket conn) {
+	public static void removeUserinTYPE(String TYPE,WebSocket conn) {
+		System.out.println("removeUserinTYPE() called");
 		Map<WebSocket,  TypeInfo> TYPEmap = TYPEconnections.get(TYPE);
-		if (TYPEmap.containsKey(conn)) {
+		if (TYPEmap == null){
+			System.out.println("注意: " + " can not find TYPEmap for " + TYPE);
+			return;
+		}
+		
+		System.out.println("TYPE: " + TYPE);
+		System.out.println("TYPEmap.size(): " + TYPEmap.size());
+		if (TYPEmap != null && TYPEmap.containsKey(conn)) {
 			TYPEmap.remove(conn);
-			return true;
-		} else {
-			return false;
 		}
 	}
 	
@@ -208,6 +214,21 @@ public class WebSocketTypePool{
 		return TYPEconnections;
 	}
 	
+	public static boolean isAgent(WebSocket conn){
+		Map<WebSocket, TypeInfo> TYPEmap = TYPEconnections.get("Agent");
+		if (TYPEmap != null && TYPEmap.containsKey(conn)){
+			return true;
+		}
+		return false;
+	}
+	
+	public static boolean isClient(WebSocket conn){
+		Map<WebSocket, TypeInfo> TYPEmap = TYPEconnections.get("Client");
+		if (TYPEmap != null && TYPEmap.containsKey(conn)){
+			return true;
+		}
+		return false;
+	}	
 	
 	
 }
