@@ -23,6 +23,7 @@ function checktoLeave() {
 
 // 連上websocket
 function Login() {
+	console.log("Agent Login() function");
 	// 登入使用者
 	UserName = document.getElementById('UserName').value;
 	if (null == UserName || "" == UserName) {
@@ -36,6 +37,23 @@ function Login() {
 		// 當websocket連接建立成功時
 		ws.onopen = function() {
 			console.log('websocket 打開成功');
+			/** 登入 **/
+			var now = new Date();
+			// 向websocket送出登入指令
+			var msg = {
+				type : "login",
+				// id: UserID,
+				UserName : UserName,
+				ACtype : "Agent",
+				channel : "chat",
+				date : now.getHours() + ":" + now.getMinutes() + ":"
+						+ now.getSeconds()
+			};			
+			// 發送消息
+			ws.send(JSON.stringify(msg));
+			
+			
+			
 		};
 		// 當收到服務端的消息時
 		ws.onmessage = function(e) {
@@ -191,7 +209,21 @@ function Login() {
 					console.log("userjoin - UserID: " + obj.from);
 					document.getElementById("UserID").value = obj.from;
 					UserID_g = obj.from;
-					document.getElementById("Event").innerHTML = obj.Event;
+					var UserID = document.getElementById('UserID').value;
+					
+					document.getElementById("Event").innerHTML = obj.Event;					
+					document.getElementById("showUserID").innerHTML = UserID;
+					document.getElementById("status").innerHTML = "狀態: Login";
+					document.getElementById("Login").disabled = true;
+					document.getElementById("Logout").disabled = false;
+					document.getElementById("online").disabled = false;
+
+					/** 開啟layui **/
+					addlayim();
+					document.getElementById("ready").disabled = false;
+					// document.getElementById("send").disabled = false;
+					isonline = true;
+					
 				} else if ("refreshRoomList" == obj.Event) {
 					document.getElementById("UserID").value = obj.from;
 					document.getElementById("Event").innerHTML = obj.Event;
@@ -254,57 +286,6 @@ function Login() {
 		ws.onerror = function() {
 			console.log("出現錯誤");
 		};
-
-		// var UserID = document.getElementById('UserID').value;
-		var now = new Date();
-		// 向websocket送出登入指令
-		var msg = {
-			type : "login",
-			// id: UserID,
-			UserName : UserName,
-			ACtype : "Agent",
-			channel : "chat",
-			date : now.getHours() + ":" + now.getMinutes() + ":"
-					+ now.getSeconds()
-		};
-		setTimeout(function() {
-			// 發送消息
-			ws.send(JSON.stringify(msg));
-
-			setTimeout(function() {
-				var UserID = document.getElementById('UserID').value;
-				document.getElementById("showUserID").innerHTML = UserID;
-				document.getElementById("status").innerHTML = "狀態: Login";
-				document.getElementById("Login").disabled = true;
-				document.getElementById("Logout").disabled = false;
-				document.getElementById("online").disabled = false;
-
-				// 向websocket送出登入Agent列表指令
-				var UserID = document.getElementById('UserID').value;
-				var now = new Date();
-				var msg = {
-					type : "typein",
-					ACtype : "Agent",
-					id : UserID,
-					UserName : UserName,
-					channel : "chat",
-					date : now.getHours() + ":" + now.getMinutes() + ":"
-							+ now.getSeconds()
-				};
-				setTimeout(function() {
-					// 發送消息
-//					ws.send(JSON.stringify(msg)); //
-
-					setTimeout(function() {
-						addlayim();
-						document.getElementById("ready").disabled = false;
-						// document.getElementById("send").disabled = false;
-						isonline = true;
-					}, 500);
-				}, 500);
-			}, 500);
-		}, 500);
-
 	}
 
 }
@@ -1035,6 +1016,17 @@ function responseThirdParty(aResponse){
 	// 發送消息
 	ws.send(JSON.stringify(responseThirdPartyMsg));	
 	
+}
+
+function notready() {
+	// 更新狀態
+	updateStatus("not ready","no reason");
+	// 取得狀態
+	getUserStatus();
+	// 更新.jsp
+	document.getElementById("status").innerHTML = "狀態: not ready";
+	document.getElementById("ready").disabled = false;
+	document.getElementById("notready").disabled = true;
 }
 
 // 測試按鈕
