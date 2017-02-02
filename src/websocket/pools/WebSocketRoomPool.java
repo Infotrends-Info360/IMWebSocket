@@ -91,6 +91,7 @@ public class WebSocketRoomPool{
 					WebSocketUserPool.removeUserRoom(memberConn);
 				}
 				roommap.clear();
+				sendJson.put("result", WebSocketUserPool.getUserNameByKey(conn) + " closed the room" + aRoomID);
 			// 之後可將一二條件式合併:
 			}else if (roommap.size() == 2){ 
 				System.out.println("roommap.size() == 2 全清");
@@ -99,15 +100,17 @@ public class WebSocketRoomPool{
 					WebSocketUserPool.removeUserRoom(memberConn);
 				}
 				roommap.clear();
+				sendJson.put("result", WebSocketUserPool.getUserNameByKey(conn) + " closed the room" + aRoomID);				
 			}else if (roommap.size() > 2){
 				System.out.println("roommap.size() > 2  清自己");
 				//清Agent自己
 				WebSocketUserPool.removeUserRoom(conn);
 				roommap.remove(conn);
+				sendJson.put("result", WebSocketUserPool.getUserNameByKey(conn) + " left the room" + aRoomID);				
 			}
 			System.out.println("roomId: " + aRoomID + " size: " + roommap.size());
 			sendJson.put("roomMembers", WebSocketRoomPool.getOnlineUserinroom(aRoomID).toString());
-			sendJson.put("whoLeft", WebSocketUserPool.getUserNameByKey(conn));
+			
 			
 			/** 告知所有成員有人離開room,請更新前端頁面 **/
 			for (WebSocket memberConn: tmpMemberConns){

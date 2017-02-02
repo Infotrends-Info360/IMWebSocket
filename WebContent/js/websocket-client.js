@@ -243,12 +243,7 @@ function Login() {
 				}  else if ("removeUserinroom" == obj.Event){
 					document.getElementById("currRoomID").innerHTML = obj.roomID;
 					document.getElementById("currUsers").innerHTML = obj.roomMembers;
-					// 如果room成員為空,則代表有人關閉了
-					if (obj.roomMembers == "[]"){						
-						alert(obj.whoLeft + " closed room " + obj.roomID);
-						return;
-					}
-					alert(obj.whoLeft + " left room " + obj.roomID);
+					alert(obj.result);
 				}
 			} else {
 				// 控制前端傳值

@@ -253,6 +253,7 @@ public class ClientFunction {
 
 		SimpleDateFormat getsdf = new SimpleDateFormat(
 				"yyyy-MM-dd'T'HH:mm:ss.SSS'Z'");
+		///
 		Date startdated = null;
 		try {
 			startdated = getsdf.parse(obj.getString("startdate"));
@@ -261,6 +262,7 @@ public class ClientFunction {
 			e.printStackTrace();
 		}
 		String startdate = sdf.format(startdated);
+		///
 		StringBuilder responseSB = null;
 		try {
 			// Encode the query
