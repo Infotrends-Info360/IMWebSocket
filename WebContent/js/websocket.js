@@ -265,12 +265,17 @@ function Login() {
 					document.getElementById("currUsers").innerHTML = obj.roomMembers;
 
 				} else if ("privateMsg" == obj.Event){
-					console.log("onMessage - privateMsg");
 					console.log("onMessage - privateMsg" + obj.UserName + ": " + obj.text + "&#13;&#10");
 					document.getElementById("chatAgentContentHistory").innerHTML += obj.UserName + ": " + obj.text + "&#13;&#10";
 					
 				} else if ("removeUserinroom" == obj.Event){
-					console.log("onMessage - removeUserinroom");
+					document.getElementById("currUsers").innerHTML = obj.roomMembers;
+					// 如果room成員為空,則代表有人關閉了
+					if (obj.roomMembers == "[]"){						
+						alert(obj.whoLeft + " closed room " + obj.roomID);
+						return;
+					}
+					alert(obj.whoLeft + " left room " + obj.roomID);
 				}
 			// 非指令訊息
 			}else {

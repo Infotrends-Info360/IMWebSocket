@@ -62,50 +62,52 @@ public class WebSocketRoomPool{
 	}
 	
 	/** * Remove User from Room * @param inbound */
-	public static boolean removeUserinroom(String room,WebSocket conn) {
+	public static void removeUserinroom(String aRoomID,WebSocket conn) {
 		// 把離開的邏輯坐在這裡
 		// 1. 若是Client離開 -> 則把所有人都踢出此room
 		// 2. 若是Agent離開 && 剩餘人數 > 1 -> 自己退出就好
 		// 3. 若是Agent離開 && 剩餘人數 == 1 -> 則把所有人都踢出此room
 		System.out.println("removeUserinroom(String room,WebSocket conn) called");
-		Map<WebSocket, RoomInfo> roommap = roomuserconnections.get(room);
+		Map<WebSocket, RoomInfo> roommap = roomuserconnections.get(aRoomID);
 //		Set<WebSocket> memberConns = roommap.keySet();
 		Set<WebSocket> tmpMemberConns = new HashSet(roommap.keySet());
 		JSONObject sendJson = new JSONObject();
 		sendJson.put("Event", "removeUserinroom");
+		sendJson.put("roomID", aRoomID);
 		
 		
 		
-		if (roommap.containsKey(conn)) {
+		
+		if (roommap != null && roommap.containsKey(conn)) {
 //			System.out.println(conn + "'s room is " + " removed");
 			String currACType = WebSocketUserPool.getACTypeByKey(conn);
 			System.out.println("ACType: " + WebSocketUserPool.getACTypeByKey(conn));
+			
+			/** 清除room相關資料 **/
 			if ("Client".equals(currACType)){
 				System.out.println("Client 全清");
-//				Iterator<Map.Entry<WebSocket, RoomInfo>> itr = roomMembers.iterator();
-//				while(itr.hasNext()){
-//					itr.next();
-//					itr.remove();
-//				}
 				//全清:
-				//補上清WebSocketUserPool
-				//補上告知相關人員的迴圈.send
+				for (WebSocket memberConn: tmpMemberConns){
+					WebSocketUserPool.removeUserRoom(memberConn);
+				}
 				roommap.clear();
-			}else if (roommap.size() == 2){
+			// 之後可將一二條件式合併:
+			}else if (roommap.size() == 2){ 
 				System.out.println("roommap.size() == 2 全清");
 				//也全清:
-				//補上清WebSocketUserPool
-				//補上告知相關人員的迴圈.send
+				for (WebSocket memberConn: tmpMemberConns){
+					WebSocketUserPool.removeUserRoom(memberConn);
+				}
 				roommap.clear();
 			}else if (roommap.size() > 2){
 				System.out.println("roommap.size() > 2  清自己");
 				//清Agent自己
-				//補上清WebSocketUserPool
-				//補上告知相關人員的迴圈.send // 有人離開了就好
+				WebSocketUserPool.removeUserRoom(conn);
 				roommap.remove(conn);
 			}
-			System.out.println("roomId: " + room + " size: " + roommap.size());
-			sendJson.put("roomMembers", WebSocketRoomPool.getOnlineUserinroom(room).toString());
+			System.out.println("roomId: " + aRoomID + " size: " + roommap.size());
+			sendJson.put("roomMembers", WebSocketRoomPool.getOnlineUserinroom(aRoomID).toString());
+			sendJson.put("whoLeft", WebSocketUserPool.getUserNameByKey(conn));
 			
 			/** 告知所有成員有人離開room,請更新前端頁面 **/
 			for (WebSocket memberConn: tmpMemberConns){
@@ -115,11 +117,7 @@ public class WebSocketRoomPool{
 				}
 				WebSocketUserPool.sendMessageToUser(memberConn, sendJson.toString());
 			}
-			
-			return true;
 		}
-		
-		return false;
 	}
 	
 	/** * Send Message to all of User in Room * @param message */

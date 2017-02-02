@@ -88,6 +88,18 @@
 	<input name="Platfrom" id="Platfrom" value="" type="hidden">
 	<input name="Cli_IP" id="Cli_IP" value="<%out.println(ip);%>" type="hidden">
 	
+	<!-- 三方轉接 -->
+	<table border='2' id='invitedRoomListTable'>
+		<tr> 
+			<td>
+			房間ID: <span id="currRoomID"></span><br>
+			</td>
+			<td>
+			房間成員: <span id="currUsers"></span><br>
+			</td>
+		</tr>
+	</table>
+	
 <!--  取得時間  -->	
 <script language="javascript">
 var Today=new Date();
