@@ -173,16 +173,17 @@ public class CommonFunction {
 //		sendjson.put("channel", obj.getString("channel"));
 //		WebSocketRoomPool.sendMessageinroom(roomID, sendjson.toString());
 		
-		// 嘗試使用gson
+		// 拿取資料並加上資料(gson)
 		JsonParser jsonParser = new JsonParser(); 
 		JsonObject msgJson = jsonParser.parse(message).getAsJsonObject();
 		msgJson.addProperty("Event", "messagetoRoom");
+		System.out.println("msgJson: "+ msgJson);
+		
+		// 將新訊息更新到RoomInfo bean上
+		
+		// 將訊息寄給room線上使用者:
 		if (msgJson.get("roomID") == null) return;
 		WebSocketRoomPool.sendMessageinroom(msgJson.get("roomID").getAsString(), msgJson.toString());
-		System.out.println("msgJson: "+ msgJson);
-//		System.out.println("msgJson.get('roomSS'): " + msgJson.get("roomSS")); // test - 查不到就會是null,而非exception
-		
-		// 
 		
 	}
 	
