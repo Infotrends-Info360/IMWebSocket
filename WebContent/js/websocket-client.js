@@ -104,7 +104,12 @@ function Login() {
 					document.getElementById("Eventform").value = obj.from;
 					// 收到尋找Agent的指令
 				} else if ("findAgent" == obj.Event) {
-					
+					// 寫入log
+					// 增加此判斷式,避免一直呼叫senduserdata方法
+					if (contactID == null){
+						senduserdata(UserID, UserName, obj.Agent);
+						console.log("senduserdata done ******************* ");						
+					}
 
 					if ("null" == obj.Agent || null == obj.Agent) {
 						if (isonline) {
@@ -122,9 +127,10 @@ function Login() {
 						var UserID = document.getElementById('UserID').value;
 						
 						waittingAgent = true;
-						// 寫入log
+						// 寫入log(告知雙方彼此的資訊)
 						senduserdata(UserID, UserName, obj.Agent);
-						console.log("senduserdata done ******************* ");
+						console.log("senduserdata done ******************* ");						
+
 						
 						// 找尋Agent
 						find();
@@ -141,7 +147,7 @@ function Login() {
 					document.getElementById("text").innerHTML += obj.username
 							+ ": " + obj.message + "<br>";
 
-				} else if ("searchuserdata" == obj.Event) {
+				} else if ("senduserdata" == obj.Event) {
 					contactID = obj.userdata.SetContactLog.contactID;
 					setinteractionDemo(ixnstatus, ixnactivitycode);
 					// alert(obj.userdata.SetContactLog.contactID);

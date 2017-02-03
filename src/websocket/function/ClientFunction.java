@@ -51,7 +51,7 @@ public class ClientFunction {
 	
 	/** * Get user data */
 	public static void senduserdata(String message, org.java_websocket.WebSocket conn) {
-		System.out.println(message);
+//		System.out.println("senduserdata: " + message);
 		JSONObject obj = new JSONObject(message);
 		String lang = obj.getString("lang");
 		String searchtype = obj.getString("searchtype");
@@ -104,15 +104,22 @@ public class ClientFunction {
 		JSONObject responseSBjson = new JSONObject(responseSB.toString());
 		JSONObject sendjson = new JSONObject();
 		
-		sendjson.put("Event", "searchuserdata");
+		sendjson.put("Event", "senduserdata");
 		sendjson.put("from", obj.getJSONObject("attributes").getString("id"));
 		sendjson.put("userdata",  responseSBjson);
 		sendjson.put("channel", obj.getString("channel"));
 		WebSocketUserPool.sendMessageToUser(conn, sendjson.toString());
 		// 掉換順序
-		org.java_websocket.WebSocket sendto = WebSocketUserPool
-				.getWebSocketByUser(obj.getString("sendto"));
-		WebSocketUserPool.sendMessageToUser(sendto, sendjson.toString());
+		// 若尚未找到Agent,則會出現JSONException
+		// 之後若熟悉RESTful,則可試著將抓取contactID與找到Agent後通知兩方這兩件事情分開處理
+		try{
+			org.java_websocket.WebSocket sendto = WebSocketUserPool
+					.getWebSocketByUser(obj.getString("sendto"));
+			WebSocketUserPool.sendMessageToUser(sendto, sendjson.toString());			
+		}catch(org.json.JSONException e) {
+			System.out.println("JSONObject[\"sendto\"] not found.");
+		}
+
 	}
 	
 	/** * send entry log */
@@ -302,7 +309,7 @@ public class ClientFunction {
 	}
 	
 	public static void setinteraction(String message, org.java_websocket.WebSocket conn){
-		System.out.println("setinteraction:"+message);
+//		System.out.println("setinteraction:"+message);
 		WebSocketUserPool.addUserInteraction(message, conn);
 	}
 	

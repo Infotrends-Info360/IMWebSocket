@@ -171,8 +171,8 @@ function Login() {
 					document.getElementById("status").innerHTML = "狀態: "
 							+ obj.Status + "<br>Reason: " + obj.Reason;
 					// 接收到找尋Client的UserData的訊息
-				} else if ("searchuserdata" == obj.Event) {
-					console.log("onMessage - searchuserdata event");
+				} else if ("senduserdata" == obj.Event) {
+					console.log("onMessage - senduserdata event");
 					document.getElementById("userdata").innerHTML = JSON
 							.stringify(obj.userdata);
 					// 接收到Agent or Client加入列表的訊息
