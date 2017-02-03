@@ -50,8 +50,8 @@
 	UserName : <input type="text" name="UserName" id="UserName" value="A123456789">
 	UserID : <input type="text" name="UserID" id="UserID" disabled>
 	<!--sendto : <input type="text" name="sendto" id="sendto">-->
-	<button type="submit" onclick="Login();" id="Login">Login</button>
-	<button type="submit" onclick="Logout();" id="Logout" disabled>Logout</button>
+	<button type="submit" onclick="Login();" id="Login">Login(進入即時訊息頁面)</button>
+	<button type="submit" onclick="Logout();" id="Logout" disabled>Logout(離開即時訊息頁面)</button>
 <!-- 	<button type="submit" id="ready" onclick="ready();" >ready</button> -->
 <!-- 	<button type="submit" id="notready" onclick="notready();" disabled>notready</button> -->
 	<span id="status"> </span>

@@ -10,6 +10,7 @@ import org.java_websocket.WebSocket;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
+import com.google.gson.JsonObject;
 
 
 
@@ -17,6 +18,9 @@ import org.json.JSONObject;
 
 
 
+
+
+import com.google.gson.JsonParser;
 
 import websocket.HeartBeat;
 import websocket.bean.TypeInfo;
@@ -156,18 +160,27 @@ public class CommonFunction {
 	/** * Get Message from Room */
 	public static void getMessageinRoom(String message,
 			org.java_websocket.WebSocket conn) {
-		JSONObject obj = new JSONObject(message);
-		String roomID = obj.getString("roomID");
-		String userid = obj.getString("id");
-		String username = obj.getString("UserName");
-		String text = obj.getString("text");
-		JSONObject sendjson = new JSONObject();
-		sendjson.put("Event", "roommessage");
-		sendjson.put("from", userid);
-		sendjson.put("username", username);
-		sendjson.put("message", text);
-		sendjson.put("channel", obj.getString("channel"));
-		WebSocketRoomPool.sendMessageinroom(roomID, sendjson.toString());
+//		JSONObject obj = new JSONObject(message);
+//		String roomID = obj.getString("roomID");
+//		String userid = obj.getString("id");
+//		String username = obj.getString("UserName");
+//		String text = obj.getString("text");
+//		JSONObject sendjson = new JSONObject();
+//		sendjson.put("Event", "messagetoRoom");
+//		sendjson.put("from", userid);
+//		sendjson.put("username", username);
+//		sendjson.put("message", text);
+//		sendjson.put("channel", obj.getString("channel"));
+//		WebSocketRoomPool.sendMessageinroom(roomID, sendjson.toString());
+		
+		// 嘗試使用gson
+		JsonParser jsonParser = new JsonParser(); 
+		JsonObject msgJson = jsonParser.parse(message).getAsJsonObject();
+		msgJson.addProperty("Event", "messagetoRoom");
+		WebSocketRoomPool.sendMessageinroom(msgJson.get("roomID").getAsString(), msgJson.toString());
+		System.out.println("msgJson: "+ msgJson);
+//		System.out.println("msgJson.get('roomSS'): " + msgJson.get("roomSS")); // test - 查不到就會是null,而非exception
+		
 	}
 	
 	// room

@@ -136,16 +136,16 @@ function Login() {
 						find();
 					}
 					// 收到群組訊息
-				} else if ("roommessage" == obj.Event) {
+				} else if ("messagetoRoom" == obj.Event) {
 					var UserID = document.getElementById('UserID').value;
 					// 判斷是否有開啟layim與是否為自己傳送的訊息
-					if (true == layimswitch && obj.from != UserID) {
+					if (true == layimswitch && obj.id != UserID) {
 						// 將收到訊息顯示到layim上
-						getmessagelayim(obj.message, obj.from, obj.username);
+						getmessagelayim(obj.text, obj.id, obj.UserName);
 					}
 					// 控制前端傳值
-					document.getElementById("text").innerHTML += obj.username
-							+ ": " + obj.message + "<br>";
+					document.getElementById("text").innerHTML += obj.UserName
+							+ ": " + obj.text + "<br>";
 
 				} else if ("senduserdata" == obj.Event) {
 					contactID = obj.userdata.SetContactLog.contactID;

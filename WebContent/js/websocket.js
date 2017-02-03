@@ -69,19 +69,19 @@ function Login() {
 					document.getElementById("Eventform").value = obj.from;
 					document.getElementById("Event").innerHTML = obj.Event;
 					// 接收到group訊息
-				} else if ("roommessage" == obj.Event) {
+				} else if ("messagetoRoom" == obj.Event) {
 					var UserID = document.getElementById('UserID').value;
 					// 判斷是否有開啟layim與是否為自己傳送的訊息
-					if (true == layimswitch && obj.from != UserID) {
+					if (true == layimswitch && obj.id != UserID) {
 						// 將收到訊息顯示到layim上
-						getclientmessagelayim(obj.message, obj.from,
-								obj.username);
+						getclientmessagelayim(obj.text, obj.id,
+								obj.UserName);
 						// 將訊息顯示到測試訊息框
-						document.getElementById("chatContent").innerHTML += (obj.message + "&#13;&#10");
+						document.getElementById("chatContent").innerHTML += (obj.text + "&#13;&#10");
 						
 					}
-					document.getElementById("text").innerHTML += obj.username
-							+ ": " + obj.message + "<br>";
+					document.getElementById("text").innerHTML += obj.UserName
+							+ ": " + obj.text + "<br>";
 					// 接收到離開Agent列表的訊息
 				} else if ("userExitfromTYPE" == obj.Event) {
 					layui.use('layim', function(layim) {
@@ -640,7 +640,7 @@ function sendtoRoomonlay01(text, aRoomID) {
 	var msg = {
 		type : "messagetoRoom",
 		text : text,
-		id : UserID,
+		id : UserID_g,
 		UserName : UserName,
 		roomID : aRoomID,
 		channel : "chat",
