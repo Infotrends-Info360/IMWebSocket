@@ -9,6 +9,7 @@ var startdate = new Date();
 var ixnstatus = 0;
 var ixnactivitycode;
 var waittingAgent = false;
+var UserID_g;
 
 // 控制例外離開動作(如: 刷新頁面、關閉視窗)
 function checktoLeave() {
@@ -156,6 +157,7 @@ function Login() {
 				} else if ("userjoin" == obj.Event) {
 					// 控制前端傳值
 					document.getElementById("UserID").value = obj.from;
+					UserID_g = obj.from;
 					var UserID = document.getElementById('UserID').value;
 					/** 成功登入後,開始找尋Agent **/
 					var now = new Date();
@@ -526,23 +528,22 @@ function senduserdata(UserID, phone, sendto) {
 }
 
 // 傳送群組訊息至layim視窗上
-function sendtoRoomonlay(text) {
-	var UserID = document.getElementById('UserID').value;
-	// var group = 'G'+document.getElementById('group').value;
-	var now = new Date();
+function sendtoRoomonlay(aText) {
+	
 	// 組成傳送群組訊息至layim視窗上的JSON指令
-	var msg = {
-		type : "messagetoRoom",
-		text : text,
-		id : UserID,
-		UserName : UserName,
-		roomID : roomID,
-		channel : "chat",
-		date : now.getHours() + ":" + now.getMinutes() + ":" + now.getSeconds()
-	};
-
+	var myMessagetoRoomJson = Object.create(messagetoRoomJson); // test
+	myMessagetoRoomJson.buildup("messagetoRoom", "Client", aText, UserID_g, UserName, roomID, "chat", "");
+//	myMessagetoRoomJson.type = "messagetoRoom";
+//	myMessagetoRoomJson.roomID = roomID; // Client至多只會有一個roomID
+//	myMessagetoRoomJson.ACtype = "Client";
+//	myMessagetoRoomJson.id = UserID_g;
+//	myMessagetoRoomJson.UserName = UserName;
+//	myMessagetoRoomJson.text = aText;
+//	myMessagetoRoomJson.channel = "chat";
+//	myMessagetoRoomJson.date = "";	// 日期部分須到server端拿
+	
 	// 發送消息給WebSocket
-	ws.send(JSON.stringify(msg));
+	ws.send(JSON.stringify(myMessagetoRoomJson));
 }
 
 // layim取得訊息

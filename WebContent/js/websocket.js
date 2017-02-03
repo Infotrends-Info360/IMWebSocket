@@ -634,31 +634,19 @@ function sendtoRoomonlay(text) {
 }
 
 function sendtoRoomonlay01(aText, aRoomID) {
-	var UserID = document.getElementById('UserID').value;
-	var now = new Date();
 	// 組成傳送群組訊息至layim視窗上的JSON指令
 	var myMessagetoRoomJson = Object.create(messagetoRoomJson); // test
-	myMessagetoRoomJson.type = "messagetoRoom";
-	myMessagetoRoomJson.roomID = aRoomID;
-	myMessagetoRoomJson.ACtype = "Agent";
-	myMessagetoRoomJson.id = UserID_g;
-	myMessagetoRoomJson.UserName = UserName;
-	myMessagetoRoomJson.text = aText;
-	myMessagetoRoomJson.channel = "chat";
+	myMessagetoRoomJson.buildup("messagetoRoom", "Agent",aText, UserID_g, UserName, aRoomID, "chat", "");
+//	myMessagetoRoomJson.type = "messagetoRoom";
+//	myMessagetoRoomJson.roomID = aRoomID;
+//	myMessagetoRoomJson.ACtype = "Agent";
+//	myMessagetoRoomJson.id = UserID_g;
+//	myMessagetoRoomJson.UserName = UserName;
+//	myMessagetoRoomJson.text = aText;
+//	myMessagetoRoomJson.channel = "chat";
+//	myMessagetoRoomJson.date = "";	// 日期部分須到server端拿
 	
-//	var msg = {
-//		type : "messagetoRoom",
-//		roomID : aRoomID,
-//		ACtype : "Agent",
-//		id : UserID_g,
-//		UserName : UserName,
-//		text : text,
-//		channel : "chat",
-//		date : now.getHours() + ":" + now.getMinutes() + ":" + now.getSeconds()
-//	};
-
 	// 發送消息給WebSocket
-//	ws.send(JSON.stringify(msg));
 	ws.send(JSON.stringify(myMessagetoRoomJson));
 }
 
