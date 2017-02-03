@@ -70,9 +70,9 @@ function Login() {
 					document.getElementById("Event").innerHTML = obj.Event;
 					// 接收到group訊息
 				} else if ("messagetoRoom" == obj.Event) {
-					var UserID = document.getElementById('UserID').value;
+//					var UserID = document.getElementById('UserID').value;
 					// 判斷是否有開啟layim與是否為自己傳送的訊息
-					if (true == layimswitch && obj.id != UserID) {
+					if (true == layimswitch && obj.id != UserID_g) {
 						// 將收到訊息顯示到layim上
 						getclientmessagelayim(obj.text, obj.id,
 								obj.UserName);
@@ -633,22 +633,33 @@ function sendtoRoomonlay(text) {
 	sendtoRoomonlay01(text, RoomID);
 }
 
-function sendtoRoomonlay01(text, aRoomID) {
+function sendtoRoomonlay01(aText, aRoomID) {
 	var UserID = document.getElementById('UserID').value;
 	var now = new Date();
 	// 組成傳送群組訊息至layim視窗上的JSON指令
-	var msg = {
-		type : "messagetoRoom",
-		text : text,
-		id : UserID_g,
-		UserName : UserName,
-		roomID : aRoomID,
-		channel : "chat",
-		date : now.getHours() + ":" + now.getMinutes() + ":" + now.getSeconds()
-	};
+	var myMessagetoRoomJson = Object.create(messagetoRoomJson); // test
+	myMessagetoRoomJson.type = "messagetoRoom";
+	myMessagetoRoomJson.roomID = aRoomID;
+	myMessagetoRoomJson.ACtype = "Agent";
+	myMessagetoRoomJson.id = UserID_g;
+	myMessagetoRoomJson.UserName = UserName;
+	myMessagetoRoomJson.text = aText;
+	myMessagetoRoomJson.channel = "chat";
+	
+//	var msg = {
+//		type : "messagetoRoom",
+//		roomID : aRoomID,
+//		ACtype : "Agent",
+//		id : UserID_g,
+//		UserName : UserName,
+//		text : text,
+//		channel : "chat",
+//		date : now.getHours() + ":" + now.getMinutes() + ":" + now.getSeconds()
+//	};
 
 	// 發送消息給WebSocket
-	ws.send(JSON.stringify(msg));
+//	ws.send(JSON.stringify(msg));
+	ws.send(JSON.stringify(myMessagetoRoomJson));
 }
 
 // layim取得訊息
@@ -1030,6 +1041,8 @@ function notready() {
 	document.getElementById("ready").disabled = false;
 	document.getElementById("notready").disabled = true;
 }
+
+
 
 // 測試按鈕
 function test() {

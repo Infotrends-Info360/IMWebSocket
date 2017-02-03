@@ -177,9 +177,12 @@ public class CommonFunction {
 		JsonParser jsonParser = new JsonParser(); 
 		JsonObject msgJson = jsonParser.parse(message).getAsJsonObject();
 		msgJson.addProperty("Event", "messagetoRoom");
+		if (msgJson.get("roomID") == null) return;
 		WebSocketRoomPool.sendMessageinroom(msgJson.get("roomID").getAsString(), msgJson.toString());
 		System.out.println("msgJson: "+ msgJson);
 //		System.out.println("msgJson.get('roomSS'): " + msgJson.get("roomSS")); // test - 查不到就會是null,而非exception
+		
+		// 
 		
 	}
 	

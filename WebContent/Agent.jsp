@@ -18,9 +18,11 @@
 
 <link rel="stylesheet" href="layui/css/layui.css">
 
+<script type="text/javascript" src="js/beans.js"></script>
 <script type="text/javascript" src="js/jquery.min.js"></script>
 <script type="text/javascript" src="js/websocket.js"></script>
 <script src="layui/layui.js"></script>
+
 </head>
 <body onbeforeunload="checktoLeave()"> 
 	UserName : <input type="text" name="UserName" id="UserName" value="agent01">
