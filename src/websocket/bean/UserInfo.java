@@ -14,6 +14,13 @@ public class UserInfo {
 	private Timer heartbeatTimer;
 	private String ACType;
 	private java.util.Date startdate;
+	// 以下為原本TypeInfo部分的屬性
+	private String reason;
+	private String status;
+	private String time;
+	
+	
+	
 	public String getUserid() {
 		return userid;
 	}
@@ -61,6 +68,24 @@ public class UserInfo {
 	}
 	public void setStartdate(java.util.Date startdate) {
 		this.startdate = startdate;
+	}
+	public String getReason() {
+		return reason;
+	}
+	public void setReason(String reason) {
+		this.reason = reason;
+	}
+	public String getStatus() {
+		return status;
+	}
+	public void setStatus(String status) {
+		this.status = status;
+	}
+	public String getTime() {
+		return time;
+	}
+	public void setTime(String time) {
+		this.time = time;
 	}
 	
 	

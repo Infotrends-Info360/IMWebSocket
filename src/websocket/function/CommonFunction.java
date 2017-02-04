@@ -12,7 +12,7 @@ import org.json.JSONObject;
 
 import com.google.gson.JsonObject;
 
-
+import util.Util;
 
 
 
@@ -23,7 +23,6 @@ import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 
 import websocket.HeartBeat;
-import websocket.bean.TypeInfo;
 //import websocket.HeartBeat;
 import websocket.pools.WebSocketRoomPool;
 import websocket.pools.WebSocketTypePool;
@@ -76,7 +75,7 @@ public class CommonFunction {
 				+ WebSocketUserPool.getOnlineUser().toString());
 		
 		/*** 將user加入到各自的TYPEmap ***/
-		SimpleDateFormat sdf = new SimpleDateFormat("HH:mm:ss");
+		SimpleDateFormat sdf = new SimpleDateFormat(Util.getSdfTimeFormat());
 		String date = sdf.format(new java.util.Date());
 		WebSocketTypePool.addUserinTYPE(ACtype, username, userId, date, conn);
 		
@@ -226,7 +225,8 @@ public class CommonFunction {
 		String ACtype = obj.getString("ACtype");
 		String userid = obj.getString("id");
 		String username = obj.getString("UserName");
-		String date = obj.get("date").toString();
+		SimpleDateFormat sdf = new SimpleDateFormat(Util.getSdfTimeFormat());
+		String date = sdf.format(new java.util.Date());
 		String joinMsg = "[Server]" + username + " join " + ACtype;
 		WebSocketTypePool.addUserinTYPE(ACtype, username, userid, date, conn); // 
 		WebSocketTypePool.sendMessageinTYPE(ACtype, joinMsg);

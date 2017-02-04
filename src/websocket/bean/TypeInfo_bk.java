@@ -1,7 +1,7 @@
 package websocket.bean;
 
 //此類別給WebSocketTypePool.TYPEconnections使用
-public class TypeInfo {
+public class TypeInfo_bk {
 	private String userid;
 	private String username;
 	private String status;
