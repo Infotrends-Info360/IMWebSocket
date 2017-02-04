@@ -1,13 +1,10 @@
 package websocket.pools;
 
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.HashSet;
-import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -29,32 +26,39 @@ public class WebSocketRoomPool{
 	/**
 	 * Room Members Map
 	 */
-	private static final Map<String, Map<WebSocket, RoomInfo>> roomuserconnections = new HashMap<String, Map<WebSocket, RoomInfo>>();
+//	private static final Map<String, Map<WebSocket, RoomInfo>> roomuserconnections = new HashMap<String, Map<WebSocket, RoomInfo>>();
+	private static final Map<String, RoomInfo> roomMap = new HashMap<>();
+	
 	
 	/** * Add User to Room Map * @param inbound */
-	public static void addUserinroom(String room,String username,String userid, WebSocket conn) {
+	public static void addUserinroom(String roomID,String username,String userid, WebSocket conn) {
 		
-		RoomInfo roominfo = new RoomInfo();
-		roominfo.setUserid(userid);
-		roominfo.setUsername(username);
-		Date starttime = new Date();
-		roominfo.setStarttime(starttime);
-		
-		Map<WebSocket, RoomInfo> roommap = roomuserconnections.get(room);
-		if (roommap == null || roommap.isEmpty()){
-			roommap = new HashMap<WebSocket, RoomInfo>();			
+		// 找是否已有roomInfo(表示已經有人先加入此room了)
+		RoomInfo roomInfo = roomMap.get(roomID);	
+		if (roomInfo == null){
+			//建立實體
+			roomInfo = new RoomInfo();					
+			//拿ID
+			roomInfo.setRoomID(roomID);
+			//拿room建立時間
+			Date starttime = new Date();
+			roomInfo.setStarttime(starttime);
 		}
-		roommap.put(conn, roominfo);
-		roomuserconnections.put(room, roommap);
+				
+		//拿UserInfo:
+		UserInfo userInfo = WebSocketUserPool.getUserallconnections().get(conn);
+		roomInfo.getUserConns().put(conn, userInfo);		
 		
-		System.out.println("room: " + room + " now has " + roomuserconnections.get(room).size() + " users online");
+		//將roomInfo放入roomMap中
+		roomMap.put(roomID, roomInfo);
+//		System.out.println("room: " + room + " now has " + roomuserconnections.get(room).size() + " users online");
 	}
 	
 	/** * Remove User from Room * @param inbound */
-	public static boolean removeRoom(String room) {
+	public static boolean removeRoom(String aRoomID) {
 		//Map<WebSocket, Map<String,String>> roommap = roomuserconnections.get(room);
-		if (roomuserconnections.containsKey(room)) {
-			roomuserconnections.remove(room);
+		if (roomMap.containsKey(aRoomID)) {
+			roomMap.remove(aRoomID);
 			return true;
 		} else {
 			return false;
@@ -62,76 +66,76 @@ public class WebSocketRoomPool{
 	}
 	
 	/** * Remove User from Room * @param inbound */
-	public static void removeUserinroom(String aRoomID,WebSocket conn) {
+	public static void removeUserinroom(String aRoomID,WebSocket aConn) {
 		// 把離開的邏輯坐在這裡
 		// 1. 若是Client離開 -> 則把所有人都踢出此room
 		// 2. 若是Agent離開 && 剩餘人數 > 1 -> 自己退出就好
 		// 3. 若是Agent離開 && 剩餘人數 == 1 -> 則把所有人都踢出此room
-		System.out.println("removeUserinroom(String room,WebSocket conn) called");
-		Map<WebSocket, RoomInfo> roommap = roomuserconnections.get(aRoomID);
-//		Set<WebSocket> memberConns = roommap.keySet();
-		Set<WebSocket> tmpMemberConns = new HashSet(roommap.keySet());
+		System.out.println("removeUserinroom(String aRoomID,WebSocket aConn) called");
+		RoomInfo roomInfo = roomMap.get(aRoomID);
+//		Set<WebSocket> tmpMemberConns = new HashSet(roommap.keySet());
+		Map<WebSocket, UserInfo> connsInRoomMap = roomInfo.getUserConns();
+		Set<WebSocket> tmpConnsInRoom = new HashSet<>(connsInRoomMap.keySet()); // 通知用,可避免出現concurrent Exception
 		JSONObject sendJson = new JSONObject();
 		sendJson.put("Event", "removeUserinroom");
 		sendJson.put("roomID", aRoomID);
 		
-		
-		
-		
-		if (roommap != null && roommap.containsKey(conn)) {
+		if (connsInRoomMap != null && connsInRoomMap.containsKey(aConn)) {
 //			System.out.println(conn + "'s room is " + " removed");
-			String currACType = WebSocketUserPool.getACTypeByKey(conn);
-			System.out.println("ACType: " + WebSocketUserPool.getACTypeByKey(conn));
+			String currACType = WebSocketUserPool.getACTypeByKey(aConn);
+			System.out.println("ACType: " + WebSocketUserPool.getACTypeByKey(aConn));
 			
 			/** 清除room相關資料 **/
 			if ("Client".equals(currACType)){
 				System.out.println("Client 全清");
 				//全清:
-				for (WebSocket memberConn: tmpMemberConns){
-					WebSocketUserPool.removeUserRoom(memberConn);
+				for (WebSocket conn: tmpConnsInRoom){
+					WebSocketUserPool.removeUserRoom(conn);
 				}
-				roommap.clear();
-				sendJson.put("result", WebSocketUserPool.getUserNameByKey(conn) + " closed the room" + aRoomID);
+				connsInRoomMap.clear();
+				sendJson.put("result", WebSocketUserPool.getUserNameByKey(aConn) + " closed the room" + aRoomID);
 			// 之後可將一二條件式合併:
-			}else if (roommap.size() == 2){ 
-				System.out.println("roommap.size() == 2 全清");
+			}else if (connsInRoomMap.size() == 2){ 
+				System.out.println("connsInRoom.size() == 2 全清");
 				//也全清:
-				for (WebSocket memberConn: tmpMemberConns){
-					WebSocketUserPool.removeUserRoom(memberConn);
+				for (WebSocket conn: tmpConnsInRoom){
+					WebSocketUserPool.removeUserRoom(conn);
 				}
-				roommap.clear();
-				sendJson.put("result", WebSocketUserPool.getUserNameByKey(conn) + " closed the room" + aRoomID);				
-			}else if (roommap.size() > 2){
-				System.out.println("roommap.size() > 2  清自己");
+				connsInRoomMap.clear();
+				sendJson.put("result", WebSocketUserPool.getUserNameByKey(aConn) + " closed the room" + aRoomID);				
+			}else if (connsInRoomMap.size() > 2){
+				System.out.println("connsInRoom.size() > 2  清自己");
 				//清Agent自己
-				WebSocketUserPool.removeUserRoom(conn);
-				roommap.remove(conn);
-				sendJson.put("result", WebSocketUserPool.getUserNameByKey(conn) + " left the room" + aRoomID);				
+				WebSocketUserPool.removeUserRoom(aConn);
+				connsInRoomMap.remove(aConn);
+				sendJson.put("result", WebSocketUserPool.getUserNameByKey(aConn) + " left the room" + aRoomID);				
 			}
-			System.out.println("roomId: " + aRoomID + " size: " + roommap.size());
+			System.out.println("roomId: " + aRoomID + " size: " + connsInRoomMap.size());
 			sendJson.put("roomMembers", WebSocketRoomPool.getOnlineUserinroom(aRoomID).toString());
 			
 			
 			/** 告知所有成員有人離開room,請更新前端頁面 **/
-			for (WebSocket memberConn: tmpMemberConns){
+			for (WebSocket conn: tmpConnsInRoom){
 				// 若是Logout()觸發的,則跳過
-				if (memberConn.isClosed() || memberConn.isClosing()){
+				if (conn.isClosed() || conn.isClosing()){
 					continue;
 				}
-				WebSocketUserPool.sendMessageToUser(memberConn, sendJson.toString());
+				WebSocketUserPool.sendMessageToUser(conn, sendJson.toString());
 			}
 		}
 	}
 	
 	/** * Send Message to all of User in Room * @param message */
-	public static void sendMessageinroom(String room,String message) {
-		Map<WebSocket, RoomInfo> roommap = roomuserconnections.get(room);
-		Set<WebSocket> keySet = roommap.keySet();
-		synchronized (keySet) {
-			for (WebSocket conn : keySet) {
-				String userid = roommap.get(conn).getUserid();
-				if (userid != null) {
-					conn.send(message);
+	public static void sendMessageinroom(String aRoomID,String aMessage) {
+		RoomInfo roomInfo = roomMap.get(aRoomID);
+		Map<WebSocket, UserInfo> connsInRoomMap = roomInfo.getUserConns();
+		
+		Set<WebSocket> connsInRoom = connsInRoomMap.keySet();
+		synchronized (connsInRoom) {
+			for (WebSocket conn : connsInRoom) {
+				String userID = connsInRoomMap.get(conn).getUserid();
+				if (userID != null) {
+					conn.send(aMessage);
 				}
 			}
 		}
@@ -139,11 +143,14 @@ public class WebSocketRoomPool{
 	
 	/** * Get Online User Name in Room * @return */
 	// 先預留著,以後判斷須不須保留
-	public static Collection<String> getOnlineUserinroom(String room) {
-		Map<WebSocket, RoomInfo> roommap = roomuserconnections.get(room);
-		List<String> setUsers = new ArrayList<String>();
-		Collection<RoomInfo> setUser = roommap.values();
-		for (RoomInfo u : setUser) {
+	public static Collection<String> getOnlineUserinroom(String aRoomID) {
+		RoomInfo roomInfo = roomMap.get(aRoomID);
+		Map<WebSocket, UserInfo> connsInRoomMap = roomInfo.getUserConns();
+		
+		List<String> setUsers = new ArrayList<>();
+		Collection<UserInfo> setUser = connsInRoomMap.values();
+		
+		for (UserInfo u : setUser) {
 			setUsers.add(u.getUsername());
 		}
 		return setUsers;
@@ -151,27 +158,28 @@ public class WebSocketRoomPool{
 	
 	/** * Get Online count in Room * @return */
 	// 先預留著,以後判斷須不須保留
-	public static int getOnlineUserInRoomCount(String room) {
-		return roomuserconnections.get(room).size();
+	public static int getOnlineUserInRoomCount(String aRoomID) {
+		return roomMap.get(aRoomID).getUserConns().size();
 	}
 	
 	/** * Get User Name By WebSocket Key from Room * @param session */
 	// 先預留著,以後判斷須不須保留
-	public static String getUserByKeyInRoom(String room, WebSocket conn) {
-		Map<WebSocket, RoomInfo> roommap = roomuserconnections.get(room);
-		return roommap.get(conn).getUsername();
+	public static String getUserByKeyInRoom(String aRoomID, WebSocket aConn) {
+		RoomInfo roomInfo = roomMap.get(aRoomID);
+		Map<WebSocket, UserInfo> connsInRoomMap = roomInfo.getUserConns();
+		return connsInRoomMap.get(aConn).getUsername();
 	}
 
 	/** * Get Online Room Count * @param */
 	public static int getRoomCount() {
-		return roomuserconnections.size();
+		return roomMap.size();
 	}
 	
 	/** * Get Process Time Count * @param */
-	public static String getProcessTimeCount(String room, WebSocket conn) {
+	public static String getProcessTimeCount(String aRoomID, WebSocket aConn) {
 		Date nowtime = new Date();
-		Date starttime = roomuserconnections.get(room).get(conn).getStarttime();
-		long ProcessTime = starttime.getTime()-nowtime.getTime();
+		Date starttime = roomMap.get(aRoomID).getStarttime(); // 房間開啟時間
+		long ProcessTime = starttime.getTime() - nowtime.getTime();
 		long seconds = 0, minutes = 0, hours = 0;
 	    seconds = ProcessTime / 1000;
 	    hours = seconds / 3600;
@@ -182,9 +190,9 @@ public class WebSocketRoomPool{
 	}
 	
 	/** * Get Online Room * @param */
-	public static Collection<String> getRooms() {
+	public static Collection<String> getRooms() { // get RoomID
 		List<String> setRooms = new ArrayList<String>();
-		Collection<String> setRoom = roomuserconnections.keySet();
+		Collection<String> setRoom = roomMap.keySet();
 		for (String u : setRoom) {
 			//System.out.println("u: "+u);
 			setRooms.add(u);
@@ -194,13 +202,15 @@ public class WebSocketRoomPool{
 
 	/** * Get WebSocket Key By User ID from Room * @param user */
 	// 先預留著,以後判斷須不須保留
-	public static WebSocket getWebSocketByUserInRoom(String room,String user) {
-		Map<WebSocket, RoomInfo> roommap = roomuserconnections.get(room);
-		Set<WebSocket> keySet = roommap.keySet();
-		synchronized (keySet) {
-			for (WebSocket conn : keySet) {
-				String cuser = roommap.get(conn).getUserid();
-				if (cuser.equals(user)) {
+	public static WebSocket getWebSocketByUserInRoom(String aRoomID,String aUser) {
+		RoomInfo roomInfo = roomMap.get(aRoomID);
+		Map<WebSocket, UserInfo> connsInRoomMap = roomInfo.getUserConns();
+
+		Set<WebSocket> connsInRoom = connsInRoomMap.keySet();
+		synchronized (connsInRoom) {
+			for (WebSocket conn : connsInRoom) {
+				String userID = connsInRoomMap.get(conn).getUserid();
+				if (userID.equals(aUser)) {
 					return conn;
 				}
 			}
@@ -208,8 +218,8 @@ public class WebSocketRoomPool{
 		return null;
 	}
 
-	public static Map<String, Map<WebSocket, RoomInfo>> getRoomUserConnections() {
-		return roomuserconnections;
+	public static Map<String, RoomInfo> getRoomUserConnections() {
+		return roomMap;
 	}
 	
 	

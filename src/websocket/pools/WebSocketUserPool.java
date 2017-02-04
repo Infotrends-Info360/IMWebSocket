@@ -27,7 +27,7 @@ public class WebSocketUserPool {
 	 * online User ID/NAME Map
 	 * 暫時先設為public,測試用
 	 */
-	public static final Map<WebSocket, UserInfo> userallconnections = new HashMap<WebSocket,UserInfo>();	
+	private static final Map<WebSocket, UserInfo> userallconnections = new HashMap<WebSocket,UserInfo>();	
 	
 	/** * Get User ID By Key * @param session */ /* Done */
 	public static String getUserByKey(WebSocket conn) {
@@ -212,6 +212,11 @@ public class WebSocketUserPool {
 		if (userInfo == null) return null;
 		return userInfo.getStartdate();
 	}
+
+	public static Map<WebSocket, UserInfo> getUserallconnections() {
+		return userallconnections;
+	}
+	
 	
 	
 }
