@@ -111,7 +111,7 @@ public class WebSocketRoomPool{
 				sendJson.put("result", WebSocketUserPool.getUserNameByKey(aConn) + " left the room" + aRoomID);				
 			}
 			System.out.println("roomId: " + aRoomID + " size: " + connsInRoomMap.size());
-			sendJson.put("roomMembers", WebSocketRoomPool.getOnlineUserinroom(aRoomID).toString());
+			sendJson.put("roomMembers", getOnlineUserinroom(aRoomID).toString());
 			
 			
 			/** 告知所有成員有人離開room,請更新前端頁面 **/
