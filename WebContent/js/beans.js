@@ -20,6 +20,11 @@ var messagetoRoomJson = {
 		}			
 }
 
+//
+function myRoomMemberJsonObj(aID){
+	this.ID = aID;
+}
+
 // reference:
 // https://developer.mozilla.org/en-US/docs/Web/JavaScript/Guide/Working_with_Objects
 // Animal properties and method encapsulation

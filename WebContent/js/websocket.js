@@ -172,8 +172,23 @@ function Login() {
 					document.getElementById("Event").innerHTML = obj.Event;
 
 					AcceptEventAction();
-					//addRoom(); // 先將Client加入到room
-					addRoom(myRoomID); // 再將Agent加入到room  改AcceptEvent()架構的目的在這
+					
+					// 一次將Agent與Client加入到room中
+					var currClientID = document.getElementById("clientID").innerHTML;
+					// 在此使用新的方法,將一個list的成員都加入到同一群組中
+					var memberListToJoin = [];
+					var mem1 = new myRoomMemberJsonObj(currClientID);
+					var mem2 = new myRoomMemberJsonObj(UserID_g);
+					memberListToJoin.push(mem1);
+					memberListToJoin.push(mem2);
+
+					var memberListToJoinJson = JSON.stringify(memberListToJoin);
+//					addRoomForMany(myRoomID, memberListToJoinJson);
+					addRoomForMany(myRoomID, memberListToJoin);
+//					addRoom(currClientID); // 先將Client加入到room
+//					addRoom(myRoomID); // 再將Agent加入到room  改AcceptEvent()架構的目的在這
+					
+					
 					updateStatusAction("Established", "Established");
 
 					layuiUse01(); // 先暫時這樣隔開,之後有需要細改再看此部分
@@ -426,6 +441,31 @@ function online() {
 }
 
 // 加入群組
+function addRoomForMany(aRoomID, aMemberListToJoin){
+	
+	//JSONObject jo = new JSONObject(aMemberListToJoin);
+//	console.log(JSON.parse(aMemberListToJoin));
+	console.log("addRoomForMany() - aMemberListToJoin"+ aMemberListToJoin);
+	// 向websocket送出加入群組指令
+	var now = new Date();
+	var msg = {
+		type : "addRoomForMany",
+		roomID : aRoomID,
+		memberListToJoin : aMemberListToJoin,
+		ACtype : "Agent",
+		UserName : UserName,
+		date : now.getHours() + ":" + now.getMinutes() + ":" + now.getSeconds()
+	};
+
+	// 發送消息
+	ws.send(JSON.stringify(msg));
+
+	document.getElementById("groupstatus").innerHTML = "加入" + RoomID + "群組";
+	document.getElementById("leaveRoom").disabled = false;
+	document.getElementById("addRoom").disabled = true;
+	document.getElementById("roomonline").disabled = false;	
+}
+
 function addRoom(aRoomID) {
 	var UserID = document.getElementById('UserID').value;
 	// 向websocket送出加入群組指令

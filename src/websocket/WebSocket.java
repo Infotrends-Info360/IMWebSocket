@@ -14,6 +14,11 @@ import org.java_websocket.server.WebSocketServer;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
+import com.google.gson.JsonArray;
+import com.google.gson.JsonElement;
+import com.google.gson.JsonObject;
+
+import util.Util;
 import websocket.bean.RoomInfo;
 import websocket.function.AgentFunction;
 import websocket.function.ClientFunction;
@@ -160,13 +165,15 @@ public class WebSocket extends WebSocketServer {
 		case "refreshRoomList":
 			CommonFunction.refreshRoomList(conn);
 			break;
+		case "addRoomForMany":
+			addRoomForMany(message.toString(), conn);
+			break;
 		case "test":
 			this.test();
 			break;
 		}
 	}
 	
-
 
 	/** * user leave websocket (Demo) */
 	// 此方法沒有用到,先放著,並不會影響到主流程
@@ -309,6 +316,37 @@ public class WebSocket extends WebSocketServer {
 			System.out.println("responseThirdParty() - reject");			
 		}
 	
+	}
+	
+	private void addRoomForMany(String aMsg, org.java_websocket.WebSocket aConn) {
+		JsonObject msgJson = Util.getGJsonObject(aMsg);
+		System.out.println("addRoomForMany - msgJson: " + msgJson);
+		String roomID = msgJson.get("roomID").getAsString();
+		JsonArray userIDJsonAry = msgJson.getAsJsonArray("memberListToJoin");		
+		
+		for (JsonElement userIDJsonE : userIDJsonAry){
+			JsonObject userIDJsonObj = userIDJsonE.getAsJsonObject();
+			String userID = userIDJsonObj.get("ID").getAsString();
+			System.out.println("userID: " + userID);
+			org.java_websocket.WebSocket userConn = WebSocketUserPool.getWebSocketByUser(userID);
+			System.out.println("userConn: " + userConn);
+			String username = WebSocketUserPool.getUserNameByKey(userConn);
+			String joinMsg = "[Server]" + username + " join " + roomID + " room";
+			
+			WebSocketRoomPool.addUserinroom(roomID, username, userID, userConn); //重要步驟
+			WebSocketUserPool.addUserRoom(roomID, userConn); //重要步驟
+			WebSocketRoomPool.sendMessageinroom(roomID, joinMsg);
+			WebSocketRoomPool.sendMessageinroom(roomID, "room people: "
+					+ WebSocketRoomPool.getOnlineUserinroom(roomID).toString());
+			
+			// 更新room list
+			String ACtype = WebSocketUserPool.getACTypeByKey(userConn);
+			if ("Agent".equals(ACtype)){
+				System.out.println("userjointoroom - one Agent joined");
+				CommonFunction.refreshRoomList(userConn);
+			}
+		}
+		
 	}
 	
 	

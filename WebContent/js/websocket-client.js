@@ -67,11 +67,11 @@ function Login() {
 				if ("AcceptEvent" == obj.Event) {
 					var UserID = document.getElementById('UserID').value;
 					// var group = 'G'+document.getElementById('group').value;
-					roomID = obj.roomID;
-					console.log("roomID: " + roomID);
+//					roomID = obj.roomID;
+//					console.log("roomID: " + roomID);
 					var now = new Date();
 					// 組成增加群組的JSON指令
-					addRoom(roomID); //取代下面的Code
+//					addRoom(roomID); //取代下面的Code
 					
 					var updateAgentStatusmsg = {
 						    type: "updateStatus",

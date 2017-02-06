@@ -179,7 +179,7 @@ public class CommonFunction {
 		// 拿取資料(gson)
 		JsonParser jsonParser = new JsonParser(); 
 		JsonObject msgJson = jsonParser.parse(message).getAsJsonObject();
-		System.out.println("initial msgJson: "+ msgJson);
+		System.out.println("getMessageinRoom() msgJson: "+ msgJson);
 		
 		// 將新訊息更新到RoomInfo bean上
 		System.out.println("msgJson.text: " + msgJson.get("text").getAsString());

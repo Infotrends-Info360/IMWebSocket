@@ -75,6 +75,8 @@ public class WebSocketUserPool {
 		synchronized (conns) {
 			for (WebSocket conn : conns) {
 				String cuser = userallconnections.get(conn).getUserid();
+//				System.out.println("***cuser: " + cuser);
+//				System.out.println("***user: " + user);
 				if (cuser.equals(user)) {
 //					System.out.println("(getWebSocketByUser)found user id: " + cuser + "的connection");
 					return conn;
