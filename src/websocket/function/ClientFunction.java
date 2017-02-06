@@ -8,10 +8,16 @@ import java.net.HttpURLConnection;
 import java.net.URL;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.List;
 import java.util.Set;
 
+import org.json.JSONArray;
 import org.json.JSONObject;
 
+import com.google.gson.JsonObject;
+
+import util.Util;
+import websocket.bean.RoomInfo;
 import websocket.pools.WebSocketRoomPool;
 import websocket.pools.WebSocketTypePool;
 import websocket.pools.WebSocketUserPool;
@@ -189,7 +195,8 @@ public class ClientFunction {
 		int entitytypeid = 0;
 		String subtypeid = null;
 		String text = null;
-		String structuredtext = null;
+//		String structuredtext = null;
+		JSONArray structuredtext = null;
 		String thecomment = null;
 		String stoppedreason = null;
 		String activitycode = null;
@@ -226,7 +233,8 @@ public class ClientFunction {
 					text = obj.getString(key);
 					break;
 				case "structuredtext":
-					structuredtext = obj.getString(key);
+//					structuredtext = obj.getString(key);
+					structuredtext = obj.getJSONArray(key);
 					break;
 				case "thecomment":
 					thecomment = obj.getString(key);
@@ -272,7 +280,7 @@ public class ClientFunction {
 					+ "&enddate=" + enddate + "&status=" + status + "&typeid="
 					+ typeid + "&entitytypeid=" + entitytypeid + "&subtypeid="
 					+ subtypeid + "&text=" + text + "&structuredtext="
-					+ structuredtext + "&thecomment=" + thecomment
+					+ structuredtext.toString() + "&thecomment=" + thecomment
 					+ "&stoppedreason=" + stoppedreason + "&activitycode="
 					+ activitycode + "&structuredmimetype="
 					+ structuredmimetype + "&subject=" + subject;
@@ -308,9 +316,26 @@ public class ClientFunction {
 		}
 	}
 	
-	public static void setinteraction(String message, org.java_websocket.WebSocket conn){
+	public static void setinteraction(String aMsg, org.java_websocket.WebSocket aConn){
 //		System.out.println("setinteraction:"+message);
-		WebSocketUserPool.addUserInteraction(message, conn);
+		// 在此更新RoomInfo中的text, structuredtext到interaction log中
+			// 拿取需要物件
+		JsonObject msgJson = Util.getGJsonObject(aMsg);
+		List<String> roomID = WebSocketUserPool.getUserRoomByKey(aConn);
+			// 因此方法只有Client呼叫,故最多一個Client也就只有一個roomID,若有再更新即可
+		if (roomID.size() == 1){
+			RoomInfo roomInfo = WebSocketRoomPool.getRoomInfo(roomID.get(0));
+			msgJson.addProperty("text", roomInfo.getText().toString());
+			msgJson.add("structuredtext", roomInfo.getStructuredtext());
+		}else{
+			msgJson.addProperty("text", "");
+			msgJson.add("structuredtext", null);			
+		}
+		
+		System.out.println("setinteraction - msgJson: " + msgJson);
+		
+		// 更新UserInteraction
+		WebSocketUserPool.addUserInteraction(msgJson.toString(), aConn);
 	}
 	
 }

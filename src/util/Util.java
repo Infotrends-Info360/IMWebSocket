@@ -1,5 +1,8 @@
 package util;
 
+import com.google.gson.JsonObject;
+import com.google.gson.JsonParser;
+
 public class Util {
 	public static String getSdfDateFormat(){
 		return Attr.sdfDateFormat;
@@ -9,6 +12,11 @@ public class Util {
 	}
 	public static String getSdfDateTimeFormat(){
 		return Attr.sdfTimeFormat;
+	}
+	public static JsonObject getGJsonObject(String aMsg){
+		JsonParser jsonParser = new JsonParser(); 
+		JsonObject msgJson = jsonParser.parse(aMsg).getAsJsonObject();
+		return msgJson;
 	}
 
 
