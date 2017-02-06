@@ -24,7 +24,7 @@
 <script src="layui/layui.js"></script>
 
 </head>
-<body onbeforeunload="checktoLeave()"> 
+<body onbeforeunload="checktoLeave()" onload="onloadFunction()"> 
 	UserName : <input type="text" name="UserName" id="UserName" value="agent01">
 	UserID : <input type="text" name="UserID" id="UserID" disabled>
 	<br>

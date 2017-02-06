@@ -12,6 +12,28 @@ var layim; // Layim
 var layimswitch = false; // layim開關參數，判斷是否開啟layim的時機
 var isonline = false; // 判斷是否上線的開關
 
+//onloadFunction
+function onloadFunction(){
+	// for debugging
+	console.log("onloadFunction() called");
+	if (Math.random() < 0.5){
+		document.getElementById('UserName').value = "agent01";
+	}else{
+		document.getElementById('UserName').value = "agent02";		
+	}
+//	
+//	var tmpAgentName = document.getElementById('UserName').value;
+//	console.log("tmpAgentName: " + tmpAgentName);
+//	var tmpNo = tmpAgentName.charAt(6);
+//	console.log("tmpAgentName: " + tmpAgentName);
+//	var tmpNo = parseInt(tmpNo);
+//	tmpNo++;
+//	console.log("tmpNo: " + tmpNo);
+//	document.getElementById('UserName').value = "agent0" + tmpNo;
+	
+	
+}
+
 // refresh或關閉網頁時執行
 function checktoLeave() {
 	var UserID = document.getElementById('UserID').value;
