@@ -20,9 +20,11 @@ import util.Util;
 
 
 
+
 import com.google.gson.JsonParser;
 
 import websocket.HeartBeat;
+import websocket.bean.RoomInfo;
 //import websocket.HeartBeat;
 import websocket.pools.WebSocketRoomPool;
 import websocket.pools.WebSocketTypePool;
@@ -179,6 +181,14 @@ public class CommonFunction {
 		System.out.println("msgJson: "+ msgJson);
 		
 		// 將新訊息更新到RoomInfo bean上
+		System.out.println("msgJson.text: " + msgJson.get("text").getAsString());
+		RoomInfo roomInfo = WebSocketRoomPool.getRoomInfo(msgJson.get("roomID").getAsString());
+			// 更新text
+		StringBuilder text = roomInfo.getText();
+		text.append(msgJson.get("UserName").getAsString() + ": " + msgJson.get("text").getAsString() + "\n");
+		System.out.println("roomInfo.getText()\n" + roomInfo.getText());
+			// 更新structuredtext
+		
 		
 		// 將訊息寄給room線上使用者:
 		if (msgJson.get("roomID") == null) return;

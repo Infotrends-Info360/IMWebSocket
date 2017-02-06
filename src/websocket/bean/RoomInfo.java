@@ -13,7 +13,7 @@ public class RoomInfo {
 	private String roomID;
 	private Date starttime;
 	private Map<WebSocket, UserInfo> userConns = new HashMap<>();
-	private StringBuilder text;
+	private StringBuilder text = new StringBuilder();
 	private JsonArray structuredtext; // gson
 	
 	public String getRoomID() {

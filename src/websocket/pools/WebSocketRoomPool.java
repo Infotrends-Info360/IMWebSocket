@@ -190,7 +190,7 @@ public class WebSocketRoomPool{
 	}
 	
 	/** * Get Online Room * @param */
-	public static Collection<String> getRooms() { // get RoomID
+	public static Collection<String> getRoomIDs() { // get RoomID
 		List<String> setRooms = new ArrayList<String>();
 		Collection<String> setRoom = roomMap.keySet();
 		for (String u : setRoom) {
@@ -218,10 +218,13 @@ public class WebSocketRoomPool{
 		return null;
 	}
 
-	public static Map<String, RoomInfo> getRoomUserConnections() {
+	public static Map<String, RoomInfo> getRoomMaps() {
 		return roomMap;
 	}
 	
+	public static RoomInfo getRoomInfo(String aRoomID){
+		return roomMap.get(aRoomID);
+	}
 	
 	
 }

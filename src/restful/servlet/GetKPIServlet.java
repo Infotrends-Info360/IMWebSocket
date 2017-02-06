@@ -41,7 +41,7 @@ public class GetKPIServlet {
 		}
 		
 		
-		Collection<String> CollectionRooms = WebSocketRoomPool.getRooms();
+		Collection<String> CollectionRooms = WebSocketRoomPool.getRoomIDs();
 		JSONArray roomsjsonarray = new JSONArray();
 		for (String room : CollectionRooms) {
 			JSONObject roomsjsonobject = new JSONObject();
