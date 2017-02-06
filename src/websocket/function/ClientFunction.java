@@ -229,13 +229,13 @@ public class ClientFunction {
 				case "subtypeid":
 					subtypeid = obj.getString(key);
 					break;
-				case "text":
-					text = obj.getString(key);
-					break;
-				case "structuredtext":
-//					structuredtext = obj.getString(key);
-					structuredtext = obj.getJSONArray(key);
-					break;
+//				case "text":
+//					text = obj.getString(key);
+//					break;
+//				case "structuredtext":
+////					structuredtext = obj.getString(key);
+//					structuredtext = obj.getJSONArray(key);
+//					break;
 				case "thecomment":
 					thecomment = obj.getString(key);
 					break;
@@ -275,12 +275,21 @@ public class ClientFunction {
 		StringBuilder responseSB = null;
 		try {
 			// Encode the query
+//			System.out.println("obj.get(\"text\")" + obj.get("text"));
+//			System.out.println("obj.get(\"structuredtext\")" + obj.get("structuredtext"));
+			// 將RoomInfo對話歷史訊息更新上去
+			if (!"".equals(obj.get("text")) && obj.get("structuredtext") != null){
+				System.out.println("got here");
+				text = obj.getString("text");
+				structuredtext = obj.getJSONArray("structuredtext");
+			}
+			
 			String postData = "contactid=" + contactid + "&ixnid=" + ixnid
 					+ "&agentid=" + agentid + "&startdate=" + startdate
 					+ "&enddate=" + enddate + "&status=" + status + "&typeid="
 					+ typeid + "&entitytypeid=" + entitytypeid + "&subtypeid="
 					+ subtypeid + "&text=" + text + "&structuredtext="
-					+ structuredtext.toString() + "&thecomment=" + thecomment
+					+ structuredtext + "&thecomment=" + thecomment
 					+ "&stoppedreason=" + stoppedreason + "&activitycode="
 					+ activitycode + "&structuredmimetype="
 					+ structuredmimetype + "&subject=" + subject;

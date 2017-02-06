@@ -187,10 +187,13 @@ public class WebSocket extends WebSocketServer {
 //		if (roomids != null) {
 //			System.out.println("roomids.size(): " + roomids.size()); //
 //		}
-		for (String roomid: roomids){
-			//使用每個roomid,並找出相對應的room,再將其中的conn remove掉
-			WebSocketRoomPool.removeUserinroom(roomid, conn);
+		if (roomids != null){
+			for (String roomid: roomids){
+				//使用每個roomid,並找出相對應的room,再將其中的conn remove掉
+				WebSocketRoomPool.removeUserinroom(roomid, conn);
+			}			
 		}
+
 		// 清TYPE:
 		String ACType = WebSocketUserPool.getACTypeByKey(conn);
 		WebSocketTypePool.removeUserinTYPE(ACType, conn);
@@ -202,6 +205,7 @@ public class WebSocket extends WebSocketServer {
 		System.out.println("inputInteractionLog() called");
 //		System.out.println("conn: " + conn);
 		
+		// only Client stores userInteraction
 		String message = WebSocketUserPool.getUserInteractionByKey(conn); // 一定取得到: 1. 在user login時就會呼叫setUserInteraction, 2. 在user logut or 重整時也會呼叫setUserInteraction
 		String username = WebSocketUserPool.getUserNameByKey(conn);
 //		System.out.println("message: " + message);
