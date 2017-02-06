@@ -172,7 +172,8 @@ function Login() {
 					document.getElementById("Event").innerHTML = obj.Event;
 
 					AcceptEventAction();
-					addRoom(myRoomID); // 改AcceptEvent()架構的目的在這
+					//addRoom(); // 先將Client加入到room
+					addRoom(myRoomID); // 再將Agent加入到room  改AcceptEvent()架構的目的在這
 					updateStatusAction("Established", "Established");
 
 					layuiUse01(); // 先暫時這樣隔開,之後有需要細改再看此部分
@@ -197,6 +198,8 @@ function Login() {
 					console.log("onMessage - senduserdata event");
 					document.getElementById("userdata").innerHTML = JSON
 							.stringify(obj.userdata);
+					document.getElementById("clientID").innerHTML = obj.clientID;
+					//  obj.clientID // **************
 					// 接收到Agent or Client加入列表的訊息
 				} else if ("userjointoTYPE" == obj.Event) {
 					if ("Agent" == obj.ACtype) {
@@ -251,6 +254,7 @@ function Login() {
 					document.getElementById("Event").innerHTML = obj.Event;
 					console.log(obj.Event + "***********************");
 					var roomList = obj.roomList;
+					var memberList = obj.memberList;
 //					var roomListToUpdate = null;
 //					console.log("roomList: "+obj.roomList[0]);
 					// remove All childeNodes:
@@ -263,14 +267,24 @@ function Login() {
 					
 					for (var i in roomList) {
 						console.log("roomList[i]" + roomList[i]);
+						console.log("memberList[i]" + memberList[i]);
 //						roomListToUpdate += "<br>" + "(" + i + ") - " +  roomList[i];
 						// dynamically create <tr><td></td>....</tr>
 						// <tr><td>RoomID</td><td>RoomMems</td><td>RoomContent</td><td>SendMsg</td></tr>
 					    var trNode = document.createElement("tr");
+					    	// 放入roomID
 					    var tdNode = document.createElement("td");
 					    var tdTextnode = document.createTextNode(roomList[i]);
 					    tdNode.appendChild(tdTextnode);
 					    trNode.appendChild(tdNode);
+					    	// 放入members
+					    var tdNode = document.createElement("td");
+					    var tdTextnode = document.createTextNode(memberList[i]);
+					    tdNode.appendChild(tdTextnode);
+					    trNode.appendChild(tdNode);
+					    	// 放入RoomContent
+					    
+					    
 					    document.getElementById("roomListTable").appendChild(trNode);
 					}
 //					document.getElementById("roomList").innerHTML = roomListToUpdate;
@@ -1069,7 +1083,14 @@ function notready() {
 	document.getElementById("notready").disabled = true;
 }
 
-
+function RefreshRoomList(){
+	var testmsg = {
+		    type: "refreshRoomList"
+		  };
+	//發送消息 
+	ws.send(JSON.stringify(testmsg));	
+	
+}
 
 // 測試按鈕
 function test() {

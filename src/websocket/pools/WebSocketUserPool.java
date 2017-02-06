@@ -217,6 +217,8 @@ public class WebSocketUserPool {
 		return userallconnections;
 	}
 	
-	
+	public static String getUserID(WebSocket conn){
+		return userallconnections.get(conn).getUserid();
+	}
 	
 }

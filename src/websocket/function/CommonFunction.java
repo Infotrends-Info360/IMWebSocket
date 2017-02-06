@@ -295,28 +295,42 @@ public class CommonFunction {
 	
 	public static void refreshRoomList(org.java_websocket.WebSocket conn){
 		System.out.println("refreshRoomList() called");
-		JSONObject sendjson = new JSONObject();
-		sendjson.put("Event", "refreshRoomList");
-		sendjson.put("UserID", conn);
-		// 將此Agent所屬的Room list塞入json中
-		JSONArray roomList_json = new JSONArray();
-		List<String> roomList = WebSocketUserPool.getUserRoomByKey(conn);
-		System.out.println("roomList.size(): " + roomList.size());
-		//JSONObject roomList_json = new JSONObject();
-		for (String room: roomList){
-			roomList_json.put(room);
+		JsonObject sendJson = new JsonObject();
+		sendJson.addProperty("Event", "refreshRoomList");
+		sendJson.addProperty("UserID", conn.toString());
+		
+		JsonArray roomIDListJson = new JsonArray();
+		JsonArray memberListJson = new JsonArray();
+		
+		// 將 此Agent所屬的Room list 塞入json中
+		List<String> roomIDList = WebSocketUserPool.getUserRoomByKey(conn);
+		System.out.println("roomIDList.size(): " + roomIDList.size());
+		for (String roomID: roomIDList){
+			roomIDListJson.add(roomID);
+			memberListJson.add(WebSocketRoomPool.getOnlineUserinroom(roomID).toString());
 		}
+		
+		// 將 membersInRoom list 塞入json中
+		
+		
+		// 將 RoomContent list 塞入json中
+		
+		// 
+		
 		// 測試用-新增幾個room
 //		roomList_json.put("2982ebfa-0359-4777-8746-e6de5e493712");
 //		roomList_json.put("2982ebfa-0359-4777-8746-e6de5e493778");
 		
-		sendjson.put("roomList", roomList_json);
-		System.out.println("roomList_json.length(): " + roomList_json.length());
-		System.out.println("sendjson: " + sendjson);
+		sendJson.add("roomList", roomIDListJson);
+		sendJson.add("memberList", memberListJson);
+		
+		
+		System.out.println("roomIDListJson.size(): " + roomIDListJson.size());
+		System.out.println("sendJson: " + sendJson);
 		
 		
 		// end of 將此Agent所屬的Room list塞入json中
-		WebSocketUserPool.sendMessageToUser(conn, sendjson.toString());
+		WebSocketUserPool.sendMessageToUser(conn, sendJson.toString());
 	}
 	
 	private static void refreshClientList(String user){

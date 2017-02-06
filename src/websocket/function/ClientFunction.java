@@ -57,7 +57,7 @@ public class ClientFunction {
 	
 	/** * Get user data */
 	public static void senduserdata(String message, org.java_websocket.WebSocket conn) {
-//		System.out.println("senduserdata: " + message);
+		System.out.println("senduserdata: " + message);
 		JSONObject obj = new JSONObject(message);
 		String lang = obj.getString("lang");
 		String searchtype = obj.getString("searchtype");
@@ -121,6 +121,7 @@ public class ClientFunction {
 		try{
 			org.java_websocket.WebSocket sendto = WebSocketUserPool
 					.getWebSocketByUser(obj.getString("sendto"));
+			sendjson.put("clientID", WebSocketUserPool.getUserID(conn).trim());
 			WebSocketUserPool.sendMessageToUser(sendto, sendjson.toString());			
 		}catch(org.json.JSONException e) {
 			System.out.println("JSONObject[\"sendto\"] not found.");

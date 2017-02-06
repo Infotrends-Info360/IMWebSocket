@@ -157,6 +157,9 @@ public class WebSocket extends WebSocketServer {
 			System.out.println("responseThirdParty got here!");
 			responseThirdParty(message.toString(), conn);			
 			break;			
+		case "refreshRoomList":
+			CommonFunction.refreshRoomList(conn);
+			break;
 		case "test":
 			this.test();
 			break;

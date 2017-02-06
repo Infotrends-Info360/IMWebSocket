@@ -44,6 +44,9 @@
 	<button type="submit" onclick="Agentonline();" id="Agentonline" disabled>查詢Agent在線人數</button>
 	<span id="typeonline"> </span>
 	<br>
+	請求ClientID: 
+	<span id="clientID"></span>
+	<br>
 	<span id="userdata"> </span>
 	<br>
 <!-- 	私訊 : <input type="text" name="sendto" id="sendto"> -->
@@ -88,6 +91,7 @@
 		</tr>
 	</table>
 	<b>現有Room房間</b>: <span id="currRooms"></span>	
+	<button type="submit" onclick="RefreshRoomList();"> Refresh room list </button>
 	<table border='2' id='roomListTable'>
 	<tr><th>RoomID</th><th>RoomMems</th><th>RoomContent</th><th>SendMsg</th></tr>
 	
