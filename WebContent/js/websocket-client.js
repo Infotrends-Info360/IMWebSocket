@@ -640,20 +640,16 @@ function addlayim(UserID, UserName) {
 }
 
 function setinteractionDemo(status, activitycode) {
-	var text = 'text';
-	var structuredtext = 'structuredtext';
 	var thecomment = 'thecomment';
 	var stoppedreason = 'stoppedreason';
 	// var activitycode = 'activitycode';
 	var AgentID = document.getElementById('findAgent').value;
 	setinteraction(contactID, roomID, AgentID, status, 'Inbound', 2,
-			'InBound New', text, structuredtext, thecomment, stoppedreason,
+			'InBound New', thecomment, stoppedreason,
 			activitycode, startdate, 'default');
 }
 
 function interactionLogDemo(status, activitycode) {
-	var text = 'text';
-	var structuredtext = 'structuredtext';
 	var thecomment = 'thecomment';
 	var stoppedreason = 'stoppedreason';
 	// var activitycode = 'activitycode';
@@ -664,12 +660,14 @@ function interactionLogDemo(status, activitycode) {
 //	 activitycode, startdate);
 	// 此處可能會有"Exit"事件先發生,而此'setinteraction'會後發生,但因為目前有太多的全域變數,調動上過大,暫時先註解著
 	setinteraction(contactID, roomID, AgentID, status, 'Inbound', 2,
-			'InBound New', text, structuredtext, thecomment, stoppedreason,
+			'InBound New', thecomment, stoppedreason,
 			activitycode, startdate, 'client');
 }
 
+//保留此方法,暫時沒用到
+/*
 function interactionlog(contactid, ixnid, agentid, status, typeid,
-		entitytypeid, subtypeid, text, structuredtext, thecomment,
+		entitytypeid, subtypeid, thecomment,
 		stoppedreason, activitycode, startdate) {
 	// var now = new Date();
 	// 組成interactionlog
@@ -682,8 +680,6 @@ function interactionlog(contactid, ixnid, agentid, status, typeid,
 		typeid : typeid,
 		entitytypeid : entitytypeid,
 		subtypeid : subtypeid,
-		text : text,
-		structuredtext : structuredtext,
 		thecomment : thecomment,
 		stoppedreason : stoppedreason,
 		activitycode : activitycode,
@@ -694,9 +690,9 @@ function interactionlog(contactid, ixnid, agentid, status, typeid,
 	// 發送消息給WebSocket
 	ws.send(JSON.stringify(msg));
 }
-
+*/
 function setinteraction(contactid, ixnid, agentid, status, typeid,
-		entitytypeid, subtypeid, text, structuredtext, thecomment,
+		entitytypeid, subtypeid, thecomment,
 		stoppedreason, activitycode, startdate, closefrom) {
 	var msg = {
 		type : 'setinteraction',
@@ -707,8 +703,6 @@ function setinteraction(contactid, ixnid, agentid, status, typeid,
 		typeid : typeid,
 		entitytypeid : entitytypeid,
 		subtypeid : subtypeid,
-		text : text,
-		structuredtext : structuredtext,
 		thecomment : thecomment,
 		stoppedreason : stoppedreason,
 		activitycode : activitycode,
