@@ -251,13 +251,29 @@ function Login() {
 					document.getElementById("Event").innerHTML = obj.Event;
 					console.log(obj.Event + "***********************");
 					var roomList = obj.roomList;
-					var roomListToUpdate = null;
+//					var roomListToUpdate = null;
 //					console.log("roomList: "+obj.roomList[0]);
+					// remove All childeNodes:
+					var myNode = document.getElementById("roomListTable");
+					// 永遠把第二個child刪除,只保留<tr><th>RoomID</th><th>RoomMems</th><th>RoomContent</th><th>SendMsg</th></tr>
+					while (myNode.lastChild && myNode.children.length > 1) {
+						console.log("myNode.children.length: " + myNode.children.length);
+					    myNode.removeChild(myNode.lastChild);
+					}
+					
 					for (var i in roomList) {
 						console.log("roomList[i]" + roomList[i]);
-						roomListToUpdate += "<br>" + "(" + i + ") - " +  roomList[i];
+//						roomListToUpdate += "<br>" + "(" + i + ") - " +  roomList[i];
+						// dynamically create <tr><td></td>....</tr>
+						// <tr><td>RoomID</td><td>RoomMems</td><td>RoomContent</td><td>SendMsg</td></tr>
+					    var trNode = document.createElement("tr");
+					    var tdNode = document.createElement("td");
+					    var tdTextnode = document.createTextNode(roomList[i]);
+					    tdNode.appendChild(tdTextnode);
+					    trNode.appendChild(tdNode);
+					    document.getElementById("roomListTable").appendChild(trNode);
 					}
-					document.getElementById("roomList").innerHTML = roomListToUpdate;
+//					document.getElementById("roomList").innerHTML = roomListToUpdate;
 					//JSONArray groupList = obj.groupList;
 //					document.getElementById("roomList").innerHTML = "Test - new group list here!!!";
 				} else if ("inviteAgentThirdParty" == obj.Event){
