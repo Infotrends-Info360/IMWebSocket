@@ -132,8 +132,8 @@ public class CommonFunction {
 		String userid = obj.getString("id");
 		String username = obj.getString("UserName");
 		String joinMsg = "[Server]" + username + " join " + roomID + " room";
-		WebSocketRoomPool.addUserinroom(roomID, username, userid, conn);
-		WebSocketUserPool.addUserRoom(roomID, conn);
+		WebSocketRoomPool.addUserinroom(roomID, username, userid, conn); //重要步驟
+		WebSocketUserPool.addUserRoom(roomID, conn); //重要步驟
 		WebSocketRoomPool.sendMessageinroom(roomID, joinMsg);
 		WebSocketRoomPool.sendMessageinroom(roomID, "room people: "
 				+ WebSocketRoomPool.getOnlineUserinroom(roomID).toString());
@@ -190,7 +190,7 @@ public class CommonFunction {
 		System.out.println("roomInfo.getText()\n" + roomInfo.getText()); // for debugging
 			// 更新structuredtext
 		JsonArray structuredtext = roomInfo.getStructuredtext();
-		SimpleDateFormat sdf = new SimpleDateFormat(Util.getSdfDateFormat());
+		SimpleDateFormat sdf = new SimpleDateFormat(Util.getSdfDateTimeFormat());
 		String dateStr = sdf.format(new java.util.Date());
 		msgJson.addProperty("date", dateStr);
 		structuredtext.add(msgJson);
