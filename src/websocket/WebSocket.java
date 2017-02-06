@@ -282,6 +282,10 @@ public class WebSocket extends WebSocketServer {
 			/** 新增user所加入的room list **/
 			WebSocketUserPool.addUserRoom(roomID, conn);
 			
+			// 通知更新roomList
+			CommonFunction.refreshRoomList(conn);				
+			CommonFunction.refreshRoomList(WebSocketUserPool.getWebSocketByUser(fromAgentID));				
+			
 			// 通知各房間成員成員數改變了
 			JSONObject sendJson = new JSONObject();
 			sendJson.put("Event", "responseThirdParty");

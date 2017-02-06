@@ -90,6 +90,9 @@
 	<b>現有Room房間</b>: <span id="currRooms"></span>	
 	<table border='2' id='roomListTable'>
 	<span id="roomList"></span>
+	<tr><th>RoomID</th><th>RoomMems</th><th>RoomContent</th><th>SendMsg</th></tr>
+	<tr><td>RoomID</td><td>RoomMems</td><td>RoomContent</td><td>SendMsg</td></tr>
+	
 	</table>	
 	<b>受邀加入Room房間(三方)</b>: <span id="invitedRooms"  style="visibility: hidden;"></span>	
 	<table border='2' id='invitedRoomListTable'>

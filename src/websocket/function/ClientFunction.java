@@ -279,7 +279,7 @@ public class ClientFunction {
 //			System.out.println("obj.get(\"structuredtext\")" + obj.get("structuredtext"));
 			// 將RoomInfo對話歷史訊息更新上去
 			if (!"".equals(obj.get("text")) && obj.get("structuredtext") != null){
-				System.out.println("got here");
+//				System.out.println("got here");
 				text = obj.getString("text");
 				structuredtext = obj.getJSONArray("structuredtext");
 			}

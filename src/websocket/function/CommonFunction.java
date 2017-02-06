@@ -293,7 +293,7 @@ public class CommonFunction {
 		WebSocketTypePool.UserUpdate(ACtype, username, userid, date, status, reason, conn);
 	}
 	
-	private static void refreshRoomList(org.java_websocket.WebSocket conn){
+	public static void refreshRoomList(org.java_websocket.WebSocket conn){
 		System.out.println("refreshRoomList() called");
 		JSONObject sendjson = new JSONObject();
 		sendjson.put("Event", "refreshRoomList");
@@ -301,6 +301,7 @@ public class CommonFunction {
 		// 將此Agent所屬的Room list塞入json中
 		JSONArray roomList_json = new JSONArray();
 		List<String> roomList = WebSocketUserPool.getUserRoomByKey(conn);
+		System.out.println("roomList.size(): " + roomList.size());
 		//JSONObject roomList_json = new JSONObject();
 		for (String room: roomList){
 			roomList_json.put(room);

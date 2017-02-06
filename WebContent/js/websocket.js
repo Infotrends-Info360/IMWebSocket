@@ -251,12 +251,13 @@ function Login() {
 					document.getElementById("Event").innerHTML = obj.Event;
 					console.log(obj.Event + "***********************");
 					var roomList = obj.roomList;
-					var roomListToUpdate = document.getElementById("roomList");
+					var roomListToUpdate = null;
 //					console.log("roomList: "+obj.roomList[0]);
 					for (var i in roomList) {
 						console.log("roomList[i]" + roomList[i]);
-						roomListToUpdate.innerHTML += "<br>" + "(" + i + ") - " +  roomList[i];
+						roomListToUpdate += "<br>" + "(" + i + ") - " +  roomList[i];
 					}
+					document.getElementById("roomList").innerHTML = roomListToUpdate;
 					//JSONArray groupList = obj.groupList;
 //					document.getElementById("roomList").innerHTML = "Test - new group list here!!!";
 				} else if ("inviteAgentThirdParty" == obj.Event){
