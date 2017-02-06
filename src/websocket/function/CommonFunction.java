@@ -10,9 +10,11 @@ import org.java_websocket.WebSocket;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
+import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
 
 import util.Util;
+
 
 
 
@@ -174,11 +176,10 @@ public class CommonFunction {
 //		sendjson.put("channel", obj.getString("channel"));
 //		WebSocketRoomPool.sendMessageinroom(roomID, sendjson.toString());
 		
-		// 拿取資料並加上資料(gson)
+		// 拿取資料(gson)
 		JsonParser jsonParser = new JsonParser(); 
 		JsonObject msgJson = jsonParser.parse(message).getAsJsonObject();
-		msgJson.addProperty("Event", "messagetoRoom");
-		System.out.println("msgJson: "+ msgJson);
+		System.out.println("initial msgJson: "+ msgJson);
 		
 		// 將新訊息更新到RoomInfo bean上
 		System.out.println("msgJson.text: " + msgJson.get("text").getAsString());
@@ -186,14 +187,21 @@ public class CommonFunction {
 			// 更新text
 		StringBuilder text = roomInfo.getText();
 		text.append(msgJson.get("UserName").getAsString() + ": " + msgJson.get("text").getAsString() + "\n");
-		System.out.println("roomInfo.getText()\n" + roomInfo.getText());
+		System.out.println("roomInfo.getText()\n" + roomInfo.getText()); // for debugging
 			// 更新structuredtext
-		
+		JsonArray structuredtext = roomInfo.getStructuredtext();
+		SimpleDateFormat sdf = new SimpleDateFormat(Util.getSdfDateFormat());
+		String dateStr = sdf.format(new java.util.Date());
+		msgJson.addProperty("date", dateStr);
+		structuredtext.add(msgJson);
+		System.out.println("roomInfo.getStructuredtext()\n" + roomInfo.getStructuredtext()); // for debugging
 		
 		// 將訊息寄給room線上使用者:
 		if (msgJson.get("roomID") == null) return;
+		msgJson.addProperty("Event", "messagetoRoom");
 		WebSocketRoomPool.sendMessageinroom(msgJson.get("roomID").getAsString(), msgJson.toString());
 		
+		System.out.println("final msgJson: \n"+ msgJson); // for debugging
 	}
 	
 	// room

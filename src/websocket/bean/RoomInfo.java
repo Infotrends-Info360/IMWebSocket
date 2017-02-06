@@ -14,7 +14,7 @@ public class RoomInfo {
 	private Date starttime;
 	private Map<WebSocket, UserInfo> userConns = new HashMap<>();
 	private StringBuilder text = new StringBuilder();
-	private JsonArray structuredtext; // gson
+	private JsonArray structuredtext = new JsonArray(); // gson
 	
 	public String getRoomID() {
 		return roomID;
