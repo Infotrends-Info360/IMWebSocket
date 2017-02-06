@@ -40,7 +40,8 @@ layui.define('layer' , function(exports){
     
     return elem.each(function(index, item){
       item = $(item);
-      var form = '<form target="'+ elemIframe +'" method="'+ (options.method||'post') +'" key="set-mine" enctype="multipart/form-data" action="'+ (options.url||'') +'"></form>';
+      //var form = '<form target="'+ elemIframe +'" method="'+ (options.method||'post') +'" key="set-mine" enctype="multipart/form-data" action="'+ (options.url||'') +'"></form>';
+      var form = '<form target="'+ elemIframe +'" method="'+ (options.method||'post') +'" key="set-mine" enctype="multipart/form-data" accept-charset="Big5" action="'+ (options.url||'') +'"></form>';
       
       var type = item.attr('lay-type') || options.type; //获取文件类型
 
