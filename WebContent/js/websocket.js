@@ -160,37 +160,29 @@ function Login() {
 					 */
 					// 接收到Client離開群組的訊息
 				} else if ("createroomId" == obj.Event) {
-					// RoomID = 'G'+document.getElementById('UserID').value;
+					// 拿取資料 + 為之後建立roomList做準備
 					RoomID = obj.roomId; // 之後要改成local variable
 					var myRoomID = obj.roomId;
-					// SinglyList.prototype.add();
 					RoomIDLinkedList.add(myRoomID);
-					// GroupIDLinkedList.prototype.add("test"); // 錯
 					console.log("GroupIDLinkedList._length: "
 							+ RoomIDLinkedList._length);
 					document.getElementById("group").value = RoomID;
 					document.getElementById("Event").innerHTML = obj.Event;
 
-					//AcceptEventAction();
-					
 					// 一次將Agent與Client加入到room中
 					var currClientID = document.getElementById("clientID").innerHTML;
-					// 在此使用新的方法,將一個list的成員都加入到同一群組中
+						// 在此使用新的方法,將一個list的成員都加入到同一群組中
 					var memberListToJoin = [];
 					var mem1 = new myRoomMemberJsonObj(currClientID);
 					var mem2 = new myRoomMemberJsonObj(UserID_g);
 					memberListToJoin.push(mem1);
 					memberListToJoin.push(mem2);
-
-//					var memberListToJoinJson = JSON.stringify(memberListToJoin);
-//					addRoomForMany(myRoomID, memberListToJoinJson);
 					addRoomForMany(myRoomID, memberListToJoin);
-//					addRoom(currClientID); // 先將Client加入到room
-//					addRoom(myRoomID); // 再將Agent加入到room  改AcceptEvent()架構的目的在這
 					
-					
+					// 更新狀態
 					updateStatusAction("Established", "Established");
-
+					
+					// 使用layui
 					layuiUse01(); // 先暫時這樣隔開,之後有需要細改再看此部分
 
 					// 取得狀態
@@ -631,24 +623,24 @@ function AcceptEventInit() {
 	ws.send(JSON.stringify(createroomIdmsg));
 }
 
-function AcceptEventAction() {
-	var UserID = document.getElementById('UserID').value;
-	var Eventform = document.getElementById('Eventform').value;
-	// 向websocket送出同意與Client交談指令
-	var now = new Date();
-	var msg = {
-		type : "AcceptEvent",
-		ACtype : "Agent",
-		id : UserID,
-		UserName : UserName,
-		sendto : Eventform,
-		roomID : RoomID,
-		channel : "chat",
-		date : now.getHours() + ":" + now.getMinutes() + ":" + now.getSeconds()
-	};
-	// 發送消息
-	ws.send(JSON.stringify(msg));
-}
+//function AcceptEventAction() {
+//	var UserID = document.getElementById('UserID').value;
+//	var Eventform = document.getElementById('Eventform').value;
+//	// 向websocket送出同意與Client交談指令
+//	var now = new Date();
+//	var msg = {
+//		type : "AcceptEvent",
+//		ACtype : "Agent",
+//		id : UserID,
+//		UserName : UserName,
+//		sendto : Eventform,
+//		roomID : RoomID,
+//		channel : "chat",
+//		date : now.getHours() + ":" + now.getMinutes() + ":" + now.getSeconds()
+//	};
+//	// 發送消息
+//	ws.send(JSON.stringify(msg));
+//}
 
 // 拒絕交談
 function RejectEvent() {

@@ -41,6 +41,7 @@
 <link rel="stylesheet" href="layui/css/layui.css">
 
 <script type="text/javascript" src="js/beans.js"></script>
+<script type="text/javascript" src="js/util.js"></script>
 <script type="text/javascript" src="js/jquery.min.js"></script>
 <script type="text/javascript" src="js/websocket-client.js"></script>
 

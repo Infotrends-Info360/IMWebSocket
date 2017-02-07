@@ -65,30 +65,13 @@ function Login() {
 				var obj = jQuery.parseJSON(e.data);
 				// 收到同意交談指令
 				if ("AcceptEvent" == obj.Event) {
-					var UserID = document.getElementById('UserID').value;
-					// var group = 'G'+document.getElementById('group').value;
-					roomID = obj.roomID;
-					console.log("roomID: " + roomID);
-					var now = new Date();
-					// 組成增加群組的JSON指令
-//					addRoom(roomID); //取代下面的Code
-					
-					var updateAgentStatusmsg = {
-						    type: "updateStatus",
-						    ACtype: "Client",
-						    id: UserID,
-							UserName: UserName,
-							status: "chat",
-							reason: "chatting",
-						    date: now.getHours()+":"+now.getMinutes()+":"+now.getSeconds()
-						  };
-					
-					//發送消息 
-					ws.send(JSON.stringify(updateAgentStatusmsg));
+					updateStatusAction("Client", UserID_g, UserName, "chat", "chatting");
 					
 					waittingAgent = false;
 					
 					// 開啟layim
+					roomID = obj.roomID;
+					console.log("roomID: " + roomID);
 					console.log("UserID_g: " + UserID_g);
 //					addlayim(UserID, UserName);
 					addlayim(UserID_g, UserName, roomID);
@@ -308,29 +291,29 @@ function online() {
 }
 
 // 新增人員至group
-function addRoom(aRoomID) {
-	var UserID = document.getElementById('UserID').value;
-	// var group = 'G'+document.getElementById('group').value;
-	var now = new Date();
-	// 組成新增人員至group JSON指令
-	var msg = {
-		type : "addRoom",
-		roomID : aRoomID,
-		id : UserID,
-		ACtype : "Client",
-		UserName : UserName,
-		date : now.getHours() + ":" + now.getMinutes() + ":" + now.getSeconds()
-	};
-
-	// 發送消息給WebSocket
-	ws.send(JSON.stringify(msg));
-
-	// 控制前端傳值
-	document.getElementById("groupstatus").innerHTML = "加入" + roomID + "群組";
-	document.getElementById("leaveRoom").disabled = false;
-	document.getElementById("addRoom").disabled = true;
-	document.getElementById("roomonline").disabled = false;
-}
+//function addRoom(aRoomID) {
+//	var UserID = document.getElementById('UserID').value;
+//	// var group = 'G'+document.getElementById('group').value;
+//	var now = new Date();
+//	// 組成新增人員至group JSON指令
+//	var msg = {
+//		type : "addRoom",
+//		roomID : aRoomID,
+//		id : UserID,
+//		ACtype : "Client",
+//		UserName : UserName,
+//		date : now.getHours() + ":" + now.getMinutes() + ":" + now.getSeconds()
+//	};
+//
+//	// 發送消息給WebSocket
+//	ws.send(JSON.stringify(msg));
+//
+//	// 控制前端傳值
+//	document.getElementById("groupstatus").innerHTML = "加入" + roomID + "群組";
+//	document.getElementById("leaveRoom").disabled = false;
+//	document.getElementById("addRoom").disabled = true;
+//	document.getElementById("roomonline").disabled = false;
+//}
 
 // 離開group
 function leaveRoom(UserID) {
