@@ -67,8 +67,8 @@ function Login() {
 				if ("AcceptEvent" == obj.Event) {
 					var UserID = document.getElementById('UserID').value;
 					// var group = 'G'+document.getElementById('group').value;
-//					roomID = obj.roomID;
-//					console.log("roomID: " + roomID);
+					roomID = obj.roomID;
+					console.log("roomID: " + roomID);
 					var now = new Date();
 					// 組成增加群組的JSON指令
 //					addRoom(roomID); //取代下面的Code
@@ -89,7 +89,9 @@ function Login() {
 					waittingAgent = false;
 					
 					// 開啟layim
-					addlayim(UserID, UserName);
+					console.log("UserID_g: " + UserID_g);
+//					addlayim(UserID, UserName);
+					addlayim(UserID_g, UserName, roomID);
 
 					// 控制前端傳值
 					document.getElementById("roomID").value = roomID;
@@ -569,11 +571,11 @@ function getmessagelayim(text, UserID, UserName) {
 }
 
 // 開啟layim
-function addlayim(UserID, UserName) {
+function addlayim(UserID, UserName, aRoomID) {
 
 	console.log(UserID);
 	console.log(UserName);
-	console.log(roomID);
+	console.log(aRoomID);
 
 	// 開啟layui
 	layui.use('layim', function(elayim) {
@@ -615,7 +617,7 @@ function addlayim(UserID, UserName) {
 			,
 			avatar : './layui/images/git.jpg' // 頭像
 			,
-			id : roomID
+			id : aRoomID
 		// 定義唯一的id方便你處理資訊
 		})
 		// layim.setChatMin(); //收縮聊天面板

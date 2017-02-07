@@ -322,7 +322,9 @@ public class WebSocket extends WebSocketServer {
 		JsonObject msgJson = Util.getGJsonObject(aMsg);
 		System.out.println("addRoomForMany - msgJson: " + msgJson);
 		String roomID = msgJson.get("roomID").getAsString();
-		JsonArray userIDJsonAry = msgJson.getAsJsonArray("memberListToJoin");		
+		String channel = msgJson.get("channel").getAsString();
+		JsonArray userIDJsonAry = msgJson.getAsJsonArray("memberListToJoin");
+		String clientID = null;
 		
 		for (JsonElement userIDJsonE : userIDJsonAry){
 			JsonObject userIDJsonObj = userIDJsonE.getAsJsonObject();
@@ -344,8 +346,34 @@ public class WebSocket extends WebSocketServer {
 			if ("Agent".equals(ACtype)){
 				System.out.println("userjointoroom - one Agent joined");
 				CommonFunction.refreshRoomList(userConn);
+			}else if ("Client".equals(ACtype)){
+				clientID = userID;
 			}
 		}
+		
+		// 通知Client,要開啟layim(將原本AcceptEvent移到此處)
+		org.java_websocket.WebSocket sendto = WebSocketUserPool
+				.getWebSocketByUser(clientID);
+		JsonObject sendJson = new JsonObject();
+		sendJson.addProperty("Event", "AcceptEvent");
+		sendJson.addProperty("from",  WebSocketUserPool.getUserID(aConn));
+		sendJson.addProperty("fromName", WebSocketUserPool.getUserNameByKey(aConn));
+		sendJson.addProperty("roomID",  roomID);
+		sendJson.addProperty("channel", channel);
+		WebSocketUserPool.sendMessageToUser(
+				sendto,sendJson.toString());		
+//		JSONObject obj = new JSONObject(message);
+//		String roomID = obj.getString("roomID");
+//		org.java_websocket.WebSocket sendto = WebSocketUserPool
+//				.getWebSocketByUser(obj.getString("sendto"));
+//		JSONObject sendjson = new JSONObject();
+//		sendjson.put("Event", "AcceptEvent");
+//		sendjson.put("from", obj.getString("id"));
+//		sendjson.put("fromName",  obj.getString("UserName"));
+//		sendjson.put("roomID",  roomID);
+//		sendjson.put("channel", obj.getString("channel"));
+//		WebSocketUserPool.sendMessageToUser(
+//				sendto,sendjson.toString());
 		
 	}
 	

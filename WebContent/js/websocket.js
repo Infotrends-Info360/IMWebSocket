@@ -171,7 +171,7 @@ function Login() {
 					document.getElementById("group").value = RoomID;
 					document.getElementById("Event").innerHTML = obj.Event;
 
-					AcceptEventAction();
+					//AcceptEventAction();
 					
 					// 一次將Agent與Client加入到room中
 					var currClientID = document.getElementById("clientID").innerHTML;
@@ -182,7 +182,7 @@ function Login() {
 					memberListToJoin.push(mem1);
 					memberListToJoin.push(mem2);
 
-					var memberListToJoinJson = JSON.stringify(memberListToJoin);
+//					var memberListToJoinJson = JSON.stringify(memberListToJoin);
 //					addRoomForMany(myRoomID, memberListToJoinJson);
 					addRoomForMany(myRoomID, memberListToJoin);
 //					addRoom(currClientID); // 先將Client加入到room
@@ -454,6 +454,7 @@ function addRoomForMany(aRoomID, aMemberListToJoin){
 		memberListToJoin : aMemberListToJoin,
 		ACtype : "Agent",
 		UserName : UserName,
+		channel: "chat",
 		date : now.getHours() + ":" + now.getMinutes() + ":" + now.getSeconds()
 	};
 
