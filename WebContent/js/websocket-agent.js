@@ -180,8 +180,7 @@ function Login() {
 					addRoomForMany(myRoomID, memberListToJoin);
 					
 					// 更新狀態
-					updateStatusAction("Established", "Established");
-					
+					updateStatusAction("Agent", UserID_g, UserName, "Established", "Established");
 					// 使用layui
 					layuiUse01(); // 先暫時這樣隔開,之後有需要細改再看此部分
 
@@ -540,19 +539,7 @@ function roomonline() {
 function ready() {
 	var UserID = document.getElementById('UserID').value;
 	// 向websocket送出變更狀態至準備就緒指令
-	var now = new Date();
-	var updateAgentStatusmsg = {
-		type : "updateStatus",
-		ACtype : "Agent",
-		id : UserID,
-		UserName : UserName,
-		status : "ready",
-		reason : "ready",
-		date : now.getHours() + ":" + now.getMinutes() + ":" + now.getSeconds()
-	};
-
-	// 發送消息
-	ws.send(JSON.stringify(updateAgentStatusmsg));
+	updateStatusAction("Agent", UserID_g, UserName, "ready", "ready");
 
 	// 取得狀態
 	getUserStatus();
@@ -858,23 +845,6 @@ function addlayim() {
 		// 開啟傳送layim參數
 		layimswitch = true;
 	});
-}
-
-function updateStatusAction(aStatus, aReason) {
-	var UserID = document.getElementById('UserID').value;
-	var now = new Date();
-	var updateAgentStatusmsg = {
-		type : "updateStatus",
-		ACtype : "Agent",
-		id : UserID,
-		UserName : UserName,
-		status : aStatus,
-		reason : aReason,
-		date : now.getHours() + ":" + now.getMinutes() + ":" + now.getSeconds()
-	};
-
-	// 發送消息
-	ws.send(JSON.stringify(updateAgentStatusmsg));
 }
 
 function layuiUse01() {

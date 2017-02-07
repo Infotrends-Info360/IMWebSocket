@@ -18,7 +18,7 @@
 
 <link rel="stylesheet" href="layui/css/layui.css">
 
-<script type="text/javascript" src="js/websocket-agent.js"></script>
+<script type="text/javascript" src="js/websocket-util.js"></script>
 <script type="text/javascript" src="js/jquery.min.js"></script>
 <script type="text/javascript" src="js/websocket-agent.js"></script>
 <script src="layui/layui.js"></script>
