@@ -57,7 +57,8 @@ public class ClientFunction {
 	
 	/** * Get user data */
 	public static void senduserdata(String message, org.java_websocket.WebSocket conn) {
-		System.out.println("senduserdata: " + message);
+//		System.out.println("senduserdata()" + message);
+		System.out.println("senduserdata() called ");
 		JSONObject obj = new JSONObject(message);
 		String lang = obj.getString("lang");
 		String searchtype = obj.getString("searchtype");
@@ -327,7 +328,7 @@ public class ClientFunction {
 	}
 	
 	public static void setinteraction(String aMsg, org.java_websocket.WebSocket aConn){
-//		System.out.println("setinteraction:"+message);
+		System.out.println("setinteraction() called");
 		// 在此更新RoomInfo中的text, structuredtext到interaction log中
 			// 拿取需要物件
 		JsonObject msgJson = Util.getGJsonObject(aMsg);
@@ -342,7 +343,7 @@ public class ClientFunction {
 			msgJson.add("structuredtext", null);			
 		}
 		
-		System.out.println("setinteraction - msgJson: " + msgJson);
+//		System.out.println("setinteraction - msgJson: " + msgJson);
 		
 		// 更新UserInteraction
 		WebSocketUserPool.addUserInteraction(msgJson.toString(), aConn);
