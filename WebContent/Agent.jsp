@@ -93,9 +93,10 @@
 	<b>現有Room房間</b>: <span id="currRooms"></span>	
 	<button type="submit" onclick="RefreshRoomList();"> Refresh room list </button>
 	<table border='2' id='roomListTable'>
-	<tr><th>RoomID</th><th>RoomMems</th><th>RoomContent</th><th>SendMsg</th></tr>
+	<tr><th>RoomID</th><th>RoomMems</th><th>SendMsgContent</th><th>SendMsg</th><th>RoomContent</th><th>三方/轉接邀請</th></tr>
 	
 	</table>	
+	<br>
 	<b>受邀加入Room房間(三方)</b>: <span id="invitedRooms"  style="visibility: hidden;"></span>	
 	<table border='2' id='invitedRoomListTable'>
 		<tr>

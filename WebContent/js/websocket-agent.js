@@ -290,6 +290,32 @@ function Login() {
 					    trNode.appendChild(tdNode);
 					    	// 放入RoomContent
 					    
+					    	// 放入SendMsgIputbox
+					    	// <input type="text" id="message">
+					    var tdNode = document.createElement("td");
+					    var inputNode = document.createElement("input");
+					    inputNode.setAttribute("type", "text");
+					    inputNode.setAttribute("id", "roomMsg" + i);
+					    tdNode.appendChild(inputNode);
+					    trNode.appendChild(tdNode);
+					    
+					    	// 放入SendMsgButton
+					    	// <button type="submit" onclick="sendtoRoom();" id="sendtoRoom">send to Group</button>
+					    var buttonNode = document.createElement("button");
+					    buttonNode.type = "submit";
+					    buttonNode.value = roomList[i];
+					    buttonNode.index = "roomMsg" + i;
+					    buttonNode.onclick= function(){
+					    	var msg = document.getElementById(this.index).value;
+					    	console.log("msg: " + msg);
+//					    	console.log("msg: " + document.getElementById("roomMsg").value);
+//					    	sendtoRoom01(this.value);
+					    	sendtoRoom02(this.value, msg);
+					    	} ;
+//					    buttonNode.onclick="sendtoRoom();";
+					    var buttonTextnode = document.createTextNode("Send to Group");
+					    buttonNode.appendChild(buttonTextnode);
+					    trNode.appendChild(buttonNode);
 					    
 					    document.getElementById("roomListTable").appendChild(trNode);
 					}
@@ -501,23 +527,32 @@ function leaveRoom(UserID) {
 }
 
 // 送出訊息至群組
-function sendtoRoom() {
-	var message = document.getElementById('message').value;
-	var UserID = document.getElementById('UserID').value;
+function sendtoRoom02(aRoomID, aMessage){
+//	var UserID = document.getElementById('UserID').value;
 	// 向websocket送出送至訊息群組指令
 	var now = new Date();
 	var msg = {
 		type : "messagetoRoom",
-		text : message,
-		id : UserID,
+		text : aMessage,
+		id : UserID_g,
 		UserName : UserName,
-		roomID : RoomID,
+		roomID : aRoomID,
 		channel : "chat",
 		date : now.getHours() + ":" + now.getMinutes() + ":" + now.getSeconds()
 	};
 
 	// 發送消息
-	ws.send(JSON.stringify(msg));
+	ws.send(JSON.stringify(msg));	
+}
+
+function sendtoRoom01(aRoomID){
+	console.log("sendtoRoom01() called");
+	var message = document.getElementById('message').value;
+	sendtoRoom02(aRoomID,message);
+}
+
+function sendtoRoom() {
+	sendtoRoom01(RoomID);
 }
 
 // 查詢群組線上人數
@@ -608,6 +643,10 @@ function AcceptEventInit() {
 
 	// 發送消息
 	ws.send(JSON.stringify(createroomIdmsg));
+	
+	// 開啟ready功能:
+	document.getElementById("ready").disabled = false;
+	document.getElementById("notready").disabled = true;
 }
 
 //function AcceptEventAction() {
