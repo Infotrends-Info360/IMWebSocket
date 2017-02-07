@@ -459,27 +459,27 @@ function addRoomForMany(aRoomID, aMemberListToJoin){
 	document.getElementById("roomonline").disabled = false;	
 }
 
-function addRoom(aRoomID) {
-	var UserID = document.getElementById('UserID').value;
-	// 向websocket送出加入群組指令
-	var now = new Date();
-	var msg = {
-		type : "addRoom",
-		roomID : aRoomID,
-		id : UserID,
-		ACtype : "Agent",
-		UserName : UserName,
-		date : now.getHours() + ":" + now.getMinutes() + ":" + now.getSeconds()
-	};
-
-	// 發送消息
-	ws.send(JSON.stringify(msg));
-
-	document.getElementById("groupstatus").innerHTML = "加入" + RoomID + "群組";
-	document.getElementById("leaveRoom").disabled = false;
-	document.getElementById("addRoom").disabled = true;
-	document.getElementById("roomonline").disabled = false;
-}
+//function addRoom(aRoomID) {
+//	var UserID = document.getElementById('UserID').value;
+//	// 向websocket送出加入群組指令
+//	var now = new Date();
+//	var msg = {
+//		type : "addRoom",
+//		roomID : aRoomID,
+//		id : UserID,
+//		ACtype : "Agent",
+//		UserName : UserName,
+//		date : now.getHours() + ":" + now.getMinutes() + ":" + now.getSeconds()
+//	};
+//
+//	// 發送消息
+//	ws.send(JSON.stringify(msg));
+//
+//	document.getElementById("groupstatus").innerHTML = "加入" + RoomID + "群組";
+//	document.getElementById("leaveRoom").disabled = false;
+//	document.getElementById("addRoom").disabled = true;
+//	document.getElementById("roomonline").disabled = false;
+//}
 
 // 離開群組
 function leaveRoom(UserID) {
