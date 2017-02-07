@@ -307,12 +307,8 @@ function Login() {
 					    buttonNode.index = "roomMsg" + i;
 					    buttonNode.onclick= function(){
 					    	var msg = document.getElementById(this.index).value;
-					    	console.log("msg: " + msg);
-//					    	console.log("msg: " + document.getElementById("roomMsg").value);
-//					    	sendtoRoom01(this.value);
 					    	sendtoRoom02(this.value, msg);
 					    	} ;
-//					    buttonNode.onclick="sendtoRoom();";
 					    var buttonTextnode = document.createTextNode("Send to Group");
 					    buttonNode.appendChild(buttonTextnode);
 					    trNode.appendChild(buttonNode);
