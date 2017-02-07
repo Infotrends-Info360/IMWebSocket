@@ -21,17 +21,6 @@ function onloadFunction(){
 	}else{
 		document.getElementById('UserName').value = "agent02";		
 	}
-//	
-//	var tmpAgentName = document.getElementById('UserName').value;
-//	console.log("tmpAgentName: " + tmpAgentName);
-//	var tmpNo = tmpAgentName.charAt(6);
-//	console.log("tmpAgentName: " + tmpAgentName);
-//	var tmpNo = parseInt(tmpNo);
-//	tmpNo++;
-//	console.log("tmpNo: " + tmpNo);
-//	document.getElementById('UserName').value = "agent0" + tmpNo;
-	
-	
 }
 
 // refresh或關閉網頁時執行
@@ -402,6 +391,7 @@ function Logoutaction(UserID) {
 		// text: message,
 		id : UserID,
 		UserName : UserName,
+		channel : "chat",
 		date : now.getHours() + ":" + now.getMinutes() + ":" + now.getSeconds()
 	};
 
@@ -427,6 +417,7 @@ function send01(aSendto,aMessage){
 		id : UserID,
 		UserName : UserName,
 		sendto : aSendto,
+		channel : "chat",
 		date : now.getHours() + ":" + now.getMinutes() + ":" + now.getSeconds()
 	};
 	// 發送消息
@@ -447,6 +438,7 @@ function online() {
 	var msg = {
 		type : "online",
 		UserName : UserName,
+		channel : "chat",
 		date : now.getHours() + ":" + now.getMinutes() + ":" + now.getSeconds()
 	};
 	// 發送消息
@@ -490,6 +482,7 @@ function addRoomForMany(aRoomID, aMemberListToJoin){
 //		id : UserID,
 //		ACtype : "Agent",
 //		UserName : UserName,
+//		channel: "chat",
 //		date : now.getHours() + ":" + now.getMinutes() + ":" + now.getSeconds()
 //	};
 //
@@ -511,6 +504,7 @@ function leaveRoom(UserID) {
 		roomID : RoomID,
 		id : UserID,
 		UserName : UserName,
+		channel : "chat",
 		date : now.getHours() + ":" + now.getMinutes() + ":" + now.getSeconds()
 	};
 
@@ -559,6 +553,7 @@ function roomonline() {
 		type : "roomonline",
 		roomID : RoomID,
 		UserName : UserName,
+		channel : "chat",
 		date : now.getHours() + ":" + now.getMinutes() + ":" + now.getSeconds()
 	};
 
@@ -634,6 +629,7 @@ function AcceptEventInit() {
 	var now = new Date();
 	var createroomIdmsg = {
 		type : "createroomId",
+		channel : "chat",
 		date : now.getHours() + ":" + now.getMinutes() + ":" + now.getSeconds()
 	};
 
@@ -745,15 +741,6 @@ function sendtoRoomonlay01(aText, aRoomID) {
 	// 組成傳送群組訊息至layim視窗上的JSON指令
 	var myMessagetoRoomJson = Object.create(messagetoRoomJson); // test
 	myMessagetoRoomJson.buildup("messagetoRoom", "Agent",aText, UserID_g, UserName, aRoomID, "chat", "");
-//	myMessagetoRoomJson.type = "messagetoRoom";
-//	myMessagetoRoomJson.roomID = aRoomID;
-//	myMessagetoRoomJson.ACtype = "Agent";
-//	myMessagetoRoomJson.id = UserID_g;
-//	myMessagetoRoomJson.UserName = UserName;
-//	myMessagetoRoomJson.text = aText;
-//	myMessagetoRoomJson.channel = "chat";
-//	myMessagetoRoomJson.date = "";	// 日期部分須到server端拿
-	
 	// 發送消息給WebSocket
 	ws.send(JSON.stringify(myMessagetoRoomJson));
 }
@@ -952,96 +939,6 @@ function layuiUse01() {
 					});
 }
 
-// 給Group ID List用 - 之後試著把這段獨立出去
-// website:
-// https://code.tutsplus.com/articles/data-structures-with-javascript-singly-linked-list-and-doubly-linked-list--cms-23392
-function Node(data) {
-	this.data = data;
-	this.next = null;
-}
-
-function SinglyList() {
-	this._length = 0;
-	this.head = null;
-}
-
-SinglyList.prototype.add = function(value) {
-	var node = new Node(value), currentNode = this.head;
-
-	// 1st use-case: an empty list
-	if (!currentNode) {
-		this.head = node;
-		this._length++;
-
-		return node;
-	}
-
-	// 2nd use-case: a non-empty list
-	while (currentNode.next) {
-		currentNode = currentNode.next;
-	}
-
-	currentNode.next = node;
-
-	this._length++;
-
-	return node;
-};
-
-SinglyList.prototype.searchNodeAt = function(position) {
-	var currentNode = this.head, length = this._length, count = 1, message = {
-		failure : 'Failure: non-existent node in this list.'
-	};
-
-	// 1st use-case: an invalid position
-	if (length === 0 || position < 1 || position > length) {
-		throw new Error(message.failure);
-	}
-
-	// 2nd use-case: a valid position
-	while (count < position) {
-		currentNode = currentNode.next;
-		count++;
-	}
-
-	return currentNode;
-};
-
-SinglyList.prototype.remove = function(position) {
-	var currentNode = this.head, length = this._length, count = 0, message = {
-		failure : 'Failure: non-existent node in this list.'
-	}, beforeNodeToDelete = null, nodeToDelete = null, deletedNode = null;
-
-	// 1st use-case: an invalid position
-	if (position < 0 || position > length) {
-		throw new Error(message.failure);
-	}
-
-	// 2nd use-case: the first node is removed
-	if (position === 1) {
-		this.head = currentNode.next;
-		deletedNode = currentNode;
-		currentNode = null;
-		this._length--;
-
-		return deletedNode;
-	}
-
-	// 3rd use-case: any other node is removed
-	while (count < position) {
-		beforeNodeToDelete = currentNode;
-		nodeToDelete = currentNode.next;
-		count++;
-	}
-
-	beforeNodeToDelete.next = nodeToDelete.next;
-	deletedNode = nodeToDelete;
-	nodeToDelete = null;
-	this._length--;
-
-	return deletedNode;
-};
-
 function updateStatus(aStatus, aReason){
 	var UserID = document.getElementById('UserID').value;
 	// 向websocket送出變更狀態至未就緒指令
@@ -1053,6 +950,7 @@ function updateStatus(aStatus, aReason){
 		UserName : UserName,
 		status : aStatus,
 		reason : aReason,
+		channel : "chat",
 		date : now.getHours() + ":" + now.getMinutes() + ":" + now.getSeconds()
 	};
 	// 發送消息
@@ -1078,7 +976,8 @@ function inviteAgentThirdParty(aInviteType){
 			fromAgentID : UserID_g, // 使用全域變數
 			invitedAgentID : myInvitedAgentID,
 			fromAgentName : UserName,
-			inviteType: aInviteType
+			inviteType: aInviteType,
+			channel : "chat"
 		};
 		// 發送消息
 		ws.send(JSON.stringify(inviteAgent3waymsg));
@@ -1102,7 +1001,8 @@ function responseThirdParty(aResponse){
 			fromAgentID : myfromAgentID, 
 			invitedAgentID : UserID_g,
 			response: aResponse,
-			inviteType: inviteType
+			inviteType: inviteType,
+			channel : "chat"
 //			fromAgentName : UserName
 		};
 	// 發送消息
@@ -1122,34 +1022,22 @@ function notready() {
 }
 
 function RefreshRoomList(){
-	var testmsg = {
-		    type: "refreshRoomList"
+	var msg = {
+		    type: "refreshRoomList",
+		    channel : "chat",	
 		  };
 	//發送消息 
-	ws.send(JSON.stringify(testmsg));	
+	ws.send(JSON.stringify(msg));	
 	
 }
 
 // 測試按鈕
 function test() {
 	console.log("test method called");
-	//切換為未就緒
-//	notready();
-//	var UserID = document.getElementById('UserID').value;
-//	//向websocket送出變更狀態至party remove指令
-//	var now = new Date();
 	var testmsg = {
-		    type: "test"
-//		    ,
-//		    ACtype: "Agent",
-//		    id: UserID,
-//			UserName: UserName,
-//			status: "party remove",
-//			reason: "no reason",
-//		    date: now.getHours()+":"+now.getMinutes()+":"+now.getSeconds()
-		    //date: Date.now()
+		    type: "test",
+		    channel : "chat"
 		  };
 	//發送消息 
 	ws.send(JSON.stringify(testmsg));
-	
 }

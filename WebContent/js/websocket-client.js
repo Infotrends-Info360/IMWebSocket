@@ -170,7 +170,7 @@ function Login() {
 						ipaddress : '127.0.0.1',
 						browser : 'IE',
 						platfrom : 'Windows',
-						channel : 'Web',
+						channel : 'Web', // 使用管道
 						language : 'chiname',
 						enterkey : 'Phone'
 					};
@@ -249,6 +249,7 @@ function Logoutaction(UserID) {
 		type : "Exit",
 		id : UserID,
 		UserName : UserName,
+		channel: "chat",
 		date : now.getHours() + ":" + now.getMinutes() + ":" + now.getSeconds()
 	};
 
@@ -269,6 +270,7 @@ function send() {
 		id : UserID,
 		UserName : UserName,
 		sendto : sendto,
+		channel: "chat",
 		date : now.getHours() + ":" + now.getMinutes() + ":" + now.getSeconds()
 	};
 
@@ -283,6 +285,7 @@ function online() {
 	var msg = {
 		type : "online",
 		UserName : UserName,
+		channel: "chat",
 		date : now.getHours() + ":" + now.getMinutes() + ":" + now.getSeconds()
 	};
 
@@ -302,6 +305,7 @@ function online() {
 //		id : UserID,
 //		ACtype : "Client",
 //		UserName : UserName,
+//		channel: "chat",
 //		date : now.getHours() + ":" + now.getMinutes() + ":" + now.getSeconds()
 //	};
 //
@@ -325,6 +329,7 @@ function leaveRoom(UserID) {
 		roomID : roomID,
 		id : UserID,
 		UserName : UserName,
+		channel: "chat",
 		date : now.getHours() + ":" + now.getMinutes() + ":" + now.getSeconds()
 	};
 
@@ -372,6 +377,7 @@ function roomonline() {
 		type : "roomonline",
 		roomID : roomID,
 		UserName : UserName,
+		channel: "chat",
 		date : now.getHours() + ":" + now.getMinutes() + ":" + now.getSeconds()
 	};
 
@@ -443,6 +449,7 @@ function LeaveType(UserID) {
 				UserName: UserName,
 				status: "lose",
 				reason: "Waitting Agent",
+				channel: "chat",
 			    date: now.getHours()+":"+now.getMinutes()+":"+now.getSeconds()
 			  };
 		
@@ -669,7 +676,8 @@ function interactionlog(contactid, ixnid, agentid, status, typeid,
 		stoppedreason : stoppedreason,
 		activitycode : activitycode,
 		startdate : startdate,
-		closefrom : 'client'
+		closefrom : 'client',
+		channel: "chat"
 	};
 
 	// 發送消息給WebSocket
@@ -692,7 +700,8 @@ function setinteraction(contactid, ixnid, agentid, status, typeid,
 		stoppedreason : stoppedreason,
 		activitycode : activitycode,
 		startdate : startdate,
-		closefrom : closefrom
+		closefrom : closefrom,
+		channel: "chat"
 	};
 
 	// 發送消息給WebSocket
