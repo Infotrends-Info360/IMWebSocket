@@ -361,20 +361,7 @@ public class WebSocket extends WebSocketServer {
 		sendJson.addProperty("roomID",  roomID);
 		sendJson.addProperty("channel", channel);
 		WebSocketUserPool.sendMessageToUser(
-				sendto,sendJson.toString());		
-//		JSONObject obj = new JSONObject(message);
-//		String roomID = obj.getString("roomID");
-//		org.java_websocket.WebSocket sendto = WebSocketUserPool
-//				.getWebSocketByUser(obj.getString("sendto"));
-//		JSONObject sendjson = new JSONObject();
-//		sendjson.put("Event", "AcceptEvent");
-//		sendjson.put("from", obj.getString("id"));
-//		sendjson.put("fromName",  obj.getString("UserName"));
-//		sendjson.put("roomID",  roomID);
-//		sendjson.put("channel", obj.getString("channel"));
-//		WebSocketUserPool.sendMessageToUser(
-//				sendto,sendjson.toString());
-		
+				sendto,sendJson.toString());	
 	}
 	
 	
