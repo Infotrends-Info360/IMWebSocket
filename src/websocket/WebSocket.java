@@ -101,9 +101,9 @@ public class WebSocket extends WebSocketServer {
 		case "Exit":
 			CommonFunction.userExit(message.toString(), conn);
 			break;
-		case "addRoom":
-			CommonFunction.userjointoRoom(message.toString(), conn);
-			break;
+//		case "addRoom":
+//			CommonFunction.userjointoRoom(message.toString(), conn);
+//			break;
 		case "leaveRoom":
 			CommonFunction.userExitfromRoom(message.toString(), conn);
 			break;
