@@ -169,7 +169,8 @@ function Login() {
 					addRoomForMany(myRoomID, memberListToJoin);
 					
 					// 更新狀態
-					updateStatusAction("Agent", UserID_g, UserName, "Established", "Established");
+					var myUpdateStatusJson = new updateStatusJson("Agent", UserID_g, UserName, "Established", "Established");
+					ws.send(JSON.stringify(myUpdateStatusJson));
 					// 使用layui
 					layuiUse01(); // 先暫時這樣隔開,之後有需要細改再看此部分
 
@@ -565,7 +566,8 @@ function roomonline() {
 function ready() {
 	var UserID = document.getElementById('UserID').value;
 	// 向websocket送出變更狀態至準備就緒指令
-	updateStatusAction("Agent", UserID_g, UserName, "ready", "ready");
+	var myUpdateStatusJson = new updateStatusJson("Agent", UserID_g, UserName, "ready", "ready");
+	ws.send(JSON.stringify(myUpdateStatusJson));
 
 	// 取得狀態
 	getUserStatus();

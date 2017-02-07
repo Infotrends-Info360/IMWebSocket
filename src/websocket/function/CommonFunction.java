@@ -179,29 +179,29 @@ public class CommonFunction {
 		// 拿取資料(gson)
 		JsonParser jsonParser = new JsonParser(); 
 		JsonObject msgJson = jsonParser.parse(message).getAsJsonObject();
-		System.out.println("getMessageinRoom() msgJson: "+ msgJson);
+//		System.out.println("getMessageinRoom() msgJson: "+ msgJson); // for debugging
 		
 		// 將新訊息更新到RoomInfo bean上
-		System.out.println("msgJson.text: " + msgJson.get("text").getAsString());
+//		System.out.println("msgJson.text: " + msgJson.get("text").getAsString());
 		RoomInfo roomInfo = WebSocketRoomPool.getRoomInfo(msgJson.get("roomID").getAsString());
 			// 更新text
 		StringBuilder text = roomInfo.getText();
 		text.append(msgJson.get("UserName").getAsString() + ": " + msgJson.get("text").getAsString() + "\n");
-		System.out.println("roomInfo.getText()\n" + roomInfo.getText()); // for debugging
+//		System.out.println("roomInfo.getText()\n" + roomInfo.getText()); // for debugging
 			// 更新structuredtext
 		JsonArray structuredtext = roomInfo.getStructuredtext();
 		SimpleDateFormat sdf = new SimpleDateFormat(Util.getSdfDateTimeFormat());
 		String dateStr = sdf.format(new java.util.Date());
 		msgJson.addProperty("date", dateStr);
 		structuredtext.add(msgJson);
-		System.out.println("roomInfo.getStructuredtext()\n" + roomInfo.getStructuredtext()); // for debugging
+//		System.out.println("roomInfo.getStructuredtext()\n" + roomInfo.getStructuredtext()); // for debugging
 		
 		// 將訊息寄給room線上使用者:
 		if (msgJson.get("roomID") == null) return;
 		msgJson.addProperty("Event", "messagetoRoom");
 		WebSocketRoomPool.sendMessageinroom(msgJson.get("roomID").getAsString(), msgJson.toString());
 		
-		System.out.println("final msgJson: \n"+ msgJson); // for debugging
+//		System.out.println("final msgJson: \n"+ msgJson); // for debugging
 	}
 	
 	// room
@@ -304,7 +304,7 @@ public class CommonFunction {
 		
 		// 將 此Agent所屬的Room list 塞入json中
 		List<String> roomIDList = WebSocketUserPool.getUserRoomByKey(conn);
-		System.out.println("roomIDList.size(): " + roomIDList.size());
+//		System.out.println("roomIDList.size(): " + roomIDList.size());
 		for (String roomID: roomIDList){
 			roomIDListJson.add(roomID);
 			memberListJson.add(WebSocketRoomPool.getOnlineUserinroom(roomID).toString());
@@ -324,9 +324,8 @@ public class CommonFunction {
 		sendJson.add("roomList", roomIDListJson);
 		sendJson.add("memberList", memberListJson);
 		
-		
-		System.out.println("roomIDListJson.size(): " + roomIDListJson.size());
-		System.out.println("sendJson: " + sendJson);
+//		System.out.println("roomIDListJson.size(): " + roomIDListJson.size());
+//		System.out.println("sendJson: " + sendJson);
 		
 		
 		// end of 將此Agent所屬的Room list塞入json中

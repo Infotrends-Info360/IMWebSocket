@@ -86,7 +86,7 @@ public class WebSocket extends WebSocketServer {
 	@Override
 	public void onMessage(org.java_websocket.WebSocket conn, String message) {
 		message = message.toString();
-		// System.out.println(message);
+//		System.out.println("WebSocket :\n " +message);
 		JSONObject obj = new JSONObject(message);
 		switch (obj.getString("type").trim()) {
 		case "message":
@@ -319,8 +319,9 @@ public class WebSocket extends WebSocketServer {
 	}
 	
 	private void addRoomForMany(String aMsg, org.java_websocket.WebSocket aConn) {
+		System.out.println("addRoomForMany() called");
 		JsonObject msgJson = Util.getGJsonObject(aMsg);
-		System.out.println("addRoomForMany - msgJson: " + msgJson);
+//		System.out.println("addRoomForMany - msgJson: " + msgJson);
 		String roomID = msgJson.get("roomID").getAsString();
 		String channel = msgJson.get("channel").getAsString();
 		JsonArray userIDJsonAry = msgJson.getAsJsonArray("memberListToJoin");
@@ -329,9 +330,9 @@ public class WebSocket extends WebSocketServer {
 		for (JsonElement userIDJsonE : userIDJsonAry){
 			JsonObject userIDJsonObj = userIDJsonE.getAsJsonObject();
 			String userID = userIDJsonObj.get("ID").getAsString();
-			System.out.println("userID: " + userID);
+//			System.out.println("userID: " + userID);
 			org.java_websocket.WebSocket userConn = WebSocketUserPool.getWebSocketByUser(userID);
-			System.out.println("userConn: " + userConn);
+//			System.out.println("userConn: " + userConn);
 			String username = WebSocketUserPool.getUserNameByKey(userConn);
 			String joinMsg = "[Server]" + username + " join " + roomID + " room";
 			
@@ -344,7 +345,7 @@ public class WebSocket extends WebSocketServer {
 			// 更新room list
 			String ACtype = WebSocketUserPool.getACTypeByKey(userConn);
 			if ("Agent".equals(ACtype)){
-				System.out.println("userjointoroom - one Agent joined");
+//				System.out.println("userjointoroom - one Agent joined");
 				CommonFunction.refreshRoomList(userConn);
 			}else if ("Client".equals(ACtype)){
 				clientID = userID;

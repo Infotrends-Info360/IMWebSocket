@@ -65,8 +65,8 @@ function Login() {
 				var obj = jQuery.parseJSON(e.data);
 				// 收到同意交談指令
 				if ("AcceptEvent" == obj.Event) {
-					updateStatusAction("Client", UserID_g, UserName, "chat", "chatting");
-					
+					var myUpdateStatusJson = new updateStatusJson("Client", UserID_g, UserName, "chat", "chatting");
+					ws.send(JSON.stringify(myUpdateStatusJson));
 					waittingAgent = false;
 					
 					// 開啟layim

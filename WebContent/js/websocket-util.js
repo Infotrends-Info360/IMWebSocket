@@ -1,22 +1,4 @@
 /********** util *************/
-function updateStatusAction(aACType, aUserID, aUserName, aStatus, aReason) {
-	console.log("updateStatusAction() called");
-	var UserID = document.getElementById('UserID').value;
-	var now = new Date();
-	var updateAgentStatusmsg = {
-		type : "updateStatus",
-		ACtype : aACType,
-		id : aUserID,
-		UserName : aUserName,
-		status : aStatus,
-		reason : aReason,
-		channel: "chat",
-		date : now.getHours() + ":" + now.getMinutes() + ":" + now.getSeconds()
-	};
-
-	// 發送消息
-	ws.send(JSON.stringify(updateAgentStatusmsg));
-}
 
 /********** bean *************/
 //配合Object.create()使用,可收inheritance的效果
@@ -39,6 +21,17 @@ var messagetoRoomJson = {
 			this.channel = aChannel;
 			this.date = aDate;
 		}			
+}
+function updateStatusJson(aACType, aID, aUserName, aStatus, aReason){
+	this.type = "updateStatus";
+	this.ACtype = aACType;
+	this.id = aID;
+	this.UserName = aUserName;
+	this.status = aStatus;
+	this.reason = aReason;
+	this.channel = "chat";
+	var now = new Date();
+	this.date = "" + now.getHours() + ":" + now.getMinutes() + ":" + now.getSeconds();
 }
 
 // addRoomForMany
