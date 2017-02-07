@@ -54,8 +54,10 @@ public class searchUserdataServlet {
 			CfgServiceNameSettingjsonObject = GetServiceNameSetting(searchtype);
 			searchkey = CfgServiceNameSettingjsonObject.getString("searchkey");
 			pkey = CfgServiceNameSettingjsonObject.getString("uniquekey");
+		} catch(org.json.JSONException e){
+			System.out.println("org.json.JSONException - " + "searchUserdataServlet.java");
+//			e.printStackTrace();
 		} catch (Exception e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 		jsonObject.put("searchkey", searchkey);

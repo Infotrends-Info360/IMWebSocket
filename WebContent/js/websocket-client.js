@@ -94,7 +94,6 @@ function Login() {
 					// 增加此判斷式,避免一直呼叫senduserdata方法
 					if (contactID == null){
 						senduserdata(UserID, UserName, obj.Agent);
-						console.log("senduserdata done ******************* ");						
 					}
 
 					if ("null" == obj.Agent || null == obj.Agent) {
@@ -134,8 +133,13 @@ function Login() {
 							+ ": " + obj.text + "<br>";
 
 				} else if ("senduserdata" == obj.Event) {
-					contactID = obj.userdata.SetContactLog.contactID;
-					setinteractionDemo(ixnstatus, ixnactivitycode);
+					if (obj.userdata.SetContactLog != null){
+						contactID = obj.userdata.SetContactLog.contactID;
+						setinteractionDemo(ixnstatus, ixnactivitycode);						
+					}else{
+						console.log("senduserdata - " + "contactID not found! ");
+					}
+					console.log("senduserdata done from WS ******************* ");	
 					// alert(obj.userdata.SetContactLog.contactID);
 					// document.getElementById("userdata").innerHTML =
 					// JSON.stringify(obj.userdata);
