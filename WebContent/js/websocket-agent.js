@@ -741,9 +741,8 @@ function sendtoRoomonlay(text) {
 
 function sendtoRoomonlay01(aText, aRoomID) {
 	// 組成傳送群組訊息至layim視窗上的JSON指令
-	var myMessagetoRoomJson = Object.create(messagetoRoomJson); // test
-	myMessagetoRoomJson.buildup("messagetoRoom", "Agent",aText, UserID_g, UserName, aRoomID, "chat", "");
-	// 發送消息給WebSocket
+	var myMessagetoRoomJson = new messagetoRoomJson("messagetoRoom", "Client", aText, UserID_g, UserName, aRoomID, "chat", "");
+	// 發送消息給WebSocket	
 	ws.send(JSON.stringify(myMessagetoRoomJson));
 }
 

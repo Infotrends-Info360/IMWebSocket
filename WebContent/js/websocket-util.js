@@ -2,26 +2,18 @@
 
 /********** bean *************/
 //配合Object.create()使用,可收inheritance的效果
-var messagetoRoomJson = {
-		type : "messagetoRoom",
-		ACtype : "",
-		text : "",
-		id : "",
-		UserName : "",
-		roomID : "",
-		channel : "chat",
-		date : "",
-		buildup : function(aType, aACtype, aText, aId, aUserName, aRoomID, aChannel, aDate) {  // Method which will display type of Animal
-			this.type = aType;
-			this.ACtype = aACtype;
-			this.text = aText;
-			this.id = aId;
-			this.UserName = aUserName;
-			this.roomID = aRoomID;
-			this.channel = aChannel;
-			this.date = aDate;
-		}			
-}
+function messagetoRoomJson(aType, aACtype, aText, aId, aUserName, aRoomID, aChannel, aDate) {  // Method which will display type of Animal
+	this.type = aType;
+	this.ACtype = aACtype;
+	this.text = aText;
+	this.id = aId;
+	this.UserName = aUserName;
+	this.roomID = aRoomID;
+	this.channel = "chat";
+	this.channel = aChannel;
+	this.date = aDate;
+}			
+
 function updateStatusJson(aACType, aID, aUserName, aStatus, aReason){
 	this.type = "updateStatus";
 	this.ACtype = aACType;

@@ -520,21 +520,10 @@ function senduserdata(UserID, phone, sendto) {
 }
 
 // 傳送群組訊息至layim視窗上
-function sendtoRoomonlay(aText) {
-	
+function sendtoRoomonlay(aText) {	
 	// 組成傳送群組訊息至layim視窗上的JSON指令
-	var myMessagetoRoomJson = Object.create(messagetoRoomJson); // test
-	myMessagetoRoomJson.buildup("messagetoRoom", "Client", aText, UserID_g, UserName, roomID, "chat", "");
-//	myMessagetoRoomJson.type = "messagetoRoom";
-//	myMessagetoRoomJson.roomID = roomID; // Client至多只會有一個roomID
-//	myMessagetoRoomJson.ACtype = "Client";
-//	myMessagetoRoomJson.id = UserID_g;
-//	myMessagetoRoomJson.UserName = UserName;
-//	myMessagetoRoomJson.text = aText;
-//	myMessagetoRoomJson.channel = "chat";
-//	myMessagetoRoomJson.date = "";	// 日期部分須到server端拿
-	
-	// 發送消息給WebSocket
+	var myMessagetoRoomJson = new messagetoRoomJson("messagetoRoom", "Client", aText, UserID_g, UserName, roomID, "chat", "");
+	// 發送消息給WebSocket	
 	ws.send(JSON.stringify(myMessagetoRoomJson));
 }
 
