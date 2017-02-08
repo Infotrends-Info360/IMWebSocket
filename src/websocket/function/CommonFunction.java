@@ -23,10 +23,13 @@ import util.Util;
 
 
 
+
+
 import com.google.gson.JsonParser;
 
 import websocket.HeartBeat;
 import websocket.bean.RoomInfo;
+import websocket.bean.UserInfo;
 //import websocket.HeartBeat;
 import websocket.pools.WebSocketRoomPool;
 import websocket.pools.WebSocketTypePool;
@@ -151,6 +154,7 @@ public class CommonFunction {
 	/** * user leave room */
 	public static void userExitfromRoom(String message,
 			org.java_websocket.WebSocket conn) {
+		System.out.println("userExitfromRoom() called");
 		JSONObject obj = new JSONObject(message);
 		String roomID = obj.getString("roomID");
 		String username = obj.getString("UserName");
@@ -163,43 +167,43 @@ public class CommonFunction {
 	/** * Get Message from Room */
 	public static void getMessageinRoom(String message,
 			org.java_websocket.WebSocket conn) {
-//		JSONObject obj = new JSONObject(message);
-//		String roomID = obj.getString("roomID");
-//		String userid = obj.getString("id");
-//		String username = obj.getString("UserName");
-//		String text = obj.getString("text");
-//		JSONObject sendjson = new JSONObject();
-//		sendjson.put("Event", "messagetoRoom");
-//		sendjson.put("from", userid);
-//		sendjson.put("username", username);
-//		sendjson.put("message", text);
-//		sendjson.put("channel", obj.getString("channel"));
-//		WebSocketRoomPool.sendMessageinroom(roomID, sendjson.toString());
 		
 		// 拿取資料(gson)
-		JsonParser jsonParser = new JsonParser(); 
-		JsonObject msgJson = jsonParser.parse(message).getAsJsonObject();
-//		System.out.println("getMessageinRoom() msgJson: "+ msgJson); // for debugging
+		JsonObject msgJsonNew = Util.getGJsonObject(message);
+		RoomInfo roomInfo = WebSocketRoomPool.getRoomInfo(msgJsonNew.get("roomID").getAsString());
+		org.java_websocket.WebSocket clientConn = roomInfo.getClientConn();
 		
-		// 將新訊息更新到RoomInfo bean上
-//		System.out.println("msgJson.text: " + msgJson.get("text").getAsString());
-		RoomInfo roomInfo = WebSocketRoomPool.getRoomInfo(msgJson.get("roomID").getAsString());
-			// 更新text
-		StringBuilder text = roomInfo.getText();
-		text.append(msgJson.get("UserName").getAsString() + ": " + msgJson.get("text").getAsString() + "\n");
-//		System.out.println("roomInfo.getText()\n" + roomInfo.getText()); // for debugging
-			// 更新structuredtext
-		JsonArray structuredtext = roomInfo.getStructuredtext();
+			// 更新UserInteraction 
+		String userinteractionMsg = WebSocketUserPool.getUserInteractionByKey(clientConn);
+		JsonObject msgJsonOld = Util.getGJsonObject(userinteractionMsg);
+		System.out.println("getMessageinRoom() - userinteractionMsg: " + userinteractionMsg);
+		// 因此方法只有Client呼叫,故最多一個Client也就只有一個roomID,若有再更新即可
+				//更新text
+		String text = "";
+		if (msgJsonOld.get("text") != null){
+			text = msgJsonOld.get("text").getAsString();
+		}
+		text += msgJsonNew.get("UserName").getAsString() + ": " + msgJsonNew.get("text").getAsString() + "\n";
+		msgJsonOld.addProperty("text", text);
+				// 更新structuredtext
+		JsonArray structuredtext = new JsonArray();
+		if (msgJsonOld.get("structuredtext") != null){
+			structuredtext = msgJsonOld.get("structuredtext").getAsJsonArray();
+		}
+					// 更新時間
 		SimpleDateFormat sdf = new SimpleDateFormat(Util.getSdfDateTimeFormat());
-		String dateStr = sdf.format(new java.util.Date());
-		msgJson.addProperty("date", dateStr);
-		structuredtext.add(msgJson);
-//		System.out.println("roomInfo.getStructuredtext()\n" + roomInfo.getStructuredtext()); // for debugging
+		String dateStr = sdf.format(new java.util.Date()); 
+		msgJsonNew.addProperty("date", dateStr);
+		structuredtext.add(msgJsonNew);
+		msgJsonOld.add("structuredtext", structuredtext);
 		
+		WebSocketUserPool.addUserInteraction(msgJsonOld.toString(), clientConn); // final step
+		System.out.println("after - getMessageinRoom() - userinteractionMsg: " + WebSocketUserPool.getUserInteractionByKey(roomInfo.getClientConn()));
+
 		// 將訊息寄給room線上使用者:
-		if (msgJson.get("roomID") == null) return;
-		msgJson.addProperty("Event", "messagetoRoom");
-		WebSocketRoomPool.sendMessageinroom(msgJson.get("roomID").getAsString(), msgJson.toString());
+		if (msgJsonNew.get("roomID") == null) return;
+		msgJsonNew.addProperty("Event", "messagetoRoom");
+		WebSocketRoomPool.sendMessageinroom(msgJsonNew.get("roomID").getAsString(), msgJsonNew.toString());
 		
 //		System.out.println("final msgJson: \n"+ msgJson); // for debugging
 	}

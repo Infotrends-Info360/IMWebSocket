@@ -213,13 +213,10 @@ public class WebSocket extends WebSocketServer {
 	
 	private void inputInteractionLog(org.java_websocket.WebSocket conn, String reason) {
 		System.out.println("inputInteractionLog() called");
-//		System.out.println("conn: " + conn);
 		
 		// only Client stores userInteraction
 		String message = WebSocketUserPool.getUserInteractionByKey(conn); // 一定取得到: 1. 在user login時就會呼叫setUserInteraction, 2. 在user logut or 重整時也會呼叫setUserInteraction
 		String username = WebSocketUserPool.getUserNameByKey(conn);
-//		System.out.println("message: " + message);
-//		System.out.println("username: " + username);
 		
 		// 目前只有client端會再登入時、登出時、重整時寫入Log
 		if (message != null){
@@ -229,9 +226,10 @@ public class WebSocket extends WebSocketServer {
 				obj.put("status", 3);
 				obj.put("stoppedreason", "server:HeartBeatLose"); // 看之後是否考慮更改為變數reason
 				obj.put("closefrom", "server:HeartBeatLose"); 
-				message = obj.toString();
+//				message = obj.toString();
 			}
-			ClientFunction.interactionlog(message, conn);			
+//			System.out.println("inputInteractionLog() - " + message);
+			ClientFunction.interactionlog(obj.toString(), conn);			
 		}
 
 	}
@@ -322,7 +320,8 @@ public class WebSocket extends WebSocketServer {
 		System.out.println("addRoomForMany() called");
 		JsonObject msgJson = Util.getGJsonObject(aMsg);
 //		System.out.println("addRoomForMany - msgJson: " + msgJson);
-		String roomID = msgJson.get("roomID").getAsString();
+//		String roomID = msgJson.get("roomID").getAsString();
+		String roomID = java.util.UUID.randomUUID().toString(); // 在這邊直接建一個roomID,省略原本"createroomId"
 		String channel = msgJson.get("channel").getAsString();
 		JsonArray userIDJsonAry = msgJson.getAsJsonArray("memberListToJoin");
 		String clientID = null;
@@ -332,6 +331,22 @@ public class WebSocket extends WebSocketServer {
 			String userID = userIDJsonObj.get("ID").getAsString();
 //			System.out.println("userID: " + userID);
 			org.java_websocket.WebSocket userConn = WebSocketUserPool.getWebSocketByUser(userID);
+			// 處理於Client登入後 到 Agent按下AcceptEvent期間, 有人登出的狀況:
+			if (userConn == null || userConn.isClosed() || userConn.isClosing()){
+				System.out.println("userConn us closed : " + userConn);
+				String ACType = WebSocketUserPool.getACTypeByKey(userConn);
+				System.out.println("addRoomForMany() someone is disconnected");
+				if ("Client".equals(ACType)){
+					System.out.println("addRoomForMany() Client is disconnected - addRoomFailed");
+					return;
+				}else if (userIDJsonAry.size() <= 2){
+					System.out.println("addRoomForMany() room member only 1 - addRoomFailed");
+					return;
+				}else{
+					System.out.println("addRoomForMany() skip one");
+					continue;
+				}				
+			}
 //			System.out.println("userConn: " + userConn);
 			String username = WebSocketUserPool.getUserNameByKey(userConn);
 			String joinMsg = "[Server]" + username + " join " + roomID + " room";
@@ -352,17 +367,20 @@ public class WebSocket extends WebSocketServer {
 			}
 		}
 		
-		// 通知Client,要開啟layim(將原本AcceptEvent移到此處)
-		org.java_websocket.WebSocket sendto = WebSocketUserPool
-				.getWebSocketByUser(clientID);
-		JsonObject sendJson = new JsonObject();
-		sendJson.addProperty("Event", "AcceptEvent");
-		sendJson.addProperty("from",  WebSocketUserPool.getUserID(aConn));
-		sendJson.addProperty("fromName", WebSocketUserPool.getUserNameByKey(aConn));
-		sendJson.addProperty("roomID",  roomID);
-		sendJson.addProperty("channel", channel);
-		WebSocketUserPool.sendMessageToUser(
-				sendto,sendJson.toString());	
+		// 通知Client與Agent,要開啟layim(將原本AcceptEvent移到此處)
+		for (JsonElement userIDJsonE : userIDJsonAry){
+			JsonObject userIDJsonObj = userIDJsonE.getAsJsonObject();
+			String userID = userIDJsonObj.get("ID").getAsString();
+			org.java_websocket.WebSocket userConn = WebSocketUserPool.getWebSocketByUser(userID);
+			JsonObject sendJson = new JsonObject();
+			sendJson.addProperty("Event", "AcceptEvent");
+			sendJson.addProperty("from",  WebSocketUserPool.getUserID(aConn));
+			sendJson.addProperty("fromName", WebSocketUserPool.getUserNameByKey(aConn));
+			sendJson.addProperty("roomID",  roomID);
+			sendJson.addProperty("channel", channel);
+			WebSocketUserPool.sendMessageToUser(
+					userConn,sendJson.toString());	
+		}
 	}
 	
 	

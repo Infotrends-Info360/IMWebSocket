@@ -12,6 +12,9 @@ import java.util.Set;
 import org.java_websocket.WebSocket;
 import org.json.JSONObject;
 
+import com.google.gson.JsonObject;
+
+import util.Util;
 import websocket.bean.RoomInfo;
 import websocket.bean.UserInfo;
 
@@ -43,6 +46,10 @@ public class WebSocketRoomPool{
 			//拿room建立時間
 			Date starttime = new Date();
 			roomInfo.setStarttime(starttime);
+			//拿ClientConn
+			if (WebSocketTypePool.isClient(conn)){
+				roomInfo.setClientConn(conn);
+			}
 		}
 				
 		//拿UserInfo:
@@ -67,11 +74,12 @@ public class WebSocketRoomPool{
 	
 	/** * Remove User from Room * @param inbound */
 	public static void removeUserinroom(String aRoomID,WebSocket aConn) {
+		System.out.println("removeUserinroom() called");
 		// 把離開的邏輯坐在這裡
 		// 1. 若是Client離開 -> 則把所有人都踢出此room
 		// 2. 若是Agent離開 && 剩餘人數 > 1 -> 自己退出就好
 		// 3. 若是Agent離開 && 剩餘人數 == 1 -> 則把所有人都踢出此room
-		System.out.println("removeUserinroom(String aRoomID,WebSocket aConn) called");
+//		System.out.println("removeUserinroom(String aRoomID,WebSocket aConn) called");
 		RoomInfo roomInfo = roomMap.get(aRoomID);
 //		Set<WebSocket> tmpMemberConns = new HashSet(roommap.keySet());
 		Map<WebSocket, UserInfo> connsInRoomMap = roomInfo.getUserConns();

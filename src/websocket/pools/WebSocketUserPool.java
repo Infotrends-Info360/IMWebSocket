@@ -103,6 +103,7 @@ public class WebSocketUserPool {
 	
 	/** * Add User to WebSocket Pool* @param inbound */ /* Done */
 	public static void addUserInteraction(String userinteraction, WebSocket conn) {
+		System.out.println("addUserInteraction() called");
 		userallconnections.get(conn).setUserinteraction(userinteraction);
 	}
 	
@@ -221,6 +222,10 @@ public class WebSocketUserPool {
 	
 	public static String getUserID(WebSocket conn){
 		return userallconnections.get(conn).getUserid();
+	}
+	
+	public static UserInfo getUserInfoByKey(WebSocket conn){
+		return userallconnections.get(conn);
 	}
 	
 }

@@ -13,8 +13,7 @@ public class RoomInfo {
 	private String roomID;
 	private Date starttime;
 	private Map<WebSocket, UserInfo> userConns = new HashMap<>();
-	private StringBuilder text = new StringBuilder();
-	private JsonArray structuredtext = new JsonArray(); // gson
+	private WebSocket clientConn;
 	
 	public String getRoomID() {
 		return roomID;
@@ -28,27 +27,16 @@ public class RoomInfo {
 	public void setStarttime(Date starttime) {
 		this.starttime = starttime;
 	}
-	public StringBuilder getText() {
-		return text;
-	}
-	public void setText(StringBuilder text) {
-		this.text = text;
-	}
-	public JsonArray getStructuredtext() {
-		return structuredtext;
-	}
-	public void setStructuredtext(JsonArray structuredtext) {
-		this.structuredtext = structuredtext;
-	}
 	public Map<WebSocket, UserInfo> getUserConns() {
 		return userConns;
 	}
 	public void setUserConns(Map<WebSocket, UserInfo> userConns) {
 		this.userConns = userConns;
 	}
-	
-	
-	
-//	private String userid;
-//	private String username;	
+	public WebSocket getClientConn() {
+		return clientConn;
+	}
+	public void setClientConn(WebSocket clientConn) {
+		this.clientConn = clientConn;
+	}
 }
