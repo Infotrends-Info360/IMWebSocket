@@ -333,6 +333,7 @@ public class WebSocket extends WebSocketServer {
 		JsonArray userIDJsonAry = msgJson.getAsJsonArray("memberListToJoin");
 		String clientID = null;
 		
+//		System.out.println("addRoomForMany() - userIDJsonAry: " + userIDJsonAry);
 		for (JsonElement userIDJsonE : userIDJsonAry){
 			JsonObject userIDJsonObj = userIDJsonE.getAsJsonObject();
 			String userID = userIDJsonObj.get("ID").getAsString();
@@ -340,7 +341,6 @@ public class WebSocket extends WebSocketServer {
 			org.java_websocket.WebSocket userConn = WebSocketUserPool.getWebSocketByUser(userID);
 			// 處理於Client登入後 到 Agent按下AcceptEvent期間, 有人登出的狀況:
 			if (userConn == null || userConn.isClosed() || userConn.isClosing()){
-				System.out.println("userConn us closed : " + userConn);
 				String ACType = WebSocketUserPool.getACTypeByKey(userConn);
 				System.out.println("addRoomForMany() someone is disconnected");
 				if ("Client".equals(ACType)){

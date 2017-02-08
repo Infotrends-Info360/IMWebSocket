@@ -73,8 +73,6 @@ function Login() {
 				var obj = jQuery.parseJSON(e.data);
 				// 接收到Client邀請chat的event
 				if ("findAgentEvent" == obj.Event) {
-					document.getElementById("clientID").innerHTML = "";
-					
 					ClientName = obj.fromName;
 					ClientID = obj.from;
 					document.getElementById("AcceptEvent").disabled = false;
@@ -175,6 +173,8 @@ function Login() {
 					document.getElementById("RejectEvent").disabled = true;
 					document.getElementById("leaveRoom").disabled = false;
 					document.getElementById("sendtoRoom").disabled = false;
+					
+					document.getElementById("clientID").innerHTML = ""; // 到最後一步才清掉這個
 				} else if ("getUserStatus" == obj.Event) {
 					console.log("onMessage(): getUserStatus called");
 					document.getElementById("status").innerHTML = "狀態: "
@@ -236,7 +236,6 @@ function Login() {
 					isonline = true;
 					
 				} else if ("refreshRoomList" == obj.Event) {
-					document.getElementById("UserID").value = obj.from;
 					document.getElementById("Event").innerHTML = obj.Event;
 					console.log(obj.Event + "***********************");
 					var roomList = obj.roomList;
