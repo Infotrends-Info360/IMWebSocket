@@ -148,9 +148,6 @@ function Login() {
 					 * ,remark: FromArray[i] }); }); }
 					 */
 					// 接收到Client離開群組的訊息
-				} else if ("createroomId" == obj.Event) {
-
-					// 接收到Agent狀態更新的訊息
 				} else if ("AcceptEvent" == obj.Event){
 					// 拿取資料 + 為之後建立roomList做準備
 					RoomID = obj.roomID; // 之後要改成local variable
@@ -618,17 +615,6 @@ function LeaveType(UserID) {
 
 // 同意與Client交談
 function AcceptEventInit() {
-	// 向websocket送出產生groupId指令
-//	var now = new Date();
-//	var createroomIdmsg = {
-//		type : "createroomId",
-//		channel : "chat",
-//		date : now.getHours() + ":" + now.getMinutes() + ":" + now.getSeconds()
-//	};
-//
-//	// 發送消息
-//	ws.send(JSON.stringify(createroomIdmsg));
-	
 	// 一次將Agent與Client加入到room中
 	var currClientID = document.getElementById("clientID").innerHTML;
 		// 在此使用新的方法,將一個list的成員都加入到同一群組中
@@ -637,7 +623,7 @@ function AcceptEventInit() {
 	var mem2 = new myRoomMemberJsonObj(UserID_g);
 	memberListToJoin.push(mem1);
 	memberListToJoin.push(mem2);
-	addRoomForMany("tmp0101test", memberListToJoin);
+	addRoomForMany("none", memberListToJoin);
 	
 	// 開啟ready功能:
 	document.getElementById("ready").disabled = false;

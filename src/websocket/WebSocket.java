@@ -321,7 +321,14 @@ public class WebSocket extends WebSocketServer {
 		JsonObject msgJson = Util.getGJsonObject(aMsg);
 //		System.out.println("addRoomForMany - msgJson: " + msgJson);
 //		String roomID = msgJson.get("roomID").getAsString();
-		String roomID = java.util.UUID.randomUUID().toString(); // 在這邊直接建一個roomID,省略原本"createroomId"
+		// hardcoded - 之後想想看如何改善"none"這樣寫死的判斷方式
+		String roomID = "";
+		if ("none".equals(msgJson.get("roomID").getAsString())){
+			roomID = java.util.UUID.randomUUID().toString(); // 在這邊直接建一個roomID,省略原本"createroomId"
+		}else{
+			roomID = msgJson.get("roomID").getAsString();
+		}
+		
 		String channel = msgJson.get("channel").getAsString();
 		JsonArray userIDJsonAry = msgJson.getAsJsonArray("memberListToJoin");
 		String clientID = null;
