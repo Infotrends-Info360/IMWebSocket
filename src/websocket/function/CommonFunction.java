@@ -116,11 +116,6 @@ public class CommonFunction {
 		String joinMsg = "[Server]" + username + " Offline";
 		WebSocketUserPool.sendMessage(joinMsg);
 		
-//		JSONObject obj = new JSONObject(aMsg);
-//		String username = obj.getString("UserName");
-//		user = WebSocketUserPool.getUserByKey(conn);
-//		String joinMsg = "[Server]" + username + " Offline";
-//		WebSocketUserPool.removeUser(conn);
 		// 關係Heartbeat
 		Timer timer = WebSocketUserPool.getUserHeartbeatTimerByKey(aConn);
 		if (timer != null){
@@ -200,7 +195,7 @@ public class CommonFunction {
 			// 更新UserInteraction 
 		String userinteractionMsg = WebSocketUserPool.getUserInteractionByKey(clientConn);
 		JsonObject msgJsonOld = Util.getGJsonObject(userinteractionMsg);
-		System.out.println("getMessageinRoom() - userinteractionMsg: " + userinteractionMsg);
+//		System.out.println("getMessageinRoom() - userinteractionMsg: " + userinteractionMsg);
 		// 因此方法只有Client呼叫,故最多一個Client也就只有一個roomID,若有再更新即可
 				//更新text
 		String text = "";
@@ -222,7 +217,7 @@ public class CommonFunction {
 		msgJsonOld.add("structuredtext", structuredtext);
 		
 		WebSocketUserPool.addUserInteraction(msgJsonOld.toString(), clientConn); // final step
-		System.out.println("after - getMessageinRoom() - userinteractionMsg: " + WebSocketUserPool.getUserInteractionByKey(roomInfo.getClientConn()));
+//		System.out.println("after - getMessageinRoom() - userinteractionMsg: " + WebSocketUserPool.getUserInteractionByKey(roomInfo.getClientConn()));
 
 		// 將訊息寄給room線上使用者:
 		if (msgJsonNew.get("roomID") == null) return;
