@@ -73,7 +73,7 @@
 	Invite Agent : <input type="text" name="findAgent" id="findAgent">
 	<!--<button type="submit" onclick="find();" id="find" >邀請</button>-->
 	<br>
-	Event From : <input type="text" name="Eventform" id="Eventform" disabled>
+	Event From : <input type="text" name="Eventfrom" id="Eventfrom" disabled>
 	Event  : <input type="text" name="Event" id="Event" disabled>
 	<br>
 	<!--message : <input type="text" id="message">-->

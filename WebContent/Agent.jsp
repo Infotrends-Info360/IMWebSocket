@@ -61,7 +61,7 @@
 	<button type="submit" onclick="AcceptEventInit();" id="AcceptEvent" disabled>Accept</button>
 	<button type="submit" onclick="RejectEvent();" id="RejectEvent" disabled>Reject</button>
 	<button type="submit" onclick="ReleaseEvent();" id="ReleaseEvent" disabled>Release(Leave this room)</button>
-	Event From : <input type="text" name="Eventform" id="Eventform" disabled>
+	Event From : <input type="text" name="Eventfrom" id="Eventfrom" disabled>
 	<br>
 	message : <input type="text" id="message">
 	<button type="submit" onclick="sendtoRoom();" id="sendtoRoom">send to Group</button>

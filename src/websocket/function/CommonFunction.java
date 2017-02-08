@@ -107,21 +107,43 @@ public class CommonFunction {
 	}
 	
 	/** * user leave websocket */
-	public static void userExit(String user, org.java_websocket.WebSocket conn) {
+	public static void userExit(String aMsg, org.java_websocket.WebSocket aConn) {
 		System.out.println("userExit() called");
-		JSONObject obj = new JSONObject(user);
-		String username = obj.getString("UserName");
-//		user = WebSocketUserPool.getUserByKey(conn);
+		JsonObject jsonIn = Util.getGJsonObject(aMsg);
+		
+		//通知大家有人離開了
+		String username = jsonIn.get("UserName").getAsString();
 		String joinMsg = "[Server]" + username + " Offline";
 		WebSocketUserPool.sendMessage(joinMsg);
+		
+//		JSONObject obj = new JSONObject(aMsg);
+//		String username = obj.getString("UserName");
+//		user = WebSocketUserPool.getUserByKey(conn);
+//		String joinMsg = "[Server]" + username + " Offline";
 //		WebSocketUserPool.removeUser(conn);
-		Timer timer = WebSocketUserPool.getUserHeartbeatTimerByKey(conn);
-		// 取消HeartBeat
+		// 關係Heartbeat
+		Timer timer = WebSocketUserPool.getUserHeartbeatTimerByKey(aConn);
 		if (timer != null){
 			timer.cancel();			
 		}
-
-		conn.close();
+		
+		// 若以有Agent再決定是否Accept此通通話, 則告知此Agent此Client已經登出, 不用再等
+//		String waittingAgent = jsonIn.get("waittingAgent").getAsBoolean();
+		System.out.println("userExit() - waittingAgent: " + jsonIn.get("waittingAgent").getAsBoolean());
+		if (jsonIn.get("waittingAgent").getAsBoolean()){
+			String waittingAgentID = jsonIn.get("waittingAgentID").getAsString();
+			WebSocket agentConn = WebSocketUserPool.getWebSocketByUser(waittingAgentID);
+			System.out.println("userExit() - waittingAgentID: " + waittingAgentID);
+			// "clientLeft"
+			JsonObject jsonTo = new JsonObject();
+			jsonTo.addProperty("Event", "clientLeft");
+			jsonTo.addProperty("from", WebSocketUserPool.getUserID(aConn));
+			
+			WebSocketUserPool.sendMessageToUser(agentConn, jsonTo.toString());
+		}
+		
+		// 最後關閉連線
+		aConn.close();
 //		WebSocketPool.removeUserID(conn);
 //		WebSocketPool.removeUserName(conn);
 	}

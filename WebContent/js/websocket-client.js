@@ -9,6 +9,7 @@ var startdate = new Date();
 var ixnstatus = 0;
 var ixnactivitycode;
 var waittingAgent = false;
+var waittingAgentID = "none";
 var UserID_g;
 
 // 控制例外離開動作(如: 刷新頁面、關閉視窗)
@@ -68,6 +69,7 @@ function Login() {
 					var myUpdateStatusJson = new updateStatusJson("Client", UserID_g, UserName, "chat", "chatting");
 					ws.send(JSON.stringify(myUpdateStatusJson));
 					waittingAgent = false;
+					waittingAgentID = "none";
 					
 					// 開啟layim
 					roomID = obj.roomID;
@@ -80,14 +82,14 @@ function Login() {
 					document.getElementById("roomID").value = roomID;
 					document.getElementById("roomonline").disabled = false;
 					document.getElementById("Event").value = obj.Event;
-					document.getElementById("Eventform").value = obj.from;
+					document.getElementById("Eventfrom").value = obj.from;
 					// 收到拒絕交談指令
 				} else if ("RejectEvent" == obj.Event) {
 					var UserID = document.getElementById('UserID').value;
 					findingAgent(UserID, UserName);
 					// 控制前端傳值
 					document.getElementById("Event").value = obj.Event;
-					document.getElementById("Eventform").value = obj.from;
+					document.getElementById("Eventfrom").value = obj.from;
 					// 收到尋找Agent的指令
 				} else if ("findAgent" == obj.Event) {
 					// 寫入log
@@ -108,10 +110,11 @@ function Login() {
 						document.getElementById("findAgent").value = obj.Agent;
 						// document.getElementById("group").value = RoomID;
 						document.getElementById("Event").value = obj.Event;
-						document.getElementById("Eventform").value = obj.from;
+						document.getElementById("Eventfrom").value = obj.from;
 						var UserID = document.getElementById('UserID').value;
 						
 						waittingAgent = true;
+						waittingAgentID = obj.Agent;
 						// 寫入log(告知雙方彼此的資訊)
 						senduserdata(UserID, UserName, obj.Agent);
 						console.log("senduserdata done ******************* ");						
@@ -243,7 +246,8 @@ function Logout() {
 }
 
 // 離開WebSocket Pool列表
-function Logoutaction(UserID) {
+function Logoutaction(aUserID) {
+//	Logoutaction01(aUserID, "none");
 	// 在登出前,將要存入的log資訊先放到userallconnections中,此方法最後會呼叫adduserinteraction() 
 	interactionLogDemo(ixnstatus, ixnactivitycode)
 	
@@ -251,12 +255,16 @@ function Logoutaction(UserID) {
 	// 組成離開WebSocket Pool列表JSON指令
 	var msg = {
 		type : "Exit",
-		id : UserID,
+		id : aUserID,
 		UserName : UserName,
 		channel: "chat",
+		waittingAgent: waittingAgent, // global variable 
+		waittingAgentID: waittingAgentID, // global variable 
 		date : now.getHours() + ":" + now.getMinutes() + ":" + now.getSeconds()
 	};
-
+	
+	console.log("Logoutaction() - msg.waittingAgent: " + msg.waittingAgent);
+	console.log("Logoutaction() - msg.waittingAgentID: " + msg.waittingAgentID);
 	// 發送消息給WebSocket
 	ws.send(JSON.stringify(msg));
 }

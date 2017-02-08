@@ -71,8 +71,8 @@ public class WebSocketTypePool{
 			return;
 		}
 		
-		System.out.println("TYPE: " + aTYPE);
-		System.out.println("TYPEmap.size(): " + TYPEmap.size());
+//		System.out.println("TYPE: " + aTYPE);
+//		System.out.println("TYPEmap.size(): " + TYPEmap.size());
 		if (TYPEmap != null && TYPEmap.containsKey(aConn)) {
 			TYPEmap.remove(aConn);
 		}

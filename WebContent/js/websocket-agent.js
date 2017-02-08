@@ -73,11 +73,13 @@ function Login() {
 				var obj = jQuery.parseJSON(e.data);
 				// 接收到Client邀請chat的event
 				if ("findAgentEvent" == obj.Event) {
+					document.getElementById("clientID").innerHTML = "";
+					
 					ClientName = obj.fromName;
 					ClientID = obj.from;
 					document.getElementById("AcceptEvent").disabled = false;
 					document.getElementById("RejectEvent").disabled = false;
-					document.getElementById("Eventform").value = obj.from;
+					document.getElementById("Eventfrom").value = obj.from;
 					document.getElementById("Event").innerHTML = obj.Event;
 					// 接收到group訊息
 				} else if ("messagetoRoom" == obj.Event) {
@@ -330,6 +332,19 @@ function Login() {
 				} else if ("removeUserinroom" == obj.Event){
 					document.getElementById("currUsers").innerHTML = obj.roomMembers;
 					alert(obj.result);
+				} else if ("clientLeft" == obj.Event){
+					// 在這邊進行一連串的善後處理
+					alert("Client left : " + obj.from);
+					
+					ClientName = "";
+					ClientID = "";
+					document.getElementById("AcceptEvent").disabled = true;
+					document.getElementById("RejectEvent").disabled = true;
+					document.getElementById("Eventfrom").value = obj.from;
+					document.getElementById("Event").innerHTML = obj.Event;
+					document.getElementById("userdata").innerHTML = ""; // 清掉userdata
+					
+					ready();
 				}
 			// 非指令訊息
 			}else {
@@ -632,7 +647,7 @@ function AcceptEventInit() {
 
 //function AcceptEventAction() {
 //	var UserID = document.getElementById('UserID').value;
-//	var Eventform = document.getElementById('Eventform').value;
+//	var Eventfrom = document.getElementById('Eventfrom').value;
 //	// 向websocket送出同意與Client交談指令
 //	var now = new Date();
 //	var msg = {
@@ -640,7 +655,7 @@ function AcceptEventInit() {
 //		ACtype : "Agent",
 //		id : UserID,
 //		UserName : UserName,
-//		sendto : Eventform,
+//		sendto : Eventfrom,
 //		roomID : RoomID,
 //		channel : "chat",
 //		date : now.getHours() + ":" + now.getMinutes() + ":" + now.getSeconds()
@@ -652,7 +667,7 @@ function AcceptEventInit() {
 // 拒絕交談
 function RejectEvent() {
 	var UserID = document.getElementById('UserID').value;
-	var Eventform = document.getElementById('Eventform').value;
+	var Eventfrom = document.getElementById('Eventfrom').value;
 	// 向websocket送出拒絕交談指令
 	var now = new Date();
 	var msg = {
@@ -660,7 +675,7 @@ function RejectEvent() {
 		ACtype : "Agent",
 		id : UserID,
 		UserName : UserName,
-		sendto : Eventform,
+		sendto : Eventfrom,
 		channel : "chat",
 		// Event: "RejectEvent",
 		date : now.getHours() + ":" + now.getMinutes() + ":" + now.getSeconds()
