@@ -277,21 +277,19 @@ function Login() {
 					    inputNode.setAttribute("id", "roomMsg" + i);
 					    tdNode.appendChild(inputNode);
 					    trNode.appendChild(tdNode);
-					    
 					    	// 放入SendMsgButton
 					    	// <button type="submit" onclick="sendtoRoom();" id="sendtoRoom">send to Group</button>
 					    var buttonNode = document.createElement("button");
-					    buttonNode.type = "submit";
+					    buttonNode.setAttribute("type", "submit");
 					    buttonNode.value = roomList[i];
 					    buttonNode.index = "roomMsg" + i;
-					    buttonNode.onclick= function(){
+						buttonNode.onclick= function(){
 					    	var msg = document.getElementById(this.index).value;
 					    	sendtoRoom02(this.value, msg);
 					    	} ;
 					    var buttonTextnode = document.createTextNode("Send to Group");
 					    buttonNode.appendChild(buttonTextnode);
 					    trNode.appendChild(buttonNode);
-					    
 					    document.getElementById("roomListTable").appendChild(trNode);
 					}
 //					document.getElementById("roomList").innerHTML = roomListToUpdate;

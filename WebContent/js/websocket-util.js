@@ -1,4 +1,13 @@
 /********** util *************/
+// IE8 does not support trim() - this is a polyfill for IE8 
+if(typeof String.prototype.trim !== 'function') {
+  String.prototype.trim = function() {
+    return this.replace(/^\s+|\s+$/g, ''); 
+  };
+}
+
+
+
 
 /********** bean *************/
 //配合Object.create()使用,可收inheritance的效果

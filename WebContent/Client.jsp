@@ -40,9 +40,18 @@
 
 <link rel="stylesheet" href="layui/css/layui.css">
 
+<script type="text/javascript" src="js/swfobject.js"></script> <!-- for IE8 websocket compatibility -->
+<script type="text/javascript" src="js/web_socket.js"></script> <!-- for IE8 websocket compatibility -->
 <script type="text/javascript" src="js/websocket-util.js"></script>
 <script type="text/javascript" src="js/jquery.min.js"></script>
 <script type="text/javascript" src="js/websocket-client.js"></script>
+
+<!-- for IE8 websocket compatibility -->
+<script type="text/javascript">
+// Let the library know where WebSocketMain.swf is:
+WEB_SOCKET_SWF_LOCATION = "WebSocketMain.swf";	
+</script>
+
 
 <script src="layui/layui.js"></script>
 <!-- <script src="js/layimClient.js"></script> -->
