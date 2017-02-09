@@ -15,15 +15,10 @@ var UserID_g;
 // 控制例外離開動作(如: 刷新頁面、關閉視窗)
 function checktoLeave() {
 	console.log('leave');
-	var UserID = document.getElementById('UserID').value;
 	// 顯示是否要離開網頁
 	event.returnValue = "Leave?";
-	// 離開Client列表
-//	LeaveType(UserID);
 	// 離開WebSocket Pool列表
-	Logoutaction(UserID);
-	// 離開群組列表
-//	leaveRoom(UserID);
+	Logoutaction(UserID_g); // 這邊會全部清: Group, Type, User conn
 }
 
 // 連上websocket
@@ -235,7 +230,7 @@ function Logout() {
 	isonline = false; // 給"Clientclosegroup" -> .java - "Clientclosegroup" -> .js - ReleaseEvent() -> notready -> "Agentclosegroup" -> .java -> client.js - if(isonlone){} 
 						// 也給"ReleaseEvent"用
 	// 離開WebSocket Pool列表
-	Logoutaction(UserID); // 這邊會全部清: Group, Type, User conn
+	Logoutaction(UserID_g); // 這邊會全部清: Group, Type, User conn
 	// 控制前端傳值
 	document.getElementById("status").innerHTML = "狀態: Logout";
 	document.getElementById("Logout").disabled = true;
@@ -245,13 +240,13 @@ function Logout() {
 	document.getElementById("Agentonline").disabled = true;
 }
 
+
 // 離開WebSocket Pool列表
 function Logoutaction(aUserID) {
 //	Logoutaction01(aUserID, "none");
 	// 在登出前,將要存入的log資訊先放到userallconnections中,此方法最後會呼叫adduserinteraction() 
-	interactionLogDemo(ixnstatus, ixnactivitycode)
+	setinteractionDemo(ixnstatus, ixnactivitycode, 'client');
 	
-	var now = new Date();
 	// 組成離開WebSocket Pool列表JSON指令
 	var msg = {
 		type : "Exit",
@@ -259,33 +254,11 @@ function Logoutaction(aUserID) {
 		UserName : UserName,
 		channel: "chat",
 		waittingAgent: waittingAgent, // global variable 
-		waittingAgentID: waittingAgentID, // global variable 
-		date : now.getHours() + ":" + now.getMinutes() + ":" + now.getSeconds()
+		waittingAgentID: waittingAgentID // global variable 
 	};
 	
-	console.log("Logoutaction() - msg.waittingAgent: " + msg.waittingAgent);
-	console.log("Logoutaction() - msg.waittingAgentID: " + msg.waittingAgentID);
-	// 發送消息給WebSocket
-	ws.send(JSON.stringify(msg));
-}
-
-// 送出私訊
-function send() {
-	var message = document.getElementById('message').value;
-	var UserID = document.getElementById('UserID').value;
-	var sendto = document.getElementById('sendto').value;
-	var now = new Date();
-	// 組成送出私訊JSON指令
-	var msg = {
-		type : "message",
-		text : message,
-		id : UserID,
-		UserName : UserName,
-		sendto : sendto,
-		channel: "chat",
-		date : now.getHours() + ":" + now.getMinutes() + ":" + now.getSeconds()
-	};
-
+//	console.log("Logoutaction() - msg.waittingAgent: " + msg.waittingAgent);
+//	console.log("Logoutaction() - msg.waittingAgentID: " + msg.waittingAgentID);
 	// 發送消息給WebSocket
 	ws.send(JSON.stringify(msg));
 }
@@ -305,31 +278,6 @@ function online() {
 	ws.send(JSON.stringify(msg));
 }
 
-// 新增人員至group
-//function addRoom(aRoomID) {
-//	var UserID = document.getElementById('UserID').value;
-//	// var group = 'G'+document.getElementById('group').value;
-//	var now = new Date();
-//	// 組成新增人員至group JSON指令
-//	var msg = {
-//		type : "addRoom",
-//		roomID : aRoomID,
-//		id : UserID,
-//		ACtype : "Client",
-//		UserName : UserName,
-//		channel: "chat",
-//		date : now.getHours() + ":" + now.getMinutes() + ":" + now.getSeconds()
-//	};
-//
-//	// 發送消息給WebSocket
-//	ws.send(JSON.stringify(msg));
-//
-//	// 控制前端傳值
-//	document.getElementById("groupstatus").innerHTML = "加入" + roomID + "群組";
-//	document.getElementById("leaveRoom").disabled = false;
-//	document.getElementById("addRoom").disabled = true;
-//	document.getElementById("roomonline").disabled = false;
-//}
 
 // 離開group
 function leaveRoom(UserID) {
@@ -356,12 +304,10 @@ function leaveRoom(UserID) {
 }
 
 // 傳送訊息至群組
-function sendtoRoom() {
-	var message = document.getElementById('message').value;
-	sendtoRoom01(roomID, message);
-}
-
-function sendtoRoom01(aRoomID,aMessage){
+function sendtoRoom(aRoomID,aMessage) {
+	if (aRoomID === undefined) aRoomID = roomID; 
+	if (aMessage === undefined) aMessage = document.getElementById('message').value; 
+	
 	var UserID = document.getElementById('UserID').value;
 	// var group = 'G'+document.getElementById('group').value;
 	var now = new Date();
@@ -377,8 +323,11 @@ function sendtoRoom01(aRoomID,aMessage){
 	};
 
 	// 發送消息給WebSocket
-	ws.send(JSON.stringify(msg));
-} 
+	ws.send(JSON.stringify(msg));	
+
+//	var message = document.getElementById('message').value;
+//	sendtoRoom01(roomID, message);
+}
 
 // 查詢群組內人員
 function roomonline() {
@@ -448,42 +397,8 @@ function Agentonline() {
 	ws.send(JSON.stringify(msg));
 }
 
-// 離開Client列表
-function LeaveType(UserID) {
-	var now = new Date();
-	
-	if(waittingAgent){
-		var UserID = document.getElementById('UserID').value;
-		var updateAgentStatusmsg = {
-			    type: "updateStatus",
-			    ACtype: "Client",
-			    id: UserID,
-				UserName: UserName,
-				status: "lose",
-				reason: "Waitting Agent",
-				channel: "chat",
-			    date: now.getHours()+":"+now.getMinutes()+":"+now.getSeconds()
-			  };
-		
-		//發送消息 
-		ws.send(JSON.stringify(updateAgentStatusmsg));
-	}
-	
-	// 組成離開Client列表JSON指令
-	var Clientmsg = {
-		type : "typeout",
-		ACtype : "Client",
-		id : UserID,
-		UserName : UserName,
-		channel : "chat",
-		date : now.getHours() + ":" + now.getMinutes() + ":" + now.getSeconds()
-	};
 
-	// 發送消息給WebSocket
-	ws.send(JSON.stringify(Clientmsg));
-}
-
-// 查詢要邀請的Agent
+// 告知Agent,Client自己也已經只到Agent接通了此通通話了
 function find() {
 	var UserID = document.getElementById('UserID').value;
 	var findAgent = document.getElementById('findAgent').value;
@@ -632,59 +547,18 @@ function addlayim(UserID, UserName, aRoomID) {
 
 }
 
-function setinteractionDemo(status, activitycode) {
+function setinteractionDemo(status, activitycode, aCloseFrom) {
+	if (aCloseFrom === undefined) aCloseFrom = 'default';
+	
 	var thecomment = 'thecomment';
 	var stoppedreason = 'stoppedreason';
 	// var activitycode = 'activitycode';
 	var AgentID = document.getElementById('findAgent').value;
 	setinteraction(contactID, roomID, AgentID, status, 'Inbound', 2,
 			'InBound New', thecomment, stoppedreason,
-			activitycode, startdate, 'default');
+			activitycode, startdate, aCloseFrom);
 }
 
-function interactionLogDemo(status, activitycode) {
-	var thecomment = 'thecomment';
-	var stoppedreason = 'stoppedreason';
-	// var activitycode = 'activitycode';
-	var AgentID = document.getElementById('findAgent').value;
-	// 因為onClose()時就會呼叫interactionlog(),所以不用再這邊又呼叫一次
-//	 interactionlog(contactID, roomID, AgentID, status, 'Inbound', 2,
-//	 'InBound New', text, structuredtext, thecomment, stoppedreason,
-//	 activitycode, startdate);
-	// 此處可能會有"Exit"事件先發生,而此'setinteraction'會後發生,但因為目前有太多的全域變數,調動上過大,暫時先註解著(沒問題就先處理更重要的事項)
-	setinteraction(contactID, roomID, AgentID, status, 'Inbound', 2,
-			'InBound New', thecomment, stoppedreason,
-			activitycode, startdate, 'client');
-}
-
-//保留此方法,暫時沒用到
-/*
-function interactionlog(contactid, ixnid, agentid, status, typeid,
-		entitytypeid, subtypeid, thecomment,
-		stoppedreason, activitycode, startdate) {
-	// var now = new Date();
-	// 組成interactionlog
-	var msg = {
-		type : 'interactionlog',
-		contactid : contactid,
-		ixnid : ixnid,
-		agentid : agentid,
-		status : status,
-		typeid : typeid,
-		entitytypeid : entitytypeid,
-		subtypeid : subtypeid,
-		thecomment : thecomment,
-		stoppedreason : stoppedreason,
-		activitycode : activitycode,
-		startdate : startdate,
-		closefrom : 'client',
-		channel: "chat"
-	};
-
-	// 發送消息給WebSocket
-	ws.send(JSON.stringify(msg));
-}
-*/
 function setinteraction(contactid, ixnid, agentid, status, typeid,
 		entitytypeid, subtypeid, thecomment,
 		stoppedreason, activitycode, startdate, closefrom) {
@@ -708,3 +582,105 @@ function setinteraction(contactid, ixnid, agentid, status, typeid,
 	// 發送消息給WebSocket
 	ws.send(JSON.stringify(msg));
 }
+
+
+/******* 暫時保留區 *******/
+////此方法可刪除了
+////登出後 寫入log
+//function interactionLogDemo(status, activitycode) {
+//	var thecomment = 'thecomment';
+//	var stoppedreason = 'stoppedreason';
+//	// var activitycode = 'activitycode';
+//	var AgentID = document.getElementById('findAgent').value;
+//	// 因為onClose()時就會呼叫interactionlog(),所以不用再這邊又呼叫一次
+////	 interactionlog(contactID, roomID, AgentID, status, 'Inbound', 2,
+////	 'InBound New', text, structuredtext, thecomment, stoppedreason,
+////	 activitycode, startdate);
+//	// 此處可能會有"Exit"事件先發生,而此'setinteraction'會後發生,但因為目前有太多的全域變數,調動上過大,暫時先註解著(沒問題就先處理更重要的事項)
+//	setinteraction(contactID, roomID, AgentID, status, 'Inbound', 2,
+//			'InBound New', thecomment, stoppedreason,
+//			activitycode, startdate, 'client');
+//}
+
+
+//// 送出私訊
+//function send() {
+//	var message = document.getElementById('message').value;
+//	var UserID = document.getElementById('UserID').value;
+//	var sendto = document.getElementById('sendto').value;
+//	var now = new Date();
+//	// 組成送出私訊JSON指令
+//	var msg = {
+//		type : "message",
+//		text : message,
+//		id : UserID,
+//		UserName : UserName,
+//		sendto : sendto,
+//		channel: "chat",
+//		date : now.getHours() + ":" + now.getMinutes() + ":" + now.getSeconds()
+//	};
+//
+//	// 發送消息給WebSocket
+//	ws.send(JSON.stringify(msg));
+//}
+
+////新增人員至group
+//function addRoom(aRoomID) {
+//	var UserID = document.getElementById('UserID').value;
+//	// var group = 'G'+document.getElementById('group').value;
+//	var now = new Date();
+//	// 組成新增人員至group JSON指令
+//	var msg = {
+//		type : "addRoom",
+//		roomID : aRoomID,
+//		id : UserID,
+//		ACtype : "Client",
+//		UserName : UserName,
+//		channel: "chat",
+//		date : now.getHours() + ":" + now.getMinutes() + ":" + now.getSeconds()
+//	};
+//
+//	// 發送消息給WebSocket
+//	ws.send(JSON.stringify(msg));
+//
+//	// 控制前端傳值
+//	document.getElementById("groupstatus").innerHTML = "加入" + roomID + "群組";
+//	document.getElementById("leaveRoom").disabled = false;
+//	document.getElementById("addRoom").disabled = true;
+//	document.getElementById("roomonline").disabled = false;
+//}
+
+////離開Client列表
+//function LeaveType(UserID) {
+//	var now = new Date();
+//	
+//	if(waittingAgent){
+//		var UserID = document.getElementById('UserID').value;
+//		var updateAgentStatusmsg = {
+//			    type: "updateStatus",
+//			    ACtype: "Client",
+//			    id: UserID,
+//				UserName: UserName,
+//				status: "lose",
+//				reason: "Waitting Agent",
+//				channel: "chat",
+//			    date: now.getHours()+":"+now.getMinutes()+":"+now.getSeconds()
+//			  };
+//		
+//		//發送消息 
+//		ws.send(JSON.stringify(updateAgentStatusmsg));
+//	}
+//	
+//	// 組成離開Client列表JSON指令
+//	var Clientmsg = {
+//		type : "typeout",
+//		ACtype : "Client",
+//		id : UserID,
+//		UserName : UserName,
+//		channel : "chat",
+//		date : now.getHours() + ":" + now.getMinutes() + ":" + now.getSeconds()
+//	};
+//
+//	// 發送消息給WebSocket
+//	ws.send(JSON.stringify(Clientmsg));
+//}

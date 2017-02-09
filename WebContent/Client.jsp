@@ -75,7 +75,7 @@ WEB_SOCKET_SWF_LOCATION = "WebSocketMain.swf";
 	<span id="typeonline"> </span>
 	<br>
 	群組 : <input type="text" name="roomID" id="roomID" disabled>
-	<button type="submit" onclick="addRoom();" id="addRoom" >加入群組</button>
+<!-- 	<button type="submit" onclick="addRoom();" id="addRoom" >加入群組</button> -->
 	<button type="submit" onclick="leaveRoom();" id="leaveRoom" disabled>離開群組</button>
 	<span id="groupstatus"> </span>
 	<br>
