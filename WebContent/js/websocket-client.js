@@ -12,6 +12,23 @@ var waittingAgent = false;
 var waittingAgentID = "none";
 var UserID_g;
 
+/*********** type list (送出的) ************/
+/* "login", "Exit", "online", 
+ * "leaveRoom", "messagetoRoom", "roomonline",
+ * "findAgent", "typeonline", "findAgentEvent",
+ * "senduserdata", 'setinteraction', 
+ * "entrylog", 
+ * 
+ * */
+
+/*********** type list (接收的) ************/
+/* "AcceptEvent", "RejectEvent", "findAgent", 
+ * "messagetoRoom", "senduserdata", "userjoin",
+ * "responseThirdParty", "removeUserinroom", 
+ * 
+ * */
+
+
 // 控制例外離開動作(如: 刷新頁面、關閉視窗)
 function checktoLeave() {
 	console.log('leave');
@@ -366,35 +383,28 @@ function findingAgent(UserID, UserName) {
 }
 
 // 查詢Client列表內人員
-function Clientonline() {
+function Clientonline(aACType) {
+	onlineAction(aACType);
+}
+
+// 查詢Agent列表內人員
+function Agentonline(aACType) {
+	onlineAction(aACType);
+}
+
+function onlineAction(aACType){
 	var now = new Date();
 	// 組成查詢Client列表內人員JSON指令
 	var msg = {
 		type : "typeonline",
-		ACtype : "Client",
+		ACtype : aACType,
 		UserName : UserName,
 		channel : "chat",
 		date : now.getHours() + ":" + now.getMinutes() + ":" + now.getSeconds()
 	};
 
 	// 發送消息給WebSocket
-	ws.send(JSON.stringify(msg));
-}
-
-// 查詢Agent列表內人員
-function Agentonline() {
-	var now = new Date();
-	// 組成查詢Agent列表內人員JSON指令
-	var msg = {
-		type : "typeonline",
-		ACtype : "Agent",
-		UserName : UserName,
-		channel : "chat",
-		date : now.getHours() + ":" + now.getMinutes() + ":" + now.getSeconds()
-	};
-
-	// 發送消息給WebSocket
-	ws.send(JSON.stringify(msg));
+	ws.send(JSON.stringify(msg));	
 }
 
 
@@ -547,6 +557,7 @@ function addlayim(UserID, UserName, aRoomID) {
 
 }
 
+// 於登入以及登出錢更新interaction log
 function setinteractionDemo(status, activitycode, aCloseFrom) {
 	if (aCloseFrom === undefined) aCloseFrom = 'default';
 	
@@ -558,7 +569,6 @@ function setinteractionDemo(status, activitycode, aCloseFrom) {
 			'InBound New', thecomment, stoppedreason,
 			activitycode, startdate, aCloseFrom);
 }
-
 function setinteraction(contactid, ixnid, agentid, status, typeid,
 		entitytypeid, subtypeid, thecomment,
 		stoppedreason, activitycode, startdate, closefrom) {

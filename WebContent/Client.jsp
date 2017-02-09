@@ -70,8 +70,8 @@ WEB_SOCKET_SWF_LOCATION = "WebSocketMain.swf";
 	<button type="submit" onclick="online();" id="online" disabled>查詢在線人數</button>
 	<button type="submit" onclick="roomonline();" id="roomonline" disabled>查詢群組在線人數</button>
 	<br>
-	<button type="submit" onclick="Clientonline();" id="Clientonline" disabled>查詢Client在線人數</button>
-	<button type="submit" onclick="Agentonline();" id="Agentonline" disabled>查詢Agent在線人數</button>
+	<button type="submit" onclick="Clientonline(this.value);" id="Clientonline" value="Client" disabled>查詢Client在線人數</button>
+	<button type="submit" onclick="Agentonline(this.value);" id="Agentonline" value="Agent" disabled>查詢Agent在線人數</button>
 	<span id="typeonline"> </span>
 	<br>
 	群組 : <input type="text" name="roomID" id="roomID" disabled>
