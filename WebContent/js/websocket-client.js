@@ -19,11 +19,11 @@ function checktoLeave() {
 	// 顯示是否要離開網頁
 	event.returnValue = "Leave?";
 	// 離開Client列表
-	LeaveType(UserID);
+//	LeaveType(UserID);
 	// 離開WebSocket Pool列表
 	Logoutaction(UserID);
 	// 離開群組列表
-	leaveRoom(UserID);
+//	leaveRoom(UserID);
 }
 
 // 連上websocket
