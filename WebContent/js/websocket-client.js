@@ -107,7 +107,7 @@ function Login() {
 					// 寫入log
 					// 增加此判斷式,避免一直呼叫senduserdata方法
 					if (contactID == null){
-						senduserdata(UserID, UserName, obj.Agent);
+						senduserdata(UserID, "PhoneNo", obj.Agent); 
 					}
 
 					if ("null" == obj.Agent || null == obj.Agent) {
@@ -128,7 +128,7 @@ function Login() {
 						waittingAgent = true;
 						waittingAgentID = obj.Agent;
 						// 寫入log(告知雙方彼此的資訊)
-						senduserdata(UserID, UserName, obj.Agent);
+						senduserdata(UserID, "PhoneNo", obj.Agent);
 						console.log("senduserdata done ******************* ");						
 
 						

@@ -340,6 +340,7 @@ function Login() {
 					document.getElementById("Eventfrom").value = obj.from;
 					document.getElementById("Event").innerHTML = obj.Event;
 					document.getElementById("userdata").innerHTML = ""; // 清掉userdata
+					document.getElementById("clientID").innerHTML = "";
 					
 					ready();
 				}

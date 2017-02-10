@@ -47,6 +47,10 @@ public class searchUserdataServlet {
 			@FormParam("attributenames")String attributenames,
 			@FormParam("lang")String lang
 			) throws IOException {
+		/*** debug - 測試時間 ***/
+		long startTime;
+		long endTime;
+		
 		JSONObject CfgServiceNameSettingjsonObject = null;
 		String searchkey = null;
 		String pkey = null;
