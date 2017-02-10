@@ -61,7 +61,7 @@ WEB_SOCKET_SWF_LOCATION = "WebSocketMain.swf";
 <!-- 	<button type="submit" onclick="send();" id="send" disabled>send</button> -->
 	<br>
 	群組 : <input type="text" name="group" id="group" disabled>
-	<button type="submit" onclick="addRoom();" id="addRoom" >加入群組</button>
+<!-- 	<button type="submit" onclick="addRoom();" id="addRoom" >加入群組</button> -->
 	<button type="submit" onclick="leaveRoom();" id="leaveRoom" disabled>離開群組</button>
 	<span id="groupstatus"> </span>
 	Event : <span id="Event"> </span>

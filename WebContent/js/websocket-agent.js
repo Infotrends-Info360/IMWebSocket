@@ -401,14 +401,10 @@ function Logoutaction(UserID) {
 }
 
 // 送出私訊
-function send() {
-	var sendto = document.getElementById('sendto').value;	
-	var message = document.getElementById('message').value;
-	send01(sendto,message);
-
-}
-
-function send01(aSendto,aMessage){
+function send(aSendto,aMessage) {
+	if (aSendto === undefined) aSendto = document.getElementById('sendto').value;
+	if (aMessage === undefined) aMessage = document.getElementById('message').value;
+	
 	var UserID = document.getElementById('UserID').value;
 	// 向websocket送出私訊指令
 	var now = new Date();
@@ -422,13 +418,13 @@ function send01(aSendto,aMessage){
 		date : now.getHours() + ":" + now.getMinutes() + ":" + now.getSeconds()
 	};
 	// 發送消息
-	ws.send(JSON.stringify(msg));	
+	ws.send(JSON.stringify(msg));
 }
 
 function sendA2A(aSendto){
 	var msg = document.getElementById("chatAgentContent").value;
 	console.log("sendA2A() - msg: " + msg);
-	send01(aSendto,msg);
+	send(aSendto,msg);
 }
 
 
@@ -469,7 +465,7 @@ function addRoomForMany(aRoomID, aMemberListToJoin){
 
 	document.getElementById("groupstatus").innerHTML = "加入" + RoomID + "群組";
 	document.getElementById("leaveRoom").disabled = false;
-	document.getElementById("addRoom").disabled = true;
+//	document.getElementById("addRoom").disabled = true;
 	document.getElementById("roomonline").disabled = false;	
 }
 
