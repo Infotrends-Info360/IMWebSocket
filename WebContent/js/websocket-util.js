@@ -1,4 +1,34 @@
 /********** util *************/
+function switchStatus(aStatus){
+	switch(aStatus) {
+    case StatusEnum.LOGOUT:
+//        alert('StatusEnum.LOGOUT matched');
+        document.getElementById("Status").innerHTML = StatusEnum.LOGOUT;
+		// 顯現對話視窗
+		document.getElementById("chatDialogue").classList.add("hidden");
+		document.getElementById("chatDialogueReverse").classList.remove("hidden");
+		// 啟用openChat功能
+		document.getElementById("openChat").disabled = false;
+		document.getElementById("closeChat").disabled = true;
+
+        break;
+    case StatusEnum.WAIT_AGENT:
+        // code block
+        break;
+    case StatusEnum.JOIN_ROOM:
+        //code block
+        break;
+    case StatusEnum.FIND_AGENT:
+    	//code block
+    	break;
+//    case StatusEnum.:
+//    	//code block
+//    	break;
+    default:
+        break;
+}
+}
+
 // IE8 does not support trim() - this is a polyfill for IE8 
 if(typeof String.prototype.trim !== 'function') {
   String.prototype.trim = function() {
@@ -152,6 +182,16 @@ SinglyList.prototype.remove = function(position) {
 
 	return deletedNode;
 };
+
+
+/********** enum *************/
+var StatusEnum = Object.freeze({
+	LOGOUT: 'LOGOUT', 
+	WAIT_AGENT: 'WAIT_AGENT', 
+	JOIN_ROOM: 'JOIN_ROOM',
+	FIND_AGENT: 'FIND_AGENT'
+		
+});
 
 
 

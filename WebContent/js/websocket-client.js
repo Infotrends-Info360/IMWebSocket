@@ -103,7 +103,7 @@ function Login() {
 					roomID = obj.roomID;
 					document.getElementById("RoomID").innerHTML = roomID;
 					document.getElementById("Event").innerHTML = obj.Event;
-					document.getElementById("Status").innerHTML = 'Joined Room';
+					document.getElementById("Status").innerHTML = StatusEnum.JOIN_ROOM;
 					// 收到拒絕交談指令
 				} else if ("RejectEvent" == obj.Event) {
 					findingAgent(UserID_g, UserName_g);
@@ -208,7 +208,7 @@ function Login() {
 					ws.send(JSON.stringify(entrylogmsg));
 					
 					/** 更新前端資料 **/
-					document.getElementById('Status').innerHTML = 'looking for Agent';
+					document.getElementById('Status').innerHTML = StatusEnum.FIND_AGENT;
 					document.getElementById("openChat").disabled = true;
 					document.getElementById("closeChat").disabled = false;
 
@@ -222,17 +222,17 @@ function Login() {
 //					document.getElementById("currRoomID").innerHTML = obj.roomID;
 					document.getElementById("AgentIDs").innerHTML = ''; // 先清再加
 					document.getElementById("AgentNames").innerHTML = ''; // 先清再加
-					var roomMembers = obj.roomMembers.slice(1,-1)
-					roomMembers = roomMembers.split(",");
-					var roomMemberIDs = obj.roomMemberIDs.slice(1,-1)
+					var roomMemberIDs = obj.roomMemberIDs.slice(1,-1);
 					roomMemberIDs = roomMemberIDs.split(",");
-					console.log("removeUserinroom - roomMembers: " + roomMembers);
-					console.log("removeUserinroom - roomMemberIDs: " + roomMemberIDs);
+					var roomMembers = obj.roomMembers.slice(1,-1);
+					roomMembers = roomMembers.split(",");
+//					console.log("removeUserinroom - roomMembers: " + roomMembers);
+//					console.log("removeUserinroom - roomMemberIDs: " + roomMemberIDs);
 //					var roomMembers = JSON.parse(obj.roomMembers);
-					for (var index in roomMembers){
-						console.log("removeUserinroom - roomMembers[index].trim(): " + roomMembers[index].trim());
-						console.log("removeUserinroom - roomMemberIDs[index].trim(): " + roomMemberIDs[index].trim());
-						if (UserName_g == roomMembers[index].trim()) continue;
+					for (var index in roomMemberIDs){
+//						console.log("removeUserinroom - roomMembers[index].trim(): " + roomMembers[index].trim());
+//						console.log("removeUserinroom - roomMemberIDs[index].trim(): " + roomMemberIDs[index].trim());
+//						if (UserName_g == roomMembers[index].trim()) continue;
 						if (UserID_g == roomMemberIDs[index].trim()) continue;
 						document.getElementById("AgentNames").innerHTML += roomMembers[index].trim() // 先這樣, 還不用做太細
 						document.getElementById("AgentIDs").innerHTML += roomMemberIDs[index].trim() // 先這樣, 還不用做太細
@@ -241,7 +241,10 @@ function Login() {
 					
 					alert(obj.result);
 					if (obj.roomSize == 0){
-						alert("close the chatDialogue");
+//						alert("close the chatDialogue");
+						document.getElementById("RoomID").innerHTML = '';
+						
+						switchStatus(StatusEnum.LOGOUT);
 					}
 					
 				}
@@ -275,7 +278,7 @@ function Logout() {
 	// 離開WebSocket Pool列表
 	Logoutaction(UserID_g); // 這邊會全部清: Group, Type, User conn
 	// 控制前端傳值
-	document.getElementById("Status").innerHTML = "Logout";
+	document.getElementById("Status").innerHTML = StatusEnum.LOGOUT;
 	document.getElementById("closeChat").disabled = true;
 	document.getElementById("openChat").disabled = false;
 }
@@ -441,7 +444,7 @@ function onlineAction(aACType){
 function find() {
 //	var UserID = document.getElementById('UserID').value;
 	var firstAgentID = AgentIDList[0];
-	document.getElementById('Status').innerHTML = 'waiting for Agent';
+	document.getElementById('Status').innerHTML = StatusEnum.WAIT_AGENT;
 	var now = new Date();
 	// 組成查詢要邀請的Agent JSON指令
 	var msg = {

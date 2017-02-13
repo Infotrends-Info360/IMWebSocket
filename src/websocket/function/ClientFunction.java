@@ -30,6 +30,7 @@ public class ClientFunction {
 	
 	/** * findAgentEvent */
 	public static void findAgentEvent(String message, org.java_websocket.WebSocket conn) {
+		System.out.println("findAgentEvent() called");
 		JSONObject obj = new JSONObject(message);
 		org.java_websocket.WebSocket sendto = WebSocketUserPool
 				.getWebSocketByUser(obj.getString("sendto"));
