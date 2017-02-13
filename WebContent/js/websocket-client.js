@@ -12,6 +12,9 @@ var waittingAgent = false;
 var waittingAgentID = "none";
 var UserID_g;
 
+var AgentIDList = [];
+var AgentNameList = [];
+
 /*********** type list (送出的) ************/
 /* "login", "Exit", "online", 
  * "leaveRoom", "messagetoRoom", "roomonline",
@@ -28,6 +31,17 @@ var UserID_g;
  * 
  * */
 
+function onloadFunction(){
+	console.log("onloadFunction() called");
+	/** 建立傳送訊息enter事件 **/
+	$("#message").keypress(function(e) {
+	    if(e.which == 13) {
+	       //alert('You pressed enter!');
+	    	sendtoRoom();
+	    }
+	});
+	
+}
 
 // 控制例外離開動作(如: 刷新頁面、關閉視窗)
 function checktoLeave() {
@@ -84,8 +98,10 @@ function Login() {
 					waittingAgentID = "none";
 
 					// 控制前端傳值
-					document.getElementById("RoomID").value = roomID;
-					document.getElementById("Event").value = obj.Event;
+					roomID = obj.roomID;
+					document.getElementById("RoomID").innerHTML = roomID;
+					document.getElementById("Event").innerHTML = obj.Event;
+					document.getElementById("Status").innerHTML = 'Joined Room';
 					// 收到拒絕交談指令
 				} else if ("RejectEvent" == obj.Event) {
 					findingAgent(UserID_g, UserName_g);
@@ -108,7 +124,10 @@ function Login() {
 					} else {
 						// 控制前端傳值
 						// RoomID = 'G'+obj.Agent;
-						document.getElementById("AgentIDs").innerHTML = obj.Agent + " ";
+						AgentIDList.push(obj.Agent);
+						AgentNameList.push(obj.AgentName);
+						document.getElementById("AgentIDs").innerHTML = AgentIDList[0];
+						document.getElementById("AgentNames").innerHTML = AgentNameList[0];
 						// document.getElementById("group").value = RoomID;
 						document.getElementById("Event").innerHTML = obj.Event;
 //						document.getElementById("Eventfrom").value = obj.from;
@@ -127,12 +146,11 @@ function Login() {
 					// 收到群組訊息
 				} else if ("messagetoRoom" == obj.Event) {
 //					var UserID = document.getElementById('UserID').value;
-					// 判斷是否有開啟layim與是否為自己傳送的訊息
-					if (true == layimswitch && obj.id != UserID_g) {
-						// 將收到訊息顯示到layim上
-						getmessagelayim(obj.text, obj.id, obj.UserName);
-					}
+					var msgToShow = obj.UserName + ": " + obj.text;
+					document.getElementById("chatroom").innerHTML += msgToShow + "<br>";
+					
 					// 控制前端傳值
+					document.getElementById("Event").innerHTML = obj.Event;
 					document.getElementById("text").innerHTML += obj.UserName
 							+ ": " + obj.text + "<br>";
 
@@ -188,7 +206,7 @@ function Login() {
 					ws.send(JSON.stringify(entrylogmsg));
 					
 					/** 更新前端資料 **/
-					document.getElementById("status").innerHTML = "Login";
+					document.getElementById('Status').innerHTML = 'looking for Agent';
 					document.getElementById("openChat").disabled = true;
 					document.getElementById("closeChat").disabled = false;
 
@@ -235,7 +253,7 @@ function Logout() {
 	// 離開WebSocket Pool列表
 	Logoutaction(UserID_g); // 這邊會全部清: Group, Type, User conn
 	// 控制前端傳值
-	document.getElementById("status").innerHTML = "Logout";
+	document.getElementById("Status").innerHTML = "Logout";
 	document.getElementById("Logout").disabled = true;
 	document.getElementById("Login").disabled = false;
 	document.getElementById("online").disabled = true;
@@ -309,7 +327,8 @@ function leaveRoom(aUserID) {
 // 傳送訊息至群組
 function sendtoRoom(aRoomID,aMessage) {
 	if (aRoomID === undefined) aRoomID = roomID; 
-	if (aMessage === undefined) aMessage = document.getElementById('message').value; 
+	if (aMessage === undefined) aMessage = document.getElementById('message').value; // <input> tag - 所以用.value
+	console.log("sendtoRoom() - aMessage: " + aMessage);
 	
 //	var UserID = document.getElementById('UserID').value;
 	// var group = 'G'+document.getElementById('group').value;
@@ -327,6 +346,9 @@ function sendtoRoom(aRoomID,aMessage) {
 
 	// 發送消息給WebSocket
 	ws.send(JSON.stringify(msg));	
+	
+	// 清空訊息欄
+	document.getElementById('message').value = '';
 
 //	var message = document.getElementById('message').value;
 //	sendtoRoom01(roomID, message);
@@ -394,10 +416,11 @@ function onlineAction(aACType){
 }
 
 
-// 告知Agent,Client自己也已經只到Agent接通了此通通話了
+// 告知Agent,Client自己也已經知道Agent接通了此通通話了
 function find() {
 //	var UserID = document.getElementById('UserID').value;
-	var findAgent = document.getElementById('AgentIDs').value;
+	var firstAgentID = AgentIDList[0];
+	document.getElementById('Status').innerHTML = 'waiting for Agent';
 	var now = new Date();
 	// 組成查詢要邀請的Agent JSON指令
 	var msg = {
@@ -405,7 +428,7 @@ function find() {
 		ACtype : "Client",
 		id : UserID_g,
 		UserName : UserName_g,
-		sendto : findAgent,
+		sendto : firstAgentID,
 		channel : "chat",
 		// Event: "findAgentEvent",
 		date : now.getHours() + ":" + now.getMinutes() + ":" + now.getSeconds()
@@ -544,18 +567,18 @@ function addlayim(UserID, UserName, aRoomID) {
 }
 
 // 於登入以及登出錢更新interaction log
-function setinteractionDemo(status, activitycode, aCloseFrom) {
+function setinteractionDemo(aStatus, activitycode, aCloseFrom) {
 	if (aCloseFrom === undefined) aCloseFrom = 'default';
 	
 	var thecomment = 'thecomment';
 	var stoppedreason = 'stoppedreason';
 	// var activitycode = 'activitycode';
-	var AgentID = document.getElementById('AgentIDs').value;
-	setinteraction(contactID, roomID, AgentID, status, 'Inbound', 2,
+	var AgentID = AgentIDList[0];
+	setinteraction(contactID, roomID, AgentID, aStatus, 'Inbound', 2,
 			'InBound New', thecomment, stoppedreason,
 			activitycode, startdate, aCloseFrom);
 }
-function setinteraction(contactid, ixnid, agentid, status, typeid,
+function setinteraction(contactid, ixnid, agentid, aStatus, typeid,
 		entitytypeid, subtypeid, thecomment,
 		stoppedreason, activitycode, startdate, closefrom) {
 	var msg = {
@@ -563,7 +586,7 @@ function setinteraction(contactid, ixnid, agentid, status, typeid,
 		contactid : contactid,
 		ixnid : ixnid,
 		agentid : agentid,
-		status : status,
+		status : aStatus,
 		typeid : typeid,
 		entitytypeid : entitytypeid,
 		subtypeid : subtypeid,
@@ -579,6 +602,12 @@ function setinteraction(contactid, ixnid, agentid, status, typeid,
 	ws.send(JSON.stringify(msg));
 }
 
+
+function enterEvent(aEvent){
+	console.log("enterEvent() - aEvent" + aEvent);
+	console.log("enterEvent() - which" + aEvent.which);
+	
+}
 
 /******* 暫時保留區 *******/
 ////此方法可刪除了

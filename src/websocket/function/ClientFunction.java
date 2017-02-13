@@ -45,12 +45,14 @@ public class ClientFunction {
 	public static void findAgent(String message, org.java_websocket.WebSocket conn) {
 		JSONObject obj = new JSONObject(message);
 		String Agent;
+		JSONObject sendjson = new JSONObject();
 		try {
 			Agent = WebSocketTypePool.getOnlineLongestUserinTYPE("Agent");
+			sendjson.put("AgentName", WebSocketUserPool.getUserNameByKey(WebSocketUserPool.getWebSocketByUser(Agent)));
 		} catch (Exception e) {
 			Agent = null;
 		}
-		JSONObject sendjson = new JSONObject();
+		
 		sendjson.put("Event", "findAgent");
 		sendjson.put("from", obj.getString("id"));
 		sendjson.put("Agent",  Agent);

@@ -44,7 +44,7 @@
 <script type="text/javascript" src="js/web_socket.js"></script> <!-- for IE8 websocket compatibility -->
 <script type="text/javascript" src="js/websocket-util.js"></script>
 <script type="text/javascript" src="js/jquery.min.js"></script>
-<script type="text/javascript" src="js/websocket-client.js"></script>
+<script type="text/javascript" src="js/websocket-clientLayim.js"></script>
 
 <!-- for IE8 websocket compatibility -->
 <script type="text/javascript">

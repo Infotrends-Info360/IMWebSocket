@@ -59,7 +59,7 @@ WEB_SOCKET_SWF_LOCATION = "WebSocketMain.swf";
 
 </style>
 </head>
-<body>
+<body onload="onloadFunction()">
 	<!-- 標題 -->
 	<div class="row no-gutter" style="border-bottom: 1px solid #c0c0c0; width: 100%;"> <!-- width: 100% 讓螢幕寬度符合螢幕大小 -->
 		<div class="col-xs-12 col-sm-12 col-md-12 col-lg-12 center">
@@ -85,7 +85,7 @@ WEB_SOCKET_SWF_LOCATION = "WebSocketMain.swf";
 					<b>UserID</b>:<br>
 					<span id="UserID">default</span><br> 
 					<b>Status:</b><br>
-					<span id="status">default</span><br>
+					<span id="Status">default</span><br>
 					<b>RoomID:</b><br> 
 					<span id="RoomID">default</span><br> 
 					<b>AgentIDs</b>:<br> 
@@ -123,40 +123,37 @@ WEB_SOCKET_SWF_LOCATION = "WebSocketMain.swf";
 				<div class="col-xs-12 col-sm-12 col-md-12 col-lg-12 panel-heading nopadding">
 					<h3>Chat Dialogue:</h3>
 				</div>
-				<form>
-					<div class=" form-group col-xs-12 col-sm-12 col-md-12 col-lg-12"> 
-						<br>
-						<div class="col-xs-10 col-sm-10 col-md-10 col-lg-10">
-							<input class="form-control" id="comment">
-						</div>						
-						<div class="col-xs-2 col-sm-2 col-md-2 col-lg-2">
-							<button class="btn btn-primary btn-sm" id="sendToRoom">SEND</button>
-						</div>						
-					</div> <!-- end of form-group -->
-				</form>				
-				<div class="pre-scrollable col-xs-12 col-sm-12 col-md-12 col-lg-12 panel-body left chatmaxHeight">
-					someone says .... <br>
-					someone says .... <br>
-					someone says .... <br>
-					someone says .... <br>
-					someone says .... <br>
-					someone says .... <br>
-					someone says .... <br>
-					someone says .... <br>
-					someone says .... <br>
-					someone says .... <br>
-					someone says .... <br> 
-					someone says .... <br>
-					someone says .... <br>
-					someone says .... <br>
-					someone says .... <br>
-					someone says .... <br>
-					someone says .... <br>
-					someone says .... <br>
-					someone says .... <br>
-					someone says .... <br>
-					someone says .... <br>
-					someone says .... <br>
+						<div class="col-xs-12 col-sm-12 col-md-12 col-lg-12 container" style="padding-top: 20px;">
+							<div class="col-xs-10 col-sm-10 col-md-10 col-lg-10">
+								<input class="form-control" id="message" onclick="enterEvent(event);">
+							</div>						
+							<div class="col-xs-2 col-sm-2 col-md-2 col-lg-2">
+								<button class="btn btn-primary btn-sm" id="sendToRoom" onclick="sendtoRoom();">SEND</button>
+							</div>						
+						</div>
+				<div class="pre-scrollable col-xs-12 col-sm-12 col-md-12 col-lg-12 panel-body left chatmaxHeight" id="chatroom">
+<!-- 					someone says .... <br> -->
+<!-- 					someone says .... <br> -->
+<!-- 					someone says .... <br> -->
+<!-- 					someone says .... <br> -->
+<!-- 					someone says .... <br> -->
+<!-- 					someone says .... <br> -->
+<!-- 					someone says .... <br> -->
+<!-- 					someone says .... <br> -->
+<!-- 					someone says .... <br> -->
+<!-- 					someone says .... <br> -->
+<!-- 					someone says .... <br>  -->
+<!-- 					someone says .... <br> -->
+<!-- 					someone says .... <br> -->
+<!-- 					someone says .... <br> -->
+<!-- 					someone says .... <br> -->
+<!-- 					someone says .... <br> -->
+<!-- 					someone says .... <br> -->
+<!-- 					someone says .... <br> -->
+<!-- 					someone says .... <br> -->
+<!-- 					someone says .... <br> -->
+<!-- 					someone says .... <br> -->
+<!-- 					someone says .... <br> -->
 				</div>
 			</div> <!-- end of container -->
 		</div>

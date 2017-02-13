@@ -22,7 +22,7 @@
 <script type="text/javascript" src="js/web_socket.js"></script> <!-- for IE8 websocket compatibility -->
 <script type="text/javascript" src="js/websocket-util.js"></script>
 <script type="text/javascript" src="js/jquery.min.js"></script>
-<script type="text/javascript" src="js/websocket-agent.js"></script>
+<script type="text/javascript" src="js/websocket-agentLayim.js"></script>
 <script src="layui/layui.js"></script>
 
  <!-- for IE8 websocket compatibility -->
