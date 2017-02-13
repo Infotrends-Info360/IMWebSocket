@@ -159,7 +159,7 @@ public class WebSocket extends WebSocketServer {
 			inviteAgentThirdParty(message.toString(), conn);
 			break;
 		case "responseThirdParty":
-			System.out.println("responseThirdParty got here!");
+//			System.out.println("responseThirdParty got here!");
 			responseThirdParty(message.toString(), conn);			
 			break;			
 		case "refreshRoomList":
@@ -286,7 +286,7 @@ public class WebSocket extends WebSocketServer {
 		if ("accept".equals(response)){
 			System.out.println("responseThirdParty() - accept");
 			/** 新增room成員 **/
-			WebSocketRoomPool.addUserinroom(roomID, invitedAgentName, invitedAgentID, conn);
+			WebSocketRoomPool.addUserInRoom(roomID, invitedAgentName, invitedAgentID, conn);
 			/** 新增user所加入的room list **/
 			WebSocketUserPool.addUserRoom(roomID, conn);
 			
@@ -358,7 +358,7 @@ public class WebSocket extends WebSocketServer {
 			String username = WebSocketUserPool.getUserNameByKey(userConn);
 			String joinMsg = "[Server]" + username + " join " + roomID + " room";
 			
-			WebSocketRoomPool.addUserinroom(roomID, username, userID, userConn); //重要步驟
+			WebSocketRoomPool.addUserInRoom(roomID, username, userID, userConn); //重要步驟
 			WebSocketUserPool.addUserRoom(roomID, userConn); //重要步驟
 			WebSocketRoomPool.sendMessageinroom(roomID, joinMsg);
 			WebSocketRoomPool.sendMessageinroom(roomID, "room people: "

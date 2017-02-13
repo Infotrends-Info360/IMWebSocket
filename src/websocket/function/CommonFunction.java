@@ -154,7 +154,7 @@ public class CommonFunction {
 		String userid = obj.getString("id");
 		String username = obj.getString("UserName");
 		String joinMsg = "[Server]" + username + " join " + roomID + " room";
-		WebSocketRoomPool.addUserinroom(roomID, username, userid, conn); //重要步驟
+		WebSocketRoomPool.addUserInRoom(roomID, username, userid, conn); //重要步驟
 		WebSocketUserPool.addUserRoom(roomID, conn); //重要步驟
 		WebSocketRoomPool.sendMessageinroom(roomID, joinMsg);
 		WebSocketRoomPool.sendMessageinroom(roomID, "room people: "

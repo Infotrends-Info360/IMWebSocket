@@ -117,12 +117,13 @@ function Login() {
 					if (contactID == null){
 						senduserdata(UserID_g, UserName_g, obj.Agent); 
 					}
-
+					// 若仍未找到Agent, 則再找
 					if ("null" == obj.Agent || null == obj.Agent) {
 						if (isonline) {
 							console.log(UserName_g + " is looking for an agent ... ");
 							findingAgent(UserID_g, UserName_g);
 						}
+					// 若找到Agent, 則進入等待Agent回應狀態	
 					} else {
 						// 控制前端傳值
 						// RoomID = 'G'+obj.Agent;
@@ -219,35 +220,13 @@ function Login() {
 //					document.getElementById("currUsers").innerHTML = obj.roomMembers;
 					
 				}  else if ("removeUserinroom" == obj.Event){
-//					document.getElementById("currRoomID").innerHTML = obj.roomID;
-					document.getElementById("AgentIDs").innerHTML = ''; // 先清再加
-					document.getElementById("AgentNames").innerHTML = ''; // 先清再加
-					var roomMemberIDs = obj.roomMemberIDs.slice(1,-1);
-					roomMemberIDs = roomMemberIDs.split(",");
-					var roomMembers = obj.roomMembers.slice(1,-1);
-					roomMembers = roomMembers.split(",");
-//					console.log("removeUserinroom - roomMembers: " + roomMembers);
-//					console.log("removeUserinroom - roomMemberIDs: " + roomMemberIDs);
-//					var roomMembers = JSON.parse(obj.roomMembers);
-					for (var index in roomMemberIDs){
-//						console.log("removeUserinroom - roomMembers[index].trim(): " + roomMembers[index].trim());
-//						console.log("removeUserinroom - roomMemberIDs[index].trim(): " + roomMemberIDs[index].trim());
-//						if (UserName_g == roomMembers[index].trim()) continue;
-						if (UserID_g == roomMemberIDs[index].trim()) continue;
-						document.getElementById("AgentNames").innerHTML += roomMembers[index].trim() // 先這樣, 還不用做太細
-						document.getElementById("AgentIDs").innerHTML += roomMemberIDs[index].trim() // 先這樣, 還不用做太細
-					}
-//					document.getElementById("currUsers").innerHTML = obj.roomMembers;
-					
 					alert(obj.result);
-					if (obj.roomSize == 0){
-//						alert("close the chatDialogue");
-						document.getElementById("RoomID").innerHTML = '';
-						
-						switchStatus(StatusEnum.LOGOUT);
-					}
-					
-				}
+					updateAgentInfo(obj.roomMemberIDs, obj.roomMembers, obj.roomSize); //格式為[agentid, clientid]
+				} else if ("addUserInRoom" == obj.Event){
+					console.log("obj.roomMemberIDs: " + obj.roomMemberIDs);
+					console.log("obj.roomMembers: " + obj.roomMembers);
+					updateAgentInfo(obj.roomMemberIDs, obj.roomMembers, obj.roomSize);
+				} 
 			} else {
 				// 控制前端傳值
 				document.getElementById("text").innerHTML += e.data + "<br>";
@@ -627,10 +606,30 @@ function setinteraction(contactid, ixnid, agentid, aStatus, typeid,
 }
 
 
-function enterEvent(aEvent){
-	console.log("enterEvent() - aEvent" + aEvent);
-	console.log("enterEvent() - which" + aEvent.which);
+function updateAgentInfo(aRoomMemberIDs, aRoomMembers, aRoomSize){
+	document.getElementById("AgentIDs").innerHTML = ''; // 先清再加
+	document.getElementById("AgentNames").innerHTML = ''; // 先清再加
+	var roomMemberIDs = aRoomMemberIDs.slice(1,-1);
+	roomMemberIDs = roomMemberIDs.split(",");
+	var roomMembers = aRoomMembers.slice(1,-1);
+	roomMembers = roomMembers.split(",");
+	for (var index in roomMemberIDs){
+		if (UserID_g == roomMemberIDs[index].trim()) continue;
+		// 若有第二輪, 則加上 ',' + "<br>"
+		if (document.getElementById("AgentIDs").innerHTML != ''){
+			document.getElementById("AgentNames").innerHTML += ',' + "<br>" // 
+			document.getElementById("AgentIDs").innerHTML += ',' + "<br>" // 			
+		}
+		
+		document.getElementById("AgentNames").innerHTML += roomMembers[index].trim() // 先這樣, 還不用做太細
+		document.getElementById("AgentIDs").innerHTML += roomMemberIDs[index].trim() // 先這樣, 還不用做太細
+	}
 	
+	if (aRoomSize == 0){
+		document.getElementById("RoomID").innerHTML = '';
+		
+		switchStatus(StatusEnum.LOGOUT);
+	}
 }
 
 /******* 暫時保留區 *******/

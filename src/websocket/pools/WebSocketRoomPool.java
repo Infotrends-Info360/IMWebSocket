@@ -34,15 +34,15 @@ public class WebSocketRoomPool{
 	
 	
 	/** * Add User to Room Map * @param inbound */
-	public static void addUserinroom(String roomID,String username,String userid, WebSocket conn) {
+	public static void addUserInRoom(String aRoomID,String username,String userid, WebSocket conn) {
 		
 		// 找是否已有roomInfo(表示已經有人先加入此room了)
-		RoomInfo roomInfo = roomMap.get(roomID);	
+		RoomInfo roomInfo = roomMap.get(aRoomID);	
 		if (roomInfo == null){
 			//建立實體
 			roomInfo = new RoomInfo();					
 			//拿ID
-			roomInfo.setRoomID(roomID);
+			roomInfo.setRoomID(aRoomID);
 			//拿room建立時間
 			Date starttime = new Date();
 			roomInfo.setStarttime(starttime);
@@ -57,7 +57,16 @@ public class WebSocketRoomPool{
 		roomInfo.getUserConns().put(conn, userInfo);		
 		
 		//將roomInfo放入roomMap中
-		roomMap.put(roomID, roomInfo);
+		roomMap.put(aRoomID, roomInfo);
+		
+		//告知room成員已變動,請瀏覽器對前端頁面做更新
+		JsonObject sendJson = new JsonObject();
+		sendJson.addProperty("Event", "addUserInRoom");		
+		sendJson.addProperty("roomMembers", getOnlineUserNameinroom(aRoomID).toString());
+		sendJson.addProperty("roomMemberIDs", getOnlineUserIDinroom(aRoomID).toString());
+		sendJson.addProperty("roomSize", roomInfo.getUserConns().size());
+		WebSocketRoomPool.sendMessageinroom(aRoomID, sendJson.toString());
+		
 //		System.out.println("room: " + room + " now has " + roomuserconnections.get(room).size() + " users online");
 	}
 	
