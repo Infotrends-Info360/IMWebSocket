@@ -82,19 +82,10 @@ function Login() {
 					ws.send(JSON.stringify(myUpdateStatusJson));
 					waittingAgent = false;
 					waittingAgentID = "none";
-					
-					// 開啟layim
-					roomID = obj.roomID;
-					console.log("roomID: " + roomID);
-					console.log("UserID_g: " + UserID_g);
-//					addlayim(UserID, UserName);
-					addlayim(UserID_g, UserName_g, roomID);
 
 					// 控制前端傳值
-					document.getElementById("roomID").value = roomID;
-					document.getElementById("roomonline").disabled = false;
+					document.getElementById("RoomID").value = roomID;
 					document.getElementById("Event").value = obj.Event;
-					document.getElementById("Eventfrom").value = obj.from;
 					// 收到拒絕交談指令
 				} else if ("RejectEvent" == obj.Event) {
 					findingAgent(UserID_g, UserName_g);
@@ -106,7 +97,7 @@ function Login() {
 					// 寫入log
 					// 增加此判斷式,避免一直呼叫senduserdata方法
 					if (contactID == null){
-						senduserdata(UserID_g, "PhoneNo", obj.Agent); 
+						senduserdata(UserID_g, UserName_g, obj.Agent); 
 					}
 
 					if ("null" == obj.Agent || null == obj.Agent) {
@@ -126,7 +117,7 @@ function Login() {
 						waittingAgent = true;
 						waittingAgentID = obj.Agent;
 						// 寫入log(告知雙方彼此的資訊)
-						senduserdata(UserID_g, "PhoneNo", obj.Agent);
+						senduserdata(UserID_g, UserName_g, obj.Agent);
 						console.log("senduserdata done ******************* ");						
 
 						
@@ -425,7 +416,7 @@ function find() {
 }
 
 // Send userdata
-function senduserdata(aUserID, phone, sendto) {
+function senduserdata(aUserID, aPhone, sendto) {
 	var now = new Date();
 	// 組成userdata JSON
 	var msg = {
@@ -433,15 +424,15 @@ function senduserdata(aUserID, phone, sendto) {
 		ACtype : "Client",
 		sendto : sendto,
 		lang : "chiname",
-		// searchkey: "Phone",
-		// pkey: "id",
+		//searchkey: "Phone",
+		//pkey: "id",
 		searchtype : "A",
 		channel : "chat",
 		date : now.getHours() + ":" + now.getMinutes() + ":" + now.getSeconds(),
 		attributes : {
 			attributenames : "Phone,id,service1,service2",
-			Phone : phone,
-			id : phone,
+			Phone : aPhone,
+			id : aUserID,
 			service1 : "service one",
 			service2 : "service two"
 		}
@@ -559,7 +550,7 @@ function setinteractionDemo(status, activitycode, aCloseFrom) {
 	var thecomment = 'thecomment';
 	var stoppedreason = 'stoppedreason';
 	// var activitycode = 'activitycode';
-	var AgentID = document.getElementById('findAgent').value;
+	var AgentID = document.getElementById('AgentIDs').value;
 	setinteraction(contactID, roomID, AgentID, status, 'Inbound', 2,
 			'InBound New', thecomment, stoppedreason,
 			activitycode, startdate, aCloseFrom);

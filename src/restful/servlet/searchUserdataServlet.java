@@ -51,6 +51,8 @@ public class searchUserdataServlet {
 		long startTime;
 		long endTime;
 		
+		System.out.println("attributes: "+attributes);
+		
 		JSONObject CfgServiceNameSettingjsonObject = null;
 		String searchkey = null;
 		String pkey = null;
