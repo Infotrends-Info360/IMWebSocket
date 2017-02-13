@@ -19,7 +19,11 @@
 </resultMap>
 
 <select id="Select_activitygroups" parameterType="com.Info360.bean.Activitygroups"  resultMap="activitygroupsResult">
- Select DBID,ACTIVITYMENUID,GROUPNAME,DELETEDATETIME,CREATEDATETIME,SORT from tblCfg_ActivityGroups where activitymenuid=#{activitymenuid} ORDER BY SORT
+ Select DBID,ACTIVITYMENUID,GROUPNAME,DELETEDATETIME,CREATEDATETIME,SORT from tblCfg_ActivityGroups
+ <if test="dbid!=0">
+  where activitymenuid=#{activitymenuid}
+  </if>
+   ORDER BY SORT
 </select>
 
 <insert id="Insert_activitygroups" parameterType="com.Info360.bean.Activitygroups">
