@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!DOCTYPE mapper
+    PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+    "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="activitygroups">
+
+  <resultMap type="com.Info360.bean.Activitygroups" id="activitygroupsResult">
+  
+    <id     column="DBID" 				jdbcType="INTEGER" property="dbid"/>
+    <result column="ACTIVITYMENUID" 	jdbcType="INTEGER" property="activitymenuid"/>
+    <result column="GROUPNAME" 			jdbcType="VARCHAR" property="groupname"/>
+    <result column="DELETEDATETIME"     jdbcType="VARCHAR" property="deletedatetime"/>
+    <result column="CREATEDATETIME" 	jdbcType="VARCHAR" property="createdatetime"/>
+    <result column="SORT"     			jdbcType="VARCHAR" property="sort"/>
+
+
+</resultMap>
+
+<select id="Select_activitygroups" parameterType="com.Info360.bean.Activitygroups"  resultMap="activitygroupsResult">
+ Select DBID,ACTIVITYMENUID,GROUPNAME,DELETEDATETIME,CREATEDATETIME,SORT from tblCfg_ActivityGroups where activitymenuid=#{activitymenuid} ORDER BY SORT
+</select>
+
+<insert id="Insert_activitygroups" parameterType="com.Info360.bean.Activitygroups">
+insert into tblCfg_ActivityGroups 
+(ACTIVITYMENUID,GROUPNAME,DELETEDATETIME,CREATEDATETIME,SORT) 
+values
+(#{activitymenuid},#{groupname},#{deletedatetime},#{createdatetime},#{sort})
+</insert>
+
+<update id="Update_activitygroups" parameterType="com.Info360.bean.Activitygroups">
+update  tblCfg_ActivityGroups 
+set 
+	ACTIVITYMENUID=#{activitymenuid},GROUPNAME=#{groupname},DELETEDATETIME=#{deletedatetime},SORT=#{sort}
+
+where DBID=#{dbid}
+</update>
+
+<delete id="Delete_activitygroups" parameterType="com.Info360.bean.Activitygroups">
+delete from tblCfg_ActivityGroups where GROUPNAME=#{groupname}
+</delete>
+ 
+</mapper>

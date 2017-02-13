@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!DOCTYPE mapper
+    PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+    "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="activitymenu">
+
+  <resultMap type="com.Info360.bean.Activitymenu" id="activitymenuResult">
+  
+    <id     column="DBID" 					jdbcType="INTEGER" property="dbid"/>
+    <result column="MENUNAME" 				jdbcType="VARCHAR" property="menuname"/>
+    <result column="DELETEFLAG" 			jdbcType="VARCHAR" property="deleteflag"/>
+    <result column="DELETEDATETIME"     	jdbcType="VARCHAR" property="deletedatetime"/>
+    <result column="CREATEDATETIME" 		jdbcType="VARCHAR" property="createdatetime"/>
+    <result column="SORT"     				jdbcType="VARCHAR" property="sort"/>
+
+
+</resultMap>
+
+<select id="Select_activitymenu" parameterType="com.Info360.bean.Activitymenu"  resultMap="activitymenuResult">
+ Select DBID,MENUNAME,DELETEFLAG,DELETEDATETIME,CREATEDATETIME,SORT from tblCfg_ActivityMenu
+ <if test="dbid!=0">
+ 	where dbid=#{dbid} 
+ </if>
+ ORDER BY SORT
+</select>
+
+<insert id="Insert_activitymenu" parameterType="com.Info360.bean.Activitymenu">
+insert into tblCfg_ActivityMenu 
+(MENUNAME,DELETEFLAG,DELETEDATETIME,CREATEDATETIME,SORT) 
+values
+(#{menuname},#{deleteflag},#{deletedatetime},#{createdatetime},#{sort})
+</insert>
+
+<update id="Update_activitymenu" parameterType="com.Info360.bean.Activitymenu">
+update  tblCfg_ActivityMenu 
+set 
+	MENUNAME=#{menuname},DELETEFLAG=#{deleteflag},DELETEDATETIME=#{deletedatetime},SORT=#{sort}
+
+where DBID=#{dbid}
+</update>
+
+<delete id="Delete_activitymenu" parameterType="com.Info360.bean.Activitymenu">
+delete from tblCfg_ActivityMenu where MENUNAME=#{menuname}
+</delete>
+ 
+</mapper>

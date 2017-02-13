@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!DOCTYPE mapper
+    PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+    "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="activitydata">
+
+  <resultMap type="com.Info360.bean.Activitydata" id="activitydataResult">
+  
+    <id     column="DBID" 				jdbcType="INTEGER" property="dbid"/>
+    <result column="ACTIVITYGROUPSID" 	jdbcType="INTEGER" property="activitygroupsid"/>
+    <result column="CODENAME" 			jdbcType="VARCHAR" property="codename"/>
+    <result column="COLOR"     			jdbcType="VARCHAR" property="color"/>
+    <result column="SORT" 				jdbcType="VARCHAR" property="sort"/>
+    <result column="TITLEFLAG"     		jdbcType="VARCHAR" property="titleflag"/>
+	<result column="TITLEGROUP" 		jdbcType="INTEGER" property="titlegroup"/>
+    <result column="DELETEFLAG"     	jdbcType="VARCHAR" property="deleteflag"/>
+    <result column="DELETEDATETIME" 	jdbcType="VARCHAR" property="deletedatetime"/>
+    <result column="CREATEDATETIME"     jdbcType="VARCHAR" property="createdatetime"/>
+   
+    
+</resultMap>
+
+<select id="Select_activitydata" parameterType="com.Info360.bean.Activitydata"  resultMap="activitydataResult">
+ Select DBID,ACTIVITYGROUPSID,CODENAME,COLOR,SORT,TITLEFLAG,TITLEGROUP,DELETEFLAG,CREATEDATETIME from tblCfg_ActivityData where activitygroupsid=#{activitygroupsid} ORDER BY SORT
+</select>
+
+<insert id="Insert_activitydata" parameterType="com.Info360.bean.Activitydata">
+insert into tblCfg_ActivityData 
+(ACTIVITYGROUPSID,CODENAME,COLOR,SORT,TITLEFLAG,TITLEGROUP,DELETEFLAG,DELETEDATETIME,CREATEDATETIME) 
+values
+(#{activitygroupsid},#{codename},#{color},#{sort},#{titleflag},#{titlegroup},#{deleteflag},#{deletedatetime},#{createdatetime})
+</insert>
+
+<update id="Update_activitydata" parameterType="com.Info360.bean.Activitydata">
+update  tblCfg_ActivityData 
+set 
+	ACTIVITYGROUPSID=#{activitygroupsid},CODENAME=#{codename},COLOR=#{color},SORT=#{sort},
+	TITLEFLAG=#{titleflag},TITLEGROUP=#{titlegroup},DELETEFLAG=#{deleteflag},
+	DELETEDATETIME=#{deletedatetime}
+
+where DBID=#{dbid}
+</update>
+
+<delete id="Delete_activitydata" parameterType="com.Info360.bean.Activitydata">
+delete from tblCfg_ActivityData where CODENAME=#{codename}
+</delete>
+ 
+</mapper>
