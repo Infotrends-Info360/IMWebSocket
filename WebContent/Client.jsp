@@ -104,7 +104,7 @@ WEB_SOCKET_SWF_LOCATION = "WebSocketMain.swf";
 					<button class="btn btn-primary btn-sm" id="openChat" onclick="Login();">openChat</button>
 				</div>						
 				<div class="col-xs-6 col-sm-6 col-md-6 col-lg-6">
-					<button class="btn btn-primary btn-sm" id="closeChat">closeChat</button>
+					<button class="btn btn-primary btn-sm" id="closeChat" onclick="Logout();">closeChat</button>
 				</div>	
 			</div>	
 		</div>

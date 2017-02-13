@@ -45,9 +45,7 @@ function onloadFunction(){
 
 // 控制例外離開動作(如: 刷新頁面、關閉視窗)
 function checktoLeave() {
-	console.log('leave');
-	// 顯示是否要離開網頁
-	event.returnValue = "Leave?";
+//	console.log('leave');
 	// 離開WebSocket Pool列表
 	Logoutaction(UserID_g); // 這邊會全部清: Group, Type, User conn
 }
@@ -252,23 +250,21 @@ function Login() {
 function Logout() {
 	// 關閉socket
 	// ws.close()
-	isonline = false; // 給"Clientclosegroup" -> .java - "Clientclosegroup" -> .js - ReleaseEvent() -> notready -> "Agentclosegroup" -> .java -> client.js - if(isonlone){} 
-						// 也給"ReleaseEvent"用
 	// 離開WebSocket Pool列表
 	Logoutaction(UserID_g); // 這邊會全部清: Group, Type, User conn
 	// 控制前端傳值
 	document.getElementById("Status").innerHTML = "Logout";
-	document.getElementById("Logout").disabled = true;
-	document.getElementById("Login").disabled = false;
-	document.getElementById("online").disabled = true;
-	document.getElementById("Clientonline").disabled = true;
-	document.getElementById("Agentonline").disabled = true;
+	document.getElementById("closeChat").disabled = true;
+	document.getElementById("openChat").disabled = false;
 }
 
 
 // 離開WebSocket Pool列表
 function Logoutaction(aUserID) {
 //	Logoutaction01(aUserID, "none");
+	isonline = false; // 給"Clientclosegroup" -> .java - "Clientclosegroup" -> .js - ReleaseEvent() -> notready -> "Agentclosegroup" -> .java -> client.js - if(isonlone){} 
+	// 也給"ReleaseEvent"用
+	
 	// 在登出前,將要存入的log資訊先放到userallconnections中,此方法最後會呼叫adduserinteraction() 
 	setinteractionDemo(ixnstatus, ixnactivitycode, 'client');
 	
@@ -376,22 +372,21 @@ function roomonline() {
 }
 
 function findingAgent(aUserID, aUserName) {
-	setTimeout(function() {
-		now = new Date();
-		// 組成找尋Agent JSON指令
-		var findAgentmsg = {
-			type : "findAgent",
-			id : aUserID,
-			UserName : aUserName,
-			channel : "chat",
-			// Event: "findAgent",
-			date : now.getHours() + ":" + now.getMinutes() + ":"
-					+ now.getSeconds()
-		};
+	now = new Date();
+	// 組成找尋Agent JSON指令
+	var findAgentmsg = {
+		type : "findAgent",
+		id : aUserID,
+		UserName : aUserName,
+		channel : "chat",
+		// Event: "findAgent",
+		date : now.getHours() + ":" + now.getMinutes() + ":"
+				+ now.getSeconds()
+	};
 
-		// 發送消息給WebSocket
-		ws.send(JSON.stringify(findAgentmsg));
-	}, 1000);
+	// 發送消息給WebSocket
+	ws.send(JSON.stringify(findAgentmsg));
+	setTimeout(function(){}, 1000); // 先執行,後延遲 -> 目的是讓 Logout()時能乾淨的取消掉findAgent排程 
 }
 
 // 查詢Client列表內人員
