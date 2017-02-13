@@ -116,7 +116,7 @@ WEB_SOCKET_SWF_LOCATION = "WebSocketMain.swf";
 				</div>
 						<div class="col-xs-12 col-sm-12 col-md-12 col-lg-12 container" style="padding-top: 20px;">
 							<div class="col-xs-10 col-sm-10 col-md-10 col-lg-10">
-								<input class="form-control" id="message" onclick="enterEvent(event);">
+								<input class="form-control" id="message">
 							</div>						
 							<div class="col-xs-2 col-sm-2 col-md-2 col-lg-2">
 								<button class="btn btn-primary btn-sm" id="sendToRoom" onclick="sendtoRoom();">SEND</button>
