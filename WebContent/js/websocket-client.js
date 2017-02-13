@@ -106,7 +106,7 @@ function Login() {
 					// 寫入log
 					// 增加此判斷式,避免一直呼叫senduserdata方法
 					if (contactID == null){
-						senduserdata(UserID, "PhoneNo", obj.Agent); 
+						senduserdata(UserID_g, "PhoneNo", obj.Agent); 
 					}
 
 					if ("null" == obj.Agent || null == obj.Agent) {
@@ -121,12 +121,12 @@ function Login() {
 						// document.getElementById("group").value = RoomID;
 						document.getElementById("Event").value = obj.Event;
 						document.getElementById("Eventfrom").value = obj.from;
-						var UserID = document.getElementById('UserID').value;
+//						var UserID = document.getElementById('UserID').value;
 						
 						waittingAgent = true;
 						waittingAgentID = obj.Agent;
 						// 寫入log(告知雙方彼此的資訊)
-						senduserdata(UserID, "PhoneNo", obj.Agent);
+						senduserdata(UserID_g, "PhoneNo", obj.Agent);
 						console.log("senduserdata done ******************* ");						
 
 						
@@ -135,9 +135,9 @@ function Login() {
 					}
 					// 收到群組訊息
 				} else if ("messagetoRoom" == obj.Event) {
-					var UserID = document.getElementById('UserID').value;
+//					var UserID = document.getElementById('UserID').value;
 					// 判斷是否有開啟layim與是否為自己傳送的訊息
-					if (true == layimswitch && obj.id != UserID) {
+					if (true == layimswitch && obj.id != UserID_g) {
 						// 將收到訊息顯示到layim上
 						getmessagelayim(obj.text, obj.id, obj.UserName);
 					}
@@ -291,14 +291,14 @@ function online() {
 
 
 // 離開group
-function leaveRoom(UserID) {
+function leaveRoom(aUserID) {
 	// var group = 'G'+document.getElementById('group').value;
 	var now = new Date();
 	// 組成離開group JSON指令
 	var msg = {
 		type : "leaveRoom",
 		roomID : roomID,
-		id : UserID,
+		id : aUserID,
 		UserName : UserName_g,
 		channel: "chat",
 		date : now.getHours() + ":" + now.getMinutes() + ":" + now.getSeconds()
@@ -319,14 +319,14 @@ function sendtoRoom(aRoomID,aMessage) {
 	if (aRoomID === undefined) aRoomID = roomID; 
 	if (aMessage === undefined) aMessage = document.getElementById('message').value; 
 	
-	var UserID = document.getElementById('UserID').value;
+//	var UserID = document.getElementById('UserID').value;
 	// var group = 'G'+document.getElementById('group').value;
 	var now = new Date();
 	// 組成傳送訊息至群組JSON指令
 	var msg = {
 		type : "messagetoRoom",
 		text : aMessage,
-		id : UserID,
+		id : UserID_g,
 		UserName : UserName_g,
 		roomID : aRoomID,
 		channel : "chat",
@@ -404,14 +404,14 @@ function onlineAction(aACType){
 
 // 告知Agent,Client自己也已經只到Agent接通了此通通話了
 function find() {
-	var UserID = document.getElementById('UserID').value;
+//	var UserID = document.getElementById('UserID').value;
 	var findAgent = document.getElementById('findAgent').value;
 	var now = new Date();
 	// 組成查詢要邀請的Agent JSON指令
 	var msg = {
 		type : "findAgentEvent",
 		ACtype : "Client",
-		id : UserID,
+		id : UserID_g,
 		UserName : UserName_g,
 		sendto : findAgent,
 		channel : "chat",
@@ -424,7 +424,7 @@ function find() {
 }
 
 // Send userdata
-function senduserdata(UserID, phone, sendto) {
+function senduserdata(aUserID, phone, sendto) {
 	var now = new Date();
 	// 組成userdata JSON
 	var msg = {
