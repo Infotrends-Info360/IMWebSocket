@@ -86,7 +86,7 @@ public class WebSocket extends WebSocketServer {
 	@Override
 	public void onMessage(org.java_websocket.WebSocket conn, String message) {
 		message = message.toString();
-		System.out.println("WebSocket :\n " +message);
+//		System.out.println("WebSocket :\n " +message);
 		JSONObject obj = new JSONObject(message);
 		switch (obj.getString("type").trim()) {
 		case "message":

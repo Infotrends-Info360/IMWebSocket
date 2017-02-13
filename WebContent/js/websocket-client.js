@@ -117,10 +117,10 @@ function Login() {
 					} else {
 						// 控制前端傳值
 						// RoomID = 'G'+obj.Agent;
-						document.getElementById("findAgent").value = obj.Agent;
+						document.getElementById("AgentIDs").innerHTML = obj.Agent + " ";
 						// document.getElementById("group").value = RoomID;
-						document.getElementById("Event").value = obj.Event;
-						document.getElementById("Eventfrom").value = obj.from;
+						document.getElementById("Event").innerHTML = obj.Event;
+//						document.getElementById("Eventfrom").value = obj.from;
 //						var UserID = document.getElementById('UserID').value;
 						
 						waittingAgent = true;
@@ -160,6 +160,7 @@ function Login() {
 					// 控制前端傳值
 //					document.getElementById("UserID").value = obj.from;
 					document.getElementById("UserID").innerHTML = obj.from;
+					document.getElementById("Event").innerHTML = obj.Event;
 					UserID_g = obj.from;
 					/** 成功登入後,開始找尋Agent **/
 					var now = new Date();
@@ -405,7 +406,7 @@ function onlineAction(aACType){
 // 告知Agent,Client自己也已經只到Agent接通了此通通話了
 function find() {
 //	var UserID = document.getElementById('UserID').value;
-	var findAgent = document.getElementById('findAgent').value;
+	var findAgent = document.getElementById('AgentIDs').value;
 	var now = new Date();
 	// 組成查詢要邀請的Agent JSON指令
 	var msg = {
