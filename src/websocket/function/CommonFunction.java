@@ -158,7 +158,7 @@ public class CommonFunction {
 		WebSocketUserPool.addUserRoom(roomID, conn); //重要步驟
 		WebSocketRoomPool.sendMessageinroom(roomID, joinMsg);
 		WebSocketRoomPool.sendMessageinroom(roomID, "room people: "
-				+ WebSocketRoomPool.getOnlineUserinroom(roomID).toString());
+				+ WebSocketRoomPool.getOnlineUserNameinroom(roomID).toString());
 		
 		// 之後可做更詳細的判斷-如為Agent才執行就好
 		// 尚有例外: JSONObject["ACtype"] not found.
@@ -233,7 +233,7 @@ public class CommonFunction {
 		JSONObject obj = new JSONObject(message);
 		String roomID = obj.getString("roomID");
 		WebSocketUserPool.sendMessageToUser(conn, "room people: "
-				+ WebSocketRoomPool.getOnlineUserinroom(roomID).toString());
+				+ WebSocketRoomPool.getOnlineUserNameinroom(roomID).toString());
 	}
 	
 	/** * search online people from Agent or client */
@@ -330,7 +330,7 @@ public class CommonFunction {
 //		System.out.println("roomIDList.size(): " + roomIDList.size());
 		for (String roomID: roomIDList){
 			roomIDListJson.add(roomID);
-			memberListJson.add(WebSocketRoomPool.getOnlineUserinroom(roomID).toString());
+			memberListJson.add(WebSocketRoomPool.getOnlineUserNameinroom(roomID).toString());
 		}
 		
 		// 將 membersInRoom list 塞入json中

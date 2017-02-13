@@ -87,6 +87,7 @@ public class WebSocketRoomPool{
 		JSONObject sendJson = new JSONObject();
 		sendJson.put("Event", "removeUserinroom");
 		sendJson.put("roomID", aRoomID);
+		sendJson.put("fromUserID", WebSocketUserPool.getUserID(aConn));
 		
 		if (connsInRoomMap != null && connsInRoomMap.containsKey(aConn)) {
 //			System.out.println(conn + "'s room is " + " removed");
@@ -119,8 +120,11 @@ public class WebSocketRoomPool{
 				sendJson.put("result", WebSocketUserPool.getUserNameByKey(aConn) + " left the room" + aRoomID);				
 			}
 			System.out.println("roomId: " + aRoomID + " size: " + connsInRoomMap.size());
-			sendJson.put("roomMembers", getOnlineUserinroom(aRoomID).toString());
+			sendJson.put("roomMembers", getOnlineUserNameinroom(aRoomID).toString());
+			sendJson.put("roomMemberIDs", getOnlineUserIDinroom(aRoomID).toString());
+			sendJson.put("roomSize", connsInRoomMap.size());
 			
+			System.out.println("removeUserinroom() - sendJson: " + sendJson);
 			
 			/** 告知所有成員有人離開room,請更新前端頁面 **/
 			for (WebSocket conn: tmpConnsInRoom){
@@ -151,7 +155,7 @@ public class WebSocketRoomPool{
 	
 	/** * Get Online User Name in Room * @return */
 	// 先預留著,以後判斷須不須保留
-	public static Collection<String> getOnlineUserinroom(String aRoomID) {
+	public static Collection<String> getOnlineUserNameinroom(String aRoomID) {
 		RoomInfo roomInfo = roomMap.get(aRoomID);
 		Map<WebSocket, UserInfo> connsInRoomMap = roomInfo.getUserConns();
 		
@@ -160,6 +164,21 @@ public class WebSocketRoomPool{
 		
 		for (UserInfo u : setUser) {
 			setUsers.add(u.getUsername());
+		}
+		return setUsers;
+	}
+	
+	/** * Get Online User ID in Room * @return */
+	// 先預留著,以後判斷須不須保留
+	public static Collection<String> getOnlineUserIDinroom(String aRoomID) {
+		RoomInfo roomInfo = roomMap.get(aRoomID);
+		Map<WebSocket, UserInfo> connsInRoomMap = roomInfo.getUserConns();
+		
+		List<String> setUsers = new ArrayList<>();
+		Collection<UserInfo> setUser = connsInRoomMap.values();
+		
+		for (UserInfo u : setUser) {
+			setUsers.add(u.getUserid());
 		}
 		return setUsers;
 	}

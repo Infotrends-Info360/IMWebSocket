@@ -300,7 +300,7 @@ public class WebSocket extends WebSocketServer {
 			sendJson.put("roomID", roomID);
 			sendJson.put("fromAgentID", fromAgentID);
 			sendJson.put("invitedAgentID", invitedAgentID);
-			sendJson.put("roomMembers", WebSocketRoomPool.getOnlineUserinroom(roomID).toString());
+			sendJson.put("roomMembers", WebSocketRoomPool.getOnlineUserNameinroom(roomID).toString());
 			
 			// 若是屬於轉接的要求,則將原Agent(邀請者)踢出
 			if ("transfer".equals(inviteType)){
@@ -362,7 +362,7 @@ public class WebSocket extends WebSocketServer {
 			WebSocketUserPool.addUserRoom(roomID, userConn); //重要步驟
 			WebSocketRoomPool.sendMessageinroom(roomID, joinMsg);
 			WebSocketRoomPool.sendMessageinroom(roomID, "room people: "
-					+ WebSocketRoomPool.getOnlineUserinroom(roomID).toString());
+					+ WebSocketRoomPool.getOnlineUserNameinroom(roomID).toString());
 			
 			// 更新room list
 			String ACtype = WebSocketUserPool.getACTypeByKey(userConn);

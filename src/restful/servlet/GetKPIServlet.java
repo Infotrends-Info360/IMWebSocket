@@ -46,7 +46,7 @@ public class GetKPIServlet {
 		for (String room : CollectionRooms) {
 			JSONObject roomsjsonobject = new JSONObject();
 			roomsjsonobject.put("roomname", room);
-			roomsjsonobject.put("roommember", WebSocketRoomPool.getOnlineUserinroom(room));
+			roomsjsonobject.put("roommember", WebSocketRoomPool.getOnlineUserNameinroom(room));
 			roomsjsonobject.put("roommembercount", WebSocketRoomPool.getOnlineUserInRoomCount(room));
 			roomsjsonarray.put(roomsjsonobject);
 		}

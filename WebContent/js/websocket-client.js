@@ -215,13 +215,35 @@ function Login() {
 					isonline = true;
 					
 				}  else if ("responseThirdParty" == obj.Event){
-					document.getElementById("currRoomID").innerHTML = obj.roomID;
-					document.getElementById("currUsers").innerHTML = obj.roomMembers;
+//					document.getElementById("currRoomID").innerHTML = obj.roomID;
+//					document.getElementById("currUsers").innerHTML = obj.roomMembers;
 					
 				}  else if ("removeUserinroom" == obj.Event){
-					document.getElementById("currRoomID").innerHTML = obj.roomID;
-					document.getElementById("currUsers").innerHTML = obj.roomMembers;
+//					document.getElementById("currRoomID").innerHTML = obj.roomID;
+					document.getElementById("AgentIDs").innerHTML = ''; // 先清再加
+					document.getElementById("AgentNames").innerHTML = ''; // 先清再加
+					var roomMembers = obj.roomMembers.slice(1,-1)
+					roomMembers = roomMembers.split(",");
+					var roomMemberIDs = obj.roomMemberIDs.slice(1,-1)
+					roomMemberIDs = roomMemberIDs.split(",");
+					console.log("removeUserinroom - roomMembers: " + roomMembers);
+					console.log("removeUserinroom - roomMemberIDs: " + roomMemberIDs);
+//					var roomMembers = JSON.parse(obj.roomMembers);
+					for (var index in roomMembers){
+						console.log("removeUserinroom - roomMembers[index].trim(): " + roomMembers[index].trim());
+						console.log("removeUserinroom - roomMemberIDs[index].trim(): " + roomMemberIDs[index].trim());
+						if (UserName_g == roomMembers[index].trim()) continue;
+						if (UserID_g == roomMemberIDs[index].trim()) continue;
+						document.getElementById("AgentNames").innerHTML += roomMembers[index].trim() // 先這樣, 還不用做太細
+						document.getElementById("AgentIDs").innerHTML += roomMemberIDs[index].trim() // 先這樣, 還不用做太細
+					}
+//					document.getElementById("currUsers").innerHTML = obj.roomMembers;
+					
 					alert(obj.result);
+					if (obj.roomSize == 0){
+						alert("close the chatDialogue");
+					}
+					
 				}
 			} else {
 				// 控制前端傳值
