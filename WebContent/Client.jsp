@@ -55,6 +55,10 @@ WEB_SOCKET_SWF_LOCATION = "WebSocketMain.swf";
     height: 470px;
 }​
 
+.hidden
+{
+	visibility: hidden;
+}
 
 
 </style>
@@ -103,22 +107,9 @@ WEB_SOCKET_SWF_LOCATION = "WebSocketMain.swf";
 					<button class="btn btn-primary btn-sm" id="closeChat">closeChat</button>
 				</div>	
 			</div>	
-<!-- 			<div class="col-xs-2 col-sm-2 col-md-2 col-lg-2"></div> 換行 -->
-<!-- 			<div class="container -->
-<!-- 						col-xs-8 col-sm-8 col-md-8 col-lg-8 -->
-<!-- 						col-xs-offset-2 col-sm-offset-2 col-md-offset-2 col-lg-offset-2" -->
-<!-- 				 > -->
-<!-- 				<form> -->
-<!-- 					<div class="form-group"> -->
-					
-<!-- 					</div> -->
-<!-- 				</form> -->
-<!-- 			</div> end of container -->
-<!-- 			<div class="col-xs-2 col-sm-2 col-md-2 col-lg-2"></div> 換行 -->
-							
 		</div>
 		<!-- Chat Dialogue -->
-		<div class="col-xs-6 col-sm-6 col-md-6 col-lg-6 center nopading">
+		<div class="col-xs-6 col-sm-6 col-md-6 col-lg-6 center hidden" id="chatDialogue">
 			<div class="col-xs-12 col-sm-12 col-md-12 col-lg-12 container panel panel-default center nopadding ">
 				<div class="col-xs-12 col-sm-12 col-md-12 col-lg-12 panel-heading nopadding">
 					<h3>Chat Dialogue:</h3>
@@ -157,6 +148,7 @@ WEB_SOCKET_SWF_LOCATION = "WebSocketMain.swf";
 				</div>
 			</div> <!-- end of container -->
 		</div>
+		<div class="col-xs-6 col-sm-6 col-md-6 col-lg-6 center" id="chatDialogueReverse"></div>
 
 		<!-- Log -->
 		<div class="col-xs-3 col-sm-3 col-md-3 col-lg-3 panel panel-default center nopadding">

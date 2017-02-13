@@ -96,6 +96,10 @@ function Login() {
 					ws.send(JSON.stringify(myUpdateStatusJson));
 					waittingAgent = false;
 					waittingAgentID = "none";
+					
+					// 顯現對話視窗
+					document.getElementById("chatDialogue").classList.remove("hidden");
+					document.getElementById("chatDialogueReverse").classList.add("hidden");
 
 					// 控制前端傳值
 					roomID = obj.roomID;
