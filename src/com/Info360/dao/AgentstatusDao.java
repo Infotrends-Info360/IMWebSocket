@@ -6,6 +6,7 @@ import java.util.List;
 
 import org.apache.ibatis.session.SqlSession;
 
+import com.Info360.bean.Agentstatus;
 import com.Info360.bean.CommonLink;
 import com.Info360.bean.ContactData;
 import com.Info360.bean.Interaction;
@@ -13,47 +14,22 @@ import com.Info360.db.DBAccess;
 import com.Info360.util.IsError;
 
 
-public class CommonlinkDao {
-
+public class AgentstatusDao {
 	
 	/**
-	 * @param CommonLink
+	 * 
+	 * Insert
+	 * @param ContactData
 	 */
-	public int Delete_commonlink(
-			CommonLink   commonlink)
-			{
+	public int Insert_agentstatus(Agentstatus   agentstatus){
 		DBAccess dbAccess = new DBAccess();
-		int commonlinkInt = 0;
+		int agentstatusInt = 0;
 		SqlSession sqlSession = null;
-
-       try {
-			sqlSession = dbAccess.getSqlSession();
-			//通過sqlSession執行SQL語句
-			commonlinkInt = sqlSession.insert("commonlink.Delete_commonlink", commonlink);
-			sqlSession.commit();
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			//e.printStackTrace();
-			IsError.GET_EXCEPTION = e.getMessage();
-		} finally {
-			if(sqlSession != null){
-				sqlSession.close();
-			}
-		}
-		return commonlinkInt;
-	}
-	
-	
-	
-	public List<CommonLink> Select_commonlink(CommonLink commonlink){
-		DBAccess dbAccess = new DBAccess();
-		List<CommonLink> commonlinklist = new ArrayList<CommonLink>();
-		SqlSession sqlSession = null;
-	
+		
 		try {
 			sqlSession = dbAccess.getSqlSession();
 			//通過sqlSession執行SQL語句
-			commonlinklist = sqlSession.selectList("commonlink.Select_commonlink", commonlink);
+			agentstatusInt = sqlSession.insert("agentstatus.Insert_agentstatus", agentstatus);
 			sqlSession.commit();
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
@@ -64,26 +40,22 @@ public class CommonlinkDao {
 			   sqlSession.close();
 			}
 		}
-		return commonlinklist;
+		return agentstatusInt;
 	}
 
-	
-	
 	/**
-	 * 新增資訊
-	 * @param CommonLink
+	 * Select_agentstatus
+	 * @param Select_agentstatus
 	 */
-	public int Insert_commonlink(
-			CommonLink   commonlink)
-			{
+	public List<Agentstatus> Select_agentstatus(Agentstatus agentstatus){
 		DBAccess dbAccess = new DBAccess();
-		int commonlinkInt = 0;
+		List<Agentstatus> agentstatuslist = new ArrayList<Agentstatus>();
 		SqlSession sqlSession = null;
-
-       try {
+	
+		try {
 			sqlSession = dbAccess.getSqlSession();
 			//通過sqlSession執行SQL語句
-			commonlinkInt = sqlSession.insert("commonlink.Insert_commonlink", commonlink);
+			agentstatuslist = sqlSession.selectList("agentstatus.Select_agentstatus", agentstatus);
 			sqlSession.commit();
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
@@ -91,26 +63,26 @@ public class CommonlinkDao {
 			IsError.GET_EXCEPTION = e.getMessage();
 		} finally {
 			if(sqlSession != null){
-				sqlSession.close();
+			   sqlSession.close();
 			}
 		}
-		return commonlinkInt;
+		return agentstatuslist;
 	}
- 	
+
 	/**
 	 * 更新個人資訊
-	 * @param Update_commonlink
+	 * @param Update_agentstatus
 	 */
-	public int Update_commonlink(
-			CommonLink   commonlink	){
+	public int Update_agentstatus(
+			Agentstatus   agentstatus	){
 		DBAccess dbAccess = new DBAccess();
-		int commonlinkInt = 0;
+		int agentstatusInt = 0;
 		SqlSession sqlSession = null;
 
 		try {
 			sqlSession = dbAccess.getSqlSession();
 			//通過sqlSession執行SQL語句
-			commonlinkInt = sqlSession.update("commonlink.Update_commonlink", commonlink);
+			agentstatusInt = sqlSession.update("agentstatus.Update_agentstatus", agentstatus);
 			sqlSession.commit();
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
@@ -121,9 +93,33 @@ public class CommonlinkDao {
 				sqlSession.close();
 			}
 		}
-		return commonlinkInt;
+		return agentstatusInt;
 	}
 	
-	
-	
+	/**
+	 * 更新個人資訊
+	 * @param LogicDelete_agentstatus
+	 */
+	public int LogicDelete_agentstatus(
+			Agentstatus   agentstatus	){
+		DBAccess dbAccess = new DBAccess();
+		int agentstatusInt = 0;
+		SqlSession sqlSession = null;
+
+		try {
+			sqlSession = dbAccess.getSqlSession();
+			//通過sqlSession執行SQL語句
+			agentstatusInt = sqlSession.update("agentstatus.LogicDelete_agentstatus", agentstatus);
+			sqlSession.commit();
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			//e.printStackTrace();
+			IsError.GET_EXCEPTION = e.getMessage();
+		} finally {
+			if(sqlSession != null){
+				sqlSession.close();
+			}
+		}
+		return agentstatusInt;
+	}
 }

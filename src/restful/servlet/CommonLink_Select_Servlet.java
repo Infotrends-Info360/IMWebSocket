@@ -32,8 +32,6 @@ public class CommonLink_Select_Servlet {
 	@POST
 	@Produces("application/json")
 	public Response PostFromPath(
-			
-			@FormParam("sort") int sort
 		
 			
 			) throws IOException {
@@ -42,26 +40,28 @@ public class CommonLink_Select_Servlet {
 		
 		CommonLink commonlink = new CommonLink();
 		
-		commonlink.setSort(sort);
 		
 		
 		MaintainService maintainservice = new MaintainService();		
 		List<CommonLink> commonlinklist = maintainservice.Select_commonlink(commonlink);
 	    
   	  JSONArray TreeJsonArray = new JSONArray();
-		
+  	int count = commonlinklist.size();
   
     	for(int a = 0; a < commonlinklist.size(); a++){
 
 	    	JSONObject TreeJsonObject = new JSONObject();
 	    	JSONObject hrefJsonObject = new JSONObject();
+	    	JSONObject colorJsonObject = new JSONObject();
 	    	
 	    	TreeJsonObject.put("id", commonlinklist.get(a).getNodeid());
 	    	TreeJsonObject.put("text", commonlinklist.get(a).getNodetext());
 	    	TreeJsonObject.put("parent", commonlinklist.get(a).getParnetid());
+	    	TreeJsonObject.put("createuser", commonlinklist.get(a).getCreateuserid());
 	    	
 	    	hrefJsonObject.put("href", commonlinklist.get(a).getNodeurl());
 	    	
+	    	colorJsonObject.put("class", commonlinklist.get(a).getColor());
 	    	String Pid =  Integer.toString(commonlinklist.get(a).getParnetid());
 	    	String ppp = commonlinklist.get(a).getNodeurl();
 	    	
@@ -69,18 +69,16 @@ public class CommonLink_Select_Servlet {
 	    		String b = "#";
 	    		Pid = b;
 	    	}
-	    			
-	       
-	    			
+	    		System.out.println();
+	    		
 	    	TreeJsonObject.put("a_attr", hrefJsonObject );
 	    	TreeJsonObject.put("parent", Pid);
-	    
+	    	TreeJsonObject.put("li_attr", colorJsonObject);
 	    	TreeJsonArray.put(TreeJsonObject);
-	    	
   	}
     	
     		jsonObject.put("Tree", TreeJsonArray);
-  	    
+    		jsonObject.put("count", count);
   	  
 		return Response.status(200).entity(jsonObject.toString())
 				.header("Access-Control-Allow-Origin", "*")

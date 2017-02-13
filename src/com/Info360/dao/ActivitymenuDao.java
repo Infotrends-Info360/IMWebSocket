@@ -6,6 +6,8 @@ import java.util.List;
 
 import org.apache.ibatis.session.SqlSession;
 
+import com.Info360.bean.Activitymenu;
+import com.Info360.bean.Agentstatus;
 import com.Info360.bean.CommonLink;
 import com.Info360.bean.ContactData;
 import com.Info360.bean.Interaction;
@@ -13,23 +15,22 @@ import com.Info360.db.DBAccess;
 import com.Info360.util.IsError;
 
 
-public class CommonlinkDao {
-
+public class ActivitymenuDao {
 	
 	/**
-	 * @param CommonLink
+	 * @param Delete_activitymenu
 	 */
-	public int Delete_commonlink(
-			CommonLink   commonlink)
+	public int Delete_activitymenu(
+			Activitymenu   activitymenu)
 			{
 		DBAccess dbAccess = new DBAccess();
-		int commonlinkInt = 0;
+		int activitymenuInt = 0;
 		SqlSession sqlSession = null;
 
        try {
 			sqlSession = dbAccess.getSqlSession();
 			//通過sqlSession執行SQL語句
-			commonlinkInt = sqlSession.insert("commonlink.Delete_commonlink", commonlink);
+			activitymenuInt = sqlSession.insert("activitymenu.Delete_activitymenu", activitymenu);
 			sqlSession.commit();
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
@@ -40,20 +41,49 @@ public class CommonlinkDao {
 				sqlSession.close();
 			}
 		}
-		return commonlinkInt;
+		return activitymenuInt;
 	}
 	
-	
-	
-	public List<CommonLink> Select_commonlink(CommonLink commonlink){
+	/**
+	 * 更新個人資訊
+	 * @param Update_activitymenu
+	 */
+	public int Update_activitymenu(
+			Activitymenu   activitymenu	){
 		DBAccess dbAccess = new DBAccess();
-		List<CommonLink> commonlinklist = new ArrayList<CommonLink>();
+		int activitymenuInt = 0;
+		SqlSession sqlSession = null;
+
+		try {
+			sqlSession = dbAccess.getSqlSession();
+			//通過sqlSession執行SQL語句
+			activitymenuInt = sqlSession.update("activitymenu.Update_activitymenu", activitymenu);
+			sqlSession.commit();
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			//e.printStackTrace();
+			IsError.GET_EXCEPTION = e.getMessage();
+		} finally {
+			if(sqlSession != null){
+				sqlSession.close();
+			}
+		}
+		return activitymenuInt;
+	}
+
+	/**
+	 * Select_activitymenu
+	 * @param Select_activitymenu
+	 */
+	public List<Activitymenu> Select_activitymenu(Activitymenu activitymenu){
+		DBAccess dbAccess = new DBAccess();
+		List<Activitymenu> activitymenulist = new ArrayList<Activitymenu>();
 		SqlSession sqlSession = null;
 	
 		try {
 			sqlSession = dbAccess.getSqlSession();
 			//通過sqlSession執行SQL語句
-			commonlinklist = sqlSession.selectList("commonlink.Select_commonlink", commonlink);
+			activitymenulist = sqlSession.selectList("activitymenu.Select_activitymenu", activitymenu);
 			sqlSession.commit();
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
@@ -64,53 +94,24 @@ public class CommonlinkDao {
 			   sqlSession.close();
 			}
 		}
-		return commonlinklist;
+		return activitymenulist;
 	}
 
 	
-	
 	/**
-	 * 新增資訊
-	 * @param CommonLink
+	 * Insert
+	 * @param Insert_activitymenu
 	 */
-	public int Insert_commonlink(
-			CommonLink   commonlink)
-			{
+	public int Insert_activitymenu(Activitymenu activitymenu){
 		DBAccess dbAccess = new DBAccess();
-		int commonlinkInt = 0;
+		int activitymenuInt = 0;
 		SqlSession sqlSession = null;
-
-       try {
-			sqlSession = dbAccess.getSqlSession();
-			//通過sqlSession執行SQL語句
-			commonlinkInt = sqlSession.insert("commonlink.Insert_commonlink", commonlink);
-			sqlSession.commit();
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			//e.printStackTrace();
-			IsError.GET_EXCEPTION = e.getMessage();
-		} finally {
-			if(sqlSession != null){
-				sqlSession.close();
-			}
-		}
-		return commonlinkInt;
-	}
- 	
-	/**
-	 * 更新個人資訊
-	 * @param Update_commonlink
-	 */
-	public int Update_commonlink(
-			CommonLink   commonlink	){
-		DBAccess dbAccess = new DBAccess();
-		int commonlinkInt = 0;
-		SqlSession sqlSession = null;
-
+		
+		
 		try {
 			sqlSession = dbAccess.getSqlSession();
 			//通過sqlSession執行SQL語句
-			commonlinkInt = sqlSession.update("commonlink.Update_commonlink", commonlink);
+			activitymenuInt = sqlSession.insert("activitymenu.Insert_activitymenu", activitymenu);
 			sqlSession.commit();
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
@@ -118,12 +119,10 @@ public class CommonlinkDao {
 			IsError.GET_EXCEPTION = e.getMessage();
 		} finally {
 			if(sqlSession != null){
-				sqlSession.close();
+			   sqlSession.close();
 			}
 		}
-		return commonlinkInt;
+		return activitymenuInt;
 	}
-	
-	
 	
 }

@@ -1,6 +1,8 @@
 package com.Info360.bean;
 
 import java.math.BigDecimal;
+import java.util.ArrayList;
+import java.util.List;
 
 public class CommonLink {
 	
@@ -21,9 +23,32 @@ public class CommonLink {
 	
 	private String createuserid;//
 	
+	private int count;
+	
+	private String color;
+	
+	private List<Integer> children_list = new ArrayList<Integer>();
 	
 	
 	
+	public String getColor() {
+		return color;
+	}
+	public void setColor(String color) {
+		this.color = color;
+	}
+	public List<Integer> getChildren_list() {
+		return children_list;
+	}
+	public void setChildren_list(List<Integer> children_list) {
+		this.children_list = children_list;
+	}
+	public int getCount() {
+		return count;
+	}
+	public void setCount(int count) {
+		this.count = count;
+	}
 	public int getNodeid() {
 		return nodeid;
 	}

@@ -6,6 +6,9 @@ import java.util.List;
 
 import org.apache.ibatis.session.SqlSession;
 
+import com.Info360.bean.Activitygroups;
+import com.Info360.bean.Activitymenu;
+import com.Info360.bean.Agentstatus;
 import com.Info360.bean.CommonLink;
 import com.Info360.bean.ContactData;
 import com.Info360.bean.Interaction;
@@ -13,23 +16,22 @@ import com.Info360.db.DBAccess;
 import com.Info360.util.IsError;
 
 
-public class CommonlinkDao {
-
+public class ActivitygroupsDao {
 	
 	/**
-	 * @param CommonLink
+	 * @param Delete_activitygroups
 	 */
-	public int Delete_commonlink(
-			CommonLink   commonlink)
+	public int Delete_activitygroups(
+			Activitygroups   activitygroups)
 			{
 		DBAccess dbAccess = new DBAccess();
-		int commonlinkInt = 0;
+		int activitygroupsInt = 0;
 		SqlSession sqlSession = null;
 
        try {
 			sqlSession = dbAccess.getSqlSession();
 			//通過sqlSession執行SQL語句
-			commonlinkInt = sqlSession.insert("commonlink.Delete_commonlink", commonlink);
+			activitygroupsInt = sqlSession.insert("activitygroups.Delete_activitygroups", activitygroups);
 			sqlSession.commit();
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
@@ -40,20 +42,47 @@ public class CommonlinkDao {
 				sqlSession.close();
 			}
 		}
-		return commonlinkInt;
+		return activitygroupsInt;
 	}
-	
-	
-	
-	public List<CommonLink> Select_commonlink(CommonLink commonlink){
+	/**
+	 * 更新個人資訊
+	 * @param Update_activitygroups
+	 */
+	public int Update_activitygroups(
+			Activitygroups   activitygroups	){
 		DBAccess dbAccess = new DBAccess();
-		List<CommonLink> commonlinklist = new ArrayList<CommonLink>();
+		int activitygroupsInt = 0;
 		SqlSession sqlSession = null;
-	
+
 		try {
 			sqlSession = dbAccess.getSqlSession();
 			//通過sqlSession執行SQL語句
-			commonlinklist = sqlSession.selectList("commonlink.Select_commonlink", commonlink);
+			activitygroupsInt = sqlSession.update("activitygroups.Update_activitygroups", activitygroups);
+			sqlSession.commit();
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			//e.printStackTrace();
+			IsError.GET_EXCEPTION = e.getMessage();
+		} finally {
+			if(sqlSession != null){
+				sqlSession.close();
+			}
+		}
+		return activitygroupsInt;
+	}
+	/**
+	 * Insert
+	 * @param Insert_activitygroups
+	 */
+	public int Insert_activitygroups(Activitygroups activitygroups){
+		DBAccess dbAccess = new DBAccess();
+		int activitygroupsInt = 0;
+		SqlSession sqlSession = null;
+		
+		try {
+			sqlSession = dbAccess.getSqlSession();
+			//通過sqlSession執行SQL語句
+			activitygroupsInt = sqlSession.insert("activitygroups.Insert_activitygroups", activitygroups);
 			sqlSession.commit();
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
@@ -64,53 +93,22 @@ public class CommonlinkDao {
 			   sqlSession.close();
 			}
 		}
-		return commonlinklist;
+		return activitygroupsInt;
 	}
-
-	
 	
 	/**
-	 * 新增資訊
-	 * @param CommonLink
+	 * Select
+	 * @param Select_activitygroups
 	 */
-	public int Insert_commonlink(
-			CommonLink   commonlink)
-			{
+	public List<Activitygroups> Select_activitygroups(Activitygroups activitygroups){
 		DBAccess dbAccess = new DBAccess();
-		int commonlinkInt = 0;
+		List<Activitygroups> activitygroupslist = new ArrayList<Activitygroups>();
 		SqlSession sqlSession = null;
-
-       try {
-			sqlSession = dbAccess.getSqlSession();
-			//通過sqlSession執行SQL語句
-			commonlinkInt = sqlSession.insert("commonlink.Insert_commonlink", commonlink);
-			sqlSession.commit();
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			//e.printStackTrace();
-			IsError.GET_EXCEPTION = e.getMessage();
-		} finally {
-			if(sqlSession != null){
-				sqlSession.close();
-			}
-		}
-		return commonlinkInt;
-	}
- 	
-	/**
-	 * 更新個人資訊
-	 * @param Update_commonlink
-	 */
-	public int Update_commonlink(
-			CommonLink   commonlink	){
-		DBAccess dbAccess = new DBAccess();
-		int commonlinkInt = 0;
-		SqlSession sqlSession = null;
-
+	
 		try {
 			sqlSession = dbAccess.getSqlSession();
 			//通過sqlSession執行SQL語句
-			commonlinkInt = sqlSession.update("commonlink.Update_commonlink", commonlink);
+			activitygroupslist = sqlSession.selectList("activitygroups.Select_activitygroups", activitygroups);
 			sqlSession.commit();
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
@@ -118,12 +116,10 @@ public class CommonlinkDao {
 			IsError.GET_EXCEPTION = e.getMessage();
 		} finally {
 			if(sqlSession != null){
-				sqlSession.close();
+			   sqlSession.close();
 			}
 		}
-		return commonlinkInt;
+		return activitygroupslist;
 	}
-	
-	
-	
+
 }

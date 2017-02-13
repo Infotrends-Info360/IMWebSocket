@@ -16,39 +16,43 @@
     <result column="SORT"     			jdbcType="INTEGER" property="sort"/>
  	<result column="CREATEDATETIME"     jdbcType="VARCHAR" property="createdatetime"/>
     <result column="CREATEUSERID" 		jdbcType="VARCHAR" property="createuserid"/>
+    <result column="COLOR"				jdbcType="VARCHAR" property="color"/>
    
     
 </resultMap>
 
 <select id="Select_commonlink" parameterType="com.Info360.bean.CommonLink"  resultMap="commonlinkResult">
- Select NODEID,PARNETID,NODETEXT,NODEURL,NODETYPE,SORT,CREATEDATETIME,CREATEUSERID from tblCfg_CommonLink where sort=#{sort}; 
-
+ Select NODEID,PARNETID,NODETEXT,NODEURL,NODETYPE,SORT,CREATEDATETIME,CREATEUSERID,COLOR from tblCfg_CommonLink
+ ORDER BY SORT
 </select>
 
+<insert id="Insert_commonlink" parameterType="com.Info360.bean.CommonLink">
+insert into tblCfg_CommonLink (parnetid,nodetext,nodeurl,createuserid,color,sort) 
+       values (#{parnetid},#{nodetext},#{nodeurl},#{createuserid},#{color},#{sort})
+</insert>
 
- 
-<!--  <insert id="Insert_interaction" parameterType="com.Info360.bean.Interaction"> -->
- 
-<!--  insert into tblInteraction  -->
-<!--     		<foreach item="item" index="index" collection="InteractionMap" -->
-<!--      		 		open="(" separator="," close=")"> -->
-<!--         			${index}   -->
-<!--   			</foreach> -->
-<!--   			values -->
-<!--   			<foreach item="item" index="index" collection="InteractionMap" -->
-<!--      		 		open="(" separator="," close=")"> -->
-<!--         	 		#{item} -->
-<!--   			</foreach> -->
-  		
-<!-- </insert> -->
-
-<update id="Update_Interaction" parameterType="com.Info360.bean.Interaction">
-    update  tblInteraction  set activitycode=#{activitycode}
-    
-    where contactid=#{contactid}
+<update id="Update_commonlink" parameterType="com.Info360.bean.CommonLink">
+update  tblCfg_CommonLink  set parnetid=#{parnetid},nodetext=#{nodetext},nodeurl=#{nodeurl},
+							   createuserid=#{createuserid},color=#{color}
+    where nodeid=#{nodeid}
 </update>
 
+<!-- <delete id="Delete_commonlink" parameterType="com.Info360.bean.CommonLink"> -->
+<!-- delete from dbo.tblCfg_CommonLink where nodeid=#{nodeid} or parnetid=#{nodeid} -->
+
+<!-- </delete> -->
+
+<delete id="Delete_commonlink" parameterType="com.Info360.bean.CommonLink">
+delete from dbo.tblCfg_CommonLink where nodeid=#{nodeid}
+
+<if test="children_list.size() > 0">
+ 	<foreach item="value" index="key" collection="children_list"
+		open="or" separator="or" close="">
+ 	 nodeid=#{value}
+	</foreach>
+	</if>
+</delete>
  
- 
+
  
 </mapper>

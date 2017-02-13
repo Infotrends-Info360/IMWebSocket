@@ -331,7 +331,7 @@ function Pageleft() {
 	
 	
 	var myMap = new Map();
-	 $.post("RESTful/Query_Interaction",
+	 $.post("RESTful/JQuery_Interaction",
 			   	{
 			    	 "startdate":ss,
 			    	 "enddate":ee,
@@ -420,7 +420,7 @@ function Pageleft() {
 	        	
 	        	 console.log("ALL",all)
 	        	 
-                 var Totalcount="<h4>總共筆數:"+all.Interaction+"筆     共"+Math.ceil(all.Interaction/10)+"頁</h4><br>";
+                var Totalcount="<h4>總共筆數:"+all.Interaction+"筆     共"+Math.ceil(all.Interaction/10)+"頁</h4><br>";
                    	document.getElementById("form1").insertAdjacentHTML("BeforeEnd",Totalcount);
                   	
                 var left="<button type='button' class='btn btn-white' id='Pageleft'"+
@@ -428,8 +428,6 @@ function Pageleft() {
             	document.getElementById("form1").insertAdjacentHTML("BeforeEnd",left); 
             	        			
 	        	for(var i=1; i<=Math.ceil(all.Interaction/10); i++){
-	        	
-	        		
 	        		    var str= "<button id='bu"+i+"' class='btn btn-white' onclick='page("+i+")' value='"+i+"'>"+i+"</button>"; 
 	        		    document.getElementById("form1").insertAdjacentHTML("BeforeEnd",str); 
 	        	}
@@ -465,7 +463,7 @@ function Pageleft() {
 		var pp = r;
 		
 		var myMap = new Map();
-		 $.post("RESTful/Query_Interaction",
+		 $.post("RESTful/JQuery_Interaction",
 				   	{
 				    	 "startdate":ss,
 				    	 "enddate":ee,

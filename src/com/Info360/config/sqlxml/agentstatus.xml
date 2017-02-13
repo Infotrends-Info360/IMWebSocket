@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!DOCTYPE mapper
+    PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+    "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="agentstatus">
+
+  <resultMap type="com.Info360.bean.Agentstatus" id="agentstatusResult">
+  
+    <id     column="DBID" 				jdbcType="INTEGER" property="dbid"/>
+    <result column="STATUSNAME" 		jdbcType="VARCHAR" property="statusname"/>
+    <result column="STATUSNAME_CN" 		jdbcType="VARCHAR" property="statusname_cn"/>
+    <result column="STATUSNAME_EN"     	jdbcType="VARCHAR" property="statusname_en"/>
+    <result column="STATUSNAME_TW" 		jdbcType="VARCHAR" property="statusname_tw"/>
+    <result column="DESCRIPTION"     	jdbcType="VARCHAR" property="description"/>
+ 	<result column="ALARMDURATION"     	jdbcType="VARCHAR" property="alarmduration"/>
+    <result column="ALARMCOLOR" 		jdbcType="VARCHAR" property="alarmcolor"/>
+    <result column="FLAG"				jdbcType="INTEGER" property="flag"/>
+    <result column="CREATEDATETIME" 	jdbcType="VARCHAR" property="createdatetime"/>
+    <result column="CREATEUSERID"		jdbcType="VARCHAR" property="createuserid"/>
+   
+    
+</resultMap>
+
+<select id="Select_agentstatus" parameterType="com.Info360.bean.Agentstatus"  resultMap="agentstatusResult">
+ Select DBID,STATUSNAME,STATUSNAME_CN,STATUSNAME_EN,STATUSNAME_TW,DESCRIPTION,ALARMDURATION,ALARMCOLOR,FLAG from tblCfg_AgentStatus 
+
+ where flag=#{flag}
+</select>
+
+<update id="Update_agentstatus" parameterType="com.Info360.bean.Agentstatus">
+update  tblCfg_AgentStatus  set STATUSNAME=#{statusname},STATUSNAME_CN=#{statusname_cn},STATUSNAME_TW=#{statusname_tw},STATUSNAME_EN=#{statusname_en},
+							    DESCRIPTION=#{description},ALARMDURATION=#{alarmduration},ALARMCOLOR=#{alarmcolor},FLAG=#{flag}
+    						where DBID=#{dbid}
+</update>
+ 
+<update id="LogicDelete_agentstatus" parameterType="com.Info360.bean.Agentstatus">
+update  tblCfg_AgentStatus set FLAG=#{flag}	where DBID=#{dbid}
+</update>
+ 
+<insert id="Insert_agentstatus" parameterType="com.Info360.bean.Agentstatus">
+insert into tblCfg_AgentStatus 
+(STATUSNAME,STATUSNAME_CN,STATUSNAME_EN,STATUSNAME_TW,DESCRIPTION,ALARMDURATION,
+ ALARMCOLOR,FLAG,CREATEDATETIME,CREATEUSERID) 
+values
+(#{statusname},#{statusname_cn},#{statusname_en},#{statusname_tw},#{description}
+,#{alarmduration},#{alarmcolor},#{flag},#{createdatetime},#{createuserid})
+</insert>
+ 
+</mapper>
