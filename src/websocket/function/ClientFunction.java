@@ -63,7 +63,7 @@ public class ClientFunction {
 	/** * Get user data */
 	public static void senduserdata(String message, org.java_websocket.WebSocket conn) {
 //		System.out.println("senduserdata()" + message);
-//		System.out.println("senduserdata() called ");
+		System.out.println("senduserdata() called ");
 		JSONObject obj = new JSONObject(message);
 		String lang = obj.getString("lang");
 		String searchtype = obj.getString("searchtype");
@@ -111,7 +111,7 @@ public class ClientFunction {
 		}
 		long endTime = System.currentTimeMillis();
 //		System.out.println("RESTful searchUserdata search time: " + (endTime - startTime)/1000 + "s" );
-//		System.out.println("http://127.0.0.1:8080/IMWebSocket/RESTful/searchUserdata done ****");
+		System.out.println("http://127.0.0.1:8080/IMWebSocket/RESTful/searchUserdata done ****");
 
 		JSONObject responseSBjson = new JSONObject(responseSB.toString());
 		JSONObject sendjson = new JSONObject();
@@ -131,7 +131,7 @@ public class ClientFunction {
 			sendjson.put("clientID", WebSocketUserPool.getUserID(conn).trim());
 			WebSocketUserPool.sendMessageToUser(sendto, sendjson.toString());			
 		}catch(org.json.JSONException e) {
-//			System.out.println("JSONObject[\"sendto\"] not found.");
+			System.out.println("JSONObject[\"sendto\"] not found.");
 		}
 
 	}
