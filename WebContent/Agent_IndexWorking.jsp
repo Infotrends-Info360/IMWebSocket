@@ -47,12 +47,30 @@ div class ="container"> <h2>Form control: textarea </h2> <p>The form below conta
 				<label id="PageTitle"></label>
 			</h3>
 		</div>
-		<div class="col-xs-3 col-sm-3 col-md-3 col-lg-3 vcenter disabled">
-			<label class="checkbox-inline"><input type="checkbox"
-				id="voiceStatus" disabled>Voice</label> <label
-				class="checkbox-inline"><input type="checkbox"
-				id="chatStatus" disabled>Chat</label> <label class="checkbox-inline"><input
-				type="checkbox" id="emailStatus" disabled>Email</label>
+		<div class="col-xs-3 col-sm-3 col-md-3 col-lg-3 vcenter">
+			<div class="col-xs-12 col-sm-12 col-md-12 col-lg-12 disabled">
+				<label class="checkbox-inline">
+					<input type="checkbox" id="voiceStatus" disabled>Voice
+				</label> 
+				<label class="checkbox-inline">
+					<input type="checkbox" id="chatStatus" disabled>Chat
+				</label> 
+				<label class="checkbox-inline">
+					<input type="checkbox" id="emailStatus" disabled>Email
+				</label>
+			</div>
+			<div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+               	<div class="col-xs-6 col-sm-6 col-md-6 col-lg-6">
+               		<h4>Status: </h4>
+               	</div>
+               	<div class="col-xs-6 col-sm-6 col-md-6 col-lg-6">
+	                <select id="status" class="form-control">
+	                    <option value="status01">status01</option>
+	                    <option value="status02">status02</option>
+	                    <option value="status03">status03</option>
+	                </select>
+               	</div>				
+			</div>
 		</div>
 	</div>
 	<div class="row" style="width: 100%;">

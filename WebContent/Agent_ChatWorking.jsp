@@ -87,6 +87,10 @@ hr {
 .spacer200 { height: 200px; width: 100%; font-size: 0; margin: 0; padding: 0; border: 0; display: block; }
 
 
+.wrapTextBtn{
+	white-space: normal;
+}
+
 </style>
 </head>
 <body>
@@ -105,12 +109,12 @@ hr {
             <div class="col-xs-4 col-sm-4 col-md-4 col-lg-4">
                 <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
                 	<div class="col-xs-4 col-sm-4 col-md-4 col-lg-4">
-                		<button id="AgentReady" class="btn btn-primary btn-sm marginBottom" style="width:100px">Ready</button>
+                		<button id="AgentReady" class="btn btn-primary marginBottom" style="width:100px">Ready</button>
                 	</div>	                	
                 </div>	
                 <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
                 	<div class="col-xs-6 col-sm-6 col-md-6 col-lg-6">
-                        <button id="AgentNotReady" class="btn btn-primary btn-sm" style="width:100px">Not Ready</button>
+                        <button id="AgentNotReady" class="btn btn-primary" style="width:100px">Not Ready</button>
                 	</div>
                 	<div class="col-xs-6 col-sm-6 col-md-6 col-lg-6">
                         <select id="reason" class="form-control">
@@ -169,12 +173,12 @@ hr {
 		                    <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
 		                        <div class="form-group">
 		                        	<div class="col-xs-6 col-sm-6 col-md-6 col-lg-6">
-		        	                    <button class="btn btn-primary btn-sm pull-left marginDefault" id="Accept" style="width:100px">Accept</button>
-		            	                <button class="btn btn-primary btn-sm pull-left marginDefault" id="Reject" style="width:100px">Reject</button>
+		        	                    <button class="btn btn-primary pull-left marginDefault" id="Accept" style="width:100px">Accept</button>
+		            	                <button class="btn btn-primary pull-left marginDefault" id="Reject" style="width:100px">Reject</button>
 		                        	</div>
 		                        	<div class="col-xs-6 col-sm-6 col-md-6 col-lg-6">
-		    	                        <button class="btn btn-primary btn-sm pull-right marginDefault" id="RejectThirdParty" style="width:100px">三方轉接Reject</button>                        	
-			                            <button class="btn btn-primary btn-sm pull-right marginDefault" id="AcceptThirdParty" style="width:100px">三方轉接Accept</button>	
+		    	                        <button class="btn btn-primary pull-right marginDefault wrapTextBtn" id="RejectThirdParty" style="width:100px">三方/轉接Reject</button>                        	
+			                            <button class="btn btn-primary pull-right marginDefault wrapTextBtn" id="AcceptThirdParty" style="width:100px">三方/轉接Accept</button>	
 		                        	</div>
 		                        </div>
 		                    </div>
@@ -203,7 +207,7 @@ hr {
 			                		<h4>comment:</h4>
 			                	</div>
 			                	<div class="col-xs-6 col-sm-6 col-md-6 col-lg-6">
-			                        <button id="" class="btn btn-primary btn-sm">離開房間</button>
+			                        <button id="" class="btn btn-primary">離開房間</button>
 			                	</div>	                	
 	                		</div>
 	                		<div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
@@ -211,7 +215,7 @@ hr {
 			                        <input type="text" id="" class="form-control" value="comment..." />
 			                	</div>
 			                	<div class="col-xs-6 col-sm-6 col-md-6 col-lg-6">
-			                        <button id="" class="btn btn-primary btn-sm">SEND</button>
+			                        <button id="" class="btn btn-primary">SEND</button>
 			                	</div>	                		                		
 	                		</div>
 	                	</div>
@@ -239,7 +243,7 @@ hr {
 										<input class="form-control" id="message">
 									</div>						
 									<div class="col-xs-2 col-sm-2 col-md-2 col-lg-2">
-										<button class="btn btn-primary btn-sm" id="sendToRoom" onclick="sendtoRoom();">SEND</button>
+										<button class="btn btn-primary" id="sendToRoom" onclick="sendtoRoom();">SEND</button>
 									</div>						
 								</div>								
 						</div>	 <!-- end of chatDialogue -->
@@ -248,8 +252,8 @@ hr {
 						
 		                <!-- 三方與轉接 -->
 						<div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
-							<button class="btn btn-primary btn-sm pull-right marginDefault" id="" style="width:100px">轉接邀請</button>
-							<button class="btn btn-primary btn-sm pull-right marginDefault" id="" style="width:100px">三方邀請</button>
+							<button class="btn btn-primary pull-right marginDefault" id="" style="width:100px">轉接邀請</button>
+							<button class="btn btn-primary pull-right marginDefault" id="" style="width:100px">三方邀請</button>
 						</div>
 						
 	                </div>
@@ -263,7 +267,7 @@ hr {
                 </div>
                 <div class="row col-xs-12 col-sm-12 col-md-12 col-lg-12 panel-body center">
 	                <div>
-	                    <button id="ClearLog" type="button" class="btn btn-sm btn-primary">Clear</button>
+	                    <button id="ClearLog" type="button" class="btn btn-primary">Clear</button>
 	                </div>
 	                <div>
 	                    <div id="ChatLog"></div>
@@ -291,7 +295,7 @@ hr {
 		                	<div class="col-xs-1 col-sm-1 col-md-1 col-lg-1 nopadding">
 		                	</div>
 		                	<div class="col-xs-2 col-sm-2 col-md-2 col-lg-2 nopadding">
-		                        <button id="" class="btn btn-primary btn-sm">SEND</button>
+		                        <button id="" class="btn btn-primary">SEND</button>
 		                	</div>	                		                		
                 		</div>	                		                	
 	                </div>

@@ -23,14 +23,6 @@ function onloadFunction(){
 	}
 }
 
-// refresh或關閉網頁時執行
-function checktoLeave() {
-	var UserID = document.getElementById('UserID').value;
-	event.returnValue = "確定要離開當前頁面嗎？";
-	LeaveType(UserID);
-	Logoutaction(UserID);
-	leaveRoom(UserID);
-}
 
 // 連上websocket
 function Login() {
@@ -165,7 +157,7 @@ function Login() {
 					layuiUse01(); // 先暫時這樣隔開,之後有需要細改再看此部分
 
 					// 取得狀態
-					getUserStatus();
+					getStatus();
 
 					document.getElementById("roomonline").disabled = false;
 					document.getElementById("ReleaseEvent").disabled = false;
@@ -384,6 +376,7 @@ function Logout() {
 	document.getElementById("online").disabled = true;
 }
 
+
 // 執行登出
 function Logoutaction(UserID) {
 	// 向websocket送出登出指令
@@ -401,49 +394,114 @@ function Logoutaction(UserID) {
 	ws.send(JSON.stringify(msg));
 }
 
-// 送出私訊
-function send(aSendto,aMessage) {
-	if (aSendto === undefined) aSendto = document.getElementById('sendto').value;
-	if (aMessage === undefined) aMessage = document.getElementById('message').value;
-	
+//refresh或關閉網頁時執行
+function checktoLeave() {
 	var UserID = document.getElementById('UserID').value;
-	// 向websocket送出私訊指令
+	event.returnValue = "確定要離開當前頁面嗎？";
+//	LeaveType(UserID);
+	Logoutaction(UserID);
+//	leaveRoom(UserID);
+}
+
+//Agent準備就緒
+function ready() {
+	var UserID = document.getElementById('UserID').value;
+	// 向websocket送出變更狀態至準備就緒指令
+	var myUpdateStatusJson = new updateStatusJson("Agent", UserID_g, UserName, "ready", "ready");
+	ws.send(JSON.stringify(myUpdateStatusJson));
+
+	// 取得狀態
+	getStatus();
+
+	document.getElementById("ready").disabled = true;
+	document.getElementById("notready").disabled = false;
+	document.getElementById("Clientonline").disabled = false;
+	document.getElementById("Agentonline").disabled = false;
+}
+
+function notready() {
+	// 更新狀態
+	updateStatus("not ready","no reason");
+	// 取得狀態
+	getStatus();
+	// 更新.jsp
+	document.getElementById("status").innerHTML = "狀態: not ready";
+	document.getElementById("ready").disabled = false;
+	document.getElementById("notready").disabled = true;
+}
+
+//同意與Client交談
+function AcceptEventInit() {
+	// 一次將Agent與Client加入到room中
+	var currClientID = document.getElementById("clientID").innerHTML;
+		// 在此使用新的方法,將一個list的成員都加入到同一群組中
+	var memberListToJoin = [];
+	var mem1 = new myRoomMemberJsonObj(currClientID);
+	var mem2 = new myRoomMemberJsonObj(UserID_g);
+	memberListToJoin.push(mem1);
+	memberListToJoin.push(mem2);
+	addRoomForMany("none", memberListToJoin);
+	
+	// 開啟ready功能:
+	document.getElementById("ready").disabled = false;
+	document.getElementById("notready").disabled = true;
+}
+
+// 拒絕交談
+function RejectEvent() {
+	var UserID = document.getElementById('UserID').value;
+	var Eventfrom = document.getElementById('Eventfrom').value;
+	// 向websocket送出拒絕交談指令
 	var now = new Date();
 	var msg = {
-		type : "message",
-		text : aMessage,
+		type : "RejectEvent",
+		ACtype : "Agent",
 		id : UserID,
 		UserName : UserName,
-		sendto : aSendto,
+		sendto : Eventfrom,
 		channel : "chat",
+		// Event: "RejectEvent",
 		date : now.getHours() + ":" + now.getMinutes() + ":" + now.getSeconds()
 	};
 	// 發送消息
 	ws.send(JSON.stringify(msg));
+
+	document.getElementById("AcceptEvent").disabled = true;
+	document.getElementById("RejectEvent").disabled = true;
 }
 
-function sendA2A(aSendto){
-	var msg = document.getElementById("chatAgentContent").value;
-	console.log("sendA2A() - msg: " + msg);
-	send(aSendto,msg);
+// 關閉交談
+function ReleaseEvent() {
+	// 切換為未就緒
+	// 更新狀態
+	updateStatus("not ready","no reason");
+	// 取得狀態
+	getStatus();
+	
+	// 將group移除layim列表
+	layui.use('layim', function(layim) {
+		layim.removeList({
+			type : 'group' // 或者group
+			,
+			id : RoomID
+		// 好友或者群组ID
+		});
+	});
+	
+	// 離開群組
+	leaveRoom(UserID); // 重點是這行
+	document.getElementById("ReleaseEvent").disabled = true;	
+	
+	// 更新.jsp
+	document.getElementById("status").innerHTML = "狀態: not ready";
+	document.getElementById("ready").disabled = false;
+	document.getElementById("notready").disabled = true;
+	document.getElementById("Clientonline").disabled = true;
+	document.getElementById("Agentonline").disabled = true;
+
 }
 
-
-// 查詢線上人數
-function online() {
-	// 向websocket送出查詢線上人數指令
-	var now = new Date();
-	var msg = {
-		type : "online",
-		UserName : UserName,
-		channel : "chat",
-		date : now.getHours() + ":" + now.getMinutes() + ":" + now.getSeconds()
-	};
-	// 發送消息
-	ws.send(JSON.stringify(msg));
-}
-
-// 加入群組
+//加入房間
 function addRoomForMany(aRoomID, aMemberListToJoin){
 	
 	//JSONObject jo = new JSONObject(aMemberListToJoin);
@@ -470,30 +528,8 @@ function addRoomForMany(aRoomID, aMemberListToJoin){
 	document.getElementById("roomonline").disabled = false;	
 }
 
-//function addRoom(aRoomID) {
-//	var UserID = document.getElementById('UserID').value;
-//	// 向websocket送出加入群組指令
-//	var now = new Date();
-//	var msg = {
-//		type : "addRoom",
-//		roomID : aRoomID,
-//		id : UserID,
-//		ACtype : "Agent",
-//		UserName : UserName,
-//		channel: "chat",
-//		date : now.getHours() + ":" + now.getMinutes() + ":" + now.getSeconds()
-//	};
-//
-//	// 發送消息
-//	ws.send(JSON.stringify(msg));
-//
-//	document.getElementById("groupstatus").innerHTML = "加入" + RoomID + "群組";
-//	document.getElementById("leaveRoom").disabled = false;
-//	document.getElementById("addRoom").disabled = true;
-//	document.getElementById("roomonline").disabled = false;
-//}
 
-// 離開群組
+// 離開房間
 function leaveRoom(UserID) {
 	// 向websocket送出離開群組指令
 	var now = new Date();
@@ -513,6 +549,37 @@ function leaveRoom(UserID) {
 	document.getElementById("leaveRoom").disabled = true;
 	document.getElementById("roomonline").disabled = true;
 }
+
+//送出私訊
+function send(aSendto,aMessage) {
+	if (aSendto === undefined) aSendto = document.getElementById('sendto').value;
+	if (aMessage === undefined) aMessage = document.getElementById('message').value;
+	
+	var UserID = document.getElementById('UserID').value;
+	// 向websocket送出私訊指令
+	var now = new Date();
+	var msg = {
+		type : "message",
+		text : aMessage,
+		id : UserID,
+		UserName : UserName,
+		sendto : aSendto,
+		channel : "chat",
+		date : now.getHours() + ":" + now.getMinutes() + ":" + now.getSeconds()
+	};
+	// 發送消息
+	ws.send(JSON.stringify(msg));
+}
+//送出私訊
+function sendA2A(aSendto){
+	var msg = document.getElementById("chatAgentContent").value;
+	console.log("sendA2A() - msg: " + msg);
+	send(aSendto,msg);
+}
+
+
+
+
 
 // 送出訊息至群組
 function sendtoRoom02(aRoomID, aMessage){
@@ -543,7 +610,128 @@ function sendtoRoom() {
 	sendtoRoom01(RoomID);
 }
 
-// 查詢群組線上人數
+
+
+
+
+
+
+// 取得Agent狀態
+function getStatus() {
+	// 向websocket送出取得Agent狀態指令
+	var UserID = document.getElementById("UserID").value;
+	var now = new Date();
+	var Eventmsg = {
+		type : "getUserStatus",
+		ACtype : "Agent",
+		id : UserID,
+		UserName : UserName,
+		channel : 'chat',
+		date : now.getHours() + ":" + now.getMinutes() + ":" + now.getSeconds()
+	};
+	// 發送消息
+	ws.send(JSON.stringify(Eventmsg));
+}
+
+function updateStatus(aStatus, aReason){
+	var UserID = document.getElementById('UserID').value;
+	// 向websocket送出變更狀態至未就緒指令
+	var now = new Date();
+	var updateAgentStatusmsg = {
+		type : "updateStatus",
+		ACtype : "Agent",
+		id : UserID,
+		UserName : UserName,
+		status : aStatus,
+		reason : aReason,
+		channel : "chat",
+		date : now.getHours() + ":" + now.getMinutes() + ":" + now.getSeconds()
+	};
+	// 發送消息
+	ws.send(JSON.stringify(updateAgentStatusmsg));
+}
+
+//邀請三方/轉接
+function inviteAgentThirdParty(aInviteType){
+	var myInvitedAgentID = document.getElementById("AgentID").value;
+//	var UserID = document.getElementById('UserID').value;
+	console.log("inviteAgentThirdParty() called - myInvitedAgentID: " + myInvitedAgentID);
+	
+	if (RoomID == null){
+		console.log("there is no roomID for this agent");
+		return;
+	}
+	console.log("inviteAgentThirdParty(): UserID_g: " + UserID_g);
+	
+	/**** 寄出邀請 *****/
+	var inviteAgent3waymsg = {
+			type : "inviteAgentThirdParty",
+			ACtype : "Agent",
+			roomID : RoomID, //先預設目前每個Agent最多也就只有一個RoomID,之後會再調整
+			fromAgentID : UserID_g, // 使用全域變數
+			invitedAgentID : myInvitedAgentID,
+			fromAgentName : UserName,
+			inviteType: aInviteType,
+			channel : "chat"
+		};
+		// 發送消息
+		ws.send(JSON.stringify(inviteAgent3waymsg));
+
+	/**** 建立私訊 *****/
+	document.getElementById("sendA2A").value = myInvitedAgentID;
+	document.getElementById("sendA2A").innerHTML += " to - " + myInvitedAgentID;	
+
+
+}
+
+//回應三方/轉接
+function responseThirdParty(aResponse){
+	console.log("aResponse: " + aResponse);
+	var roomID = document.getElementById("invitedRoomID").innerHTML;
+	var myfromAgentID = document.getElementById("fromAgentID").innerHTML;
+	var inviteType = document.getElementById("inviteType").innerHTML;
+	var responseThirdPartyMsg = {
+			type : "responseThirdParty",
+			ACtype : "Agent",
+			roomID : roomID, 
+			fromAgentID : myfromAgentID, 
+			invitedAgentID : UserID_g,
+			response: aResponse,
+			inviteType: inviteType,
+			channel : "chat"
+//			fromAgentName : UserName
+		};
+	// 發送消息
+	ws.send(JSON.stringify(responseThirdPartyMsg));	
+	
+}
+
+
+function RefreshRoomList(){
+	var msg = {
+		    type: "refreshRoomList",
+		    channel : "chat",	
+		  };
+	//發送消息 
+	ws.send(JSON.stringify(msg));	
+	
+}
+
+//查詢線上人數
+function online() {
+	// 向websocket送出查詢線上人數指令
+	var now = new Date();
+	var msg = {
+		type : "online",
+		UserName : UserName,
+		channel : "chat",
+		date : now.getHours() + ":" + now.getMinutes() + ":" + now.getSeconds()
+	};
+	// 發送消息
+	ws.send(JSON.stringify(msg));
+}
+
+//查詢群組線上人數
 function roomonline() {
 	// 向websocket送出查詢群組線上人數指令
 	var now = new Date();
@@ -559,21 +747,7 @@ function roomonline() {
 	ws.send(JSON.stringify(msg));
 }
 
-// Agent準備就緒
-function ready() {
-	var UserID = document.getElementById('UserID').value;
-	// 向websocket送出變更狀態至準備就緒指令
-	var myUpdateStatusJson = new updateStatusJson("Agent", UserID_g, UserName, "ready", "ready");
-	ws.send(JSON.stringify(myUpdateStatusJson));
 
-	// 取得狀態
-	getUserStatus();
-
-	document.getElementById("ready").disabled = true;
-	document.getElementById("notready").disabled = false;
-	document.getElementById("Clientonline").disabled = false;
-	document.getElementById("Agentonline").disabled = false;
-}
 
 // 查詢client線上人數
 function Clientonline() {
@@ -605,129 +779,6 @@ function Agentonline() {
 	ws.send(JSON.stringify(msg));
 }
 
-// 離開Agent列表
-function LeaveType(UserID) {
-	// 向websocket送出離開Agent列表指令
-	var now = new Date();
-	var Clientmsg = {
-		type : "typeout",
-		ACtype : "Agent",
-		id : UserID,
-		UserName : UserName,
-		channel : "chat",
-		date : now.getHours() + ":" + now.getMinutes() + ":" + now.getSeconds()
-	};
-
-	// 發送消息
-	ws.send(JSON.stringify(Clientmsg));
-}
-
-// 同意與Client交談
-function AcceptEventInit() {
-	// 一次將Agent與Client加入到room中
-	var currClientID = document.getElementById("clientID").innerHTML;
-		// 在此使用新的方法,將一個list的成員都加入到同一群組中
-	var memberListToJoin = [];
-	var mem1 = new myRoomMemberJsonObj(currClientID);
-	var mem2 = new myRoomMemberJsonObj(UserID_g);
-	memberListToJoin.push(mem1);
-	memberListToJoin.push(mem2);
-	addRoomForMany("none", memberListToJoin);
-	
-	// 開啟ready功能:
-	document.getElementById("ready").disabled = false;
-	document.getElementById("notready").disabled = true;
-}
-
-//function AcceptEventAction() {
-//	var UserID = document.getElementById('UserID').value;
-//	var Eventfrom = document.getElementById('Eventfrom').value;
-//	// 向websocket送出同意與Client交談指令
-//	var now = new Date();
-//	var msg = {
-//		type : "AcceptEvent",
-//		ACtype : "Agent",
-//		id : UserID,
-//		UserName : UserName,
-//		sendto : Eventfrom,
-//		roomID : RoomID,
-//		channel : "chat",
-//		date : now.getHours() + ":" + now.getMinutes() + ":" + now.getSeconds()
-//	};
-//	// 發送消息
-//	ws.send(JSON.stringify(msg));
-//}
-
-// 拒絕交談
-function RejectEvent() {
-	var UserID = document.getElementById('UserID').value;
-	var Eventfrom = document.getElementById('Eventfrom').value;
-	// 向websocket送出拒絕交談指令
-	var now = new Date();
-	var msg = {
-		type : "RejectEvent",
-		ACtype : "Agent",
-		id : UserID,
-		UserName : UserName,
-		sendto : Eventfrom,
-		channel : "chat",
-		// Event: "RejectEvent",
-		date : now.getHours() + ":" + now.getMinutes() + ":" + now.getSeconds()
-	};
-	// 發送消息
-	ws.send(JSON.stringify(msg));
-
-	document.getElementById("AcceptEvent").disabled = true;
-	document.getElementById("RejectEvent").disabled = true;
-}
-
-// 關閉交談
-function ReleaseEvent() {
-	// 切換為未就緒
-	// 更新狀態
-	updateStatus("not ready","no reason");
-	// 取得狀態
-	getUserStatus();
-	
-	// 將group移除layim列表
-	layui.use('layim', function(layim) {
-		layim.removeList({
-			type : 'group' // 或者group
-			,
-			id : RoomID
-		// 好友或者群组ID
-		});
-	});
-	
-	// 離開群組
-	leaveRoom(UserID); // 重點是這行
-	document.getElementById("ReleaseEvent").disabled = true;	
-	
-	// 更新.jsp
-	document.getElementById("status").innerHTML = "狀態: not ready";
-	document.getElementById("ready").disabled = false;
-	document.getElementById("notready").disabled = true;
-	document.getElementById("Clientonline").disabled = true;
-	document.getElementById("Agentonline").disabled = true;
-
-}
-
-// 取得Agent狀態
-function getUserStatus() {
-	// 向websocket送出取得Agent狀態指令
-	var UserID = document.getElementById("UserID").value;
-	var now = new Date();
-	var Eventmsg = {
-		type : "getUserStatus",
-		ACtype : "Agent",
-		id : UserID,
-		UserName : UserName,
-		channel : 'chat',
-		date : now.getHours() + ":" + now.getMinutes() + ":" + now.getSeconds()
-	};
-	// 發送消息
-	ws.send(JSON.stringify(Eventmsg));
-}
 
 // 傳送群組訊息至layim視窗上
 function sendtoRoomonlay(text) {
@@ -936,97 +987,7 @@ function layuiUse01() {
 					});
 }
 
-function updateStatus(aStatus, aReason){
-	var UserID = document.getElementById('UserID').value;
-	// 向websocket送出變更狀態至未就緒指令
-	var now = new Date();
-	var updateAgentStatusmsg = {
-		type : "updateStatus",
-		ACtype : "Agent",
-		id : UserID,
-		UserName : UserName,
-		status : aStatus,
-		reason : aReason,
-		channel : "chat",
-		date : now.getHours() + ":" + now.getMinutes() + ":" + now.getSeconds()
-	};
-	// 發送消息
-	ws.send(JSON.stringify(updateAgentStatusmsg));
-}
 
-function inviteAgentThirdParty(aInviteType){
-	var myInvitedAgentID = document.getElementById("AgentID").value;
-//	var UserID = document.getElementById('UserID').value;
-	console.log("inviteAgentThirdParty() called - myInvitedAgentID: " + myInvitedAgentID);
-	
-	if (RoomID == null){
-		console.log("there is no roomID for this agent");
-		return;
-	}
-	console.log("inviteAgentThirdParty(): UserID_g: " + UserID_g);
-	
-	/**** 寄出邀請 *****/
-	var inviteAgent3waymsg = {
-			type : "inviteAgentThirdParty",
-			ACtype : "Agent",
-			roomID : RoomID, //先預設目前每個Agent最多也就只有一個RoomID,之後會再調整
-			fromAgentID : UserID_g, // 使用全域變數
-			invitedAgentID : myInvitedAgentID,
-			fromAgentName : UserName,
-			inviteType: aInviteType,
-			channel : "chat"
-		};
-		// 發送消息
-		ws.send(JSON.stringify(inviteAgent3waymsg));
-
-	/**** 建立私訊 *****/
-	document.getElementById("sendA2A").value = myInvitedAgentID;
-	document.getElementById("sendA2A").innerHTML += " to - " + myInvitedAgentID;	
-
-
-}
-
-function responseThirdParty(aResponse){
-	console.log("aResponse: " + aResponse);
-	var roomID = document.getElementById("invitedRoomID").innerHTML;
-	var myfromAgentID = document.getElementById("fromAgentID").innerHTML;
-	var inviteType = document.getElementById("inviteType").innerHTML;
-	var responseThirdPartyMsg = {
-			type : "responseThirdParty",
-			ACtype : "Agent",
-			roomID : roomID, 
-			fromAgentID : myfromAgentID, 
-			invitedAgentID : UserID_g,
-			response: aResponse,
-			inviteType: inviteType,
-			channel : "chat"
-//			fromAgentName : UserName
-		};
-	// 發送消息
-	ws.send(JSON.stringify(responseThirdPartyMsg));	
-	
-}
-
-function notready() {
-	// 更新狀態
-	updateStatus("not ready","no reason");
-	// 取得狀態
-	getUserStatus();
-	// 更新.jsp
-	document.getElementById("status").innerHTML = "狀態: not ready";
-	document.getElementById("ready").disabled = false;
-	document.getElementById("notready").disabled = true;
-}
-
-function RefreshRoomList(){
-	var msg = {
-		    type: "refreshRoomList",
-		    channel : "chat",	
-		  };
-	//發送消息 
-	ws.send(JSON.stringify(msg));	
-	
-}
 
 // 測試按鈕
 function test() {
@@ -1038,3 +999,63 @@ function test() {
 	//發送消息 
 	ws.send(JSON.stringify(testmsg));
 }
+
+
+//function AcceptEventAction() {
+//var UserID = document.getElementById('UserID').value;
+//var Eventfrom = document.getElementById('Eventfrom').value;
+//// 向websocket送出同意與Client交談指令
+//var now = new Date();
+//var msg = {
+//	type : "AcceptEvent",
+//	ACtype : "Agent",
+//	id : UserID,
+//	UserName : UserName,
+//	sendto : Eventfrom,
+//	roomID : RoomID,
+//	channel : "chat",
+//	date : now.getHours() + ":" + now.getMinutes() + ":" + now.getSeconds()
+//};
+//// 發送消息
+//ws.send(JSON.stringify(msg));
+//}
+
+//離開Agent列表
+//function LeaveType(UserID) {
+//	// 向websocket送出離開Agent列表指令
+//	var now = new Date();
+//	var Clientmsg = {
+//		type : "typeout",
+//		ACtype : "Agent",
+//		id : UserID,
+//		UserName : UserName,
+//		channel : "chat",
+//		date : now.getHours() + ":" + now.getMinutes() + ":" + now.getSeconds()
+//	};
+//
+//	// 發送消息
+//	ws.send(JSON.stringify(Clientmsg));
+//}
+
+//function addRoom(aRoomID) {
+//var UserID = document.getElementById('UserID').value;
+//// 向websocket送出加入群組指令
+//var now = new Date();
+//var msg = {
+//	type : "addRoom",
+//	roomID : aRoomID,
+//	id : UserID,
+//	ACtype : "Agent",
+//	UserName : UserName,
+//	channel: "chat",
+//	date : now.getHours() + ":" + now.getMinutes() + ":" + now.getSeconds()
+//};
+//
+//// 發送消息
+//ws.send(JSON.stringify(msg));
+//
+//document.getElementById("groupstatus").innerHTML = "加入" + RoomID + "群組";
+//document.getElementById("leaveRoom").disabled = false;
+//document.getElementById("addRoom").disabled = true;
+//document.getElementById("roomonline").disabled = false;
+//}
