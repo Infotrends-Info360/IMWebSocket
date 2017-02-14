@@ -200,21 +200,38 @@ hr {
 						<ul class="dropdown-menu" role="menu" aria-labelledby="dropdownMenuDivider">
 						  <li role="presentation" class="divider"></li>
 						</ul>	   
-						<div class='col-xs-12 col-sm-12 col-md-12 col-lg-12'><hr></div>
+						<div class='col-xs-12 col-sm-12 col-md-12 col-lg-12'><hr></div> <!-- 分隔線 -->
+
 		                <!-- userdata -->
 	 	            	<div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
 	 	            		<h4>Userdata:</h4>
 							<div class="col-xs-12 col-sm-12 col-md-12 col-lg-12 panel panel-default center nopadding">
-								<div class="pre-scrollable col-xs-12 col-sm-12 col-md-12 col-lg-12 panel-body" style="height: 100px;">
+								<div class="pre-scrollable col-xs-12 col-sm-12 col-md-12 col-lg-12 panel-body" style="height: 80px;">
 									some log ... <br> some log ... <br> some log ... <br> some log ... <br> some log ... <br>
 								</div>
 							</div>
 	 	            	</div>
-	                	
+						<div class='col-xs-12 col-sm-12 col-md-12 col-lg-12'><hr></div> <!-- 分隔線 -->	                	
 		                
 		                <!-- chatDialogue: content, msg, send-->
-	
-		                <!-- 三方與轉接 -->	                	
+						<div class="col-xs-12 col-sm-12 col-md-12 col-lg-12" id="chatDialogue">
+							<h4>ChatDialogue:</h4>
+								<div class="pre-scrollable col-xs-12 col-sm-12 col-md-12 col-lg-12 panel panel-default" style="height: 80px;" id="">
+									someone says .... <br>	someone says .... <br>	someone says .... <br>	someone says .... <br>	someone says .... <br>
+								</div>
+								<div class="col-xs-12 col-sm-12 col-md-12 col-lg-12 nopadding">
+									<div class="col-xs-10 col-sm-10 col-md-10 col-lg-10 nopadding">
+										<input class="form-control" id="message">
+									</div>						
+									<div class="col-xs-2 col-sm-2 col-md-2 col-lg-2">
+										<button class="btn btn-primary btn-sm" id="sendToRoom" onclick="sendtoRoom();">SEND</button>
+									</div>						
+								</div>								
+						</div>	 <!-- end of chatDialogue -->
+						<!-- here -->
+		                <!-- 三方與轉接 -->
+		                
+		                	                	
 	                </div>
 				</div><!-- end of RoomInfo -->
             		
