@@ -51,7 +51,7 @@ WEB_SOCKET_SWF_LOCATION = "WebSocketMain.swf";
 
 .nopadding {
    padding: 0 !important;
-   margin: 0 !important;
+/*    margin: 0 !important; */
 }
 
 .nomargin {
@@ -72,6 +72,21 @@ hr {
   height: 1px;
 }
 
+<!-- add space vertically -->
+.spacer5 { height: 5px; width: 100%; font-size: 0; margin: 0; padding: 0; border: 0; display: block; }
+.spacer10 { height: 10px; width: 100%; font-size: 0; margin: 0; padding: 0; border: 0; display: block; }
+.spacer15 { height: 15px; width: 100%; font-size: 0; margin: 0; padding: 0; border: 0; display: block; }
+.spacer20 { height: 20px; width: 100%; font-size: 0; margin: 0; padding: 0; border: 0; display: block; }
+.spacer25 { height: 25px; width: 100%; font-size: 0; margin: 0; padding: 0; border: 0; display: block; }
+.spacer30 { height: 30px; width: 100%; font-size: 0; margin: 0; padding: 0; border: 0; display: block; }
+.spacer35 { height: 35px; width: 100%; font-size: 0; margin: 0; padding: 0; border: 0; display: block; }
+.spacer40 { height: 40px; width: 100%; font-size: 0; margin: 0; padding: 0; border: 0; display: block; }
+.spacer45 { height: 45px; width: 100%; font-size: 0; margin: 0; padding: 0; border: 0; display: block; }
+.spacer50 { height: 50px; width: 100%; font-size: 0; margin: 0; padding: 0; border: 0; display: block; }
+.spacer100 { height: 100px; width: 100%; font-size: 0; margin: 0; padding: 0; border: 0; display: block; }
+.spacer200 { height: 200px; width: 100%; font-size: 0; margin: 0; padding: 0; border: 0; display: block; }
+
+
 </style>
 </head>
 <body>
@@ -88,20 +103,23 @@ hr {
             <div class="col-xs-2 col-sm-2 col-md-2 col-lg-2">
             </div>
             <div class="col-xs-4 col-sm-4 col-md-4 col-lg-4">
-                <div>
-                	<div id="ReadyDiv">
+                <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+                	<div class="col-xs-4 col-sm-4 col-md-4 col-lg-4">
                 		<button id="AgentReady" class="btn btn-primary btn-sm marginBottom" style="width:100px">Ready</button>
-                	</div>
-                    <div id="NotReadyDiv">
+                	</div>	                	
+                </div>	
+                <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+                	<div class="col-xs-6 col-sm-6 col-md-6 col-lg-6">
                         <button id="AgentNotReady" class="btn btn-primary btn-sm" style="width:100px">Not Ready</button>
-                        <label>Reason: </label>
-                        <select id="reason">
-                            <option value="" selected="selected"></option>
-                            <option value="WC">WC</option>
-                            <option value="Business">Business</option>
-                            <option value="Meeting">Meeting</option>
+                	</div>
+                	<div class="col-xs-6 col-sm-6 col-md-6 col-lg-6">
+                        <select id="reason" class="form-control">
+                            <option value="reason01">reason01</option>
+                            <option value="reason02">reason02</option>
+                            <option value="reason03">reason03</option>
                         </select>
-                    </div>
+                	</div>
+                       
                 </div>
             </div>
         </div>
@@ -173,7 +191,7 @@ hr {
 	                	<!-- room list & comment -->
 	                	<div class="col-xs-6 col-sm-6 col-md-6 col-lg-6">
 	                	<h4>room list:</h4>
-                        <select id="ServerUrl" class="form-control">
+                        <select id="roomList" class="form-control">
                             <option value="roomID01">roomID01</option>
                             <option value="roomID02">roomID02</option>
                             <option value="roomID03">roomID03</option>
@@ -197,9 +215,6 @@ hr {
 			                	</div>	                		                		
 	                		</div>
 	                	</div>
-						<ul class="dropdown-menu" role="menu" aria-labelledby="dropdownMenuDivider">
-						  <li role="presentation" class="divider"></li>
-						</ul>	   
 						<div class='col-xs-12 col-sm-12 col-md-12 col-lg-12'><hr></div> <!-- 分隔線 -->
 
 		                <!-- userdata -->
@@ -228,88 +243,64 @@ hr {
 									</div>						
 								</div>								
 						</div>	 <!-- end of chatDialogue -->
-						<!-- here -->
+						<div class='col-xs-12 col-sm-12 col-md-12 col-lg-12'><hr></div> <!-- 分隔線 -->						
+						
+						
 		                <!-- 三方與轉接 -->
-		                
-		                	                	
+						<div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+							<button class="btn btn-primary btn-sm pull-right marginDefault" id="" style="width:100px">轉接邀請</button>
+							<button class="btn btn-primary btn-sm pull-right marginDefault" id="" style="width:100px">三方邀請</button>
+						</div>
+						
 	                </div>
 				</div><!-- end of RoomInfo -->
-            		
-<!--                 <div class="row"> -->
-<!--                     <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12"> -->
-<!--                         <div class="form-group"> -->
-<!--                         	<div class="col-xs-6 col-sm-6 col-md-6 col-lg-6"> -->
-<!--         	                    <button class="btn btn-primary btn-sm pull-left marginDefault" id="Accept" style="width:100px">Accept</button> -->
-<!--             	                <button class="btn btn-primary btn-sm pull-left marginDefault" id="Reject" style="width:100px">Reject</button> -->
-<!--                         	</div> -->
-<!--                         	<div class="col-xs-6 col-sm-6 col-md-6 col-lg-6"> -->
-<!-- 	                            <button class="btn btn-primary btn-sm pull-right marginDefault" id="AcceptThirdParty" style="width:100px">三方轉接Accept</button>	 -->
-<!--     	                        <button class="btn btn-primary btn-sm pull-right marginDefault" id="RejectThirdParty" style="width:100px">三方轉接Reject</button>                        	 -->
-<!--                         	</div> -->
-<!--                         </div> -->
-<!--                     </div> -->
-<!--                 </div> -->
-                <div class="row">
-                    <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
-                        <div class="form-group">
-                            Message:&nbsp;&nbsp;<input type="text" id="Message" style="width:440px" />
-                            <button class="btn btn-primary btn-sm" id="SendMessage" style="width:100px">Send Message</button>
-                        </div>
-                    </div>
+            </div><!-- end of 中間區塊 -->
+            <!-- 右方區塊 --> <!-- here -->
+<!--             <div class="col-xs-4 col-sm-4 col-md-4 col-lg-4" > -->
+           	<div class="col-xs-4 col-sm-4 col-md-4 col-lg-4 panel panel-default center nopadding">
+                <div class="row col-xs-12 col-sm-12 col-md-12 col-lg-12 panel-heading center">
+                    <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12" style="padding-left: 10px;">Event: </div>
                 </div>
-                <div class="row">
-                    <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
-                        <div class="form-group">
-                            Agent Id:&nbsp;&nbsp;<input type="text" id="TargetAgentId" style="width:100px" />
-                            Mode:
-                            <select id="VisibilityMode">
-                                <option value="1" selected="selected">Conference</option>
-                                <option value="2">Monitor</option>
-                                <option value="3">Coach</option>
-                            </select>
-                            <button class="btn btn-primary btn-sm" id="Conference" style="width:100px">Conference</button>
-                            <button class="btn btn-primary btn-sm" id="Transfer" style="width:100px">Transfer</button>
-                            <!--<button class="btn btn-primary btn-sm" id="Done" style="width:120px">Stop Processing</button>-->
-                        </div>
-                    </div>
-                </div>
-                <!--<div class="row">
-                    <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
-                        <div class="form-group">
-                            <button class="btn btn-primary btn-sm" id="SendPausedTypingNotice" style="width:200px">Send Paused Typing Notice</button>
-                            <button class="btn btn-primary btn-sm" id="SendTypingNotice" style="width:200px">Send Typing Notice</button>
-                        </div>
-                    </div>
-                </div>-->
-                <div class="row">
-                    <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
-                        <div class="form-group">
-                            <labe>User Data:</labe>
-                            <textarea style="width:100%" id="UserData" class="form-control" rows="3"></textarea>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="row">
-                    <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
-                        <div class="form-group">
-                            <labe>Chat Dialog:</labe>
-                            <div id="ChatDialog" class="form-control"></div>
-                        </div>
-                    </div>
-                </div>
+                <div class="row col-xs-12 col-sm-12 col-md-12 col-lg-12 panel-body center">
+	                <div>
+	                    <button id="ClearLog" type="button" class="btn btn-sm btn-primary">Clear</button>
+	                </div>
+	                <div>
+	                    <div id="ChatLog"></div>
+	                </div>
+				</div>            
+                
+                <!-- 私訊 -->
+            	<div class="col-xs-12 col-sm-12 col-md-12 col-lg-12 panel panel-default center nopadding">
+	                <div class="row col-xs-12 col-sm-12 col-md-12 col-lg-12 panel-heading center">
+	                    <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12" style="padding-left: 10px;">私訊: </div>
+	                </div>
+	                <div class="row col-xs-12 col-sm-12 col-md-12 col-lg-12 panel-body center">
+	                	<div class="col-xs-12 col-sm-12 col-md-12 col-lg-12 ">
+	                        <select id="agentList" class="form-control">
+	                            <option value="agent01">agent01</option>
+	                            <option value="agent02">agent02</option>
+	                            <option value="agent03">agent03</option>
+	                        </select>
+	                	</div>
+		                <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12 spacer10"></div>
+                		<div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+		                	<div class="col-xs-9 col-sm-9 col-md-9 col-lg-9 nopadding">
+		                        <input type="text" id="" class="form-control" value="comment..."/>
+		                	</div>
+		                	<div class="col-xs-1 col-sm-1 col-md-1 col-lg-1 nopadding">
+		                	</div>
+		                	<div class="col-xs-2 col-sm-2 col-md-2 col-lg-2 nopadding">
+		                        <button id="" class="btn btn-primary btn-sm">SEND</button>
+		                	</div>	                		                		
+                		</div>	                		                	
+	                </div>
+                
+                
+                
+                
             </div>
-            <!-- 右方區塊 -->
-            <div class="col-xs-4 col-sm-4 col-md-4 col-lg-4" style="border-left: 1px solid #000000;">
-                <div>
-                    <label>Event :</label>&nbsp;&nbsp;&nbsp;&nbsp;<button id="ClearLog" type="button" class="btn btn-sm btn-primary">Clear</button>
-                </div>
-                <div>
-                    <div id="ChatLog"></div>
-                </div>
-            </div>
-            
-        </div>
+        </div><!-- end of 右方區塊 -->
     </div>
 
 

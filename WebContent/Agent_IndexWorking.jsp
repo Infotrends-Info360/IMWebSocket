@@ -2,8 +2,6 @@
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
 <title></title>
-<link href="Content/bootstrap.css" rel="stylesheet" />
-<link href="Content/bootstrap-theme.css" rel="stylesheet" />
 <!-- bootstrap v3.3.6 -->
 <script src="js/jquery.min.js"></script>
 <link href="boostrap/bootstrap.css" rel="stylesheet" />
@@ -221,360 +219,360 @@ div class ="container"> <h2>Form control: textarea </h2> <p>The form below conta
 				});
 
 		/* ------------- SignalR Hub Functions --------------------------- */
-		var hub = $.connection.voiceHub; // 指定 signalR server 的 hub class
-		var IsManualStop = false; // 是否每隔5秒自動連接
-		var IsStartComplete = false; // $.connection.hub.start() 動作是否完成
-		var StartResult = false; // $.connection.hub.start() 結果(true:成功, false:失敗)
-		var ConnectApiServerResult = false; // $.connection.hub.start() 結果(true:成功, false:失敗)
-		$.connection.hub.logging = true; // 是否要顯示 signalR 事件在 browser's console 上
-		$.connection.hub.stateChanged(connectionStateChanged); // 設定 signalR connection 的狀態監控事件
+// 		var hub = $.connection.voiceHub; // 指定 signalR server 的 hub class
+// 		var IsManualStop = false; // 是否每隔5秒自動連接
+// 		var IsStartComplete = false; // $.connection.hub.start() 動作是否完成
+// 		var StartResult = false; // $.connection.hub.start() 結果(true:成功, false:失敗)
+// 		var ConnectApiServerResult = false; // $.connection.hub.start() 結果(true:成功, false:失敗)
+// 		$.connection.hub.logging = true; // 是否要顯示 signalR 事件在 browser's console 上
+// 		$.connection.hub.stateChanged(connectionStateChanged); // 設定 signalR connection 的狀態監控事件
 
-		// set timeout 120 seconds
-		var t = new Date();
-		t.setSeconds(t.getSeconds() + 120);
-		$.connection.DeadlockErrorTimeout = t;
+// 		// set timeout 120 seconds
+// 		var t = new Date();
+// 		t.setSeconds(t.getSeconds() + 120);
+// 		$.connection.DeadlockErrorTimeout = t;
 
-		var CheckApiServer = true; // Login時是否檢查 API Server
-		var CurrentSignalR_Server_Url = ""; // 目前的 signalR server URL
+// 		var CheckApiServer = true; // Login時是否檢查 API Server
+// 		var CurrentSignalR_Server_Url = ""; // 目前的 signalR server URL
 
-		// signalR connection 的狀態監控事件
-		function connectionStateChanged(state) {
-			// 0: 'connecting', 1: 'connected', 2: 'reconnecting', 4: 'disconnected'
-			hubState = state.newState;
-			console.log('*** Hub State is changed to ' + hubState)
-		}
+// 		// signalR connection 的狀態監控事件
+// 		function connectionStateChanged(state) {
+// 			// 0: 'connecting', 1: 'connected', 2: 'reconnecting', 4: 'disconnected'
+// 			hubState = state.newState;
+// 			console.log('*** Hub State is changed to ' + hubState)
+// 		}
 
-		// 設定 signalR 錯誤事件記錄
-		$.connection.hub.error(function(error) {
-			console.log('*** SignalR error: ' + error)
-		});
+// 		// 設定 signalR 錯誤事件記錄
+// 		$.connection.hub.error(function(error) {
+// 			console.log('*** SignalR error: ' + error)
+// 		});
 
-		// 連接 signalR server
-		function StartSignalR(SignalR_Server_Url, SignalR_Server_Name,
-				autoLogin) {
-			// 若已連接 signalR server，則退出
-			if (hubState == 1) {
-				$("#LoginFrame")[0].contentWindow.addSimpleLog('Reconnect '
-						+ SignalR_Server_Url + '.');
-				$.connection.hub.stop();
-				//return;
-			}
+// 		// 連接 signalR server
+// 		function StartSignalR(SignalR_Server_Url, SignalR_Server_Name,
+// 				autoLogin) {
+// 			// 若已連接 signalR server，則退出
+// 			if (hubState == 1) {
+// 				$("#LoginFrame")[0].contentWindow.addSimpleLog('Reconnect '
+// 						+ SignalR_Server_Url + '.');
+// 				$.connection.hub.stop();
+// 				//return;
+// 			}
 
-			$.connection.hub.url = SignalR_Server_Url;
-			$.connection.hub
-					.start()
-					.done(
-							function() {
-								CurrentSignalR_Server_Url = $.connection.hub.url;
-								IsManualStop = false; // 避免每隔5秒自動連接
-								$("#LoginFrame")[0].contentWindow
-										.addSimpleLog('Connect '
-												+ SignalR_Server_Name
-												+ ' OK !!');
-								StartResult = true; // 成功
-								IsStartComplete = true; // 已完成
-								console.log("*** Hub started !!")
-								// 啟動 login
-								if (autoLogin) {
-									console.log("*** Auto Login !!")
-									CheckApiServer = false;
-									$("#LoginFrame")[0].contentWindow.Login();
-								}
-							})
-					.fail(
-							function(error) { // 連接失敗
-								IsManualStop = false;
-								$("#LoginFrame")[0].contentWindow
-										.addSimpleLog('Connect '
-												+ SignalR_Server_Name
-												+ ' failed. Please check Server Url and Server Status.');
-								StartResult = false;
-								IsStartComplete = true;
-								sleep(5000);
-								//SignalR_Server_Url = $("#LoginFrame")[0].contentWindow.getNextServerUrl();
-								//if (SignalR_Server_Url != null && SignalR_Server_Url != "") 
-								//    StartSignalR(SignalR_Server_Url, $("#LoginFrame")[0].contentWindow.getNextServerName());
-							});
-		}
+// 			$.connection.hub.url = SignalR_Server_Url;
+// 			$.connection.hub
+// 					.start()
+// 					.done(
+// 							function() {
+// 								CurrentSignalR_Server_Url = $.connection.hub.url;
+// 								IsManualStop = false; // 避免每隔5秒自動連接
+// 								$("#LoginFrame")[0].contentWindow
+// 										.addSimpleLog('Connect '
+// 												+ SignalR_Server_Name
+// 												+ ' OK !!');
+// 								StartResult = true; // 成功
+// 								IsStartComplete = true; // 已完成
+// 								console.log("*** Hub started !!")
+// 								// 啟動 login
+// 								if (autoLogin) {
+// 									console.log("*** Auto Login !!")
+// 									CheckApiServer = false;
+// 									$("#LoginFrame")[0].contentWindow.Login();
+// 								}
+// 							})
+// 					.fail(
+// 							function(error) { // 連接失敗
+// 								IsManualStop = false;
+// 								$("#LoginFrame")[0].contentWindow
+// 										.addSimpleLog('Connect '
+// 												+ SignalR_Server_Name
+// 												+ ' failed. Please check Server Url and Server Status.');
+// 								StartResult = false;
+// 								IsStartComplete = true;
+// 								sleep(5000);
+// 								//SignalR_Server_Url = $("#LoginFrame")[0].contentWindow.getNextServerUrl();
+// 								//if (SignalR_Server_Url != null && SignalR_Server_Url != "") 
+// 								//    StartSignalR(SignalR_Server_Url, $("#LoginFrame")[0].contentWindow.getNextServerName());
+// 							});
+// 		}
 
-		// 切斷 SignalR 連接
-		function StopSignalR() {
-			// michael 20161021 move addSimpleLog from last line to first line, to show message FIRST 
-			$("#LoginFrame")[0].contentWindow
-					.addSimpleLog("Application Server Connection is closed !!");
-			IsManualStop = true;
-			$.connection.hub.stop();
-		}
+// 		// 切斷 SignalR 連接
+// 		function StopSignalR() {
+// 			// michael 20161021 move addSimpleLog from last line to first line, to show message FIRST 
+// 			$("#LoginFrame")[0].contentWindow
+// 					.addSimpleLog("Application Server Connection is closed !!");
+// 			IsManualStop = true;
+// 			$.connection.hub.stop();
+// 		}
 
-		// 斷線處理
-		$.connection.hub
-				.disconnected(function() {
-					// 斷線時將通話中的資訊回存Server
-					$("#VoiceFrame")[0].contentWindow
-							.SaveNormalCall(CurrentSignalR_Server_Url
-									.toLowerCase().replace("/signalr", "")
-									+ '/Home/SaveUnabnormalCall');
-					$("#VoiceFrame")[0].contentWindow
-							.SaveTransferCall(CurrentSignalR_Server_Url
-									.toLowerCase().replace("/signalr", "")
-									+ '/Home/SaveUnabnormalCall');
+// 		// 斷線處理
+// 		$.connection.hub
+// 				.disconnected(function() {
+// 					// 斷線時將通話中的資訊回存Server
+// 					$("#VoiceFrame")[0].contentWindow
+// 							.SaveNormalCall(CurrentSignalR_Server_Url
+// 									.toLowerCase().replace("/signalr", "")
+// 									+ '/Home/SaveUnabnormalCall');
+// 					$("#VoiceFrame")[0].contentWindow
+// 							.SaveTransferCall(CurrentSignalR_Server_Url
+// 									.toLowerCase().replace("/signalr", "")
+// 									+ '/Home/SaveUnabnormalCall');
 
-					if (!IsManualStop) {
-						$("#LoginFrame")[0].contentWindow
-								.addSimpleLog("Application Server 已斷線, 隔5秒後自動重新連接 !!");
-					}
-					// 每隔5秒自動連接
-					setTimeout(
-							function() {
-								if (!IsManualStop && hubState == 4) { // 非人工強制切斷，且目前為斷線
-									// 重新連接
-									var SignalR_Server_Url = $("#LoginFrame")[0].contentWindow
-											.getNextServerUrl();
-									if (SignalR_Server_Url != null
-											&& SignalR_Server_Url != "") {
-										$("#LoginFrame")[0].contentWindow
-												.addSimpleLog($("#LoginFrame")[0].contentWindow
-														.getNextServerName()
-														+ " 重新連接中 ...");
-										StartSignalR(
-												SignalR_Server_Url,
-												$("#LoginFrame")[0].contentWindow
-														.getNextServerName(),
-												true);
-									} else { // 由第一個 application 連接
-										$("#LoginFrame")[0].contentWindow
-												.ResetServerNo();
-										$("#LoginFrame")[0].contentWindow
-												.addSimpleLog($("#LoginFrame")[0].contentWindow
-														.getNextServerName()
-														+ " 重新連接中 ...");
-									}
-									//IsManualStop = true;
-								}
-							}, 5000); // Restart connection after 5 seconds.
-				});
+// 					if (!IsManualStop) {
+// 						$("#LoginFrame")[0].contentWindow
+// 								.addSimpleLog("Application Server 已斷線, 隔5秒後自動重新連接 !!");
+// 					}
+// 					// 每隔5秒自動連接
+// 					setTimeout(
+// 							function() {
+// 								if (!IsManualStop && hubState == 4) { // 非人工強制切斷，且目前為斷線
+// 									// 重新連接
+// 									var SignalR_Server_Url = $("#LoginFrame")[0].contentWindow
+// 											.getNextServerUrl();
+// 									if (SignalR_Server_Url != null
+// 											&& SignalR_Server_Url != "") {
+// 										$("#LoginFrame")[0].contentWindow
+// 												.addSimpleLog($("#LoginFrame")[0].contentWindow
+// 														.getNextServerName()
+// 														+ " 重新連接中 ...");
+// 										StartSignalR(
+// 												SignalR_Server_Url,
+// 												$("#LoginFrame")[0].contentWindow
+// 														.getNextServerName(),
+// 												true);
+// 									} else { // 由第一個 application 連接
+// 										$("#LoginFrame")[0].contentWindow
+// 												.ResetServerNo();
+// 										$("#LoginFrame")[0].contentWindow
+// 												.addSimpleLog($("#LoginFrame")[0].contentWindow
+// 														.getNextServerName()
+// 														+ " 重新連接中 ...");
+// 									}
+// 									//IsManualStop = true;
+// 								}
+// 							}, 5000); // Restart connection after 5 seconds.
+// 				});
 
-		// sleep n 毫秒
-		function sleep(milliseconds) {
-			var start = new Date().getTime();
-			for (var i = 0; i < 1e7; i++) {
-				if ((new Date().getTime() - start) > milliseconds) {
-					break;
-				}
-			}
-		}
+// 		// sleep n 毫秒
+// 		function sleep(milliseconds) {
+// 			var start = new Date().getTime();
+// 			for (var i = 0; i < 1e7; i++) {
+// 				if ((new Date().getTime() - start) > milliseconds) {
+// 					break;
+// 				}
+// 			}
+// 		}
 
-		$(document)
-				.ready(
-						function() {
-							/*************************** hub.client. 定義 SignalR Server 呼叫的事件 **************/
-							// signalR action 的執行結果接收事件
-							hub.client.addSimpleLog = function(MediaType,
-									Result, Message) {
-								ConnectApiServerResult = Result;
-								$("#" + MediaType + "Frame")[0].contentWindow
-										.addSimpleLog(Message);
-							}
+// 		$(document)
+// 				.ready(
+// 						function() {
+// 							/*************************** hub.client. 定義 SignalR Server 呼叫的事件 **************/
+// 							// signalR action 的執行結果接收事件
+// 							hub.client.addSimpleLog = function(MediaType,
+// 									Result, Message) {
+// 								ConnectApiServerResult = Result;
+// 								$("#" + MediaType + "Frame")[0].contentWindow
+// 										.addSimpleLog(Message);
+// 							}
 
-							// signalR action 的執行結果接收事件
-							hub.client.addLog = function(CommandObject,
-									ShowDetailMessage) {
-								if (CommandObject.Action == "CheckApiServerOK") {
-									ConnectApiServerResult = (CommandObject.Result == "");
-								}
+// 							// signalR action 的執行結果接收事件
+// 							hub.client.addLog = function(CommandObject,
+// 									ShowDetailMessage) {
+// 								if (CommandObject.Action == "CheckApiServerOK") {
+// 									ConnectApiServerResult = (CommandObject.Result == "");
+// 								}
 
-								// login or logout，MediaType改為login，將結果記錄在login frame內
-								if (CommandObject.Action == "Login"
-										|| CommandObject.Action == "Logout") {
-									//CommandObject.EventName = CommandObject.EventName + (CommandObject.MediaType == "Login" ? "" : "(" + CommandObject.MediaType + ")");
-									if (CommandObject.EventName.indexOf("("
-											+ CommandObject.MediaType + ")") < 0)
-										CommandObject.EventName = CommandObject.EventName
-												+ "("
-												+ CommandObject.MediaType
-												+ ")";
-									$("#LoginFrame")[0].contentWindow
-											.addLog(CommandObject);
-								} else
-									// 依 MediaType 值，將執行結果顯示在對應的 frame 內 
-									$("#" + CommandObject.MediaType + "Frame")[0].contentWindow
-											.addLog(CommandObject);
+// 								// login or logout，MediaType改為login，將結果記錄在login frame內
+// 								if (CommandObject.Action == "Login"
+// 										|| CommandObject.Action == "Logout") {
+// 									//CommandObject.EventName = CommandObject.EventName + (CommandObject.MediaType == "Login" ? "" : "(" + CommandObject.MediaType + ")");
+// 									if (CommandObject.EventName.indexOf("("
+// 											+ CommandObject.MediaType + ")") < 0)
+// 										CommandObject.EventName = CommandObject.EventName
+// 												+ "("
+// 												+ CommandObject.MediaType
+// 												+ ")";
+// 									$("#LoginFrame")[0].contentWindow
+// 											.addLog(CommandObject);
+// 								} else
+// 									// 依 MediaType 值，將執行結果顯示在對應的 frame 內 
+// 									$("#" + CommandObject.MediaType + "Frame")[0].contentWindow
+// 											.addLog(CommandObject);
 
-								if (CommandObject.Action == "Login") {
-									IsLoggedin = true;
-									//$("#VoiceFrame")[0].contentWindow.setLogin();
-									//DN = CommandObject.DN;
-								} else if (CommandObject.Action == "Logout") {
-									IsLoggedin = false;
-									//$("#VoiceFrame")[0].contentWindow.setLogout();
-									//DN = "";
-								}
-							};
+// 								if (CommandObject.Action == "Login") {
+// 									IsLoggedin = true;
+// 									//$("#VoiceFrame")[0].contentWindow.setLogin();
+// 									//DN = CommandObject.DN;
+// 								} else if (CommandObject.Action == "Logout") {
+// 									IsLoggedin = false;
+// 									//$("#VoiceFrame")[0].contentWindow.setLogout();
+// 									//DN = "";
+// 								}
+// 							};
 
-							//hub.client.addLog = function (MediaType, AgentId, Event, DN, ReferenceId, message) {
-							//    $("#" + MediaType + "Frame")[0].contentWindow.addLog(AgentId, Event, DN, ReferenceId, message);
-							//    if (Event == "Login") {
-							//        IsLoggedin = true;
-							//        $("#VoiceFrame")[0].contentWindow.setLogin();
-							//    } else if (Event == "Logout") {
-							//        IsLoggedin = false;
-							//        $("#VoiceFrame")[0].contentWindow.setLogout();
-							//    }
-							//};
+// 							//hub.client.addLog = function (MediaType, AgentId, Event, DN, ReferenceId, message) {
+// 							//    $("#" + MediaType + "Frame")[0].contentWindow.addLog(AgentId, Event, DN, ReferenceId, message);
+// 							//    if (Event == "Login") {
+// 							//        IsLoggedin = true;
+// 							//        $("#VoiceFrame")[0].contentWindow.setLogin();
+// 							//    } else if (Event == "Logout") {
+// 							//        IsLoggedin = false;
+// 							//        $("#VoiceFrame")[0].contentWindow.setLogout();
+// 							//    }
+// 							//};
 
-							// 依 MediaType 值，將交談內容顯示在對應的 frame 內 
-							hub.client.addDialog = function(CommandObject) {
-								$("#" + CommandObject.MediaType + "Frame")[0].contentWindow
-										.addDialog(CommandObject);
-							};
+// 							// 依 MediaType 值，將交談內容顯示在對應的 frame 內 
+// 							hub.client.addDialog = function(CommandObject) {
+// 								$("#" + CommandObject.MediaType + "Frame")[0].contentWindow
+// 										.addDialog(CommandObject);
+// 							};
 
-							// 增加一個連線(Interaction)
-							hub.client.addInteraction = function(CommandObject) {
-								$("#" + CommandObject.MediaType + "Frame")[0].contentWindow
-										.addInteraction(CommandObject);
-							};
+// 							// 增加一個連線(Interaction)
+// 							hub.client.addInteraction = function(CommandObject) {
+// 								$("#" + CommandObject.MediaType + "Frame")[0].contentWindow
+// 										.addInteraction(CommandObject);
+// 							};
 
-							// 刪除一個連線(Interaction)
-							hub.client.removeInteraction = function(
-									CommandObject) {
-								$("#" + CommandObject.MediaType + "Frame")[0].contentWindow
-										.removeInteraction(CommandObject);
-							};
+// 							// 刪除一個連線(Interaction)
+// 							hub.client.removeInteraction = function(
+// 									CommandObject) {
+// 								$("#" + CommandObject.MediaType + "Frame")[0].contentWindow
+// 										.removeInteraction(CommandObject);
+// 							};
 
-							// 一般action指令執行錯誤的處理
-							hub.client.errorHandler = function(CommandObject) {
-								if (CommandObject.Action == "Login"
-										|| CommandObject.Action == "Logout") {
-									$("#LoginFrame")[0].contentWindow
-											.errorHandler(CommandObject);
-								} else
-									// 依 MediaType 值，將執行結果顯示在對應的 frame 內 
-									$("#" + CommandObject.MediaType + "Frame")[0].contentWindow
-											.errorHandler(CommandObject);
-							};
+// 							// 一般action指令執行錯誤的處理
+// 							hub.client.errorHandler = function(CommandObject) {
+// 								if (CommandObject.Action == "Login"
+// 										|| CommandObject.Action == "Logout") {
+// 									$("#LoginFrame")[0].contentWindow
+// 											.errorHandler(CommandObject);
+// 								} else
+// 									// 依 MediaType 值，將執行結果顯示在對應的 frame 內 
+// 									$("#" + CommandObject.MediaType + "Frame")[0].contentWindow
+// 											.errorHandler(CommandObject);
+// 							};
 
-							// Voice action指令執行錯誤的處理
-							hub.client.eventHandler_Voice = function(
-									CommandObject, ShowDetailMessage) {
-								if (CommandObject.Action == "Login"
-										|| CommandObject.Action == "Logout") {
-									$("#LoginFrame")[0].contentWindow
-											.addLog(CommandObject);
-								} else
-									// 依 MediaType 值，將執行結果顯示在對應的 frame 內 
-									$("#VoiceFrame")[0].contentWindow
-											.eventHandler_Voice(CommandObject,
-													ShowDetailMessage);
-							};
+// 							// Voice action指令執行錯誤的處理
+// 							hub.client.eventHandler_Voice = function(
+// 									CommandObject, ShowDetailMessage) {
+// 								if (CommandObject.Action == "Login"
+// 										|| CommandObject.Action == "Logout") {
+// 									$("#LoginFrame")[0].contentWindow
+// 											.addLog(CommandObject);
+// 								} else
+// 									// 依 MediaType 值，將執行結果顯示在對應的 frame 內 
+// 									$("#VoiceFrame")[0].contentWindow
+// 											.eventHandler_Voice(CommandObject,
+// 													ShowDetailMessage);
+// 							};
 
-							// Chat action指令執行錯誤的處理
-							hub.client.eventHandler_Chat = function(
-									CommandObject, ShowDetailMessage) {
-								if (CommandObject.Action == "Login"
-										|| CommandObject.Action == "Logout") {
-									$("#LoginFrame")[0].contentWindow
-											.addLog(CommandObject);
-								} else
-									// 依 MediaType 值，將執行結果顯示在對應的 frame 內 
-									$("#ChatFrame")[0].contentWindow
-											.eventHandler_Chat(CommandObject,
-													ShowDetailMessage);
-							};
+// 							// Chat action指令執行錯誤的處理
+// 							hub.client.eventHandler_Chat = function(
+// 									CommandObject, ShowDetailMessage) {
+// 								if (CommandObject.Action == "Login"
+// 										|| CommandObject.Action == "Logout") {
+// 									$("#LoginFrame")[0].contentWindow
+// 											.addLog(CommandObject);
+// 								} else
+// 									// 依 MediaType 值，將執行結果顯示在對應的 frame 內 
+// 									$("#ChatFrame")[0].contentWindow
+// 											.eventHandler_Chat(CommandObject,
+// 													ShowDetailMessage);
+// 							};
 
-							// Email action指令執行錯誤的處理
-							hub.client.eventHandler_Email = function(
-									CommandObject, ShowDetailMessage) {
-								if (CommandObject.Action == "Login"
-										|| CommandObject.Action == "Logout") {
-									$("#LoginFrame")[0].contentWindow
-											.addLog(CommandObject);
-								} else
-									// 依 MediaType 值，將執行結果顯示在對應的 frame 內 
-									$("#ChatFrame")[0].contentWindow
-											.eventHandler_Email(CommandObject,
-													ShowDetailMessage);
-							};
+// 							// Email action指令執行錯誤的處理
+// 							hub.client.eventHandler_Email = function(
+// 									CommandObject, ShowDetailMessage) {
+// 								if (CommandObject.Action == "Login"
+// 										|| CommandObject.Action == "Logout") {
+// 									$("#LoginFrame")[0].contentWindow
+// 											.addLog(CommandObject);
+// 								} else
+// 									// 依 MediaType 值，將執行結果顯示在對應的 frame 內 
+// 									$("#ChatFrame")[0].contentWindow
+// 											.eventHandler_Email(CommandObject,
+// 													ShowDetailMessage);
+// 							};
 
-							// 交談內容處理 -- 多訊息 (以確保訊息先後順序)
-							hub.client.addDialogArray = function(
-									CommandObjectArray) {
-								for (var i = 0; i < CommandObjectArray.length; i++) {
-									var CommandObject = CommandObjectArray[i];
-									$("#" + CommandObject.MediaType + "Frame")[0].contentWindow
-											.addDialog(CommandObject);
-								}
-							};
+// 							// 交談內容處理 -- 多訊息 (以確保訊息先後順序)
+// 							hub.client.addDialogArray = function(
+// 									CommandObjectArray) {
+// 								for (var i = 0; i < CommandObjectArray.length; i++) {
+// 									var CommandObject = CommandObjectArray[i];
+// 									$("#" + CommandObject.MediaType + "Frame")[0].contentWindow
+// 											.addDialog(CommandObject);
+// 								}
+// 							};
 
-							// 交談內容處理
-							hub.client.addDialog = function(CommandObject) {
-								$("#" + CommandObject.MediaType + "Frame")[0].contentWindow
-										.addDialog(CommandObject);
-							};
+// 							// 交談內容處理
+// 							hub.client.addDialog = function(CommandObject) {
+// 								$("#" + CommandObject.MediaType + "Frame")[0].contentWindow
+// 										.addDialog(CommandObject);
+// 							};
 
-							// Email內容處理
-							hub.client.displayEmailContent = function(
-									CommandObject) {
-								$("#" + CommandObject.MediaType + "Frame")[0].contentWindow
-										.displayEmailContent(CommandObject,
-												true);
-								if (CommandObject.MediaType == "Email")
-									$("#EmailFrame")[0].contentWindow
-											.saveEmailContent(CommandObject);
-							};
+// 							// Email內容處理
+// 							hub.client.displayEmailContent = function(
+// 									CommandObject) {
+// 								$("#" + CommandObject.MediaType + "Frame")[0].contentWindow
+// 										.displayEmailContent(CommandObject,
+// 												true);
+// 								if (CommandObject.MediaType == "Email")
+// 									$("#EmailFrame")[0].contentWindow
+// 											.saveEmailContent(CommandObject);
+// 							};
 
-							// display Email Body
-							// 2016/07/23 added StartDate
-							//hub.client.displayEmailBody = function (MediaType, Action, EmailObject, Id, TheComment, StartDate, Cc, Bcc) {
-							//    $("#" + MediaType + "Frame")[0].contentWindow.displayEmailBody(Action, EmailObject, Id, TheComment, StartDate, Cc, Bcc);
-							hub.client.displayEmailBody = function(
-									CommandObject) {
-								$("#" + CommandObject.MediaType + "Frame")[0].contentWindow
-										.displayEmailBody(CommandObject); // Action, EmailObject, Id, TheComment, StartDate, Cc, Bcc);
-							};
+// 							// display Email Body
+// 							// 2016/07/23 added StartDate
+// 							//hub.client.displayEmailBody = function (MediaType, Action, EmailObject, Id, TheComment, StartDate, Cc, Bcc) {
+// 							//    $("#" + MediaType + "Frame")[0].contentWindow.displayEmailBody(Action, EmailObject, Id, TheComment, StartDate, Cc, Bcc);
+// 							hub.client.displayEmailBody = function(
+// 									CommandObject) {
+// 								$("#" + CommandObject.MediaType + "Frame")[0].contentWindow
+// 										.displayEmailBody(CommandObject); // Action, EmailObject, Id, TheComment, StartDate, Cc, Bcc);
+// 							};
 
-							// display Email Body
-							// 2016/07/23 added StartDate
-							//hub.client.displayInteractionEmailBody = function (MediaType, Action, EmailObject, Id, TheComment, StartDate, Cc, Bcc) {
-							//    $("#" + MediaType + "Frame")[0].contentWindow.displayInteractionEmailBody(Action, EmailObject, Id, TheComment, StartDate, Cc, Bcc);
-							hub.client.displayInteractionEmailBody = function(
-									CommandObject) {
-								$("#" + CommandObject.MediaType + "Frame")[0].contentWindow
-										.displayInteractionEmailBody(CommandObject); // Action, EmailObject, Id, TheComment, StartDate, Cc, Bcc);
-							};
+// 							// display Email Body
+// 							// 2016/07/23 added StartDate
+// 							//hub.client.displayInteractionEmailBody = function (MediaType, Action, EmailObject, Id, TheComment, StartDate, Cc, Bcc) {
+// 							//    $("#" + MediaType + "Frame")[0].contentWindow.displayInteractionEmailBody(Action, EmailObject, Id, TheComment, StartDate, Cc, Bcc);
+// 							hub.client.displayInteractionEmailBody = function(
+// 									CommandObject) {
+// 								$("#" + CommandObject.MediaType + "Frame")[0].contentWindow
+// 										.displayInteractionEmailBody(CommandObject); // Action, EmailObject, Id, TheComment, StartDate, Cc, Bcc);
+// 							};
 
-							// Agent狀態改變的處理
-							hub.client.informCurrentAgentStatus = function(
-									CommandObject) {
-								$("#EmailFrame")[0].contentWindow
-										.informCurrentAgentStatus(CommandObject);
-							};
+// 							// Agent狀態改變的處理
+// 							hub.client.informCurrentAgentStatus = function(
+// 									CommandObject) {
+// 								$("#EmailFrame")[0].contentWindow
+// 										.informCurrentAgentStatus(CommandObject);
+// 							};
 
-							// 在Workbin加入一個inInteraction的處理
-							hub.client.addEmailWorkbinInteraction = function(
-									Interactions) {
-								$("#EmailFrame")[0].contentWindow
-										.addEmailWorkbinInteraction(Interactions);
-							};
+// 							// 在Workbin加入一個inInteraction的處理
+// 							hub.client.addEmailWorkbinInteraction = function(
+// 									Interactions) {
+// 								$("#EmailFrame")[0].contentWindow
+// 										.addEmailWorkbinInteraction(Interactions);
+// 							};
 
-							// 顯示 Contact list
-							hub.client.displayContact = function(CommandObject) {
-								$("#" + CommandObject.MediaType + "Frame")[0].contentWindow
-										.displayContact(CommandObject,
-												CommandObject.Action);
-							};
+// 							// 顯示 Contact list
+// 							hub.client.displayContact = function(CommandObject) {
+// 								$("#" + CommandObject.MediaType + "Frame")[0].contentWindow
+// 										.displayContact(CommandObject,
+// 												CommandObject.Action);
+// 							};
 
-							// 因同一Agent ID在其他地方Login，強迫離線
-							hub.client.forceDisconnect = function() {
-								// StopSignalR()，以避免產生多個 alert 
-								StopSignalR();
+// 							// 因同一Agent ID在其他地方Login，強迫離線
+// 							hub.client.forceDisconnect = function() {
+// 								// StopSignalR()，以避免產生多個 alert 
+// 								StopSignalR();
 
-								alert("因同一Agent ID在其他地方Login，強迫離線 !!")
+// 								alert("因同一Agent ID在其他地方Login，強迫離線 !!")
 
-								$("iframe").hide();
-								$("#LoginFrame").show();
-							};
+// 								$("iframe").hide();
+// 								$("#LoginFrame").show();
+// 							};
 
-						});
+// 						});
 	</script>
 
 </body>
