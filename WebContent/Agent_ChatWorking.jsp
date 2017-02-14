@@ -1,11 +1,26 @@
 ﻿<!DOCTYPE html>
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
-    <title></title>
-    <link href="../Content/bootstrap.css" rel="stylesheet" />
-    <link href="../Content/bootstrap-theme.css" rel="stylesheet" />
-    <script src="../Scripts/jquery-2.1.4.js"></script>
-    <script src="../Scripts/bootstrap.js"></script>
+<title>Agent - Chat</title>
+<title>Agent</title>
+<!-- bootstrap v3.3.6 -->
+<script src="js/jquery.min.js"></script>
+<link href="boostrap/bootstrap.css" rel="stylesheet" />
+<link href="boostrap/bootstrap-theme.css" rel="stylesheet" />
+<script src="boostrap/bootstrap.js"></script>
+
+<script type="text/javascript" src="js/swfobject.js"></script> <!-- for IE8 websocket compatibility -->
+<script type="text/javascript" src="js/web_socket.js"></script> <!-- for IE8 websocket compatibility -->
+<script type="text/javascript" src="js/websocket-util.js"></script>
+<script type="text/javascript" src="js/jquery.min.js"></script>
+<script type="text/javascript" src="js/websocket-agent.js"></script>
+
+ <!-- for IE8 websocket compatibility -->
+<script type="text/javascript">
+// Let the library know where WebSocketMain.swf is:
+WEB_SOCKET_SWF_LOCATION = "WebSocketMain.swf";	
+</script>
+
     <style>
         .form-group {
             margin-bottom: 10px;

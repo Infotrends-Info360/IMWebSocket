@@ -1,8 +1,8 @@
-﻿<!DOCTYPE html>
+<!DOCTYPE html>
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
-   <title>Agent</title>
-   <!-- bootstrap v3.3.6 -->
+<title>Agent</title>
+<!-- bootstrap v3.3.6 -->
 <script src="js/jquery.min.js"></script>
 <link href="boostrap/bootstrap.css" rel="stylesheet" />
 <link href="boostrap/bootstrap-theme.css" rel="stylesheet" />
@@ -39,32 +39,13 @@ WEB_SOCKET_SWF_LOCATION = "WebSocketMain.swf";
 		<div class="row" style="border-bottom: 1px solid #c0c0c0;">
 			<div class="col-xs-12 col-sm-12 col-md-12 col-lg-12 text-center">
 				<h3>
-					<label id="PageTitle"> Agent </label>
+					<label id="PageTitle"></label>
 				</h3>
 			</div>
 		</div>        
         <div class="row" style="margin-top:0px;">
-        <!-- menu -->
-        <div class="col-xs-2 col-sm-2 col-md-2 col-lg-2">
-			<!--<div class="navmenu navmenu-default navmenu-fixed-left">-->
-			<!--  offcanvas -->
-			<ul class="nav navmenu-nav">
-				<li><a href="#" class="Page">Login</a></li>
-				<li><a href="#" class="Page">Chat</a></li>
-				<li><a href="#" class="Page disabled">Voice</a></li>
-				<li><a href="#" class="Page disabled">Email</a></li>
-				<li><a href="#" class="Page disabled">Stat</a></li>
-				<li><a href="#" class="Page disabled">Query</a></li>
-				<!--<li class="divider"></li>
-            <li class="dropdown-header">Status</li>
-            <li><a href="#" class="Page">Status 1</a></li>
-            <li><a href="#" class="Page">Status 2</a></li>
-            <li><a href="../navmenu/">Slide in</a></li>-->
-			</ul>
-			<!--</div>-->
-		</div>
         <!-- UserData -->
-            <div class="col-xs-5 col-sm-5 col-md-5 col-lg-5">
+            <div class="col-xs-6 col-sm-6 col-md-6 col-lg-6">
                 <div class="row disabled" style="margin-top:20px;">
                     <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
                         <label>Server Url:</label>
@@ -148,7 +129,7 @@ WEB_SOCKET_SWF_LOCATION = "WebSocketMain.swf";
                 </div>
             </div>
             <!-- Event -->
-            <div class="col-xs-5 col-sm-5 col-md-5 col-lg-5" style="border-left: 1px solid #000000;">
+            <div class="col-xs-6 col-sm-6 col-md-6 col-lg-6" style="border-left: 1px solid #000000;">
                 <div>
                     <label>Event :</label>&nbsp;&nbsp;&nbsp;&nbsp;<button id="ClearLog" type="button" class="btn btn-sm btn-primary">Clear</button>
                 </div>
