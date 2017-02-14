@@ -18,40 +18,33 @@ import javax.ws.rs.core.Response;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
-import com.Info360.bean.Activitygroups;
+import com.Info360.bean.Activitydata;
 import com.Info360.bean.Activitymenu;
 import com.Info360.bean.Cfg_AgentReason;
 import com.Info360.bean.CommonLink;
 import com.Info360.service.MaintainService;
 
 
-/**
- * RESTful Interaction
- * @author Lin
- */
-
-@Path("/Delete_ActivityGroup")
-public class Delete_ActivityGroup_Servlet {
+@Path("/Delete_AgentReason")
+public class AgentReason_Delete_Servlet {
 	
-
 	@POST
 	@Produces("application/json")
 	public Response PostFromPath(
-		
-			@FormParam("groupname") String groupname
-	
+			
+			@FormParam("dbid") int dbid
+			
 			) throws IOException {
 		
 		JSONObject jsonObject = new JSONObject();
-		Activitygroups activitygroups = new Activitygroups();
-
-		activitygroups.setGroupname(groupname);
-
-
+		Cfg_AgentReason agentreason = new Cfg_AgentReason();
+		
+		agentreason.setDbid(dbid);
+		
 		MaintainService maintainservice = new MaintainService();		
-		int Delete = maintainservice.Delete_activitygroups(activitygroups);
+		int Delete = maintainservice.Delete_agentreason(agentreason);
 	    
-    		jsonObject.put("activitygroups", Delete);
+    		jsonObject.put("agentreason", Delete);
   
   	  
 		return Response.status(200).entity(jsonObject.toString())

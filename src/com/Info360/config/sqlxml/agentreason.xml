@@ -4,9 +4,9 @@
     PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
     "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 
-<mapper namespace="agentstatus">
+<mapper namespace="agentreason">
 
-  <resultMap type="com.Info360.bean.Agentstatus" id="agentstatusResult">
+  <resultMap type="com.Info360.bean.Cfg_AgentReason" id="agentreasonResult">
   
     <id     column="DBID" 				jdbcType="INTEGER" property="dbid"/>
     <result column="STATUSNAME" 		jdbcType="VARCHAR" property="statusname"/>
@@ -23,29 +23,33 @@
     
 </resultMap>
 
-<select id="Select_agentstatus" parameterType="com.Info360.bean.Agentstatus"  resultMap="agentstatusResult">
- Select DBID,STATUSNAME,STATUSNAME_CN,STATUSNAME_EN,STATUSNAME_TW,DESCRIPTION,ALARMDURATION,ALARMCOLOR,FLAG from tblCfg_AgentStatus 
+<select id="Select_agentreason" parameterType="com.Info360.bean.Cfg_AgentReason"  resultMap="agentreasonResult">
+ Select DBID,STATUSNAME,STATUSNAME_CN,STATUSNAME_EN,STATUSNAME_TW,DESCRIPTION,ALARMDURATION,ALARMCOLOR,FLAG from tblCfg_AgentReason 
 
  where flag=#{flag}
 </select>
 
-<update id="Update_agentstatus" parameterType="com.Info360.bean.Agentstatus">
-update  tblCfg_AgentStatus  set STATUSNAME=#{statusname},STATUSNAME_CN=#{statusname_cn},STATUSNAME_TW=#{statusname_tw},STATUSNAME_EN=#{statusname_en},
+<update id="Update_agentreason" parameterType="com.Info360.bean.Cfg_AgentReason">
+update  tblCfg_AgentReason  set STATUSNAME=#{statusname},STATUSNAME_CN=#{statusname_cn},STATUSNAME_TW=#{statusname_tw},STATUSNAME_EN=#{statusname_en},
 							    DESCRIPTION=#{description},ALARMDURATION=#{alarmduration},ALARMCOLOR=#{alarmcolor},FLAG=#{flag}
     						where DBID=#{dbid}
 </update>
  
-<update id="LogicDelete_agentstatus" parameterType="com.Info360.bean.Agentstatus">
-update  tblCfg_AgentStatus set FLAG=#{flag}	where DBID=#{dbid}
+<update id="LogicDelete_agentreason" parameterType="com.Info360.bean.Cfg_AgentReason">
+update  tblCfg_AgentReason set FLAG=#{flag}	where DBID=#{dbid}
 </update>
  
-<insert id="Insert_agentstatus" parameterType="com.Info360.bean.Agentstatus">
-insert into tblCfg_AgentStatus 
+<insert id="Insert_agentreason" parameterType="com.Info360.bean.Cfg_AgentReason">
+insert into tblCfg_AgentReason 
 (STATUSNAME,STATUSNAME_CN,STATUSNAME_EN,STATUSNAME_TW,DESCRIPTION,ALARMDURATION,
  ALARMCOLOR,FLAG,CREATEDATETIME,CREATEUSERID) 
 values
 (#{statusname},#{statusname_cn},#{statusname_en},#{statusname_tw},#{description}
 ,#{alarmduration},#{alarmcolor},#{flag},#{createdatetime},#{createuserid})
 </insert>
+
+<delete id="Delete_agentreason" parameterType="com.Info360.bean.Cfg_AgentReason">
+delete from tblCfg_AgentReason where DBID=#{dbid}
+</delete>
  
 </mapper>

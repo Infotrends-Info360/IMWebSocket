@@ -18,10 +18,9 @@ import javax.ws.rs.core.Response;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
-import com.Info360.bean.Activitygroups;
-import com.Info360.bean.Activitymenu;
 import com.Info360.bean.Cfg_AgentReason;
 import com.Info360.bean.CommonLink;
+import com.Info360.bean.Rpt_AgentStatus;
 import com.Info360.service.MaintainService;
 
 
@@ -30,28 +29,43 @@ import com.Info360.service.MaintainService;
  * @author Lin
  */
 
-@Path("/Delete_ActivityGroup")
-public class Delete_ActivityGroup_Servlet {
+@Path("/Update_rpt_agentstatus")
+public class Rpt_Agentstatus_Update_Servlet {
 	
 
+	/**
+	 * @return
+	 * @throws IOException
+	 */
 	@POST
 	@Produces("application/json")
 	public Response PostFromPath(
-		
-			@FormParam("groupname") String groupname
-	
+			//@FormParam("duration") 	String duration,
+			@FormParam("dbid") int dbid
 			) throws IOException {
 		
 		JSONObject jsonObject = new JSONObject();
-		Activitygroups activitygroups = new Activitygroups();
-
-		activitygroups.setGroupname(groupname);
-
-
+		Rpt_AgentStatus agentstatus = new Rpt_AgentStatus();
+		
+		agentstatus.setDbid(dbid);
+		//agentstatus.setDuration(duration);
+		
+		SimpleDateFormat sdFormat = new SimpleDateFormat("yyyy/MM/dd HH:mm:ss.sss");
+		Date date = new Date();
+		String strDate = sdFormat.format(date);
+		agentstatus.setEnddatetime(strDate);
+		 
 		MaintainService maintainservice = new MaintainService();		
-		int Delete = maintainservice.Delete_activitygroups(activitygroups);
+		int update = maintainservice.Update_rpt_agentstatus(agentstatus);
 	    
-    		jsonObject.put("activitygroups", Delete);
+  	  JSONArray AgentstatusJsonArray = new JSONArray();
+  	 
+	    	JSONObject AgentstatusObject = new JSONObject();
+	    
+	    		AgentstatusJsonArray.put(AgentstatusObject);
+  		 
+  	
+    		jsonObject.put("count", update);
   
   	  
 		return Response.status(200).entity(jsonObject.toString())

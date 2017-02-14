@@ -5,6 +5,8 @@ import java.io.IOException;
 
 
 import java.math.BigDecimal;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.List;
 
 import javax.ws.rs.FormParam;
@@ -16,7 +18,7 @@ import javax.ws.rs.core.Response;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
-import com.Info360.bean.Agentstatus;
+import com.Info360.bean.Cfg_AgentReason;
 import com.Info360.bean.CommonLink;
 import com.Info360.service.MaintainService;
 
@@ -26,8 +28,8 @@ import com.Info360.service.MaintainService;
  * @author Lin
  */
 
-@Path("/Update_agentstatus")
-public class Agentstatus_Update_Servlet {
+@Path("/Insert_agentreason")
+public class AgentReason_Insert_Servlet {
 	
 
 	/**
@@ -54,36 +56,34 @@ public class Agentstatus_Update_Servlet {
 			@FormParam("alarmduration") String alarmduration,
 			@FormParam("alarmcolor") 	String alarmcolor,
 			@FormParam("flag") int flag,
-			@FormParam("dbid") int dbid
+			@FormParam("createdatetime") String createdatetime,
+			@FormParam("createuserid") String createuserid
 			
 			) throws IOException {
 		
 		JSONObject jsonObject = new JSONObject();
-		Agentstatus agentstatus = new Agentstatus();
+		Cfg_AgentReason agentreason = new Cfg_AgentReason();
 		
-		agentstatus.setFlag(flag);
-		agentstatus.setDbid(dbid);
+		agentreason.setCreateuserid(createuserid);
+		agentreason.setAlarmcolor(alarmcolor);
+		agentreason.setAlarmduration(alarmduration);
+		agentreason.setDescription(description);
+		agentreason.setStatusname(statusname);
+		agentreason.setStatusname_cn(statusname_cn);
+		agentreason.setStatusname_en(statusname_en);
+		agentreason.setStatusname_tw(statusname_tw);
+		agentreason.setFlag(flag);
+		 
+		SimpleDateFormat sdFormat = new SimpleDateFormat("yyyy/MM/dd HH:mm:ss.sss");
+		Date date = new Date();
+		String strDate = sdFormat.format(date);
+		//System.out.println(strDate);
+		agentreason.setCreatedatetime(strDate);
 		
-		agentstatus.setAlarmcolor(alarmcolor);
-		agentstatus.setAlarmduration(alarmduration);
-		agentstatus.setDescription(description);
-		agentstatus.setStatusname(statusname);
-		agentstatus.setStatusname_cn(statusname_cn);
-		agentstatus.setStatusname_en(statusname_en);
-		agentstatus.setStatusname_tw(statusname_tw);
-		 
-		 
 		MaintainService maintainservice = new MaintainService();		
-		int update = maintainservice.Update_agentstatus(agentstatus);
+		int insert = maintainservice.Insert_agentreason(agentreason);
 	    
-  	  JSONArray AgentstatusJsonArray = new JSONArray();
-  	 
-	    	JSONObject AgentstatusObject = new JSONObject();
-	    
-	    		AgentstatusJsonArray.put(AgentstatusObject);
-  		 
-  	
-    		jsonObject.put("agentstatus", update);
+    		jsonObject.put("agentreason", insert);
   
   	  
 		return Response.status(200).entity(jsonObject.toString())

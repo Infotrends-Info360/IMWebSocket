@@ -6,20 +6,24 @@ import java.util.List;
 import com.Info360.bean.Activitydata;
 import com.Info360.bean.Activitygroups;
 import com.Info360.bean.Activitymenu;
-import com.Info360.bean.Agentstatus;
+import com.Info360.bean.Cfg_AgentReason;
+import com.Info360.bean.Cfg_AgentStatus;
 import com.Info360.bean.Cfg_ServiceName_Setting;
 import com.Info360.bean.CommonLink;
 import com.Info360.bean.ContactData;
 import com.Info360.bean.Interaction;
+import com.Info360.bean.Rpt_AgentStatus;
 import com.Info360.bean.ServiceEntry;
 import com.Info360.dao.ActivitydataDao;
 import com.Info360.dao.ActivitygroupsDao;
 import com.Info360.dao.ActivitymenuDao;
-import com.Info360.dao.AgentstatusDao;
+import com.Info360.dao.AgentReasonDao;
+import com.Info360.dao.Cfg_AgentStatusDao;
 import com.Info360.dao.Cfg_ServiceName_SettingDao;
 import com.Info360.dao.CommonlinkDao;
 import com.Info360.dao.ContactDataDao;
 import com.Info360.dao.InteractionDao;
+import com.Info360.dao.Rpt_AgentStatusDao;
 import com.Info360.dao.ServiceEntryDao;
 import com.Info360.util.IsError;
 
@@ -29,6 +33,21 @@ import com.Info360.util.IsError;
  * @author Lin
  */
 public class MaintainService {
+	
+	/**
+	 * Delete_agentreason
+	 * @param Delete_agentreason
+	 */
+	public int Delete_agentreason(Cfg_AgentReason agentreason) {
+		int count = 0;
+		try {
+			AgentReasonDao agentreasondaodao = new AgentReasonDao();
+			count = agentreasondaodao.Delete_agentreason(agentreason);
+		} catch (Exception e) {
+			IsError.GET_EXCEPTION = e.getMessage();
+		}
+		return count;
+	}
 	
 	/**
 	 * Delete
@@ -174,13 +193,31 @@ public class MaintainService {
 	/**
 	 * 
 	 * insert
-	 * @param Insert_agentstatus
+	 * @param Insert_agentreason
 	 */
 
-	public int Insert_agentstatus(Agentstatus agentstatus) {
+	public int Insert_agentreason(Cfg_AgentReason agentreason) {
 		int count = 0;
 		try {
-			AgentstatusDao agentstatusdao = new AgentstatusDao();
+			AgentReasonDao agentreasondao = new AgentReasonDao();
+			count = agentreasondao.Insert_agentreason(agentreason);
+		} catch (Exception e) {
+			IsError.GET_EXCEPTION = e.getMessage();
+		}
+		return count;
+	}
+	
+
+	/**
+	 * 
+	 * insert
+	 * @param Insert_rpt_agentstatus
+	 */
+
+	public int Insert_rpt_agentstatus(Rpt_AgentStatus agentstatus) {
+		int count = 0;
+		try {
+			Rpt_AgentStatusDao agentstatusdao = new Rpt_AgentStatusDao();
 			count = agentstatusdao.Insert_agentstatus(agentstatus);
 		} catch (Exception e) {
 			IsError.GET_EXCEPTION = e.getMessage();
@@ -207,8 +244,8 @@ public class MaintainService {
 	
 	/**
 	 * 
-	 * Select_activitymenu
-	 * @param Select_activitymenu
+	 * Select_activitygroups
+	 * @param Select_activitygroups
 	 */
 	public List<Activitygroups> Select_activitygroups(Activitygroups activitygroups) {
 	
@@ -245,11 +282,11 @@ public class MaintainService {
 	 * LogicDelete_agentstatus
 	 * @param agentstatus
 	 */
-	public int LogicDelete_agentstatus(Agentstatus agentstatus) {
+	public int LogicDelete_agentreason(Cfg_AgentReason agentreason) {
 		int count = 0;
 		try {
-			AgentstatusDao agentstatusdaodao = new AgentstatusDao();
-			count = agentstatusdaodao.LogicDelete_agentstatus(agentstatus);
+			AgentReasonDao agentreasondaodao = new AgentReasonDao();
+			count = agentreasondaodao.LogicDelete_agentreason(agentreason);
 		} catch (Exception e) {
 			IsError.GET_EXCEPTION = e.getMessage();
 		}
@@ -261,11 +298,27 @@ public class MaintainService {
 	 * update
 	 * @param agentstatus
 	 */
-	public int Update_agentstatus(Agentstatus agentstatus) {
+	public int Update_agentreason(Cfg_AgentReason agentreason) {
 		int count = 0;
 		try {
-			AgentstatusDao agentstatusdaodao = new AgentstatusDao();
-			count = agentstatusdaodao.Update_agentstatus(agentstatus);
+			AgentReasonDao agentreasondaodao = new AgentReasonDao();
+			count = agentreasondaodao.Update_agentreason(agentreason);
+		} catch (Exception e) {
+			IsError.GET_EXCEPTION = e.getMessage();
+		}
+		return count;
+	}
+	
+	/**
+	 * 
+	 * update
+	 * @param rpt_agentstatus
+	 */
+	public int Update_rpt_agentstatus(Rpt_AgentStatus agentstatus) {
+		int count = 0;
+		try {
+			Rpt_AgentStatusDao agentstatusdao = new Rpt_AgentStatusDao();
+			count = agentstatusdao.Update_agentstatus(agentstatus);
 		} catch (Exception e) {
 			IsError.GET_EXCEPTION = e.getMessage();
 		}
@@ -349,11 +402,29 @@ public class MaintainService {
 	 * Select_agentstatus
 	 * @param Select_agentstatus
 	 */
-	public List<Agentstatus> Select_agentstatus(Agentstatus agentstatus) {
+	public List<Cfg_AgentReason> Select_agentreason(Cfg_AgentReason agentreason) {
 		
-			List<Agentstatus> agentstatuslist = new ArrayList<Agentstatus>();
+			List<Cfg_AgentReason> agentreasonlist = new ArrayList<Cfg_AgentReason>();
 			try {
-				AgentstatusDao agentstatusdao = new AgentstatusDao();
+				AgentReasonDao agentreasondao = new AgentReasonDao();
+				agentreasonlist = agentreasondao.Select_agentreason(agentreason);
+			} catch (Exception e) {
+				IsError.GET_EXCEPTION = e.getMessage();
+			}
+			return agentreasonlist;
+	
+	}
+	
+	/**
+	 * 
+	 * Select_agentstatus
+	 * @param Select_cfg_agentstatus
+	 */
+	public List<Cfg_AgentStatus> Select_cfg_agentstatus(Cfg_AgentStatus agentstatus) {
+		
+			List<Cfg_AgentStatus> agentstatuslist = new ArrayList<Cfg_AgentStatus>();
+			try {
+				Cfg_AgentStatusDao agentstatusdao = new Cfg_AgentStatusDao();
 				agentstatuslist = agentstatusdao.Select_agentstatus(agentstatus);
 			} catch (Exception e) {
 				IsError.GET_EXCEPTION = e.getMessage();

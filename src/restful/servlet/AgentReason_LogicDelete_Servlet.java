@@ -5,8 +5,6 @@ import java.io.IOException;
 
 
 import java.math.BigDecimal;
-import java.text.SimpleDateFormat;
-import java.util.Date;
 import java.util.List;
 
 import javax.ws.rs.FormParam;
@@ -18,8 +16,6 @@ import javax.ws.rs.core.Response;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
-import com.Info360.bean.Activitygroups;
-import com.Info360.bean.Activitymenu;
 import com.Info360.bean.Cfg_AgentReason;
 import com.Info360.bean.CommonLink;
 import com.Info360.service.MaintainService;
@@ -30,28 +26,48 @@ import com.Info360.service.MaintainService;
  * @author Lin
  */
 
-@Path("/Delete_ActivityGroup")
-public class Delete_ActivityGroup_Servlet {
+@Path("/LogicDelete_agentreason")
+public class AgentReason_LogicDelete_Servlet {
 	
 
+	/**
+	 * @param statusname
+	 * @param statusname_cn
+	 * @param statusname_en
+	 * @param statusname_tw
+	 * @param description
+	 * @param alarmduration
+	 * @param alarmcolor
+	 * @param flag
+	 * @param dbid
+	 * @return
+	 * @throws IOException
+	 */
 	@POST
 	@Produces("application/json")
 	public Response PostFromPath(
-		
-			@FormParam("groupname") String groupname
 	
+			@FormParam("flag") int flag,
+			@FormParam("dbid") int dbid
+			
 			) throws IOException {
 		
 		JSONObject jsonObject = new JSONObject();
-		Activitygroups activitygroups = new Activitygroups();
-
-		activitygroups.setGroupname(groupname);
-
-
+		Cfg_AgentReason agentreason = new Cfg_AgentReason();
+		
+		agentreason.setFlag(flag);
+		agentreason.setDbid(dbid);
+		
 		MaintainService maintainservice = new MaintainService();		
-		int Delete = maintainservice.Delete_activitygroups(activitygroups);
+		int update = maintainservice.LogicDelete_agentreason(agentreason);
 	    
-    		jsonObject.put("activitygroups", Delete);
+  	  JSONArray agentreasonJsonArray = new JSONArray();
+  	 
+	    	JSONObject agentreasonObject = new JSONObject();
+	    
+	    	agentreasonJsonArray.put(agentreasonObject);
+  		
+    		jsonObject.put("agentreason", update);
   
   	  
 		return Response.status(200).entity(jsonObject.toString())

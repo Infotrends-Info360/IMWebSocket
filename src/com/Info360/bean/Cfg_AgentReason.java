@@ -1,6 +1,6 @@
 package com.Info360.bean;
 
-public class Agentstatus {
+public class Cfg_AgentReason {
 	private int dbid;
 	
 	private String statusname;
