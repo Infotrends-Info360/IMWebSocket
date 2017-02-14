@@ -58,12 +58,25 @@ WEB_SOCKET_SWF_LOCATION = "WebSocketMain.swf";
 	margin: 0px;
 }
 
+.center {
+	margin: auto;
+/* 	text-align: center; */
+}
 
+hr {
+  border: 0;
+  clear:both;
+  display:block;
+  width: 96%;               
+  background-color:#aaaaaa;
+  height: 1px;
+}
 
 </style>
 </head>
 <body>
     <div style="width:90%">
+    	<!-- 標題列 -->
         <div class="row" style="margin-top:5px;">
             <div class="col-xs-4 col-sm-4 col-md-4 col-lg-4">
                 <div>
@@ -92,63 +105,119 @@ WEB_SOCKET_SWF_LOCATION = "WebSocketMain.swf";
                 </div>
             </div>
         </div>
+        <!-- 主頁 -->
         <div class="row" style="margin-top:5px;border-top: 1px solid #000000;">
+        	<!-- 左方bar區塊(由index.jsp負責產生) -->
+        	<!-- 中間區塊 -->
             <div class="col-xs-8 col-sm-8 col-md-8 col-lg-8">
-            	<div class="col-xs-12 col-sm-12 col-md-12 col-lg-12 panel panel-default">
-	                <div class="row panel-heading">
+            	<!-- Request list -->
+            	<div class="col-xs-12 col-sm-12 col-md-12 col-lg-12 panel panel-default center nopadding">
+	                <div class="row col-xs-12 col-sm-12 col-md-12 col-lg-12 panel-heading center">
 	                    <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12" style="padding-left: 10px;">Request List: </div>
 	                </div>
-	                <div class="row">
-	                    <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
-							<table class="table table-hover nomargin">
-								<thead>
-									<tr>
-										<th>請求種類</th>
-										<th>請求ID</th>
-										<th>其他</th>
-									</tr>
-								</thead>
-								<tbody>
-									<tr>
-										<td>通話</td>
-										<td>Client01</td>
-										<td></td>
-									</tr>
-									<tr>
-										<td>三方</td>
-										<td>Agent01</td>
-										<td></td>
-									</tr>
-									<tr>
-										<td>通話</td>
-										<td>Client02</td>
-										<td></td>
-									</tr>
-									<tr>
-										<td>轉接</td>
-										<td>Agent03</td>
-										<td></td>
-									</tr>
-								</tbody>
-							</table>	 
-                <div class="row">
-                    <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
-                        <div class="form-group">
-                        	<div class="col-xs-6 col-sm-6 col-md-6 col-lg-6">
-        	                    <button class="btn btn-primary btn-sm pull-left marginDefault" id="Accept" style="width:100px">Accept</button>
-            	                <button class="btn btn-primary btn-sm pull-left marginDefault" id="Reject" style="width:100px">Reject</button>
-                        	</div>
-                        	<div class="col-xs-6 col-sm-6 col-md-6 col-lg-6">
-	                            <button class="btn btn-primary btn-sm pull-right marginDefault" id="AcceptThirdParty" style="width:100px">三方轉接Accept</button>	
-    	                        <button class="btn btn-primary btn-sm pull-right marginDefault" id="RejectThirdParty" style="width:100px">三方轉接Reject</button>                        	
-                        	</div>
-                        </div>
-                    </div>
-                </div>							
-							                   
-	                    </div>
+	                <div class="row col-xs-12 col-sm-12 col-md-12 col-lg-12 panel-body center">
+						<table class="table table-hover nomargin">
+							<thead>
+								<tr>
+									<th>請求種類</th>
+									<th>請求ID</th>
+									<th>其他</th>
+								</tr>
+							</thead>
+							<tbody>
+								<tr>
+									<td>通話</td>
+									<td>Client01</td>
+									<td></td>
+								</tr>
+								<tr>
+									<td>三方</td>
+									<td>Agent01</td>
+									<td></td>
+								</tr>
+								<tr>
+									<td>通話</td>
+									<td>Client02</td>
+									<td></td>
+								</tr>
+								<tr>
+									<td>轉接</td>
+									<td>Agent03</td>
+									<td></td>
+								</tr>
+							</tbody>
+						</table>	 
+		                <div class="row">
+		                    <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+		                        <div class="form-group">
+		                        	<div class="col-xs-6 col-sm-6 col-md-6 col-lg-6">
+		        	                    <button class="btn btn-primary btn-sm pull-left marginDefault" id="Accept" style="width:100px">Accept</button>
+		            	                <button class="btn btn-primary btn-sm pull-left marginDefault" id="Reject" style="width:100px">Reject</button>
+		                        	</div>
+		                        	<div class="col-xs-6 col-sm-6 col-md-6 col-lg-6">
+		    	                        <button class="btn btn-primary btn-sm pull-right marginDefault" id="RejectThirdParty" style="width:100px">三方轉接Reject</button>                        	
+			                            <button class="btn btn-primary btn-sm pull-right marginDefault" id="AcceptThirdParty" style="width:100px">三方轉接Accept</button>	
+		                        	</div>
+		                        </div>
+		                    </div>
+		                </div> 					
 	                </div>
-            	</div>
+            	</div><!-- end of request list -->	
+
+				<!-- Room Info -->
+            	<div class="col-xs-12 col-sm-12 col-md-12 col-lg-12 panel panel-default center nopadding">
+	                <div class="row col-xs-12 col-sm-12 col-md-12 col-lg-12 panel-heading center">
+	                    <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12" style="padding-left: 10px;">Room Info: </div>	                	
+	                </div>
+	                <div class="row col-xs-12 col-sm-12 col-md-12 col-lg-12 panel-body center">
+	                	<!-- room list & comment -->
+	                	<div class="col-xs-6 col-sm-6 col-md-6 col-lg-6">
+	                	<h4>room list:</h4>
+                        <select id="ServerUrl" class="form-control">
+                            <option value="roomID01">roomID01</option>
+                            <option value="roomID02">roomID02</option>
+                            <option value="roomID03">roomID03</option>
+                        </select>
+	                	</div>
+	                	<div class="col-xs-6 col-sm-6 col-md-6 col-lg-6">
+	                		<div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+			                	<div class="col-xs-6 col-sm-6 col-md-6 col-lg-6">
+			                		<h4>comment:</h4>
+			                	</div>
+			                	<div class="col-xs-6 col-sm-6 col-md-6 col-lg-6">
+			                        <button id="" class="btn btn-primary btn-sm">離開房間</button>
+			                	</div>	                	
+	                		</div>
+	                		<div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+			                	<div class="col-xs-6 col-sm-6 col-md-6 col-lg-6 ">
+			                        <input type="text" id="" class="form-control" value="comment..." />
+			                	</div>
+			                	<div class="col-xs-6 col-sm-6 col-md-6 col-lg-6">
+			                        <button id="" class="btn btn-primary btn-sm">SEND</button>
+			                	</div>	                		                		
+	                		</div>
+	                	</div>
+						<ul class="dropdown-menu" role="menu" aria-labelledby="dropdownMenuDivider">
+						  <li role="presentation" class="divider"></li>
+						</ul>	   
+						<div class='col-xs-12 col-sm-12 col-md-12 col-lg-12'><hr></div>
+		                <!-- userdata -->
+	 	            	<div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+	 	            		<h4>Userdata:</h4>
+							<div class="col-xs-12 col-sm-12 col-md-12 col-lg-12 panel panel-default center nopadding">
+								<div class="pre-scrollable col-xs-12 col-sm-12 col-md-12 col-lg-12 panel-body" style="height: 100px;">
+									some log ... <br> some log ... <br> some log ... <br> some log ... <br> some log ... <br>
+								</div>
+							</div>
+	 	            	</div>
+	                	
+		                
+		                <!-- chatDialogue: content, msg, send-->
+	
+		                <!-- 三方與轉接 -->	                	
+	                </div>
+				</div><!-- end of RoomInfo -->
+            		
 <!--                 <div class="row"> -->
 <!--                     <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12"> -->
 <!--                         <div class="form-group"> -->
@@ -213,6 +282,7 @@ WEB_SOCKET_SWF_LOCATION = "WebSocketMain.swf";
                     </div>
                 </div>
             </div>
+            <!-- 右方區塊 -->
             <div class="col-xs-4 col-sm-4 col-md-4 col-lg-4" style="border-left: 1px solid #000000;">
                 <div>
                     <label>Event :</label>&nbsp;&nbsp;&nbsp;&nbsp;<button id="ClearLog" type="button" class="btn btn-sm btn-primary">Clear</button>
@@ -221,6 +291,7 @@ WEB_SOCKET_SWF_LOCATION = "WebSocketMain.swf";
                     <div id="ChatLog"></div>
                 </div>
             </div>
+            
         </div>
     </div>
 
