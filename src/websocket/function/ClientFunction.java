@@ -111,8 +111,8 @@ public class ClientFunction {
 			e.printStackTrace();
 		}
 		long endTime = System.currentTimeMillis();
-//		System.out.println("RESTful searchUserdata search time: " + (endTime - startTime)/1000 + "s" );
-		System.out.println("http://127.0.0.1:8080/IMWebSocket/RESTful/searchUserdata done ****");
+		System.out.println("RESTful searchUserdata search time: " + (endTime - startTime)/1000 + "s" );
+//		System.out.println("http://127.0.0.1:8080/IMWebSocket/RESTful/searchUserdata done ****");
 
 		JSONObject responseSBjson = new JSONObject(responseSB.toString());
 		JSONObject sendjson = new JSONObject();
