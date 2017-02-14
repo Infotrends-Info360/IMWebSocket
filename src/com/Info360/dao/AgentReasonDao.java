@@ -6,7 +6,8 @@ import java.util.List;
 
 import org.apache.ibatis.session.SqlSession;
 
-import com.Info360.bean.Agentstatus;
+import com.Info360.bean.Activitymenu;
+import com.Info360.bean.Cfg_AgentReason;
 import com.Info360.bean.CommonLink;
 import com.Info360.bean.ContactData;
 import com.Info360.bean.Interaction;
@@ -14,22 +15,48 @@ import com.Info360.db.DBAccess;
 import com.Info360.util.IsError;
 
 
-public class AgentstatusDao {
+public class AgentReasonDao {
+	/**
+	 * @param Delete_agentreason
+	 */
+	public int Delete_agentreason(
+			Cfg_AgentReason   agentreason)
+			{
+		DBAccess dbAccess = new DBAccess();
+		int agentreasonInt = 0;
+		SqlSession sqlSession = null;
+
+       try {
+			sqlSession = dbAccess.getSqlSession();
+			//通過sqlSession執行SQL語句
+			agentreasonInt = sqlSession.delete("agentreason.Delete_agentreason", agentreason);
+			sqlSession.commit();
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			//e.printStackTrace();
+			IsError.GET_EXCEPTION = e.getMessage();
+		} finally {
+			if(sqlSession != null){
+				sqlSession.close();
+			}
+		}
+		return agentreasonInt;
+	}
 	
 	/**
 	 * 
 	 * Insert
-	 * @param ContactData
+	 * @param Insert_agentreason
 	 */
-	public int Insert_agentstatus(Agentstatus   agentstatus){
+	public int Insert_agentreason(Cfg_AgentReason   agentreason){
 		DBAccess dbAccess = new DBAccess();
-		int agentstatusInt = 0;
+		int agentreasonInt = 0;
 		SqlSession sqlSession = null;
 		
 		try {
 			sqlSession = dbAccess.getSqlSession();
 			//通過sqlSession執行SQL語句
-			agentstatusInt = sqlSession.insert("agentstatus.Insert_agentstatus", agentstatus);
+			agentreasonInt = sqlSession.insert("agentreason.Insert_agentreason", agentreason);
 			sqlSession.commit();
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
@@ -40,22 +67,22 @@ public class AgentstatusDao {
 			   sqlSession.close();
 			}
 		}
-		return agentstatusInt;
+		return agentreasonInt;
 	}
 
 	/**
-	 * Select_agentstatus
-	 * @param Select_agentstatus
+	 * Select_agentreason
+	 * @param Select_agentreason
 	 */
-	public List<Agentstatus> Select_agentstatus(Agentstatus agentstatus){
+	public List<Cfg_AgentReason> Select_agentreason(Cfg_AgentReason agentreason){
 		DBAccess dbAccess = new DBAccess();
-		List<Agentstatus> agentstatuslist = new ArrayList<Agentstatus>();
+		List<Cfg_AgentReason> agentreasonlist = new ArrayList<Cfg_AgentReason>();
 		SqlSession sqlSession = null;
 	
 		try {
 			sqlSession = dbAccess.getSqlSession();
 			//通過sqlSession執行SQL語句
-			agentstatuslist = sqlSession.selectList("agentstatus.Select_agentstatus", agentstatus);
+			agentreasonlist = sqlSession.selectList("agentreason.Select_agentreason", agentreason);
 			sqlSession.commit();
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
@@ -66,23 +93,23 @@ public class AgentstatusDao {
 			   sqlSession.close();
 			}
 		}
-		return agentstatuslist;
+		return agentreasonlist;
 	}
 
 	/**
 	 * 更新個人資訊
-	 * @param Update_agentstatus
+	 * @param Update_agentreason
 	 */
-	public int Update_agentstatus(
-			Agentstatus   agentstatus	){
+	public int Update_agentreason(
+			Cfg_AgentReason   agentreason	){
 		DBAccess dbAccess = new DBAccess();
-		int agentstatusInt = 0;
+		int agentreasonInt = 0;
 		SqlSession sqlSession = null;
 
 		try {
 			sqlSession = dbAccess.getSqlSession();
 			//通過sqlSession執行SQL語句
-			agentstatusInt = sqlSession.update("agentstatus.Update_agentstatus", agentstatus);
+			agentreasonInt = sqlSession.update("agentreason.Update_agentreason", agentreason);
 			sqlSession.commit();
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
@@ -93,23 +120,23 @@ public class AgentstatusDao {
 				sqlSession.close();
 			}
 		}
-		return agentstatusInt;
+		return agentreasonInt;
 	}
 	
 	/**
-	 * 更新個人資訊
-	 * @param LogicDelete_agentstatus
+	 * LogicDelete_agentreason
+	 * @param LogicDelete_agentreason
 	 */
-	public int LogicDelete_agentstatus(
-			Agentstatus   agentstatus	){
+	public int LogicDelete_agentreason(
+			Cfg_AgentReason   agentreason	){
 		DBAccess dbAccess = new DBAccess();
-		int agentstatusInt = 0;
+		int agentreasonInt = 0;
 		SqlSession sqlSession = null;
 
 		try {
 			sqlSession = dbAccess.getSqlSession();
 			//通過sqlSession執行SQL語句
-			agentstatusInt = sqlSession.update("agentstatus.LogicDelete_agentstatus", agentstatus);
+			agentreasonInt = sqlSession.update("agentreason.LogicDelete_agentreason", agentreason);
 			sqlSession.commit();
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
@@ -120,6 +147,6 @@ public class AgentstatusDao {
 				sqlSession.close();
 			}
 		}
-		return agentstatusInt;
+		return agentreasonInt;
 	}
 }

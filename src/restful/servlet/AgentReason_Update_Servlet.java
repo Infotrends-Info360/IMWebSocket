@@ -5,8 +5,6 @@ import java.io.IOException;
 
 
 import java.math.BigDecimal;
-import java.text.SimpleDateFormat;
-import java.util.Date;
 import java.util.List;
 
 import javax.ws.rs.FormParam;
@@ -18,7 +16,7 @@ import javax.ws.rs.core.Response;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
-import com.Info360.bean.Agentstatus;
+import com.Info360.bean.Cfg_AgentReason;
 import com.Info360.bean.CommonLink;
 import com.Info360.service.MaintainService;
 
@@ -28,8 +26,8 @@ import com.Info360.service.MaintainService;
  * @author Lin
  */
 
-@Path("/Insert_agentstatus")
-public class Agentstatus_Insert_Servlet {
+@Path("/Update_agentreason")
+public class AgentReason_Update_Servlet {
 	
 
 	/**
@@ -56,34 +54,36 @@ public class Agentstatus_Insert_Servlet {
 			@FormParam("alarmduration") String alarmduration,
 			@FormParam("alarmcolor") 	String alarmcolor,
 			@FormParam("flag") int flag,
-			@FormParam("createdatetime") String createdatetime,
-			@FormParam("createuserid") String createuserid
+			@FormParam("dbid") int dbid
 			
 			) throws IOException {
 		
 		JSONObject jsonObject = new JSONObject();
-		Agentstatus agentstatus = new Agentstatus();
+		Cfg_AgentReason agentreason = new Cfg_AgentReason();
 		
-		agentstatus.setCreateuserid(createuserid);
-		agentstatus.setAlarmcolor(alarmcolor);
-		agentstatus.setAlarmduration(alarmduration);
-		agentstatus.setDescription(description);
-		agentstatus.setStatusname(statusname);
-		agentstatus.setStatusname_cn(statusname_cn);
-		agentstatus.setStatusname_en(statusname_en);
-		agentstatus.setStatusname_tw(statusname_tw);
-		agentstatus.setFlag(flag);
+		agentreason.setFlag(flag);
+		agentreason.setDbid(dbid);
+		
+		agentreason.setAlarmcolor(alarmcolor);
+		agentreason.setAlarmduration(alarmduration);
+		agentreason.setDescription(description);
+		agentreason.setStatusname(statusname);
+		agentreason.setStatusname_cn(statusname_cn);
+		agentreason.setStatusname_en(statusname_en);
+		agentreason.setStatusname_tw(statusname_tw);
 		 
-		SimpleDateFormat sdFormat = new SimpleDateFormat("yyyy/MM/dd HH:mm:ss.sss");
-		Date date = new Date();
-		String strDate = sdFormat.format(date);
-		//System.out.println(strDate);
-		agentstatus.setCreatedatetime(strDate);
-		
+		 
 		MaintainService maintainservice = new MaintainService();		
-		int insert = maintainservice.Insert_agentstatus(agentstatus);
+		int update = maintainservice.Update_agentreason(agentreason);
 	    
-    		jsonObject.put("agentstatus", insert);
+  	  JSONArray agentreasonJsonArray = new JSONArray();
+  	 
+	    	JSONObject agentreasonObject = new JSONObject();
+	    
+	    	agentreasonJsonArray.put(agentreasonObject);
+  		 
+  	
+    		jsonObject.put("agentreason", update);
   
   	  
 		return Response.status(200).entity(jsonObject.toString())

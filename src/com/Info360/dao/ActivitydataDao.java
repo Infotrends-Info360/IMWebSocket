@@ -8,7 +8,7 @@ import org.apache.ibatis.session.SqlSession;
 
 import com.Info360.bean.Activitydata;
 import com.Info360.bean.Activitygroups;
-import com.Info360.bean.Agentstatus;
+import com.Info360.bean.Cfg_AgentReason;
 import com.Info360.bean.CommonLink;
 import com.Info360.bean.ContactData;
 import com.Info360.bean.Interaction;

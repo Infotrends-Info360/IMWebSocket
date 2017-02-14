@@ -5,6 +5,8 @@ import java.io.IOException;
 
 
 import java.math.BigDecimal;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.List;
 
 import javax.ws.rs.FormParam;
@@ -16,8 +18,9 @@ import javax.ws.rs.core.Response;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
-import com.Info360.bean.Agentstatus;
+import com.Info360.bean.Cfg_AgentReason;
 import com.Info360.bean.CommonLink;
+import com.Info360.bean.Rpt_AgentStatus;
 import com.Info360.service.MaintainService;
 
 
@@ -26,48 +29,39 @@ import com.Info360.service.MaintainService;
  * @author Lin
  */
 
-@Path("/LogicDelete_agentstatus")
-public class Agentstatus_LogicDelete_Servlet {
+@Path("/Insert_rpt_agentstatus")
+public class Rpt_Agentstatus_Insert_Servlet {
 	
 
 	/**
-	 * @param statusname
-	 * @param statusname_cn
-	 * @param statusname_en
-	 * @param statusname_tw
-	 * @param description
-	 * @param alarmduration
-	 * @param alarmcolor
-	 * @param flag
-	 * @param dbid
 	 * @return
 	 * @throws IOException
 	 */
 	@POST
 	@Produces("application/json")
 	public Response PostFromPath(
-	
-			@FormParam("flag") int flag,
-			@FormParam("dbid") int dbid
-			
+			@FormParam("person_dbid") 	String person_dbid,
+			@FormParam("status_dbid") String status_dbid,
+			@FormParam("reason_dbid") String reason_dbid
+			//@FormParam("startdatetime") String startdatetime
 			) throws IOException {
 		
 		JSONObject jsonObject = new JSONObject();
-		Agentstatus agentstatus = new Agentstatus();
+		Rpt_AgentStatus agentstatus = new Rpt_AgentStatus();
 		
-		agentstatus.setFlag(flag);
-		agentstatus.setDbid(dbid);
+		agentstatus.setPerson_dbid(person_dbid);
+		agentstatus.setStatus_dbid(status_dbid);
+		agentstatus.setReason_dbid(reason_dbid);
+		 
+		SimpleDateFormat sdFormat = new SimpleDateFormat("yyyy/MM/dd HH:mm:ss.sss");
+		Date date = new Date();
+		String strDate = sdFormat.format(date);
+		agentstatus.setStartdatetime(strDate);
+		
 		
 		MaintainService maintainservice = new MaintainService();		
-		int update = maintainservice.LogicDelete_agentstatus(agentstatus);
-	    
-  	  JSONArray AgentstatusJsonArray = new JSONArray();
-  	 
-	    	JSONObject AgentstatusObject = new JSONObject();
-	    
-	    		AgentstatusJsonArray.put(AgentstatusObject);
-  		
-    		jsonObject.put("agentstatus", update);
+		int insert = maintainservice.Insert_rpt_agentstatus(agentstatus);
+		jsonObject.put("dbid", insert);
   
   	  
 		return Response.status(200).entity(jsonObject.toString())

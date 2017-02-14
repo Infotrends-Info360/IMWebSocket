@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!DOCTYPE mapper
+    PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+    "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="cfg_agentstatus">
+
+  <resultMap type="com.Info360.bean.Cfg_AgentStatus" id="agentstatusresult">
+    <id     column="DBID" 				jdbcType="INTEGER" property="dbid"/>
+    <result column="STATUSNAME" 		jdbcType="VARCHAR" property="statusname"/>
+    <result column="MEDIATYPEID" 		jdbcType="VARCHAR" property="mediatypeid"/>
+    <result column="DESCRIPTION"     	jdbcType="VARCHAR" property="description"/>
+</resultMap>
+
+<select id="Select_agentstatus" parameterType="com.Info360.bean.Cfg_AgentStatus"  resultMap="agentstatusresult">
+ 	Select DBID,STATUSNAME,MEDIATYPEID,DESCRIPTION from tblCfg_AgentStatus
+</select>
+ 
+</mapper>
