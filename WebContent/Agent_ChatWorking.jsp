@@ -21,45 +21,66 @@
 WEB_SOCKET_SWF_LOCATION = "WebSocketMain.swf";	
 </script>
 
-    <style>
-        .form-group {
-            margin-bottom: 10px;
-        }
+<style>
+.form-group {
+    margin-bottom: 10px;
+}
 
-        #ChatLog {
-            overflow-y: auto;
-            overflow-x: hidden;
-            border: 1px solid #d2dbe3;
-            font-size: smaller;
-            height: 460px;
-        }
+#ChatLog {
+    overflow-y: auto;
+    overflow-x: hidden;
+    border: 1px solid #d2dbe3;
+    font-size: smaller;
+    height: 460px;
+}
 
-        #ChatDialog {
-            overflow-y: auto;
-            overflow-x: hidden;
-            border: 1px solid #d2dbe3;
-            font-size: smaller;
-            height: 80px;
-        }
-    </style>
+#ChatDialog {
+    overflow-y: auto;
+    overflow-x: hidden;
+    border: 1px solid #d2dbe3;
+    font-size: smaller;
+    height: 80px;
+}
+.marginDefault{
+	margin: 5px;
+}
+
+.marginBottom {
+	margin-bottom: 5px;
+}
+
+.nopadding {
+   padding: 0 !important;
+   margin: 0 !important;
+}
+
+.nomargin {
+	margin: 0px;
+}
+
+
+
+</style>
 </head>
 <body>
     <div style="width:90%">
         <div class="row" style="margin-top:5px;">
             <div class="col-xs-4 col-sm-4 col-md-4 col-lg-4">
                 <div>
-                    <label>Agent:</label>
                     <label id="AgentId"></label>
                 </div>
             </div>
             <div class="col-xs-2 col-sm-2 col-md-2 col-lg-2">
             </div>
             <div class="col-xs-2 col-sm-2 col-md-2 col-lg-2">
-                <button id="AgentReady" class="btn btn-primary btn-sm" style="width:100px">Ready</button>
             </div>
             <div class="col-xs-4 col-sm-4 col-md-4 col-lg-4">
                 <div>
+                	<div id="ReadyDiv">
+                		<button id="AgentReady" class="btn btn-primary btn-sm marginBottom" style="width:100px">Ready</button>
+                	</div>
                     <div id="NotReadyDiv">
+                        <button id="AgentNotReady" class="btn btn-primary btn-sm" style="width:100px">Not Ready</button>
                         <label>Reason: </label>
                         <select id="reason">
                             <option value="" selected="selected"></option>
@@ -67,33 +88,81 @@ WEB_SOCKET_SWF_LOCATION = "WebSocketMain.swf";
                             <option value="Business">Business</option>
                             <option value="Meeting">Meeting</option>
                         </select>
-                        <button id="AgentNotReady" class="btn btn-primary btn-sm" style="width:100px">Not Ready</button>
                     </div>
                 </div>
             </div>
         </div>
         <div class="row" style="margin-top:5px;border-top: 1px solid #000000;">
             <div class="col-xs-8 col-sm-8 col-md-8 col-lg-8">
-                <div class="row" style="margin-top:5px">
-                    <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12" style="text-decoration: underline;">Interaction</div>
-                </div>
+            	<div class="col-xs-12 col-sm-12 col-md-12 col-lg-12 panel panel-default">
+	                <div class="row panel-heading">
+	                    <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12" style="padding-left: 10px;">Request List: </div>
+	                </div>
+	                <div class="row">
+	                    <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+							<table class="table table-hover nomargin">
+								<thead>
+									<tr>
+										<th>請求種類</th>
+										<th>請求ID</th>
+										<th>其他</th>
+									</tr>
+								</thead>
+								<tbody>
+									<tr>
+										<td>通話</td>
+										<td>Client01</td>
+										<td></td>
+									</tr>
+									<tr>
+										<td>三方</td>
+										<td>Agent01</td>
+										<td></td>
+									</tr>
+									<tr>
+										<td>通話</td>
+										<td>Client02</td>
+										<td></td>
+									</tr>
+									<tr>
+										<td>轉接</td>
+										<td>Agent03</td>
+										<td></td>
+									</tr>
+								</tbody>
+							</table>	 
                 <div class="row">
                     <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
                         <div class="form-group">
-                            <select id="Interactions" class="form-control" style="width:100%" size=5></select>
+                        	<div class="col-xs-6 col-sm-6 col-md-6 col-lg-6">
+        	                    <button class="btn btn-primary btn-sm pull-left marginDefault" id="Accept" style="width:100px">Accept</button>
+            	                <button class="btn btn-primary btn-sm pull-left marginDefault" id="Reject" style="width:100px">Reject</button>
+                        	</div>
+                        	<div class="col-xs-6 col-sm-6 col-md-6 col-lg-6">
+	                            <button class="btn btn-primary btn-sm pull-right marginDefault" id="AcceptThirdParty" style="width:100px">三方轉接Accept</button>	
+    	                        <button class="btn btn-primary btn-sm pull-right marginDefault" id="RejectThirdParty" style="width:100px">三方轉接Reject</button>                        	
+                        	</div>
                         </div>
                     </div>
-                </div>
-                <div class="row">
-                    <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
-                        <div class="form-group">
-                            <button class="btn btn-primary btn-sm" id="Accept" style="width:100px">Accept</button>
-                            <button class="btn btn-primary btn-sm" id="Reject" style="width:100px">Reject</button>
-                            <button class="btn btn-primary btn-sm" id="Release" style="width:100px">Release</button>
-                            <button class="btn btn-primary btn-sm" id="Done" style="width:100px;visibility:hidden">Done</button>
-                        </div>
-                    </div>
-                </div>
+                </div>							
+							                   
+	                    </div>
+	                </div>
+            	</div>
+<!--                 <div class="row"> -->
+<!--                     <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12"> -->
+<!--                         <div class="form-group"> -->
+<!--                         	<div class="col-xs-6 col-sm-6 col-md-6 col-lg-6"> -->
+<!--         	                    <button class="btn btn-primary btn-sm pull-left marginDefault" id="Accept" style="width:100px">Accept</button> -->
+<!--             	                <button class="btn btn-primary btn-sm pull-left marginDefault" id="Reject" style="width:100px">Reject</button> -->
+<!--                         	</div> -->
+<!--                         	<div class="col-xs-6 col-sm-6 col-md-6 col-lg-6"> -->
+<!-- 	                            <button class="btn btn-primary btn-sm pull-right marginDefault" id="AcceptThirdParty" style="width:100px">三方轉接Accept</button>	 -->
+<!--     	                        <button class="btn btn-primary btn-sm pull-right marginDefault" id="RejectThirdParty" style="width:100px">三方轉接Reject</button>                        	 -->
+<!--                         	</div> -->
+<!--                         </div> -->
+<!--                     </div> -->
+<!--                 </div> -->
                 <div class="row">
                     <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
                         <div class="form-group">

@@ -46,7 +46,7 @@ div class ="container"> <h2>Form control: textarea </h2> <p>The form below conta
 		</div>
 		<div class="col-xs-6 col-sm-6 col-md-6 col-lg-6 text-center">
 			<h3>
-				<label id="PageTitle">Login</label>
+				<label id="PageTitle"></label>
 			</h3>
 		</div>
 		<div class="col-xs-3 col-sm-3 col-md-3 col-lg-3 vcenter disabled">
@@ -175,7 +175,7 @@ div class ="container"> <h2>Form control: textarea </h2> <p>The form below conta
 
 					// 顯示 Login Frame
 					$("iframe").hide();
-					$("#LoginFrame").show();
+					$("#ChatFrame").show(); // 為了開發方便,先轉成ChatFrame為預設頁面
 					var height = $(this).attr('data-height')
 							|| document.body.scrollHeight;
 					height = screen.height * 0.8;
@@ -191,7 +191,7 @@ div class ="container"> <h2>Form control: textarea </h2> <p>The form below conta
 // 					$(document).width(); // returns width of HTML document (same as pageWidth in screenshot)
 
 					//var width = $(this).attr('data-width') || setWidth();
-					$("#LoginFrame").attr({
+					$("#ChatFrame").attr({  // 為了開發方便,先轉成ChatFrame為預設頁面
 						'height' : height,
 					//'width': width
 					});
@@ -216,7 +216,7 @@ div class ="container"> <h2>Form control: textarea </h2> <p>The form below conta
 								//'width': width
 								});
 								$("#PageTitle").text($(this).text());
-								alert("height: " + height);
+// 								alert("height: " + height);
 							});
 				});
 
