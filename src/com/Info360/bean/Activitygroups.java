@@ -13,6 +13,18 @@ public class Activitygroups {
 	private String createdatetime;
 	
 	private String sort;
+	
+	private String deleteflag;
+
+	
+	
+	public String getDeleteflag() {
+		return deleteflag;
+	}
+
+	public void setDeleteflag(String deleteflag) {
+		this.deleteflag = deleteflag;
+	}
 
 	public int getDbid() {
 		return dbid;

@@ -23,28 +23,37 @@
 </resultMap>
 
 <select id="Select_activitydata" parameterType="com.Info360.bean.Activitydata"  resultMap="activitydataResult">
- Select DBID,ACTIVITYGROUPSID,CODENAME,COLOR,SORT,TITLEFLAG,TITLEGROUP,DELETEFLAG,CREATEDATETIME from tblCfg_ActivityData where activitygroupsid=#{activitygroupsid} ORDER BY SORT
+ Select DBID,ACTIVITYGROUPSID,CODENAME,COLOR,SORT,TITLEFLAG,TITLEGROUP,DELETEFLAG,CREATEDATETIME,DELETEDATETIME from tblCfg_ActivityData where activitygroupsid=#{activitygroupsid} ORDER BY SORT
 </select>
+
+<select id="Flag_activitydata" parameterType="com.Info360.bean.Activitydata"  resultMap="activitydataResult">
+ Select DBID,ACTIVITYGROUPSID,CODENAME,COLOR,SORT,TITLEFLAG,TITLEGROUP,DELETEFLAG,CREATEDATETIME,DELETEDATETIME from tblCfg_ActivityData
+ <if test="deleteflag != null &amp;&amp; deleteflag!=&quot;&quot; &amp;&amp; deleteflag.equals(&quot;0&quot;)">
+ 	where activitygroupsid=#{activitygroupsid} 
+ </if>
+  <if test="deleteflag != null &amp;&amp; deleteflag!=&quot;&quot; &amp;&amp; deleteflag.equals(&quot;1&quot;)">
+ 	where activitygroupsid=#{activitygroupsid}
+ </if>
+ ORDER BY SORT
+</select>
+
 
 <insert id="Insert_activitydata" parameterType="com.Info360.bean.Activitydata">
 insert into tblCfg_ActivityData 
-(ACTIVITYGROUPSID,CODENAME,COLOR,SORT,TITLEFLAG,TITLEGROUP,DELETEFLAG,DELETEDATETIME,CREATEDATETIME) 
+(ACTIVITYGROUPSID,CODENAME,COLOR,SORT,TITLEFLAG,TITLEGROUP,DELETEFLAG,CREATEDATETIME) 
 values
-(#{activitygroupsid},#{codename},#{color},#{sort},#{titleflag},#{titlegroup},#{deleteflag},#{deletedatetime},#{createdatetime})
+(#{activitygroupsid},#{codename},#{color},#{sort},#{titleflag},#{titlegroup},#{deleteflag},#{createdatetime})
 </insert>
 
 <update id="Update_activitydata" parameterType="com.Info360.bean.Activitydata">
-update  tblCfg_ActivityData 
-set 
-	ACTIVITYGROUPSID=#{activitygroupsid},CODENAME=#{codename},COLOR=#{color},SORT=#{sort},
-	TITLEFLAG=#{titleflag},TITLEGROUP=#{titlegroup},DELETEFLAG=#{deleteflag},
-	DELETEDATETIME=#{deletedatetime}
-
+update  tblCfg_ActivityData set CODENAME=#{codename},COLOR=#{color},SORT=#{sort}
 where DBID=#{dbid}
 </update>
 
-<delete id="Delete_activitydata" parameterType="com.Info360.bean.Activitydata">
-delete from tblCfg_ActivityData where CODENAME=#{codename}
-</delete>
- 
+<update id="LogicDelete_ActivityData" parameterType="com.Info360.bean.Activitydata">
+update  tblCfg_ActivityData set deleteflag=#{deleteflag},deletedatetime=#{deletedatetime}
+where codename=#{codename}
+</update>
+
+
 </mapper>

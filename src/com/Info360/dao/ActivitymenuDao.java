@@ -18,19 +18,19 @@ import com.Info360.util.IsError;
 public class ActivitymenuDao {
 	
 	/**
-	 * @param Delete_activitymenu
+	 * LogicDelete_activitymenu
+	 * @param LogicDelete_activitymenu
 	 */
-	public int Delete_activitymenu(
-			Activitymenu   activitymenu)
-			{
+	public int LogicDelete_activitymenu(
+			Activitymenu   activitymenu	){
 		DBAccess dbAccess = new DBAccess();
 		int activitymenuInt = 0;
 		SqlSession sqlSession = null;
 
-       try {
+		try {
 			sqlSession = dbAccess.getSqlSession();
 			//通過sqlSession執行SQL語句
-			activitymenuInt = sqlSession.insert("activitymenu.Delete_activitymenu", activitymenu);
+			activitymenuInt = sqlSession.update("activitymenu.LogicDelete_activitymenu", activitymenu);
 			sqlSession.commit();
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
@@ -43,6 +43,34 @@ public class ActivitymenuDao {
 		}
 		return activitymenuInt;
 	}
+	
+	/**
+	 * Flag_activitymenu
+	 * @param Flag_activitymenu
+	 */
+	public List<Activitymenu> Flag_activitymenu(Activitymenu activitymenu){
+		DBAccess dbAccess = new DBAccess();
+		List<Activitymenu> activitymenulist = new ArrayList<Activitymenu>();
+		SqlSession sqlSession = null;
+	
+		try {
+			sqlSession = dbAccess.getSqlSession();
+			//通過sqlSession執行SQL語句
+			activitymenulist = sqlSession.selectList("activitymenu.Flag_activitymenu", activitymenu);
+			sqlSession.commit();
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			//e.printStackTrace();
+			IsError.GET_EXCEPTION = e.getMessage();
+		} finally {
+			if(sqlSession != null){
+			   sqlSession.close();
+			}
+		}
+		return activitymenulist;
+	}
+	
+	
 	
 	/**
 	 * 更新個人資訊

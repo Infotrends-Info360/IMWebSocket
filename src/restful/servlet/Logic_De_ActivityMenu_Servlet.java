@@ -18,7 +18,6 @@ import javax.ws.rs.core.Response;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
-import com.Info360.bean.Activitygroups;
 import com.Info360.bean.Activitymenu;
 import com.Info360.bean.Cfg_AgentReason;
 import com.Info360.bean.CommonLink;
@@ -30,28 +29,47 @@ import com.Info360.service.MaintainService;
  * @author Lin
  */
 
-@Path("/Delete_ActivityGroup")
-public class Delete_ActivityGroup_Servlet {
+@Path("/LogicDelete_activitymenu")
+public class Logic_De_ActivityMenu_Servlet {
 	
-
 	@POST
 	@Produces("application/json")
 	public Response PostFromPath(
-		
-			@FormParam("groupname") String groupname
 	
+			@FormParam("menuname") String menuname,
+			@FormParam("deletedatetime") String deletedatetime,
+			@FormParam("deleteflag") String deleteflag
+			
 			) throws IOException {
 		
 		JSONObject jsonObject = new JSONObject();
-		Activitygroups activitygroups = new Activitygroups();
-
-		activitygroups.setGroupname(groupname);
-
-
+		Activitymenu activitymenu = new Activitymenu();
+		
+		activitymenu.setMenuname(menuname);
+		activitymenu.setDeleteflag(deleteflag);
+		
+		
+		if(activitymenu.getDeleteflag().equals("1")){
+			
+			SimpleDateFormat sdFormat = new SimpleDateFormat("yyyy/MM/dd HH:mm:ss.sss");
+			Date date = new Date();
+			String strDate = sdFormat.format(date);
+			activitymenu.setDeletedatetime(strDate);
+			
+			}else{
+			
+				activitymenu.setDeletedatetime(null);
+			}
 		MaintainService maintainservice = new MaintainService();		
-		int Delete = maintainservice.Delete_activitygroups(activitygroups);
+		int update = maintainservice.LogicDelete_activitymenu(activitymenu);
 	    
-    		jsonObject.put("activitygroups", Delete);
+  	  JSONArray activitymenuJsonArray = new JSONArray();
+  	 
+	    	JSONObject activitymenuObject = new JSONObject();
+	    
+	    	activitymenuJsonArray.put(activitymenuObject);
+  		
+    		jsonObject.put("activitymenu", update);
   
   	  
 		return Response.status(200).entity(jsonObject.toString())

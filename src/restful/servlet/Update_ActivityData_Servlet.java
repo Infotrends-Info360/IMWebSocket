@@ -36,14 +36,9 @@ public class Update_ActivityData_Servlet {
 	@POST
 	@Produces("application/json")
 	public Response PostFromPath(
-			
-			@FormParam("activitygroupsid") 	int activitygroupsid,
+		
 			@FormParam("codename") 			String codename,
 			@FormParam("color") 			String color,
-			@FormParam("titleflag") 		String titleflag,
-			@FormParam("titlegroup") 		int titlegroup,
-			@FormParam("deleteflag") 		String deleteflag,
-			@FormParam("deletedatetime") 	String deletedatetime,
 			@FormParam("dbid") 				int dbid,
 			@FormParam("sort") 				String sort
 			
@@ -52,14 +47,9 @@ public class Update_ActivityData_Servlet {
 		JSONObject jsonObject = new JSONObject();
 		Activitydata activitydata = new Activitydata();
 		
-		activitydata.setActivitygroupsid(activitygroupsid);
 		activitydata.setCodename(codename);
 		activitydata.setColor(color);
-		activitydata.setTitleflag(titleflag);
-		activitydata.setDeleteflag(deleteflag);
-		activitydata.setDeletedatetime(deletedatetime);
 		activitydata.setSort(sort);
-		activitydata.setTitlegroup(titlegroup);
 		activitydata.setDbid(dbid);
 		
 		MaintainService maintainservice = new MaintainService();		

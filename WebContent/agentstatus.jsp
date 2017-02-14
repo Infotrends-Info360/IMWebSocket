@@ -366,7 +366,13 @@
                     <h3>是否確定停用帳號？</h3>
                 </div>
                 <div class="modal-footer">
-                    <button type="button" class="btn btn-success" data-dismiss="modal" onclick="showToastSuccess('停用成功')">確定</button>
+                <div class="form-group col-sm-6">
+                 <label for="inputAssignedDepartment" class="col-sm-2 control-label">ID:</label>
+                 <div class="col-sm-4">
+                    <input type="text" class="form-control" id="D_id" placeholder="">
+                 </div>
+                 </div>
+                    <button type="button" class="btn btn-success" data-dismiss="modal" onclick="showToastSuccess('刪除成功')">確定</button>
                     <button type="button" class="btn btn-danger" data-dismiss="modal">取消</button>
                 </div>
             </div>
@@ -439,7 +445,7 @@
    	 function state(){
    		
    			  $.ajax({                              
-   		          url:"/IMWebSocket/RESTful/Select_agentstatus",
+   		          url:"/IMWebSocket/RESTful/Select_agentreason",
    			         data:{
    			        	 flag:0
    			        	 },
@@ -489,7 +495,7 @@
    		     		console.log("Open",data);
 
    		     	  $.ajax({                              
-   	   		          url:"/IMWebSocket/RESTful/Select_agentstatus",
+   	   		          url:"/IMWebSocket/RESTful/Select_agentreason",
    	   			         data:{
    	   			        	 flag:1
    	   			        	 },
@@ -641,7 +647,7 @@
 			 var createuserid = document.getElementById('Insert_createuserid').value;
 			
 			 $.ajax({                              
-		          url:"/IMWebSocket/RESTful/Insert_agentstatus",
+		          url:"/IMWebSocket/RESTful/Insert_agentreason",
 			         data:{
 			        	 flag:flag,
 			        	 alarmcolor:alarmcolor,
@@ -689,7 +695,7 @@
 			 var statusname_tw = document.getElementById('statusname_tw').value;
 		
 			 $.ajax({                              
-		          url:"/IMWebSocket/RESTful/Update_agentstatus",
+		          url:"/IMWebSocket/RESTful/Update_agentreason",
 			         data:{
 			        	 flag:flag,
 			        	 dbid:dbid,
@@ -773,6 +779,26 @@
         }
 
         function showToastSuccess(message) {
+        	
+        	var dbid = document.getElementById('D_id').value;
+        	 
+			 $.ajax({                              
+		          url:"/IMWebSocket/RESTful/Delete_AgentReason",
+			         data:{			        
+			        	 dbid:dbid
+			        	 },
+			         type : "POST",                                                                    
+			         dataType:'json',
+			         error:function(e){                                                                 
+			         alert("失敗");
+			         callback(data);
+			         },
+			         success:function(data){
+			        	 play(play2);
+			        	
+			     	}  
+			 }); 
+        	
             toastr.success(message);
         }
 
@@ -782,10 +808,10 @@
     			 var dbid = document.getElementById('Delete_id').value;
  
     			 $.ajax({                              
-    		          url:"/IMWebSocket/RESTful/LogicDelete_agentstatus",
+    		          url:"/IMWebSocket/RESTful/LogicDelete_agentreason",
     			         data:{
     			        	 flag:flag,
-    			        	 dbid:dbid,
+    			        	 dbid:dbid
     			        	 },
     			         type : "POST",                                                                    
     			         dataType:'json',

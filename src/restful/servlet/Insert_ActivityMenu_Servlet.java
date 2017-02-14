@@ -38,7 +38,6 @@ public class Insert_ActivityMenu_Servlet {
 	public Response PostFromPath(
 			@FormParam("menuname") 	String menuname,
 			@FormParam("deleteflag") String deleteflag,
-			@FormParam("deletedatetime") String deletedatetime,
 			@FormParam("createdatetime") String createdatetime,
 			@FormParam("sort") 	String sort
 		
@@ -47,8 +46,7 @@ public class Insert_ActivityMenu_Servlet {
 		
 		JSONObject jsonObject = new JSONObject();
 		Activitymenu activitymenu = new Activitymenu();
-		
-		activitymenu.setDeletedatetime(deletedatetime);
+
 		activitymenu.setDeleteflag(deleteflag);
 		activitymenu.setMenuname(menuname);
 		activitymenu.setSort(sort);

@@ -29,8 +29,8 @@ import com.Info360.service.MaintainService;
  * @author Lin
  */
 
-@Path("/Query_ActivityMenu")
-public class Query_ActivityMenu_Servlet {
+@Path("/FLAGDATA")
+public class FLAGDATA_Servlet {
 	
 
 	@POST
@@ -41,39 +41,19 @@ public class Query_ActivityMenu_Servlet {
 			) throws IOException {
 		
 		JSONObject jsonObject = new JSONObject();
-		Activitymenu activitymenu = new Activitymenu();
+		Activitygroups activitygroups = new Activitygroups();
 		
-		activitymenu.setDbid(dbid);
+		activitygroups.setDbid(dbid);
 	
 		MaintainService maintainservice = new MaintainService();	
 		
-		JSONArray ActivitymenuJsonArray = new JSONArray();
-  	 
-		List<Activitymenu> activitymenulist = maintainservice.Select_activitymenu(activitymenu);
-	    
-  	  for (int i = 0; i < activitymenulist.size(); i++) {
-  		  	JSONObject activitymenuObject = new JSONObject();
-  	  		activitymenuObject.put("dbid", activitymenulist.get(i).getDbid());
-  	  		activitymenuObject.put("createdatetime", activitymenulist.get(i).getCreatedatetime());
-  	  		activitymenuObject.put("deletedatetime", activitymenulist.get(i).getDeletedatetime());
-  	  		activitymenuObject.put("deleteflag", activitymenulist.get(i).getDeleteflag());
-  	  		activitymenuObject.put("menuname", activitymenulist.get(i).getMenuname());
-  	  		activitymenuObject.put("sort", activitymenulist.get(i).getSort());
-  	  	
-  	  		ActivitymenuJsonArray.put(activitymenuObject);
-  	  }
-    		jsonObject.put("activitymenu", ActivitymenuJsonArray);
-  	  	
-    		if(dbid!=0){
-    			
-    			Activitygroups activitygroups = new Activitygroups();
     			JSONArray ActivitygroupsJsonArray = new JSONArray();
     			
         		Activitydata activitydata = new Activitydata();
         		JSONArray ActivitydataJsonArray = new JSONArray();
-        		JSONArray TitleflagJsonArray = new JSONArray();
+        		JSONArray flagJsonArray = new JSONArray();
 
-        		activitygroups.setActivitymenuid(activitymenu.getDbid());
+        		activitygroups.setActivitymenuid(dbid);
         		List<Activitygroups> activitygroupslist = maintainservice.Select_activitygroups(activitygroups);
         		
         		for(int a = 0; a < activitygroupslist.size(); a++){
@@ -85,11 +65,13 @@ public class Query_ActivityMenu_Servlet {
         	  	activitygroupsObject.put("activitymenuid", activitygroupslist.get(a).getActivitymenuid());
         	  	activitygroupsObject.put("groupname", activitygroupslist.get(a).getGroupname());
         	  	activitygroupsObject.put("sort", activitygroupslist.get(a).getSort());
+        		
         	  	
         	  	ActivitygroupsJsonArray.put(activitygroupsObject);
         	  	
         	 // 	System.out.println("GroupDbid: "+activitygroupslist.get(a).getDbid());
         	  	
+        	  	if(dbid!=0){	
         	  	activitydata.setActivitygroupsid(activitygroupslist.get(a).getDbid());
     	  		List<Activitydata> activitydatalist = maintainservice.Select_activitydata(activitydata);
     	  		
@@ -108,17 +90,17 @@ public class Query_ActivityMenu_Servlet {
         			activitydataObject.put("sort", activitydatalist.get(g).getSort());
         					
         			
-        			if(activitydatalist.get(g).getTitleflag().trim().equals("0")){
+        			if(activitydatalist.get(g).getDeleteflag().trim().equals("0")){
         				ActivitydataJsonArray.put(activitydataObject);
                 		
         			}else{
-        				TitleflagJsonArray.put(activitydataObject);
+        				flagJsonArray.put(activitydataObject);
         			}
         			
         	  	}
 
     		}
-        		jsonObject.put("TitleFlag", TitleflagJsonArray);
+        		jsonObject.put("Flag", flagJsonArray);
         		jsonObject.put("activitydata", ActivitydataJsonArray);
         		jsonObject.put("activitygroups", ActivitygroupsJsonArray);
     		}

@@ -38,8 +38,6 @@ public class Update_ActivityMenu_Servlet {
 	public Response PostFromPath(
 			@FormParam("dbid") 	int dbid,
 			@FormParam("menuname") 	String menuname,
-			@FormParam("deleteflag") String deleteflag,
-			@FormParam("deletedatetime") String deletedatetime,
 			@FormParam("sort") 	String sort
 		
 			
@@ -50,8 +48,6 @@ public class Update_ActivityMenu_Servlet {
 		
 		
 		activitymenu.setDbid(dbid);
-		activitymenu.setDeletedatetime(deletedatetime);
-		activitymenu.setDeleteflag(deleteflag);
 		activitymenu.setMenuname(menuname);
 		activitymenu.setSort(sort);
 	

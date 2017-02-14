@@ -29,10 +29,9 @@ import com.Info360.service.MaintainService;
  * @author Lin
  */
 
-@Path("/Query_ActivityMenu")
-public class Query_ActivityMenu_Servlet {
+@Path("/Select_ActivityGroup")
+public class Select_ActivityGroup_Servlet {
 	
-
 	@POST
 	@Produces("application/json")
 	public Response PostFromPath(
@@ -68,9 +67,7 @@ public class Query_ActivityMenu_Servlet {
     			
     			Activitygroups activitygroups = new Activitygroups();
     			JSONArray ActivitygroupsJsonArray = new JSONArray();
-    			
-        		Activitydata activitydata = new Activitydata();
-        		JSONArray ActivitydataJsonArray = new JSONArray();
+
         		JSONArray TitleflagJsonArray = new JSONArray();
 
         		activitygroups.setActivitymenuid(activitymenu.getDbid());
@@ -85,41 +82,16 @@ public class Query_ActivityMenu_Servlet {
         	  	activitygroupsObject.put("activitymenuid", activitygroupslist.get(a).getActivitymenuid());
         	  	activitygroupsObject.put("groupname", activitygroupslist.get(a).getGroupname());
         	  	activitygroupsObject.put("sort", activitygroupslist.get(a).getSort());
+        	  	activitygroupsObject.put("deleteflag", activitygroupslist.get(a).getDeleteflag());
         	  	
-        	  	ActivitygroupsJsonArray.put(activitygroupsObject);
-        	  	
-        	 // 	System.out.println("GroupDbid: "+activitygroupslist.get(a).getDbid());
-        	  	
-        	  	activitydata.setActivitygroupsid(activitygroupslist.get(a).getDbid());
-    	  		List<Activitydata> activitydatalist = maintainservice.Select_activitydata(activitydata);
-    	  		
-        	  	for(int g = 0; g < activitydatalist.size(); g++){
-        	  		
-        	  		JSONObject activitydataObject = new JSONObject();
-        			activitydataObject.put("dbid", activitydatalist.get(g).getDbid());
-        			activitydataObject.put("createdatetime", activitydatalist.get(g).getCreatedatetime());
-        			activitydataObject.put("deletedatetime", activitydatalist.get(g).getDeletedatetime());
-        			activitydataObject.put("activitygroupsid", activitydatalist.get(g).getActivitygroupsid());
-        			activitydataObject.put("codename", activitydatalist.get(g).getCodename());
-        			activitydataObject.put("color", activitydatalist.get(g).getColor());
-        			activitydataObject.put("deleteflag", activitydatalist.get(g).getDeleteflag());
-        			activitydataObject.put("titlegroup", activitydatalist.get(g).getTitlegroup());
-        			activitydataObject.put("titleflag", activitydatalist.get(g).getTitleflag());
-        			activitydataObject.put("sort", activitydatalist.get(g).getSort());
-        					
-        			
-        			if(activitydatalist.get(g).getTitleflag().trim().equals("0")){
-        				ActivitydataJsonArray.put(activitydataObject);
-                		
-        			}else{
-        				TitleflagJsonArray.put(activitydataObject);
-        			}
-        			
+        	  	if(activitygroupslist.get(a).getDeleteflag().equals("1")){
+        	  		TitleflagJsonArray.put(activitygroupsObject);
+        	  	}else{
+        	  		ActivitygroupsJsonArray.put(activitygroupsObject);
         	  	}
-
+        	  	
     		}
-        		jsonObject.put("TitleFlag", TitleflagJsonArray);
-        		jsonObject.put("activitydata", ActivitydataJsonArray);
+        		jsonObject.put("Group_Flag", TitleflagJsonArray);
         		jsonObject.put("activitygroups", ActivitygroupsJsonArray);
     		}
 

@@ -8,6 +8,7 @@ import org.apache.ibatis.session.SqlSession;
 
 import com.Info360.bean.Activitydata;
 import com.Info360.bean.Activitygroups;
+import com.Info360.bean.Activitymenu;
 import com.Info360.bean.Cfg_AgentReason;
 import com.Info360.bean.CommonLink;
 import com.Info360.bean.ContactData;
@@ -19,19 +20,45 @@ import com.Info360.util.IsError;
 public class ActivitydataDao {
 	
 	/**
-	 * @param Delete_activitydata
+	 * Flag_activitymenu
+	 * @param Flag_activitymenu
 	 */
-	public int Delete_activitydata(
-			Activitydata   activitydata)
-			{
+	public List<Activitydata> Flag_activitydata(Activitydata activitydata){
+		DBAccess dbAccess = new DBAccess();
+		List<Activitydata> activitydatalist = new ArrayList<Activitydata>();
+		SqlSession sqlSession = null;
+	
+		try {
+			sqlSession = dbAccess.getSqlSession();
+			//通過sqlSession執行SQL語句
+			activitydatalist = sqlSession.selectList("activitydata.Flag_activitydata", activitydata);
+			sqlSession.commit();
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			//e.printStackTrace();
+			IsError.GET_EXCEPTION = e.getMessage();
+		} finally {
+			if(sqlSession != null){
+			   sqlSession.close();
+			}
+		}
+		return activitydatalist;
+	}
+	
+	/**
+	 * 更新個人資訊
+	 * @param Update_activitydata
+	 */
+	public int LogicDelete_ActivityData(
+			Activitydata   activitydata	){
 		DBAccess dbAccess = new DBAccess();
 		int activitydataInt = 0;
 		SqlSession sqlSession = null;
 
-       try {
+		try {
 			sqlSession = dbAccess.getSqlSession();
 			//通過sqlSession執行SQL語句
-			activitydataInt = sqlSession.insert("activitydata.Delete_activitydata", activitydata);
+			activitydataInt = sqlSession.update("activitydata.LogicDelete_ActivityData", activitydata);
 			sqlSession.commit();
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
@@ -44,7 +71,6 @@ public class ActivitydataDao {
 		}
 		return activitydataInt;
 	}
-	
 	
 	/**
 	 * 更新個人資訊

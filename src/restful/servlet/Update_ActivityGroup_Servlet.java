@@ -25,11 +25,6 @@ import com.Info360.bean.CommonLink;
 import com.Info360.service.MaintainService;
 
 
-/**
- * RESTful Interaction
- * @author Lin
- */
-
 @Path("/Update_ActivityGroup")
 public class Update_ActivityGroup_Servlet {
 	
@@ -39,11 +34,9 @@ public class Update_ActivityGroup_Servlet {
 	public Response PostFromPath(
 			@FormParam("activitymenuid") int activitymenuid,
 			@FormParam("groupname") 	 String groupname,
-			@FormParam("deletedatetime") String deletedatetime,
 			@FormParam("dbid") 			 int dbid,
 			@FormParam("sort") 			 String sort
 		
-			
 			) throws IOException {
 		
 		JSONObject jsonObject = new JSONObject();
@@ -51,7 +44,6 @@ public class Update_ActivityGroup_Servlet {
 		
 		activitygroups.setDbid(dbid);
 		activitygroups.setActivitymenuid(activitymenuid);
-		activitygroups.setDeletedatetime(deletedatetime);
 		activitygroups.setGroupname(groupname);
 		activitygroups.setSort(sort);
 		

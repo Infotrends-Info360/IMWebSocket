@@ -129,7 +129,6 @@
 				<tr >
 		 	 		<th id="dbid" data-sortable="true"></th>
 			 		<th id="createdatetime" data-sortable="true"></th>
-			 		<th id="deletedatetime" data-sortable="true"></th>
 			 		<th id="deleteflag" data-sortable="true"></th>
 			 		<th id="menuname" data-sortable="true"></th>
 			 		<th id="sort" data-sortable="true"></th>
@@ -170,29 +169,28 @@
                             </div>
 
                             <div class="row ibox">
-<!--                                 <div class="col-lg-12 col-md-12" id="banTable_div"> -->
+    <div class="col-lg-12 col-md-12" id="banTable_div">
                                 
-<!--    <table  id="banTable" -->
-<!--        data-pagination="true" -->
-<!--        data-search="true" -->
-<!--        data-click-to-select="true" -->
-<!--   	   data-toolbar="#toolbar" -->
-<!-- 		 >   -->
-<!-- 		<thead> -->
-<!-- 				<tr > -->
-				
-<!-- 					 <th id="user_name" data-sortable="true"></th>		 	 -->
-<!-- 			 		 <th id="emailaddress" data-sortable="true"></th> -->
-<!-- 			 		 <th id="state" data-sortable="true"></th> -->
-<!-- 			 		 <th id="account" data-sortable="true"></th> -->
-<!-- 			 		 <th id="employee_id" data-sortable="true"></th> -->
-<!-- 			 		 <th id="dn" data-sortable="true"></th> -->
-<!-- 				</tr> -->
-<!--      </thead> -->
+   <table  id="banTable"
+       data-pagination="true"
+       data-search="true"
+       data-click-to-select="true"
+  	   data-toolbar="#toolbar"
+		 >  
+		<thead>
+				<tr >
+					<th id="dbid" data-sortable="true"></th>
+			 		<th id="createdatetime" data-sortable="true"></th>
+			 		<th id="deletedatetime" data-sortable="true"></th>
+			 		<th id="deleteflag" data-sortable="true"></th>
+			 		<th id="menuname" data-sortable="true"></th>
+			 		<th id="sort" data-sortable="true"></th>
+				</tr>
+     </thead>
     
-<!-- </table> -->
+</table>
    
-<!--                                 </div> -->
+                                </div>
                             </div>
                         </div>
 <!-- 新增 --> 
@@ -200,57 +198,23 @@
                             <div class="widget">
 <!--                                  <form class="form-horizontal"> -->
                                     <div class="form-group col-sm-6">
-                                        <label for="inputAccount" class="col-sm-2 control-label">狀態名:</label>
+                                        <label for="inputAccount" class="col-sm-2 control-label">menuname:</label>
                                         <div class="col-sm-8">
-                                            <input type="text" class="form-control" id="Insert_statusname" placeholder="">
+                                            <input type="text" class="form-control" id="insert_menuname" placeholder="">
                                         </div>
                                     </div>
+                         
                                     <div class="form-group col-sm-6">
-                                        <label for="inputAccount" class="col-sm-2 control-label">狀態名_CN:</label>
+                                        <label for="inputAccount" class="col-sm-2 control-label">sort:</label>
                                         <div class="col-sm-8">
-                                            <input type="text" class="form-control" id="Insert_statusname_cn" placeholder="">
+                                            <input type="text" class="form-control" id="insert_sort" placeholder="">
                                         </div>
                                     </div>
-                                    <div class="form-group col-sm-6">
-                                        <label for="inputAccount" class="col-sm-2 control-label">狀態名_EN:</label>
-                                        <div class="col-sm-8">
-                                            <input type="text" class="form-control" id="Insert_statusname_en" placeholder="">
-                                        </div>
-                                    </div>
-                                    <div class="form-group col-sm-6">
-                                        <label for="inputAccount" class="col-sm-2 control-label">狀態名_TW:</label>
-                                        <div class="col-sm-8">
-                                            <input type="text" class="form-control" id="Insert_statusname_tw" placeholder="">
-                                        </div>
-                                    </div>
-                                    <div class="form-group col-sm-6">
-                                        <label for="inputAccount" class="col-sm-2 control-label">告警顏色:</label>
-                                        <div class="col-sm-8">
-                                            <input type="text" class="form-control" id="Insert_alarmcolor" placeholder="">
-                                        </div>
-                                    </div>
-                                    <div class="form-group col-sm-6">
-                                        <label for="inputAccount" class="col-sm-2 control-label">告警時間:</label>
-                                        <div class="col-sm-8">
-                                            <input type="text" class="form-control" id="Insert_alarmduration" placeholder="">
-                                        </div>
-                                    </div>
-                                    <div class="form-group col-sm-6">
-                                        <label for="inputAccount" class="col-sm-2 control-label">註解:</label>
-                                        <div class="col-sm-8">
-                                            <input type="text" class="form-control" id="Insert_description" placeholder="">
-                                        </div>
-                                    </div>
-                                     <div class="form-group col-sm-6">
-                                        <label for="inputAccount" class="col-sm-2 control-label">建立者:</label>
-                                        <div class="col-sm-8">
-                                            <input type="text" class="form-control" id="Insert_createuserid" placeholder="">
-                                        </div>
-                                    </div>
+                                  
                                      <div class="form-group col-sm-6">
                                         <label for="inputConfirmPassword" class="col-sm-2 control-label">啟用狀態:</label>
                                         <div class="col-sm-8">
-                                            <select class="form-control" id="Insert_flag">
+                                            <select class="form-control" id="insert_deleteflag">
       											<option value="0">啟用</option>
 	  											<option value="1">停用</option>
       										</select>
@@ -275,63 +239,25 @@
                        <div id="editMemberContent" style="display:none;">
                             <div class="widget">
 									<div class="form-group col-sm-6">
-                                        <label for="inputAccount" class="col-sm-2 control-label required">DBID</label>
+                                        <label for="inputAccount" class="col-sm-2 control-label required">DBID:</label>
                                         <div class="col-sm-8">
-                                            <input type="number" class="form-control" id="Update_id" >
+                                            <input type="number" class="form-control" id="up_dbid" >
                                         </div>
-                                    </div>			
+                                    </div>		
                                     <div class="form-group col-sm-6">
-                                        <label for="inputAccount" class="col-sm-2 control-label">告警顏色:</label>
+                                        <label for="inputAccount" class="col-sm-2 control-label">清單名稱:</label>
                                         <div class="col-sm-8">
-                                            <input type="text" class="form-control" id="alarmcolor" >
-                                        </div>
-                                    </div>
-                                    <div class="form-group col-sm-6">
-                                        <label for="inputName" class="col-sm-2 control-label">告警時間:</label>
-                                        <div class="col-sm-8">
-                                            <input type="text" class="form-control" id="alarmduration" placeholder="">
+                                            <input type="text" class="form-control" id="up_menuname" >
                                         </div>
                                     </div>
 
                                     <div class="form-group col-sm-6">
-                                        <label for="inputLastName" class="col-sm-2 control-label">註解:</label>
+                                        <label for="inputName" class="col-sm-2 control-label">sort:</label>
                                         <div class="col-sm-8">
-                                            <input type="text" class="form-control" id="description" placeholder="">
+                                            <input type="text" class="form-control" id="up_sort" placeholder="">
                                         </div>
                                     </div>
-                                    <div class="form-group col-sm-6">
-                                        <label for="inputFirstName" class="col-sm-2 control-label">狀態名:</label>
-                                        <div class="col-sm-8">
-                                            <input type="text" class="form-control" id="statusname" placeholder="">
-                                        </div>
-                                    </div>
-                                    <div class="form-group col-sm-6">
-                                        <label for="inputEmployNumber" class="col-sm-2 control-label">狀態名_CN:</label>
-                                        <div class="col-sm-8">
-                                            <input type="text" class="form-control" id="statusname_cn" placeholder="">
-                                        </div>
-                                    </div>
-                                    <div class="form-group col-sm-6">
-                                        <label for="inputPhoneNumber" class="col-sm-2 control-label">狀態名_EN:</label>
-                                        <div class="col-sm-8">
-                                            <input type="text" class="form-control" id="statusname_en" placeholder="">
-                                        </div>
-                                    </div>
-                                    <div class="form-group col-sm-6">
-                                        <label for="inputPassword" class="col-sm-2 control-label">狀態名_TW:</label>
-                                        <div class="col-sm-8">
-                                            <input type="text" class="form-control" id="statusname_tw" placeholder="">
-                                        </div>
-                                    </div>
-                                    <div class="form-group col-sm-6">
-                                        <label for="inputConfirmPassword" class="col-sm-2 control-label">啟用狀態:</label>
-                                        <div class="col-sm-8">
-                                            <select class="form-control" id="Update_flag">
-      											<option value="0">啟用</option>
-	  											<option value="1">停用</option>
-      										</select>
-                                        </div>
-                                    </div>
+
 
                                     <div class="form-group">
                                         <div class="col-sm-offset-9 col-sm-3">
@@ -365,7 +291,8 @@
                     <h3>是否確定停用帳號？</h3>
                 </div>
                 <div class="modal-footer">
-                    <button type="button" class="btn btn-success" data-dismiss="modal" onclick="showToastSuccess('停用成功')">確定</button>
+              
+                    <button type="button" class="btn btn-success" data-dismiss="modal" onclick="showToastSuccess('刪除成功')">確定</button>
                     <button type="button" class="btn btn-danger" data-dismiss="modal">取消</button>
                 </div>
             </div>
@@ -386,8 +313,8 @@
                 </div>
                 <div class="modal-footer">
                  <div class="form-group col-sm-6">
-                 <label for="inputAssignedDepartment" class="col-sm-2 control-label">ID:</label>
-                 <div class="col-sm-4">
+                 <label for="inputAssignedDepartment" class="col-sm-5 control-label">清單名稱:</label>
+                 <div class="col-sm-6">
                     <input type="text" class="form-control" id="Delete_id" placeholder="">
                  </div>
                  </div>
@@ -438,9 +365,9 @@
    	 function state(){
    		
    			  $.ajax({                              
-   		          url:"/IMWebSocket/RESTful/Query_ActivityMenu",
+   		          url:"/IMWebSocket/RESTful/Flag_ActivityMenu",
    			         data:{
-   			        	 dbid:0
+   			        	 deleteflag:0
    			        	 },
    			            
    			         type : "POST",                                                                    
@@ -460,9 +387,6 @@
    			         }, {
    			             field: 'createdatetime',
    			             title: 'createdatetime'
-   			         },{
-   			             field: 'deletedatetime',
-   			             title: 'deletedatetime'
    			         },
    			         {
    			             field: 'deleteflag',
@@ -480,59 +404,54 @@
    			     	}));"json"
    			     	
    		     		console.log("activitymenu",data);
-
-//    		     	  $.ajax({                              
-//    	   		          url:"/IMWebSocket/RESTful/Select_agentstatus",
-//    	   			         data:{
-//    	   			        	 flag:1
-//    	   			        	 },
-   	   			            
-//    	   			         type : "POST",                                                                    
-//    	   			         dataType:'json',
-//    	   			         error:function(e){                                                                 
-//    	   			         alert("失敗");
-//    	   			         callback(data);
-//    	   			         },
-//    	   			         success:function(data){
-//    	   			       		$('#banTable tr').empty();
-//      		        	 	$("#banTable_div").html($('#banTable').bootstrapTable({
-//    	   			         columns: [{
-   	   			           
-//    	   			             field: 'statusname',
-//    	   			             title: '狀態名'
-//    	   			         }, {
-//    	   			             field: 'statusname_cn',
-//    	   			             title: '狀態名_CN'
-//    	   			         },{
-//    	   			             field: 'statusname_en',
-//    	   			             title: '狀態名_EN'
-//    	   			         },
-//    	   			         {
-//    	   			             field: 'statusname_tw',
-//    	   			             title: '狀態名_TW'
-//    	   			         },
-//    	   			         {
-//    	   			             field: 'description',
-//    	   			             title: '註解'
-//    	   			         },
-//    	   			         {
-//    	   			             field: 'alarmduration',
-//    	   			             title: '告警時間'
-//    	   			         }, {
-//    	   			             field: 'alarmcolor',
-//    	   			             title: '告警顏色'
-//    	   			         }, {
-//    	   			             field: 'flag',
-//    	   			             title: 'flag'
-//    	   			         }],
-//    	   			     	data:data.agentstatus
-//    	   			     	}));"json"
-   	   			     	
-//    	   		     		console.log("Close",data);
-//    	   		     	callback();
-//    	   			     }
-   	   			        
-//    	   			 }); 
+   			     	
+   			     	
+   		     	 $.ajax({                              
+      		          url:"/IMWebSocket/RESTful/Flag_ActivityMenu",
+      			         data:{
+      			        	deleteflag:1
+      			        	 },
+      			            
+      			         type : "POST",                                                                    
+      			         dataType:'json',
+      			         
+      			         error:function(e){                                                                 
+      			         alert("失敗");
+      			         callback(data);
+      			         },
+      			         success:function(data){
+      			        	 $('#banTable tr').empty();
+      	   		        	 $("#banTable_div").html($('#banTable').bootstrapTable({
+      			         columns: [{
+      			           
+      			             field: 'dbid',
+      			             title: 'dbid'
+      			         }, {
+      			             field: 'createdatetime',
+      			             title: 'createdatetime'
+      			         },{
+      			             field: 'deletedatetime',
+      			             title: 'deletedatetime'
+      			         },
+      			         {
+      			             field: 'deleteflag',
+      			             title: 'deleteflag'
+      			         },
+      			         {
+      			             field: 'menuname',
+      			             title: 'menuname'
+      			         },
+      			         {
+      			             field: 'sort',
+      			             title: 'sort'
+      			         }],
+      			     	data:data.activitymenu
+      			     	}));"json"
+      			     	
+      		     		console.log("activitymenu",data);
+      		     		callback();
+      			     }
+   		      		}); 
    			     }
    			        
    			 }); 
@@ -623,42 +542,29 @@
             
             closeAddMember();
             
-//              var flag = document.getElementById('Insert_flag').value;
-// 			 var alarmcolor = document.getElementById('Insert_alarmcolor').value;
-// 			 var alarmduration = document.getElementById('Insert_alarmduration').value;
-// 			 var description = document.getElementById('Insert_description').value;
-// 			 var statusname = document.getElementById('Insert_statusname').value;
-// 			 var statusname_cn = document.getElementById('Insert_statusname_cn').value;
-// 			 var statusname_en = document.getElementById('Insert_statusname_en').value;
-// 			 var statusname_tw = document.getElementById('Insert_statusname_tw').value;
-// 			 var createuserid = document.getElementById('Insert_createuserid').value;
-			
-// 			 $.ajax({                              
-// 		          url:"/IMWebSocket/RESTful/Insert_agentstatus",
-// 			         data:{
-// 			        	 flag:flag,
-// 			        	 alarmcolor:alarmcolor,
-// 			        	 alarmduration:alarmduration,
-// 			        	 description:description,
-// 			        	 statusname:statusname,
-// 			        	 statusname_cn:statusname_cn,
-// 			        	 statusname_en:statusname_en,
-// 			        	 statusname_tw:statusname_tw,
-// 			        	 createuserid:createuserid
-// 			        	 },
+          var menuname = document.getElementById('insert_menuname').value;
+          var deleteflag = document.getElementById('insert_deleteflag').value;
+          var sort = document.getElementById('insert_sort').value;
+			 $.ajax({                              
+		          url:"/IMWebSocket/RESTful/Insert_ActivityMenu",
+			         data:{
+			        	 menuname:menuname,
+			        	 deleteflag:deleteflag,
+			        	 sort:sort
+			        	 },
 			            
-// 			         type : "POST",                                                                    
-// 			         dataType:'json',
+			         type : "POST",                                                                    
+			         dataType:'json',
 			         
-// 			         error:function(e){                                                                 
-// 			         alert("失敗");
-// 			         callback(data);
-// 			         },
-// 			         success:function(data){
-// 			        	 play(play2);
-// 			   		     }
+			         error:function(e){                                                                 
+			         alert("失敗");
+			         callback(data);
+			         },
+			         success:function(data){
+			        	 play(play2);
+			   		     }
 			   		        
-// 			   		 }); 
+			   		 }); 
             
             showToastSuccess("新增成功");
         }
@@ -671,42 +577,31 @@
 //             }
             closeEditMember();
          
-//              var flag = document.getElementById('Update_flag').value;
-// 			 var dbid = document.getElementById('Update_id').value;;
-// 			 var alarmcolor = document.getElementById('alarmcolor').value;
-// 			 var alarmduration = document.getElementById('alarmduration').value;
-// 			 var description = document.getElementById('description').value;
-// 			 var statusname = document.getElementById('statusname').value;
-// 			 var statusname_cn = document.getElementById('statusname_cn').value;
-// 			 var statusname_en = document.getElementById('statusname_en').value;
-// 			 var statusname_tw = document.getElementById('statusname_tw').value;
-		
-// 			 $.ajax({                              
-// 		          url:"/IMWebSocket/RESTful/Update_agentstatus",
-// 			         data:{
-// 			        	 flag:flag,
-// 			        	 dbid:dbid,
-// 			        	 alarmcolor:alarmcolor,
-// 			        	 alarmduration:alarmduration,
-// 			        	 description:description,
-// 			        	 statusname:statusname,
-// 			        	 statusname_cn:statusname_cn,
-// 			        	 statusname_en:statusname_en,
-// 			        	 statusname_tw:statusname_tw
-// 			        	 },
+             var dbid = document.getElementById('up_dbid').value;
+			 var menuname = document.getElementById('up_menuname').value;
+			 var sort = document.getElementById('up_sort').value;
+			 
+			 $.ajax({                              
+		          url:"/IMWebSocket/RESTful/Update_ActivityMenu",
+			         data:{
+			        	 dbid:dbid,
+			        	 menuname:menuname,
+			        	 sort:sort
+			        		 
+			        	 },
 			            
-// 			         type : "POST",                                                                    
-// 			         dataType:'json',
+			         type : "POST",                                                                    
+			         dataType:'json',
 			         
-// 			         error:function(e){                                                                 
-// 			         alert("失敗");
-// 			         callback(data);
-// 			         },
-// 			         success:function(data){
-// 			        	 play(play2);
-// 			   		     }
+			         error:function(e){                                                                 
+			         alert("失敗");
+			         callback(data);
+			         },
+			         success:function(data){
+			        	 play(play2);
+			   		     }
 			   		        
-// 			   		 }); 
+			   		 }); 
 
             showToastSuccess("修改成功");
         }
@@ -766,31 +661,32 @@
         }
 
         function showToastSuccess(message) {
+        	
             toastr.success(message);
         }
 
         function showToastError(message) {
         	
-//     			 var flag = document.getElementById('Delete_flag').value;
-//     			 var dbid = document.getElementById('Delete_id').value;
+    			 var deleteflag = document.getElementById('Delete_flag').value;
+    			 var menuname = document.getElementById('Delete_id').value;
  
-//     			 $.ajax({                              
-//     		          url:"/IMWebSocket/RESTful/LogicDelete_agentstatus",
-//     			         data:{
-//     			        	 flag:flag,
-//     			        	 dbid:dbid,
-//     			        	 },
-//     			         type : "POST",                                                                    
-//     			         dataType:'json',
-//     			         error:function(e){                                                                 
-//     			         alert("失敗");
-//     			         callback(data);
-//     			         },
-//     			         success:function(data){
-//     			        	 play(play2);
+    			 $.ajax({                              
+    		          url:"/IMWebSocket/RESTful/LogicDelete_activitymenu",
+    			         data:{
+    			        	 menuname:menuname,
+    			        	 deleteflag:deleteflag
+    			        	 },
+    			         type : "POST",                                                                    
+    			         dataType:'json',
+    			         error:function(e){                                                                 
+    			         alert("失敗");
+    			         callback(data);
+    			         },
+    			         success:function(data){
+    			        	 play(play2);
     			        	
-//     			     	}  
-//     			 }); 
+    			     	}  
+    			 }); 
     			        
      
             toastr.error(message);
