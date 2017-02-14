@@ -47,10 +47,6 @@ public class Query_ActivityGroup_Servlet {
 	
 		MaintainService maintainservice = new MaintainService();	
 		
-	
-  	  	
-    		
-    		
     			JSONArray ActivitygroupsJsonArray = new JSONArray();
     			
         		Activitydata activitydata = new Activitydata();

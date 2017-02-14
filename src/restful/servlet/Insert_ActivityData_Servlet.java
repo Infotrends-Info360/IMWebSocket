@@ -43,7 +43,6 @@ public class Insert_ActivityData_Servlet {
 			@FormParam("titleflag") 		String titleflag,
 			@FormParam("titlegroup") 		int titlegroup,
 			@FormParam("deleteflag") 		String deleteflag,
-			@FormParam("deletedatetime") 	String deletedatetime,
 			@FormParam("createdatetime") 	String createdatetime,
 			@FormParam("sort") 				String sort
 			
@@ -57,7 +56,6 @@ public class Insert_ActivityData_Servlet {
 		activitydata.setColor(color);
 		activitydata.setTitleflag(titleflag);
 		activitydata.setDeleteflag(deleteflag);
-		activitydata.setDeletedatetime(deletedatetime);
 		activitydata.setSort(sort);
 		activitydata.setTitlegroup(titlegroup);
 		
@@ -67,20 +65,6 @@ public class Insert_ActivityData_Servlet {
 		String strDate = sdFormat.format(date);
 		//System.out.println(strDate);
 		activitydata.setCreatedatetime(strDate);
-		
-		
-		System.out.println(
-				"Gid: "+ activitydata.getActivitygroupsid()+
-				" codename: "+activitydata.getCodename()+
-				" color: "+activitydata.getColor()+
-				" Cr time: "+activitydata.getCreatedatetime()+
-				" De time: "+activitydata.getDeletedatetime()+
-				" De flag: "+activitydata.getDeleteflag()+
-				" Ti flag: "+activitydata.getTitleflag()+
-				" Ti group: "+activitydata.getTitlegroup()+
-				" sort: "+activitydata.getSort()
-				);
-	
 		
 		
 		MaintainService maintainservice = new MaintainService();		

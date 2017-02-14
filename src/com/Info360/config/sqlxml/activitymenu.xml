@@ -26,23 +26,35 @@
  ORDER BY SORT
 </select>
 
+<select id="Flag_activitymenu" parameterType="com.Info360.bean.Activitymenu"  resultMap="activitymenuResult">
+ Select DBID,MENUNAME,DELETEFLAG,DELETEDATETIME,CREATEDATETIME,SORT from tblCfg_ActivityMenu
+ <if test="deleteflag != null &amp;&amp; deleteflag!=&quot;&quot; &amp;&amp; deleteflag.equals(&quot;0&quot;)">
+ 	where deleteflag=#{deleteflag} 
+ </if>
+  <if test="deleteflag != null &amp;&amp; deleteflag!=&quot;&quot; &amp;&amp; deleteflag.equals(&quot;1&quot;)">
+ 	where deleteflag=#{deleteflag} 
+ </if>
+ ORDER BY SORT
+</select>
+
+
+
 <insert id="Insert_activitymenu" parameterType="com.Info360.bean.Activitymenu">
 insert into tblCfg_ActivityMenu 
-(MENUNAME,DELETEFLAG,DELETEDATETIME,CREATEDATETIME,SORT) 
+(MENUNAME,DELETEFLAG,CREATEDATETIME,SORT) 
 values
-(#{menuname},#{deleteflag},#{deletedatetime},#{createdatetime},#{sort})
+(#{menuname},#{deleteflag},#{createdatetime},#{sort})
 </insert>
 
 <update id="Update_activitymenu" parameterType="com.Info360.bean.Activitymenu">
 update  tblCfg_ActivityMenu 
 set 
-	MENUNAME=#{menuname},DELETEFLAG=#{deleteflag},DELETEDATETIME=#{deletedatetime},SORT=#{sort}
+	MENUNAME=#{menuname},SORT=#{sort}
 
 where DBID=#{dbid}
 </update>
+<update id="LogicDelete_activitymenu" parameterType="com.Info360.bean.Activitymenu">
+update  tblCfg_ActivityMenu set deleteflag=#{deleteflag},deletedatetime=#{deletedatetime} where menuname=#{menuname}
+</update>
 
-<delete id="Delete_activitymenu" parameterType="com.Info360.bean.Activitymenu">
-delete from tblCfg_ActivityMenu where MENUNAME=#{menuname}
-</delete>
- 
 </mapper>

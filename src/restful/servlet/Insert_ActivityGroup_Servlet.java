@@ -39,7 +39,6 @@ public class Insert_ActivityGroup_Servlet {
 	public Response PostFromPath(
 			@FormParam("activitymenuid") int activitymenuid,
 			@FormParam("groupname") 	 String groupname,
-			@FormParam("deletedatetime") String deletedatetime,
 			@FormParam("createdatetime") String createdatetime,
 			@FormParam("sort") 			 String sort
 		
@@ -50,7 +49,6 @@ public class Insert_ActivityGroup_Servlet {
 		Activitygroups activitygroups = new Activitygroups();
 		
 		activitygroups.setActivitymenuid(activitymenuid);
-		activitygroups.setDeletedatetime(deletedatetime);
 		activitygroups.setGroupname(groupname);
 		activitygroups.setSort(sort);
 		

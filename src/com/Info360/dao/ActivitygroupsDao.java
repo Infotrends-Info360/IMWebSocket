@@ -19,19 +19,19 @@ import com.Info360.util.IsError;
 public class ActivitygroupsDao {
 	
 	/**
-	 * @param Delete_activitygroups
+	 * 更新個人資訊
+	 * @param LogicDelete_activitygroups
 	 */
-	public int Delete_activitygroups(
-			Activitygroups   activitygroups)
-			{
+	public int LogicDelete_activitygroups(
+			Activitygroups   activitygroups	){
 		DBAccess dbAccess = new DBAccess();
 		int activitygroupsInt = 0;
 		SqlSession sqlSession = null;
 
-       try {
+		try {
 			sqlSession = dbAccess.getSqlSession();
 			//通過sqlSession執行SQL語句
-			activitygroupsInt = sqlSession.insert("activitygroups.Delete_activitygroups", activitygroups);
+			activitygroupsInt = sqlSession.update("activitygroups.LogicDelete_activitygroups", activitygroups);
 			sqlSession.commit();
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
@@ -44,6 +44,7 @@ public class ActivitygroupsDao {
 		}
 		return activitygroupsInt;
 	}
+	
 	/**
 	 * 更新個人資訊
 	 * @param Update_activitygroups
