@@ -75,7 +75,7 @@ div class ="container"> <h2>Form control: textarea </h2> <p>The form below conta
 <!-- 	                    <option value="status03">status03</option> -->
 <!-- 	                </select> -->
                         <div class="form-group">
-                            <input type="text" id="status" class="form-control" value="status01" />
+                            <input type="text" id="status" class="form-control" value="" />
                         </div>
                	</div>				
 			</div>

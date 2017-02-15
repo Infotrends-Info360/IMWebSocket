@@ -111,12 +111,12 @@ hr {
             <div class="col-xs-4 col-sm-4 col-md-4 col-lg-4">
                 <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
                 	<div class="col-xs-4 col-sm-4 col-md-4 col-lg-4">
-                		<button id="AgentReady" class="btn btn-primary marginBottom" style="width:100px">Ready</button>
+                		<button id="ready" class="btn btn-primary marginBottom" style="width:100px" disabled>Ready</button>
                 	</div>	                	
                 </div>	
                 <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
                 	<div class="col-xs-6 col-sm-6 col-md-6 col-lg-6">
-                        <button id="AgentNotReady" class="btn btn-primary" style="width:100px">Not Ready</button>
+                        <button id="notready" class="btn btn-primary" style="width:100px" disabled>Not Ready</button>
                 	</div>
                 	<div class="col-xs-6 col-sm-6 col-md-6 col-lg-6">
                         <select id="reason" class="form-control">

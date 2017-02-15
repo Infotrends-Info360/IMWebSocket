@@ -127,7 +127,7 @@ WEB_SOCKET_SWF_LOCATION = "WebSocketMain.swf";
                 <div class="row">
                     <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
                         <button id="Login" class="btn btn-primary btn-sm" onclick="Login();">Login</button>
-                        <button id="Logout" class="btn btn-primary btn-sm">Logout</button>
+                        <button id="Logout" class="btn btn-primary btn-sm" onclick="Logout();" disabled>Logout</button>
                     </div>
                 </div>
             </div>
