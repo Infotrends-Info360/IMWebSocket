@@ -1,4 +1,5 @@
 /********** util *************/
+// 之後可當做Agent, Client共用更新方法
 function switchStatus(aStatus){
 	switch(aStatus) {
     case StatusEnum.LOGOUT:
@@ -26,7 +27,7 @@ function switchStatus(aStatus){
 //    	break;
     default:
         break;
-}
+	}
 }
 
 // IE8 does not support trim() - this is a polyfill for IE8 
@@ -37,10 +38,9 @@ if(typeof String.prototype.trim !== 'function') {
 }
 
 
-
-
 /********** bean *************/
-//配合Object.create()使用,可收inheritance的效果
+//目的: 將Json請求字串物件化 (持續進行中)
+
 function messagetoRoomJson(aType, aACtype, aText, aId, aUserName, aRoomID, aChannel, aDate) {  // Method which will display type of Animal
 	this.type = aType;
 	this.ACtype = aACtype;
@@ -70,15 +70,24 @@ function myRoomMemberJsonObj(aID){
 	this.ID = aID;
 }
 
+/********** enum *************/
+var StatusEnum = Object.freeze({
+	LOGOUT: 'LOGOUT', 
+	WAIT_AGENT: 'WAIT_AGENT', 
+	JOIN_ROOM: 'JOIN_ROOM',
+	FIND_AGENT: 'FIND_AGENT'
+		
+});
+
 // reference:
 // https://developer.mozilla.org/en-US/docs/Web/JavaScript/Guide/Working_with_Objects
 // Animal properties and method encapsulation
- var Animal = {
-		type: "Invertebrates", // Default value of properties
-		displayType : function() { // Method which will display type of Animal
-			console.log(this.type);
-		}
- }
+// var Animal = {
+//		type: "Invertebrates", // Default value of properties
+//		displayType : function() { // Method which will display type of Animal
+//			console.log(this.type);
+//		}
+// }
 //
 // // Create new animal type called animal1
 // var animal1 = Object.create(Animal);
@@ -184,14 +193,6 @@ SinglyList.prototype.remove = function(position) {
 };
 
 
-/********** enum *************/
-var StatusEnum = Object.freeze({
-	LOGOUT: 'LOGOUT', 
-	WAIT_AGENT: 'WAIT_AGENT', 
-	JOIN_ROOM: 'JOIN_ROOM',
-	FIND_AGENT: 'FIND_AGENT'
-		
-});
 
 
 

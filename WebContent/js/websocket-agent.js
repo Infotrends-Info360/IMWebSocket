@@ -592,7 +592,7 @@ function getStatus() {
 	ws.send(JSON.stringify(Eventmsg));
 }
 
-// 只有再aStatus狀態為not ready時,才會傳入aReason參數
+// 只有在aStatus狀態為not ready時,才會傳入aReason參數
 function updateStatus(aStatus, aReason){
 	// 向websocket送出變更狀態至未就緒指令
 	var now = new Date();

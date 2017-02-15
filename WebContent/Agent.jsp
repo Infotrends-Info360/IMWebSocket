@@ -91,7 +91,7 @@ WEB_SOCKET_SWF_LOCATION = "WebSocketMain.swf";
 			<td>動作(Event)</td>
 			<td>動作(Event)</td>
 		</tr>
-		<tr>
+		<tr>     
 			<td id="AgentName">A2</td>
 			<td id="AgentID" value=""></td>
 			<td><button type="submit" onclick="inviteAgentThirdParty(this.value);" value="thirdParty">邀請加入(三方)</button></td>
