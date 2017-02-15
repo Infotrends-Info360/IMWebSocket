@@ -118,8 +118,8 @@ WEB_SOCKET_SWF_LOCATION = "WebSocketMain.swf";
 			<td id="invitedRoomID" value=""></td>
 			<td id="fromAgentID" value=""></td>
 			<td id="inviteType" value=""></td>
-			<td><button type="submit" onclick="responseThirdParty(this.value);" id="acceptThirdParty" value="accept">接受</button></td>
-			<td><button type="submit" onclick="responseThirdParty(this.value);" id="rejectThirdParty" value="reject">拒絕</button></td>
+			<td><button type="submit" onclick="responseThirdParty(undefined, undefined, undefined, this.value);" id="acceptThirdParty" value="accept">接受</button></td>
+			<td><button type="submit" onclick="responseThirdParty(undefined, undefined, undefined, this.value);" id="rejectThirdParty" value="reject">拒絕</button></td>
 		</tr>
 		<tr> 
 			<td colspan="4">
@@ -133,8 +133,8 @@ WEB_SOCKET_SWF_LOCATION = "WebSocketMain.swf";
 			<td>
 				Agent talks to Agent
 				<button type="submit" onclick="sendA2A(this.value);" id="sendA2A" value="">send</button>
-				<input type="text" name="chatAgentContent" id="chatAgentContent">
-<!-- 				<textarea rows="15" cols="40" id="chatAgentContent"></textarea> -->
+				<input type="text" name="A2AContent" id="A2AContent">
+<!-- 				<textarea rows="15" cols="40" id="A2AContent"></textarea> -->
 			</td>
 			<td>
 				<textarea rows="15" cols="40" id="chatAgentContentHistory"></textarea>
