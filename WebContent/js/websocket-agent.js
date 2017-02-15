@@ -1,10 +1,10 @@
-var ws; // websocket
+var ws_g; // websocket
 var UserName_g; // 使用者名稱全域變數
 var UserID_g; // 使用者ID全域變數
 var RoomID_g; // 此為第一個加入的RoomID, 僅為開發過程使用, 不符合目前架構, 為過度開發期間保留的全域變數
 var ClientID_g; // 現在準備要服務的Client的ID 
 var ClientName_g; // 現在準備要服務的Client的名稱
-var isonline = false; // 判斷是否上線的開關
+var isonline_g = false; // 判斷是否上線的開關
 //var RoomIDList = []; // 接通後產生Group的ID List
 //var RoomIDLinkedList = new SinglyList(); // 接通後產生Group的ID Linked List
 
@@ -38,10 +38,10 @@ function Login() {
 		// 連上websocket
 		console.log("window.location.hostname: " + window.location.hostname);
 		var hostname = window.location.hostname;
-		ws = new WebSocket('ws://' + hostname + ':8888');
+		ws_g = new WebSocket('ws://' + hostname + ':8888');
 
 		// 當websocket連接建立成功時
-		ws.onopen = function() {
+		ws_g.onopen = function() {
 			console.log('websocket 打開成功');
 			/** 登入 **/
 			var now = new Date();
@@ -56,13 +56,13 @@ function Login() {
 						+ now.getSeconds()
 			};			
 			// 發送消息
-			ws.send(JSON.stringify(msg));
+			ws_g.send(JSON.stringify(msg));
 			
 			
 			
 		};
 		// 當收到服務端的消息時
-		ws.onmessage = function(e) {
+		ws_g.onmessage = function(e) {
 			// e.data 是服務端發來的資料
 			if ("{" == e.data.substring(0, 1)) {
 				var obj = jQuery.parseJSON(e.data);
@@ -139,7 +139,7 @@ function Login() {
 					
 					// 更新狀態
 					var myUpdateStatusJson = new updateStatusJson("Agent", UserID_g, UserName_g, "Established", "Established");
-					ws.send(JSON.stringify(myUpdateStatusJson));
+					ws_g.send(JSON.stringify(myUpdateStatusJson));
 					// 使用layui
 					layuiUse01(); // 先暫時這樣隔開,之後有需要細改再看此部分
 
@@ -329,12 +329,12 @@ function Login() {
 		};
 
 		// 當websocket關閉時
-		ws.onclose = function() {
+		ws_g.onclose = function() {
 			console.log("websocket 連接關閉");
 		};
 
 		// 當出現錯誤時
-		ws.onerror = function() {
+		ws_g.onerror = function() {
 			console.log("出現錯誤");
 		};
 	}
@@ -371,7 +371,7 @@ function Logoutaction() {
 	};
 
 	// 發送消息
-	ws.send(JSON.stringify(msg));
+	ws_g.send(JSON.stringify(msg));
 }
 
 //refresh或關閉網頁時執行
@@ -384,7 +384,7 @@ function checktoLeave() {
 function ready() {
 	// 向websocket送出變更狀態至準備就緒指令
 	var myUpdateStatusJson = new updateStatusJson("Agent", UserID_g, UserName_g, "ready", "ready");
-	ws.send(JSON.stringify(myUpdateStatusJson));
+	ws_g.send(JSON.stringify(myUpdateStatusJson));
 
 	// 取得狀態
 	getStatus();
@@ -439,7 +439,7 @@ function RejectEvent() {
 		date : now.getHours() + ":" + now.getMinutes() + ":" + now.getSeconds()
 	};
 	// 發送消息
-	ws.send(JSON.stringify(msg));
+	ws_g.send(JSON.stringify(msg));
 
 	document.getElementById("AcceptEvent").disabled = true;
 	document.getElementById("RejectEvent").disabled = true;
@@ -498,7 +498,7 @@ function addRoomForMany(aRoomID, aMemberListToJoin){
 	};
 
 	// 發送消息
-	ws.send(JSON.stringify(msg));
+	ws_g.send(JSON.stringify(msg));
 
 	document.getElementById("groupstatus").innerHTML = "加入" + RoomID_g + "群組";
 	document.getElementById("leaveRoom").disabled = false;
@@ -523,7 +523,7 @@ function leaveRoom(aRoomID, aUserID) {
 	};
 
 	// 發送消息
-	ws.send(JSON.stringify(msg));
+	ws_g.send(JSON.stringify(msg));
 
 	document.getElementById("groupstatus").innerHTML = "離開" + RoomID_g + "群組";
 	document.getElementById("leaveRoom").disabled = true;
@@ -547,7 +547,7 @@ function send(aSendto,aMessage) {
 		date : now.getHours() + ":" + now.getMinutes() + ":" + now.getSeconds()
 	};
 	// 發送消息
-	ws.send(JSON.stringify(msg));
+	ws_g.send(JSON.stringify(msg));
 }
 //送出Agent to Agent私訊
 function sendA2A(aSendto){
@@ -573,7 +573,7 @@ function sendtoRoom(aRoomID, aMessage){
 	};
 
 	// 發送消息
-	ws.send(JSON.stringify(msg));	
+	ws_g.send(JSON.stringify(msg));	
 }
 
 // 取得Agent狀態
@@ -589,7 +589,7 @@ function getStatus() {
 		date : now.getHours() + ":" + now.getMinutes() + ":" + now.getSeconds()
 	};
 	// 發送消息
-	ws.send(JSON.stringify(Eventmsg));
+	ws_g.send(JSON.stringify(Eventmsg));
 }
 
 // 只有在aStatus狀態為not ready時,才會傳入aReason參數
@@ -607,7 +607,7 @@ function updateStatus(aStatus, aReason){
 		date : now.getHours() + ":" + now.getMinutes() + ":" + now.getSeconds()
 	};
 	// 發送消息
-	ws.send(JSON.stringify(updateAgentStatusmsg));
+	ws_g.send(JSON.stringify(updateAgentStatusmsg));
 }
 
 //邀請三方/轉接
@@ -635,7 +635,7 @@ function inviteAgentThirdParty(aInviteType, aRoomID ,aInvitedAgentID){
 			channel : "chat"
 		};
 	// 發送消息
-	ws.send(JSON.stringify(inviteAgent3waymsg));
+	ws_g.send(JSON.stringify(inviteAgent3waymsg));
 
 	/**** 建立私訊 *****/
 	document.getElementById("sendA2A").value = aInvitedAgentID;
@@ -662,7 +662,7 @@ function responseThirdParty(aInviteType, aRoomID, aFromAgentID, aResponse){
 //			fromAgentName : UserName
 		};
 	// 發送消息
-	ws.send(JSON.stringify(responseThirdPartyMsg));	
+	ws_g.send(JSON.stringify(responseThirdPartyMsg));	
 	
 }
 
@@ -673,7 +673,7 @@ function RefreshRoomList(){
 		    channel : "chat",	
 		  };
 	//發送消息 
-	ws.send(JSON.stringify(msg));	
+	ws_g.send(JSON.stringify(msg));	
 	
 }
 
@@ -688,7 +688,7 @@ function online() {
 		date : now.getHours() + ":" + now.getMinutes() + ":" + now.getSeconds()
 	};
 	// 發送消息
-	ws.send(JSON.stringify(msg));
+	ws_g.send(JSON.stringify(msg));
 }
 
 //查詢群組線上人數
@@ -704,7 +704,7 @@ function roomonline() {
 	};
 
 	// 發送消息
-	ws.send(JSON.stringify(msg));
+	ws_g.send(JSON.stringify(msg));
 }
 
 
@@ -721,7 +721,7 @@ function Clientonline() {
 		date : now.getHours() + ":" + now.getMinutes() + ":" + now.getSeconds()
 	};
 	// 發送消息
-	ws.send(JSON.stringify(msg));
+	ws_g.send(JSON.stringify(msg));
 }
 
 // 查詢agent線上人數
@@ -736,7 +736,7 @@ function Agentonline() {
 		date : now.getHours() + ":" + now.getMinutes() + ":" + now.getSeconds()
 	};
 	// 發送消息
-	ws.send(JSON.stringify(msg));
+	ws_g.send(JSON.stringify(msg));
 }
 
 
@@ -750,7 +750,7 @@ function sendtoRoomonlay01(aText, aRoomID) {
 	// 組成傳送群組訊息至layim視窗上的JSON指令
 	var myMessagetoRoomJson = new messagetoRoomJson("messagetoRoom", "Client", aText, UserID_g, UserName_g, aRoomID, "chat", "");
 	// 發送消息給WebSocket	
-	ws.send(JSON.stringify(myMessagetoRoomJson));
+	ws_g.send(JSON.stringify(myMessagetoRoomJson));
 }
 
 // layim取得訊息
@@ -954,6 +954,6 @@ function test() {
 		    channel : "chat"
 		  };
 	//發送消息 
-	ws.send(JSON.stringify(testmsg));
+	ws_g.send(JSON.stringify(testmsg));
 }
 
