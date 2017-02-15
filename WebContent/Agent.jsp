@@ -114,9 +114,9 @@ div class ="container"> <h2>Form control: textarea </h2> <p>The form below conta
             <h1 id="header">Off Canvas Push Menu Template</h1>
         	</div>-->
 			<!--<iframe frameborder="0" id="MainFrame"></iframe>-->
-			<iframe frameborder="0" id="LoginFrame" src="AgentLogin.jsp"
+			<iframe frameborder="0" id="LoginFrame" name="LoginFrame" src="AgentLogin.jsp"
 				style="width: 100%"></iframe>
-			<iframe frameborder="0" id="ChatFrame" src="AgentChat.jsp"
+			<iframe frameborder="0" id="ChatFrame" name="ChatFrame" src="AgentChat.jsp"
 				style="width: 100%"></iframe>
 <!-- 			<iframe frameborder="0" id="VoiceFrame" src="Pages/Voice.html" -->
 <!-- 				style="width: 100%"></iframe> -->

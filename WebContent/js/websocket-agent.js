@@ -207,12 +207,14 @@ function Login() {
 					document.getElementById("UserID").value = obj.from;
 					UserID_g = obj.from;
 					
-					document.getElementById("Event").innerHTML = obj.Event;					
-					document.getElementById("showUserID").innerHTML = UserID_g;
-					document.getElementById("status").innerHTML = "狀態: Login";
+//					document.getElementById("Event").innerHTML = obj.Event;					
+//					document.getElementById("showUserID").innerHTML = UserID_g;
 					document.getElementById("Login").disabled = true;
 					document.getElementById("Logout").disabled = false;
-					document.getElementById("online").disabled = false;
+//					alert("window.name: " + window.name);
+//					alert(parent.document.getElementById("status").value);
+					parent.document.getElementById("status").value = "狀態: Login";
+//					document.getElementById("online").disabled = false;
 
 					/** 開啟layui **/
 					addlayim();
