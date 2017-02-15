@@ -331,6 +331,7 @@ public class WebSocket extends WebSocketServer {
 		
 		String channel = msgJson.get("channel").getAsString();
 		JsonArray userIDJsonAry = msgJson.getAsJsonArray("memberListToJoin");
+		System.out.println("addRoomForMany() - userIDJsonAry: " + userIDJsonAry);
 		String clientID = null;
 		
 //		System.out.println("addRoomForMany() - userIDJsonAry: " + userIDJsonAry);
