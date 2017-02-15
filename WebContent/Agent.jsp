@@ -1,4 +1,6 @@
-﻿<!DOCTYPE html>
+﻿<%@ page language="java" import="java.util.*" contentType="text/html; charset=UTF-8"  pageEncoding="UTF-8" %>
+
+<!DOCTYPE html>
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
 <title></title>
@@ -7,6 +9,9 @@
 <link href="boostrap/bootstrap.css" rel="stylesheet" />
 <link href="boostrap/bootstrap-theme.css" rel="stylesheet" />
 <script src="boostrap/bootstrap.js"></script>
+
+<script type="text/javascript" src="js/websocket-agent.js" charset="utf-8"></script>
+
 
 <!-- <script src="Scripts/jquery-2.1.4.js"></script> -->
 <!-- <script src="Scripts/bootstrap.js"></script> -->
@@ -37,7 +42,7 @@ div class ="container"> <h2>Form control: textarea </h2> <p>The form below conta
 }
 </style>
 </head>
-<body>
+<body onload="onloadFunction();">
 	<div class="row" style="border-bottom: 1px solid #c0c0c0; width: 100%;">
 		<div class="col-xs-3 col-sm-3 col-md-3 col-lg-3">
 			<h3>Info360 - Agent</h3>

@@ -19,11 +19,18 @@ var layimswitch = false; // layim開關參數，判斷是否開啟layim的時機
 function onloadFunction(){
 	// for debugging only
 	console.log("onloadFunction() called");
-	if (Math.random() < 0.5){
-		document.getElementById('UserName').value = "agent01";
-	}else{
-		document.getElementById('UserName').value = "agent02";		
-	}
+//	if (Math.random() < 0.5){
+//		document.getElementById('UserName').value = "agent01";
+//	}else{
+//		document.getElementById('UserName').value = "agent02";		
+//	}
+	
+	// test 
+	console.log("StatusEnum.LOGIN: " + StatusEnum.LOGIN);
+	console.log("StatusEnum.convertToChinese(StatusEnum.LOGIN): " + StatusEnum.toChinese(StatusEnum.LOGIN));
+	
+	
+	
 }
 
 
@@ -272,7 +279,6 @@ function Login() {
 					}
 //					document.getElementById("roomList").innerHTML = roomListToUpdate;
 					//JSONArray groupList = obj.groupList;
-//					document.getElementById("roomList").innerHTML = "Test - new group list here!!!";
 				} else if ("inviteAgentThirdParty" == obj.Event){
 					console.log("received inviteAgentThirdParty event");
 					var tmpRoomID = obj.roomID;
@@ -676,6 +682,85 @@ function RefreshRoomList(){
 	ws_g.send(JSON.stringify(msg));	
 	
 }
+
+
+/** 2017/02/15 - 新增方法 **/
+function switchStatus(aStatus){
+	switch(aStatus) {
+    case StatusEnum.LOGIN:
+////        alert('StatusEnum.LOGOUT matched');
+//        document.getElementById("Status").innerHTML = StatusEnum.LOGOUT;
+//		// 顯現對話視窗
+//		document.getElementById("chatDialogue").classList.add("hidden");
+//		document.getElementById("chatDialogueReverse").classList.remove("hidden");
+//		// 啟用openChat功能
+//		document.getElementById("openChat").disabled = false;
+//		document.getElementById("closeChat").disabled = true;
+
+        break;
+    case StatusEnum.LOGOUT:
+        // code block
+        break;
+    case StatusEnum.READY:
+        //code block
+        break;
+    case StatusEnum.NOT_READY:
+    	//code block
+    	break;
+    case StatusEnum.PAPERWORK:
+    	//code block
+    	break;
+    case StatusEnum.RING:
+    	//code block
+    	break;
+    case StatusEnum.I_ESTABLISHED:
+    	//code block
+    	break;
+    case StatusEnum.O_ESTABLISHED:
+    	//code block
+    	break;
+//    case StatusEnum.:
+//    	//code block
+//    	break;
+    default:
+        break;
+	}
+}
+// here
+var StatusEnum = Object.freeze({
+	LOGIN: '1', 
+	LOGOUT: '2', 
+	READY: '3',
+	NOT_READY: '4',
+	PAPERWORK: '5',
+	RING: '6',
+	I_ESTABLISHED: '7',
+	O_ESTABLISHED: '8',
+	
+	toChinese : function(aStatusEnumIndex) { // Method which will display type of Animal
+//		console.log(this.type);
+//		console.log("aStatusEnumIndex: " + aStatusEnumIndex);
+//						 0	    1      2        3      4        5      6        7		
+		var converter = ["登入", "登出", "準備就緒", "離席", "文書處理", "響鈴", "進線通話", "外撥通話"];
+//		alert(converter[aStatusEnumIndex]);
+//		alert(converter[2]);
+//		console.log("converter[aStatusEnumIndex]: " + converter[aStatusEnumIndex]);
+		return converter[aStatusEnumIndex];
+	}	
+	
+});
+
+var Animal = {
+		type: "Invertebrates", // Default value of properties
+		displayType : function() { // Method which will display type of Animal
+			console.log(this.type);
+		}
+}
+
+
+
+
+
 
 /** 現在未使用方法 **/
 //查詢線上人數
