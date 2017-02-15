@@ -604,8 +604,7 @@ function addlayim(UserID, UserName, aRoomID) {
 		layimswitch = true;
 		ixnstatus = 1;
 		// ixnactivitycode = "";
-	});
-
+	});  
 }
 
 // 於登入(收到server端"searchusedata"事件時)以及登出錢更新interaction log
