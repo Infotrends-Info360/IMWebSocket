@@ -603,7 +603,7 @@ function addlayim(UserID, UserName, aRoomID) {
 		// 開啟傳送layim參數 
 		layimswitch = true;
 		ixnstatus = 1;
-		// ixnactivitycode = "";
+		// ixnactivitycode = ""; 
 	});  
 }
 
