@@ -677,6 +677,7 @@ function RefreshRoomList(){
 	
 }
 
+/** 現在未使用方法 **/
 //查詢線上人數
 function online() {
 	// 向websocket送出查詢線上人數指令
@@ -740,6 +741,7 @@ function Agentonline() {
 }
 
 
+/** layim(以後會刪除方法) **/
 // 傳送群組訊息至layim視窗上
 function sendtoRoomonlay(text) {
 	// 暫時保留此方法,以後若要讓Agent能同時開多個視窗,則不能再用RoomID此全域變數

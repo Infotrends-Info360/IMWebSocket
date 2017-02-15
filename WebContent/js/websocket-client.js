@@ -541,7 +541,7 @@ function roomonline() {
 
 
 
-
+/** layim(以後會刪除方法) **/
 // 傳送群組訊息至layim視窗上
 function sendtoRoomonlay(aText) {	
 	// 組成傳送群組訊息至layim視窗上的JSON指令
