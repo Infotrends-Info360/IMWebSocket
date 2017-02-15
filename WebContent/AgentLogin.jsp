@@ -69,7 +69,7 @@ WEB_SOCKET_SWF_LOCATION = "WebSocketMain.swf";
                     </div>
                 </div>
                 <div class="row">
-                    <div class="col-xs-6 col-sm-6 col-md-6 col-lg-6">
+                    <div class="col-xs-6 col-sm-6 col-md-6 col-lg-6 disabled">
                         <div class="form-group">
                             <select class="form-control" id="AgentList">
                                 <option value="1111" selected>1111</option>
@@ -78,14 +78,14 @@ WEB_SOCKET_SWF_LOCATION = "WebSocketMain.swf";
                             </select>
                         </div>
                     </div>
-                    <div class="col-xs-6 col-sm-6 col-md-6 col-lg-6 disabled">
+                    <div class="col-xs-6 col-sm-6 col-md-6 col-lg-6">
                         <div class="form-group">
-                            <input type="text" id="AgentId" class="form-control" value="1111" />
+                            <input type="text" id="AgentId" class="form-control" value="agent01" />
                         </div>
                     </div>
                 </div>
                 <div class="row">
-                    <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+                    <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12 disabled">
                         <div class="form-group">
                             <label>Nick Name: </label><input type="text" id="NickName" class="form-control" value="1111" />
                         </div>
