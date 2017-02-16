@@ -775,13 +775,13 @@
 
         function showToastError(message) {
         	
-    			 var flag = document.getElementById('Delete_flag').value;
+    			// var flag = document.getElementById('Delete_flag').value;
     			 var dbid = document.getElementById('Delete_id').value;
  
     			 $.ajax({                              
     		          url:"/IMWebSocket/RESTful/LogicDelete_ActivityData",
     			         data:{
-    			        	 deleteflag:flag,
+    			        	 deleteflag:1,
     			        	 codename:dbid,
     			        	 },
     			         type : "POST",                                                                    
