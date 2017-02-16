@@ -1,3 +1,5 @@
+<%-- <%@ page language="java" import="java.util.*" pageEncoding="UTF-8"%> --%>
+<%@ page language="java" import="java.util.*" contentType="text/html; charset=UTF-8"  pageEncoding="UTF-8" %>
 <!DOCTYPE html>
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
@@ -63,29 +65,30 @@ WEB_SOCKET_SWF_LOCATION = "WebSocketMain.swf";
                         <button id="ButtonDisconnect" class="btn btn-primary btn-sm">Disconnect</button>
                     </div>
                 </div>
-                <div class="row" style="margin-top:10px;">
-                    <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
-                        <label>Agent ID: </label>
-                    </div>
-                </div>
                 <div class="row">
-                    <div class="col-xs-6 col-sm-6 col-md-6 col-lg-6">
-                        <div class="form-group">
-                            <select class="form-control" id="AgentList">
-                                <option value="1111" selected>1111</option>
-                                <option value="2222">2222</option>
-                                <option value="3333">3333</option>
-                            </select>
-                        </div>
-                    </div>
                     <div class="col-xs-6 col-sm-6 col-md-6 col-lg-6 disabled">
+		                <div class="row" style="margin-top:10px;">
+		                    <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+		                        <label>Agent ID: </label>
+		                    </div>
+		                </div>
                         <div class="form-group">
-                            <input type="text" id="AgentId" class="form-control" value="1111" />
+                            <input type="text" id="UserID" class="form-control" value="" />
+                        </div>
+                    </div>
+                    <div class="col-xs-6 col-sm-6 col-md-6 col-lg-6">
+		                <div class="row" style="margin-top:10px;">
+		                    <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+		                        <label>Agent Name: </label>
+		                    </div>
+		                </div>
+                        <div class="form-group">
+                            <input type="text" id="UserName" class="form-control" value="agent01" />
                         </div>
                     </div>
                 </div>
                 <div class="row">
-                    <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+                    <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12 disabled">
                         <div class="form-group">
                             <label>Nick Name: </label><input type="text" id="NickName" class="form-control" value="1111" />
                         </div>
@@ -123,8 +126,8 @@ WEB_SOCKET_SWF_LOCATION = "WebSocketMain.swf";
                 </div>
                 <div class="row">
                     <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
-                        <button id="ButtonLogin" class="btn btn-primary btn-sm">Login</button>
-                        <button id="ButtonLogout" class="btn btn-primary btn-sm">Logout</button>
+                        <button id="Login" class="btn btn-primary btn-sm" onclick="Login();">Login</button>
+                        <button id="Logout" class="btn btn-primary btn-sm" onclick="Logout();" disabled>Logout</button>
                     </div>
                 </div>
             </div>
@@ -134,7 +137,7 @@ WEB_SOCKET_SWF_LOCATION = "WebSocketMain.swf";
                     <label>Event :</label>&nbsp;&nbsp;&nbsp;&nbsp;<button id="ClearLog" type="button" class="btn btn-sm btn-primary">Clear</button>
                 </div>
                 <div>
-                    <div id="ChatLog"></div>
+                    <div id="text"></div>
                 </div>
             </div>
             </div>

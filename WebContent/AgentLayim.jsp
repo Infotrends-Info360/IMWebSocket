@@ -22,7 +22,7 @@
 <script type="text/javascript" src="js/web_socket.js"></script> <!-- for IE8 websocket compatibility -->
 <script type="text/javascript" src="js/websocket-util.js"></script>
 <script type="text/javascript" src="js/jquery.min.js"></script>
-<script type="text/javascript" src="js/websocket-agentLayim.js"></script>
+<script type="text/javascript" src="js/websocket-agent.js"></script>
 <script src="layui/layui.js"></script>
 
  <!-- for IE8 websocket compatibility -->
@@ -91,7 +91,7 @@ WEB_SOCKET_SWF_LOCATION = "WebSocketMain.swf";
 			<td>動作(Event)</td>
 			<td>動作(Event)</td>
 		</tr>
-		<tr>
+		<tr>     
 			<td id="AgentName">A2</td>
 			<td id="AgentID" value=""></td>
 			<td><button type="submit" onclick="inviteAgentThirdParty(this.value);" value="thirdParty">邀請加入(三方)</button></td>
@@ -118,8 +118,8 @@ WEB_SOCKET_SWF_LOCATION = "WebSocketMain.swf";
 			<td id="invitedRoomID" value=""></td>
 			<td id="fromAgentID" value=""></td>
 			<td id="inviteType" value=""></td>
-			<td><button type="submit" onclick="responseThirdParty(this.value);" id="acceptThirdParty" value="accept">接受</button></td>
-			<td><button type="submit" onclick="responseThirdParty(this.value);" id="rejectThirdParty" value="reject">拒絕</button></td>
+			<td><button type="submit" onclick="responseThirdParty(undefined, undefined, undefined, this.value);" id="acceptThirdParty" value="accept">接受</button></td>
+			<td><button type="submit" onclick="responseThirdParty(undefined, undefined, undefined, this.value);" id="rejectThirdParty" value="reject">拒絕</button></td>
 		</tr>
 		<tr> 
 			<td colspan="4">
@@ -133,8 +133,8 @@ WEB_SOCKET_SWF_LOCATION = "WebSocketMain.swf";
 			<td>
 				Agent talks to Agent
 				<button type="submit" onclick="sendA2A(this.value);" id="sendA2A" value="">send</button>
-				<input type="text" name="chatAgentContent" id="chatAgentContent">
-<!-- 				<textarea rows="15" cols="40" id="chatAgentContent"></textarea> -->
+				<input type="text" name="A2AContent" id="A2AContent">
+<!-- 				<textarea rows="15" cols="40" id="A2AContent"></textarea> -->
 			</td>
 			<td>
 				<textarea rows="15" cols="40" id="chatAgentContentHistory"></textarea>

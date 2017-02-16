@@ -67,10 +67,10 @@ public class CommonFunction {
 		String userId = java.util.UUID.randomUUID().toString();
 		String username = obj.getString("UserName");
 		String ACtype = obj.getString("ACtype");
-		String joinMsg = "[Server]" + username + " Online";
 		String channel = obj.getString("channel");
 		WebSocketUserPool.addUser(username, userId, conn, ACtype); // 在此刻,已將user conn加入倒Pool中
-		WebSocketUserPool.sendMessage(joinMsg);
+//		String joinMsg = "[Server]" + username + " Online";
+//		WebSocketUserPool.sendMessage(joinMsg);
 		
 		/*** 告知user其成功登入的UserID ***/
 		JSONObject sendjson = new JSONObject();
@@ -78,8 +78,8 @@ public class CommonFunction {
 		sendjson.put("from", userId);
 		sendjson.put("channel", channel);
 		WebSocketUserPool.sendMessageToUser(conn, sendjson.toString());
-		WebSocketUserPool.sendMessage("online people: "
-				+ WebSocketUserPool.getOnlineUser().toString());
+//		WebSocketUserPool.sendMessage("online people: "
+//				+ WebSocketUserPool.getOnlineUser().toString());
 		
 		/*** 將user加入到各自的TYPEmap ***/
 		SimpleDateFormat sdf = new SimpleDateFormat(Util.getSdfTimeFormat());
@@ -112,9 +112,9 @@ public class CommonFunction {
 		JsonObject jsonIn = Util.getGJsonObject(aMsg);
 		
 		//通知大家有人離開了
-		String username = jsonIn.get("UserName").getAsString();
-		String joinMsg = "[Server]" + username + " Offline";
-		WebSocketUserPool.sendMessage(joinMsg);
+//		String username = jsonIn.get("UserName").getAsString();
+//		String joinMsg = "[Server]" + username + " Offline";
+//		WebSocketUserPool.sendMessage(joinMsg);
 		
 		// 關係Heartbeat
 		Timer timer = WebSocketUserPool.getUserHeartbeatTimerByKey(aConn);
@@ -122,7 +122,7 @@ public class CommonFunction {
 			timer.cancel();			
 		}
 		
-		// 若以有Agent再決定是否Accept此通通話, 則告知此Agent此Client已經登出, 不用再等
+		// 若已經有Agent正在決定是否Accept此通通話, 若Client先離開了, 則告知此Agent此Client已經離開, 不用再等了
 //		String waittingAgent = jsonIn.get("waittingAgent").getAsBoolean();
 		if (jsonIn.get("waittingAgent") != null){
 			System.out.println("userExit() - waittingAgent: " + jsonIn.get("waittingAgent").getAsBoolean());
