@@ -216,7 +216,7 @@ div class ="container"> <h2>Form control: textarea </h2> <p>The form below conta
 					//$('.navbar-toggle').hide();
 
 					// 顯示 Login Frame
-					var defaultPageId = "LoginFrame";
+					var defaultPageId = "ChatFrame";
 					$("iframe").hide();
 					$("#" + defaultPageId).show(); // 為了開發方便,先轉成ChatFrame為預設頁面
 					var height = $(this).attr('data-height')

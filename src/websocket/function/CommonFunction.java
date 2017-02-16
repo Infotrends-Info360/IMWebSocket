@@ -63,6 +63,7 @@ public class CommonFunction {
 	
 	/** * user join websocket * @param user */
 	public static void userjoin(String user, org.java_websocket.WebSocket conn) {
+		System.out.println("userjoin() called");
 		JSONObject obj = new JSONObject(user);
 		String userId = java.util.UUID.randomUUID().toString();
 		String username = obj.getString("UserName");
