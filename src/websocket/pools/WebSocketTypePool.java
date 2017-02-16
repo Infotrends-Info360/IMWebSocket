@@ -12,6 +12,7 @@ import java.util.Set;
 
 import org.java_websocket.WebSocket;
 
+import util.StatusEnum;
 import util.Util;
 import websocket.bean.UserInfo;
 
@@ -116,7 +117,9 @@ public class WebSocketTypePool{
 			} catch (ParseException e) {
 				e.printStackTrace();
 			}
-			if(userdate.getTime() <= UserStayTime && u.getStatus().trim().equals("ready")){
+			System.out.println("Agent Status - u.getStatus(): " + u.getStatus());
+			System.out.println("Agent Status - StatusEnum.READY.getValue(): " + StatusEnum.READY.getValue());
+			if(userdate.getTime() <= UserStayTime && u.getStatus().trim().equals(StatusEnum.READY.getValue())){
 				UserStayTime = userdate.getTime(); // 每次都會將UserStayTime拿去當作"上一個"Uset的等待時間
 				settingUser = u.getUserid();
 			}
