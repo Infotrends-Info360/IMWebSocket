@@ -21,6 +21,9 @@ var layimswitch = false; // layim開關參數，判斷是否開啟layim的時機
 function onloadFunction(){
 	// for debugging only
 	console.log("onloadFunction() called");
+	
+//	$('#roomList').change(function() {alert("hey"); });
+	
 //	if (Math.random() < 0.5){
 //		document.getElementById('UserName').value = "agent01";
 //	}else{
@@ -153,11 +156,14 @@ function Login() {
 					
 					// 在這邊興建roomList與其room bean
 					RoomID_g = obj.roomID; // 之後要改成local variable
-					var tmpRoomInfo = new roomInfo(obj.roomID);
+					var tmpRoomInfo = new roomInfo(
+							obj.roomID,
+							$('#Accept')[0].userdata
+					);
 					roomInfoMap_g.set(obj.roomID, tmpRoomInfo);
 					console.log("roomInfoMap_g.size: " + roomInfoMap_g.size);
 					// 1. 研究一下這個map的json長什麼樣 2. 看怎麼拿值
-					updateRoomIDList();
+					updateRoomIDList(obj.roomID);
 					
 
 					// 更新前端頁面
@@ -802,16 +808,23 @@ function Agentonline() {
 	ws_g.send(JSON.stringify(msg));
 }
 
-function updateRoomIDList(){
+function updateRoomIDList(aNewRoomID){
 	// 先清空原list
 	$("#roomList").empty();
 	// 開始更新roomList
 	var rows = "";
-	roomInfoMap_g.forEach(function(value, key) {
-		  console.log(key + ' = ' + value);
-		  rows += '<option value=' + '"'+ key +'"' + '>' + '"'+ key +'"' + '</option>';
+	roomInfoMap_g.forEach(function(roomInfo, roomID) {
+		  console.log(roomID + ' = ' + roomInfo);
+		  rows += '<option value=' + '"'+ roomID +'"' + '>' + '"'+ roomID +'"' + '</option>';
+		  rows += '<option value=' + '"'+ roomID +'2"' + '>' + '"'+ roomID +'2"' + '</option>';
 	});
 	$( rows ).appendTo( "#roomList" );
+	$('#roomList').change(function() { 
+		var tmpRoomID = $('#roomList').val();
+		updateRoomInfo(roomInfoMap_g.get(tmpRoomID));
+	});
+	
+	$("#roomList").val(aNewRoomID).change();
 	
 //	$('#roomList:last-child').append(
 //			'<option value=' + '"someValue"' + '>' + 'someText' + '</option>'
@@ -822,6 +835,13 @@ function updateRoomIDList(){
 //	});
 //
 //	$( rows ).appendTo( "#roomList" );
+}
+
+function updateRoomInfo(aRoomInfo){
+	console.log("updateRoomInfo()");
+	seeAllKV(aRoomInfo);
+	
+	$('#userdata')[0].innerHTML += aRoomInfo.userdata;
 }
 
 // 測試按鈕

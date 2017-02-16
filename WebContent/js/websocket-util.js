@@ -41,8 +41,9 @@ if(typeof String.prototype.trim !== 'function') {
 /********** bean *************/
 //目的: 將Json請求字串物件化 (持續進行中)
 
-function roomInfo(aRoomID){
+function roomInfo(aRoomID, aUserdata){
 	this.roomID = aRoomID;
+	this.userdata = aUserdata;
 }
 
 function messagetoRoomJson(aType, aACtype, aText, aId, aUserName, aRoomID, aChannel, aDate) {  // Method which will display type of Animal

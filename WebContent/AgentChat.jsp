@@ -219,7 +219,7 @@ hr {
 	 	            	<div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
 	 	            		<h4>Userdata:</h4>
 							<div class="col-xs-12 col-sm-12 col-md-12 col-lg-12 panel panel-default center nopadding">
-								<div class="pre-scrollable col-xs-12 col-sm-12 col-md-12 col-lg-12 panel-body" style="height: 80px;">
+								<div class="pre-scrollable col-xs-12 col-sm-12 col-md-12 col-lg-12 panel-body" id="userdata" style="height: 80px;">
 <!-- 									some log ... <br> some log ... <br> some log ... <br> some log ... <br> some log ... <br> -->
 								</div>
 							</div>
