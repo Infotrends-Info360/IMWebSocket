@@ -25,6 +25,7 @@ import util.Util;
 
 
 
+
 import com.google.gson.JsonParser;
 
 import websocket.HeartBeat;
@@ -325,13 +326,30 @@ public class CommonFunction {
 		
 		JsonArray roomIDListJson = new JsonArray();
 		JsonArray memberListJson = new JsonArray();
+		JsonArray clietIDListJson = new JsonArray();
+		JsonArray textListJson = new JsonArray();
+		JsonArray structuredtextListJson = new JsonArray();
 		
 		// 將 此Agent所屬的Room list 塞入json中
 		List<String> roomIDList = WebSocketUserPool.getUserRoomByKey(conn);
 //		System.out.println("roomIDList.size(): " + roomIDList.size());
 		for (String roomID: roomIDList){
+			RoomInfo roomInfo = WebSocketRoomPool.getRoomInfo(roomID);
+			UserInfo clientInfo = WebSocketUserPool.getUserInfoByKey(roomInfo.getClientConn());
 			roomIDListJson.add(roomID);
 			memberListJson.add(WebSocketRoomPool.getOnlineUserNameinroom(roomID).toString());
+			clietIDListJson.add(clientInfo.getUserid());
+			
+			// 如果有room歷史訊息,則放到room物件中傳給client
+			if (WebSocketUserPool.getUserInteractionByKey(roomInfo.getClientConn()) != null){
+				JsonObject msgJsonOld = Util.getGJsonObject(WebSocketUserPool.getUserInteractionByKey(roomInfo.getClientConn()));
+				System.out.println("setinteraction() - msgJsonOld: " + msgJsonOld);
+				if (msgJsonOld.get("text") != null &&
+					msgJsonOld.get("structuredtext") != null){
+					textListJson.add(msgJsonOld.get("text").getAsString());
+					structuredtextListJson.add(msgJsonOld.get("structuredtext").getAsJsonArray());							
+				}
+			}
 		}
 		
 		// 將 membersInRoom list 塞入json中
@@ -339,14 +357,14 @@ public class CommonFunction {
 		
 		// 將 RoomContent list 塞入json中
 		
-		// 
-		
 		// 測試用-新增幾個room
 //		roomList_json.put("2982ebfa-0359-4777-8746-e6de5e493712");
 //		roomList_json.put("2982ebfa-0359-4777-8746-e6de5e493778");
 		
 		sendJson.add("roomList", roomIDListJson);
 		sendJson.add("memberList", memberListJson);
+		sendJson.add("textList", textListJson);
+		sendJson.add("structuredtextList", structuredtextListJson);
 		
 //		System.out.println("roomIDListJson.size(): " + roomIDListJson.size());
 //		System.out.println("sendJson: " + sendJson);

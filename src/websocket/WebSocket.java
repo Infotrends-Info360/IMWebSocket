@@ -366,13 +366,13 @@ public class WebSocket extends WebSocketServer {
 					+ WebSocketRoomPool.getOnlineUserNameinroom(roomID).toString());
 			
 			// 更新room list
-			String ACtype = WebSocketUserPool.getACTypeByKey(userConn);
-			if ("Agent".equals(ACtype)){
-//				System.out.println("userjointoroom - one Agent joined");
-				CommonFunction.refreshRoomList(userConn);
-			}else if ("Client".equals(ACtype)){
-				clientID = userID;
-			}
+//			String ACtype = WebSocketUserPool.getACTypeByKey(userConn);
+//			if ("Agent".equals(ACtype)){
+////				System.out.println("userjointoroom - one Agent joined");
+//				CommonFunction.refreshRoomList(userConn);
+//			}else if ("Client".equals(ACtype)){
+//				clientID = userID;
+//			}
 		}
 		
 		// 通知Client與Agent,要開啟layim(將原本AcceptEvent移到此處)
@@ -380,12 +380,21 @@ public class WebSocket extends WebSocketServer {
 			JsonObject userIDJsonObj = userIDJsonE.getAsJsonObject();
 			String userID = userIDJsonObj.get("ID").getAsString();
 			org.java_websocket.WebSocket userConn = WebSocketUserPool.getWebSocketByUser(userID);
+			
+			JsonArray roomIDListJson = new JsonArray();
+			List<String> roomIDList = WebSocketUserPool.getUserRoomByKey(aConn);
+			for (String tmpRoomID: roomIDList){
+				roomIDListJson.add(tmpRoomID);
+			}
+			
 			JsonObject sendJson = new JsonObject();
 			sendJson.addProperty("Event", "AcceptEvent");
 			sendJson.addProperty("from",  WebSocketUserPool.getUserID(aConn));
 			sendJson.addProperty("fromName", WebSocketUserPool.getUserNameByKey(aConn));
 			sendJson.addProperty("roomID",  roomID);
 			sendJson.addProperty("channel", channel);
+			sendJson.add("roomList", roomIDListJson);
+
 			WebSocketUserPool.sendMessageToUser(
 					userConn,sendJson.toString());	
 		}

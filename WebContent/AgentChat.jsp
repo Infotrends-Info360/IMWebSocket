@@ -190,9 +190,9 @@ hr {
 	                	<div class="col-xs-6 col-sm-6 col-md-6 col-lg-6">
 	                	<h4>room list:</h4>
                         <select id="roomList" class="form-control">
-                            <option value="roomID01">roomID01</option>
-                            <option value="roomID02">roomID02</option>
-                            <option value="roomID03">roomID03</option>
+<!--                             <option value="roomID01">roomID01</option> -->
+<!--                             <option value="roomID02">roomID02</option> -->
+<!--                             <option value="roomID03">roomID03</option> -->
                         </select>
 	                	</div>
 	                	<div class="col-xs-6 col-sm-6 col-md-6 col-lg-6">
@@ -220,7 +220,7 @@ hr {
 	 	            		<h4>Userdata:</h4>
 							<div class="col-xs-12 col-sm-12 col-md-12 col-lg-12 panel panel-default center nopadding">
 								<div class="pre-scrollable col-xs-12 col-sm-12 col-md-12 col-lg-12 panel-body" style="height: 80px;">
-									some log ... <br> some log ... <br> some log ... <br> some log ... <br> some log ... <br>
+<!-- 									some log ... <br> some log ... <br> some log ... <br> some log ... <br> some log ... <br> -->
 								</div>
 							</div>
 	 	            	</div>
@@ -230,7 +230,7 @@ hr {
 						<div class="col-xs-12 col-sm-12 col-md-12 col-lg-12" id="chatDialogue">
 							<h4>ChatDialogue:</h4>
 								<div class="pre-scrollable col-xs-12 col-sm-12 col-md-12 col-lg-12 panel panel-default" style="height: 80px;" id="">
-									someone says .... <br>	someone says .... <br>	someone says .... <br>	someone says .... <br>	someone says .... <br>
+<!-- 									someone says .... <br>	someone says .... <br>	someone says .... <br>	someone says .... <br>	someone says .... <br> -->
 								</div>
 								<div class="col-xs-12 col-sm-12 col-md-12 col-lg-12 nopadding">
 									<div class="col-xs-10 col-sm-10 col-md-10 col-lg-10 nopadding">

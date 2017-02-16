@@ -6,6 +6,7 @@ var ClientID_g; // 現在準備要服務的Client的ID
 var ClientName_g; // 現在準備要服務的Client的名稱
 var isonline_g = false; // 判斷是否上線的開關
 var status_g;
+var roomInfoMap_g = new Map();
 //var RoomIDList = []; // 接通後產生Group的ID List
 //var RoomIDLinkedList = new SinglyList(); // 接通後產生Group的ID Linked List
 
@@ -140,8 +141,9 @@ function Login() {
 					// 接收到Client離開群組的訊息
 				} else if ("AcceptEvent" == obj.Event){
 					// 拿取資料 + 為之後建立roomList做準備
-					RoomID_g = obj.roomID; // 之後要改成local variable
-					
+					console.log("AcceptEvent: *****");
+					seeAllKV(obj);
+				
 					// 更新狀態
 					var myUpdateStatusJson = new updateStatusJson("Agent", parent.UserID_g, parent.UserName_g, "Established", "no reason");
 					parent.ws_g.send(JSON.stringify(myUpdateStatusJson));
@@ -150,7 +152,15 @@ function Login() {
 					switchStatus(StatusEnum.I_ESTABLISHED);
 					
 					// 在這邊興建roomList與其room bean
+					RoomID_g = obj.roomID; // 之後要改成local variable
+					var tmpRoomInfo = new roomInfo(obj.roomID);
+					roomInfoMap_g.set(obj.roomID, tmpRoomInfo);
+					console.log("roomInfoMap_g.size: " + roomInfoMap_g.size);
+					// 1. 研究一下這個map的json長什麼樣 2. 看怎麼拿值
+					updateRoomIDList();
+					
 
+					// 更新前端頁面
 					document.getElementById("Accept").disabled = true;
 					document.getElementById("Reject").disabled = true;
 					document.getElementById("leaveRoom").disabled = false;
@@ -192,6 +202,7 @@ function Login() {
 						$('#Reject')[0].disabled = false;
 						$('#Accept')[0].reqType = 'Client';
 						$('#Accept')[0].clientID = obj.clientID;
+						$('#Accept')[0].userdata = JSON.stringify(obj.userdata);
 					}; // 設定 AcceptEventInit
 					
 					
@@ -209,64 +220,13 @@ function Login() {
 					switchStatus(status_g);
 										
 				} else if ("refreshRoomList" == obj.Event) {
-					document.getElementById("Event").innerHTML = obj.Event;
-					console.log(obj.Event + "***********************");
-					var roomList = obj.roomList;
-					var memberList = obj.memberList;
-//					var roomListToUpdate = null;
-//					console.log("roomList: "+obj.roomList[0]);
-					// remove All childeNodes:
-					var myNode = document.getElementById("roomListTable");
-					// 永遠把第二個child刪除,只保留<tr><th>RoomID</th><th>RoomMems</th><th>RoomContent</th><th>SendMsg</th></tr>
-					while (myNode.lastChild && myNode.children.length > 1) {
-						console.log("myNode.children.length: " + myNode.children.length);
-					    myNode.removeChild(myNode.lastChild);
-					}
+					// debug: 確認全部key-value:
+					console.log("refreshRoomList");
+					seeAllKV(obj);
 					
-					for (var i in roomList) {
-						console.log("roomList[i]" + roomList[i]);
-						console.log("memberList[i]" + memberList[i]);
-//						roomListToUpdate += "<br>" + "(" + i + ") - " +  roomList[i];
-						// dynamically create <tr><td></td>....</tr>
-						// <tr><td>RoomID</td><td>RoomMems</td><td>RoomContent</td><td>SendMsg</td></tr>
-					    var trNode = document.createElement("tr");
-					    	// 放入roomID
-					    var tdNode = document.createElement("td");
-					    var tdTextnode = document.createTextNode(roomList[i]);
-					    tdNode.appendChild(tdTextnode);
-					    trNode.appendChild(tdNode);
-					    	// 放入members
-					    var tdNode = document.createElement("td");
-					    var tdTextnode = document.createTextNode(memberList[i]);
-					    tdNode.appendChild(tdTextnode);
-					    trNode.appendChild(tdNode);
-					    	// 放入RoomContent
-					    
-					    	// 放入SendMsgIputbox
-					    	// <input type="text" id="message">
-					    var tdNode = document.createElement("td");
-					    var inputNode = document.createElement("input");
-					    inputNode.setAttribute("type", "text");
-					    inputNode.setAttribute("id", "roomMsg" + i);
-					    tdNode.appendChild(inputNode);
-					    trNode.appendChild(tdNode);
-					    	// 放入SendMsgButton
-					    	// <button type="submit" onclick="sendtoRoom();" id="sendtoRoom">send to Group</button>
-					    var buttonNode = document.createElement("button");
-					    buttonNode.setAttribute("type", "submit");
-					    buttonNode.value = roomList[i];
-					    buttonNode.index = "roomMsg" + i;
-						buttonNode.onclick= function(){
-					    	var msg = document.getElementById(this.index).value;
-					    	sendtoRoom(this.value, msg);
-					    	} ;
-					    var buttonTextnode = document.createTextNode("Send to Group");
-					    buttonNode.appendChild(buttonTextnode);
-					    trNode.appendChild(buttonNode);
-					    document.getElementById("roomListTable").appendChild(trNode);
-					}
-//					document.getElementById("roomList").innerHTML = roomListToUpdate;
-					//JSONArray groupList = obj.groupList;
+					
+					
+
 				} else if ("inviteAgentThirdParty" == obj.Event){
 					console.log("received inviteAgentThirdParty event");
 					var tmpRoomID = obj.roomID;
@@ -398,6 +358,8 @@ function AcceptEventInit() {
 	var reqType = $('#Accept')[0].reqType;
 	// 一次將Agent與Client加入到room中
 	var currClientID = $('#Accept')[0].clientID;
+//	var userdata = $('#Accept')[0].userdata;
+	
 		// 在此使用新的方法,將一個list的成員都加入到同一群組中
 	var memberListToJoin = [];
 	var mem1 = new myRoomMemberJsonObj(currClientID);
@@ -838,6 +800,28 @@ function Agentonline() {
 	};
 	// 發送消息
 	ws_g.send(JSON.stringify(msg));
+}
+
+function updateRoomIDList(){
+	// 先清空原list
+	$("#roomList").empty();
+	// 開始更新roomList
+	var rows = "";
+	roomInfoMap_g.forEach(function(value, key) {
+		  console.log(key + ' = ' + value);
+		  rows += '<option value=' + '"'+ key +'"' + '>' + '"'+ key +'"' + '</option>';
+	});
+	$( rows ).appendTo( "#roomList" );
+	
+//	$('#roomList:last-child').append(
+//			'<option value=' + '"someValue"' + '>' + 'someText' + '</option>'
+//		);
+//	var rows = "";
+//	$.each(items, function(){
+//	    rows += '<option value=' + '"someValue"' + '>' + 'someText' + '</option>';
+//	});
+//
+//	$( rows ).appendTo( "#roomList" );
 }
 
 // 測試按鈕

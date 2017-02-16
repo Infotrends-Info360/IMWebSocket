@@ -41,6 +41,10 @@ if(typeof String.prototype.trim !== 'function') {
 /********** bean *************/
 //目的: 將Json請求字串物件化 (持續進行中)
 
+function roomInfo(aRoomID){
+	this.roomID = aRoomID;
+}
+
 function messagetoRoomJson(aType, aACtype, aText, aId, aUserName, aRoomID, aChannel, aDate) {  // Method which will display type of Animal
 	this.type = aType;
 	this.ACtype = aACtype;
@@ -98,6 +102,15 @@ var StatusEnum = Object.freeze({
 // fish.type = "Fishes";
 // fish.displayType(); // Output:Fishes
 
+
+
+/******** debugging *********/
+function seeAllKV(obj){
+	Object.keys(obj).forEach(function (key) {
+	    var val = obj[key];
+	    console.log(key + " : " + val);
+	});
+}
 
 
 
