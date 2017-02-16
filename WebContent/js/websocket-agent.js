@@ -76,12 +76,12 @@ function Login() {
 				var obj = jQuery.parseJSON(e.data);
 				// 接收到Client邀請chat的event
 				if ("findAgentEvent" == obj.Event) {
-					ClientName_g = obj.fromName;
-					ClientID_g = obj.from;
-					document.getElementById("AcceptEvent").disabled = false;
-					document.getElementById("RejectEvent").disabled = false;
-					document.getElementById("Eventfrom").value = obj.from;
-					document.getElementById("Event").innerHTML = obj.Event;
+//					ClientName_g = obj.fromName;
+//					ClientID_g = obj.from;
+//					document.getElementById("AcceptEvent").disabled = false;
+//					document.getElementById("RejectEvent").disabled = false;
+//					document.getElementById("Eventfrom").value = obj.from;
+//					document.getElementById("Event").innerHTML = obj.Event;
 					// 接收到group訊息
 				} else if ("messagetoRoom" == obj.Event) {
 					// 判斷是否有開啟layim與是否為自己傳送的訊息
@@ -168,12 +168,28 @@ function Login() {
 //							+ obj.Status + "<br>Reason: " + obj.Reason; 
 					// 接收到找尋Client的UserData的訊息
 				} else if ("senduserdata" == obj.Event) {
-					console.log("onMessage - senduserdata event");
-					document.getElementById("userdata").innerHTML = JSON
-							.stringify(obj.userdata);
-					document.getElementById("clientID").innerHTML = obj.clientID;
+//					document.getElementById("userdata").innerHTML = JSON
+//							.stringify(obj.userdata);
+//					document.getElementById("clientID").innerHTML = obj.clientID;
+					// 在這邊取代原本findAgentEvent事件所做的事情
+					console.log("obj.clientName: " + obj.clientName);
+					console.log("obj.clientID: " + obj.clientID);
+					ClientName_g = obj.clientName;
+					ClientID_g = obj.clientID;
+//					document.getElementById("AcceptEvent").disabled = false;
+//					document.getElementById("RejectEvent").disabled = false;
 					//  obj.clientID // **************
 					// 接收到Agent or Client加入列表的訊息(此方法可考慮消去)
+					$('#requestTable > tbody:last-child').append(
+							'<tr>' + 
+									'<td>' + '通話' + '</td>'  + 
+								    '<td>' + obj.clientName + '</td>'  + 
+								    '<td style="display: none;">' + JSON.stringify(obj.userdata) + '</td>'  + 
+							'</tr>'
+					);
+					
+					// 在這邊動態增加request list
+					
 				} else if ("userjointoTYPE" == obj.Event) {
 
 					// 接收到有人登入的訊息

@@ -147,47 +147,32 @@ hr {
 	                    <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12" style="padding-left: 10px;">Request List: </div>
 	                </div>
 	                <div class="row col-xs-12 col-sm-12 col-md-12 col-lg-12 panel-body center">
-						<table class="table table-hover nomargin">
+						<table class="table table-hover nomargin" id="requestTable">
 							<thead>
 								<tr>
 									<th>請求種類</th>
-									<th>請求ID</th>
-									<th>其他</th>
+									<th>請求Name</th>
+									<th>其他(userdata)</th>
 								</tr>
 							</thead>
 							<tbody>
-								<tr>
-									<td>通話</td>
-									<td>Client01</td>
-									<td></td>
-								</tr>
-								<tr>
-									<td>三方</td>
-									<td>Agent01</td>
-									<td></td>
-								</tr>
-								<tr>
-									<td>通話</td>
-									<td>Client02</td>
-									<td></td>
-								</tr>
-								<tr>
-									<td>轉接</td>
-									<td>Agent03</td>
-									<td></td>
-								</tr>
+<!-- 								<tr> -->
+<!-- 									<td>通話</td> -->
+<!-- 									<td>Client01</td> -->
+<!-- 									<td></td> -->
+<!-- 								</tr> -->
 							</tbody>
 						</table>	 
 		                <div class="row">
 		                    <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
 		                        <div class="form-group">
 		                        	<div class="col-xs-6 col-sm-6 col-md-6 col-lg-6">
-		        	                    <button class="btn btn-primary pull-left marginDefault" id="Accept" style="width:100px">Accept</button>
-		            	                <button class="btn btn-primary pull-left marginDefault" id="Reject" style="width:100px">Reject</button>
+		        	                    <button class="btn btn-primary pull-left marginDefault" id="Accept" style="width:100px" disabled>Accept</button>
+		            	                <button class="btn btn-primary pull-left marginDefault" id="Reject" style="width:100px" disabled>Reject</button>
 		                        	</div>
 		                        	<div class="col-xs-6 col-sm-6 col-md-6 col-lg-6">
-		    	                        <button class="btn btn-primary pull-right marginDefault wrapTextBtn" id="RejectThirdParty" style="width:100px">三方/轉接Reject</button>                        	
-			                            <button class="btn btn-primary pull-right marginDefault wrapTextBtn" id="AcceptThirdParty" style="width:100px">三方/轉接Accept</button>	
+		    	                        <button class="btn btn-primary pull-right marginDefault wrapTextBtn" id="RejectThirdParty" style="width:100px" disabled>三方/轉接Reject</button>                        	
+			                            <button class="btn btn-primary pull-right marginDefault wrapTextBtn" id="AcceptThirdParty" style="width:100px" disabled>三方/轉接Accept</button>	
 		                        	</div>
 		                        </div>
 		                    </div>
