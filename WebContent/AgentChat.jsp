@@ -99,15 +99,22 @@ hr {
     <div style="width:90%">
     	<!-- 標題列 -->
         <div class="row" style="margin-top:5px;">
-            <div class="col-xs-4 col-sm-4 col-md-4 col-lg-4">
-                <div>
-                    <label id="AgentId"></label>
-                </div>
-            </div>
-            <div class="col-xs-2 col-sm-2 col-md-2 col-lg-2">
-            </div>
-            <div class="col-xs-2 col-sm-2 col-md-2 col-lg-2">
-            </div>
+            <div class="col-xs-8 col-sm-8 col-md-8 col-lg-8">
+		            <div class="col-xs-3 col-sm-3 col-md-3 col-lg-3">
+						<div class="form-group">
+						    <input type="text" id="UserID" class="form-control" value="" />
+						</div>	            
+					</div>
+		            <div class="col-xs-3 col-sm-3 col-md-3 col-lg-3">
+						<div class="form-group">
+						    <input type="text" id="UserName" class="form-control" value="agent01" />
+						</div>
+		            </div>
+		            <div class="col-xs-6 col-sm-6 col-md-6 col-lg-6">
+		                <button id="Login" class="btn btn-primary btn-sm" onclick="Login();">Login</button>
+		                <button id="Logout" class="btn btn-primary btn-sm" onclick="Logout();" disabled>Logout</button>
+		            </div>
+		    </div>
             <div class="col-xs-4 col-sm-4 col-md-4 col-lg-4">
                 <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
                 	<div class="col-xs-4 col-sm-4 col-md-4 col-lg-4">

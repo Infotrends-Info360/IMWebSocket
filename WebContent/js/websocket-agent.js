@@ -163,9 +163,9 @@ function Login() {
 					
 					document.getElementById("clientID").innerHTML = ""; // 到最後一步才清掉這個
 				} else if ("getUserStatus" == obj.Event) {
-					console.log("onMessage(): getUserStatus called");
-					document.getElementById("status").innerHTML = "狀態: "
-							+ obj.Status + "<br>Reason: " + obj.Reason;
+//					console.log("onMessage(): getUserStatus called");
+//					document.getElementById("status").innerHTML = "狀態: "
+//							+ obj.Status + "<br>Reason: " + obj.Reason;
 					// 接收到找尋Client的UserData的訊息
 				} else if ("senduserdata" == obj.Event) {
 					console.log("onMessage - senduserdata event");
