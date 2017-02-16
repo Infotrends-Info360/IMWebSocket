@@ -48,9 +48,27 @@ div class ="container"> <h2>Form control: textarea </h2> <p>The form below conta
 			<h3>Info360 - Agent</h3>
 		</div>
 		<div class="col-xs-6 col-sm-6 col-md-6 col-lg-6 text-center">
+            <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
 			<h3>
 				<label id="PageTitle"></label>
 			</h3>
+            </div>
+	        <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+	            <div class="col-xs-3 col-sm-3 col-md-3 col-lg-3">
+					<div class="form-group">
+					    <input type="text" id="UserID" class="form-control" value="" />
+					</div>	            
+				</div>
+	            <div class="col-xs-3 col-sm-3 col-md-3 col-lg-3">
+					<div class="form-group">
+					    <input type="text" id="UserName" class="form-control" value="agent01" />
+					</div>
+	            </div>
+	            <div class="col-xs-6 col-sm-6 col-md-6 col-lg-6">
+	                <button id="Login" class="btn btn-primary btn-sm" onclick="Login();">Login</button>
+	                <button id="Logout" class="btn btn-primary btn-sm" onclick="Logout();" disabled>Logout</button>
+	            </div>
+            </div>
 		</div>
 		<div class="col-xs-3 col-sm-3 col-md-3 col-lg-3 vcenter">
 			<div class="col-xs-12 col-sm-12 col-md-12 col-lg-12 disabled">
