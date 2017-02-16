@@ -355,14 +355,6 @@ function ready() {
 	// 更新頁面
 	switchStatus(status_g);
 	
-	// 去server更新狀態
-//	var myUpdateStatusJson = new updateStatusJson("Agent", parent.UserID_g, UserName_g, aStatus, "no reason");
-//	ws_g.send(JSON.stringify(myUpdateStatusJson));
-	updateStatus("ready");
-	// 從server取得狀態
-	getStatus();
-
-	
 }
 // Agent尚未準備就緒
 function notready() {
@@ -693,6 +685,13 @@ function switchStatus(aStatus){
         // code block
         break;
     case StatusEnum.READY:
+    	// 去server更新狀態
+    	var myUpdateStatusJson = new updateStatusJson("Agent", parent.UserID_g, UserName_g, aStatus, "no reason");
+    	parent.ws_g.send(JSON.stringify(myUpdateStatusJson));
+//    	updateStatus("ready");
+    	// 從server取得狀態
+    	getStatus();
+
     	document.getElementById("ready").disabled = true;
     	document.getElementById("notready").disabled = false;
         //code block
