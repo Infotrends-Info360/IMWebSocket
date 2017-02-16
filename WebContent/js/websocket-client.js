@@ -125,7 +125,7 @@ function Login() {
 
 					// 若仍未找到Agent, 則再找
 					if ("null" == obj.Agent || null == obj.Agent) {
-						if (isonline_g) {
+						if (parent.isonline_g) {
 							console.log(UserName_g + " is looking for an agent ... ");
 							findingAgent();
 						}
@@ -222,7 +222,7 @@ function Login() {
 					document.getElementById("openChat").disabled = true;
 					document.getElementById("closeChat").disabled = false;
 
-					isonline_g = true;
+					parent.isonline_g = true;
 					
 				}  else if ("responseThirdParty" == obj.Event){
 					console.log("obj.invitedAgentID: " + obj.invitedAgentID);
@@ -277,7 +277,7 @@ function Logout() {
 // 離開WebSocket Pool列表
 function Logoutaction() {
 	// 使用流程: 給"Clientclosegroup" -> .java - "Clientclosegroup" -> .js - ReleaseEvent() -> notready -> "Agentclosegroup" -> .java -> client.js - if(isonlone){} 
-	isonline_g = false; 
+	parent.isonline_g = false; 
 
 	// 在登出前,將要存入的log資訊先放到userallconnections中,此方法最後會呼叫adduserinteraction() 
 //	setinteractionDemo(ixnstatus, ixnactivitycode, 'client');
@@ -297,21 +297,25 @@ function Logoutaction() {
 }
 
 function findingAgent() {
-	var now = new Date();
-	// 組成找尋Agent JSON指令
-	var findAgentmsg = {
-		type : "findAgent",
-		id : UserID_g,
-		UserName : UserName_g,
-		channel : "chat",
-		// Event: "findAgent",
-		date : now.getHours() + ":" + now.getMinutes() + ":"
-				+ now.getSeconds()
-	};
+	setTimeout(function(){
+		if (!parent.isonline_g) return;
 
-	// 發送消息給WebSocket
-	ws_g.send(JSON.stringify(findAgentmsg));
-	setTimeout(function(){}, 1000); // 先執行,後延遲 -> 目的是讓 Logout()時能乾淨的取消掉findAgent排程 
+		var now = new Date();
+		// 組成找尋Agent JSON指令
+		var findAgentmsg = {
+			type : "findAgent",
+			id : UserID_g,
+			UserName : UserName_g,
+			channel : "chat",
+			// Event: "findAgent",
+			date : now.getHours() + ":" + now.getMinutes() + ":"
+					+ now.getSeconds()
+		};		
+		// 發送消息給WebSocket
+		ws_g.send(JSON.stringify(findAgentmsg));
+		
+	}, 1000); // 先執行,後延遲 -> 目的是讓 Logout()時能乾淨的取消掉findAgent排程 
+
 }
 
 //告知Agent,Client自己也已經知道Agent接通了此通通話了

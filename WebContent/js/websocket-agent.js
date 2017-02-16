@@ -27,9 +27,9 @@ function onloadFunction(){
 //	}
 	
 	// test 
-	console.log("StatusEnum.LOGIN: " + StatusEnum.LOGIN);
-	console.log("StatusEnum.convertToChinese(StatusEnum.LOGIN): " + StatusEnum.toChinese(StatusEnum.LOGIN));
-	
+//	console.log("StatusEnum.LOGIN: " + StatusEnum.LOGIN);
+//	console.log("StatusEnum.convertToChinese(StatusEnum.LOGIN): " + StatusEnum.toChinese(StatusEnum.LOGIN));
+
 	
 	
 }
@@ -182,7 +182,6 @@ function Login() {
 					parent.UserID_g = obj.from;
 					status_g = StatusEnum.LOGIN;
 					
-					document.getElementById("UserID").value = parent.UserID_g;
 					switchStatus(status_g);
 										
 				} else if ("refreshRoomList" == obj.Event) {
@@ -314,8 +313,6 @@ function Login() {
 
 // 登出
 function Logout() {
-	// 關閉socket
-	// ws.close()
 	// 執行登出
 	Logoutaction(); // onClose()會全部清: Group, Type, User conn
 	// 關閉上線開關
@@ -328,6 +325,8 @@ function Logout() {
 
 // 執行登出
 function Logoutaction() {
+	// 關閉websocket
+	parent.ws.close();
 	// 向websocket送出登出指令
 	var now = new Date();
 	var msg = {
@@ -659,6 +658,7 @@ function switchStatus(aStatus){
 		}
 		isonline = true;
 		
+		document.getElementById("UserID").value = parent.UserID_g;
 		document.getElementById("Login").disabled = true;
 		document.getElementById("Logout").disabled = false;
 
@@ -686,7 +686,7 @@ function switchStatus(aStatus){
         break;
     case StatusEnum.READY:
     	// 去server更新狀態
-    	var myUpdateStatusJson = new updateStatusJson("Agent", parent.UserID_g, UserName_g, aStatus, "no reason");
+    	var myUpdateStatusJson = new updateStatusJson("Agent", parent.UserID_g, parent.UserName_g, aStatus, "no reason");
     	parent.ws_g.send(JSON.stringify(myUpdateStatusJson));
 //    	updateStatus("ready");
     	// 從server取得狀態
