@@ -141,27 +141,21 @@ function Login() {
 				} else if ("AcceptEvent" == obj.Event){
 					// 拿取資料 + 為之後建立roomList做準備
 					RoomID_g = obj.roomID; // 之後要改成local variable
-					var myRoomID = obj.roomID;
-					document.getElementById("group").value = RoomID_g;
-					document.getElementById("Event").innerHTML = obj.Event;
 					
 					// 更新狀態
-					var myUpdateStatusJson = new updateStatusJson("Agent", parent.UserID_g, parent.UserName_g, "Established", "Established");
+					var myUpdateStatusJson = new updateStatusJson("Agent", parent.UserID_g, parent.UserName_g, "Established", "no reason");
 					parent.ws_g.send(JSON.stringify(myUpdateStatusJson));
-					// 使用layui
-					layuiUse01(); // 先暫時這樣隔開,之後有需要細改再看此部分
-
 					// 取得狀態
 					getStatus();
-
-					document.getElementById("roomonline").disabled = false;
-					document.getElementById("ReleaseEvent").disabled = false;
-					document.getElementById("AcceptEvent").disabled = true;
-					document.getElementById("RejectEvent").disabled = true;
-					document.getElementById("leaveRoom").disabled = false;
-					document.getElementById("sendtoRoom").disabled = false;
+					switchStatus(StatusEnum.I_ESTABLISHED);
 					
-					document.getElementById("clientID").innerHTML = ""; // 到最後一步才清掉這個
+					// 在這邊興建roomList與其room bean
+
+					document.getElementById("Accept").disabled = true;
+					document.getElementById("Reject").disabled = true;
+					document.getElementById("leaveRoom").disabled = false;
+//					document.getElementById("sendtoRoom").disabled = false;
+					
 				} else if ("getUserStatus" == obj.Event) {
 //					console.log("onMessage(): getUserStatus called");
 //					document.getElementById("status").innerHTML = "狀態: "
@@ -191,6 +185,16 @@ function Login() {
 									'</td>'  +    
 							'</tr>'
 					);
+					// here
+					$('#requestTable > tbody:last-child')[0].value = obj.clientID; // 保存資訊
+					$('#requestTable > tbody:last-child')[0].onclick = function(){
+						$('#Accept')[0].disabled = false;
+						$('#Reject')[0].disabled = false;
+						$('#Accept')[0].reqType = 'Client';
+						$('#Accept')[0].clientID = obj.clientID;
+					}; // 設定 AcceptEventInit
+					
+					
 					
 					// 在這邊動態增加request list
 					
@@ -389,8 +393,11 @@ function notready() {
 
 //同意與Client交談
 function AcceptEventInit() {
+	console.log("AcceptEventInit(): ");
+	
+	var reqType = $('#Accept')[0].reqType;
 	// 一次將Agent與Client加入到room中
-	var currClientID = document.getElementById("clientID").innerHTML;
+	var currClientID = $('#Accept')[0].clientID;
 		// 在此使用新的方法,將一個list的成員都加入到同一群組中
 	var memberListToJoin = [];
 	var mem1 = new myRoomMemberJsonObj(currClientID);
@@ -479,12 +486,7 @@ function addRoomForMany(aRoomID, aMemberListToJoin){
 	};
 
 	// 發送消息
-	ws_g.send(JSON.stringify(msg));
-
-	document.getElementById("groupstatus").innerHTML = "加入" + RoomID_g + "群組";
-	document.getElementById("leaveRoom").disabled = false;
-//	document.getElementById("addRoom").disabled = true;
-	document.getElementById("roomonline").disabled = false;	
+	parent.ws_g.send(JSON.stringify(msg));
 }
 
 

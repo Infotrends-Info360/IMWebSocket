@@ -167,7 +167,7 @@ hr {
 		                    <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
 		                        <div class="form-group">
 		                        	<div class="col-xs-6 col-sm-6 col-md-6 col-lg-6">
-		        	                    <button class="btn btn-primary pull-left marginDefault" id="Accept" style="width:100px" disabled>Accept</button>
+		        	                    <button class="btn btn-primary pull-left marginDefault" id="Accept" style="width:100px" onclick="AcceptEventInit();" disabled>Accept</button>
 		            	                <button class="btn btn-primary pull-left marginDefault" id="Reject" style="width:100px" disabled>Reject</button>
 		                        	</div>
 		                        	<div class="col-xs-6 col-sm-6 col-md-6 col-lg-6">
@@ -201,15 +201,15 @@ hr {
 			                		<h4>comment:</h4>
 			                	</div>
 			                	<div class="col-xs-6 col-sm-6 col-md-6 col-lg-6">
-			                        <button id="" class="btn btn-primary">離開房間</button>
+			                        <button id="leaveRoom" class="btn btn-primary" disabled>離開房間</button>
 			                	</div>	                	
 	                		</div>
 	                		<div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
 			                	<div class="col-xs-6 col-sm-6 col-md-6 col-lg-6 ">
-			                        <input type="text" id="" class="form-control" value="comment..." />
+			                        <input type="text" id="" class="form-control" value="comment..." disabled/>
 			                	</div>
 			                	<div class="col-xs-6 col-sm-6 col-md-6 col-lg-6">
-			                        <button id="" class="btn btn-primary">SEND</button>
+			                        <button id="" class="btn btn-primary" disabled>SEND</button>
 			                	</div>	                		                		
 	                		</div>
 	                	</div>
@@ -264,7 +264,7 @@ hr {
 	                    <button id="ClearLog" type="button" class="btn btn-primary">Clear</button>
 	                </div>
 	                <div>
-	                    <div id="ChatLog"></div>
+	                    <div id="text"></div>
 	                </div>
 				</div>            
                 
