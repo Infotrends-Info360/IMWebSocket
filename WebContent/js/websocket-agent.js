@@ -184,7 +184,11 @@ function Login() {
 							'<tr>' + 
 									'<td>' + '通話' + '</td>'  + 
 								    '<td>' + obj.clientName + '</td>'  + 
-								    '<td style="display: none;">' + JSON.stringify(obj.userdata) + '</td>'  + 
+								    '<td>' +
+									    '<div style="height: 20px; overflow-y: hidden;">' +
+									    	 JSON.stringify(obj.userdata) + 
+									    '</div>' + 
+									'</td>'  +    
 							'</tr>'
 					);
 					
