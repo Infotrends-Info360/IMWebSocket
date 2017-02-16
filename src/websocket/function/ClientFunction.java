@@ -121,7 +121,7 @@ public class ClientFunction {
 		sendjson.put("from", obj.getJSONObject("attributes").getString("id"));
 		sendjson.put("userdata",  responseSBjson);
 		sendjson.put("channel", obj.getString("channel"));
-		System.out.println("senduserdata() - sendjson" + sendjson);
+//		System.out.println("senduserdata() - sendjson" + sendjson);
 		WebSocketUserPool.sendMessageToUser(conn, sendjson.toString());
 		// 掉換順序
 		// 若尚未找到Agent,則會出現JSONException
@@ -229,7 +229,9 @@ public class ClientFunction {
 					ixnid = entry.getValue().getAsString();
 					break;
 				case "agentid":
-					agentid = entry.getValue().getAsString();
+					System.out.println("entry.getValue(): " + entry.getValue());
+//					agentid = entry.getValue().getAsString();
+					agentid = entry.getValue().toString();
 					break;
 				case "status":
 					status = entry.getValue().getAsInt();
