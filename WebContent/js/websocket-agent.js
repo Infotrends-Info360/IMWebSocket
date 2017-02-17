@@ -190,8 +190,9 @@ function Login() {
 //					document.getElementById("RejectEvent").disabled = false;
 					//  obj.clientID // **************
 					// 接收到Agent or Client加入列表的訊息(此方法可考慮消去)
+//					alert("obj.userdata.id: " + obj.userdata.id);
 					$('#requestTable > tbody:last-child').append(
-							'<tr>' + 
+							'<tr id="' + obj.userdata.id + '">' + 
 									'<td>' + '通話' + '</td>'  + 
 								    '<td>' + obj.clientName + '</td>'  + 
 								    '<td>' +
@@ -208,6 +209,7 @@ function Login() {
 						$('#Reject')[0].disabled = false;
 						$('#Accept')[0].reqType = 'Client';
 						$('#Accept')[0].clientID = obj.clientID;
+						$('#Accept')[0].userID = obj.userdata.id;
 						$('#Accept')[0].userdata = JSON.stringify(obj.userdata);
 					}; // 設定 AcceptEventInit
 					
@@ -373,6 +375,11 @@ function AcceptEventInit() {
 	memberListToJoin.push(mem1);
 	memberListToJoin.push(mem2);
 	addRoomForMany("none", memberListToJoin); // "none"是一個keyword, 會影響websocket server的邏輯判斷處理
+	
+	// 將此請求從request list中去除掉
+	var userID = $('#Accept')[0].userID;
+	alert("userID: " + userID);
+	$('#' + userID).remove(); // <tr>的id
 	
 	// 開啟ready功能:
 	document.getElementById("ready").disabled = false;
@@ -816,14 +823,14 @@ function updateRoomIDList(aNewRoomID){
 	roomInfoMap_g.forEach(function(roomInfo, roomID) {
 		  console.log(roomID + ' = ' + roomInfo);
 		  rows += '<option value=' + '"'+ roomID +'"' + '>' + '"'+ roomID +'"' + '</option>';
-		  rows += '<option value=' + '"'+ roomID +'2"' + '>' + '"'+ roomID +'2"' + '</option>';
 	});
 	$( rows ).appendTo( "#roomList" );
+	// 建立select onchange事件, 一選取之後則將room info所有欄位更新
 	$('#roomList').change(function() { 
 		var tmpRoomID = $('#roomList').val();
 		updateRoomInfo(roomInfoMap_g.get(tmpRoomID));
 	});
-	
+	// 主要trigger onchange事件
 	$("#roomList").val(aNewRoomID).change();
 	
 //	$('#roomList:last-child').append(
