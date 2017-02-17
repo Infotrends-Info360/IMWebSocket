@@ -30,6 +30,16 @@ function onloadFunctionAgent(){
 	    	sendtoRoom($('#sendToRoom')[0].roomID);
 	    }
 	});
+
+	
+	$("#A2AContent").keypress(function(e) {
+	    if(e.which == 13) {
+	       //alert('You pressed enter!');
+//	    	alert("$('#sendToRoom')[0].roomID: " + $('#sendToRoom')[0].roomID);
+	    	sendA2A($('#privateMsg')[0].agentID);
+	    }
+	});
+	
 	
 //	$('#roomList').change(function() {alert("hey"); });
 	
@@ -272,8 +282,8 @@ function Login() {
 					document.getElementById("currUsers").innerHTML = obj.roomMembers;
 
 				} else if ("privateMsg" == obj.Event){
-					console.log("onMessage - privateMsg" + obj.UserName + ": " + obj.text + "&#13;&#10");
-					document.getElementById("chatAgentContentHistory").innerHTML += obj.UserName + ": " + obj.text + "&#13;&#10";
+//					console.log("onMessage - privateMsg" + obj.UserName + ": " + obj.text + "&#13;&#10");
+//					document.getElementById("chatAgentContentHistory").innerHTML += obj.UserName + ": " + obj.text + "&#13;&#10";
 					
 				} else if ("removeUserinroom" == obj.Event){
 //					document.getElementById("currUsers").innerHTML = obj.roomMembers;
@@ -546,6 +556,7 @@ function sendA2A(aSendto){
 	var msg = document.getElementById("A2AContent").value;
 	console.log("sendA2A() - msg: " + msg);
 	send(aSendto,msg);
+	document.getElementById("A2AContent").value = ''; // 清掉
 }
 
 // 送出訊息至群組
@@ -884,20 +895,21 @@ function updateAgentIDList(){
 	// 先清空原list
 	$("#agentList").empty();
 	// 開始更新roomList
-	var rows = "";
-//	alert("agentIDMap_g.size: " + agentIDMap_g.size);
+	var rows = "<option disabled selected value> -- select an agent -- </option>";
+	
 	agentIDMap_g.forEach(function(value, AgentID) {
-//		alert("AgentID: " + AgentID);
 		rows += '<option value=' + '"'+ AgentID +'"' + '>' + '"'+ AgentID +'"' + '</option>';
-	});
+	});		
+	
 	$( rows ).appendTo( "#agentList" );
 	// 建立select onchange事件, 一選取之後則將room info所有欄位更新
 	$('#agentList').unbind('change').change(function() { 
 		var tmpAgentID = $('#agentList').val();
 		$('#privateMsg')[0].agentID = tmpAgentID;
-		alert("$('#privateMsg')[0].agentID: " + $('#privateMsg')[0].agentID);
+		alert("$('#privateMsg')[0].agentID: \n" + $('#privateMsg')[0].agentID);
 //		updateRoomInfo(roomInfoMap_g.get(tmpRoomID));
 	});
+		
 	// 主要trigger onchange事件
 //	$("#agentList").val(aNewAgentID).change();
 	

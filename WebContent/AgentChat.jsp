@@ -276,6 +276,7 @@ hr {
 	                <div class="row col-xs-12 col-sm-12 col-md-12 col-lg-12 panel-body center">
 	                	<div class="col-xs-12 col-sm-12 col-md-12 col-lg-12 ">
 	                        <select id="agentList" class="form-control">
+<!-- 		                        <option disabled selected value> -- select an agent -- </option> -->
 <!-- 	                            <option value="agent01">agent01</option> -->
 <!-- 	                            <option value="agent02">agent02</option> -->
 <!-- 	                            <option value="agent03">agent03</option> -->
@@ -284,12 +285,12 @@ hr {
 		                <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12 spacer10"></div>
                 		<div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
 		                	<div class="col-xs-9 col-sm-9 col-md-9 col-lg-9 nopadding">
-		                        <input type="text" id="" class="form-control" value="comment..."/>
+		                        <input type="text" id="A2AContent" class="form-control" value=""/>
 		                	</div>
 		                	<div class="col-xs-1 col-sm-1 col-md-1 col-lg-1 nopadding">
 		                	</div>
 		                	<div class="col-xs-2 col-sm-2 col-md-2 col-lg-2 nopadding">
-		                        <button id="privateMsg" class="btn btn-primary">SEND</button>
+		                        <button id="privateMsg" class="btn btn-primary" onclick="sendA2A(this.agentID);">SEND</button>
 		                	</div>	                		                		
                 		</div>	                		                	
 	                </div>
