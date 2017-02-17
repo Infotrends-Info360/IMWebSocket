@@ -307,7 +307,8 @@ function Login() {
 					console.log("refreshAgentList - agentIDList: " + obj.agentIDList);
 					var tmpAgentIDList = "" + obj.agentIDList;
 					var agentIDList = tmpAgentIDList.split(",");
-				    var i;					
+				    var i;			
+				    agentIDMap_g.clear();
 					for (i = 0; i < agentIDList.length; i++) {
 						var agentID = agentIDList[i].trim();
 						console.log("agentID: " + agentID);
@@ -724,6 +725,9 @@ function switchStatus(aStatus){
 		document.getElementById("Logout").disabled = true;
 		document.getElementById("Login").disabled = false;
 		document.getElementById("UserID").value = '';
+		
+		//清空AgentList
+		$("#agentList").empty();
 
         // code block
         break;

@@ -207,6 +207,12 @@ public class WebSocket extends WebSocketServer {
 		// 清TYPE:
 		String ACType = WebSocketUserPool.getACTypeByKey(conn);
 		WebSocketTypePool.removeUserinTYPE(ACType, conn);
+		/*** 更新Agent list - 私訊用 ***/
+		if ("Agent".equals(ACType)){
+			System.out.println("here?");
+			AgentFunction.refreshAgentList();
+		}
+		
 		// 清USER:
 		WebSocketUserPool.removeUser(conn);
 	}

@@ -148,6 +148,7 @@ public class CommonFunction {
 			}			
 		}
 		
+		
 		// 最後關閉連線
 		aConn.close();
 //		WebSocketPool.removeUserID(conn);
