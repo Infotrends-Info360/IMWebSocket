@@ -106,19 +106,10 @@ public class Query_ActivityMenu_Servlet {
         			activitydataObject.put("titlegroup", activitydatalist.get(g).getTitlegroup());
         			activitydataObject.put("titleflag", activitydatalist.get(g).getTitleflag());
         			activitydataObject.put("sort", activitydatalist.get(g).getSort());
-        					
-        			
-        			if(activitydatalist.get(g).getTitleflag().trim().equals("0")){
-        				ActivitydataJsonArray.put(activitydataObject);
-                		
-        			}else{
-        				TitleflagJsonArray.put(activitydataObject);
-        			}
-        			
+        				
         	  	}
-
     		}
-        		jsonObject.put("TitleFlag", TitleflagJsonArray);
+        	
         		jsonObject.put("activitydata", ActivitydataJsonArray);
         		jsonObject.put("activitygroups", ActivitygroupsJsonArray);
     		}
