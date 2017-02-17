@@ -48,9 +48,11 @@ div class ="container"> <h2>Form control: textarea </h2> <p>The form below conta
 			<h3>Info360 - Agent</h3>
 		</div>
 		<div class="col-xs-6 col-sm-6 col-md-6 col-lg-6 text-center">
+            <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
 			<h3>
 				<label id="PageTitle"></label>
 			</h3>
+            </div>
 		</div>
 		<div class="col-xs-3 col-sm-3 col-md-3 col-lg-3 vcenter">
 			<div class="col-xs-12 col-sm-12 col-md-12 col-lg-12 disabled">
@@ -198,7 +200,7 @@ div class ="container"> <h2>Form control: textarea </h2> <p>The form below conta
 					//$('.navbar-toggle').hide();
 
 					// 顯示 Login Frame
-					var defaultPageId = "LoginFrame";
+					var defaultPageId = "ChatFrame";
 					$("iframe").hide();
 					$("#" + defaultPageId).show(); // 為了開發方便,先轉成ChatFrame為預設頁面
 					var height = $(this).attr('data-height')
