@@ -27,8 +27,8 @@
 </select>
 
 <insert id="Insert_commonlink" parameterType="com.Info360.bean.CommonLink">
-insert into tblCfg_CommonLink (parnetid,nodetext,nodeurl,createuserid,color,sort) 
-       values (#{parnetid},#{nodetext},#{nodeurl},#{createuserid},#{color},#{sort})
+insert into tblCfg_CommonLink (parnetid,nodetext,nodeurl,createuserid,color,sort,createdatetime) 
+       values (#{parnetid},#{nodetext},#{nodeurl},#{createuserid},#{color},#{sort},#{createdatetime})
 </insert>
 
 <update id="Update_commonlink" parameterType="com.Info360.bean.CommonLink">

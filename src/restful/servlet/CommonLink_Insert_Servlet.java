@@ -5,6 +5,8 @@ import java.io.IOException;
 
 
 import java.math.BigDecimal;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.List;
 
 import javax.ws.rs.FormParam;
@@ -38,6 +40,7 @@ public class CommonLink_Insert_Servlet {
 			@FormParam("nodeurl") String nodeurl,
 			@FormParam("createuserid") String createuserid,
 			@FormParam("sort") int sort,
+			@FormParam("createdatetime") String createdatetime,
 			@FormParam("color") String color
 			
 			) throws IOException {
@@ -52,6 +55,13 @@ public class CommonLink_Insert_Servlet {
 		commonlink.setCreateuserid(createuserid);
 		commonlink.setSort(0);
 		commonlink.setColor(color);
+		
+		SimpleDateFormat sdFormat = new SimpleDateFormat("yyyy/MM/dd HH:mm:ss.sss");
+		Date date = new Date();
+		String strDate = sdFormat.format(date);
+		//System.out.println(strDate);
+		commonlink.setCreatedatetime(strDate);
+		
 		
 		MaintainService maintainservice = new MaintainService();		
 	  

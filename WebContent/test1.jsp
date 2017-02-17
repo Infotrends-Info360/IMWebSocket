@@ -25,7 +25,7 @@
         <link href="layui/css/layui.css" rel="stylesheet">
         	<!-- jQuery -->
     	<script src="js/jquery.min.js"></script>
-        <script type="text/javascript" src="js/Query_Interaction.js"></script>
+<!--         <script type="text/javascript" src="js/Query_Interaction.js"></script> -->
 
     </head>
     <body class="gray-bg">
@@ -166,10 +166,10 @@
                                         <span class="input-group-addon" id="basic-addon1">日期</span>
                                         <div class="input-daterange input-group" id="datepicker">
                                   
-                                            <input type="text" class="input-sm form-control" name="start" value="2016-12-28" id="startdate">
+                                            <input type="text" class="input-sm form-control" name="start" value="2017-01-01" id="startdate">
                                           
                                             <span class="input-group-addon">到</span>
-                                            <input type="text" class="input-sm form-control" name="end" value="2016-12-28" id="enddate">
+                                            <input type="text" class="input-sm form-control" name="end" value="2017-01-22" id="enddate">
                                          
                                         </div>
                                     </div>
@@ -331,7 +331,7 @@ function Pageleft() {
 	
 	
 	var myMap = new Map();
-	 $.post("RESTful/JQuery_Interaction",
+	 $.post("RESTful/Query_Interaction",
 			   	{
 			    	 "startdate":ss,
 			    	 "enddate":ee,
@@ -420,7 +420,7 @@ function Pageleft() {
 	        	
 	        	 console.log("ALL",all)
 	        	 
-                var Totalcount="<h4>總共筆數:"+all.Interaction+"筆     共"+Math.ceil(all.Interaction/10)+"頁</h4><br>";
+                 var Totalcount="<h4>總共筆數:"+all.Interaction+"筆     共"+Math.ceil(all.Interaction/10)+"頁</h4><br>";
                    	document.getElementById("form1").insertAdjacentHTML("BeforeEnd",Totalcount);
                   	
                 var left="<button type='button' class='btn btn-white' id='Pageleft'"+
@@ -428,6 +428,8 @@ function Pageleft() {
             	document.getElementById("form1").insertAdjacentHTML("BeforeEnd",left); 
             	        			
 	        	for(var i=1; i<=Math.ceil(all.Interaction/10); i++){
+	        	
+	        		
 	        		    var str= "<button id='bu"+i+"' class='btn btn-white' onclick='page("+i+")' value='"+i+"'>"+i+"</button>"; 
 	        		    document.getElementById("form1").insertAdjacentHTML("BeforeEnd",str); 
 	        	}
@@ -463,7 +465,7 @@ function Pageleft() {
 		var pp = r;
 		
 		var myMap = new Map();
-		 $.post("RESTful/JQuery_Interaction",
+		 $.post("RESTful/Query_Interaction",
 				   	{
 				    	 "startdate":ss,
 				    	 "enddate":ee,

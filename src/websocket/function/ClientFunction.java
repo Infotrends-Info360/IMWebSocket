@@ -130,6 +130,7 @@ public class ClientFunction {
 			org.java_websocket.WebSocket sendto = WebSocketUserPool
 					.getWebSocketByUser(obj.getString("sendto"));
 			sendjson.put("clientID", WebSocketUserPool.getUserID(conn).trim());
+			sendjson.put("clientName", WebSocketUserPool.getUserNameByKey(conn).trim());
 			WebSocketUserPool.sendMessageToUser(sendto, sendjson.toString());			
 		}catch(org.json.JSONException e) {
 			System.out.println("JSONObject[\"sendto\"] not found.");
