@@ -7,6 +7,7 @@ var ClientName_g; // 現在準備要服務的Client的名稱
 var isonline_g = false; // 判斷是否上線的開關
 var status_g;
 var roomInfoMap_g = new Map();
+var agentIDMap_g = new Map();
 var count = 0;
 //var RoomIDList = []; // 接通後產生Group的ID List
 //var RoomIDLinkedList = new SinglyList(); // 接通後產生Group的ID Linked List
@@ -301,6 +302,22 @@ function Login() {
 					document.getElementById("clientID").innerHTML = "";
 					
 					ready();
+				} else if ("refreshAgentList" == obj.Event){
+//					alert(obj.fromAgentID + " logined!");
+					console.log("refreshAgentList - agentIDList: " + obj.agentIDList);
+					var tmpAgentIDList = "" + obj.agentIDList;
+					var agentIDList = tmpAgentIDList.split(",");
+				    var i;					
+					for (i = 0; i < agentIDList.length; i++) {
+						var agentID = agentIDList[i].trim();
+						console.log("agentID: " + agentID);
+						console.log("parent.UserID_g: " + parent.UserID_g);
+						if (agentID == parent.UserID_g) continue;
+						agentIDMap_g.set(agentID, agentID);
+						
+					}
+					console.log("refreshAgentList - agentIDMap_g: " + agentIDMap_g);
+					updateAgentIDList();
 				}
 			// 非指令訊息
 			}else {
@@ -857,15 +874,29 @@ function updateRoomIDList(aNewRoomID){
 	// 主要trigger onchange事件
 	$("#roomList").val(aNewRoomID).change();
 	
-//	$('#roomList:last-child').append(
-//			'<option value=' + '"someValue"' + '>' + 'someText' + '</option>'
-//		);
-//	var rows = "";
-//	$.each(items, function(){
-//	    rows += '<option value=' + '"someValue"' + '>' + 'someText' + '</option>';
-//	});
-//
-//	$( rows ).appendTo( "#roomList" );
+}
+
+function updateAgentIDList(){
+	// 先清空原list
+	$("#agentList").empty();
+	// 開始更新roomList
+	var rows = "";
+//	alert("agentIDMap_g.size: " + agentIDMap_g.size);
+	agentIDMap_g.forEach(function(value, AgentID) {
+//		alert("AgentID: " + AgentID);
+		rows += '<option value=' + '"'+ AgentID +'"' + '>' + '"'+ AgentID +'"' + '</option>';
+	});
+	$( rows ).appendTo( "#agentList" );
+	// 建立select onchange事件, 一選取之後則將room info所有欄位更新
+	$('#agentList').unbind('change').change(function() { 
+		var tmpAgentID = $('#agentList').val();
+		$('#privateMsg')[0].agentID = tmpAgentID;
+		alert("$('#privateMsg')[0].agentID: " + $('#privateMsg')[0].agentID);
+//		updateRoomInfo(roomInfoMap_g.get(tmpRoomID));
+	});
+	// 主要trigger onchange事件
+//	$("#agentList").val(aNewAgentID).change();
+	
 }
 
 function updateRoomInfo(aRoomInfo){

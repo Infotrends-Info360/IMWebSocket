@@ -4,6 +4,7 @@ import java.text.SimpleDateFormat;
 import java.util.Collection;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 import java.util.Timer;
 
 import org.java_websocket.WebSocket;
@@ -14,6 +15,7 @@ import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
 
 import util.Util;
+
 
 
 
@@ -63,14 +65,14 @@ public class CommonFunction {
 	}
 	
 	/** * user join websocket * @param user */
-	public static void userjoin(String user, org.java_websocket.WebSocket conn) {
+	public static void userjoin(String user, org.java_websocket.WebSocket aConn) {
 		System.out.println("userjoin() called");
 		JSONObject obj = new JSONObject(user);
 		String userId = java.util.UUID.randomUUID().toString();
 		String username = obj.getString("UserName");
 		String ACtype = obj.getString("ACtype");
 		String channel = obj.getString("channel");
-		WebSocketUserPool.addUser(username, userId, conn, ACtype); // 在此刻,已將user conn加入倒Pool中
+		WebSocketUserPool.addUser(username, userId, aConn, ACtype); // 在此刻,已將user conn加入倒Pool中
 //		String joinMsg = "[Server]" + username + " Online";
 //		WebSocketUserPool.sendMessage(joinMsg);
 		
@@ -79,27 +81,32 @@ public class CommonFunction {
 		sendjson.put("Event", "userjoin");
 		sendjson.put("from", userId);
 		sendjson.put("channel", channel);
-		WebSocketUserPool.sendMessageToUser(conn, sendjson.toString());
+		WebSocketUserPool.sendMessageToUser(aConn, sendjson.toString());
 //		WebSocketUserPool.sendMessage("online people: "
 //				+ WebSocketUserPool.getOnlineUser().toString());
 		
 		/*** 將user加入到各自的TYPEmap ***/
 		SimpleDateFormat sdf = new SimpleDateFormat(Util.getSdfTimeFormat());
 		String date = sdf.format(new java.util.Date());
-		WebSocketTypePool.addUserinTYPE(ACtype, username, userId, date, conn);
+		WebSocketTypePool.addUserinTYPE(ACtype, username, userId, date, aConn);
 		
-		/** 告訴Agent開啟layui **/
-		JSONObject sendjson2 = new JSONObject();
-		sendjson2.put("Event", "userjointoTYPE");
-		sendjson2.put("from", userId);
-		sendjson2.put("username",  username);
-		sendjson2.put("ACtype", ACtype);
-		sendjson2.put("channel", channel);
-		WebSocketUserPool.sendMessage(sendjson2.toString());
+		/*** 更新Agent list - 私訊用 ***/
+		if ("Agent".equals(ACtype)){
+			AgentFunction.refreshAgentList();
+		}
+		
+//		/** 告訴Agent開啟layui **/
+//		JSONObject sendjson2 = new JSONObject();
+//		sendjson2.put("Event", "userjointoTYPE");
+//		sendjson2.put("from", userId);
+//		sendjson2.put("username",  username);
+//		sendjson2.put("ACtype", ACtype);
+//		sendjson2.put("channel", channel);
+//		WebSocketUserPool.sendMessage(sendjson2.toString());
 		
 		/*** 讓Agent與Client都有Heartbeat ***/
 		HeartBeat heartbeat = new HeartBeat();
-		heartbeat.heartbeating(conn);
+		heartbeat.heartbeating(aConn);
 	}
 	
 	/** ask online people **/

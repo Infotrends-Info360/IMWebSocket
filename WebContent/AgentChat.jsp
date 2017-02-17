@@ -276,9 +276,9 @@ hr {
 	                <div class="row col-xs-12 col-sm-12 col-md-12 col-lg-12 panel-body center">
 	                	<div class="col-xs-12 col-sm-12 col-md-12 col-lg-12 ">
 	                        <select id="agentList" class="form-control">
-	                            <option value="agent01">agent01</option>
-	                            <option value="agent02">agent02</option>
-	                            <option value="agent03">agent03</option>
+<!-- 	                            <option value="agent01">agent01</option> -->
+<!-- 	                            <option value="agent02">agent02</option> -->
+<!-- 	                            <option value="agent03">agent03</option> -->
 	                        </select>
 	                	</div>
 		                <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12 spacer10"></div>
@@ -289,7 +289,7 @@ hr {
 		                	<div class="col-xs-1 col-sm-1 col-md-1 col-lg-1 nopadding">
 		                	</div>
 		                	<div class="col-xs-2 col-sm-2 col-md-2 col-lg-2 nopadding">
-		                        <button id="" class="btn btn-primary">SEND</button>
+		                        <button id="privateMsg" class="btn btn-primary">SEND</button>
 		                	</div>	                		                		
                 		</div>	                		                	
 	                </div>
