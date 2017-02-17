@@ -17,6 +17,7 @@
         <title>「設定」頁面</title>
 		<link rel="stylesheet" href="jstree/style.min.css" />
 		<script src="js/jquery.min.js"></script>
+		
         <link href="css/bootstrap.min.css?v=3.3.6" rel="stylesheet">
         <link href="css/font-awesome.css?v=4.4.0" rel="stylesheet">
         <link href="css/animate.css" rel="stylesheet">
@@ -238,10 +239,6 @@
 		        	 	}
 		        	 	document.getElementById("nodeLINKlist").insertAdjacentHTML("BeforeEnd",oo1);
 	        	 		document.getElementById("nodeLINKlistU").insertAdjacentHTML("BeforeEnd",oo1);
-	        	 		
-	       
-	       
-		        	
 		         },
 		     });
 		  
