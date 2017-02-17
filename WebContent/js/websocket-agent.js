@@ -319,8 +319,6 @@ function Logout() {
 
 // 執行登出
 function Logoutaction() {
-	// 關閉websocket
-	parent.ws.close();
 	// 向websocket送出登出指令
 	var now = new Date();
 	var msg = {
@@ -334,6 +332,9 @@ function Logoutaction() {
 
 	// 發送消息
 	parent.ws_g.send(JSON.stringify(msg));
+	
+	// 關閉websocket
+	parent.ws_g.close();
 }
 
 //refresh或關閉網頁時執行
