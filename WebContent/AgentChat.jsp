@@ -234,7 +234,7 @@ hr {
 								</div>
 								<div class="col-xs-12 col-sm-12 col-md-12 col-lg-12 nopadding">
 									<div class="col-xs-10 col-sm-10 col-md-10 col-lg-10 nopadding">
-										<input class="form-control" id="message">
+										<input class="form-control" id="message" disabled>
 									</div>						
 									<div class="col-xs-2 col-sm-2 col-md-2 col-lg-2">
 										<button class="btn btn-primary" id="sendToRoom" onclick="sendtoRoom(this.roomID);" disabled>SEND</button>

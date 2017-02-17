@@ -7,6 +7,7 @@ var ClientName_g; // 現在準備要服務的Client的名稱
 var isonline_g = false; // 判斷是否上線的開關
 var status_g;
 var roomInfoMap_g = new Map();
+var count = 0;
 //var RoomIDList = []; // 接通後產生Group的ID List
 //var RoomIDLinkedList = new SinglyList(); // 接通後產生Group的ID Linked List
 
@@ -182,42 +183,47 @@ function Login() {
 //							+ obj.Status + "<br>Reason: " + obj.Reason; 
 					// 接收到找尋Client的UserData的訊息
 				} else if ("senduserdata" == obj.Event) {
-//					document.getElementById("userdata").innerHTML = JSON
-//							.stringify(obj.userdata);
-//					document.getElementById("clientID").innerHTML = obj.clientID;
 					// 在這邊取代原本findAgentEvent事件所做的事情
 					console.log("obj.clientName: " + obj.clientName);
 					console.log("obj.clientID: " + obj.clientID);
 					ClientName_g = obj.clientName;
 					ClientID_g = obj.clientID;
-//					document.getElementById("AcceptEvent").disabled = false;
-//					document.getElementById("RejectEvent").disabled = false;
-					//  obj.clientID // **************
-					// 接收到Agent or Client加入列表的訊息(此方法可考慮消去)
-//					alert("obj.userdata.id: " + obj.userdata.id);
-					$('#requestTable > tbody:last-child').append(
-							'<tr id="' + obj.userdata.id + '">' + 
-									'<td>' + '通話' + '</td>'  + 
-								    '<td>' + obj.clientName + '</td>'  + 
-								    '<td>' +
-									    '<div style="height: 20px; overflow-y: hidden;">' +
-									    	 JSON.stringify(obj.userdata) + 
-									    '</div>' + 
-									'</td>'  +    
-							'</tr>'
-					);
-					$('#requestTable > tbody:last-child')[0].value = obj.clientID; // 保存資訊
-					$('#requestTable > tbody:last-child')[0].onclick = function(){
+					
+				    var tr = document.createElement('tr');   
+
+				    var td1 = document.createElement('td');
+				    var td2 = document.createElement('td');
+				    var td3 = document.createElement('td');
+
+				    var text1 = document.createTextNode('通話');
+				    var text2 = document.createTextNode(obj.clientName);
+				    var text3 = document.createTextNode(JSON.stringify(obj.userdata));
+				    var div3 = document.createElement('div');
+				    div3.setAttribute("style", "height: 20px; overflow-y: hidden;");
+				    
+				    td1.appendChild(text1);
+				    td2.appendChild(text2);
+				    div3.appendChild(text3);
+				    td3.appendChild(div3);
+				    
+				    tr.appendChild(td1);
+				    tr.appendChild(td2);
+				    tr.appendChild(td3);
+
+				    tr.setAttribute("id", obj.userdata.id);
+				    tr.setAttribute("userID", obj.userdata.id);
+				    tr.setAttribute("userdata", JSON.stringify(obj.userdata));
+				    
+				    document.getElementById("requestTable").appendChild(tr);
+				    
+				    tr.onclick = function(e){
 						$('#Accept')[0].disabled = false;
 						$('#Reject')[0].disabled = false;
 						$('#Accept')[0].reqType = 'Client';
-						$('#Accept')[0].clientID = obj.clientID;
-						$('#Accept')[0].userID = obj.userdata.id;
-						$('#Accept')[0].userdata = JSON.stringify(obj.userdata);
+						$('#Accept')[0].userID = this.getAttribute("userID");
+						$('#Accept')[0].userdata = this.getAttribute("userdata");
 					}; // 設定 AcceptEventInit
-					
-					
-					
+				    				    
 					// 在這邊動態增加request list
 					
 				} else if ("userjointoTYPE" == obj.Event) {
@@ -374,7 +380,7 @@ function AcceptEventInit() {
 	
 	var reqType = $('#Accept')[0].reqType;
 	// 一次將Agent與Client加入到room中
-	var currClientID = $('#Accept')[0].clientID;
+	var currClientID = $('#Accept')[0].userID;
 //	var userdata = $('#Accept')[0].userdata;
 	
 		// 在此使用新的方法,將一個list的成員都加入到同一群組中
@@ -387,6 +393,7 @@ function AcceptEventInit() {
 	
 	// 將此請求從request list中去除掉
 	var userID = $('#Accept')[0].userID;
+	console.log("userID: " + userID);
 //	alert("userID: " + userID);
 	$('#' + userID).remove(); // <tr>的id
 	
@@ -480,6 +487,7 @@ function leaveRoom(aRoomID, aUserID) {
 	if (aUserID === undefined) aUserID = parent.UserID_g;
 	var roomInfo = roomInfoMap_g.get(aRoomID);
 	roomInfo.close = true;
+	updateRoomInfo(roomInfo);
 	
 	// 向websocket送出離開群組指令
 	var now = new Date();
@@ -494,13 +502,6 @@ function leaveRoom(aRoomID, aUserID) {
 
 	// 發送消息
 	parent.ws_g.send(JSON.stringify(msg));
-
-	// 關閉按鈕
-	$('#leaveRoom')[0].disabled = true;
-	$('#sendToRoom')[0].disabled = true;
-	$('#inviteTransfer')[0].disabled = true;
-	$('#inviteThirdParty')[0].disabled = true;
-	// here 
 }
 
 //送出私訊
@@ -720,7 +721,7 @@ function switchStatus(aStatus){
     	document.getElementById("ready").disabled = false;
     	document.getElementById("notready").disabled = true;
     	break;
-    case StatusEnum.PAPERWORK:
+    case StatusEnum.AFTER_CALL_WORK:
     	//code block
     	break;
     case StatusEnum.RING:
@@ -744,7 +745,7 @@ var StatusEnum = Object.freeze({
 	LOGOUT: '2', 
 	READY: '3',
 	NOT_READY: '4',
-	PAPERWORK: '5',
+	AFTER_CALL_WORK: '5',
 	RING: '6',
 	I_ESTABLISHED: '7',
 	O_ESTABLISHED: '8',
@@ -882,11 +883,13 @@ function updateRoomInfo(aRoomInfo){
 		$('#sendToRoom')[0].disabled = false;
 		$('#inviteTransfer')[0].disabled = false;
 		$('#inviteThirdParty')[0].disabled = false;		
+		$('#message')[0].disabled = false;		
 	}else{
 		$('#leaveRoom')[0].disabled = true;
 		$('#sendToRoom')[0].disabled = true;
 		$('#inviteTransfer')[0].disabled = true;
 		$('#inviteThirdParty')[0].disabled = true;				
+		$('#message')[0].disabled = true;				
 	}
 
 }
