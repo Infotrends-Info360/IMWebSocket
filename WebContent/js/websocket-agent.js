@@ -98,7 +98,13 @@ function Login() {
 					var roomInfo = roomInfoMap_g.get(obj.roomID);
 					var msgToShow = obj.UserName + ": " + obj.text + "<br>";
 					roomInfo.text += msgToShow;
-					updateRoomInfo(roomInfo);	
+					// 判斷若當前頁面就是這個訊息所傳的room, 則馬上更新
+					var currRoomID = $('#roomList').val();
+					if (currRoomID == obj.roomID){
+						updateRoomInfo(roomInfo);	
+					}
+						
+					
 
 					// 接收到離開Agent列表的訊息
 				} else if ("userExitfromTYPE" == obj.Event) {
@@ -149,10 +155,7 @@ function Login() {
 //					seeAllKV(obj);
 				
 					// 更新狀態
-					var myUpdateStatusJson = new updateStatusJson("Agent", parent.UserID_g, parent.UserName_g, "Established", "no reason");
-					parent.ws_g.send(JSON.stringify(myUpdateStatusJson));
-					// 取得狀態
-					getStatus();
+					status_g = StatusEnum.I_ESTABLISHED;
 					switchStatus(StatusEnum.I_ESTABLISHED);
 					
 					// 在這邊興建roomList與其room bean
@@ -171,7 +174,6 @@ function Login() {
 					// 更新前端頁面
 					document.getElementById("Accept").disabled = true;
 					document.getElementById("Reject").disabled = true;
-					document.getElementById("leaveRoom").disabled = false;
 //					document.getElementById("sendtoRoom").disabled = false;
 					
 				} else if ("getUserStatus" == obj.Event) {
@@ -204,7 +206,6 @@ function Login() {
 									'</td>'  +    
 							'</tr>'
 					);
-					// here
 					$('#requestTable > tbody:last-child')[0].value = obj.clientID; // 保存資訊
 					$('#requestTable > tbody:last-child')[0].onclick = function(){
 						$('#Accept')[0].disabled = false;
@@ -225,8 +226,8 @@ function Login() {
 				} else if ("userjoin" == obj.Event) {
 					console.log("userjoin - UserID: " + obj.from);
 					parent.UserID_g = obj.from;
+					// 更新狀態
 					status_g = StatusEnum.LOGIN;
-					
 					switchStatus(status_g);
 										
 				} else if ("refreshRoomList" == obj.Event) {
@@ -268,7 +269,7 @@ function Login() {
 					document.getElementById("chatAgentContentHistory").innerHTML += obj.UserName + ": " + obj.text + "&#13;&#10";
 					
 				} else if ("removeUserinroom" == obj.Event){
-					document.getElementById("currUsers").innerHTML = obj.roomMembers;
+//					document.getElementById("currUsers").innerHTML = obj.roomMembers;
 					alert(obj.result);
 				} else if ("clientLeft" == obj.Event){
 					// 在這邊進行一連串的善後處理
@@ -309,16 +310,16 @@ function Login() {
 function Logout() {
 	// 執行登出
 	Logoutaction(); // onClose()會全部清: Group, Type, User conn
-	// 關閉上線開關
-	
-	status_g = StatusEnum.LOGOUT;
-	switchStatus(status_g);	
 	
 }
 
 
 // 執行登出
 function Logoutaction() {
+	// 關閉上線開關
+	status_g = StatusEnum.LOGOUT;
+	switchStatus(status_g);	
+	
 	// 向websocket送出登出指令
 	var now = new Date();
 	var msg = {
@@ -345,21 +346,16 @@ function checktoLeave() {
 
 //Agent準備就緒
 function ready() {
-	status_g = StatusEnum.READY;
 	// 更新頁面
+	status_g = StatusEnum.READY;
 	switchStatus(status_g);
 	
 }
 // Agent尚未準備就緒
 function notready() {
 	// 更新狀態
-	updateStatus("not ready");
-	// 取得狀態
-	getStatus();
-	// 更新.jsp
-	document.getElementById("status").innerHTML = "狀態: not ready";
-	document.getElementById("ready").disabled = false;
-	document.getElementById("notready").disabled = true;
+	status_g = StatusEnum.NOT_READY;
+	switchStatus(StatusEnum.NOT_READY);	
 }
 
 //同意與Client交談
@@ -385,8 +381,9 @@ function AcceptEventInit() {
 	$('#' + userID).remove(); // <tr>的id
 	
 	// 開啟ready功能:
-	document.getElementById("ready").disabled = false;
-	document.getElementById("notready").disabled = true;
+	switchStatus(StatusEnum.NOT_READY); // 這邊之後要用全域變數來控制不同的工作模式-是否要在established之後變成not ready
+//	document.getElementById("ready").disabled = false;
+//	document.getElementById("notready").disabled = true;
 }
 
 // 拒絕交談
@@ -471,6 +468,8 @@ function addRoomForMany(aRoomID, aMemberListToJoin){
 // 離開房間
 function leaveRoom(aRoomID, aUserID) {
 	if (aUserID === undefined) aUserID = parent.UserID_g;
+	var roomInfo = roomInfoMap_g.get(aRoomID);
+	roomInfo.close = true;
 	
 	// 向websocket送出離開群組指令
 	var now = new Date();
@@ -486,9 +485,12 @@ function leaveRoom(aRoomID, aUserID) {
 	// 發送消息
 	parent.ws_g.send(JSON.stringify(msg));
 
-	document.getElementById("groupstatus").innerHTML = "離開" + RoomID_g + "群組";
-	document.getElementById("leaveRoom").disabled = true;
-	document.getElementById("roomonline").disabled = true;
+	// 關閉按鈕
+	$('#leaveRoom')[0].disabled = true;
+	$('#sendToRoom')[0].disabled = true;
+	$('#inviteTransfer')[0].disabled = true;
+	$('#inviteThirdParty')[0].disabled = true;
+	// here 
 }
 
 //送出私訊
@@ -649,7 +651,15 @@ function RefreshRoomList(){
 
 /** 2017/02/15 - 新增方法 **/
 function switchStatus(aStatus){
+	// 更新狀態資訊
 	parent.document.getElementById("status").value = StatusEnum.toChinese(aStatus);
+	// 去server更新狀態
+	var myUpdateStatusJson = new updateStatusJson("Agent", parent.UserID_g, parent.UserName_g, aStatus, "no reason");
+	parent.ws_g.send(JSON.stringify(myUpdateStatusJson));
+//	updateStatus("ready");
+	// 從server取得狀態
+	getStatus();
+
 	switch(aStatus) {
     case StatusEnum.LOGIN:
 		var frames = window.parent.frames; // or // var frames = window.parent.frames;
@@ -687,16 +697,9 @@ function switchStatus(aStatus){
 		document.getElementById("Login").disabled = false;
 		document.getElementById("UserID").value = '';
 
-    	
         // code block
         break;
     case StatusEnum.READY:
-    	// 去server更新狀態
-    	var myUpdateStatusJson = new updateStatusJson("Agent", parent.UserID_g, parent.UserName_g, aStatus, "no reason");
-    	parent.ws_g.send(JSON.stringify(myUpdateStatusJson));
-//    	updateStatus("ready");
-    	// 從server取得狀態
-    	getStatus();
 
     	document.getElementById("ready").disabled = true;
     	document.getElementById("notready").disabled = false;
@@ -704,6 +707,8 @@ function switchStatus(aStatus){
         break;
     case StatusEnum.NOT_READY:
     	//code block
+    	document.getElementById("ready").disabled = false;
+    	document.getElementById("notready").disabled = true;
     	break;
     case StatusEnum.PAPERWORK:
     	//code block
@@ -724,7 +729,6 @@ function switchStatus(aStatus){
         break;
 	}
 }
-// here
 var StatusEnum = Object.freeze({
 	LOGIN: '1', 
 	LOGOUT: '2', 
@@ -835,7 +839,7 @@ function updateRoomIDList(aNewRoomID){
 	});
 	$( rows ).appendTo( "#roomList" );
 	// 建立select onchange事件, 一選取之後則將room info所有欄位更新
-	$('#roomList').change(function() { 
+	$('#roomList').unbind('change').change(function() { 
 		var tmpRoomID = $('#roomList').val();
 		updateRoomInfo(roomInfoMap_g.get(tmpRoomID));
 	});
@@ -860,11 +864,21 @@ function updateRoomInfo(aRoomInfo){
 	$('#userdata')[0].innerHTML = aRoomInfo.userdata;
 	$('#chatroom')[0].innerHTML = aRoomInfo.text;
 	$('#sendToRoom')[0].roomID = aRoomInfo.roomID;
-	
+	$('#leaveRoom')[0].roomID = aRoomInfo.roomID;
 	// 開啟按鈕
-	$('#sendToRoom')[0].disabled = false;
-	$('#inviteTransfer')[0].disabled = false;
-	$('#inviteThirdParty')[0].disabled = false;
+	alert("!aRoomInfo.close: " + !aRoomInfo.close);
+	if (!aRoomInfo.close){
+		$('#leaveRoom')[0].disabled = false;
+		$('#sendToRoom')[0].disabled = false;
+		$('#inviteTransfer')[0].disabled = false;
+		$('#inviteThirdParty')[0].disabled = false;		
+	}else{
+		$('#leaveRoom')[0].disabled = true;
+		$('#sendToRoom')[0].disabled = true;
+		$('#inviteTransfer')[0].disabled = true;
+		$('#inviteThirdParty')[0].disabled = true;				
+	}
+
 }
 
 // 測試按鈕

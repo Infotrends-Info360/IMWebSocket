@@ -123,7 +123,7 @@ hr {
                 </div>	
                 <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
                 	<div class="col-xs-6 col-sm-6 col-md-6 col-lg-6">
-                        <button id="notready" class="btn btn-primary" style="width:100px" disabled>Not Ready</button>
+                        <button id="notready" class="btn btn-primary" style="width:100px" disabled onclick="notready();">Not Ready</button>
                 	</div>
                 	<div class="col-xs-6 col-sm-6 col-md-6 col-lg-6">
                         <select id="reason" class="form-control">
@@ -201,7 +201,7 @@ hr {
 			                		<h4>comment:</h4>
 			                	</div>
 			                	<div class="col-xs-6 col-sm-6 col-md-6 col-lg-6">
-			                        <button id="leaveRoom" class="btn btn-primary" disabled>離開房間</button>
+			                        <button id="leaveRoom" class="btn btn-primary" disabled onclick="leaveRoom(this.roomID);">離開房間</button>
 			                	</div>	                	
 	                		</div>
 	                		<div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
