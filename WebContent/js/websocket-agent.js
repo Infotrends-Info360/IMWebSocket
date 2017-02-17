@@ -216,7 +216,7 @@ function Login() {
 				    
 				    document.getElementById("requestTable").appendChild(tr);
 				    
-				    tr.onclick = function(e){
+				    tr.onclick = function(e){ 
 						$('#Accept')[0].disabled = false;
 						$('#Reject')[0].disabled = false;
 						$('#Accept')[0].reqType = 'Client';
