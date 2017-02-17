@@ -196,29 +196,29 @@ public class CommonFunction {
 		
 			// 更新UserInteraction 
 		String userinteractionMsg = WebSocketUserPool.getUserInteractionByKey(clientConn);
-		JsonObject msgJsonOld = Util.getGJsonObject(userinteractionMsg);
+		JsonObject userinteractionJsonMsg = Util.getGJsonObject(userinteractionMsg);
 //		System.out.println("getMessageinRoom() - userinteractionMsg: " + userinteractionMsg);
 		// 因此方法只有Client呼叫,故最多一個Client也就只有一個roomID,若有再更新即可
 				//更新text
 		String text = "";
-		if (msgJsonOld.get("text") != null){
-			text = msgJsonOld.get("text").getAsString();
+		if (userinteractionJsonMsg.get("text") != null){
+			text = userinteractionJsonMsg.get("text").getAsString();
 		}
 		text += msgJsonNew.get("UserName").getAsString() + ": " + msgJsonNew.get("text").getAsString() + "\n";
-		msgJsonOld.addProperty("text", text);
+		userinteractionJsonMsg.addProperty("text", text);
 				// 更新structuredtext
 		JsonArray structuredtext = new JsonArray();
-		if (msgJsonOld.get("structuredtext") != null){
-			structuredtext = msgJsonOld.get("structuredtext").getAsJsonArray();
+		if (userinteractionJsonMsg.get("structuredtext") != null){
+			structuredtext = userinteractionJsonMsg.get("structuredtext").getAsJsonArray();
 		}
 					// 更新時間
 		SimpleDateFormat sdf = new SimpleDateFormat(Util.getSdfDateTimeFormat());
 		String dateStr = sdf.format(new java.util.Date()); 
 		msgJsonNew.addProperty("date", dateStr);
 		structuredtext.add(msgJsonNew);
-		msgJsonOld.add("structuredtext", structuredtext);
+		userinteractionJsonMsg.add("structuredtext", structuredtext);
 		
-		WebSocketUserPool.addUserInteraction(msgJsonOld.toString(), clientConn); // final step
+		WebSocketUserPool.addUserInteraction(userinteractionJsonMsg.toString(), clientConn); // final step
 //		System.out.println("after - getMessageinRoom() - userinteractionMsg: " + WebSocketUserPool.getUserInteractionByKey(roomInfo.getClientConn()));
 
 		// 將訊息寄給room線上使用者:

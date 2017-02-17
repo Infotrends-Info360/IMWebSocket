@@ -95,7 +95,7 @@ hr {
 
 </style>
 </head>
-<body>
+<body onload="onloadFunctionAgent();">
     <div style="width:90%">
     	<!-- 標題列 -->
         <div class="row" style="margin-top:5px;">
@@ -229,7 +229,7 @@ hr {
 		                <!-- chatDialogue: content, msg, send-->
 						<div class="col-xs-12 col-sm-12 col-md-12 col-lg-12" id="chatDialogue">
 							<h4>ChatDialogue:</h4>
-								<div class="pre-scrollable col-xs-12 col-sm-12 col-md-12 col-lg-12 panel panel-default" style="height: 80px;" id="">
+								<div class="pre-scrollable col-xs-12 col-sm-12 col-md-12 col-lg-12 panel panel-default" id="chatroom" style="height: 80px;">
 <!-- 									someone says .... <br>	someone says .... <br>	someone says .... <br>	someone says .... <br>	someone says .... <br> -->
 								</div>
 								<div class="col-xs-12 col-sm-12 col-md-12 col-lg-12 nopadding">
@@ -237,7 +237,7 @@ hr {
 										<input class="form-control" id="message">
 									</div>						
 									<div class="col-xs-2 col-sm-2 col-md-2 col-lg-2">
-										<button class="btn btn-primary" id="sendToRoom" onclick="sendtoRoom();">SEND</button>
+										<button class="btn btn-primary" id="sendToRoom" onclick="sendtoRoom(this.roomID);" disabled>SEND</button>
 									</div>						
 								</div>								
 						</div>	 <!-- end of chatDialogue -->
@@ -246,8 +246,8 @@ hr {
 						
 		                <!-- 三方與轉接 -->
 						<div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
-							<button class="btn btn-primary pull-right marginDefault" id="" style="width:100px">轉接邀請</button>
-							<button class="btn btn-primary pull-right marginDefault" id="" style="width:100px">三方邀請</button>
+							<button class="btn btn-primary pull-right marginDefault" id="inviteTransfer" style="width:100px" disabled>轉接邀請</button>
+							<button class="btn btn-primary pull-right marginDefault" id="inviteThirdParty" style="width:100px" disabled>三方邀請</button>
 						</div>
 						
 	                </div>

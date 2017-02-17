@@ -18,9 +18,16 @@ var layimswitch = false; // layim開關參數，判斷是否開啟layim的時機
 
 
 //onloadFunction
-function onloadFunction(){
+function onloadFunctionAgent(){
 	// for debugging only
 	console.log("onloadFunction() called");
+	$("#message").keypress(function(e) {
+	    if(e.which == 13) {
+	       //alert('You pressed enter!');
+//	    	alert("$('#sendToRoom')[0].roomID: " + $('#sendToRoom')[0].roomID);
+	    	sendtoRoom($('#sendToRoom')[0].roomID);
+	    }
+	});
 	
 //	$('#roomList').change(function() {alert("hey"); });
 	
@@ -88,17 +95,11 @@ function Login() {
 //					document.getElementById("Event").innerHTML = obj.Event;
 					// 接收到group訊息
 				} else if ("messagetoRoom" == obj.Event) {
-					// 判斷是否有開啟layim與是否為自己傳送的訊息
-					if (true == layimswitch && obj.id != parent.UserID_g) {
-						// 將收到訊息顯示到layim上
-						getclientmessagelayim(obj.text, obj.id,
-								obj.UserName);
-						// 將訊息顯示到測試訊息框
-						document.getElementById("chatContent").innerHTML += (obj.text + "&#13;&#10");
-						
-					}
-					document.getElementById("text").innerHTML += obj.UserName
-							+ ": " + obj.text + "<br>";
+					var roomInfo = roomInfoMap_g.get(obj.roomID);
+					var msgToShow = obj.UserName + ": " + obj.text + "<br>";
+					roomInfo.text += msgToShow;
+					updateRoomInfo(roomInfo);	
+
 					// 接收到離開Agent列表的訊息
 				} else if ("userExitfromTYPE" == obj.Event) {
 					layui.use('layim', function(layim) {
@@ -145,7 +146,7 @@ function Login() {
 				} else if ("AcceptEvent" == obj.Event){
 					// 拿取資料 + 為之後建立roomList做準備
 					console.log("AcceptEvent: *****");
-					seeAllKV(obj);
+//					seeAllKV(obj);
 				
 					// 更新狀態
 					var myUpdateStatusJson = new updateStatusJson("Agent", parent.UserID_g, parent.UserName_g, "Established", "no reason");
@@ -156,9 +157,10 @@ function Login() {
 					
 					// 在這邊興建roomList與其room bean
 					RoomID_g = obj.roomID; // 之後要改成local variable
-					var tmpRoomInfo = new roomInfo(
+					var tmpRoomInfo = new RoomInfo(
 							obj.roomID,
-							$('#Accept')[0].userdata
+							$('#Accept')[0].userdata,
+							''
 					);
 					roomInfoMap_g.set(obj.roomID, tmpRoomInfo);
 					console.log("roomInfoMap_g.size: " + roomInfoMap_g.size);
@@ -378,7 +380,7 @@ function AcceptEventInit() {
 	
 	// 將此請求從request list中去除掉
 	var userID = $('#Accept')[0].userID;
-	alert("userID: " + userID);
+//	alert("userID: " + userID);
 	$('#' + userID).remove(); // <tr>的id
 	
 	// 開啟ready功能:
@@ -402,7 +404,7 @@ function RejectEvent() {
 		date : now.getHours() + ":" + now.getMinutes() + ":" + now.getSeconds()
 	};
 	// 發送消息
-	ws_g.send(JSON.stringify(msg));
+	parent.ws_g.send(JSON.stringify(msg));
 
 	document.getElementById("AcceptEvent").disabled = true;
 	document.getElementById("RejectEvent").disabled = true;
@@ -481,7 +483,7 @@ function leaveRoom(aRoomID, aUserID) {
 	};
 
 	// 發送消息
-	ws_g.send(JSON.stringify(msg));
+	parent.ws_g.send(JSON.stringify(msg));
 
 	document.getElementById("groupstatus").innerHTML = "離開" + RoomID_g + "群組";
 	document.getElementById("leaveRoom").disabled = true;
@@ -505,7 +507,7 @@ function send(aSendto,aMessage) {
 		date : now.getHours() + ":" + now.getMinutes() + ":" + now.getSeconds()
 	};
 	// 發送消息
-	ws_g.send(JSON.stringify(msg));
+	parent.ws_g.send(JSON.stringify(msg));
 }
 //送出Agent to Agent私訊
 function sendA2A(aSendto){
@@ -516,6 +518,7 @@ function sendA2A(aSendto){
 
 // 送出訊息至群組
 function sendtoRoom(aRoomID, aMessage){
+//	alert("sendtoRoom - aRoomID: " + aRoomID);
 	if (aRoomID === undefined) aRoomID = RoomID_g; // 開發過渡期使用,之後會修掉
 	if (aMessage === undefined) aMessage = document.getElementById('message').value;
 	
@@ -531,7 +534,12 @@ function sendtoRoom(aRoomID, aMessage){
 	};
 
 	// 發送消息
-	ws_g.send(JSON.stringify(msg));	
+	parent.ws_g.send(JSON.stringify(msg));	
+	
+	// 清空訊息欄
+	$('#message')[0].value = '';
+//	document.getElementById('message').value = '';
+
 }
 
 // 取得Agent狀態
@@ -595,7 +603,7 @@ function inviteAgentThirdParty(aInviteType, aRoomID ,aInvitedAgentID){
 			channel : "chat"
 		};
 	// 發送消息
-	ws_g.send(JSON.stringify(inviteAgent3waymsg));
+	parent.ws_g.send(JSON.stringify(inviteAgent3waymsg));
 
 	/**** 建立私訊 *****/
 	document.getElementById("sendA2A").value = aInvitedAgentID;
@@ -622,7 +630,7 @@ function responseThirdParty(aInviteType, aRoomID, aFromAgentID, aResponse){
 //			fromAgentName : UserName
 		};
 	// 發送消息
-	ws_g.send(JSON.stringify(responseThirdPartyMsg));	
+	parent.ws_g.send(JSON.stringify(responseThirdPartyMsg));	
 	
 }
 
@@ -633,7 +641,7 @@ function RefreshRoomList(){
 		    channel : "chat",	
 		  };
 	//發送消息 
-	ws_g.send(JSON.stringify(msg));	
+	parent.ws_g.send(JSON.stringify(msg));	
 	
 }
 
@@ -764,7 +772,7 @@ function online() {
 		date : now.getHours() + ":" + now.getMinutes() + ":" + now.getSeconds()
 	};
 	// 發送消息
-	ws_g.send(JSON.stringify(msg));
+	parent.ws_g.send(JSON.stringify(msg));
 }
 
 //查詢群組線上人數
@@ -780,7 +788,7 @@ function roomonline() {
 	};
 
 	// 發送消息
-	ws_g.send(JSON.stringify(msg));
+	parent.ws_g.send(JSON.stringify(msg));
 }
 
 
@@ -797,7 +805,7 @@ function Clientonline() {
 		date : now.getHours() + ":" + now.getMinutes() + ":" + now.getSeconds()
 	};
 	// 發送消息
-	ws_g.send(JSON.stringify(msg));
+	parent.ws_g.send(JSON.stringify(msg));
 }
 
 // 查詢agent線上人數
@@ -812,7 +820,7 @@ function Agentonline() {
 		date : now.getHours() + ":" + now.getMinutes() + ":" + now.getSeconds()
 	};
 	// 發送消息
-	ws_g.send(JSON.stringify(msg));
+	parent.ws_g.send(JSON.stringify(msg));
 }
 
 function updateRoomIDList(aNewRoomID){
@@ -846,9 +854,16 @@ function updateRoomIDList(aNewRoomID){
 
 function updateRoomInfo(aRoomInfo){
 	console.log("updateRoomInfo()");
-	seeAllKV(aRoomInfo);
+//	seeAllKV(aRoomInfo);
 	
-	$('#userdata')[0].innerHTML += aRoomInfo.userdata;
+	$('#userdata')[0].innerHTML = aRoomInfo.userdata;
+	$('#chatroom')[0].innerHTML = aRoomInfo.text;
+	$('#sendToRoom')[0].roomID = aRoomInfo.roomID;
+	
+	// 開啟按鈕
+	$('#sendToRoom')[0].disabled = false;
+	$('#inviteTransfer')[0].disabled = false;
+	$('#inviteThirdParty')[0].disabled = false;
 }
 
 // 測試按鈕
@@ -859,6 +874,6 @@ function test() {
 		    channel : "chat"
 		  };
 	//發送消息 
-	ws_g.send(JSON.stringify(testmsg));
+	parent.ws_g.send(JSON.stringify(testmsg));
 }
 

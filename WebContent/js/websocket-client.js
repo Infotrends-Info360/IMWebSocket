@@ -35,7 +35,7 @@ var layim;
  * */
 
 // 網頁載入後第一個動作
-function onloadFunction(){
+function onloadFunctionClient(){
 	console.log("onloadFunction() called");
 	/** 建立傳送訊息enter事件 **/
 	$("#message").keypress(function(e) {
@@ -156,9 +156,9 @@ function Login() {
 					document.getElementById("chatroom").innerHTML += msgToShow + "<br>";
 					
 					// 控制前端傳值
-					document.getElementById("Event").innerHTML = obj.Event;
-					document.getElementById("text").innerHTML += obj.UserName
-							+ ": " + obj.text + "<br>";
+//					document.getElementById("Event").innerHTML = obj.Event;
+//					document.getElementById("text").innerHTML += obj.UserName
+//							+ ": " + obj.text + "<br>";
 
 				} else if ("senduserdata" == obj.Event) {
 					if (obj.userdata.SetContactLog != null){
