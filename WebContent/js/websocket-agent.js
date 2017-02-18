@@ -892,13 +892,21 @@ function updateRoomIDList(aNewRoomID){
 }
 
 function updateAgentIDList(){
+	// 保留著原本選取之選項
+	var selectedAgentID = $("#agentList").val();
+//	alert("updateAgentIDList() - selected: " + selectedAgentID);
 	// 先清空原list
 	$("#agentList").empty();
 	// 開始更新roomList
 	var rows = "<option disabled selected value> -- select an agent -- </option>";
 	
 	agentIDMap_g.forEach(function(value, AgentID) {
-		rows += '<option value=' + '"'+ AgentID +'"' + '>' + '"'+ AgentID +'"' + '</option>';
+		if (selectedAgentID != AgentID){
+			rows += '<option value=' + '"'+ AgentID +'"' + '>' + '"'+ AgentID +'"' + '</option>';
+		}else{
+			rows += '<option value=' + '"'+ AgentID +'"' + ' selected>' + '"'+ AgentID +'"' + '</option>';			
+		}
+		
 	});		
 	
 	$( rows ).appendTo( "#agentList" );
