@@ -120,10 +120,10 @@ public class CommonFunction {
 		System.out.println("userExit() called");
 		JsonObject jsonIn = Util.getGJsonObject(aMsg);
 		
-		//通知大家有人離開了
-//		String username = jsonIn.get("UserName").getAsString();
-//		String joinMsg = "[Server]" + username + " Offline";
-//		WebSocketUserPool.sendMessage(joinMsg);
+		//Billy哥部分前端需求:
+		String username = jsonIn.get("UserName").getAsString();
+		String joinMsg = "[Server] - " + username + " Offline";
+		WebSocketUserPool.sendMessage(joinMsg);
 		
 		// 關係Heartbeat
 		Timer timer = WebSocketUserPool.getUserHeartbeatTimerByKey(aConn);
