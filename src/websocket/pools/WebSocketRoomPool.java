@@ -144,6 +144,14 @@ public class WebSocketRoomPool{
 				
 				WebSocketUserPool.sendMessageToUser(conn, sendJson.toString());
 			}
+			
+			System.out.println("roomMap.size() - before: " + roomMap.size());
+			// 如果一個room都空了,就把它從Map中清掉
+			if (connsInRoomMap.size() == 0){
+				roomMap.remove(aRoomID);
+			}
+			System.out.println("roomMap.size() - after: " + roomMap.size());
+			
 		}
 	}
 	
