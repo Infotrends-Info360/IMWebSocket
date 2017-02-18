@@ -171,8 +171,8 @@ hr {
 		            	                <button class="btn btn-primary pull-left marginDefault" id="Reject" style="width:100px" disabled>Reject</button>
 		                        	</div>
 		                        	<div class="col-xs-6 col-sm-6 col-md-6 col-lg-6">
-		    	                        <button class="btn btn-primary pull-right marginDefault wrapTextBtn" id="RejectThirdParty" style="width:100px" disabled>三方/轉接Reject</button>                        	
-			                            <button class="btn btn-primary pull-right marginDefault wrapTextBtn" id="AcceptThirdParty" style="width:100px" disabled>三方/轉接Accept</button>	
+<!-- 		    	                        <button class="btn btn-primary pull-right marginDefault wrapTextBtn" id="RejectThirdParty" style="width:100px" disabled>三方/轉接Reject</button>                        	 -->
+<!-- 			                            <button class="btn btn-primary pull-right marginDefault wrapTextBtn" id="AcceptThirdParty" style="width:100px" disabled>三方/轉接Accept</button>	 -->
 		                        	</div>
 		                        </div>
 		                    </div>

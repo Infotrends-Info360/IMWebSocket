@@ -246,18 +246,17 @@ function Login() {
 					console.log("refreshRoomList");
 					seeAllKV(obj);
 					
-					
-					
-
 				} else if ("inviteAgentThirdParty" == obj.Event){
 					console.log("received inviteAgentThirdParty event");
 					var tmpRoomID = obj.roomID;
 					var fromAgentID = obj.fromAgentID; 
 					var invitedAgentID = obj.invitedAgentID;
 					var inviteType = obj.inviteType;
-					var userdata = obj.userdata;
-//					alert("inviteType: " + inviteType);
-					
+					var userdata = JSON.stringify( obj.userdata );
+					var text = obj.text;
+//					alert("inviteAgentThirdParty - obj.text: " + obj.text);
+//					alert("inviteAgentThirdParty - obj.text: " + JSON.stringify( obj.text ));
+
 					//在這邊動態新增request
 				    var tr = document.createElement('tr');   
 
@@ -284,6 +283,8 @@ function Login() {
 				    tr.setAttribute("userID", fromAgentID);
 				    tr.setAttribute("roomID", tmpRoomID);
 				    tr.setAttribute("userdata", userdata);
+				    tr.setAttribute("text", text);
+//				    tr.setAttribute("userdata", userdata);
 				    
 				    document.getElementById("requestTable").appendChild(tr);
 				    
@@ -294,29 +295,18 @@ function Login() {
 						$('#Accept')[0].userID = this.getAttribute("userID");
 						$('#Accept')[0].roomID = this.getAttribute("roomID");
 						$('#Accept')[0].userdata = this.getAttribute("userdata");
+						$('#Accept')[0].text = this.getAttribute("text");
 					}; // 設定 AcceptEventInit
-					
-					
-					
-//					document.getElementById("invitedRoomID").innerHTML = tmpRoomID;
-//					RoomID_g = tmpRoomID;
-//					
-//					document.getElementById("fromAgentID").innerHTML = fromAgentID;
-//					document.getElementById("invitedRoomID").style.visibility = "visible";					
-////					document.getElementById("agentList").style.visibility = "visible";
-//					
-//					document.getElementById("inviteType").innerHTML = inviteType;
-//					
-//					
-//					// 判斷要寄送私訊的對方是誰(只要不是自己就對了)
-//					console.log("fromAgentID: " + fromAgentID);
-//					console.log("invitedAgentID: " + invitedAgentID);
-//					document.getElementById("sendA2A").value = fromAgentID;
-//					document.getElementById("sendA2A").innerHTML += " to - " + fromAgentID;
 
 				} else if ("responseThirdParty" == obj.Event){
 //					document.getElementById("currUsers").innerHTML = obj.roomMembers;
-					var userdata = obj.userdata;
+//					alert("responseThirdParty - " + userdata);
+//					alert("responseThirdParty - " + JSON.stringify( obj.userdata ));
+
+					var userdata = JSON.stringify( obj.userdata );
+					var text = obj.text;
+//					alert("responseThirdParty - obj.text: " + obj.text);
+//					alert("responseThirdParty - obj.text: " + JSON.stringify( obj.text ));
 					console.log("userdata: " + userdata);
 
 					// 更新狀態
@@ -328,7 +318,7 @@ function Login() {
 					var tmpRoomInfo = new RoomInfo(
 							obj.roomID,
 							userdata, // userdata
-							'' // text
+							text // text
 					);
 					roomInfoMap_g.set(obj.roomID, tmpRoomInfo);
 					console.log("roomInfoMap_g.size: " + roomInfoMap_g.size);
@@ -389,8 +379,8 @@ function Login() {
 			// (Billy哥部分)
 			}  else if ("{" != e.data.substring(0, 1)) {
 				console.log(e);
-				alert("get here1");
-				alert("parent.UserName_g: " + parent.UserName_g);
+//				alert("get here1");
+//				alert("parent.UserName_g: " + parent.UserName_g);
 				// 非指令訊息
 				if (e.data.indexOf("Offline") > 0 && e.data.indexOf(parent.UserName_g) > 0) {
 //					$("#statusButton button.status-ready").css("display", "none");
@@ -400,7 +390,7 @@ function Login() {
 //					$("#navNickName").html("已登出");
 //					window.location.href = 'console';
 					
-					alert("get here2");
+//					alert("get here2");
 					// 關閉websocket
 					parent.ws_g.close();
 				}
@@ -711,10 +701,8 @@ function inviteAgentThirdParty(aInviteType, aRoomID ,aInvitedAgentID){
 	if (aRoomID === undefined) aRoomID = $('#roomList').val(); 
 	if (aInvitedAgentID === undefined) aInvitedAgentID = $('#agentList').val(); 
 	var userdata = JSON.parse( $('#userdata').html() );
-	console.log("userdata: " + userdata);
-//	alert("userdata: " + userdata);
-//	alert("aRoomID: " + aRoomID);
-//	alert("aInvitedAgentID: " + aInvitedAgentID);
+	var roomInfo = roomInfoMap_g.get(aRoomID);
+	var text = roomInfo.text;
 	
 	if (aRoomID == null){
 		alert("開發模式: " + "inviteAgentThirdParty() - there is no roomID for this agent");
@@ -731,6 +719,7 @@ function inviteAgentThirdParty(aInviteType, aRoomID ,aInvitedAgentID){
 			fromAgentName : parent.UserName_g,
 			inviteType: aInviteType,
 			userdata : userdata,
+			text: text,
 			channel : "chat"
 		};
 	// 發送消息
@@ -751,7 +740,9 @@ function responseThirdParty(aInviteType, aRoomID, aFromAgentID, aResponse){
 	if (aInviteType === undefined) aInviteType = document.getElementById("inviteType").innerHTML; // 開發過渡期使用,之後會修掉
 	if (aRoomID === undefined) aRoomID = document.getElementById("invitedRoomID").innerHTML; // 開發過渡期使用,之後會修掉
 	if (aFromAgentID === undefined) aFromAgentID = document.getElementById("fromAgentID").innerHTML; // 開發過渡期使用,之後會修掉
-	var userdata = $('#Accept')[0].userdata;
+	var userdata = JSON.parse( $('#Accept')[0].userdata );
+	var text = $('#Accept')[0].text;
+//	alert("******* text: " + text);
 	
 	var responseThirdPartyMsg = {
 			type : "responseThirdParty",
@@ -762,6 +753,7 @@ function responseThirdParty(aInviteType, aRoomID, aFromAgentID, aResponse){
 			response: aResponse,
 			inviteType: aInviteType,
 			userdata : userdata,
+			text: text,
 			channel : "chat"
 //			fromAgentName : UserName
 		};
