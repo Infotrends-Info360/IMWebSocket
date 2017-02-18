@@ -255,6 +255,7 @@ function Login() {
 					var fromAgentID = obj.fromAgentID; 
 					var invitedAgentID = obj.invitedAgentID;
 					var inviteType = obj.inviteType;
+					var userdata = obj.userdata;
 //					alert("inviteType: " + inviteType);
 					
 					//在這邊動態新增request
@@ -282,6 +283,7 @@ function Login() {
 				    tr.setAttribute("id", fromAgentID);
 				    tr.setAttribute("userID", fromAgentID);
 				    tr.setAttribute("roomID", tmpRoomID);
+				    tr.setAttribute("userdata", userdata);
 				    
 				    document.getElementById("requestTable").appendChild(tr);
 				    
@@ -291,6 +293,7 @@ function Login() {
 						$('#Accept')[0].reqType = inviteType;
 						$('#Accept')[0].userID = this.getAttribute("userID");
 						$('#Accept')[0].roomID = this.getAttribute("roomID");
+						$('#Accept')[0].userdata = this.getAttribute("userdata");
 					}; // 設定 AcceptEventInit
 					
 					
@@ -313,7 +316,9 @@ function Login() {
 
 				} else if ("responseThirdParty" == obj.Event){
 //					document.getElementById("currUsers").innerHTML = obj.roomMembers;
-					
+					var userdata = obj.userdata;
+					console.log("userdata: " + userdata);
+
 					// 更新狀態
 					status_g = StatusEnum.I_ESTABLISHED;
 					switchStatus(StatusEnum.I_ESTABLISHED);
@@ -322,7 +327,7 @@ function Login() {
 					RoomID_g = obj.roomID; // 之後要改成local variable
 					var tmpRoomInfo = new RoomInfo(
 							obj.roomID,
-							'', // userdata
+							userdata, // userdata
 							'' // text
 					);
 					roomInfoMap_g.set(obj.roomID, tmpRoomInfo);
@@ -381,7 +386,25 @@ function Login() {
 					updateAgentIDList();
 				}
 			// 非指令訊息
-			}else {
+			// (Billy哥部分)
+			}  else if ("{" != e.data.substring(0, 1)) {
+				console.log(e);
+				alert("get here1");
+				alert("parent.UserName_g: " + parent.UserName_g);
+				// 非指令訊息
+				if (e.data.indexOf("Offline") > 0 && e.data.indexOf(parent.UserName_g) > 0) {
+//					$("#statusButton button.status-ready").css("display", "none");
+//					$("#statusButton button.status-notready")
+//							.css("display", "inline-block");
+//
+//					$("#navNickName").html("已登出");
+//					window.location.href = 'console';
+					
+					alert("get here2");
+					// 關閉websocket
+					parent.ws_g.close();
+				}
+			} else {
 				document.getElementById("text").innerHTML += e.data + "<br>";
 			}
 			console.log("onMessage(): " + e.data);
@@ -428,8 +451,8 @@ function Logoutaction() {
 	// 發送消息
 	parent.ws_g.send(JSON.stringify(msg));
 	
-	// 關閉websocket
-	parent.ws_g.close();
+//	// 關閉websocket
+//	parent.ws_g.close();
 }
 
 //refresh或關閉網頁時執行
@@ -688,7 +711,8 @@ function inviteAgentThirdParty(aInviteType, aRoomID ,aInvitedAgentID){
 	if (aRoomID === undefined) aRoomID = $('#roomList').val(); 
 	if (aInvitedAgentID === undefined) aInvitedAgentID = $('#agentList').val(); 
 	var userdata = JSON.parse( $('#userdata').html() );
-	alert("userdata: " + userdata);
+	console.log("userdata: " + userdata);
+//	alert("userdata: " + userdata);
 //	alert("aRoomID: " + aRoomID);
 //	alert("aInvitedAgentID: " + aInvitedAgentID);
 	
@@ -727,6 +751,7 @@ function responseThirdParty(aInviteType, aRoomID, aFromAgentID, aResponse){
 	if (aInviteType === undefined) aInviteType = document.getElementById("inviteType").innerHTML; // 開發過渡期使用,之後會修掉
 	if (aRoomID === undefined) aRoomID = document.getElementById("invitedRoomID").innerHTML; // 開發過渡期使用,之後會修掉
 	if (aFromAgentID === undefined) aFromAgentID = document.getElementById("fromAgentID").innerHTML; // 開發過渡期使用,之後會修掉
+	var userdata = $('#Accept')[0].userdata;
 	
 	var responseThirdPartyMsg = {
 			type : "responseThirdParty",
@@ -736,6 +761,7 @@ function responseThirdParty(aInviteType, aRoomID, aFromAgentID, aResponse){
 			invitedAgentID : parent.UserID_g,
 			response: aResponse,
 			inviteType: aInviteType,
+			userdata : userdata,
 			channel : "chat"
 //			fromAgentName : UserName
 		};
