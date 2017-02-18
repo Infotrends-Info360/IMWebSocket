@@ -246,8 +246,8 @@ hr {
 						
 		                <!-- 三方與轉接 -->
 						<div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
-							<button class="btn btn-primary pull-right marginDefault" id="inviteTransfer" style="width:100px" disabled>轉接邀請</button>
-							<button class="btn btn-primary pull-right marginDefault" id="inviteThirdParty" style="width:100px" disabled>三方邀請</button>
+							<button class="btn btn-primary pull-right marginDefault" id="inviteTransfer" style="width:100px" disabled onclick="inviteAgentThirdParty(this.value)" value="transfer">轉接邀請</button>
+							<button class="btn btn-primary pull-right marginDefault" id="inviteThirdParty" style="width:100px" disabled onclick="inviteAgentThirdParty(this.value)" value="thirdParty">三方邀請</button>
 						</div>
 						
 	                </div>

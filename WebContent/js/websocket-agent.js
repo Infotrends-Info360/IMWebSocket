@@ -182,12 +182,6 @@ function Login() {
 					// 1. 研究一下這個map的json長什麼樣 2. 看怎麼拿值
 					updateRoomIDList(obj.roomID);
 					
-
-					// 更新前端頁面
-					document.getElementById("Accept").disabled = true;
-					document.getElementById("Reject").disabled = true;
-//					document.getElementById("sendtoRoom").disabled = false;
-					
 				} else if ("getUserStatus" == obj.Event) {
 //					console.log("onMessage(): getUserStatus called");
 //					document.getElementById("status").innerHTML = "狀態: "
@@ -200,6 +194,7 @@ function Login() {
 					ClientName_g = obj.clientName;
 					ClientID_g = obj.clientID;
 					
+					// 在這邊動態增加request list
 				    var tr = document.createElement('tr');   
 
 				    var td1 = document.createElement('td');
@@ -235,7 +230,6 @@ function Login() {
 						$('#Accept')[0].userdata = this.getAttribute("userdata");
 					}; // 設定 AcceptEventInit
 				    				    
-					// 在這邊動態增加request list
 					
 				} else if ("userjointoTYPE" == obj.Event) {
 
@@ -258,28 +252,84 @@ function Login() {
 				} else if ("inviteAgentThirdParty" == obj.Event){
 					console.log("received inviteAgentThirdParty event");
 					var tmpRoomID = obj.roomID;
-					var fromAgentID = obj.fromAgentID;
+					var fromAgentID = obj.fromAgentID; 
 					var invitedAgentID = obj.invitedAgentID;
 					var inviteType = obj.inviteType;
+//					alert("inviteType: " + inviteType);
 					
-					document.getElementById("invitedRoomID").innerHTML = tmpRoomID;
-					RoomID_g = tmpRoomID;
+					//在這邊動態新增request
+				    var tr = document.createElement('tr');   
+
+				    var td1 = document.createElement('td');
+				    var td2 = document.createElement('td');
+				    var td3 = document.createElement('td');
+
+				    var text1 = document.createTextNode(inviteType);
+				    var text2 = document.createTextNode(fromAgentID);
+				    var text3 = document.createTextNode('');
+				    var div3 = document.createElement('div');
+				    div3.setAttribute("style", "height: 20px; overflow-y: hidden;");
+				    
+				    td1.appendChild(text1);
+				    td2.appendChild(text2);
+				    div3.appendChild(text3);
+				    td3.appendChild(div3);
+				    
+				    tr.appendChild(td1);
+				    tr.appendChild(td2);
+				    tr.appendChild(td3);
+
+				    tr.setAttribute("id", fromAgentID);
+				    tr.setAttribute("userID", fromAgentID);
+				    tr.setAttribute("roomID", tmpRoomID);
+				    
+				    document.getElementById("requestTable").appendChild(tr);
+				    
+				    tr.onclick = function(e){ 
+						$('#Accept')[0].disabled = false;
+						$('#Reject')[0].disabled = false;
+						$('#Accept')[0].reqType = inviteType;
+						$('#Accept')[0].userID = this.getAttribute("userID");
+						$('#Accept')[0].roomID = this.getAttribute("roomID");
+					}; // 設定 AcceptEventInit
 					
-					document.getElementById("fromAgentID").innerHTML = fromAgentID;
-					document.getElementById("invitedRoomID").style.visibility = "visible";					
-//					document.getElementById("agentList").style.visibility = "visible";
-					
-					document.getElementById("inviteType").innerHTML = inviteType;
 					
 					
-					// 判斷要寄送私訊的對方是誰(只要不是自己就對了)
-					console.log("fromAgentID: " + fromAgentID);
-					console.log("invitedAgentID: " + invitedAgentID);
-					document.getElementById("sendA2A").value = fromAgentID;
-					document.getElementById("sendA2A").innerHTML += " to - " + fromAgentID;
+//					document.getElementById("invitedRoomID").innerHTML = tmpRoomID;
+//					RoomID_g = tmpRoomID;
+//					
+//					document.getElementById("fromAgentID").innerHTML = fromAgentID;
+//					document.getElementById("invitedRoomID").style.visibility = "visible";					
+////					document.getElementById("agentList").style.visibility = "visible";
+//					
+//					document.getElementById("inviteType").innerHTML = inviteType;
+//					
+//					
+//					// 判斷要寄送私訊的對方是誰(只要不是自己就對了)
+//					console.log("fromAgentID: " + fromAgentID);
+//					console.log("invitedAgentID: " + invitedAgentID);
+//					document.getElementById("sendA2A").value = fromAgentID;
+//					document.getElementById("sendA2A").innerHTML += " to - " + fromAgentID;
 
 				} else if ("responseThirdParty" == obj.Event){
-					document.getElementById("currUsers").innerHTML = obj.roomMembers;
+//					document.getElementById("currUsers").innerHTML = obj.roomMembers;
+					
+					// 更新狀態
+					status_g = StatusEnum.I_ESTABLISHED;
+					switchStatus(StatusEnum.I_ESTABLISHED);
+					
+					// 在這邊興建roomList與其room bean
+					RoomID_g = obj.roomID; // 之後要改成local variable
+					var tmpRoomInfo = new RoomInfo(
+							obj.roomID,
+							'', // userdata
+							'' // text
+					);
+					roomInfoMap_g.set(obj.roomID, tmpRoomInfo);
+					console.log("roomInfoMap_g.size: " + roomInfoMap_g.size);
+					// 1. 研究一下這個map的json長什麼樣 2. 看怎麼拿值
+					updateRoomIDList(obj.roomID);
+					// 更新roomIDList
 
 				} else if ("privateMsg" == obj.Event){
 //					console.log("onMessage - privateMsg" + obj.UserName + ": " + obj.text + "&#13;&#10");
@@ -405,19 +455,26 @@ function notready() {
 //同意與Client交談
 function AcceptEventInit() {
 	console.log("AcceptEventInit(): ");
-	
 	var reqType = $('#Accept')[0].reqType;
-	// 一次將Agent與Client加入到room中
-	var currClientID = $('#Accept')[0].userID;
-//	var userdata = $('#Accept')[0].userdata;
-	
-		// 在此使用新的方法,將一個list的成員都加入到同一群組中
-	var memberListToJoin = [];
-	var mem1 = new myRoomMemberJsonObj(currClientID);
-	var mem2 = new myRoomMemberJsonObj(parent.UserID_g);
-	memberListToJoin.push(mem1);
-	memberListToJoin.push(mem2);
-	addRoomForMany("none", memberListToJoin); // "none"是一個keyword, 會影響websocket server的邏輯判斷處理
+	if (reqType == 'thirdParty' || reqType == 'transfer'){
+		//here
+		var roomID = $('#Accept')[0].roomID;
+		var fromAgentID = $('#Accept')[0].userID;
+		responseThirdParty(reqType, roomID, fromAgentID, 'accept');
+	// Client to Agent 請求	
+	}else{
+		// 一次將Agent與Client加入到room中
+		var currClientID = $('#Accept')[0].userID;
+//		var userdata = $('#Accept')[0].userdata;
+			// 在此使用新的方法,將一個list的成員都加入到同一群組中
+		var memberListToJoin = [];
+		var mem1 = new myRoomMemberJsonObj(currClientID);
+		var mem2 = new myRoomMemberJsonObj(parent.UserID_g);
+		memberListToJoin.push(mem1);
+		memberListToJoin.push(mem2);
+		addRoomForMany("none", memberListToJoin); // "none"是一個keyword, 會影響websocket server的邏輯判斷處理
+				
+	}
 	
 	// 將此請求從request list中去除掉
 	var userID = $('#Accept')[0].userID;
@@ -428,7 +485,9 @@ function AcceptEventInit() {
 	// 開啟ready功能:
 	switchStatus(StatusEnum.NOT_READY); // 這邊之後要用全域變數來控制不同的工作模式-是否要在established之後變成not ready
 //	document.getElementById("ready").disabled = false;
-//	document.getElementById("notready").disabled = true;
+//	document.getElementById("notready").disabled = true;		
+
+
 }
 
 // 拒絕交談
@@ -626,8 +685,11 @@ function updateStatus(aStatus, aReason){
 // 1. thirdParty(三方)
 // 2. transfer(轉接)
 function inviteAgentThirdParty(aInviteType, aRoomID ,aInvitedAgentID){
-	if (aRoomID === undefined) aRoomID = RoomID_g; // 開發過渡期使用,之後會修掉
-	if (aInvitedAgentID === undefined) aInvitedAgentID = document.getElementById("AgentID").value; // 開發過渡期使用,之後會修掉
+	if (aRoomID === undefined) aRoomID = $('#roomList').val(); 
+	if (aInvitedAgentID === undefined) aInvitedAgentID = $('#agentList').val(); 
+//	var userdata = ;
+//	alert("aRoomID: " + aRoomID);
+//	alert("aInvitedAgentID: " + aInvitedAgentID);
 	
 	if (aRoomID == null){
 		alert("開發模式: " + "inviteAgentThirdParty() - there is no roomID for this agent");
@@ -643,19 +705,23 @@ function inviteAgentThirdParty(aInviteType, aRoomID ,aInvitedAgentID){
 			invitedAgentID : aInvitedAgentID,
 			fromAgentName : parent.UserName_g,
 			inviteType: aInviteType,
+//			userdata : ,
 			channel : "chat"
 		};
 	// 發送消息
 	parent.ws_g.send(JSON.stringify(inviteAgent3waymsg));
 
 	/**** 建立私訊 *****/
-	document.getElementById("sendA2A").value = aInvitedAgentID;
-	document.getElementById("sendA2A").innerHTML += " to - " + aInvitedAgentID;	
-
+//	document.getElementById("sendA2A").value = aInvitedAgentID;
+//	document.getElementById("sendA2A").innerHTML += " to - " + aInvitedAgentID;	
 
 }
 
 //回應三方/轉接
+/* aResponse可能參數字串:
+ * 1. accept
+ * 2. reject
+ */
 function responseThirdParty(aInviteType, aRoomID, aFromAgentID, aResponse){
 	if (aInviteType === undefined) aInviteType = document.getElementById("inviteType").innerHTML; // 開發過渡期使用,之後會修掉
 	if (aRoomID === undefined) aRoomID = document.getElementById("invitedRoomID").innerHTML; // 開發過渡期使用,之後會修掉
@@ -761,6 +827,8 @@ function switchStatus(aStatus){
     	break;
     case StatusEnum.I_ESTABLISHED:
     	//code block
+		document.getElementById("Accept").disabled = true;
+		document.getElementById("Reject").disabled = true;
     	break;
     case StatusEnum.O_ESTABLISHED:
     	//code block
@@ -914,7 +982,7 @@ function updateAgentIDList(){
 	$('#agentList').unbind('change').change(function() { 
 		var tmpAgentID = $('#agentList').val();
 		$('#privateMsg')[0].agentID = tmpAgentID;
-		alert("$('#privateMsg')[0].agentID: \n" + $('#privateMsg')[0].agentID);
+//		alert("$('#privateMsg')[0].agentID: \n" + $('#privateMsg')[0].agentID);
 //		updateRoomInfo(roomInfoMap_g.get(tmpRoomID));
 	});
 		
