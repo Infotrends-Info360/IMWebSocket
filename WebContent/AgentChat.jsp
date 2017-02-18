@@ -95,7 +95,7 @@ hr {
 
 </style>
 </head>
-<body>
+<body onload="onloadFunctionAgent();">
     <div style="width:90%">
     	<!-- 標題列 -->
         <div class="row" style="margin-top:5px;">
@@ -123,7 +123,7 @@ hr {
                 </div>	
                 <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
                 	<div class="col-xs-6 col-sm-6 col-md-6 col-lg-6">
-                        <button id="notready" class="btn btn-primary" style="width:100px" disabled>Not Ready</button>
+                        <button id="notready" class="btn btn-primary" style="width:100px" disabled onclick="notready();">Not Ready</button>
                 	</div>
                 	<div class="col-xs-6 col-sm-6 col-md-6 col-lg-6">
                         <select id="reason" class="form-control">
@@ -201,7 +201,7 @@ hr {
 			                		<h4>comment:</h4>
 			                	</div>
 			                	<div class="col-xs-6 col-sm-6 col-md-6 col-lg-6">
-			                        <button id="leaveRoom" class="btn btn-primary" disabled>離開房間</button>
+			                        <button id="leaveRoom" class="btn btn-primary" disabled onclick="leaveRoom(this.roomID);">離開房間</button>
 			                	</div>	                	
 	                		</div>
 	                		<div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
@@ -229,15 +229,15 @@ hr {
 		                <!-- chatDialogue: content, msg, send-->
 						<div class="col-xs-12 col-sm-12 col-md-12 col-lg-12" id="chatDialogue">
 							<h4>ChatDialogue:</h4>
-								<div class="pre-scrollable col-xs-12 col-sm-12 col-md-12 col-lg-12 panel panel-default" style="height: 80px;" id="">
+								<div class="pre-scrollable col-xs-12 col-sm-12 col-md-12 col-lg-12 panel panel-default" id="chatroom" style="height: 80px;">
 <!-- 									someone says .... <br>	someone says .... <br>	someone says .... <br>	someone says .... <br>	someone says .... <br> -->
 								</div>
 								<div class="col-xs-12 col-sm-12 col-md-12 col-lg-12 nopadding">
 									<div class="col-xs-10 col-sm-10 col-md-10 col-lg-10 nopadding">
-										<input class="form-control" id="message">
+										<input class="form-control" id="message" disabled>
 									</div>						
 									<div class="col-xs-2 col-sm-2 col-md-2 col-lg-2">
-										<button class="btn btn-primary" id="sendToRoom" onclick="sendtoRoom();">SEND</button>
+										<button class="btn btn-primary" id="sendToRoom" onclick="sendtoRoom(this.roomID);" disabled>SEND</button>
 									</div>						
 								</div>								
 						</div>	 <!-- end of chatDialogue -->
@@ -246,8 +246,8 @@ hr {
 						
 		                <!-- 三方與轉接 -->
 						<div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
-							<button class="btn btn-primary pull-right marginDefault" id="" style="width:100px">轉接邀請</button>
-							<button class="btn btn-primary pull-right marginDefault" id="" style="width:100px">三方邀請</button>
+							<button class="btn btn-primary pull-right marginDefault" id="inviteTransfer" style="width:100px" disabled onclick="inviteAgentThirdParty(this.value)" value="transfer">轉接邀請</button>
+							<button class="btn btn-primary pull-right marginDefault" id="inviteThirdParty" style="width:100px" disabled onclick="inviteAgentThirdParty(this.value)" value="thirdParty">三方邀請</button>
 						</div>
 						
 	                </div>
@@ -276,20 +276,21 @@ hr {
 	                <div class="row col-xs-12 col-sm-12 col-md-12 col-lg-12 panel-body center">
 	                	<div class="col-xs-12 col-sm-12 col-md-12 col-lg-12 ">
 	                        <select id="agentList" class="form-control">
-	                            <option value="agent01">agent01</option>
-	                            <option value="agent02">agent02</option>
-	                            <option value="agent03">agent03</option>
+<!-- 		                        <option disabled selected value> -- select an agent -- </option> -->
+<!-- 	                            <option value="agent01">agent01</option> -->
+<!-- 	                            <option value="agent02">agent02</option> -->
+<!-- 	                            <option value="agent03">agent03</option> -->
 	                        </select>
 	                	</div>
 		                <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12 spacer10"></div>
                 		<div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
 		                	<div class="col-xs-9 col-sm-9 col-md-9 col-lg-9 nopadding">
-		                        <input type="text" id="" class="form-control" value="comment..."/>
+		                        <input type="text" id="A2AContent" class="form-control" value=""/>
 		                	</div>
 		                	<div class="col-xs-1 col-sm-1 col-md-1 col-lg-1 nopadding">
 		                	</div>
 		                	<div class="col-xs-2 col-sm-2 col-md-2 col-lg-2 nopadding">
-		                        <button id="" class="btn btn-primary">SEND</button>
+		                        <button id="privateMsg" class="btn btn-primary" onclick="sendA2A(this.agentID);">SEND</button>
 		                	</div>	                		                		
                 		</div>	                		                	
 	                </div>

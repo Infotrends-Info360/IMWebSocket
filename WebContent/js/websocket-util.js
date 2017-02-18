@@ -1,34 +1,4 @@
 /********** util *************/
-// 之後可當做Agent, Client共用更新方法
-function switchStatus(aStatus){
-	switch(aStatus) {
-    case StatusEnum.LOGOUT:
-//        alert('StatusEnum.LOGOUT matched');
-        document.getElementById("Status").innerHTML = StatusEnum.LOGOUT;
-		// 顯現對話視窗
-		document.getElementById("chatDialogue").classList.add("hidden");
-		document.getElementById("chatDialogueReverse").classList.remove("hidden");
-		// 啟用openChat功能
-		document.getElementById("openChat").disabled = false;
-		document.getElementById("closeChat").disabled = true;
-
-        break;
-    case StatusEnum.WAIT_AGENT:
-        // code block
-        break;
-    case StatusEnum.JOIN_ROOM:
-        //code block
-        break;
-    case StatusEnum.FIND_AGENT:
-    	//code block
-    	break;
-//    case StatusEnum.:
-//    	//code block
-//    	break;
-    default:
-        break;
-	}
-}
 
 // IE8 does not support trim() - this is a polyfill for IE8 
 if(typeof String.prototype.trim !== 'function') {
@@ -41,9 +11,11 @@ if(typeof String.prototype.trim !== 'function') {
 /********** bean *************/
 //目的: 將Json請求字串物件化 (持續進行中)
 
-function roomInfo(aRoomID, aUserdata){
+function RoomInfo(aRoomID, aUserdata, aText){
 	this.roomID = aRoomID;
 	this.userdata = aUserdata;
+	this.text = aText;
+	this.close = false;
 }
 
 function messagetoRoomJson(aType, aACtype, aText, aId, aUserName, aRoomID, aChannel, aDate) {  // Method which will display type of Animal
@@ -75,14 +47,6 @@ function myRoomMemberJsonObj(aID){
 	this.ID = aID;
 }
 
-/********** enum *************/
-var StatusEnum = Object.freeze({
-	LOGOUT: 'LOGOUT', 
-	WAIT_AGENT: 'WAIT_AGENT', 
-	JOIN_ROOM: 'JOIN_ROOM',
-	FIND_AGENT: 'FIND_AGENT'
-		
-});
 
 // reference:
 // https://developer.mozilla.org/en-US/docs/Web/JavaScript/Guide/Working_with_Objects
