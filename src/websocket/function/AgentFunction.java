@@ -1,7 +1,13 @@
 package websocket.function;
 
+import java.util.Collection;
+import java.util.Map;
+import java.util.Set;
+
+import org.java_websocket.WebSocket;
 import org.json.JSONObject;
 
+import websocket.bean.UserInfo;
 import websocket.pools.WebSocketRoomPool;
 import websocket.pools.WebSocketTypePool;
 import websocket.pools.WebSocketUserPool;
@@ -73,4 +79,19 @@ public class AgentFunction {
 		String text = obj.getString("text");
 		WebSocketTypePool.sendMessageinTYPE(ACtype, username + ": " + text);
 	}
+	
+	public static void refreshAgentList(){
+		Map<WebSocket, UserInfo> agentMap = WebSocketTypePool.getTypeconnections().get("Agent");
+		Collection<String> agentIDList = WebSocketTypePool.getOnlineUserIDinTYPE("Agent");
+		System.out.println("userjoin() - agentIDList.size(): " + agentIDList.size());
+		Set<WebSocket> agentConnList = agentMap.keySet();
+		for (WebSocket tmpConn: agentConnList){
+			
+			JSONObject sendjson02 = new JSONObject();
+			sendjson02.put("Event", "refreshAgentList");
+			sendjson02.put("agentIDList", agentIDList);
+			WebSocketUserPool.sendMessageToUser(tmpConn, sendjson02.toString());
+		}
+	}
+	
 }

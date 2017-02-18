@@ -137,10 +137,11 @@ public class WebSocketRoomPool{
 			
 			/** 告知所有成員有人離開room,請更新前端頁面 **/
 			for (WebSocket conn: tmpConnsInRoom){
-				// 若是Logout()觸發的,則跳過
-				if (conn.isClosed() || conn.isClosing()){
+				// 若是Logout()觸發的,則跳過 ; 若是自己發出的,也跳過
+				if (conn.isClosed() || conn.isClosing() || conn == aConn){
 					continue;
 				}
+				
 				WebSocketUserPool.sendMessageToUser(conn, sendJson.toString());
 			}
 		}

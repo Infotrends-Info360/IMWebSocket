@@ -35,7 +35,7 @@ var layim;
  * */
 
 // 網頁載入後第一個動作
-function onloadFunction(){
+function onloadFunctionClient(){
 	console.log("onloadFunction() called");
 	/** 建立傳送訊息enter事件 **/
 	$("#message").keypress(function(e) {
@@ -143,11 +143,14 @@ function Login() {
 						waittingAgentID_g = obj.Agent;
 						// 寫入log(告知雙方彼此的資訊)
 						senduserdata(obj.Agent);
+						// 更新資訊
+						switchStatus(StatusEnum.WAIT_AGENT);
+						
 						console.log("senduserdata done ******************* ");						
 
 						
 						// 告知Agent, Client這邊知道找到一個Agent了
-//						find(waittingAgentID_g); // 省略
+//						find(waittingAgentID_g); // 省略 - senduserdata已經能做到這件事情
 					}
 					// 收到群組訊息
 				} else if ("messagetoRoom" == obj.Event) {
@@ -156,9 +159,9 @@ function Login() {
 					document.getElementById("chatroom").innerHTML += msgToShow + "<br>";
 					
 					// 控制前端傳值
-					document.getElementById("Event").innerHTML = obj.Event;
-					document.getElementById("text").innerHTML += obj.UserName
-							+ ": " + obj.text + "<br>";
+//					document.getElementById("Event").innerHTML = obj.Event;
+//					document.getElementById("text").innerHTML += obj.UserName
+//							+ ": " + obj.text + "<br>";
 
 				} else if ("senduserdata" == obj.Event) {
 					if (obj.userdata.SetContactLog != null){
@@ -268,9 +271,6 @@ function Logout() {
 	// 離開WebSocket Pool列表
 	Logoutaction(); // 這邊會全部清: Group, Type, User conn
 	// 控制前端傳值
-	document.getElementById("Status").innerHTML = StatusEnum.LOGOUT;
-	document.getElementById("closeChat").disabled = true;
-	document.getElementById("openChat").disabled = false;
 }
 
 
@@ -278,6 +278,8 @@ function Logout() {
 function Logoutaction() {
 	// 使用流程: 給"Clientclosegroup" -> .java - "Clientclosegroup" -> .js - ReleaseEvent() -> notready -> "Agentclosegroup" -> .java -> client.js - if(isonlone){} 
 	parent.isonline_g = false; 
+	// 更新狀態
+	switchStatus(StatusEnum.LOGOUT);
 
 	// 在登出前,將要存入的log資訊先放到userallconnections中,此方法最後會呼叫adduserinteraction() 
 //	setinteractionDemo(ixnstatus, ixnactivitycode, 'client');
@@ -480,6 +482,51 @@ function setinteraction(aStatus, aActivitycode, aClosefrom, aThecomment, aStoppe
 	// 發送消息給WebSocket
 	ws_g.send(JSON.stringify(msg));
 }
+
+function switchStatus(aStatus){
+	// 統一更新狀態資訊
+	
+	switch(aStatus) {
+    case StatusEnum.FIND_AGENT:
+        document.getElementById("Status").innerHTML = StatusEnum.FIND_AGENT;
+    	//code block
+    	break;
+	case StatusEnum.WAIT_AGENT:
+        document.getElementById("Status").innerHTML = StatusEnum.WAIT_AGENT;
+        // code block
+        break;
+    case StatusEnum.JOIN_ROOM:
+        document.getElementById("Status").innerHTML = StatusEnum.JOIN_ROOM;
+        //code block
+        break;
+    case StatusEnum.LOGOUT:
+//      alert('StatusEnum.LOGOUT matched');
+      document.getElementById("Status").innerHTML = StatusEnum.LOGOUT;
+		// 顯現對話視窗
+		document.getElementById("chatDialogue").classList.add("hidden");
+		document.getElementById("chatDialogueReverse").classList.remove("hidden");
+		// 啟用openChat功能
+		document.getElementById("openChat").disabled = false;
+		document.getElementById("closeChat").disabled = true;
+
+      break;    	
+//    case StatusEnum.:
+//    	//code block
+//    	break;
+    default:
+        break;
+	}
+}
+
+/********** enum *************/
+var StatusEnum = Object.freeze({
+	LOGOUT: 'LOGOUT', 
+	WAIT_AGENT: 'WAIT_AGENT', 
+	JOIN_ROOM: 'JOIN_ROOM',
+	FIND_AGENT: 'FIND_AGENT'
+		
+});
+
 
 
 /** 現在未使用方法 **/

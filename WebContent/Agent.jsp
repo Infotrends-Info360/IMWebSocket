@@ -42,7 +42,7 @@ div class ="container"> <h2>Form control: textarea </h2> <p>The form below conta
 }
 </style>
 </head>
-<body onload="onloadFunction();">
+<body>
 	<div class="row" style="border-bottom: 1px solid #c0c0c0; width: 100%;">
 		<div class="col-xs-3 col-sm-3 col-md-3 col-lg-3">
 			<h3>Info360 - Agent</h3>

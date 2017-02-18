@@ -63,7 +63,7 @@ WEB_SOCKET_SWF_LOCATION = "WebSocketMain.swf";
 
 </style>
 </head>
-<body onload="onloadFunction()">
+<body onload="onloadFunctionClient()">
 	<!-- 標題 -->
 	<div class="row no-gutter" style="border-bottom: 1px solid #c0c0c0; width: 100%;"> <!-- width: 100% 讓螢幕寬度符合螢幕大小 -->
 		<div class="col-xs-12 col-sm-12 col-md-12 col-lg-12 center">
