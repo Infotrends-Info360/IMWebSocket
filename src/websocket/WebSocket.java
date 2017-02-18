@@ -250,25 +250,16 @@ public class WebSocket extends WebSocketServer {
 		String invitedAgentID = obj.getString("invitedAgentID");
 		String fromAgentName = obj.getString("fromAgentName");
 		String inviteType = obj.getString("inviteType");
-		
-		
-		
-		
+		String userdata = obj.getJSONObject("userdata").toString();
+				
 		//籌備要寄出的JSON物件
-		JSONObject sendjson = new JSONObject();
-		sendjson.put("Event", "inviteAgentThirdParty");
-		sendjson.put("roomID", roomID);
-		sendjson.put("fromAgentID", fromAgentID);
-		sendjson.put("invitedAgentID", invitedAgentID);
-		sendjson.put("fromAgentName", fromAgentName);
-		sendjson.put("inviteType", inviteType);
-		
-		System.out.println("sendjson: " + sendjson);
+		obj.put("Event", "inviteAgentThirdParty");
+		System.out.println("inviteAgentThirdParty() - obj: " + obj);
 		
 		// 寄給invitedAgent:
 		org.java_websocket.WebSocket invitedAgent_conn = WebSocketUserPool.getWebSocketByUser(invitedAgentID);
 		System.out.println("invitedAgent_conn: " + invitedAgent_conn);
-		WebSocketUserPool.sendMessageToUser(invitedAgent_conn, sendjson.toString());
+		WebSocketUserPool.sendMessageToUser(invitedAgent_conn, obj.toString());
 		
 //		type : "inviteAgentThirdParty",
 //		ACtype : "Agent",

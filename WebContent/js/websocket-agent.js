@@ -687,7 +687,8 @@ function updateStatus(aStatus, aReason){
 function inviteAgentThirdParty(aInviteType, aRoomID ,aInvitedAgentID){
 	if (aRoomID === undefined) aRoomID = $('#roomList').val(); 
 	if (aInvitedAgentID === undefined) aInvitedAgentID = $('#agentList').val(); 
-//	var userdata = ;
+	var userdata = JSON.parse( $('#userdata').html() );
+	alert("userdata: " + userdata);
 //	alert("aRoomID: " + aRoomID);
 //	alert("aInvitedAgentID: " + aInvitedAgentID);
 	
@@ -705,7 +706,7 @@ function inviteAgentThirdParty(aInviteType, aRoomID ,aInvitedAgentID){
 			invitedAgentID : aInvitedAgentID,
 			fromAgentName : parent.UserName_g,
 			inviteType: aInviteType,
-//			userdata : ,
+			userdata : userdata,
 			channel : "chat"
 		};
 	// 發送消息
