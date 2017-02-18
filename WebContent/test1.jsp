@@ -235,13 +235,7 @@
 				
 				<div id="form1">
 				</div>
-        				  	
-	   				 <div> 
-	        
-	  
-                            </div>
-
-
+        		
                                 </div>
                             </div>
                         </div>
