@@ -403,7 +403,7 @@
     	 function group(){
     	  		var dbid = document.getElementById("menu").value
     	 		  $.ajax({                              
-    	 	          url:"/IMWebSocket/RESTful/Select_ActivityGroup",
+    	 	          url:"/IMWebSocket/RESTful/Query_ActivityGroup",
     	 		         data:{
     	 		        	 dbid:dbid
     	 		        	 },
