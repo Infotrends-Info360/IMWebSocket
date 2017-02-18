@@ -150,7 +150,7 @@ function Login() {
 
 						
 						// 告知Agent, Client這邊知道找到一個Agent了
-//						find(waittingAgentID_g); // 省略 - senduserdata已經能做到這件事情
+						find(waittingAgentID_g); // 省略 - senduserdata已經能做到這件事情
 					}
 					// 收到群組訊息
 				} else if ("messagetoRoom" == obj.Event) {
