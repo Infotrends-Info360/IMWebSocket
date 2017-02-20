@@ -12,9 +12,11 @@ import org.json.JSONArray;
 import org.json.JSONObject;
 
 import com.google.gson.JsonArray;
+import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 
 import util.Util;
+
 
 
 
@@ -131,6 +133,7 @@ public class CommonFunction {
 			timer.cancel();			
 		}
 		
+		// Client
 		// 若已經有Agent正在決定是否Accept此通通話, 若Client先離開了, 則告知此Agent此Client已經離開, 不用再等了
 //		String waittingAgent = jsonIn.get("waittingAgent").getAsBoolean();
 		if (jsonIn.get("waittingAgent") != null){
@@ -146,6 +149,29 @@ public class CommonFunction {
 				
 				WebSocketUserPool.sendMessageToUser(agentConn, jsonTo.toString());
 			}			
+		}
+		
+		// Agent
+//		waittingClientIDList
+		if (jsonIn.get("waittingClientIDList") != null){
+			System.out.println("userExit() - waittingClientIDList got here");
+			System.out.println("userExit() - " + jsonIn.get("waittingClientIDList").toString());
+			JsonArray clientIDJsonAry = jsonIn.getAsJsonArray("waittingClientIDList");
+//			String clientIDStr = jsonIn.get("waittingClientIDList").toString();
+//			String[] waittingClientIDList = clientIDStr.substring(1, clientIDStr.length()-1).split(",");
+//			System.out.println("userExit() - " + waittingClientIDList.length);
+			System.out.println("userExit() - clientIDJsonAry: " + clientIDJsonAry);
+			for(final JsonElement clientID_je : clientIDJsonAry) {
+			    String clientID = clientID_je.getAsJsonObject().get("clientID").getAsString();
+			    WebSocket clientConn = WebSocketUserPool.getWebSocketByUser(clientID);
+			    System.out.println("userExit() - clientID: " + clientID);
+			    jsonIn.addProperty("Event", "agentLeft");
+				WebSocketUserPool.sendMessageToUser(clientConn, jsonIn.toString());
+			    
+			}
+//			for(String clientID: waittingClientIDList){
+//				System.out.println("userExit() - " + clientID);
+//			}
 		}
 		
 		

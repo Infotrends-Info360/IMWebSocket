@@ -87,17 +87,17 @@ WEB_SOCKET_SWF_LOCATION = "WebSocketMain.swf";
 					<b>UserName</b>: 
 					<input type="text" id="UserName" value="A123456789"><br> 
 					<b>UserID</b>:<br>
-					<span id="UserID">default</span><br> 
+					<span id="UserID"></span><br> 
 					<b>Status:</b><br>
-					<span id="Status">default</span><br>
+					<span id="Status"></span><br>
 					<b>RoomID:</b><br> 
-					<span id="RoomID">default</span><br> 
+					<span id="RoomID"></span><br> 
 					<b>AgentIDs</b>:<br> 
-					<span id="AgentIDs">default</span><br> 
+					<span id="AgentIDs"></span><br> 
 					<b>AgentNames:</b><br> 
-					<span id="AgentNames">default</span><br> 
+					<span id="AgentNames"></span><br> 
 					<b>Event:</b><br> 
-					<span id="Event">default</span><br>
+					<span id="Event"></span><br>
 					<br>
 				</div>		
 				<div class="col-xs-6 col-sm-6 col-md-6 col-lg-6">

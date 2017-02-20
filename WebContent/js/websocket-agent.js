@@ -6,7 +6,7 @@ var isonline_g = false; // 判斷是否上線的開關
 var status_g;
 var roomInfoMap_g = new Map();
 var agentIDMap_g = new Map();
-var waittingClientIDMap = new Map();
+var waittingClientIDList_g = [];
 //var count = 0;
 //var RoomIDList = []; // 接通後產生Group的ID List
 //var RoomIDLinkedList = new SinglyList(); // 接通後產生Group的ID Linked List
@@ -189,6 +189,13 @@ function Login() {
 					console.log("obj.clientName: " + obj.clientName);
 					console.log("obj.clientID: " + obj.clientID);
 					
+					waittingClientIDList_g.push( new function(){
+						this.clientID = obj.userdata.id
+					});
+					console.log("**********waittingClientIDMap.length: " + waittingClientIDList_g.length);
+					console.log("**********waittingClientIDMap: " + waittingClientIDList_g);
+					console.log("**********waittingClientIDMap: " + JSON.stringify( waittingClientIDList_g ));
+					
 					// 在這邊動態增加request list
 				    var tr = document.createElement('tr');   
 				    tr.setAttribute("style","height: 60px;");
@@ -218,7 +225,8 @@ function Login() {
 				    tr.setAttribute("userID", obj.userdata.id);
 				    tr.setAttribute("userdata", JSON.stringify(obj.userdata));
 				    
-				    document.getElementById("requestTable").appendChild(tr);
+//				    document.getElementById("requestTable").appendChild(tr);
+				    document.getElementById("requestTable_tbody").appendChild(tr);
 				    
 				    tr.onclick = function(e){ 
 						$('#Accept')[0].disabled = false;
@@ -455,11 +463,7 @@ function Logout() {
 
 
 // 執行登出
-function Logoutaction() {
-	// 關閉上線開關
-	status_g = StatusEnum.LOGOUT;
-	switchStatus(status_g);	
-	
+function Logoutaction() {	
 	// 向websocket送出登出指令
 	var now = new Date();
 	var msg = {
@@ -468,11 +472,17 @@ function Logoutaction() {
 		id : parent.UserID_g,
 		UserName : parent.UserName_g,
 		channel : "chat",
+		waittingClientIDList : waittingClientIDList_g,
 		date : now.getHours() + ":" + now.getMinutes() + ":" + now.getSeconds()
 	};
 
 	// 發送消息
 	parent.ws_g.send(JSON.stringify(msg));
+
+	// 關閉上線開關
+	status_g = StatusEnum.LOGOUT;
+	switchStatus(status_g);	
+	
 	
 //	// 關閉websocket
 //	parent.ws_g.close();
@@ -888,14 +898,27 @@ function switchStatus(aStatus){
 			}
 //			frames[i].document.body.style.background = "red";
 		}
+		// 改為離線
 		isonline = false;
 		
+		// 控制前端頁面
 		document.getElementById("Logout").disabled = true;
 		document.getElementById("Login").disabled = false;
 		document.getElementById("UserID").value = '';
+		document.getElementById("Accept").disabled = true;
+		document.getElementById("Reject").disabled = true;
 		
-		//清空AgentList
+		// 清空request list
+		var myNode = document.getElementById("requestTable_tbody");
+		while (myNode.firstChild) {
+		    myNode.removeChild(myNode.firstChild);
+		}
+		
+		// 清空AgentList
 		$("#agentList").empty();
+		
+		// 清空waittingClientIDList_g
+		waittingClientIDList_g = [];
 
         // code block
         break;
