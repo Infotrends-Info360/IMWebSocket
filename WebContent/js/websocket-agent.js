@@ -196,6 +196,7 @@ function Login() {
 					
 					// 在這邊動態增加request list
 				    var tr = document.createElement('tr');   
+				    tr.setAttribute("style","height: 60px;");
 
 				    var td1 = document.createElement('td');
 				    var td2 = document.createElement('td');
@@ -205,7 +206,9 @@ function Login() {
 				    var text2 = document.createTextNode(obj.clientName);
 				    var text3 = document.createTextNode(JSON.stringify(obj.userdata));
 				    var div3 = document.createElement('div');
-				    div3.setAttribute("style", "height: 20px; overflow-y: hidden;");
+//				    div3.setAttribute("style", "height: 10px; overflow-y: hidden; width: 100%;");
+				    div3.setAttribute("style", "max-height: 60px; word-wrap: break-word;; max-width: 260px;");
+				    div3.setAttribute("class", "pre-scrollable");
 				    
 				    td1.appendChild(text1);
 				    td2.appendChild(text2);
