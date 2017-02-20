@@ -123,10 +123,11 @@ public class CommonFunction {
 	public static void userExit(String aMsg, org.java_websocket.WebSocket aConn) {
 		System.out.println("userExit() called");
 		JsonObject jsonIn = Util.getGJsonObject(aMsg);
+		String id = jsonIn.get("id").getAsString();
+		String UserName = jsonIn.get("UserName").getAsString();
 		
 		//Billy哥部分前端需求:
-		String username = jsonIn.get("UserName").getAsString();
-		String joinMsg = "[Server] - " + username + " Offline";
+		String joinMsg = "[Server] - " + UserName + " Offline";
 		WebSocketUserPool.sendMessageToUser(aConn, joinMsg); // 只須原登出Agent收到此訊息即可
 		
 		// 關係Heartbeat

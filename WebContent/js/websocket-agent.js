@@ -304,7 +304,8 @@ function Login() {
 				    tr.setAttribute("text", text);
 //				    tr.setAttribute("userdata", userdata);
 				    
-				    document.getElementById("requestTable").appendChild(tr);
+//				    document.getElementById("requestTable").appendChild(tr);
+				    document.getElementById("requestTable_tbody").appendChild(tr);
 				    
 				    tr.onclick = function(e){ 
 						$('#Accept')[0].disabled = false;
@@ -424,7 +425,7 @@ function Login() {
 					console.log("refreshAgentList - agentIDMap_g: " + agentIDMap_g);
 					updateAgentIDList();
 				} else if ("agentLeftThirdParty" == obj.Event){
-					alert("agentLeftThirdParty - agent left");
+					alert("agentLeftThirdParty - agent " + obj.id + " left ");
 				}
 			// 非指令訊息
 			// (Billy哥部分)
@@ -433,6 +434,7 @@ function Login() {
 				// 非指令訊息
 				if (e.data.indexOf("Offline") > 0 && e.data.indexOf(parent.UserName_g) > 0) {
 					// 關閉websocket
+					console.log("ws 連線關閉。");
 					parent.ws_g.close(); // 在這邊關閉websocket,要特別注意會不會牽連到其他人!
 				}
 			} else {
@@ -472,8 +474,9 @@ function Logoutaction() {
 		id : parent.UserID_g,
 		UserName : parent.UserName_g,
 		channel : "chat",
-		waittingClientIDList : waittingClientIDList_g,
-		waittingAgentIDList : waittingAgentIDList_g,
+		waittingClientIDList : waittingClientIDList_g, // 告訴寄出要求的clients不用等了
+		waittingAgentIDList : waittingAgentIDList_g, // 告訴寄出三方/轉接邀請的Agents不用等了
+		// waitingAgentRoomIDList : waitingAgentRoomIDList_g; //  告訴寄出三方/轉接邀請的Agents不用等了 - 若有需要,再考慮增加是對應到哪個roomID
 		date : now.getHours() + ":" + now.getMinutes() + ":" + now.getSeconds()
 	};
 
@@ -946,6 +949,8 @@ function switchStatus(aStatus){
 		
 		// 清空waittingClientIDList_g
 		waittingClientIDList_g = [];
+		// 清空waittingClientIDList_g		
+		waittingAgentIDList_g = [];
 
         // code block
         break;
