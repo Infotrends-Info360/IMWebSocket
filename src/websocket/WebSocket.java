@@ -286,7 +286,7 @@ public class WebSocket extends WebSocketServer {
 		JSONObject userdata = obj.getJSONObject("userdata");
 		String text = obj.getString("text");
 		
-		
+		obj.put("Event", "responseThirdParty");		
 		if ("accept".equals(response)){
 			System.out.println("responseThirdParty() - accept");
 			/** 新增room成員 **/
@@ -298,9 +298,6 @@ public class WebSocket extends WebSocketServer {
 //			CommonFunction.refreshRoomList(conn);				
 //			CommonFunction.refreshRoomList(WebSocketUserPool.getWebSocketByUser(fromAgentID));				
 			
-			// 通知各房間成員成員數改變了
-			obj.put("Event", "responseThirdParty");
-
 //			JSONObject sendJson = new JSONObject();
 //			sendJson.put("Event", "responseThirdParty");
 //			sendJson.put("roomID", roomID);
@@ -317,11 +314,12 @@ public class WebSocket extends WebSocketServer {
 				WebSocketUserPool.sendMessageToUser(WebSocketUserPool.getWebSocketByUser(fromAgentID), obj.toString());
 				WebSocketRoomPool.removeUserinroom(roomID, WebSocketUserPool.getWebSocketByUser(fromAgentID));
 			}
-			
+			// 通知各房間成員成員數改變了
 			WebSocketRoomPool.sendMessageinroom(roomID, obj.toString());
 			
 		}else if("reject".equals(response)){
 			System.out.println("responseThirdParty() - reject");			
+			WebSocketUserPool.sendMessageToUser(WebSocketUserPool.getWebSocketByUser(fromAgentID), obj.toString());
 		}
 	
 	}

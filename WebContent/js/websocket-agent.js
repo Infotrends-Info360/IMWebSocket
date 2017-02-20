@@ -224,13 +224,14 @@ function Login() {
 				    
 				    tr.onclick = function(e){ 
 						$('#Accept')[0].disabled = false;
-						$('#Reject')[0].disabled = false;
 						$('#Accept')[0].reqType = 'Client';
 						$('#Accept')[0].userID = this.getAttribute("userID");
 						$('#Accept')[0].userdata = this.getAttribute("userdata");
+
+						$('#Reject')[0].disabled = false;
 						$('#Reject')[0].reqType = 'Client';
 						$('#Reject')[0].userID = this.getAttribute("userID");
-						$('#Reject')[0].userdata = this.getAttribute("userdata");
+//						$('#Reject')[0].userdata = this.getAttribute("userdata");
 					}; // 設定 AcceptEventInit
 				    				    
 					
@@ -293,32 +294,37 @@ function Login() {
 				    
 				    tr.onclick = function(e){ 
 						$('#Accept')[0].disabled = false;
-						$('#Reject')[0].disabled = false;
 						$('#Accept')[0].reqType = inviteType;
 						$('#Accept')[0].userID = this.getAttribute("userID");
 						$('#Accept')[0].roomID = this.getAttribute("roomID");
 						$('#Accept')[0].userdata = this.getAttribute("userdata");
 						$('#Accept')[0].text = this.getAttribute("text");
+						
+						$('#Reject')[0].disabled = false;
+						$('#Reject')[0].reqType = inviteType;
+						$('#Reject')[0].userID = this.getAttribute("userID");
+						$('#Reject')[0].roomID = this.getAttribute("roomID");
 					}; // 設定 AcceptEventInit
 
 				} else if ("responseThirdParty" == obj.Event){
-//					document.getElementById("currUsers").innerHTML = obj.roomMembers;
-//					alert("responseThirdParty - " + userdata);
-//					alert("responseThirdParty - " + JSON.stringify( obj.userdata ));
-//					alert("responseThirdParty");
-//					alert("obj.fromAgentID: " + obj.fromAgentID);
-//					alert("obj.inviteType: " + obj.inviteType);
-					
 					
 					var userdata = JSON.stringify( obj.userdata );
 					var text = obj.text;
 					var inviteType = obj.inviteType;
 					var fromAgentID = obj.fromAgentID;
 					var roomID = obj.roomID;
+					var response = obj.response;
+					var invitedAgentID = obj.invitedAgentID;
+
+					if("reject" == response){
+						alert( "Agent " + invitedAgentID + " rejected " + inviteType +  " invitation");
+						return;
+					}
+					
 					
 					if ("transfer" == inviteType && fromAgentID == parent.UserID_g){
 						alert("transfer");
-						var roomInfo = roomInfoMap_g.get(obj.roomID);
+						var roomInfo = roomInfoMap_g.get(roomID);
 						roomInfo.close = true;
 						console.log("roomInfo: " + roomInfo);
 //						console.log("JSON.parse(roomInfo): " + JSON.parse(roomInfo));
@@ -327,9 +333,9 @@ function Login() {
 						var currRoomID = $('#roomList').val();
 						console.log("currRoomID: " + currRoomID);
 						console.log("currRoomID: " + currRoomID);
-						console.log("obj.roomID: " + obj.roomID);
+						console.log("obj.roomID: " + roomID);
 						
-						if (currRoomID == obj.roomID){
+						if (currRoomID == roomID){
 							alert("matched!");
 							updateRoomInfo(roomInfo);
 						}
@@ -345,16 +351,16 @@ function Login() {
 					switchStatus(StatusEnum.I_ESTABLISHED);
 					
 					// 在這邊興建roomList與其room bean
-					RoomID_g = obj.roomID; // 之後要改成local variable
+					RoomID_g = roomID; // 之後要改成local variable
 					var tmpRoomInfo = new RoomInfo(
 							obj.roomID,
 							userdata, // userdata
 							text // text
 					);
-					roomInfoMap_g.set(obj.roomID, tmpRoomInfo);
+					roomInfoMap_g.set(roomID, tmpRoomInfo);
 					console.log("roomInfoMap_g.size: " + roomInfoMap_g.size);
 					// 1. 研究一下這個map的json長什麼樣 2. 看怎麼拿值
-					updateRoomIDList(obj.roomID);
+					updateRoomIDList(roomID);
 					// 更新roomIDList
 
 				} else if ("privateMsg" == obj.Event){
@@ -536,13 +542,13 @@ function AcceptEventInit() {
 
 // 拒絕交談
 function RejectEvent() {
-	console.log("AcceptEventInit(): ");
-	var reqType = $('#Accept')[0].reqType;
+	console.log("RejectEvent(): ");
+	var reqType = $('#Reject')[0].reqType;
 	if (reqType == 'thirdParty' || reqType == 'transfer'){
 		//here
-		var roomID = $('#Accept')[0].roomID;
-		var fromAgentID = $('#Accept')[0].userID;
-		responseThirdParty(reqType, roomID, fromAgentID, 'accept');
+		var roomID = $('#Reject')[0].roomID;
+		var fromAgentID = $('#Reject')[0].userID;
+		responseThirdParty(reqType, roomID, fromAgentID, 'reject');
 	// Client to Agent 請求	
 	}else{
 		// 一次將Agent與Client加入到room中
@@ -801,8 +807,17 @@ function responseThirdParty(aInviteType, aRoomID, aFromAgentID, aResponse){
 	if (aInviteType === undefined) aInviteType = document.getElementById("inviteType").innerHTML; // 開發過渡期使用,之後會修掉
 	if (aRoomID === undefined) aRoomID = document.getElementById("invitedRoomID").innerHTML; // 開發過渡期使用,之後會修掉
 	if (aFromAgentID === undefined) aFromAgentID = document.getElementById("fromAgentID").innerHTML; // 開發過渡期使用,之後會修掉
-	var userdata = JSON.parse( $('#Accept')[0].userdata );
-	var text = $('#Accept')[0].text;
+
+	var userdata;
+	var text;
+	if ("accept" == aResponse){
+		userdata = JSON.parse( $('#Accept')[0].userdata );
+		text = $('#Accept')[0].text;
+	}else if ("reject" == aResponse) {
+		userdata = JSON.parse( '{}' );
+		text = "";
+	}
+	
 //	alert("******* text: " + text);
 	
 	var responseThirdPartyMsg = {
