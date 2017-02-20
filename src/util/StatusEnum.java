@@ -12,4 +12,5 @@ public enum StatusEnum {
 	public String getValue() {
 		return this.value;
 	}
+	
 }

@@ -1,6 +1,16 @@
 package filter;
 
+import java.io.BufferedReader;
 import java.io.File;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.io.OutputStream;
+import java.net.HttpURLConnection;
+import java.net.MalformedURLException;
+import java.net.URL;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 import javax.servlet.ServletContext;
 import javax.servlet.ServletContextEvent;
@@ -8,7 +18,14 @@ import javax.servlet.ServletContextListener;
 import javax.servlet.annotation.WebListener;
  
 
+
+
+
+
 import org.apache.log4j.PropertyConfigurator;
+
+import com.Info360.bean.Cfg_AgentStatus;
+import com.Info360.service.MaintainService;
 
 import util.Util;
  
@@ -32,7 +49,23 @@ public class SystemListener implements ServletContextListener {
         //Set in WebSocket
         Util.setMaxRingTime(maxRingTime);
         Util.setAfterCallStatus(afterCallStatus);
-        
+        Cfg_AgentStatus agentstatus = new Cfg_AgentStatus();
+        MaintainService maintainservice = new MaintainService();		
+		List<Cfg_AgentStatus> agentstatuslist = maintainservice.Select_cfg_agentstatus(agentstatus);
+		Map<String, Map<String, String>> agentstatusmap = new HashMap<String, Map<String, String>>();
+		 for(int a = 0; a < agentstatuslist.size(); a++){
+			 if( agentstatuslist.get(a).getMediatypeid().equals("2")){
+				 Map<String, String> agentstatusmapinfo = new HashMap<String, String>();
+				 agentstatusmapinfo.put("statusname", agentstatuslist.get(a).getStatusname());
+				 agentstatusmapinfo.put("description", agentstatuslist.get(a).getDescription());
+				 agentstatusmap.put(String.valueOf(agentstatuslist.get(a).getDbid()), agentstatusmapinfo);
+			 }
+		 }
+		 Util.setAgentStatus(agentstatusmap);
+		 
+//		 System.out.println("agentstatusmap: "+agentstatusmap);
+		 
+//		 System.out.println("agentstatusmap: "+Util.getAgentStatus());
 //        System.out.println("MaxRingTime: "+Util.getMaxRingTime());
 //        System.out.println("AfterCallStatus: "+Util.getAfterCallStatus());
     }

@@ -34,21 +34,7 @@
 		<servlet-name>ClientServlet</servlet-name>
 		<url-pattern>/ClientServlet</url-pattern>
 	</servlet-mapping>
-
-	<servlet>
-		<servlet-name>Jersey Web Application</servlet-name>
-		<servlet-class>com.sun.jersey.spi.container.servlet.ServletContainer</servlet-class>
-		<init-param>
-			<param-name>com.sun.jersey.config.property.packages</param-name>
-			<param-value>restful.servlet</param-value>
-		</init-param>
-		<load-on-startup>1</load-on-startup>
-	</servlet>
-	<servlet-mapping>
-		<servlet-name>Jersey Web Application</servlet-name>
-		<url-pattern>/RESTful/*</url-pattern>
-	</servlet-mapping>
-
+	
 	<!-- 	Log4j configuration -->
 	<context-param>
 		<param-name>log4j-config-location</param-name>
@@ -72,5 +58,21 @@
   	<listener>
 		<listener-class>filter.SystemListener</listener-class>
 	</listener>
+
+	<servlet>
+		<servlet-name>Jersey Web Application</servlet-name>
+		<servlet-class>com.sun.jersey.spi.container.servlet.ServletContainer</servlet-class>
+		<init-param>
+			<param-name>com.sun.jersey.config.property.packages</param-name>
+			<param-value>restful.servlet</param-value>
+		</init-param>
+		<load-on-startup>1</load-on-startup>
+	</servlet>
+	<servlet-mapping>
+		<servlet-name>Jersey Web Application</servlet-name>
+		<url-pattern>/RESTful/*</url-pattern>
+	</servlet-mapping>
+
+	
 
 </web-app>
