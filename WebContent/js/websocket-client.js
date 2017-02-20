@@ -120,6 +120,7 @@ function Login() {
 					
 				// 收到拒絕交談指令
 				} else if ("RejectEvent" == obj.Event) {
+					alert("Agent reject");
 					switchStatus(StatusEnum.FIND_AGENT);
 					findingAgent();
 					// 控制前端傳值

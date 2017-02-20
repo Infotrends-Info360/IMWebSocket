@@ -529,6 +529,19 @@ function AcceptEventInit() {
 		memberListToJoin.push(mem1);
 		memberListToJoin.push(mem2);
 		addRoomForMany("none", memberListToJoin); // "none"是一個keyword, 會影響websocket server的邏輯判斷處理
+		
+		// 將此clientID從waittingClientIDList_g中去除
+		var index_remove;
+		for (var index in waittingClientIDList_g) {
+			clientIDJson = waittingClientIDList_g[index];
+			var clientID = clientIDJson.clientID;
+			if (currClientID == clientID){
+				index_remove = index;
+			}
+//			console.log("clietIDJson.clientID: " + clientIDJson.clientID);
+		}
+		waittingClientIDList_g.splice(index_remove,1);
+//		console.log("waittingClientIDList_g.length: " + waittingClientIDList_g.length);
 				
 	}
 	
@@ -581,6 +594,20 @@ function RejectEvent() {
 		};
 		// 發送消息
 		parent.ws_g.send(JSON.stringify(msg));		
+		
+		// 將此clientID從waittingClientIDList_g中去除
+		var index_remove;
+		for (var index in waittingClientIDList_g) {
+			clientIDJson = waittingClientIDList_g[index];
+			var clientID = clientIDJson.clientID;
+			if (currClientID == clientID){
+				index_remove = index;
+			}
+//			console.log("clietIDJson.clientID: " + clientIDJson.clientID);
+		}
+		waittingClientIDList_g.splice(index_remove,1);
+//		console.log("waittingClientIDList_g.length: " + waittingClientIDList_g.length);		
+		
 	}
 	
 	// 將此請求從request list中去除掉
@@ -589,7 +616,7 @@ function RejectEvent() {
 	$('#' + userID).remove(); // <tr>的id
 	
 	// 開啟ready功能:
-	switchStatus(StatusEnum.READY); // 拒絕之後就持續著READY狀態
+//	switchStatus(StatusEnum.READY); // 拒絕之後就持續著READY狀態
 	
 	// 向websocket送出拒絕交談指令
 
