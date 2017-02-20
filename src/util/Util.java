@@ -15,17 +15,17 @@ public class Util {
 	public static String getSdfDateTimeFormat(){
 		return Attr.sdfDateTimeFormat;
 	}
-	public static String getMaxRingTime(){
-		return Attr.MaxRingTime;
+	public static String getMaxRingTime() {
+		return Attr.SystemParam.get("MaxRingTime");
 	}
-	public static void setMaxRingTime(String maxRingTime) {
-		Attr.MaxRingTime = maxRingTime;
+	public static String getAfterCallStatus() {
+		return Attr.SystemParam.get("AfterCallStatus");
 	}
-	public static String getAfterCallStatus(){
-		return Attr.AfterCallStatus;
+	public static Map<String, String> getSystemParam() {
+		return Attr.SystemParam;
 	}
-	public static void setAfterCallStatus(String afterCallStatus) {
-		Attr.AfterCallStatus = afterCallStatus;
+	public static void setSystemParam(Map<String, String> systemParam) {
+		Attr.SystemParam = systemParam;
 	}
 	public static Map<String, Map<String, String>> getAgentStatus() {
 		return Attr.AgentStatus;
@@ -50,8 +50,7 @@ public class Util {
 		private static final String sdfDateFormat = "yyyy-MM-dd";
 		private static final String sdfTimeFormat = "HH:mm:ss";
 		private static final String sdfDateTimeFormat = "yyyy-MM-dd HH:mm:ss";
-		private static String MaxRingTime = null;
-		private static String AfterCallStatus = null;
+		private static Map<String,String> SystemParam = null;
 		private static Map<String, Map<String, String>> AgentStatus = null;
 		private static Map<String, Map<String, String>> AgentReason = null;
 	}

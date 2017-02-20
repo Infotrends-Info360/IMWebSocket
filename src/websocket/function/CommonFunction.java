@@ -72,6 +72,8 @@ public class CommonFunction {
 		JSONObject obj = new JSONObject(user);
 		String userId = java.util.UUID.randomUUID().toString();
 		String username = obj.getString("UserName");
+		String MaxCount = obj.getString("MaxCount"); //新增 MaxCount
+		System.out.println("MaxCount: "+MaxCount);
 		String ACtype = obj.getString("ACtype");
 		String channel = obj.getString("channel");
 		WebSocketUserPool.addUser(username, userId, aConn, ACtype); // 在此刻,已將user conn加入倒Pool中

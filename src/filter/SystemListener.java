@@ -47,8 +47,10 @@ public class SystemListener implements ServletContextListener {
 //        System.out.println("AfterCallStatus: "+afterCallStatus);
         
         //Set in WebSocket
-        Util.setMaxRingTime(maxRingTime);
-        Util.setAfterCallStatus(afterCallStatus);
+        Map<String, String> systemParam = new HashMap<String, String>();
+        systemParam.put("MaxRingTime", maxRingTime);
+        systemParam.put("AfterCallStatus", afterCallStatus);
+        Util.setSystemParam(systemParam);
         Cfg_AgentStatus agentstatus = new Cfg_AgentStatus();
         MaintainService maintainservice = new MaintainService();		
 		List<Cfg_AgentStatus> agentstatuslist = maintainservice.Select_cfg_agentstatus(agentstatus);
