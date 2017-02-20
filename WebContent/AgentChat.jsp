@@ -149,12 +149,12 @@ td {
             	<div class="col-xs-12 col-sm-12 col-md-12 col-lg-12 panel panel-default center nopadding">
 <!-- <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12 panel panel-default center nopadding"> -->
 <!-- <div class="pre-scrollable col-xs-12 col-sm-12 col-md-12 col-lg-12 panel-body" id="userdata" style="height: 80px;"> -->
-	                <div class="row col-xs-12 col-sm-12 col-md-12 col-lg-12 panel-heading center">
+	                <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12 panel-heading center">
 	                    <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12" style="padding-left: 10px;">Request List: </div>
 	                </div>
-	                <div class="row col-xs-12 col-sm-12 col-md-12 col-lg-12 panel-body center" style="height: 200px;">
-						<div class="pre-scrollable row col-xs-12 col-sm-12 col-md-12 col-lg-12 panel-body center" style="height: 70%;">
-							<table class="row col-xs-12 col-sm-12 col-md-12 col-lg-12 table table-hover nomargin" id="requestTable">
+	                <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12 panel-body center" style="height: 200px;">
+						<div class="pre-scrollable row col-xs-12 col-sm-12 col-md-12 col-lg-12 panel panel-default center" style="height: 70%;">
+							<table class="col-xs-12 col-sm-12 col-md-12 col-lg-12 table table-hover nomargin" id="requestTable">
 								<thead>
 									<tr>
 										<th>種類</th>
@@ -265,13 +265,14 @@ td {
                 <div class="row col-xs-12 col-sm-12 col-md-12 col-lg-12 panel-heading center">
                     <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12" style="padding-left: 10px;">Event: </div>
                 </div>
-                <div class="row col-xs-12 col-sm-12 col-md-12 col-lg-12 panel-body center">
+                <div class="row col-xs-12 col-sm-12 col-md-12 col-lg-12 panel-body center" style="height: 150px;">
 	                <div>
 	                    <button id="ClearLog" type="button" class="btn btn-primary">Clear</button>
 	                </div>
-	                <div>
+	                <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12 spacer10"></div>
+	                <div class="pre-scrollable row col-xs-12 col-sm-12 col-md-12 col-lg-12 panel panel-default center" style="height: 70%;">
 	                    <div id="text"></div>
-	                </div>
+	                </div>    
 				</div>            
                 
                 <!-- 私訊 -->
