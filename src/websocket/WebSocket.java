@@ -199,6 +199,9 @@ public class WebSocket extends WebSocketServer {
 //		}
 		if (roomids != null){
 			for (String roomid: roomids){
+				System.out.println("***** get roomid: " + roomid);
+				System.out.println(WebSocketUserPool.getUserNameByKey(conn));
+				System.out.println(WebSocketUserPool.getUserID(conn));
 				//使用每個roomid,並找出相對應的room,再將其中的conn remove掉
 				WebSocketRoomPool.removeUserinroom(roomid, conn);
 			}			

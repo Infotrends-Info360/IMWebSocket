@@ -7,6 +7,7 @@ var status_g;
 var roomInfoMap_g = new Map();
 var agentIDMap_g = new Map();
 var waittingClientIDList_g = [];
+var waittingAgentIDList_g = [];
 //var count = 0;
 //var RoomIDList = []; // 接通後產生Group的ID List
 //var RoomIDLinkedList = new SinglyList(); // 接通後產生Group的ID Linked List
@@ -258,12 +259,18 @@ function Login() {
 					
 				} else if ("inviteAgentThirdParty" == obj.Event){
 					console.log("received inviteAgentThirdParty event");
+					
 					var tmpRoomID = obj.roomID;
 					var fromAgentID = obj.fromAgentID; 
 					var invitedAgentID = obj.invitedAgentID;
 					var inviteType = obj.inviteType;
 					var userdata = JSON.stringify( obj.userdata );
 					var text = obj.text;
+
+					waittingAgentIDList_g.push( new function(){
+						this.agentID = fromAgentID
+					});
+					
 //					alert("inviteAgentThirdParty - obj.text: " + obj.text);
 //					alert("inviteAgentThirdParty - obj.text: " + JSON.stringify( obj.text ));
 
@@ -415,6 +422,8 @@ function Login() {
 					}
 					console.log("refreshAgentList - agentIDMap_g: " + agentIDMap_g);
 					updateAgentIDList();
+				} else if ("agentLeftThirdParty" == obj.Event){
+					alert("agentLeftThirdParty - agent left");
 				}
 			// 非指令訊息
 			// (Billy哥部分)
@@ -473,6 +482,7 @@ function Logoutaction() {
 		UserName : parent.UserName_g,
 		channel : "chat",
 		waittingClientIDList : waittingClientIDList_g,
+		waittingAgentIDList : waittingAgentIDList_g,
 		date : now.getHours() + ":" + now.getMinutes() + ":" + now.getSeconds()
 	};
 
@@ -483,7 +493,7 @@ function Logoutaction() {
 	status_g = StatusEnum.LOGOUT;
 	switchStatus(status_g);	
 	
-	
+	alert(parent.UserID_g);
 //	// 關閉websocket
 //	parent.ws_g.close();
 }
@@ -616,9 +626,9 @@ function RejectEvent() {
 	$('#' + userID).remove(); // <tr>的id
 	
 	// 開啟ready功能:
-//	switchStatus(StatusEnum.READY); // 拒絕之後就持續著READY狀態
+	switchStatus(StatusEnum.READY); // 拒絕之後就持續著READY狀態
 	
-	// 向websocket送出拒絕交談指令
+	// 向websocket送出拒絕交談指令  
 
 }
 

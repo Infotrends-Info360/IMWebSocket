@@ -136,7 +136,7 @@ public class CommonFunction {
 		// Client
 		// 若已經有Agent正在決定是否Accept此通通話, 若Client先離開了, 則告知此Agent此Client已經離開, 不用再等了
 //		String waittingAgent = jsonIn.get("waittingAgent").getAsBoolean();
-		if (jsonIn.get("waittingAgent") != null){
+		if ( WebSocketTypePool.isClient(aConn) && jsonIn.get("waittingAgent") != null){
 			System.out.println("userExit() - waittingAgent: " + jsonIn.get("waittingAgent").getAsBoolean());
 			if (jsonIn.get("waittingAgent").getAsBoolean()){
 				String waittingAgentID = jsonIn.get("waittingAgentID").getAsString();
@@ -153,28 +153,45 @@ public class CommonFunction {
 		
 		// Agent
 //		waittingClientIDList
-		if (jsonIn.get("waittingClientIDList") != null){
-			System.out.println("userExit() - waittingClientIDList got here");
-			System.out.println("userExit() - " + jsonIn.get("waittingClientIDList").toString());
-			JsonArray clientIDJsonAry = jsonIn.getAsJsonArray("waittingClientIDList");
-//			String clientIDStr = jsonIn.get("waittingClientIDList").toString();
-//			String[] waittingClientIDList = clientIDStr.substring(1, clientIDStr.length()-1).split(",");
-//			System.out.println("userExit() - " + waittingClientIDList.length);
-			System.out.println("userExit() - clientIDJsonAry: " + clientIDJsonAry);
-			for(final JsonElement clientID_je : clientIDJsonAry) {
-			    String clientID = clientID_je.getAsJsonObject().get("clientID").getAsString();
-			    WebSocket clientConn = WebSocketUserPool.getWebSocketByUser(clientID);
-			    System.out.println("userExit() - clientID: " + clientID);
-			    jsonIn.addProperty("Event", "agentLeft");
-				WebSocketUserPool.sendMessageToUser(clientConn, jsonIn.toString());
-			    
+		if (WebSocketTypePool.isAgent(aConn)){
+			if (jsonIn.get("waittingClientIDList") != null){
+				System.out.println("userExit() - waittingClientIDList got here");
+				System.out.println("userExit() - " + jsonIn.get("waittingClientIDList").toString());
+				JsonArray clientIDJsonAry = jsonIn.getAsJsonArray("waittingClientIDList");
+//				String clientIDStr = jsonIn.get("waittingClientIDList").toString();
+//				String[] waittingClientIDList = clientIDStr.substring(1, clientIDStr.length()-1).split(",");
+//				System.out.println("userExit() - " + waittingClientIDList.length);
+				System.out.println("userExit() - clientIDJsonAry: " + clientIDJsonAry);
+				for(final JsonElement clientID_je : clientIDJsonAry) {
+				    String clientID = clientID_je.getAsJsonObject().get("clientID").getAsString();
+				    WebSocket clientConn = WebSocketUserPool.getWebSocketByUser(clientID);
+				    System.out.println("userExit() - clientID: " + clientID);
+				    jsonIn.addProperty("Event", "agentLeft");
+					WebSocketUserPool.sendMessageToUser(clientConn, jsonIn.toString());
+				    
+				}				
+			}
+			
+			if (jsonIn.get("waittingAgentIDList") != null){
+				JsonArray agentIDJsonAry = jsonIn.getAsJsonArray("waittingAgentIDList");
+//				String clientIDStr = jsonIn.get("waittingClientIDList").toString();
+//				String[] waittingClientIDList = clientIDStr.substring(1, clientIDStr.length()-1).split(",");
+//				System.out.println("userExit() - " + waittingClientIDList.length);
+				System.out.println("userExit() - agentIDJsonAry: " + agentIDJsonAry);
+				for(final JsonElement agentID_je : agentIDJsonAry) {
+				    String agentID = agentID_je.getAsJsonObject().get("agentID").getAsString();
+				    WebSocket agentConn = WebSocketUserPool.getWebSocketByUser(agentID);
+				    System.out.println("userExit() - agentID: " + agentID);
+				    jsonIn.addProperty("Event", "agentLeftThirdParty");
+					WebSocketUserPool.sendMessageToUser(agentConn, jsonIn.toString());
+				}
 			}
 //			for(String clientID: waittingClientIDList){
 //				System.out.println("userExit() - " + clientID);
 //			}
 		}
 		
-		
+		System.out.println("before close: " + WebSocketUserPool.getUserID(aConn));
 		// 最後關閉連線
 		aConn.close();
 //		WebSocketPool.removeUserID(conn);

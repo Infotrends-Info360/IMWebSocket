@@ -107,6 +107,7 @@ public class AgentFunction {
 			JSONObject sendjson02 = new JSONObject();
 			sendjson02.put("Event", "refreshAgentList");
 			sendjson02.put("agentIDList", agentIDList);
+			if (tmpConn.isClosed() || tmpConn.isClosing()) continue;
 			WebSocketUserPool.sendMessageToUser(tmpConn, sendjson02.toString());
 		}
 	}
