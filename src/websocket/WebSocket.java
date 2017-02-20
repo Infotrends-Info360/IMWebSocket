@@ -46,8 +46,8 @@ public class WebSocket extends WebSocketServer {
 		//userLeave(conn);
 //		System.out.println("Someone unlink in Socket conn:" + conn);
 //		System.out.println("conn: " + conn + " is disconnected. !!!!!");
-		System.out.println(WebSocketUserPool.getACTypeByKey(conn) + " conn: " + conn + " is disconnected. (onClose)");				
-
+		System.out.println("onClose(): " + WebSocketUserPool.getACTypeByKey(conn) + " conn: " + conn + " is disconnected. (onClose)");				
+		System.out.println("onClose(): " + WebSocketUserPool.getUserID(conn));
 		// 將Heartbeat功能移轉到這裡:
 		inputInteractionLog(conn,reason);
 		clearUserData(conn); // 包含removeUser, removerUserinTYPE, removeUserinroom

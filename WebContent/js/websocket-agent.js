@@ -430,20 +430,10 @@ function Login() {
 			// (Billy哥部分)
 			}  else if ("{" != e.data.substring(0, 1)) {
 				console.log(e);
-//				alert("get here1");
-//				alert("parent.UserName_g: " + parent.UserName_g);
 				// 非指令訊息
 				if (e.data.indexOf("Offline") > 0 && e.data.indexOf(parent.UserName_g) > 0) {
-//					$("#statusButton button.status-ready").css("display", "none");
-//					$("#statusButton button.status-notready")
-//							.css("display", "inline-block");
-//
-//					$("#navNickName").html("已登出");
-//					window.location.href = 'console';
-					
-//					alert("get here2");
 					// 關閉websocket
-					parent.ws_g.close();
+					parent.ws_g.close(); // 在這邊關閉websocket,要特別注意會不會牽連到其他人!
 				}
 			} else {
 				document.getElementById("text").innerHTML += e.data + "<br>";
@@ -494,7 +484,6 @@ function Logoutaction() {
 	status_g = StatusEnum.LOGOUT;
 	switchStatus(status_g);	
 	
-	alert(parent.UserID_g);
 //	// 關閉websocket
 //	parent.ws_g.close();
 }

@@ -127,7 +127,7 @@ public class CommonFunction {
 		//Billy哥部分前端需求:
 		String username = jsonIn.get("UserName").getAsString();
 		String joinMsg = "[Server] - " + username + " Offline";
-		WebSocketUserPool.sendMessage(joinMsg);
+		WebSocketUserPool.sendMessageToUser(aConn, joinMsg); // 只須原登出Agent收到此訊息即可
 		
 		// 關係Heartbeat
 		Timer timer = WebSocketUserPool.getUserHeartbeatTimerByKey(aConn);
@@ -156,14 +156,14 @@ public class CommonFunction {
 		// Agent
 //		waittingClientIDList
 		if (WebSocketTypePool.isAgent(aConn)){
-			if (jsonIn.get("waittingClientIDList") != null){
+			if (!"[]".equals(jsonIn.get("waittingClientIDList"))){
 				System.out.println("userExit() - waittingClientIDList got here");
 				System.out.println("userExit() - " + jsonIn.get("waittingClientIDList").toString());
 				JsonArray clientIDJsonAry = jsonIn.getAsJsonArray("waittingClientIDList");
 //				String clientIDStr = jsonIn.get("waittingClientIDList").toString();
 //				String[] waittingClientIDList = clientIDStr.substring(1, clientIDStr.length()-1).split(",");
 //				System.out.println("userExit() - " + waittingClientIDList.length);
-				System.out.println("userExit() - clientIDJsonAry: " + clientIDJsonAry);
+//				System.out.println("userExit() - clientIDJsonAry: " + clientIDJsonAry);
 				for(final JsonElement clientID_je : clientIDJsonAry) {
 				    String clientID = clientID_je.getAsJsonObject().get("clientID").getAsString();
 				    WebSocket clientConn = WebSocketUserPool.getWebSocketByUser(clientID);
@@ -174,7 +174,9 @@ public class CommonFunction {
 				}				
 			}
 			
-			if (jsonIn.get("waittingAgentIDList") != null){
+			if (!"[]".equals(jsonIn.get("waittingAgentIDList").toString())){
+				System.out.println("userExit() - waittingAgentIDList got here");
+				System.out.println("userExit() - " + jsonIn.get("waittingAgentIDList").toString());
 				JsonArray agentIDJsonAry = jsonIn.getAsJsonArray("waittingAgentIDList");
 //				String clientIDStr = jsonIn.get("waittingClientIDList").toString();
 //				String[] waittingClientIDList = clientIDStr.substring(1, clientIDStr.length()-1).split(",");
