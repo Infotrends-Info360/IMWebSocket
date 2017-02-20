@@ -228,6 +228,9 @@ function Login() {
 						$('#Accept')[0].reqType = 'Client';
 						$('#Accept')[0].userID = this.getAttribute("userID");
 						$('#Accept')[0].userdata = this.getAttribute("userdata");
+						$('#Reject')[0].reqType = 'Client';
+						$('#Reject')[0].userID = this.getAttribute("userID");
+						$('#Reject')[0].userdata = this.getAttribute("userdata");
 					}; // 設定 AcceptEventInit
 				    				    
 					
@@ -533,24 +536,51 @@ function AcceptEventInit() {
 
 // 拒絕交談
 function RejectEvent() {
-	var Eventfrom = document.getElementById('Eventfrom').value;
+	console.log("AcceptEventInit(): ");
+	var reqType = $('#Accept')[0].reqType;
+	if (reqType == 'thirdParty' || reqType == 'transfer'){
+		//here
+		var roomID = $('#Accept')[0].roomID;
+		var fromAgentID = $('#Accept')[0].userID;
+		responseThirdParty(reqType, roomID, fromAgentID, 'accept');
+	// Client to Agent 請求	
+	}else{
+		// 一次將Agent與Client加入到room中
+//		var currClientID = $('#Accept')[0].userID;
+////		var userdata = $('#Accept')[0].userdata;
+//			// 在此使用新的方法,將一個list的成員都加入到同一群組中
+//		var memberListToJoin = [];
+//		var mem1 = new myRoomMemberJsonObj(currClientID);
+//		var mem2 = new myRoomMemberJsonObj(parent.UserID_g);
+//		memberListToJoin.push(mem1);
+//		memberListToJoin.push(mem2);
+//		addRoomForMany("none", memberListToJoin); // "none"是一個keyword, 會影響websocket server的邏輯判斷處理
+		var currClientID = $('#Accept')[0].userID;
+		var now = new Date();
+		var msg = {
+			type : "RejectEvent",
+			ACtype : "Agent",
+			id : parent.UserID_g,
+			UserName : parent.UserName_g,
+			sendto : currClientID,
+			channel : "chat",
+			// Event: "RejectEvent",
+			date : now.getHours() + ":" + now.getMinutes() + ":" + now.getSeconds()
+		};
+		// 發送消息
+		parent.ws_g.send(JSON.stringify(msg));		
+	}
+	
+	// 將此請求從request list中去除掉
+	var userID = $('#Accept')[0].userID;
+	console.log("userID: " + userID);
+	$('#' + userID).remove(); // <tr>的id
+	
+	// 開啟ready功能:
+	switchStatus(StatusEnum.READY); // 拒絕之後就持續著READY狀態
+	
 	// 向websocket送出拒絕交談指令
-	var now = new Date();
-	var msg = {
-		type : "RejectEvent",
-		ACtype : "Agent",
-		id : parent.UserID_g,
-		UserName : parent.UserName_g,
-		sendto : Eventfrom,
-		channel : "chat",
-		// Event: "RejectEvent",
-		date : now.getHours() + ":" + now.getMinutes() + ":" + now.getSeconds()
-	};
-	// 發送消息
-	parent.ws_g.send(JSON.stringify(msg));
 
-	document.getElementById("AcceptEvent").disabled = true;
-	document.getElementById("RejectEvent").disabled = true;
 }
 
 // 關閉交談
@@ -1050,7 +1080,7 @@ function updateRoomInfo(aRoomInfo){
 	$('#sendToRoom')[0].roomID = aRoomInfo.roomID;
 	$('#leaveRoom')[0].roomID = aRoomInfo.roomID;
 	// 開啟按鈕
-	alert("!aRoomInfo.close: " + !aRoomInfo.close);
+//	alert("!aRoomInfo.close: " + !aRoomInfo.close);
 	if (!aRoomInfo.close){
 		$('#leaveRoom')[0].disabled = false;
 		$('#sendToRoom')[0].disabled = false;
@@ -1058,7 +1088,6 @@ function updateRoomInfo(aRoomInfo){
 		$('#inviteThirdParty')[0].disabled = false;		
 		$('#message')[0].disabled = false;		
 	}else{
-		alert("關畫面了");
 		$('#leaveRoom')[0].disabled = true;
 		$('#sendToRoom')[0].disabled = true;
 		$('#inviteTransfer')[0].disabled = true;

@@ -118,8 +118,8 @@ function Login() {
 				} else if ("RejectEvent" == obj.Event) {
 					findingAgent();
 					// 控制前端傳值
-					document.getElementById("Event").value = obj.Event;
-					document.getElementById("Eventfrom").value = obj.from;
+//					document.getElementById("Event").value = obj.Event;
+//					document.getElementById("Eventfrom").value = obj.from;
 					// 收到尋找Agent的指令
 				} else if ("findAgent" == obj.Event) {
 

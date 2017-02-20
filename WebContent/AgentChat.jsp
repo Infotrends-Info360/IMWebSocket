@@ -168,7 +168,7 @@ hr {
 		                        <div class="form-group">
 		                        	<div class="col-xs-6 col-sm-6 col-md-6 col-lg-6">
 		        	                    <button class="btn btn-primary pull-left marginDefault" id="Accept" style="width:100px" onclick="AcceptEventInit();" disabled>Accept</button>
-		            	                <button class="btn btn-primary pull-left marginDefault" id="Reject" style="width:100px" disabled>Reject</button>
+		            	                <button class="btn btn-primary pull-left marginDefault" id="Reject" style="width:100px" onclick="RejectEvent()" disabled>Reject</button>
 		                        	</div>
 		                        	<div class="col-xs-6 col-sm-6 col-md-6 col-lg-6">
 <!-- 		    	                        <button class="btn btn-primary pull-right marginDefault wrapTextBtn" id="RejectThirdParty" style="width:100px" disabled>三方/轉接Reject</button>                        	 -->
