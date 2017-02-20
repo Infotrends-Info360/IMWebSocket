@@ -58,5 +58,19 @@
 	<listener>
 		<listener-class>filter.ContextListener</listener-class>
 	</listener>
+	
+	<!-- 	System configuration -->
+	<context-param>
+		<param-name>MaxRingTime</param-name>
+		<param-value>12</param-value>
+	</context-param>
+	<context-param>
+		<param-name>AfterCallStatus</param-name>
+		<param-value>4</param-value>
+	</context-param>
+  	<!-- 	System configuration -->
+  	<listener>
+		<listener-class>filter.SystemListener</listener-class>
+	</listener>
 
 </web-app>
