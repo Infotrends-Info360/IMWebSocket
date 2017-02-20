@@ -81,6 +81,7 @@ function Login() {
 				type : "login",
 				// id: parent.UserID_g,
 				UserName : parent.UserName_g,
+				MaxCount: '3',
 				ACtype : "Agent",
 				channel : "chat",
 				date : now.getHours() + ":" + now.getMinutes() + ":"

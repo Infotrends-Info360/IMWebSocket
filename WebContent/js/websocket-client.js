@@ -72,6 +72,7 @@ function Login() {
 			var msg = {
 				type : "login",
 				UserName : UserName_g,
+				MaxCount: '0',
 				ACtype : "Client",
 				channel : "chat",
 				date : now.getHours() + ":" + now.getMinutes() + ":"
