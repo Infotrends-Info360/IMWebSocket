@@ -114,13 +114,17 @@ function Login() {
 					document.getElementById("RoomID").innerHTML = RoomID_g;
 					document.getElementById("Event").innerHTML = obj.Event;
 					document.getElementById("Status").innerHTML = StatusEnum.JOIN_ROOM;
-					// 收到拒絕交談指令
+					
+					// 將focus移到寄送訊息欄
+					$('#message').focus();
+					
+				// 收到拒絕交談指令
 				} else if ("RejectEvent" == obj.Event) {
 					findingAgent();
 					// 控制前端傳值
 //					document.getElementById("Event").value = obj.Event;
 //					document.getElementById("Eventfrom").value = obj.from;
-					// 收到尋找Agent的指令
+				// 收到尋找Agent的指令
 				} else if ("findAgent" == obj.Event) {
 
 					// 若仍未找到Agent, 則再找

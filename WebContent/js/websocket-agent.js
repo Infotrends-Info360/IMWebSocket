@@ -1052,6 +1052,9 @@ function updateRoomIDList(aNewRoomID){
 	// 主要trigger onchange事件
 	$("#roomList").val(aNewRoomID).change();
 	
+	// 將focus移到寄送訊息欄
+	$('#message').focus();
+	
 }
 
 function updateAgentIDList(){
@@ -1077,12 +1080,15 @@ function updateAgentIDList(){
 	$('#agentList').unbind('change').change(function() { 
 		var tmpAgentID = $('#agentList').val();
 		$('#privateMsg')[0].agentID = tmpAgentID;
+		// 將focus移到寄送訊息欄
+		$('#A2AContent').focus();
 //		alert("$('#privateMsg')[0].agentID: \n" + $('#privateMsg')[0].agentID);
 //		updateRoomInfo(roomInfoMap_g.get(tmpRoomID));
 	});
 		
 	// 主要trigger onchange事件
 //	$("#agentList").val(aNewAgentID).change();
+	
 	
 }
 
