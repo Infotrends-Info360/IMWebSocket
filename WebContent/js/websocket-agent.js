@@ -2,13 +2,12 @@ var ws_g; // websocket
 var UserName_g; // 使用者名稱全域變數
 var UserID_g; // 使用者ID全域變數
 var RoomID_g; // 此為第一個加入的RoomID, 僅為開發過程使用, 不符合目前架構, 為過度開發期間保留的全域變數
-var ClientID_g; // 現在準備要服務的Client的ID 
-var ClientName_g; // 現在準備要服務的Client的名稱
 var isonline_g = false; // 判斷是否上線的開關
 var status_g;
 var roomInfoMap_g = new Map();
 var agentIDMap_g = new Map();
-var count = 0;
+var waittingClientIDMap = new Map();
+//var count = 0;
 //var RoomIDList = []; // 接通後產生Group的ID List
 //var RoomIDLinkedList = new SinglyList(); // 接通後產生Group的ID Linked List
 
@@ -99,8 +98,6 @@ function Login() {
 				var obj = jQuery.parseJSON(e.data);
 				// 接收到Client邀請chat的event
 				if ("findAgentEvent" == obj.Event) {
-//					ClientName_g = obj.fromName;
-//					ClientID_g = obj.from;
 //					document.getElementById("AcceptEvent").disabled = false;
 //					document.getElementById("RejectEvent").disabled = false;
 //					document.getElementById("Eventfrom").value = obj.from;
@@ -191,8 +188,6 @@ function Login() {
 					// 在這邊取代原本findAgentEvent事件所做的事情
 					console.log("obj.clientName: " + obj.clientName);
 					console.log("obj.clientID: " + obj.clientID);
-					ClientName_g = obj.clientName;
-					ClientID_g = obj.clientID;
 					
 					// 在這邊動態增加request list
 				    var tr = document.createElement('tr');   
@@ -387,8 +382,6 @@ function Login() {
 					// 在這邊進行一連串的善後處理
 					alert("Client left : " + obj.from);
 					
-					ClientName_g = "";
-					ClientID_g = "";
 					document.getElementById("AcceptEvent").disabled = true;
 					document.getElementById("RejectEvent").disabled = true;
 					document.getElementById("Eventfrom").value = obj.from;
