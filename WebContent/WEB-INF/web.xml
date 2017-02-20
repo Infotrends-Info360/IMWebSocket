@@ -34,6 +34,30 @@
 		<servlet-name>ClientServlet</servlet-name>
 		<url-pattern>/ClientServlet</url-pattern>
 	</servlet-mapping>
+	
+	<!-- 	Log4j configuration -->
+	<context-param>
+		<param-name>log4j-config-location</param-name>
+		<param-value>WEB-INF/log4j.properties</param-value>
+	</context-param>
+	<!-- 	Log4j configuration -->
+	<listener>
+		<listener-class>filter.ContextListener</listener-class>
+	</listener>
+	
+	<!-- 	System configuration -->
+	<context-param>
+		<param-name>MaxRingTime</param-name>
+		<param-value>12</param-value>
+	</context-param>
+	<context-param>
+		<param-name>AfterCallStatus</param-name>
+		<param-value>4</param-value>
+	</context-param>
+  	<!-- 	System configuration -->
+  	<listener>
+		<listener-class>filter.SystemListener</listener-class>
+	</listener>
 
 	<servlet>
 		<servlet-name>Jersey Web Application</servlet-name>
@@ -49,14 +73,6 @@
 		<url-pattern>/RESTful/*</url-pattern>
 	</servlet-mapping>
 
-	<!-- 	Log4j configuration -->
-	<context-param>
-		<param-name>log4j-config-location</param-name>
-		<param-value>WEB-INF/log4j.properties</param-value>
-	</context-param>
-	<!-- 	Log4j configuration -->
-	<listener>
-		<listener-class>filter.ContextListener</listener-class>
-	</listener>
+	
 
 </web-app>
