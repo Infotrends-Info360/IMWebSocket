@@ -271,7 +271,7 @@ public class WebSocket extends WebSocketServer {
 //		fromAgentName : UserName
 	}
 
-	private void responseThirdParty(String message, org.java_websocket.WebSocket conn) {
+	private void responseThirdParty(String message, org.java_websocket.WebSocket aConn) {
 		// TODO Auto-generated method stub
 		JSONObject obj = new JSONObject(message);
 		System.out.println("responseThirdParty - obj: " + obj);
@@ -279,7 +279,7 @@ public class WebSocket extends WebSocketServer {
 		String roomID = obj.getString("roomID");
 		String fromAgentID = obj.getString("fromAgentID");
 		String invitedAgentID = obj.getString("invitedAgentID");
-		String invitedAgentName = WebSocketUserPool.getUserNameByKey(conn);
+		String invitedAgentName = WebSocketUserPool.getUserNameByKey(aConn);
 		String response = obj.getString("response");
 		String inviteType = obj.getString("inviteType");
 //		String userdata = obj.getString("userdata");
@@ -290,9 +290,9 @@ public class WebSocket extends WebSocketServer {
 		if ("accept".equals(response)){
 			System.out.println("responseThirdParty() - accept");
 			/** 新增room成員 **/
-			WebSocketRoomPool.addUserInRoom(roomID, invitedAgentName, invitedAgentID, conn);
+			WebSocketRoomPool.addUserInRoom(roomID, invitedAgentName, invitedAgentID, aConn);
 			/** 新增user所加入的room list **/
-			WebSocketUserPool.addUserRoom(roomID, conn);
+			WebSocketUserPool.addUserRoom(roomID, aConn);
 			
 			// 通知更新roomList
 //			CommonFunction.refreshRoomList(conn);				
@@ -313,6 +313,8 @@ public class WebSocket extends WebSocketServer {
 			// 若是屬於轉接的要求,則將原Agent(邀請者)踢出
 			if ("transfer".equals(inviteType)){
 				System.out.println("responseThirdParty() - transfer");
+				// 通知使用者清除前端頁面
+				WebSocketUserPool.sendMessageToUser(WebSocketUserPool.getWebSocketByUser(fromAgentID), obj.toString());
 				WebSocketRoomPool.removeUserinroom(roomID, WebSocketUserPool.getWebSocketByUser(fromAgentID));
 			}
 			

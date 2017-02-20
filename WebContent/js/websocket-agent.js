@@ -302,9 +302,37 @@ function Login() {
 //					document.getElementById("currUsers").innerHTML = obj.roomMembers;
 //					alert("responseThirdParty - " + userdata);
 //					alert("responseThirdParty - " + JSON.stringify( obj.userdata ));
-
+//					alert("responseThirdParty");
+//					alert("obj.fromAgentID: " + obj.fromAgentID);
+//					alert("obj.inviteType: " + obj.inviteType);
+					
+					
 					var userdata = JSON.stringify( obj.userdata );
 					var text = obj.text;
+					var inviteType = obj.inviteType;
+					var fromAgentID = obj.fromAgentID;
+					var roomID = obj.roomID;
+					
+					if ("transfer" == inviteType && fromAgentID == parent.UserID_g){
+						alert("transfer");
+						var roomInfo = roomInfoMap_g.get(obj.roomID);
+						roomInfo.close = true;
+						console.log("roomInfo: " + roomInfo);
+//						console.log("JSON.parse(roomInfo): " + JSON.parse(roomInfo));
+						console.log("JSON.stringify(roomInfo): " + JSON.stringify(roomInfo));
+						// 若為當前頁面,則更新roomInfo
+						var currRoomID = $('#roomList').val();
+						console.log("currRoomID: " + currRoomID);
+						console.log("currRoomID: " + currRoomID);
+						console.log("obj.roomID: " + obj.roomID);
+						
+						if (currRoomID == obj.roomID){
+							alert("matched!");
+							updateRoomInfo(roomInfo);
+						}
+						return;
+					}
+					
 //					alert("responseThirdParty - obj.text: " + obj.text);
 //					alert("responseThirdParty - obj.text: " + JSON.stringify( obj.text ));
 					console.log("userdata: " + userdata);
@@ -328,7 +356,7 @@ function Login() {
 
 				} else if ("privateMsg" == obj.Event){
 //					console.log("onMessage - privateMsg" + obj.UserName + ": " + obj.text + "&#13;&#10");
-//					document.getElementById("chatAgentContentHistory").innerHTML += obj.UserName + ": " + obj.text + "&#13;&#10";
+					document.getElementById("text").innerHTML += obj.UserName + ": " + obj.text + "&#13;&#10" + "<br>";
 					
 				} else if ("removeUserinroom" == obj.Event){
 //					document.getElementById("currUsers").innerHTML = obj.roomMembers;
@@ -606,7 +634,10 @@ function leaveRoom(aRoomID, aUserID) {
 
 //送出私訊
 function send(aSendto,aMessage) {
-	if (aSendto === undefined) aSendto = document.getElementById('sendto').value; 
+	if (aSendto === undefined){ 
+		alert("Please select an agent"); 
+		return;
+	}
 	if (aMessage === undefined) aMessage = document.getElementById('message').value;
 	
 	// 向websocket送出私訊指令
@@ -1019,7 +1050,7 @@ function updateRoomInfo(aRoomInfo){
 	$('#sendToRoom')[0].roomID = aRoomInfo.roomID;
 	$('#leaveRoom')[0].roomID = aRoomInfo.roomID;
 	// 開啟按鈕
-//	alert("!aRoomInfo.close: " + !aRoomInfo.close);
+	alert("!aRoomInfo.close: " + !aRoomInfo.close);
 	if (!aRoomInfo.close){
 		$('#leaveRoom')[0].disabled = false;
 		$('#sendToRoom')[0].disabled = false;
@@ -1027,6 +1058,7 @@ function updateRoomInfo(aRoomInfo){
 		$('#inviteThirdParty')[0].disabled = false;		
 		$('#message')[0].disabled = false;		
 	}else{
+		alert("關畫面了");
 		$('#leaveRoom')[0].disabled = true;
 		$('#sendToRoom')[0].disabled = true;
 		$('#inviteTransfer')[0].disabled = true;

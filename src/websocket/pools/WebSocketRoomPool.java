@@ -101,7 +101,7 @@ public class WebSocketRoomPool{
 		if (connsInRoomMap != null && connsInRoomMap.containsKey(aConn)) {
 //			System.out.println(conn + "'s room is " + " removed");
 			String currACType = WebSocketUserPool.getACTypeByKey(aConn);
-			System.out.println("ACType: " + WebSocketUserPool.getACTypeByKey(aConn));
+//			System.out.println("ACType: " + WebSocketUserPool.getACTypeByKey(aConn));
 			
 			/** 清除room相關資料 **/
 			if ("Client".equals(currACType)){
