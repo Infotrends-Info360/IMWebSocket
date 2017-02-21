@@ -67,6 +67,17 @@ public class WebSocket extends WebSocketServer {
 	public void onOpen(org.java_websocket.WebSocket conn,
 			ClientHandshake handshake) {
 		System.out.println("Someone link in Socket conn:" + conn);
+		System.out.println("" + Util.getAgentStatus());
+		Map<String, Map<String, String>> statusMapOuter = Util.getAgentStatus();
+		for (String keyOuter: statusMapOuter.keySet()) {
+			System.out.println("keyOuter: " + keyOuter);
+			Map<String, String> statusMapInner = statusMapOuter.get(keyOuter);
+			for (String keyInner : statusMapInner.keySet()) {
+				System.out.println("keyInner: " + keyInner);
+				System.out.println("valueInner: " + statusMapInner.get(keyInner));
+			}
+			
+		}
 		l++;
 	}
 

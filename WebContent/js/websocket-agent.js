@@ -989,7 +989,7 @@ function switchStatus(aStatus){
 var StatusEnum = Object.freeze({
 	LOGIN: '1', 
 	LOGOUT: '2', 
-	READY: '3',
+	READY: '3', // { '3', 'READY'}
 	NOT_READY: '4',
 	AFTER_CALL_WORK: '5',
 	RING: '6',

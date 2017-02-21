@@ -119,7 +119,7 @@ public class WebSocketTypePool{
 			}
 //			System.out.println("Agent Status - u.getStatus(): " + u.getStatus());
 //			System.out.println("Agent Status - StatusEnum.READY.getValue(): " + StatusEnum.READY.getValue());
-			if(userdate.getTime() <= UserStayTime && u.getStatus().trim().equals(StatusEnum.READY.getValue())){
+			if(userdate.getTime() <= UserStayTime && u.getStatus().trim().equals(StatusEnum.READY.getDbid())){
 				UserStayTime = userdate.getTime(); // 每次都會將UserStayTime拿去當作"上一個"Uset的等待時間
 				settingUser = u.getUserid();
 			}
