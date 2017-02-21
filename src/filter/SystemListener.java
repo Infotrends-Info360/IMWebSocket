@@ -17,7 +17,9 @@ import javax.servlet.ServletContextEvent;
 import javax.servlet.ServletContextListener;
 import javax.servlet.annotation.WebListener;
  
+
 import util.StatusEnum;
+
 
 
 
@@ -30,6 +32,7 @@ import com.Info360.service.MaintainService;
 
 import util.StatusEnum;
 import util.Util;
+import websocket.function.AgentFunction;
  
 @WebListener("application context listener")
 public class SystemListener implements ServletContextListener {
@@ -40,7 +43,7 @@ public class SystemListener implements ServletContextListener {
     @Override
     public void contextInitialized(ServletContextEvent event) {
 //         initialize log4j here
-    	System.out.println("System Config called");
+    	System.out.println("System Config - contextInitialized() called");
         ServletContext context = event.getServletContext();
         String maxRingTime = context.getInitParameter("MaxRingTime");
         String afterCallStatus = context.getInitParameter("AfterCallStatus");
@@ -76,13 +79,15 @@ public class SystemListener implements ServletContextListener {
 		 }
 		 Util.setAgentStatus(agentstatusmap);
 		 
-		 System.out.println("agentstatusmap: "+agentstatusmap);
+//		 System.out.println("agentstatusmap: "+agentstatusmap);
 		 
-		 System.out.println("結果驗證: ");
-		 System.out.println("StatusEnum.LOGIN.getDbid(): " + StatusEnum.LOGIN.getDbid());
-		 System.out.println("StatusEnum.LOGIN.getDescription(): " + StatusEnum.LOGIN.getDescription());
-		 System.out.println("StatusEnum.IESTABLISHED.getDbid(): " + StatusEnum.IESTABLISHED.getDbid());
-		 System.out.println("StatusEnum.IESTABLISHED.getDescription(): " + StatusEnum.IESTABLISHED.getDescription());
+		 
+		 
+//		 System.out.println("結果驗證: ");
+//		 System.out.println("StatusEnum.LOGIN.getDbid(): " + StatusEnum.LOGIN.getDbid());
+//		 System.out.println("StatusEnum.LOGIN.getDescription(): " + StatusEnum.LOGIN.getDescription());
+//		 System.out.println("StatusEnum.IESTABLISHED.getDbid(): " + StatusEnum.IESTABLISHED.getDbid());
+//		 System.out.println("StatusEnum.IESTABLISHED.getDescription(): " + StatusEnum.IESTABLISHED.getDescription());
 		 
 //		 System.out.println("agentstatusmap: "+Util.getAgentStatus());
 //        System.out.println("MaxRingTime: "+Util.getMaxRingTime());

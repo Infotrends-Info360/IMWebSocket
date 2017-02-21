@@ -247,10 +247,12 @@ function Login() {
 
 					// 接收到有人登入的訊息
 				} else if ("userjoin" == obj.Event) {
+//					alert("login_dbid: " + obj.login_dbid);
 //					console.log("***Enum - e.data: " + e.data);
 //					console.log("***Enum - obj.statusList: " + obj.statusList);
 //					console.log("***Enum - JSON.stringify( obj.statusList ): " + JSON.stringify( obj.statusList ));
 //					console.log("userjoin - UserID: " + obj.from);
+					var login_dbid = obj.login_dbid;
 					parent.UserID_g = obj.from;
 					
 					// 更新enum
@@ -275,6 +277,10 @@ function Login() {
 					status_g = StatusEnum.LOGIN;
 					switchStatus(status_g);
 					
+					// 計算LOGIN狀態持續時間用:
+//					alert("login_dbid: " + login_dbid);
+					$('#Login')[0].setAttribute("login_dbid",login_dbid);
+//					alert("$('#Login')[0].getAttribute(\"login_dbid\"):\n" + $('#Login')[0].getAttribute("login_dbid"));
 										
 				} else if ("refreshRoomList" == obj.Event) {
 					// debug: 確認全部key-value:
@@ -499,10 +505,11 @@ function Logoutaction() {
 		channel : "chat",
 		waittingClientIDList : waittingClientIDList_g, // 告訴寄出要求的clients不用等了
 		waittingAgentIDList : waittingAgentIDList_g, // 告訴寄出三方/轉接邀請的Agents不用等了
+		login_dbid : $('#Login')[0].getAttribute("login_dbid"),
 		// waitingAgentRoomIDList : waitingAgentRoomIDList_g; //  告訴寄出三方/轉接邀請的Agents不用等了 - 若有需要,再考慮增加是對應到哪個roomID
 		date : now.getHours() + ":" + now.getMinutes() + ":" + now.getSeconds()
 	};
-
+ 
 	// 發送消息
 	parent.ws_g.send(JSON.stringify(msg));
 
