@@ -99,6 +99,7 @@ public class CommonFunction {
 		sendjson.put("channel", channel);
 		sendjson.put("statusList", Util.getAgentStatus());
 		sendjson.put("login_dbid", login_dbid); // 此key-value只須Agent接就好(先不做過濾)
+		sendjson.put("MaxCount", MaxCount); // 此key-value只須Agent接就好(先不做過濾)
 		WebSocketUserPool.sendMessageToUser(aConn, sendjson.toString());
 //		WebSocketUserPool.sendMessage("online people: "
 //				+ WebSocketUserPool.getOnlineUser().toString());

@@ -8,6 +8,7 @@ var roomInfoMap_g = new Map();
 var agentIDMap_g = new Map();
 var waittingClientIDList_g = [];
 var waittingAgentIDList_g = [];
+var maxCount_g;
 //var count = 0;
 //var RoomIDList = []; // 接通後產生Group的ID List
 //var RoomIDLinkedList = new SinglyList(); // 接通後產生Group的ID Linked List
@@ -254,6 +255,7 @@ function Login() {
 //					console.log("userjoin - UserID: " + obj.from);
 					var login_dbid = obj.login_dbid;
 					parent.UserID_g = obj.from;
+					maxCount_g = obj.MaxCount;
 					
 					// 更新enum
 					 console.log("***Enum - 更新enum: ");
