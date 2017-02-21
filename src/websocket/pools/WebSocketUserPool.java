@@ -98,6 +98,8 @@ public class WebSocketUserPool {
 	
 	/** * Add User to WebSocket Pool* @param inbound */ /* Done */
 	public static void addUserRoom(String userRoom, WebSocket conn) {
+		userallconnections.get(conn);
+		userallconnections.get(conn).getUserRoom();
 		userallconnections.get(conn).getUserRoom().add(userRoom);
 	}
 	
@@ -151,7 +153,7 @@ public class WebSocketUserPool {
 	public static boolean removeUserRoom(WebSocket conn) {
 		
 		if (userallconnections.containsKey(conn)) {
-			userallconnections.get(conn).setUserRoom(null); // 看是要null還是"",目前覺得null比較同於原本的Map.remove(USERGROUP)
+			userallconnections.get(conn).getUserRoom().clear(); // 改成clear, 不然會清過頭,不能重複用
 			return true;
 		} else {
 			return false;
