@@ -264,9 +264,11 @@ function Login() {
 					}; // 設定 AcceptEventInit
 				    	
 					// 更改架構為 - 最多一次只收一個ring
-					status_g = StatusEnum.NOTREADY;
-					switchStatus(StatusEnum.NOTREADY);
-
+					status_g = StatusEnum.RING;
+					switchStatus(status_g);
+					StatusEnum.ready_dbid = StatusEnum.updateStatus(StatusEnum.READY, "end", StatusEnum.ready_dbid);
+					StatusEnum.updateStatus(StatusEnum.NOTREADY, "start");
+					StatusEnum.updateStatus(StatusEnum.RING, "start");
 					
 				} else if ("userjointoTYPE" == obj.Event) {
 
@@ -530,9 +532,11 @@ function Logoutaction() {
 	console.log("StatusEnum.login_dbid: " + StatusEnum.login_dbid);
 	console.log("StatusEnum.notready_dbid: " + StatusEnum.notready_dbid);
 	console.log("StatusEnum.ready_dbid: " + StatusEnum.ready_dbid);
+	console.log("StatusEnum.ring_dbid: " + StatusEnum.ring_dbid);
 	StatusEnum.login_dbid = StatusEnum.updateStatus(StatusEnum.LOGOUT, "end", StatusEnum.login_dbid);
 	StatusEnum.notready_dbid = StatusEnum.updateStatus(StatusEnum.NOTREADY, "end", StatusEnum.notready_dbid);
 	StatusEnum.ready_dbid = StatusEnum.updateStatus(StatusEnum.READY, "end", StatusEnum.ready_dbid);
+	StatusEnum.ring_dbid = StatusEnum.updateStatus(StatusEnum.RING, "end", StatusEnum.ring_dbid);
 	
 	// 登出動作
 	var now = new Date();
@@ -646,16 +650,6 @@ function RejectEvent() {
 		responseThirdParty(reqType, roomID, fromAgentID, 'reject');
 	// Client to Agent 請求	
 	}else{
-		// 一次將Agent與Client加入到room中
-//		var currClientID = $('#Accept')[0].userID;
-////		var userdata = $('#Accept')[0].userdata;
-//			// 在此使用新的方法,將一個list的成員都加入到同一群組中
-//		var memberListToJoin = [];
-//		var mem1 = new myRoomMemberJsonObj(currClientID);
-//		var mem2 = new myRoomMemberJsonObj(parent.UserID_g);
-//		memberListToJoin.push(mem1);
-//		memberListToJoin.push(mem2);
-//		addRoomForMany("none", memberListToJoin); // "none"是一個keyword, 會影響websocket server的邏輯判斷處理
 		var currClientID = $('#Accept')[0].userID;
 		var now = new Date();
 		var msg = {
@@ -683,6 +677,9 @@ function RejectEvent() {
 		}
 		waittingClientIDList_g.splice(index_remove,1);
 //		console.log("waittingClientIDList_g.length: " + waittingClientIDList_g.length);		
+		
+		//更新狀態
+		StatusEnum.ring_dbid = StatusEnum.updateStatus(StatusEnum.RING, "end", StatusEnum.ring_dbid);
 		
 	}
 	
@@ -1041,7 +1038,11 @@ function switchStatus(aStatusEnum){
     case StatusEnum.AFTERCALLWORK:
     	//code block
     	break;
-    case StatusEnum.RING:
+    case StatusEnum.RING: // 當有RING事件時,同時也會切換為NOTREADY,故畫面更新同NOTREADY
+    	switchStatus(StatusEnum.NOTREADY);
+//      document.getElementById("ready").disabled = false;
+//    	document.getElementById("notready").disabled = true;
+ 
     	//code block
     	break;
     case StatusEnum.IESTABLISHED:
