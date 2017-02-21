@@ -95,12 +95,12 @@ public class AgentFunction {
 	}
 
 	public static void refreshAgentList() {
+		System.out.println("refreshAgentList() called");
 		Map<WebSocket, UserInfo> agentMap = WebSocketTypePool
 				.getTypeconnections().get("Agent");
 		Collection<String> agentIDList = WebSocketTypePool
 				.getOnlineUserIDinTYPE("Agent");
-		System.out.println("userjoin() - agentIDList.size(): "
-				+ agentIDList.size());
+//		System.out.println("refreshAgentList() - agentIDList.size(): " 	+ agentIDList.size());
 		Set<WebSocket> agentConnList = agentMap.keySet();
 		for (WebSocket tmpConn : agentConnList) {
 

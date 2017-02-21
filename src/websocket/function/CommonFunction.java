@@ -85,6 +85,7 @@ public class CommonFunction {
 		sendjson.put("Event", "userjoin");
 		sendjson.put("from", userId);
 		sendjson.put("channel", channel);
+		sendjson.put("statusList", Util.getAgentStatus());
 		WebSocketUserPool.sendMessageToUser(aConn, sendjson.toString());
 //		WebSocketUserPool.sendMessage("online people: "
 //				+ WebSocketUserPool.getOnlineUser().toString());
