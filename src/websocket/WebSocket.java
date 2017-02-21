@@ -46,8 +46,8 @@ public class WebSocket extends WebSocketServer {
 		//userLeave(conn);
 //		System.out.println("Someone unlink in Socket conn:" + conn);
 //		System.out.println("conn: " + conn + " is disconnected. !!!!!");
-		System.out.println(WebSocketUserPool.getACTypeByKey(conn) + " conn: " + conn + " is disconnected. (onClose)");				
-
+		System.out.println("onClose(): " + WebSocketUserPool.getACTypeByKey(conn) + " conn: " + conn + " is disconnected. (onClose)");				
+		System.out.println("onClose(): " + WebSocketUserPool.getUserID(conn));
 		// 將Heartbeat功能移轉到這裡:
 		inputInteractionLog(conn,reason);
 		clearUserData(conn); // 包含removeUser, removerUserinTYPE, removeUserinroom
@@ -199,6 +199,9 @@ public class WebSocket extends WebSocketServer {
 //		}
 		if (roomids != null){
 			for (String roomid: roomids){
+				System.out.println("***** get roomid: " + roomid);
+				System.out.println(WebSocketUserPool.getUserNameByKey(conn));
+				System.out.println(WebSocketUserPool.getUserID(conn));
 				//使用每個roomid,並找出相對應的room,再將其中的conn remove掉
 				WebSocketRoomPool.removeUserinroom(roomid, conn);
 			}			
@@ -209,7 +212,6 @@ public class WebSocket extends WebSocketServer {
 		WebSocketTypePool.removeUserinTYPE(ACType, conn);
 		/*** 更新Agent list - 私訊用 ***/
 		if ("Agent".equals(ACType)){
-			System.out.println("here?");
 			AgentFunction.refreshAgentList();
 		}
 		
@@ -250,25 +252,18 @@ public class WebSocket extends WebSocketServer {
 		String invitedAgentID = obj.getString("invitedAgentID");
 		String fromAgentName = obj.getString("fromAgentName");
 		String inviteType = obj.getString("inviteType");
-		
-		
-		
-		
+		String userdata = obj.getJSONObject("userdata").toString();
+		String text = obj.getString("text");
+		System.out.println("inviteAgentThirdParty - userdata: " + userdata);
+				
 		//籌備要寄出的JSON物件
-		JSONObject sendjson = new JSONObject();
-		sendjson.put("Event", "inviteAgentThirdParty");
-		sendjson.put("roomID", roomID);
-		sendjson.put("fromAgentID", fromAgentID);
-		sendjson.put("invitedAgentID", invitedAgentID);
-		sendjson.put("fromAgentName", fromAgentName);
-		sendjson.put("inviteType", inviteType);
-		
-		System.out.println("sendjson: " + sendjson);
+		obj.put("Event", "inviteAgentThirdParty");
+//		System.out.println("inviteAgentThirdParty() - userdata: " + userdata);
 		
 		// 寄給invitedAgent:
 		org.java_websocket.WebSocket invitedAgent_conn = WebSocketUserPool.getWebSocketByUser(invitedAgentID);
-		System.out.println("invitedAgent_conn: " + invitedAgent_conn);
-		WebSocketUserPool.sendMessageToUser(invitedAgent_conn, sendjson.toString());
+//		System.out.println("invitedAgent_conn: " + invitedAgent_conn);
+		WebSocketUserPool.sendMessageToUser(invitedAgent_conn, obj.toString());
 		
 //		type : "inviteAgentThirdParty",
 //		ACtype : "Agent",
@@ -278,46 +273,55 @@ public class WebSocket extends WebSocketServer {
 //		fromAgentName : UserName
 	}
 
-	private void responseThirdParty(String message, org.java_websocket.WebSocket conn) {
+	private void responseThirdParty(String message, org.java_websocket.WebSocket aConn) {
 		// TODO Auto-generated method stub
 		JSONObject obj = new JSONObject(message);
+		System.out.println("responseThirdParty - obj: " + obj);
 		String ACtype = obj.getString("ACtype");
 		String roomID = obj.getString("roomID");
 		String fromAgentID = obj.getString("fromAgentID");
 		String invitedAgentID = obj.getString("invitedAgentID");
-		String invitedAgentName = WebSocketUserPool.getUserNameByKey(conn);
+		String invitedAgentName = WebSocketUserPool.getUserNameByKey(aConn);
 		String response = obj.getString("response");
 		String inviteType = obj.getString("inviteType");
+//		String userdata = obj.getString("userdata");
+		JSONObject userdata = obj.getJSONObject("userdata");
+		String text = obj.getString("text");
 		
+		obj.put("Event", "responseThirdParty");		
 		if ("accept".equals(response)){
 			System.out.println("responseThirdParty() - accept");
 			/** 新增room成員 **/
-			WebSocketRoomPool.addUserInRoom(roomID, invitedAgentName, invitedAgentID, conn);
+			WebSocketRoomPool.addUserInRoom(roomID, invitedAgentName, invitedAgentID, aConn);
 			/** 新增user所加入的room list **/
-			WebSocketUserPool.addUserRoom(roomID, conn);
+			WebSocketUserPool.addUserRoom(roomID, aConn);
 			
 			// 通知更新roomList
-			CommonFunction.refreshRoomList(conn);				
-			CommonFunction.refreshRoomList(WebSocketUserPool.getWebSocketByUser(fromAgentID));				
+//			CommonFunction.refreshRoomList(conn);				
+//			CommonFunction.refreshRoomList(WebSocketUserPool.getWebSocketByUser(fromAgentID));				
 			
-			// 通知各房間成員成員數改變了
-			JSONObject sendJson = new JSONObject();
-			sendJson.put("Event", "responseThirdParty");
-			sendJson.put("roomID", roomID);
-			sendJson.put("fromAgentID", fromAgentID);
-			sendJson.put("invitedAgentID", invitedAgentID);
-			sendJson.put("roomMembers", WebSocketRoomPool.getOnlineUserNameinroom(roomID).toString());
+//			JSONObject sendJson = new JSONObject();
+//			sendJson.put("Event", "responseThirdParty");
+//			sendJson.put("roomID", roomID);
+//			sendJson.put("fromAgentID", fromAgentID);
+//			sendJson.put("invitedAgentID", invitedAgentID);
+//			sendJson.put("roomMembers", WebSocketRoomPool.getOnlineUserNameinroom(roomID).toString());
+//			sendJson.put("userdata", userdata);
+//			sendJson.put("text", text);
 			
 			// 若是屬於轉接的要求,則將原Agent(邀請者)踢出
 			if ("transfer".equals(inviteType)){
 				System.out.println("responseThirdParty() - transfer");
+				// 通知使用者清除前端頁面
+				WebSocketUserPool.sendMessageToUser(WebSocketUserPool.getWebSocketByUser(fromAgentID), obj.toString());
 				WebSocketRoomPool.removeUserinroom(roomID, WebSocketUserPool.getWebSocketByUser(fromAgentID));
 			}
-			
-			WebSocketRoomPool.sendMessageinroom(roomID, sendJson.toString());
+			// 通知各房間成員成員數改變了
+			WebSocketRoomPool.sendMessageinroom(roomID, obj.toString());
 			
 		}else if("reject".equals(response)){
 			System.out.println("responseThirdParty() - reject");			
+			WebSocketUserPool.sendMessageToUser(WebSocketUserPool.getWebSocketByUser(fromAgentID), obj.toString());
 		}
 	
 	}

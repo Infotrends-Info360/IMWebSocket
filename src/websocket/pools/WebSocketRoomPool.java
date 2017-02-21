@@ -101,7 +101,7 @@ public class WebSocketRoomPool{
 		if (connsInRoomMap != null && connsInRoomMap.containsKey(aConn)) {
 //			System.out.println(conn + "'s room is " + " removed");
 			String currACType = WebSocketUserPool.getACTypeByKey(aConn);
-			System.out.println("ACType: " + WebSocketUserPool.getACTypeByKey(aConn));
+//			System.out.println("ACType: " + WebSocketUserPool.getACTypeByKey(aConn));
 			
 			/** 清除room相關資料 **/
 			if ("Client".equals(currACType)){
@@ -144,6 +144,14 @@ public class WebSocketRoomPool{
 				
 				WebSocketUserPool.sendMessageToUser(conn, sendJson.toString());
 			}
+			
+			System.out.println("roomMap.size() - before: " + roomMap.size());
+			// 如果一個room都空了,就把它從Map中清掉
+			if (connsInRoomMap.size() == 0){
+				roomMap.remove(aRoomID);
+			}
+			System.out.println("roomMap.size() - after: " + roomMap.size());
+			
 		}
 	}
 	

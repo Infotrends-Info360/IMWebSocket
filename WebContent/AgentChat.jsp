@@ -93,6 +93,10 @@ hr {
 	white-space: normal;
 }
 
+td {
+    padding: 15px;
+}
+
 </style>
 </head>
 <body onload="onloadFunctionAgent();">
@@ -143,38 +147,40 @@ hr {
             <div class="col-xs-8 col-sm-8 col-md-8 col-lg-8">
             	<!-- Request list -->
             	<div class="col-xs-12 col-sm-12 col-md-12 col-lg-12 panel panel-default center nopadding">
-	                <div class="row col-xs-12 col-sm-12 col-md-12 col-lg-12 panel-heading center">
+<!-- <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12 panel panel-default center nopadding"> -->
+<!-- <div class="pre-scrollable col-xs-12 col-sm-12 col-md-12 col-lg-12 panel-body" id="userdata" style="height: 80px;"> -->
+	                <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12 panel-heading center">
 	                    <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12" style="padding-left: 10px;">Request List: </div>
 	                </div>
-	                <div class="row col-xs-12 col-sm-12 col-md-12 col-lg-12 panel-body center">
-						<table class="table table-hover nomargin" id="requestTable">
-							<thead>
-								<tr>
-									<th>請求種類</th>
-									<th>請求Name</th>
-									<th>其他(userdata)</th>
-								</tr>
-							</thead>
-							<tbody>
-<!-- 								<tr> -->
-<!-- 									<td>通話</td> -->
-<!-- 									<td>Client01</td> -->
-<!-- 									<td></td> -->
-<!-- 								</tr> -->
-							</tbody>
-						</table>	 
+	                <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12 panel-body center" style="height: 200px;">
+						<div class="pre-scrollable row col-xs-12 col-sm-12 col-md-12 col-lg-12 panel panel-default center" style="height: 70%;">
+							<table class="col-xs-12 col-sm-12 col-md-12 col-lg-12 table table-hover nomargin" id="requestTable">
+								<thead>
+									<tr>
+										<th>種類</th>
+										<th>請求Name</th>
+										<th>其他(userdata)</th>
+									</tr>
+								</thead>
+								<tbody id="requestTable_tbody">
+<!-- 									<tr style="height: 60px;"> -->
+<!-- 										<td >通話</td> -->
+<!-- 										<td >Client01</td> -->
+<!-- 										<td style=""> -->
+<!-- 											<div class="pre-scrollable" style="max-height: 60px; overflow-x: hidden; max-width: 260px;"> -->
+<!-- 											{"id":"ae56b50b-6280-4423-89f6-17a67f9c3ef4","Phone":"A123456789","searchtype":"A","service1":"service one","service2":"service two","pkey":"id","mapping":{"Message":{"Name":{"chiname":"姓名","sort":"2","engname":"Name"},"id":{"chiname":"身分證字號","sort":"3","engname":"id"},"birthday":{"chiname":"生日","sort":"4","engname":"birthday"},"Phone":{"chiname":"電話","sort":"1","engname":"Phone"},"Fax":{"chiname":"傳真","sort":"7","engname":"Fax"},"LevelValue":{"chiname":"客戶等級","sort":"9","engname":"LevelValue"},"Tel1":{"chiname":"住家電話","sort":"5","engname":"Tel1"},"CUSTNAM":{"chiname":"住址","sort":"10","engname":"CUSTNAM"},"Tel2":{"chiname":"手機號碼","sort":"6","engname":"Tel2"},"Mail":{"chiname":"電子郵件","sort":"8","engname":"Mail"}},"method":"get","step":109},"searchkey":"Phone","lang":"chiname"} -->
+<!-- 											</div> -->
+<!-- 										</td> -->
+<!-- 									</tr> -->
+								</tbody>
+							</table>	
+						</div> 
 		                <div class="row">
 		                    <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
-		                        <div class="form-group">
-		                        	<div class="col-xs-6 col-sm-6 col-md-6 col-lg-6">
-		        	                    <button class="btn btn-primary pull-left marginDefault" id="Accept" style="width:100px" onclick="AcceptEventInit();" disabled>Accept</button>
-		            	                <button class="btn btn-primary pull-left marginDefault" id="Reject" style="width:100px" disabled>Reject</button>
+		                        	<div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+		            	                <button class="btn btn-primary marginDefault pull-right" id="Reject"  onclick="RejectEvent()" disabled>Reject</button>
+		        	                    <button class="btn btn-primary marginDefault pull-right" id="Accept"  onclick="AcceptEventInit();" disabled>Accept</button>
 		                        	</div>
-		                        	<div class="col-xs-6 col-sm-6 col-md-6 col-lg-6">
-		    	                        <button class="btn btn-primary pull-right marginDefault wrapTextBtn" id="RejectThirdParty" style="width:100px" disabled>三方/轉接Reject</button>                        	
-			                            <button class="btn btn-primary pull-right marginDefault wrapTextBtn" id="AcceptThirdParty" style="width:100px" disabled>三方/轉接Accept</button>	
-		                        	</div>
-		                        </div>
 		                    </div>
 		                </div> 					
 	                </div>
@@ -259,13 +265,14 @@ hr {
                 <div class="row col-xs-12 col-sm-12 col-md-12 col-lg-12 panel-heading center">
                     <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12" style="padding-left: 10px;">Event: </div>
                 </div>
-                <div class="row col-xs-12 col-sm-12 col-md-12 col-lg-12 panel-body center">
+                <div class="row col-xs-12 col-sm-12 col-md-12 col-lg-12 panel-body center" style="height: 150px;">
 	                <div>
 	                    <button id="ClearLog" type="button" class="btn btn-primary">Clear</button>
 	                </div>
-	                <div>
+	                <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12 spacer10"></div>
+	                <div class="pre-scrollable row col-xs-12 col-sm-12 col-md-12 col-lg-12 panel panel-default center" style="height: 70%;">
 	                    <div id="text"></div>
-	                </div>
+	                </div>    
 				</div>            
                 
                 <!-- 私訊 -->

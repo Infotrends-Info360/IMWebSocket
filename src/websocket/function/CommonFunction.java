@@ -12,9 +12,11 @@ import org.json.JSONArray;
 import org.json.JSONObject;
 
 import com.google.gson.JsonArray;
+import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 
 import util.Util;
+
 
 
 
@@ -70,6 +72,8 @@ public class CommonFunction {
 		JSONObject obj = new JSONObject(user);
 		String userId = java.util.UUID.randomUUID().toString();
 		String username = obj.getString("UserName");
+		String MaxCount = obj.getString("MaxCount"); //新增 MaxCount
+		System.out.println("MaxCount: "+MaxCount);
 		String ACtype = obj.getString("ACtype");
 		String channel = obj.getString("channel");
 		WebSocketUserPool.addUser(username, userId, aConn, ACtype); // 在此刻,已將user conn加入倒Pool中
@@ -119,11 +123,12 @@ public class CommonFunction {
 	public static void userExit(String aMsg, org.java_websocket.WebSocket aConn) {
 		System.out.println("userExit() called");
 		JsonObject jsonIn = Util.getGJsonObject(aMsg);
+		String id = jsonIn.get("id").getAsString();
+		String UserName = jsonIn.get("UserName").getAsString();
 		
-		//通知大家有人離開了
-//		String username = jsonIn.get("UserName").getAsString();
-//		String joinMsg = "[Server]" + username + " Offline";
-//		WebSocketUserPool.sendMessage(joinMsg);
+		//Billy哥部分前端需求:
+		String joinMsg = "[Server] - " + UserName + " Offline";
+		WebSocketUserPool.sendMessageToUser(aConn, joinMsg); // 只須原登出Agent收到此訊息即可
 		
 		// 關係Heartbeat
 		Timer timer = WebSocketUserPool.getUserHeartbeatTimerByKey(aConn);
@@ -131,9 +136,10 @@ public class CommonFunction {
 			timer.cancel();			
 		}
 		
+		// Client
 		// 若已經有Agent正在決定是否Accept此通通話, 若Client先離開了, 則告知此Agent此Client已經離開, 不用再等了
 //		String waittingAgent = jsonIn.get("waittingAgent").getAsBoolean();
-		if (jsonIn.get("waittingAgent") != null){
+		if ( WebSocketTypePool.isClient(aConn) && jsonIn.get("waittingAgent") != null){
 			System.out.println("userExit() - waittingAgent: " + jsonIn.get("waittingAgent").getAsBoolean());
 			if (jsonIn.get("waittingAgent").getAsBoolean()){
 				String waittingAgentID = jsonIn.get("waittingAgentID").getAsString();
@@ -148,7 +154,49 @@ public class CommonFunction {
 			}			
 		}
 		
+		// Agent
+//		waittingClientIDList
+		if (WebSocketTypePool.isAgent(aConn)){
+			if (!"[]".equals(jsonIn.get("waittingClientIDList"))){
+				System.out.println("userExit() - waittingClientIDList got here");
+				System.out.println("userExit() - " + jsonIn.get("waittingClientIDList").toString());
+				JsonArray clientIDJsonAry = jsonIn.getAsJsonArray("waittingClientIDList");
+//				String clientIDStr = jsonIn.get("waittingClientIDList").toString();
+//				String[] waittingClientIDList = clientIDStr.substring(1, clientIDStr.length()-1).split(",");
+//				System.out.println("userExit() - " + waittingClientIDList.length);
+//				System.out.println("userExit() - clientIDJsonAry: " + clientIDJsonAry);
+				for(final JsonElement clientID_je : clientIDJsonAry) {
+				    String clientID = clientID_je.getAsJsonObject().get("clientID").getAsString();
+				    WebSocket clientConn = WebSocketUserPool.getWebSocketByUser(clientID);
+				    System.out.println("userExit() - clientID: " + clientID);
+				    jsonIn.addProperty("Event", "agentLeft");
+					WebSocketUserPool.sendMessageToUser(clientConn, jsonIn.toString());
+				    
+				}				
+			}
+			
+			if (!"[]".equals(jsonIn.get("waittingAgentIDList").toString())){
+				System.out.println("userExit() - waittingAgentIDList got here");
+				System.out.println("userExit() - " + jsonIn.get("waittingAgentIDList").toString());
+				JsonArray agentIDJsonAry = jsonIn.getAsJsonArray("waittingAgentIDList");
+//				String clientIDStr = jsonIn.get("waittingClientIDList").toString();
+//				String[] waittingClientIDList = clientIDStr.substring(1, clientIDStr.length()-1).split(",");
+//				System.out.println("userExit() - " + waittingClientIDList.length);
+				System.out.println("userExit() - agentIDJsonAry: " + agentIDJsonAry);
+				for(final JsonElement agentID_je : agentIDJsonAry) {
+				    String agentID = agentID_je.getAsJsonObject().get("agentID").getAsString();
+				    WebSocket agentConn = WebSocketUserPool.getWebSocketByUser(agentID);
+				    System.out.println("userExit() - agentID: " + agentID);
+				    jsonIn.addProperty("Event", "agentLeftThirdParty");
+					WebSocketUserPool.sendMessageToUser(agentConn, jsonIn.toString());
+				}
+			}
+//			for(String clientID: waittingClientIDList){
+//				System.out.println("userExit() - " + clientID);
+//			}
+		}
 		
+		System.out.println("before close: " + WebSocketUserPool.getUserID(aConn));
 		// 最後關閉連線
 		aConn.close();
 //		WebSocketPool.removeUserID(conn);

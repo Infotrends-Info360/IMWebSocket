@@ -72,6 +72,7 @@ function Login() {
 			var msg = {
 				type : "login",
 				UserName : UserName_g,
+				MaxCount: '0',
 				ACtype : "Client",
 				channel : "chat",
 				date : now.getHours() + ":" + now.getMinutes() + ":"
@@ -114,13 +115,19 @@ function Login() {
 					document.getElementById("RoomID").innerHTML = RoomID_g;
 					document.getElementById("Event").innerHTML = obj.Event;
 					document.getElementById("Status").innerHTML = StatusEnum.JOIN_ROOM;
-					// 收到拒絕交談指令
+					
+					// 將focus移到寄送訊息欄
+					$('#message').focus();
+					
+				// 收到拒絕交談指令
 				} else if ("RejectEvent" == obj.Event) {
+					alert("Agent reject");
+					switchStatus(StatusEnum.FIND_AGENT);
 					findingAgent();
 					// 控制前端傳值
-					document.getElementById("Event").value = obj.Event;
-					document.getElementById("Eventfrom").value = obj.from;
-					// 收到尋找Agent的指令
+//					document.getElementById("Event").value = obj.Event;
+//					document.getElementById("Eventfrom").value = obj.from;
+				// 收到尋找Agent的指令
 				} else if ("findAgent" == obj.Event) {
 
 					// 若仍未找到Agent, 則再找
@@ -134,23 +141,19 @@ function Login() {
 						// 控制前端傳值
 						document.getElementById("AgentIDs").innerHTML = obj.Agent;
 						document.getElementById("AgentNames").innerHTML = obj.AgentName;
-						// document.getElementById("group").value = RoomID;
 						document.getElementById("Event").innerHTML = obj.Event;
-//						document.getElementById("Eventfrom").value = obj.from;
-//						var UserID = document.getElementById('UserID').value;
-						
 						waittingAgent_g = true;
 						waittingAgentID_g = obj.Agent;
-						// 寫入log(告知雙方彼此的資訊)
-						senduserdata(obj.Agent);
+
 						// 更新資訊
 						switchStatus(StatusEnum.WAIT_AGENT);
-						
+						// 寫入log(告知雙方彼此的資訊)
+						senduserdata(obj.Agent);
 						console.log("senduserdata done ******************* ");						
 
 						
 						// 告知Agent, Client這邊知道找到一個Agent了
-//						find(waittingAgentID_g); // 省略 - senduserdata已經能做到這件事情
+						find(waittingAgentID_g); // 省略 - senduserdata已經能做到這件事情
 					}
 					// 收到群組訊息
 				} else if ("messagetoRoom" == obj.Event) {
@@ -240,7 +243,12 @@ function Login() {
 					console.log("obj.roomMemberIDs: " + obj.roomMemberIDs);
 					console.log("obj.roomMembers: " + obj.roomMembers);
 					updateAgentInfo(obj.roomMemberIDs, obj.roomMembers, obj.roomSize);
-				} 
+				} else if ("agentLeft" == obj.Event ){
+					alert("agent left!");
+					switchStatus(StatusEnum.FIND_AGENT);
+					findingAgent();
+
+				}
 			} else {
 				// 控制前端傳值
 				document.getElementById("text").innerHTML += e.data + "<br>";
@@ -299,6 +307,7 @@ function Logoutaction() {
 }
 
 function findingAgent() {
+//	alert('findingAgent() called');
 	setTimeout(function(){
 		if (!parent.isonline_g) return;
 
@@ -489,7 +498,15 @@ function switchStatus(aStatus){
 	switch(aStatus) {
     case StatusEnum.FIND_AGENT:
         document.getElementById("Status").innerHTML = StatusEnum.FIND_AGENT;
-    	//code block
+		// 控制前端傳值
+		document.getElementById("AgentIDs").innerHTML = '';
+		document.getElementById("AgentNames").innerHTML = '';
+		document.getElementById("Event").innerHTML = '';
+
+		waittingAgent_g = false;
+		waittingAgentID_g = 'none';
+
+		//code block
     	break;
 	case StatusEnum.WAIT_AGENT:
         document.getElementById("Status").innerHTML = StatusEnum.WAIT_AGENT;

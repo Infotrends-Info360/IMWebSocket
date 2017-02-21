@@ -2,13 +2,13 @@ var ws_g; // websocket
 var UserName_g; // 使用者名稱全域變數
 var UserID_g; // 使用者ID全域變數
 var RoomID_g; // 此為第一個加入的RoomID, 僅為開發過程使用, 不符合目前架構, 為過度開發期間保留的全域變數
-var ClientID_g; // 現在準備要服務的Client的ID 
-var ClientName_g; // 現在準備要服務的Client的名稱
 var isonline_g = false; // 判斷是否上線的開關
 var status_g;
 var roomInfoMap_g = new Map();
 var agentIDMap_g = new Map();
-var count = 0;
+var waittingClientIDList_g = [];
+var waittingAgentIDList_g = [];
+//var count = 0;
 //var RoomIDList = []; // 接通後產生Group的ID List
 //var RoomIDLinkedList = new SinglyList(); // 接通後產生Group的ID Linked List
 
@@ -81,6 +81,7 @@ function Login() {
 				type : "login",
 				// id: parent.UserID_g,
 				UserName : parent.UserName_g,
+				MaxCount: '3',
 				ACtype : "Agent",
 				channel : "chat",
 				date : now.getHours() + ":" + now.getMinutes() + ":"
@@ -99,8 +100,6 @@ function Login() {
 				var obj = jQuery.parseJSON(e.data);
 				// 接收到Client邀請chat的event
 				if ("findAgentEvent" == obj.Event) {
-//					ClientName_g = obj.fromName;
-//					ClientID_g = obj.from;
 //					document.getElementById("AcceptEvent").disabled = false;
 //					document.getElementById("RejectEvent").disabled = false;
 //					document.getElementById("Eventfrom").value = obj.from;
@@ -191,11 +190,17 @@ function Login() {
 					// 在這邊取代原本findAgentEvent事件所做的事情
 					console.log("obj.clientName: " + obj.clientName);
 					console.log("obj.clientID: " + obj.clientID);
-					ClientName_g = obj.clientName;
-					ClientID_g = obj.clientID;
+					
+					waittingClientIDList_g.push( new function(){
+						this.clientID = obj.userdata.id
+					});
+					console.log("**********waittingClientIDMap.length: " + waittingClientIDList_g.length);
+					console.log("**********waittingClientIDMap: " + waittingClientIDList_g);
+					console.log("**********waittingClientIDMap: " + JSON.stringify( waittingClientIDList_g ));
 					
 					// 在這邊動態增加request list
 				    var tr = document.createElement('tr');   
+				    tr.setAttribute("style","height: 60px;");
 
 				    var td1 = document.createElement('td');
 				    var td2 = document.createElement('td');
@@ -205,7 +210,9 @@ function Login() {
 				    var text2 = document.createTextNode(obj.clientName);
 				    var text3 = document.createTextNode(JSON.stringify(obj.userdata));
 				    var div3 = document.createElement('div');
-				    div3.setAttribute("style", "height: 20px; overflow-y: hidden;");
+//				    div3.setAttribute("style", "height: 10px; overflow-y: hidden; width: 100%;");
+				    div3.setAttribute("style", "max-height: 60px; word-wrap: break-word;; max-width: 260px;");
+				    div3.setAttribute("class", "pre-scrollable");
 				    
 				    td1.appendChild(text1);
 				    td2.appendChild(text2);
@@ -220,14 +227,19 @@ function Login() {
 				    tr.setAttribute("userID", obj.userdata.id);
 				    tr.setAttribute("userdata", JSON.stringify(obj.userdata));
 				    
-				    document.getElementById("requestTable").appendChild(tr);
+//				    document.getElementById("requestTable").appendChild(tr);
+				    document.getElementById("requestTable_tbody").appendChild(tr);
 				    
 				    tr.onclick = function(e){ 
 						$('#Accept')[0].disabled = false;
-						$('#Reject')[0].disabled = false;
 						$('#Accept')[0].reqType = 'Client';
 						$('#Accept')[0].userID = this.getAttribute("userID");
 						$('#Accept')[0].userdata = this.getAttribute("userdata");
+
+						$('#Reject')[0].disabled = false;
+						$('#Reject')[0].reqType = 'Client';
+						$('#Reject')[0].userID = this.getAttribute("userID");
+//						$('#Reject')[0].userdata = this.getAttribute("userdata");
 					}; // 設定 AcceptEventInit
 				    				    
 					
@@ -246,17 +258,23 @@ function Login() {
 					console.log("refreshRoomList");
 					seeAllKV(obj);
 					
-					
-					
-
 				} else if ("inviteAgentThirdParty" == obj.Event){
 					console.log("received inviteAgentThirdParty event");
+					
 					var tmpRoomID = obj.roomID;
 					var fromAgentID = obj.fromAgentID; 
 					var invitedAgentID = obj.invitedAgentID;
 					var inviteType = obj.inviteType;
-//					alert("inviteType: " + inviteType);
+					var userdata = JSON.stringify( obj.userdata );
+					var text = obj.text;
+
+					waittingAgentIDList_g.push( new function(){
+						this.agentID = fromAgentID
+					});
 					
+//					alert("inviteAgentThirdParty - obj.text: " + obj.text);
+//					alert("inviteAgentThirdParty - obj.text: " + JSON.stringify( obj.text ));
+
 					//在這邊動態新增request
 				    var tr = document.createElement('tr');   
 
@@ -282,58 +300,87 @@ function Login() {
 				    tr.setAttribute("id", fromAgentID);
 				    tr.setAttribute("userID", fromAgentID);
 				    tr.setAttribute("roomID", tmpRoomID);
+				    tr.setAttribute("userdata", userdata);
+				    tr.setAttribute("text", text);
+//				    tr.setAttribute("userdata", userdata);
 				    
-				    document.getElementById("requestTable").appendChild(tr);
+//				    document.getElementById("requestTable").appendChild(tr);
+				    document.getElementById("requestTable_tbody").appendChild(tr);
 				    
 				    tr.onclick = function(e){ 
 						$('#Accept')[0].disabled = false;
-						$('#Reject')[0].disabled = false;
 						$('#Accept')[0].reqType = inviteType;
 						$('#Accept')[0].userID = this.getAttribute("userID");
 						$('#Accept')[0].roomID = this.getAttribute("roomID");
+						$('#Accept')[0].userdata = this.getAttribute("userdata");
+						$('#Accept')[0].text = this.getAttribute("text");
+						
+						$('#Reject')[0].disabled = false;
+						$('#Reject')[0].reqType = inviteType;
+						$('#Reject')[0].userID = this.getAttribute("userID");
+						$('#Reject')[0].roomID = this.getAttribute("roomID");
 					}; // 設定 AcceptEventInit
-					
-					
-					
-//					document.getElementById("invitedRoomID").innerHTML = tmpRoomID;
-//					RoomID_g = tmpRoomID;
-//					
-//					document.getElementById("fromAgentID").innerHTML = fromAgentID;
-//					document.getElementById("invitedRoomID").style.visibility = "visible";					
-////					document.getElementById("agentList").style.visibility = "visible";
-//					
-//					document.getElementById("inviteType").innerHTML = inviteType;
-//					
-//					
-//					// 判斷要寄送私訊的對方是誰(只要不是自己就對了)
-//					console.log("fromAgentID: " + fromAgentID);
-//					console.log("invitedAgentID: " + invitedAgentID);
-//					document.getElementById("sendA2A").value = fromAgentID;
-//					document.getElementById("sendA2A").innerHTML += " to - " + fromAgentID;
 
 				} else if ("responseThirdParty" == obj.Event){
-//					document.getElementById("currUsers").innerHTML = obj.roomMembers;
 					
+					var userdata = JSON.stringify( obj.userdata );
+					var text = obj.text;
+					var inviteType = obj.inviteType;
+					var fromAgentID = obj.fromAgentID;
+					var roomID = obj.roomID;
+					var response = obj.response;
+					var invitedAgentID = obj.invitedAgentID;
+
+					if("reject" == response){
+						alert( "Agent " + invitedAgentID + " rejected " + inviteType +  " invitation");
+						return;
+					}
+					
+					
+					if ("transfer" == inviteType && fromAgentID == parent.UserID_g){
+						alert("transfer");
+						var roomInfo = roomInfoMap_g.get(roomID);
+						roomInfo.close = true;
+						console.log("roomInfo: " + roomInfo);
+//						console.log("JSON.parse(roomInfo): " + JSON.parse(roomInfo));
+						console.log("JSON.stringify(roomInfo): " + JSON.stringify(roomInfo));
+						// 若為當前頁面,則更新roomInfo
+						var currRoomID = $('#roomList').val();
+						console.log("currRoomID: " + currRoomID);
+						console.log("currRoomID: " + currRoomID);
+						console.log("obj.roomID: " + roomID);
+						
+						if (currRoomID == roomID){
+							alert("matched!");
+							updateRoomInfo(roomInfo);
+						}
+						return;
+					}
+					
+//					alert("responseThirdParty - obj.text: " + obj.text);
+//					alert("responseThirdParty - obj.text: " + JSON.stringify( obj.text ));
+					console.log("userdata: " + userdata);
+
 					// 更新狀態
 					status_g = StatusEnum.I_ESTABLISHED;
 					switchStatus(StatusEnum.I_ESTABLISHED);
 					
 					// 在這邊興建roomList與其room bean
-					RoomID_g = obj.roomID; // 之後要改成local variable
+					RoomID_g = roomID; // 之後要改成local variable
 					var tmpRoomInfo = new RoomInfo(
 							obj.roomID,
-							'', // userdata
-							'' // text
+							userdata, // userdata
+							text // text
 					);
-					roomInfoMap_g.set(obj.roomID, tmpRoomInfo);
+					roomInfoMap_g.set(roomID, tmpRoomInfo);
 					console.log("roomInfoMap_g.size: " + roomInfoMap_g.size);
 					// 1. 研究一下這個map的json長什麼樣 2. 看怎麼拿值
-					updateRoomIDList(obj.roomID);
+					updateRoomIDList(roomID);
 					// 更新roomIDList
 
 				} else if ("privateMsg" == obj.Event){
 //					console.log("onMessage - privateMsg" + obj.UserName + ": " + obj.text + "&#13;&#10");
-//					document.getElementById("chatAgentContentHistory").innerHTML += obj.UserName + ": " + obj.text + "&#13;&#10";
+					document.getElementById("text").innerHTML += obj.UserName + ": " + obj.text + "&#13;&#10" + "<br>";
 					
 				} else if ("removeUserinroom" == obj.Event){
 //					document.getElementById("currUsers").innerHTML = obj.roomMembers;
@@ -352,8 +399,6 @@ function Login() {
 					// 在這邊進行一連串的善後處理
 					alert("Client left : " + obj.from);
 					
-					ClientName_g = "";
-					ClientID_g = "";
 					document.getElementById("AcceptEvent").disabled = true;
 					document.getElementById("RejectEvent").disabled = true;
 					document.getElementById("Eventfrom").value = obj.from;
@@ -379,9 +424,20 @@ function Login() {
 					}
 					console.log("refreshAgentList - agentIDMap_g: " + agentIDMap_g);
 					updateAgentIDList();
+				} else if ("agentLeftThirdParty" == obj.Event){
+					alert("agentLeftThirdParty - agent " + obj.id + " left ");
 				}
 			// 非指令訊息
-			}else {
+			// (Billy哥部分)
+			}  else if ("{" != e.data.substring(0, 1)) {
+				console.log(e);
+				// 非指令訊息
+				if (e.data.indexOf("Offline") > 0 && e.data.indexOf(parent.UserName_g) > 0) {
+					// 關閉websocket
+					console.log("ws 連線關閉。");
+					parent.ws_g.close(); // 在這邊關閉websocket,要特別注意會不會牽連到其他人!
+				}
+			} else {
 				document.getElementById("text").innerHTML += e.data + "<br>";
 			}
 			console.log("onMessage(): " + e.data);
@@ -409,11 +465,7 @@ function Logout() {
 
 
 // 執行登出
-function Logoutaction() {
-	// 關閉上線開關
-	status_g = StatusEnum.LOGOUT;
-	switchStatus(status_g);	
-	
+function Logoutaction() {	
 	// 向websocket送出登出指令
 	var now = new Date();
 	var msg = {
@@ -422,14 +474,21 @@ function Logoutaction() {
 		id : parent.UserID_g,
 		UserName : parent.UserName_g,
 		channel : "chat",
+		waittingClientIDList : waittingClientIDList_g, // 告訴寄出要求的clients不用等了
+		waittingAgentIDList : waittingAgentIDList_g, // 告訴寄出三方/轉接邀請的Agents不用等了
+		// waitingAgentRoomIDList : waitingAgentRoomIDList_g; //  告訴寄出三方/轉接邀請的Agents不用等了 - 若有需要,再考慮增加是對應到哪個roomID
 		date : now.getHours() + ":" + now.getMinutes() + ":" + now.getSeconds()
 	};
 
 	// 發送消息
 	parent.ws_g.send(JSON.stringify(msg));
+
+	// 關閉上線開關
+	status_g = StatusEnum.LOGOUT;
+	switchStatus(status_g);	
 	
-	// 關閉websocket
-	parent.ws_g.close();
+//	// 關閉websocket
+//	parent.ws_g.close();
 }
 
 //refresh或關閉網頁時執行
@@ -473,6 +532,19 @@ function AcceptEventInit() {
 		memberListToJoin.push(mem1);
 		memberListToJoin.push(mem2);
 		addRoomForMany("none", memberListToJoin); // "none"是一個keyword, 會影響websocket server的邏輯判斷處理
+		
+		// 將此clientID從waittingClientIDList_g中去除
+		var index_remove;
+		for (var index in waittingClientIDList_g) {
+			clientIDJson = waittingClientIDList_g[index];
+			var clientID = clientIDJson.clientID;
+			if (currClientID == clientID){
+				index_remove = index;
+			}
+//			console.log("clietIDJson.clientID: " + clientIDJson.clientID);
+		}
+		waittingClientIDList_g.splice(index_remove,1);
+//		console.log("waittingClientIDList_g.length: " + waittingClientIDList_g.length);
 				
 	}
 	
@@ -492,24 +564,65 @@ function AcceptEventInit() {
 
 // 拒絕交談
 function RejectEvent() {
-	var Eventfrom = document.getElementById('Eventfrom').value;
-	// 向websocket送出拒絕交談指令
-	var now = new Date();
-	var msg = {
-		type : "RejectEvent",
-		ACtype : "Agent",
-		id : parent.UserID_g,
-		UserName : parent.UserName_g,
-		sendto : Eventfrom,
-		channel : "chat",
-		// Event: "RejectEvent",
-		date : now.getHours() + ":" + now.getMinutes() + ":" + now.getSeconds()
-	};
-	// 發送消息
-	parent.ws_g.send(JSON.stringify(msg));
+	console.log("RejectEvent(): ");
+	var reqType = $('#Reject')[0].reqType;
+	if (reqType == 'thirdParty' || reqType == 'transfer'){
+		//here
+		var roomID = $('#Reject')[0].roomID;
+		var fromAgentID = $('#Reject')[0].userID;
+		responseThirdParty(reqType, roomID, fromAgentID, 'reject');
+	// Client to Agent 請求	
+	}else{
+		// 一次將Agent與Client加入到room中
+//		var currClientID = $('#Accept')[0].userID;
+////		var userdata = $('#Accept')[0].userdata;
+//			// 在此使用新的方法,將一個list的成員都加入到同一群組中
+//		var memberListToJoin = [];
+//		var mem1 = new myRoomMemberJsonObj(currClientID);
+//		var mem2 = new myRoomMemberJsonObj(parent.UserID_g);
+//		memberListToJoin.push(mem1);
+//		memberListToJoin.push(mem2);
+//		addRoomForMany("none", memberListToJoin); // "none"是一個keyword, 會影響websocket server的邏輯判斷處理
+		var currClientID = $('#Accept')[0].userID;
+		var now = new Date();
+		var msg = {
+			type : "RejectEvent",
+			ACtype : "Agent",
+			id : parent.UserID_g,
+			UserName : parent.UserName_g,
+			sendto : currClientID,
+			channel : "chat",
+			// Event: "RejectEvent",
+			date : now.getHours() + ":" + now.getMinutes() + ":" + now.getSeconds()
+		};
+		// 發送消息
+		parent.ws_g.send(JSON.stringify(msg));		
+		
+		// 將此clientID從waittingClientIDList_g中去除
+		var index_remove;
+		for (var index in waittingClientIDList_g) {
+			clientIDJson = waittingClientIDList_g[index];
+			var clientID = clientIDJson.clientID;
+			if (currClientID == clientID){
+				index_remove = index;
+			}
+//			console.log("clietIDJson.clientID: " + clientIDJson.clientID);
+		}
+		waittingClientIDList_g.splice(index_remove,1);
+//		console.log("waittingClientIDList_g.length: " + waittingClientIDList_g.length);		
+		
+	}
+	
+	// 將此請求從request list中去除掉
+	var userID = $('#Accept')[0].userID;
+	console.log("userID: " + userID);
+	$('#' + userID).remove(); // <tr>的id
+	
+	// 開啟ready功能:
+	switchStatus(StatusEnum.READY); // 拒絕之後就持續著READY狀態
+	
+	// 向websocket送出拒絕交談指令  
 
-	document.getElementById("AcceptEvent").disabled = true;
-	document.getElementById("RejectEvent").disabled = true;
 }
 
 // 關閉交談
@@ -593,7 +706,10 @@ function leaveRoom(aRoomID, aUserID) {
 
 //送出私訊
 function send(aSendto,aMessage) {
-	if (aSendto === undefined) aSendto = document.getElementById('sendto').value; 
+	if (aSendto === undefined){ 
+		alert("Please select an agent"); 
+		return;
+	}
 	if (aMessage === undefined) aMessage = document.getElementById('message').value;
 	
 	// 向websocket送出私訊指令
@@ -687,9 +803,9 @@ function updateStatus(aStatus, aReason){
 function inviteAgentThirdParty(aInviteType, aRoomID ,aInvitedAgentID){
 	if (aRoomID === undefined) aRoomID = $('#roomList').val(); 
 	if (aInvitedAgentID === undefined) aInvitedAgentID = $('#agentList').val(); 
-//	var userdata = ;
-//	alert("aRoomID: " + aRoomID);
-//	alert("aInvitedAgentID: " + aInvitedAgentID);
+	var userdata = JSON.parse( $('#userdata').html() );
+	var roomInfo = roomInfoMap_g.get(aRoomID);
+	var text = roomInfo.text;
 	
 	if (aRoomID == null){
 		alert("開發模式: " + "inviteAgentThirdParty() - there is no roomID for this agent");
@@ -705,7 +821,8 @@ function inviteAgentThirdParty(aInviteType, aRoomID ,aInvitedAgentID){
 			invitedAgentID : aInvitedAgentID,
 			fromAgentName : parent.UserName_g,
 			inviteType: aInviteType,
-//			userdata : ,
+			userdata : userdata,
+			text: text,
 			channel : "chat"
 		};
 	// 發送消息
@@ -726,6 +843,18 @@ function responseThirdParty(aInviteType, aRoomID, aFromAgentID, aResponse){
 	if (aInviteType === undefined) aInviteType = document.getElementById("inviteType").innerHTML; // 開發過渡期使用,之後會修掉
 	if (aRoomID === undefined) aRoomID = document.getElementById("invitedRoomID").innerHTML; // 開發過渡期使用,之後會修掉
 	if (aFromAgentID === undefined) aFromAgentID = document.getElementById("fromAgentID").innerHTML; // 開發過渡期使用,之後會修掉
+
+	var userdata;
+	var text;
+	if ("accept" == aResponse){
+		userdata = JSON.parse( $('#Accept')[0].userdata );
+		text = $('#Accept')[0].text;
+	}else if ("reject" == aResponse) {
+		userdata = JSON.parse( '{}' );
+		text = "";
+	}
+	
+//	alert("******* text: " + text);
 	
 	var responseThirdPartyMsg = {
 			type : "responseThirdParty",
@@ -735,6 +864,8 @@ function responseThirdParty(aInviteType, aRoomID, aFromAgentID, aResponse){
 			invitedAgentID : parent.UserID_g,
 			response: aResponse,
 			inviteType: aInviteType,
+			userdata : userdata,
+			text: text,
 			channel : "chat"
 //			fromAgentName : UserName
 		};
@@ -797,14 +928,29 @@ function switchStatus(aStatus){
 			}
 //			frames[i].document.body.style.background = "red";
 		}
+		// 改為離線
 		isonline = false;
 		
+		// 控制前端頁面
 		document.getElementById("Logout").disabled = true;
 		document.getElementById("Login").disabled = false;
 		document.getElementById("UserID").value = '';
+		document.getElementById("Accept").disabled = true;
+		document.getElementById("Reject").disabled = true;
 		
-		//清空AgentList
+		// 清空request list
+		var myNode = document.getElementById("requestTable_tbody");
+		while (myNode.firstChild) {
+		    myNode.removeChild(myNode.firstChild);
+		}
+		
+		// 清空AgentList
 		$("#agentList").empty();
+		
+		// 清空waittingClientIDList_g
+		waittingClientIDList_g = [];
+		// 清空waittingClientIDList_g		
+		waittingAgentIDList_g = [];
 
         // code block
         break;
@@ -957,6 +1103,9 @@ function updateRoomIDList(aNewRoomID){
 	// 主要trigger onchange事件
 	$("#roomList").val(aNewRoomID).change();
 	
+	// 將focus移到寄送訊息欄
+	$('#message').focus();
+	
 }
 
 function updateAgentIDList(){
@@ -982,12 +1131,15 @@ function updateAgentIDList(){
 	$('#agentList').unbind('change').change(function() { 
 		var tmpAgentID = $('#agentList').val();
 		$('#privateMsg')[0].agentID = tmpAgentID;
+		// 將focus移到寄送訊息欄
+		$('#A2AContent').focus();
 //		alert("$('#privateMsg')[0].agentID: \n" + $('#privateMsg')[0].agentID);
 //		updateRoomInfo(roomInfoMap_g.get(tmpRoomID));
 	});
 		
 	// 主要trigger onchange事件
 //	$("#agentList").val(aNewAgentID).change();
+	
 	
 }
 
