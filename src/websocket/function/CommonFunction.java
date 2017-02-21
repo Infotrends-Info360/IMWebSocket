@@ -372,15 +372,11 @@ public class CommonFunction {
 		String username = obj.get("UserName").getAsString();
 		String userid = obj.get("id").getAsString();
 		String date = obj.get("date").getAsString();
-		String status = obj.get("status").getAsString();
+		String status = obj.get("status").getAsString(); // 以數字代表
 		String reason = obj.get("reason").getAsString();
 		String dbid = Util.getGString(obj, "dbid");
 		String startORend = Util.getGString(obj, "startORend"); 
-		
-		//更新狀態列表:
-		String login_dbid;
-		String notready_dbid;
-
+				
 		if(status.equals("lose")){
 			WebSocketTypePool.addleaveClient();
 		}
@@ -395,13 +391,10 @@ public class CommonFunction {
 		if ("start".equals(startORend)){
 			String userID = Util.getTmpID(userid);
 			// 如果是LOGIN狀態,則同時新增NOTREADY狀態
-			if (StatusEnum.LOGIN.getDbid().equals(status)){
-				login_dbid = AgentFunction.RecordStatusStart(userID, status, "8");
-				obj.addProperty("login_dbid", login_dbid);
-			}else if (StatusEnum.NOTREADY.getDbid().equals(status)){
-				notready_dbid = AgentFunction.RecordStatusStart(userID, status, "8");
-				obj.addProperty("notready_dbid", notready_dbid);
-			}
+			StatusEnum currStatusEnum = StatusEnum.getStatusEnumByDbid(status);
+			System.out.println("currStatusEnum: " + currStatusEnum);
+			dbid = AgentFunction.RecordStatusStart(userID, status, "8");
+			obj.addProperty(currStatusEnum.toString().toLowerCase() + "_dbid", dbid); // ex. login_dbid
 
 			// 先只有新增時寄送EVENT,讓前端能拿到相對應的dbid
 			obj.addProperty("Event", "updateStatus");

@@ -574,6 +574,8 @@ function ready() {
 	// 更新頁面
 	status_g = StatusEnum.READY;
 	switchStatus(status_g);
+	StatusEnum.updateStatus(StatusEnum.NOTREADY, "end", StatusEnum.notready_dbid);
+	StatusEnum.updateStatus(StatusEnum.READY, "start");
 	
 }
 // Agent尚未準備就緒
