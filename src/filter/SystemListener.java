@@ -79,7 +79,7 @@ public class SystemListener implements ServletContextListener {
 		 }
 		 Util.setAgentStatus(agentstatusmap);
 		 
-//		 System.out.println("agentstatusmap: "+agentstatusmap);
+		 System.out.println("agentstatusmap: "+agentstatusmap);
 		 
 		 
 		 

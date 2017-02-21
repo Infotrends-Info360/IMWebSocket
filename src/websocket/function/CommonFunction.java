@@ -83,14 +83,13 @@ public class CommonFunction {
 //		WebSocketUserPool.sendMessage(joinMsg);
 
 		/*** 更新Status ***/
-//		String dbid = AgentFunction.RecordStatusStart("456", "1", "2");
-//		System.out.println("StatusEnum.LOGIN.getDbid(): " + StatusEnum.LOGIN.getDbid());
-//		System.out.println("userId.substring(0, 3): " + userId.substring(0, 2));
-		// 資料庫欄位大小限制,目前設定塞1個字母最安全
-//		String login_dbid = AgentFunction.RecordStatusStart(userId.substring(0, 2), StatusEnum.LOGIN.getDbid(), "0");
 		String tmpUserId = userId.replaceAll( "[^\\d]", "" ).substring(0,6);
+			// insert LOGIN
 		String login_dbid = AgentFunction.RecordStatusStart(tmpUserId, StatusEnum.LOGIN.getDbid(), "0");
 		System.out.println("login_dbid: " + login_dbid);
+			// insert NOTREADY
+		String notready_dbid = AgentFunction.RecordStatusStart(tmpUserId, StatusEnum.NOTREADY.getDbid(), "0");
+		System.out.println("notready_dbid: " + notready_dbid);
 		
 		/*** 告知user其成功登入的UserID ***/
 		JSONObject sendjson = new JSONObject();
@@ -99,6 +98,7 @@ public class CommonFunction {
 		sendjson.put("channel", channel);
 		sendjson.put("statusList", Util.getAgentStatus());
 		sendjson.put("login_dbid", login_dbid); // 此key-value只須Agent接就好(先不做過濾)
+		sendjson.put("notready_dbid", notready_dbid); // 此key-value只須Agent接就好(先不做過濾)
 		sendjson.put("MaxCount", MaxCount); // 此key-value只須Agent接就好(先不做過濾)
 		WebSocketUserPool.sendMessageToUser(aConn, sendjson.toString());
 //		WebSocketUserPool.sendMessage("online people: "
@@ -141,6 +141,7 @@ public class CommonFunction {
 		String id = jsonIn.get("id").getAsString();
 		String UserName = jsonIn.get("UserName").getAsString();
 		String login_dbid = jsonIn.get("login_dbid").getAsString();
+		String notready_dbid = jsonIn.get("notready_dbid").getAsString();
 		
 		//Billy哥部分前端需求:
 		String joinMsg = "[Server] - " + UserName + " Offline";
@@ -214,6 +215,7 @@ public class CommonFunction {
 		
 		// 更新Logout狀態
 		AgentFunction.RecordStatusEnd(login_dbid);
+		AgentFunction.RecordStatusEnd(notready_dbid);
 		
 //		System.out.println("before close: " + WebSocketUserPool.getUserID(aConn));
 		// 最後關閉連線
