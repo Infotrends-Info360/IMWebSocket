@@ -394,7 +394,9 @@ public class CommonFunction {
 			StatusEnum currStatusEnum = StatusEnum.getStatusEnumByDbid(status);
 			System.out.println("currStatusEnum: " + currStatusEnum);
 			dbid = AgentFunction.RecordStatusStart(userID, status, "8");
-			obj.addProperty(currStatusEnum.toString().toLowerCase() + "_dbid", dbid); // ex. login_dbid
+			String dbid_key = currStatusEnum.toString().toLowerCase() + "_dbid";
+			System.out.println("dbid_key: " + dbid_key);
+			obj.addProperty(dbid_key, dbid); // ex. login_dbid
 
 			// 先只有新增時寄送EVENT,讓前端能拿到相對應的dbid
 			obj.addProperty("Event", "updateStatus");

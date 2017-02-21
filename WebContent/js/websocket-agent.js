@@ -527,16 +527,12 @@ function Logoutaction() {
 	// 關閉上線開關
 	status_g = StatusEnum.LOGOUT;
 	switchStatus(status_g);
-	if (StatusEnum.login_dbid != null){
-		alert("end login - " + StatusEnum.login_dbid);
-//		switchStatus(status_g, 'end', StatusEnum.login_dbid);	
-		StatusEnum.updateStatus(StatusEnum.LOGOUT, "end", StatusEnum.login_dbid);
-	}
-	if (StatusEnum.notready_dbid != null){
-		alert("end notready - " + StatusEnum.notready_dbid);
-//		switchStatus(status_g, 'end', StatusEnum.notready_dbid);	
-		StatusEnum.updateStatus(StatusEnum.NOTREADY, "end", StatusEnum.notready_dbid);
-	}
+	console.log("StatusEnum.login_dbid: " + StatusEnum.login_dbid);
+	console.log("StatusEnum.notready_dbid: " + StatusEnum.notready_dbid);
+	console.log("StatusEnum.ready_dbid: " + StatusEnum.ready_dbid);
+	StatusEnum.login_dbid = StatusEnum.updateStatus(StatusEnum.LOGOUT, "end", StatusEnum.login_dbid);
+	StatusEnum.notready_dbid = StatusEnum.updateStatus(StatusEnum.NOTREADY, "end", StatusEnum.notready_dbid);
+	StatusEnum.ready_dbid = StatusEnum.updateStatus(StatusEnum.READY, "end", StatusEnum.ready_dbid);
 	
 	// 登出動作
 	var now = new Date();
@@ -574,7 +570,7 @@ function ready() {
 	// 更新頁面
 	status_g = StatusEnum.READY;
 	switchStatus(status_g);
-	StatusEnum.updateStatus(StatusEnum.NOTREADY, "end", StatusEnum.notready_dbid);
+	StatusEnum.notready_dbid = StatusEnum.updateStatus(StatusEnum.NOTREADY, "end", StatusEnum.notready_dbid);
 	StatusEnum.updateStatus(StatusEnum.READY, "start");
 	
 }
@@ -1125,13 +1121,21 @@ var StatusEnum = {
 	},
 	
 	updateStatus : function( aStatusEnum , aStartORend, aDbid){
-		if (aDbid === undefined) aDbid = null;
+		if ('end' == aStartORend && aDbid === undefined) {
+			console.log("updateStatus - end - " + aStatusEnum.description + " aDbid not found");
+			return;
+		}
+		
 		// 更新狀態資訊
 		parent.document.getElementById("status").value = aStatusEnum.description;
 		// 去server更新狀態
 		var myUpdateStatusJson = new updateStatusJson("Agent", parent.UserID_g, parent.UserName_g, 
 														aStatusEnum.dbid, "no reason", aStartORend, aDbid);
 		parent.ws_g.send(JSON.stringify(myUpdateStatusJson));
+		
+		if ('end' == aStartORend){
+			return null;
+		}
 //		// 從server取得狀態
 //		getStatus();
 	}
