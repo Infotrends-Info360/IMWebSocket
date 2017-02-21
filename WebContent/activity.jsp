@@ -561,7 +561,7 @@
 	<script type="text/javascript">
 
 	 $.ajax({                              
-         url:"/IMWebSocket/RESTful/Query_ActivityMenu",
+         url:"http://ws.crm.com.tw:8080/IMWebSocket/RESTful/Query_ActivityMenu",
 	         data:{
 	        	 dbid:0
 	        	 },
@@ -592,7 +592,7 @@
 		
 	var dbid = document.getElementById("activityMenu").value
  $.ajax({                              
-   url:"/IMWebSocket/RESTful/Query_ActivityMenu",
+   url:"http://ws.crm.com.tw:8080/IMWebSocket/RESTful/Query_ActivityMenu",
          data:{
         	 dbid:dbid
         	 },
@@ -622,19 +622,19 @@
        
         	 }	 
         	
-        	 for(var i=0; i<data.TitleFlag.length; i++){
-        		 if(i==0){
-        		 var div1 ="<div class='tab-pane active' id='caseInfo"+data.TitleFlag[i].activitygroupsid+"'><div class='row'><div class='col-xs-3'><table class='table table-striped table-bordered table-hover'><thead><tr><td><b class='text-success'>"+data.TitleFlag[i].codename+"</b></td></tr></thead><tbody id="+data.TitleFlag[i].titleflag+"><tr><td><input type='checkbox'>C1.無法登入</td></tr></tbody></table></div></div><div class='row' style='font-size:16px;'><div class='col-xs-2'><input type='checkbox'> 離席外撥</div><div class='col-xs-2'><input type='checkbox'> 來電提示</div><div class='col-xs-2'><input type='checkbox'> 抱怨</div><div class='col-xs-2'><input type='checkbox'> 離席</div><div class='col-xs-2'><input type='checkbox'> 黑名單</div><div class='col-xs-2'><button class='btn btn-success' onclick='closeCaseInfo()'>確定</button></div></div></div>"
-            	 document.getElementById("data_table").insertAdjacentHTML("BeforeEnd",div1); 
-        		 }else{
+//         	 for(var i=0; i<data.TitleFlag.length; i++){
+//         		 if(i==0){
+//         		 var div1 ="<div class='tab-pane active' id='caseInfo"+data.TitleFlag[i].activitygroupsid+"'><div class='row'><div class='col-xs-3'><table class='table table-striped table-bordered table-hover'><thead><tr><td><b class='text-success'>"+data.TitleFlag[i].codename+"</b></td></tr></thead><tbody id="+data.TitleFlag[i].titleflag+"><tr><td><input type='checkbox'>C1.無法登入</td></tr></tbody></table></div></div><div class='row' style='font-size:16px;'><div class='col-xs-2'><input type='checkbox'> 離席外撥</div><div class='col-xs-2'><input type='checkbox'> 來電提示</div><div class='col-xs-2'><input type='checkbox'> 抱怨</div><div class='col-xs-2'><input type='checkbox'> 離席</div><div class='col-xs-2'><input type='checkbox'> 黑名單</div><div class='col-xs-2'><button class='btn btn-success' onclick='closeCaseInfo()'>確定</button></div></div></div>"
+//             	 document.getElementById("data_table").insertAdjacentHTML("BeforeEnd",div1); 
+//         		 }else{
 
-        		 var div1 ="<div class='tab-pane' id='caseInfo"+data.TitleFlag[i].activitygroupsid+"'><div class='row'><div class='col-xs-3'><table class='table table-striped table-bordered table-hover'><thead><tr><td><b class='text-success'>"+data.TitleFlag[i].codename+"</b></td></tr></thead><tbody id="+data.TitleFlag[i].titleflag+"><tr><td><input type='checkbox'>C2.無法登入</td></tr></tbody></table></div></div><div class='row' style='font-size:16px;'><div class='col-xs-2'><input type='checkbox'> 離席外撥</div><div class='col-xs-2'><input type='checkbox'> 來電提示</div><div class='col-xs-2'><input type='checkbox'> 抱怨</div><div class='col-xs-2'><input type='checkbox'> 離席</div><div class='col-xs-2'><input type='checkbox'> 黑名單</div><div class='col-xs-2'><button class='btn btn-success' onclick='closeCaseInfo()'>確定</button></div></div></div>"
-        		 document.getElementById("data_table").insertAdjacentHTML("BeforeEnd",div1); 
-        	 	}
+//         		 var div1 ="<div class='tab-pane' id='caseInfo"+data.TitleFlag[i].activitygroupsid+"'><div class='row'><div class='col-xs-3'><table class='table table-striped table-bordered table-hover'><thead><tr><td><b class='text-success'>"+data.TitleFlag[i].codename+"</b></td></tr></thead><tbody id="+data.TitleFlag[i].titleflag+"><tr><td><input type='checkbox'>C2.無法登入</td></tr></tbody></table></div></div><div class='row' style='font-size:16px;'><div class='col-xs-2'><input type='checkbox'> 離席外撥</div><div class='col-xs-2'><input type='checkbox'> 來電提示</div><div class='col-xs-2'><input type='checkbox'> 抱怨</div><div class='col-xs-2'><input type='checkbox'> 離席</div><div class='col-xs-2'><input type='checkbox'> 黑名單</div><div class='col-xs-2'><button class='btn btn-success' onclick='closeCaseInfo()'>確定</button></div></div></div>"
+//         		 document.getElementById("data_table").insertAdjacentHTML("BeforeEnd",div1); 
+//         	 	}
         		 
-        		 var data ="<tr><td><input type='checkbox'>C1.無法登入</td></tr>"
-        		 document.getElementById("data_table").insertAdjacentHTML("BeforeEnd",div1);
-        	 }
+//         		 var data ="<tr><td><input type='checkbox'>C1.無法登入</td></tr>"
+//         		 document.getElementById("data_table").insertAdjacentHTML("BeforeEnd",div1);
+//         	 }
         	 
          }
    		 }); 
