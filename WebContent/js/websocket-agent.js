@@ -8,7 +8,9 @@ var roomInfoMap_g = new Map();
 var agentIDMap_g = new Map();
 var waittingClientIDList_g = [];
 var waittingAgentIDList_g = [];
-var maxCount_g;
+var maxRoomCount_g;
+var currRoomCount_g = 0;
+var afterCallStatus_g = 'WORKHARD'; // 先這樣
 //var count = 0;
 //var RoomIDList = []; // 接通後產生Group的ID List
 //var RoomIDLinkedList = new SinglyList(); // 接通後產生Group的ID Linked List
@@ -182,6 +184,23 @@ function Login() {
 					// 1. 研究一下這個map的json長什麼樣 2. 看怎麼拿值
 					updateRoomIDList(obj.roomID);
 					
+					// maxCount機制
+					currRoomCount_g++ // here
+					$('#maxRoomCount')[0].innerHTML = currRoomCount_g + " / " + maxRoomCount_g;
+
+//					alert("currRoomCount_g: " + currRoomCount_g);
+						// 判斷是否已達上限
+					if (currRoomCount_g == maxRoomCount_g) {
+						alert("reach max count");
+						$('#maxRoomCount').css('color', 'red');
+						$('#notready')[0].disabled = true;
+						$('#ready')[0].disabled = true;
+						// 若未達上限,判斷是否要切換為READY
+					}else if (afterCallStatus_g == 'WORKHARD'){
+						status_g = StatusEnum.READY;
+						switchStatus(StatusEnum.READY);
+					}
+					
 				} else if ("getUserStatus" == obj.Event) {
 //					console.log("onMessage(): getUserStatus called");
 //					document.getElementById("status").innerHTML = "狀態: "
@@ -195,9 +214,9 @@ function Login() {
 					waittingClientIDList_g.push( new function(){
 						this.clientID = obj.userdata.id
 					});
-					console.log("**********waittingClientIDMap.length: " + waittingClientIDList_g.length);
-					console.log("**********waittingClientIDMap: " + waittingClientIDList_g);
-					console.log("**********waittingClientIDMap: " + JSON.stringify( waittingClientIDList_g ));
+//					console.log("**********waittingClientIDMap.length: " + waittingClientIDList_g.length);
+//					console.log("**********waittingClientIDMap: " + waittingClientIDList_g);
+//					console.log("**********waittingClientIDMap: " + JSON.stringify( waittingClientIDList_g ));
 					
 					// 在這邊動態增加request list
 				    var tr = document.createElement('tr');   
@@ -241,8 +260,13 @@ function Login() {
 						$('#Reject')[0].reqType = 'Client';
 						$('#Reject')[0].userID = this.getAttribute("userID");
 //						$('#Reject')[0].userdata = this.getAttribute("userdata");
+												
 					}; // 設定 AcceptEventInit
-				    				    
+				    	
+					// 更改架構為 - 最多一次只收一個ring
+					status_g = StatusEnum.NOTREADY;
+					switchStatus(StatusEnum.NOTREADY);
+
 					
 				} else if ("userjointoTYPE" == obj.Event) {
 
@@ -255,7 +279,10 @@ function Login() {
 //					console.log("userjoin - UserID: " + obj.from);
 					var login_dbid = obj.login_dbid;
 					parent.UserID_g = obj.from;
-					maxCount_g = obj.MaxCount;
+//					maxRoomCount_g = obj.MaxCount; // 正式用
+					maxRoomCount_g = 2; // 測試用
+					$('#maxRoomCount')[0].innerHTML = currRoomCount_g + " / " + maxRoomCount_g;
+//					alert("maxRoomCount_g: " + maxRoomCount_g);
 					
 					// 更新enum
 					 console.log("***Enum - 更新enum: ");
@@ -270,7 +297,6 @@ function Login() {
 //						console.log("currStatusEnum.statusname: " + currStatusEnum.statusname);
 //						console.log("currStatusEnum.dbid: " + currStatusEnum.dbid);
 //						console.log("currStatusEnum.description: " + currStatusEnum.description);
-						// here
 						
 //						  $("#" + i).append(document.createTextNode(" - " + val));
 					});
@@ -424,6 +450,17 @@ function Login() {
 						if (currRoomID == obj.roomID){
 							updateRoomInfo(roomInfo);
 						}
+						
+						// maxCount機制 here
+						// 若前一次達到最大roomCount值,則恢復其狀態,且確認若會進入到此區塊,則目前狀態一定為NOTREADY
+						if(currRoomCount_g == maxRoomCount_g){
+							$('#notready')[0].disabled = true;
+							$('#ready')[0].disabled = false; // 讓Agent可以再使用這個功能
+							$('#maxRoomCount').css('color', 'black');
+						}
+						currRoomCount_g--;
+						$('#maxRoomCount')[0].innerHTML = currRoomCount_g + " / " + maxRoomCount_g;
+//						alert("currRoomCount_g: " + currRoomCount_g);
 					}
 					alert(obj.result);
 				} else if ("clientLeft" == obj.Event){
@@ -548,7 +585,6 @@ function AcceptEventInit() {
 	console.log("AcceptEventInit(): ");
 	var reqType = $('#Accept')[0].reqType;
 	if (reqType == 'thirdParty' || reqType == 'transfer'){
-		//here
 		var roomID = $('#Accept')[0].roomID;
 		var fromAgentID = $('#Accept')[0].userID;
 		responseThirdParty(reqType, roomID, fromAgentID, 'accept');
@@ -563,6 +599,7 @@ function AcceptEventInit() {
 		var mem2 = new myRoomMemberJsonObj(parent.UserID_g);
 		memberListToJoin.push(mem1);
 		memberListToJoin.push(mem2);
+		// addRoomForMany成功呼叫後,會收到"AcceptEvent"事件回應
 		addRoomForMany("none", memberListToJoin); // "none"是一個keyword, 會影響websocket server的邏輯判斷處理
 		
 		// 將此clientID從waittingClientIDList_g中去除
@@ -587,6 +624,7 @@ function AcceptEventInit() {
 	$('#' + userID).remove(); // <tr>的id
 	
 	// 開啟ready功能:
+	status_g = StatusEnum.NOTREADY;
 	switchStatus(StatusEnum.NOTREADY); // 這邊之後要用全域變數來控制不同的工作模式-是否要在established之後變成not ready
 //	document.getElementById("ready").disabled = false;
 //	document.getElementById("notready").disabled = true;		
@@ -651,7 +689,8 @@ function RejectEvent() {
 	$('#' + userID).remove(); // <tr>的id
 	
 	// 開啟ready功能:
-	switchStatus(StatusEnum.READY); // 拒絕之後就持續著READY狀態
+//	status_g = StatusEnum.READY;
+//	switchStatus(StatusEnum.READY); // 拒絕之後就持續著READY狀態
 	
 	// 向websocket送出拒絕交談指令  
 
@@ -692,6 +731,8 @@ function ReleaseEvent(aRoomID) {
 // 將多人同時加入房間
 // aMemberListToJoin船入格式如下:
 // [{"ID":"c8013217-2b20-46c4-ba2d-848fa430775e"},{"ID":"773bc9f4-3462-4360-8b11-e35be56b820a"}]
+// addRoomForMany成功呼叫後:
+// 會收到"AcceptEvent"事件回應
 function addRoomForMany(aRoomID, aMemberListToJoin){
 	if (aRoomID === undefined) aRoomID = RoomID_g; // 開發過渡期使用,之後會修掉
 	//JSONObject jo = new JSONObject(aMemberListToJoin);
@@ -942,7 +983,10 @@ function switchStatus(aStatusEnum){
 			}
 //			frames[i].document.body.style.background = "red";
 		}
+		// 改為離線
 		isonline = true;
+		// 將現有roomCount歸零
+		currRoomCount_g = 0;
 		
 		document.getElementById("UserID").value = parent.UserID_g;
 		document.getElementById("Login").disabled = true;
@@ -963,6 +1007,8 @@ function switchStatus(aStatusEnum){
 		}
 		// 改為離線
 		isonline = false;
+		// 將現有roomCount歸零
+		currRoomCount_g = 0;
 		
 		// 控制前端頁面
 		document.getElementById("Logout").disabled = true;

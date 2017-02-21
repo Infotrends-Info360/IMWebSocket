@@ -121,8 +121,12 @@ td {
 		    </div>
             <div class="col-xs-4 col-sm-4 col-md-4 col-lg-4">
                 <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
-                	<div class="col-xs-4 col-sm-4 col-md-4 col-lg-4">
+                	<div class="col-xs-6 col-sm-6 col-md-6 col-lg-6">
                 		<button id="ready" class="btn btn-primary marginBottom" style="width:100px" disabled onclick="ready();">Ready</button>
+                	</div>	                	
+                	<div class="col-xs-6 col-sm-6 col-md-6 col-lg-6">
+                		MaxRoomCount: 
+                		<div id="maxRoomCount" class="marginBottom" style="width:100px">  </div>
                 	</div>	                	
                 </div>	
                 <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
