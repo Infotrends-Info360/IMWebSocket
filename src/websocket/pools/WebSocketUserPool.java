@@ -98,8 +98,6 @@ public class WebSocketUserPool {
 	
 	/** * Add User to WebSocket Pool* @param inbound */ /* Done */
 	public static void addUserRoom(String userRoom, WebSocket conn) {
-		userallconnections.get(conn);
-		userallconnections.get(conn).getUserRoom();
 		userallconnections.get(conn).getUserRoom().add(userRoom);
 	}
 	
@@ -150,10 +148,10 @@ public class WebSocketUserPool {
 	}
 	
 	/** * Remove User Room from WebSocket Pool * @param inbound */ /* Done */
-	public static boolean removeUserRoom(WebSocket conn) {
+	public static boolean removeUserRoom(WebSocket conn, String aRoomID) {
 		
 		if (userallconnections.containsKey(conn)) {
-			userallconnections.get(conn).getUserRoom().clear(); // 改成clear, 不然會清過頭,不能重複用
+			userallconnections.get(conn).getUserRoom().remove(aRoomID); // 改成clear, 不然會清過頭,不能重複用
 			return true;
 		} else {
 			return false;

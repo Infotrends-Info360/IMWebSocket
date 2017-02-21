@@ -108,7 +108,7 @@ public class WebSocketRoomPool{
 				System.out.println("Client 全清");
 				//全清:
 				for (WebSocket conn: tmpConnsInRoom){
-					WebSocketUserPool.removeUserRoom(conn);
+					WebSocketUserPool.removeUserRoom(conn, aRoomID);
 				}
 				connsInRoomMap.clear();
 				sendJson.put("result", WebSocketUserPool.getUserNameByKey(aConn) + " closed the room" + aRoomID);
@@ -117,14 +117,14 @@ public class WebSocketRoomPool{
 				System.out.println("connsInRoom.size() == 2 全清");
 				//也全清:
 				for (WebSocket conn: tmpConnsInRoom){
-					WebSocketUserPool.removeUserRoom(conn);
+					WebSocketUserPool.removeUserRoom(conn, aRoomID);
 				}
 				connsInRoomMap.clear();
 				sendJson.put("result", WebSocketUserPool.getUserNameByKey(aConn) + " closed the room" + aRoomID);				
 			}else if (connsInRoomMap.size() > 2){
 				System.out.println("connsInRoom.size() > 2  清自己");
 				//清Agent自己
-				WebSocketUserPool.removeUserRoom(aConn);
+				WebSocketUserPool.removeUserRoom(aConn, aRoomID);
 				connsInRoomMap.remove(aConn);
 				sendJson.put("result", WebSocketUserPool.getUserNameByKey(aConn) + " left the room" + aRoomID);				
 			}
