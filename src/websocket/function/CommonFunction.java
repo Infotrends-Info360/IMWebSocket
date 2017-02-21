@@ -367,7 +367,7 @@ public class CommonFunction {
 	public static void updateStatus(String message, org.java_websocket.WebSocket conn) {
 		System.out.println("updateStatus() called");
 		JsonObject obj = Util.getGJsonObject(message);
-//		JSONObject obj = new JSONObject(message);
+//		JSONObject obj = new JSONObject(message); 
 		String ACtype = obj.get("ACtype").getAsString();
 		String username = obj.get("UserName").getAsString();
 		String userid = obj.get("id").getAsString();
