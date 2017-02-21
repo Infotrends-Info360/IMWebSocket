@@ -30,7 +30,7 @@ public class Cfg_AgentStatusDao {
 			sqlSession.commit();
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
-			//e.printStackTrace();
+			e.printStackTrace();
 			IsError.GET_EXCEPTION = e.getMessage();
 		} finally {
 			if(sqlSession != null){
