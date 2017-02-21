@@ -602,6 +602,7 @@ public class MaintainService {
 			count = agentstatusdao.Insert_agentstatus(agentstatus);
 		} catch (Exception e) {
 			IsError.GET_EXCEPTION = e.getMessage();
+			e.printStackTrace();
 		}
 		return count;
 	}
