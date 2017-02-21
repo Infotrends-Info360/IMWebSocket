@@ -166,8 +166,8 @@ function Login() {
 //					seeAllKV(obj);
 				
 					// 更新狀態
-					status_g = StatusEnum.I_ESTABLISHED;
-					switchStatus(StatusEnum.I_ESTABLISHED);
+					status_g = StatusEnum.IESTABLISHED;
+					switchStatus(StatusEnum.IESTABLISHED);
 					
 					// 在這邊興建roomList與其room bean
 					RoomID_g = obj.roomID; // 之後要改成local variable
@@ -247,11 +247,40 @@ function Login() {
 
 					// 接收到有人登入的訊息
 				} else if ("userjoin" == obj.Event) {
-					console.log("userjoin - UserID: " + obj.from);
+//					alert("login_dbid: " + obj.login_dbid);
+//					console.log("***Enum - e.data: " + e.data);
+//					console.log("***Enum - obj.statusList: " + obj.statusList);
+//					console.log("***Enum - JSON.stringify( obj.statusList ): " + JSON.stringify( obj.statusList ));
+//					console.log("userjoin - UserID: " + obj.from);
+					var login_dbid = obj.login_dbid;
 					parent.UserID_g = obj.from;
+					
+					// 更新enum
+					 console.log("***Enum - 更新enum: ");
+					jQuery.each(obj.statusList, function(key, val) {
+//						console.log("key: " + key);
+//						console.log("val.dbid: " + val.dbid);
+//						console.log("val.description: " + val.description);
+						
+						var currStatusEnum = StatusEnum.getStatusEnum(key);
+						currStatusEnum.dbid = val.dbid;
+						currStatusEnum.description = val.description;
+//						console.log("currStatusEnum.statusname: " + currStatusEnum.statusname);
+//						console.log("currStatusEnum.dbid: " + currStatusEnum.dbid);
+//						console.log("currStatusEnum.description: " + currStatusEnum.description);
+						// here
+						
+//						  $("#" + i).append(document.createTextNode(" - " + val));
+					});
+					
 					// 更新狀態
 					status_g = StatusEnum.LOGIN;
 					switchStatus(status_g);
+					
+					// 計算LOGIN狀態持續時間用:
+//					alert("login_dbid: " + login_dbid);
+					$('#Login')[0].setAttribute("login_dbid",login_dbid);
+//					alert("$('#Login')[0].getAttribute(\"login_dbid\"):\n" + $('#Login')[0].getAttribute("login_dbid"));
 										
 				} else if ("refreshRoomList" == obj.Event) {
 					// debug: 確認全部key-value:
@@ -362,8 +391,8 @@ function Login() {
 					console.log("userdata: " + userdata);
 
 					// 更新狀態
-					status_g = StatusEnum.I_ESTABLISHED;
-					switchStatus(StatusEnum.I_ESTABLISHED);
+					status_g = StatusEnum.IESTABLISHED;
+					switchStatus(StatusEnum.IESTABLISHED);
 					
 					// 在這邊興建roomList與其room bean
 					RoomID_g = roomID; // 之後要改成local variable
@@ -476,10 +505,11 @@ function Logoutaction() {
 		channel : "chat",
 		waittingClientIDList : waittingClientIDList_g, // 告訴寄出要求的clients不用等了
 		waittingAgentIDList : waittingAgentIDList_g, // 告訴寄出三方/轉接邀請的Agents不用等了
+		login_dbid : $('#Login')[0].getAttribute("login_dbid"),
 		// waitingAgentRoomIDList : waitingAgentRoomIDList_g; //  告訴寄出三方/轉接邀請的Agents不用等了 - 若有需要,再考慮增加是對應到哪個roomID
 		date : now.getHours() + ":" + now.getMinutes() + ":" + now.getSeconds()
 	};
-
+ 
 	// 發送消息
 	parent.ws_g.send(JSON.stringify(msg));
 
@@ -507,8 +537,8 @@ function ready() {
 // Agent尚未準備就緒
 function notready() {
 	// 更新狀態
-	status_g = StatusEnum.NOT_READY;
-	switchStatus(StatusEnum.NOT_READY);	
+	status_g = StatusEnum.NOTREADY;
+	switchStatus(StatusEnum.NOTREADY);	
 }
 
 //同意與Client交談
@@ -555,7 +585,7 @@ function AcceptEventInit() {
 	$('#' + userID).remove(); // <tr>的id
 	
 	// 開啟ready功能:
-	switchStatus(StatusEnum.NOT_READY); // 這邊之後要用全域變數來控制不同的工作模式-是否要在established之後變成not ready
+	switchStatus(StatusEnum.NOTREADY); // 這邊之後要用全域變數來控制不同的工作模式-是否要在established之後變成not ready
 //	document.getElementById("ready").disabled = false;
 //	document.getElementById("notready").disabled = true;		
 
@@ -887,17 +917,18 @@ function RefreshRoomList(){
 
 
 /** 2017/02/15 - 新增方法 **/
-function switchStatus(aStatus){
+function switchStatus(aStatusEnum){
 	// 更新狀態資訊
-	parent.document.getElementById("status").value = StatusEnum.toChinese(aStatus);
+//	parent.document.getElementById("status").value = StatusEnum.toChinese(aStatus);
+	parent.document.getElementById("status").value = aStatusEnum.description;
 	// 去server更新狀態
-	var myUpdateStatusJson = new updateStatusJson("Agent", parent.UserID_g, parent.UserName_g, aStatus, "no reason");
+	var myUpdateStatusJson = new updateStatusJson("Agent", parent.UserID_g, parent.UserName_g, aStatusEnum.dbid, "no reason");
 	parent.ws_g.send(JSON.stringify(myUpdateStatusJson));
 //	updateStatus("ready");
 	// 從server取得狀態
 	getStatus();
 
-	switch(aStatus) {
+	switch(aStatusEnum) {
     case StatusEnum.LOGIN:
 		var frames = window.parent.frames; // or // var frames = window.parent.frames;
 		for (var i = 0; i < frames.length; i++) { 
@@ -960,23 +991,23 @@ function switchStatus(aStatus){
     	document.getElementById("notready").disabled = false;
         //code block
         break;
-    case StatusEnum.NOT_READY:
+    case StatusEnum.NOTREADY:
     	//code block
     	document.getElementById("ready").disabled = false;
     	document.getElementById("notready").disabled = true;
     	break;
-    case StatusEnum.AFTER_CALL_WORK:
+    case StatusEnum.AFTERCALLWORK:
     	//code block
     	break;
     case StatusEnum.RING:
     	//code block
     	break;
-    case StatusEnum.I_ESTABLISHED:
+    case StatusEnum.IESTABLISHED:
     	//code block
 		document.getElementById("Accept").disabled = true;
 		document.getElementById("Reject").disabled = true;
     	break;
-    case StatusEnum.O_ESTABLISHED:
+    case StatusEnum.OESTABLISHED:
     	//code block
     	break;
 //    case StatusEnum.:
@@ -986,29 +1017,42 @@ function switchStatus(aStatus){
         break;
 	}
 }
-var StatusEnum = Object.freeze({
-	LOGIN: '1', 
-	LOGOUT: '2', 
-	READY: '3',
-	NOT_READY: '4',
-	AFTER_CALL_WORK: '5',
-	RING: '6',
-	I_ESTABLISHED: '7',
-	O_ESTABLISHED: '8',
+//var StatusEnum = Object.freeze({
+var StatusEnum = {
+	LOGIN: { statusname : 'LOGIN', dbid : '0',description : '中文'}, 
+	LOGOUT: { statusname : 'LOGOUT', dbid : '0',description : '中文'}, 
+	READY: { statusname : 'READY', dbid : '0',description : '中文'}, 
+	NOTREADY: { statusname : 'NOTREADY', dbid : '0',description : '中文'}, 
+	PAPERWORK: { statusname : 'PAPERWORK', dbid : '0',description : '中文'}, 
+	RING: { statusname : 'RING', dbid : '0',description : '中文'}, 
+	IESTABLISHED: { statusname : 'IESTABLISHED', dbid : '0',description : '中文'}, 
+	OESTABLISHED: { statusname : 'OESTABLISHED', dbid : '0',description : '中文'}, 
 	
-	toChinese : function(aStatusEnumIndex) { // Method which will display type of Animal
-//		console.log(this.type);
-//		console.log("aStatusEnumIndex: " + aStatusEnumIndex);
-		aStatusEnumIndex -= 1; // 為了符合array起始為零
-//						 0	    1      2        3      4        5      6        7		
-		var converter = ["登入", "登出", "準備就緒", "離席", "文書處理", "響鈴", "進線通話", "外撥通話"];
-//		alert(converter[aStatusEnumIndex]);
-//		alert(converter[2]);
-//		console.log("converter[aStatusEnumIndex]: " + converter[aStatusEnumIndex]);
-		return converter[aStatusEnumIndex];
-	}	
+	getStatusEnum : function(aStatusname){
+		aStatusname = aStatusname.toUpperCase();
+		
+		if (StatusEnum.LOGIN.statusname == aStatusname){
+			return StatusEnum.LOGIN;
+		}else if (StatusEnum.LOGOUT.statusname == aStatusname){
+			return StatusEnum.LOGOUT;
+		}else if (StatusEnum.READY.statusname == aStatusname){
+			return StatusEnum.READY;
+		}else if (StatusEnum.NOTREADY.statusname == aStatusname){
+			return StatusEnum.NOTREADY;
+		}else if (StatusEnum.PAPERWORK.statusname == aStatusname){
+			return StatusEnum.PAPERWORK;
+		}else if (StatusEnum.RING.statusname == aStatusname){
+			return StatusEnum.RING;
+		}else if (StatusEnum.IESTABLISHED.statusname == aStatusname){
+			return StatusEnum.IESTABLISHED;
+		}else if (StatusEnum.OESTABLISHED.statusname == aStatusname){
+			return StatusEnum.OESTABLISHED;
+		}
+		System.out.println("StatusEnmu - getStatusEnum: " + " no match");
+		return null;
+	}
 	
-});
+};
 
 var Animal = {
 		type: "Invertebrates", // Default value of properties

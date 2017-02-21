@@ -95,12 +95,12 @@ public class AgentFunction {
 	}
 
 	public static void refreshAgentList() {
+		System.out.println("refreshAgentList() called");
 		Map<WebSocket, UserInfo> agentMap = WebSocketTypePool
 				.getTypeconnections().get("Agent");
 		Collection<String> agentIDList = WebSocketTypePool
 				.getOnlineUserIDinTYPE("Agent");
-		System.out.println("userjoin() - agentIDList.size(): "
-				+ agentIDList.size());
+//		System.out.println("refreshAgentList() - agentIDList.size(): " 	+ agentIDList.size());
 		Set<WebSocket> agentConnList = agentMap.keySet();
 		for (WebSocket tmpConn : agentConnList) {
 
@@ -214,9 +214,13 @@ public class AgentFunction {
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
+		} catch (Exception e) {
+			e.printStackTrace();
 		}
 		JSONObject jsonobject = new JSONObject(responseSB.toString());
-		String dbid = jsonobject.getString("dbid");
+//		String dbid = jsonobject.getString("dbid"); // exception: "dbid" not a String type
+		String dbid = Integer.toString(jsonobject.getInt("dbid"));
+//		System.out.println("RecordStatusStart() - dbid: " + dbid);
 		
 		return dbid;
 	}
@@ -262,6 +266,7 @@ public class AgentFunction {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
+		
 		
 		return responseSB.toString();
 	}

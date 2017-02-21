@@ -67,6 +67,10 @@ public class WebSocket extends WebSocketServer {
 	public void onOpen(org.java_websocket.WebSocket conn,
 			ClientHandshake handshake) {
 		System.out.println("Someone link in Socket conn:" + conn);
+		// status測試
+//		String dbid = AgentFunction.RecordStatusStart("123", "1", "2");
+//		AgentFunction.RecordStatusEnd(dbid);
+
 		l++;
 	}
 
