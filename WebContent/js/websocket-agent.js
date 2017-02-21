@@ -576,9 +576,11 @@ function ready() {
 }
 // Agent尚未準備就緒
 function notready() {
-	// 更新狀態
+	// 更新頁面
 	status_g = StatusEnum.NOTREADY;
-	switchStatus(StatusEnum.NOTREADY);	
+	switchStatus(status_g);
+	StatusEnum.ready_dbid = StatusEnum.updateStatus(StatusEnum.READY, "end", StatusEnum.ready_dbid);
+	StatusEnum.updateStatus(StatusEnum.NOTREADY, "start");
 }
 
 //同意與Client交談
