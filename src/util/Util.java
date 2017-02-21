@@ -2,6 +2,7 @@ package util;
  
 import java.util.Map;
 
+import com.google.gson.JsonNull;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 
@@ -43,6 +44,12 @@ public class Util {
 		JsonParser jsonParser = new JsonParser(); 
 		JsonObject msgJson = jsonParser.parse(aMsg).getAsJsonObject();
 		return msgJson;
+	}
+	public static String getGString(JsonObject aObj, String aKey){
+		return (aObj.get(aKey) != null && !(aObj.get(aKey)instanceof JsonNull))?aObj.get(aKey).getAsString():null;
+	}
+	public static String getTmpID(String aID){
+		return aID.replaceAll( "[^\\d]", "" ).substring(0,6);
 	}
 
 

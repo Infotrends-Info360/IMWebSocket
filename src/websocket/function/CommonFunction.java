@@ -83,13 +83,13 @@ public class CommonFunction {
 //		WebSocketUserPool.sendMessage(joinMsg);
 
 		/*** 更新Status ***/
-		String tmpUserId = userId.replaceAll( "[^\\d]", "" ).substring(0,6);
-			// insert LOGIN
-		String login_dbid = AgentFunction.RecordStatusStart(tmpUserId, StatusEnum.LOGIN.getDbid(), "0");
-		System.out.println("login_dbid: " + login_dbid);
-			// insert NOTREADY
-		String notready_dbid = AgentFunction.RecordStatusStart(tmpUserId, StatusEnum.NOTREADY.getDbid(), "0");
-		System.out.println("notready_dbid: " + notready_dbid);
+//		String tmpUserId = userId.replaceAll( "[^\\d]", "" ).substring(0,6);
+//			// insert LOGIN
+//		String login_dbid = AgentFunction.RecordStatusStart(tmpUserId, StatusEnum.LOGIN.getDbid(), "0");
+//		System.out.println("login_dbid: " + login_dbid);
+//			// insert NOTREADY
+//		String notready_dbid = AgentFunction.RecordStatusStart(tmpUserId, StatusEnum.NOTREADY.getDbid(), "0");
+//		System.out.println("notready_dbid: " + notready_dbid);
 		
 		/*** 告知user其成功登入的UserID ***/
 		JSONObject sendjson = new JSONObject();
@@ -97,8 +97,8 @@ public class CommonFunction {
 		sendjson.put("from", userId);
 		sendjson.put("channel", channel);
 		sendjson.put("statusList", Util.getAgentStatus());
-		sendjson.put("login_dbid", login_dbid); // 此key-value只須Agent接就好(先不做過濾)
-		sendjson.put("notready_dbid", notready_dbid); // 此key-value只須Agent接就好(先不做過濾)
+//		sendjson.put("login_dbid", login_dbid); // 此key-value只須Agent接就好(先不做過濾)
+//		sendjson.put("notready_dbid", notready_dbid); // 此key-value只須Agent接就好(先不做過濾)
 		sendjson.put("MaxCount", MaxCount); // 此key-value只須Agent接就好(先不做過濾)
 		WebSocketUserPool.sendMessageToUser(aConn, sendjson.toString());
 //		WebSocketUserPool.sendMessage("online people: "
@@ -214,8 +214,8 @@ public class CommonFunction {
 		}
 		
 		// 更新Logout狀態
-		AgentFunction.RecordStatusEnd(login_dbid);
-		AgentFunction.RecordStatusEnd(notready_dbid);
+//		AgentFunction.RecordStatusEnd(login_dbid);
+//		AgentFunction.RecordStatusEnd(notready_dbid);
 		
 //		System.out.println("before close: " + WebSocketUserPool.getUserID(aConn));
 		// 最後關閉連線
@@ -382,17 +382,57 @@ public class CommonFunction {
 	
 	/** * update Agent Status */
 	public static void updateStatus(String message, org.java_websocket.WebSocket conn) {
-		JSONObject obj = new JSONObject(message);
-		String ACtype = obj.getString("ACtype");
-		String username = obj.getString("UserName");
-		String userid = obj.getString("id");
-		String date = obj.getString("date");
-		String status = obj.getString("status");
+		System.out.println("updateStatus() called");
+		JsonObject obj = Util.getGJsonObject(message);
+//		JSONObject obj = new JSONObject(message);
+		String ACtype = obj.get("ACtype").getAsString();
+		String username = obj.get("UserName").getAsString();
+		String userid = obj.get("id").getAsString();
+		String date = obj.get("date").getAsString();
+		String status = obj.get("status").getAsString();
+		String reason = obj.get("reason").getAsString();
+		String dbid = Util.getGString(obj, "dbid");
+		String startORend = Util.getGString(obj, "startORend"); 
+		
+		//更新狀態列表:
+		String login_dbid;
+		String notready_dbid;
+
 		if(status.equals("lose")){
 			WebSocketTypePool.addleaveClient();
 		}
-		String reason = obj.getString("reason");
 		WebSocketTypePool.UserUpdate(ACtype, username, userid, date, status, reason, conn);
+		
+		// 更新DB狀態時間
+		System.out.println("obj: " + obj);
+		System.out.println("dbid: " + dbid);
+		System.out.println("startORend: " + startORend);
+		
+		if ("start".equals(startORend)){
+			String userID = Util.getTmpID(userid);
+			// 如果是LOGIN狀態,則同時新增NOTREADY狀態
+			if (StatusEnum.LOGIN.getDbid().equals(status)){
+				login_dbid = AgentFunction.RecordStatusStart(userID, status, "9");
+				obj.addProperty("login_dbid", login_dbid);
+				notready_dbid = AgentFunction.RecordStatusStart(userID, StatusEnum.NOTREADY.getDbid(), "9");
+				obj.addProperty("notready_dbid", notready_dbid);
+			}// else if ... 
+			
+			// 先只有新增時寄送EVENT,讓前端能拿到相對應的dbid
+			obj.addProperty("Event", "updateStatus");
+			WebSocketUserPool.sendMessageToUser(conn, obj.toString());
+
+		}else if ("end".equals(startORend)){
+			System.out.println("end");
+			if (dbid != null){
+				System.out.println("dbid: " + dbid);
+				AgentFunction.RecordStatusEnd(dbid);
+			}
+		}
+		
+		
+		
+		
 	}
 	
 	public static void refreshRoomList(org.java_websocket.WebSocket conn){

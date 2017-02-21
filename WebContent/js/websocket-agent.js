@@ -304,7 +304,7 @@ function Login() {
 					
 					// 更新狀態
 					status_g = StatusEnum.LOGIN;
-					switchStatus(status_g);
+					switchStatus(status_g, "start");
 					
 					// 計算LOGIN狀態持續時間用:
 //					alert("login_dbid: " + login_dbid);
@@ -496,6 +496,8 @@ function Login() {
 					updateAgentIDList();
 				} else if ("agentLeftThirdParty" == obj.Event){
 					alert("agentLeftThirdParty - agent " + obj.id + " left ");
+				} else if ("updateStatus" == obj.Event){
+					StatusEnum.updateDbid(obj);
 				}
 			// 非指令訊息
 			// (Billy哥部分)
@@ -537,6 +539,18 @@ function Logout() {
 // 執行登出
 function Logoutaction() {	
 	// 向websocket送出登出指令
+	// 關閉上線開關
+	status_g = StatusEnum.LOGOUT;
+	if (StatusEnum.login_dbid != null){
+		alert("end login - " + StatusEnum.login_dbid);
+		switchStatus(status_g, 'end', StatusEnum.login_dbid);	
+	}
+	if (StatusEnum.notready_dbid != null){
+		alert("end notready - " + StatusEnum.notready_dbid);
+		switchStatus(status_g, 'end', StatusEnum.notready_dbid);	
+	}
+	
+	// 登出動作
 	var now = new Date();
 	var msg = {
 		type : "Exit",
@@ -555,9 +569,7 @@ function Logoutaction() {
 	// 發送消息
 	parent.ws_g.send(JSON.stringify(msg));
 
-	// 關閉上線開關
-	status_g = StatusEnum.LOGOUT;
-	switchStatus(status_g);	
+
 	
 //	// 關閉websocket
 //	parent.ws_g.close();
@@ -853,7 +865,7 @@ function getStatus() {
 }
 
 // 只有在aStatus狀態為not ready時,才會傳入aReason參數
-function updateStatus(aStatus, aReason){
+function updateStatus(aStatus, aReason){	
 	if (aReason === undefined) aReason = 'no reason'; 
 	// 向websocket送出變更狀態至未就緒指令
 	var now = new Date();
@@ -963,12 +975,15 @@ function RefreshRoomList(){
 
 
 /** 2017/02/15 - 新增方法 **/
-function switchStatus(aStatusEnum){
+function switchStatus(aStatusEnum, aStartORend, aDbid){
+	if (aDbid === undefined) aDbid = null;
+//	alert("aStartORend: " + aStartORend);
 	// 更新狀態資訊
 //	parent.document.getElementById("status").value = StatusEnum.toChinese(aStatus);
 	parent.document.getElementById("status").value = aStatusEnum.description;
 	// 去server更新狀態
-	var myUpdateStatusJson = new updateStatusJson("Agent", parent.UserID_g, parent.UserName_g, aStatusEnum.dbid, "no reason");
+	var myUpdateStatusJson = new updateStatusJson("Agent", parent.UserID_g, parent.UserName_g, 
+													aStatusEnum.dbid, "no reason", aStartORend, aDbid);
 	parent.ws_g.send(JSON.stringify(myUpdateStatusJson));
 //	updateStatus("ready");
 	// 從server取得狀態
@@ -1079,6 +1094,15 @@ var StatusEnum = {
 	IESTABLISHED: { statusname : 'IESTABLISHED', dbid : '0',description : '中文'}, 
 	OESTABLISHED: { statusname : 'OESTABLISHED', dbid : '0',description : '中文'}, 
 	
+	login_dbid : null,
+	logout_dbid :  null,
+	ready_dbid : null,
+	notready_dbid : null,
+	paperwork_dbid : null,
+	ring_dbid : null,
+	iestablished_dbid : null,
+	oestablished_dbid : null,
+	
 	getStatusEnum : function(aStatusname){
 		aStatusname = aStatusname.toUpperCase();
 		
@@ -1101,6 +1125,17 @@ var StatusEnum = {
 		}
 		System.out.println("StatusEnmu - getStatusEnum: " + " no match");
 		return null;
+	},
+	
+	updateDbid : function(aObj){
+		StatusEnum.login_dbid = aObj.login_dbid; 
+		StatusEnum.logout_dbid = aObj.logout_dbid; 
+		StatusEnum.ready_dbid = aObj.ready_dbid; 
+		StatusEnum.notready_dbid = aObj.notready_dbid; 
+		StatusEnum.paperwork_dbid = aObj.paperwork_dbid; 
+		StatusEnum.ring_dbid = aObj.ring_dbid; 
+		StatusEnum.iestablished_dbid = aObj.iestablished_dbid; 
+		StatusEnum.oestablished_dbid = aObj.oestablished_dbid; 
 	}
 	
 };
