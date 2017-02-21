@@ -171,6 +171,9 @@ function Login() {
 					// 更新狀態
 					status_g = StatusEnum.IESTABLISHED;
 					switchStatus(StatusEnum.IESTABLISHED);
+					StatusEnum.ring_dbid = StatusEnum.updateStatus(StatusEnum.RING, "end", StatusEnum.ring_dbid);
+					StatusEnum.updateStatus(StatusEnum.IESTABLISHED, "start");
+					
 					
 					// 在這邊興建roomList與其room bean
 					RoomID_g = obj.roomID; // 之後要改成local variable
@@ -197,8 +200,11 @@ function Login() {
 						$('#ready')[0].disabled = true;
 						// 若未達上限,判斷是否要切換為READY
 					}else if (afterCallStatus_g == 'WORKHARD'){
+						// 更新狀態(唯一在RING事件之後會將狀態切換為READY的情況)
 						status_g = StatusEnum.READY;
-						switchStatus(StatusEnum.READY);
+						switchStatus(status_g);
+						StatusEnum.notready_dbid = StatusEnum.updateStatus(StatusEnum.NOTREADY, "end", StatusEnum.notready_dbid);
+						StatusEnum.updateStatus(StatusEnum.READY, "start");
 					}
 					
 				} else if ("getUserStatus" == obj.Event) {
@@ -533,10 +539,12 @@ function Logoutaction() {
 	console.log("StatusEnum.notready_dbid: " + StatusEnum.notready_dbid);
 	console.log("StatusEnum.ready_dbid: " + StatusEnum.ready_dbid);
 	console.log("StatusEnum.ring_dbid: " + StatusEnum.ring_dbid);
+	console.log("StatusEnum.iestablished_dbid: " + StatusEnum.iestablished_dbid);
 	StatusEnum.login_dbid = StatusEnum.updateStatus(StatusEnum.LOGOUT, "end", StatusEnum.login_dbid);
 	StatusEnum.notready_dbid = StatusEnum.updateStatus(StatusEnum.NOTREADY, "end", StatusEnum.notready_dbid);
 	StatusEnum.ready_dbid = StatusEnum.updateStatus(StatusEnum.READY, "end", StatusEnum.ready_dbid);
 	StatusEnum.ring_dbid = StatusEnum.updateStatus(StatusEnum.RING, "end", StatusEnum.ring_dbid);
+	StatusEnum.ring_dbid = StatusEnum.updateStatus(StatusEnum.IESTABLISHED, "end",JSON.stringify(StatusEnum.iestablished_dbid)); // 須用list
 	
 	// 登出動作
 	var now = new Date();
@@ -621,7 +629,9 @@ function AcceptEventInit() {
 		}
 		waittingClientIDList_g.splice(index_remove,1);
 //		console.log("waittingClientIDList_g.length: " + waittingClientIDList_g.length);
-				
+		
+
+
 	}
 	
 	// 將此請求從request list中去除掉
@@ -1077,7 +1087,7 @@ var StatusEnum = {
 	notready_dbid : null,
 	paperwork_dbid : null,
 	ring_dbid : null,
-	iestablished_dbid : null,
+	iestablished_dbid : [],
 	oestablished_dbid : null,
 	
 	getStatusEnum : function(aStatusname){
@@ -1118,7 +1128,7 @@ var StatusEnum = {
 		if (aObj.ring_dbid != null)
 			StatusEnum.ring_dbid = aObj.ring_dbid; 
 		if (aObj.iestablished_dbid != null)
-			StatusEnum.iestablished_dbid = aObj.iestablished_dbid; 
+			StatusEnum.iestablished_dbid.push(aObj.iestablished_dbid); 
 		if (aObj.oestablished_dbid != null)
 			StatusEnum.oestablished_dbid = aObj.oestablished_dbid; 
 	},

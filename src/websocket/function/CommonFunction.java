@@ -406,7 +406,21 @@ public class CommonFunction {
 			System.out.println("end");
 			if (dbid != null){
 				System.out.println("dbid: " + dbid);
-				AgentFunction.RecordStatusEnd(dbid);
+				// 查看是否為iestablished list要更新
+				if ("[".equals(dbid.substring(0, 1))){
+					System.out.println("here!!");
+					dbid = dbid.substring(1, dbid.length()-1);
+					System.out.println("dbid inner: " + dbid);
+					for (String dbid_tmp: dbid.split(",")){ // dbid_tmp 原本長這樣 ["414","418"] 全部是一個字串
+						dbid_tmp = dbid_tmp.substring(1,dbid_tmp.length()-1);
+						System.out.println("dbid_tmp: " + dbid_tmp);
+						AgentFunction.RecordStatusEnd(dbid_tmp);
+					}
+					
+				}else{
+					AgentFunction.RecordStatusEnd(dbid);					
+				}
+				
 			}
 		}
 		
