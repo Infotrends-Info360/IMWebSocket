@@ -81,15 +81,6 @@ public class CommonFunction {
 		WebSocketUserPool.addUser(username, userId, aConn, ACtype); // 在此刻,已將user conn加入倒Pool中
 //		String joinMsg = "[Server]" + username + " Online";
 //		WebSocketUserPool.sendMessage(joinMsg);
-
-		/*** 更新Status ***/
-//		String tmpUserId = userId.replaceAll( "[^\\d]", "" ).substring(0,6);
-//			// insert LOGIN
-//		String login_dbid = AgentFunction.RecordStatusStart(tmpUserId, StatusEnum.LOGIN.getDbid(), "0");
-//		System.out.println("login_dbid: " + login_dbid);
-//			// insert NOTREADY
-//		String notready_dbid = AgentFunction.RecordStatusStart(tmpUserId, StatusEnum.NOTREADY.getDbid(), "0");
-//		System.out.println("notready_dbid: " + notready_dbid);
 		
 		/*** 告知user其成功登入的UserID ***/
 		JSONObject sendjson = new JSONObject();
@@ -140,8 +131,6 @@ public class CommonFunction {
 		JsonObject jsonIn = Util.getGJsonObject(aMsg);
 		String id = jsonIn.get("id").getAsString();
 		String UserName = jsonIn.get("UserName").getAsString();
-		String login_dbid = jsonIn.get("login_dbid").getAsString();
-		String notready_dbid = jsonIn.get("notready_dbid").getAsString();
 		
 		//Billy哥部分前端需求:
 		String joinMsg = "[Server] - " + UserName + " Offline";
@@ -157,11 +146,11 @@ public class CommonFunction {
 		// 若已經有Agent正在決定是否Accept此通通話, 若Client先離開了, 則告知此Agent此Client已經離開, 不用再等了
 //		String waittingAgent = jsonIn.get("waittingAgent").getAsBoolean();
 		if ( WebSocketTypePool.isClient(aConn) && jsonIn.get("waittingAgent") != null){
-			System.out.println("userExit() - waittingAgent: " + jsonIn.get("waittingAgent").getAsBoolean());
+//			System.out.println("userExit() - waittingAgent: " + jsonIn.get("waittingAgent").getAsBoolean());
 			if (jsonIn.get("waittingAgent").getAsBoolean()){
 				String waittingAgentID = jsonIn.get("waittingAgentID").getAsString();
 				WebSocket agentConn = WebSocketUserPool.getWebSocketByUser(waittingAgentID);
-				System.out.println("userExit() - waittingAgentID: " + waittingAgentID);
+//				System.out.println("userExit() - waittingAgentID: " + waittingAgentID);
 				// "clientLeft"
 				JsonObject jsonTo = new JsonObject();
 				jsonTo.addProperty("Event", "clientLeft");
@@ -175,8 +164,8 @@ public class CommonFunction {
 //		waittingClientIDList
 		if (WebSocketTypePool.isAgent(aConn)){
 			if (!"[]".equals(jsonIn.get("waittingClientIDList"))){
-				System.out.println("userExit() - waittingClientIDList got here");
-				System.out.println("userExit() - " + jsonIn.get("waittingClientIDList").toString());
+//				System.out.println("userExit() - waittingClientIDList got here");
+//				System.out.println("userExit() - " + jsonIn.get("waittingClientIDList").toString());
 				JsonArray clientIDJsonAry = jsonIn.getAsJsonArray("waittingClientIDList");
 //				String clientIDStr = jsonIn.get("waittingClientIDList").toString();
 //				String[] waittingClientIDList = clientIDStr.substring(1, clientIDStr.length()-1).split(",");
@@ -193,17 +182,17 @@ public class CommonFunction {
 			}
 			
 			if (!"[]".equals(jsonIn.get("waittingAgentIDList").toString())){
-				System.out.println("userExit() - waittingAgentIDList got here");
-				System.out.println("userExit() - " + jsonIn.get("waittingAgentIDList").toString());
+//				System.out.println("userExit() - waittingAgentIDList got here");
+//				System.out.println("userExit() - " + jsonIn.get("waittingAgentIDList").toString());
 				JsonArray agentIDJsonAry = jsonIn.getAsJsonArray("waittingAgentIDList");
 //				String clientIDStr = jsonIn.get("waittingClientIDList").toString();
 //				String[] waittingClientIDList = clientIDStr.substring(1, clientIDStr.length()-1).split(",");
 //				System.out.println("userExit() - " + waittingClientIDList.length);
-				System.out.println("userExit() - agentIDJsonAry: " + agentIDJsonAry);
+//				System.out.println("userExit() - agentIDJsonAry: " + agentIDJsonAry);
 				for(final JsonElement agentID_je : agentIDJsonAry) {
 				    String agentID = agentID_je.getAsJsonObject().get("agentID").getAsString();
 				    WebSocket agentConn = WebSocketUserPool.getWebSocketByUser(agentID);
-				    System.out.println("userExit() - agentID: " + agentID);
+//				    System.out.println("userExit() - agentID: " + agentID);
 				    jsonIn.addProperty("Event", "agentLeftThirdParty");
 					WebSocketUserPool.sendMessageToUser(agentConn, jsonIn.toString());
 				}
@@ -213,15 +202,9 @@ public class CommonFunction {
 //			}
 		}
 		
-		// 更新Logout狀態
-//		AgentFunction.RecordStatusEnd(login_dbid);
-//		AgentFunction.RecordStatusEnd(notready_dbid);
-		
 //		System.out.println("before close: " + WebSocketUserPool.getUserID(aConn));
 		// 最後關閉連線
 		aConn.close();
-//		WebSocketPool.removeUserID(conn);
-//		WebSocketPool.removeUserName(conn);
 	}
 	
 	/** * user join room */
@@ -404,6 +387,7 @@ public class CommonFunction {
 		WebSocketTypePool.UserUpdate(ACtype, username, userid, date, status, reason, conn);
 		
 		// 更新DB狀態時間
+		System.out.println("status: " + status);
 		System.out.println("obj: " + obj);
 		System.out.println("dbid: " + dbid);
 		System.out.println("startORend: " + startORend);
@@ -412,12 +396,13 @@ public class CommonFunction {
 			String userID = Util.getTmpID(userid);
 			// 如果是LOGIN狀態,則同時新增NOTREADY狀態
 			if (StatusEnum.LOGIN.getDbid().equals(status)){
-				login_dbid = AgentFunction.RecordStatusStart(userID, status, "9");
+				login_dbid = AgentFunction.RecordStatusStart(userID, status, "8");
 				obj.addProperty("login_dbid", login_dbid);
-				notready_dbid = AgentFunction.RecordStatusStart(userID, StatusEnum.NOTREADY.getDbid(), "9");
+			}else if (StatusEnum.NOTREADY.getDbid().equals(status)){
+				notready_dbid = AgentFunction.RecordStatusStart(userID, status, "8");
 				obj.addProperty("notready_dbid", notready_dbid);
-			}// else if ... 
-			
+			}
+
 			// 先只有新增時寄送EVENT,讓前端能拿到相對應的dbid
 			obj.addProperty("Event", "updateStatus");
 			WebSocketUserPool.sendMessageToUser(conn, obj.toString());
