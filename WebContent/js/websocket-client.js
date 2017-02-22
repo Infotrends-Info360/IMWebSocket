@@ -248,6 +248,10 @@ function Login() {
 					switchStatus(StatusEnum.FIND_AGENT);
 					findingAgent();
 
+				} else if ("ringTimeout" == obj.Event){
+					alert("ringTimeout");
+					switchStatus(StatusEnum.FIND_AGENT);
+					findingAgent();
 				}
 			} else {
 				// 控制前端傳值

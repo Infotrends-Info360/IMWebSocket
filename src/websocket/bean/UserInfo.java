@@ -4,6 +4,13 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.Timer;
+import java.util.TimerTask;
+import java.util.concurrent.atomic.AtomicBoolean;
+
+import org.java_websocket.WebSocket;
+
+import util.Util;
+
 
 //此類別給WebSocketPool.userallconnections使用
 public class UserInfo {
@@ -19,7 +26,8 @@ public class UserInfo {
 	private String reason;
 	private String status;
 	private String time;
-	
+	private AtomicBoolean stopRing = new AtomicBoolean(false); // 處理concurrent問題
+	private AtomicBoolean timeout = new AtomicBoolean(false); // 處理concurrent問題
 	
 	
 	public String getUserid() {
@@ -88,6 +96,21 @@ public class UserInfo {
 	public void setTime(String time) {
 		this.time = time;
 	}
+	public boolean isStopRing() {
+		return stopRing.get();
+	}
+	public void setStopRing(boolean stopRing) {
+		this.stopRing.set(stopRing);
+	}
+	public boolean getTimeout() {
+		return timeout.get();
+	}
+	public void setTimeout(boolean timeout) {
+		this.timeout.set(timeout);;
+	}
 	
 	
 }
+
+
+

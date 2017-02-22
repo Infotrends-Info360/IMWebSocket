@@ -18,7 +18,17 @@ import javax.servlet.ServletContextListener;
 import javax.servlet.annotation.WebListener;
  
 
+
+
+
+
+
 import util.StatusEnum;
+
+
+
+
+
 
 
 
@@ -32,6 +42,8 @@ import com.Info360.service.MaintainService;
 
 import util.StatusEnum;
 import util.Util;
+import websocket.bean.RingCountDownTask;
+import websocket.bean.UserInfo;
 import websocket.function.AgentFunction;
  
 @WebListener("application context listener")
@@ -85,16 +97,22 @@ public class SystemListener implements ServletContextListener {
 		 Util.setAgentStatus(agentstatusmap);
 		 System.out.println("agentstatusmap: "+agentstatusmap);
 		 
-//		 System.out.println("結果驗證: ");
-//		 System.out.println("StatusEnum.LOGIN.getDbid(): " + StatusEnum.LOGIN.getDbid());
-//		 System.out.println("StatusEnum.LOGIN.getDescription(): " + StatusEnum.LOGIN.getDescription());
-//		 System.out.println("StatusEnum.IESTABLISHED.getDbid(): " + StatusEnum.IESTABLISHED.getDbid());
-//		 System.out.println("StatusEnum.IESTABLISHED.getDescription(): " + StatusEnum.IESTABLISHED.getDescription());
+		  
+		 //測試區
+//		 System.out.println("TimerTaskRingHeartBeat test: ");
+//		 UserInfo agentUserInfo = new UserInfo();
+//		 RingCountDownTask timertask = new RingCountDownTask(null, "", agentUserInfo);
+//		 timertask.operate();
 		 
-//		 System.out.println("agentstatusmap: "+Util.getAgentStatus());
-//        System.out.println("MaxRingTime: "+Util.getMaxRingTime());
-//        System.out.println("AfterCallStatus: "+Util.getAfterCallStatus());
-//        System.out.println("EstablishedStatus: "+Util.getEstablishedStatus());
+//		 try {
+//			Thread.sleep(5000);
+//			agentUserInfo.setStopRing(true);
+//		} catch (InterruptedException e) {
+//			// TODO Auto-generated catch block
+//			e.printStackTrace();
+//		}
+		
+		 
     }
      
     @Override
