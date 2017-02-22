@@ -287,8 +287,13 @@ function Login() {
 					// 接收到找尋Client的UserData的訊息
 				} else if ("senduserdata" == obj.Event) {
 					// 在這邊取代原本findAgentEvent事件所做的事情
+					console.log("senduserdata - ")
+//					alert("senduserdata - obj.clientID: " + obj.clientID)
+//					alert("senduserdata - obj.userdata.id: " + obj.userdata.id)
 					console.log("obj.clientName: " + obj.clientName);
 					console.log("obj.clientID: " + obj.clientID);
+					var clientID = obj.clientID; 
+					var clientName = obj.clientName; 
 					
 					waittingClientIDList_g.push( new function(){
 						this.clientID = obj.userdata.id
@@ -345,9 +350,10 @@ function Login() {
 					// 更改架構為 - 最多一次只收一個ring
 					status_g = StatusEnum.RING;
 					switchStatus(status_g);
-					StatusEnum.ready_dbid = StatusEnum.updateStatus(StatusEnum.READY, "end", StatusEnum.ready_dbid);
+					StatusEnum.ready_dbid = StatusEnum.updateStatus(StatusEnum.READY, "end", StatusEnum.ready_dbid); 
 					StatusEnum.updateStatus(StatusEnum.NOTREADY, "start");
-					StatusEnum.updateStatus(StatusEnum.RING, "start");
+					//												  未新增無dbid, 非iestablished無roomID, 傳入clientID
+					StatusEnum.updateStatus(StatusEnum.RING, "start", null, null, clientID);
 					
 				} else if ("userjointoTYPE" == obj.Event) {
 
@@ -366,6 +372,7 @@ function Login() {
 					$('#maxRoomCount')[0].innerHTML = currRoomCount_g + " / " + maxRoomCount_g;
 					
 					// 更新reasonList - 位置: AgentChat.jsp -> id="reasonList"
+
 					alert("JSON.stringify( reasonList ): " + JSON.stringify( reasonList ));
 					
 //					var m = new Map();
@@ -382,6 +389,7 @@ function Login() {
 										
 					var new_option = new Option('t','v');
 					document.getElementById('reasonList').options.add(new_option)
+
 //					console.log("userjoin - reasonList: " + reasonList);
 					
 					// 更新statusList - enum
@@ -614,6 +622,26 @@ function Login() {
 					alert("agentLeftThirdParty - agent " + obj.id + " left ");
 				} else if ("updateStatus" == obj.Event){
 					StatusEnum.updateDbid(obj);
+				} else if ("ringTimeout" == obj.Event){
+					alert("ringTimeout");
+					var currClientID = obj.clientID;
+					console.log("obj.clientID: " + obj.clientID); 
+					// 清理畫面
+						// 1. 將此請求從request list中去除掉	
+					$('#' + currClientID).remove(); // <tr>的id
+						// 2. 將此clientID從waittingClientIDList_g中去除
+					var index_remove;
+					for (var index in waittingClientIDList_g) {
+						clientIDJson = waittingClientIDList_g[index];
+						var clientID = clientIDJson.clientID;
+						if (currClientID == clientID){
+							index_remove = index;
+						}
+//						console.log("clietIDJson.clientID: " + clientIDJson.clientID);
+					}
+					console.log("before - waittingClientIDList_g.length: " + waittingClientIDList_g.length);
+					waittingClientIDList_g.splice(index_remove,1);
+					console.log("after - waittingClientIDList_g.length: " + waittingClientIDList_g.length);
 				}
 			// 非指令訊息
 			// (Billy哥部分)
@@ -1257,7 +1285,7 @@ var StatusEnum = {
 			StatusEnum.oestablished_dbid = aObj.oestablished_dbid; 
 	},
 	
-	updateStatus : function( aStatusEnum , aStartORend, aDbid, aRoomID){
+	updateStatus : function( aStatusEnum , aStartORend, aDbid, aRoomID, aClientID){
 		if ('end' == aStartORend && aDbid === undefined) {
 			console.log("updateStatus - end - " + aStatusEnum.description + " aDbid not found");
 			return;
@@ -1267,7 +1295,7 @@ var StatusEnum = {
 		parent.document.getElementById("status").value = aStatusEnum.description;
 		// 去server更新狀態
 		var myUpdateStatusJson = new updateStatusJson("Agent", parent.UserID_g, parent.UserName_g, 
-														aStatusEnum.dbid, "no reason", aStartORend, aDbid, aRoomID);
+														aStatusEnum.dbid, "no reason", aStartORend, aDbid, aRoomID, aClientID);
 		parent.ws_g.send(JSON.stringify(myUpdateStatusJson));
 		
 		if ('end' == aStartORend){

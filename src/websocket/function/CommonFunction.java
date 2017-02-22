@@ -32,9 +32,11 @@ import util.Util;
 
 
 
+
 import com.google.gson.JsonParser;
 
 import websocket.HeartBeat;
+import websocket.bean.RingCountDownTask;
 import websocket.bean.RoomInfo;
 import websocket.bean.UserInfo;
 //import websocket.HeartBeat;
@@ -373,7 +375,7 @@ public class CommonFunction {
 	}
 	
 	/** * update Agent Status */
-	public static void updateStatus(String message, org.java_websocket.WebSocket conn) {
+	public static void updateStatus(String message, org.java_websocket.WebSocket aConn) {
 		System.out.println("updateStatus() called");
 		JsonObject obj = Util.getGJsonObject(message);
 //		JSONObject obj = new JSONObject(message); 
@@ -386,18 +388,21 @@ public class CommonFunction {
 		String dbid = Util.getGString(obj, "dbid");
 		String startORend = Util.getGString(obj, "startORend"); 
 		String roomID = Util.getGString(obj, "roomID"); 
+		String clientID = Util.getGString(obj, "clientID"); 
 				
 		if(status.equals("lose")){
 			WebSocketTypePool.addleaveClient();
 		}
-		WebSocketTypePool.UserUpdate(ACtype, username, userid, date, status, reason, conn);
+		WebSocketTypePool.UserUpdate(ACtype, username, userid, date, status, reason, aConn);
 		
 		// 更新DB狀態時間
-		System.out.println("obj: " + obj);
-		System.out.println("status: " + status);
-		System.out.println("startORend: " + startORend);
-		System.out.println("dbid: " + dbid);
-		System.out.println("roomID: " + roomID);
+//		System.out.println("status	startORend	dbid	roomID	clientID");
+		System.out.printf("%10s	%10s %10s %10s %10s" , "status", "startORend", "dbid", "roomID", "clientID");
+		System.out.println();
+		System.out.println("----------------------------------------------------------------------------");
+		System.out.printf("%10s	%10s %10s %10s %10s" , status, startORend, dbid, roomID, clientID);
+		System.out.println();
+//		System.out.println("obj: " + obj);
 		
 		if ("start".equals(startORend)){
 //			String userID = Util.getTmpID(userid);
@@ -415,30 +420,40 @@ public class CommonFunction {
 				RoomInfo roomInfo = WebSocketRoomPool.getRoomInfo(roomID);
 				roomInfo.setIestablish_dbid(dbid);
 			}
+			
+			// 若為RING狀態,則交由RingCountDownTask來處理結束時間點
+			if (StatusEnum.RING.getDbid().equals(status)){
+				UserInfo userInfo = WebSocketUserPool.getUserInfoByKey(aConn);
+				userInfo.setStopRing(false); // 回復為預設false
+				userInfo.setTimeout(false); // 回復為預設false
+				WebSocket clientConn = WebSocketUserPool.getWebSocketByUser(clientID);
+				RingCountDownTask ringCountDownTask = new RingCountDownTask(clientConn, dbid, userInfo);
+				ringCountDownTask.operate();
+				 //agentUserInfo
+				//將RINGHEARTBEAT放進UserInfo
+				
+			}
 
 			// 先只有新增時寄送EVENT,讓前端能拿到相對應的dbid
 			obj.addProperty("Event", "updateStatus");
-			WebSocketUserPool.sendMessageToUser(conn, obj.toString());
+			WebSocketUserPool.sendMessageToUser(aConn, obj.toString());
 
 		}else if ("end".equals(startORend)){
 			System.out.println("end");
 			if (dbid != null){
 				System.out.println("dbid: " + dbid);
-				// 查看是否為iestablished list要更新
-				if ("[".equals(dbid.substring(0, 1))){
-					System.out.println("here!!");
-					dbid = dbid.substring(1, dbid.length()-1);
-					System.out.println("dbid inner: " + dbid);
-					for (String dbid_tmp: dbid.split(",")){ // dbid_tmp 原本長這樣 ["414","418"] 全部是一個字串
-						dbid_tmp = dbid_tmp.substring(1,dbid_tmp.length()-1);
-						System.out.println("dbid_tmp: " + dbid_tmp);
-						AgentFunction.RecordStatusEnd(dbid_tmp);
-					}
-					
-				}else{
-					AgentFunction.RecordStatusEnd(dbid);					
-				}
 				
+				// 如果是RING結束,現在交由後端統一處理
+				if (StatusEnum.RING.getDbid().equals(status)){
+					UserInfo userInfo = WebSocketUserPool.getUserInfoByKey(aConn);
+					userInfo.setStopRing(true);
+					System.out.println("RING");
+					return;
+				}
+
+				
+				
+				AgentFunction.RecordStatusEnd(dbid);					
 			}
 		}
 		
