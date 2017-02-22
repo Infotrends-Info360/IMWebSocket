@@ -414,6 +414,7 @@ public class WebSocket extends WebSocketServer {
 			sendJson.addProperty("fromName", WebSocketUserPool.getUserNameByKey(aConn));
 			sendJson.addProperty("roomID",  roomID);
 			sendJson.addProperty("channel", channel);
+			sendJson.addProperty("EstablishedStatus", Util.getEstablishedStatus()); //增加AfterCallStatus變數 20170222 Lin
 			sendJson.add("roomList", roomIDListJson);
 
 			WebSocketUserPool.sendMessageToUser(

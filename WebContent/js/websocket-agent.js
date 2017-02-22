@@ -10,7 +10,7 @@ var waittingClientIDList_g = [];
 var waittingAgentIDList_g = [];
 var maxRoomCount_g;
 var currRoomCount_g = 0;
-var afterCallStatus_g = 'WORKHARD'; // 先這樣
+//var afterCallStatus_g = 'WORKHARD'; // 先這樣  //20170222 Lin
 //var count = 0;
 //var RoomIDList = []; // 接通後產生Group的ID List
 //var RoomIDLinkedList = new SinglyList(); // 接通後產生Group的ID Linked List
@@ -84,7 +84,7 @@ function Login() {
 				type : "login",
 				// id: parent.UserID_g,
 				UserName : parent.UserName_g,
-				MaxCount: '3',
+				MaxCount: '2', //要改接收Login Event (動態)
 				ACtype : "Agent",
 				channel : "chat",
 				date : now.getHours() + ":" + now.getMinutes() + ":"
@@ -200,13 +200,25 @@ function Login() {
 						$('#notready')[0].disabled = true;
 						$('#ready')[0].disabled = true;
 						// 若未達上限,判斷是否要切換為READY
-					}else if (afterCallStatus_g == 'WORKHARD'){
+						
+//					}else if (afterCallStatus_g == 'WORKHARD'){ //20170222 Lin
+						
+					//20170222 Lin
+					}else if (obj.EstablishedStatus == StatusEnum.READY.dbid){
 						// 更新狀態(唯一在RING事件之後會將狀態切換為READY的情況)
 						status_g = StatusEnum.READY;
 						switchStatus(status_g);
 						StatusEnum.notready_dbid = StatusEnum.updateStatus(StatusEnum.NOTREADY, "end", StatusEnum.notready_dbid);
 						StatusEnum.updateStatus(StatusEnum.READY, "start");
 					}
+//					else if (obj.EstablishedStatus == StatusEnum.NOTREADY.dbid){
+//						// 更新狀態(唯一在RING事件之後會將狀態切換為NOTREADY的情況)
+//						status_g = StatusEnum.NOTREADY;
+//						switchStatus(status_g);
+//						StatusEnum.ready_dbid = StatusEnum.updateStatus(StatusEnum.READY, "end", StatusEnum.ready_dbid);
+//						StatusEnum.updateStatus(StatusEnum.NOTREADY, "start");
+//					}
+					//20170222 Lin
 					
 				} else if ("getUserStatus" == obj.Event) {
 //					console.log("onMessage(): getUserStatus called");
@@ -282,8 +294,8 @@ function Login() {
 					// 接收到有人登入的訊息
 				} else if ("userjoin" == obj.Event) {
 					parent.UserID_g = obj.from;
-//					maxRoomCount_g = obj.MaxCount; // 正式用
-					maxRoomCount_g = 2; // 測試用
+					maxRoomCount_g = obj.MaxCount; // 正式用
+//					maxRoomCount_g = 2; // 測試用
 					$('#maxRoomCount')[0].innerHTML = currRoomCount_g + " / " + maxRoomCount_g;
 					
 					// 更新enum
@@ -446,7 +458,6 @@ function Login() {
 						if (currRoomID == obj.roomID){
 							updateRoomInfo(roomInfo);
 						}
-						
 						// maxCount機制 here
 						// 若前一次達到最大roomCount值,則恢復其狀態,且確認若會進入到此區塊,則目前狀態一定為NOTREADY
 						if(currRoomCount_g == maxRoomCount_g){
@@ -457,6 +468,25 @@ function Login() {
 						currRoomCount_g--;
 						$('#maxRoomCount')[0].innerHTML = currRoomCount_g + " / " + maxRoomCount_g;
 //						alert("currRoomCount_g: " + currRoomCount_g);
+						
+//						alert(obj.AfterCallStatus);
+						// 20170222 Lin
+						if(obj.AfterCallStatus == StatusEnum.READY.dbid){ //如果AfterCallStatus == ready
+							$('#notready')[0].disabled = true;
+							$('#ready')[0].disabled = false;
+							status_g = StatusEnum.READY;
+							switchStatus(status_g);
+							StatusEnum.notready_dbid = StatusEnum.updateStatus(StatusEnum.NOTREADY, "end", StatusEnum.notready_dbid);
+							StatusEnum.updateStatus(StatusEnum.READY, "start");
+						}else if(obj.AfterCallStatus == StatusEnum.NOTREADY.dbid){ //如果AfterCallStatus == not ready
+							$('#notready')[0].disabled = false;
+							$('#ready')[0].disabled = true;
+							status_g = StatusEnum.NOTREADY;
+							switchStatus(status_g);
+							StatusEnum.ready_dbid = StatusEnum.updateStatus(StatusEnum.READY, "end", StatusEnum.ready_dbid);
+							StatusEnum.updateStatus(StatusEnum.NOTREADY, "start");
+						}
+						// 20170222 Lin
 					}
 					alert(obj.result);
 				} else if ("clientLeft" == obj.Event){

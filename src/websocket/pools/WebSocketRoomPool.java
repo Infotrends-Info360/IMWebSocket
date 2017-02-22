@@ -98,6 +98,7 @@ public class WebSocketRoomPool{
 		sendJson.put("Event", "removeUserinroom");
 		sendJson.put("roomID", aRoomID);
 		sendJson.put("fromUserID", WebSocketUserPool.getUserID(aConn));
+		sendJson.put("AfterCallStatus", Util.getAfterCallStatus()); //增加AfterCallStatus變數 20170222 Lin
 		
 		if (connsInRoomMap != null && connsInRoomMap.containsKey(aConn)) {
 //			System.out.println(conn + "'s room is " + " removed");

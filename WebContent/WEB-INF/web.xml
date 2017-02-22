@@ -54,6 +54,10 @@
 		<param-name>AfterCallStatus</param-name>
 		<param-value>4</param-value>
 	</context-param>
+	<context-param>
+		<param-name>EstablishedStatus</param-name>
+		<param-value>3</param-value>
+	</context-param>
   	<!-- 	System configuration -->
   	<listener>
 		<listener-class>filter.SystemListener</listener-class>
