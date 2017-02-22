@@ -72,7 +72,8 @@ public class CommonFunction {
 	public static void userjoin(String user, org.java_websocket.WebSocket aConn) {
 		System.out.println("userjoin() called");
 		JSONObject obj = new JSONObject(user);
-		String userId = java.util.UUID.randomUUID().toString();
+//		String userId = java.util.UUID.randomUUID().toString();
+		String userId = obj.get("id").toString(); //20170222 Lin
 		String username = obj.getString("UserName");
 		String MaxCount = obj.getString("MaxCount"); //新增 MaxCount
 		System.out.println("MaxCount: "+MaxCount);
@@ -391,11 +392,11 @@ public class CommonFunction {
 		System.out.println("roomID: " + roomID);
 		
 		if ("start".equals(startORend)){
-			String userID = Util.getTmpID(userid);
+//			String userID = Util.getTmpID(userid);
 			// 如果是LOGIN狀態,則同時新增NOTREADY狀態
 			StatusEnum currStatusEnum = StatusEnum.getStatusEnumByDbid(status);
 			System.out.println("currStatusEnum: " + currStatusEnum);
-			dbid = AgentFunction.RecordStatusStart(userID, status, "8");
+			dbid = AgentFunction.RecordStatusStart(userid, status, "8");
 			String dbid_key = currStatusEnum.toString().toLowerCase() + "_dbid";
 			System.out.println("dbid_key: " + dbid_key);
 			obj.addProperty(dbid_key, dbid); // ex. login_dbid

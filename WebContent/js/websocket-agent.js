@@ -60,15 +60,74 @@ function onloadFunctionAgent(){
 	
 }
 
+//帳號密碼驗證
+function loginValidate() {
+	var account = document.getElementById('Account').value;
+	var password = document.getElementById('Password').value;
+	$
+			.ajax({
+				url : "http://ws.crm.com.tw:8080/Info360_Setting/RESTful/Login",
+				data : {
+					account : account,
+					password : password
+				},
+				type : "POST",
+				dataType : 'json',
+				error : function(e) {
+					console.log("請重新整理");
+				},
+				success : function(data) {
+					console.log("login", data)
+
+					// 測試用必驗證過
+					// 							doConnect();
+
+					if (account == "" || password == "") {
+						// 未輸入帳號與密碼
+						console.log(data.error)
+						$("#loginDialogButton").trigger("click");
+					} else if (data.error != null) {
+						// 其他可能錯誤
+						console.log(data.error);
+						$("#loginDialogButton").trigger("click");
+					} else {
+						// 驗證通過
+						//console.log(JSON.stringify(data));
+						maxCount = data.person[0].max_count;
+						//console.log(data.person[0].max_count);
+						document.getElementById('UserName').value = data.person[0].user_name;
+						document.getElementById('UserID').value = data.person[0].dbid;
+						parent.UserID_g = data.person[0].dbid;
+						parent.UserName_g = data.person[0].user_name;
+
+						// Step-1 載入時連線ws
+						Login();
+					}
+
+				},
+				beforeSend : function() {
+					// 					$('#loading').show();
+				},
+				complete : function() {
+					// 					$('#loading').hide();
+
+				}
+			});
+}
+
 
 // 連上websocket
 function Login() {
 	console.log("Agent Login() function");
+	//20170222 Lin
 	// 登入使用者
-	parent.UserName_g = document.getElementById('UserName').value;
-	if (null == parent.UserName_g || "" == parent.UserName_g) {
-		alert("請輸入UserName");
-	} else {
+//	parent.UserName_g = document.getElementById('Account').value;
+//	if (null == parent.UserName_g || "" == parent.UserName_g) {
+//		alert("請輸入Account");
+//	} else {
+	//20170222 Lin
+//	alert(parent.UserID_g);
+//	alert(parent.UserName_g);
 		// 連上websocket
 		console.log("window.location.hostname: " + window.location.hostname);
 		var hostname = window.location.hostname;
@@ -82,7 +141,7 @@ function Login() {
 			// 向websocket送出登入指令
 			var msg = {
 				type : "login",
-				// id: parent.UserID_g,
+				id: parent.UserID_g,
 				UserName : parent.UserName_g,
 				MaxCount: '2', //要改接收Login Event (動態)
 				ACtype : "Agent",
@@ -553,7 +612,7 @@ function Login() {
 		parent.ws_g.onerror = function() {
 			console.log("出現錯誤");
 		};
-	}
+	//} //20170222 Lin
 
 }
 
