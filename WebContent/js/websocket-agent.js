@@ -202,7 +202,8 @@ function Login() {
 						
 //					}else if (afterCallStatus_g == 'WORKHARD'){ //20170222 Lin
 						
-					//20170222 Lin
+					//20170222 Lin 
+					//Ring時已切換為NOTREADY，如設定為READY才做切換動作
 					}else if (obj.EstablishedStatus == StatusEnum.READY.dbid){
 						// 更新狀態(唯一在RING事件之後會將狀態切換為READY的情況)
 						status_g = StatusEnum.READY;
@@ -471,19 +472,23 @@ function Login() {
 //						alert(obj.AfterCallStatus);
 						// 20170222 Lin
 						if(obj.AfterCallStatus == StatusEnum.READY.dbid){ //如果AfterCallStatus == ready
-							$('#notready')[0].disabled = true;
-							$('#ready')[0].disabled = false;
-							status_g = StatusEnum.READY;
-							switchStatus(status_g);
-							StatusEnum.notready_dbid = StatusEnum.updateStatus(StatusEnum.NOTREADY, "end", StatusEnum.notready_dbid);
-							StatusEnum.updateStatus(StatusEnum.READY, "start");
+							if(status_g != StatusEnum.READY){
+								$('#notready')[0].disabled = true;
+								$('#ready')[0].disabled = false;
+								status_g = StatusEnum.READY;
+								switchStatus(status_g);
+								StatusEnum.notready_dbid = StatusEnum.updateStatus(StatusEnum.NOTREADY, "end", StatusEnum.notready_dbid);
+								StatusEnum.updateStatus(StatusEnum.READY, "start");
+							}
 						}else if(obj.AfterCallStatus == StatusEnum.NOTREADY.dbid){ //如果AfterCallStatus == not ready
-							$('#notready')[0].disabled = false;
-							$('#ready')[0].disabled = true;
-							status_g = StatusEnum.NOTREADY;
-							switchStatus(status_g);
-							StatusEnum.ready_dbid = StatusEnum.updateStatus(StatusEnum.READY, "end", StatusEnum.ready_dbid);
-							StatusEnum.updateStatus(StatusEnum.NOTREADY, "start");
+							if(status_g != StatusEnum.NOTREADY){
+								$('#notready')[0].disabled = false;
+								$('#ready')[0].disabled = true;
+								status_g = StatusEnum.NOTREADY;
+								switchStatus(status_g);
+								StatusEnum.ready_dbid = StatusEnum.updateStatus(StatusEnum.READY, "end", StatusEnum.ready_dbid);
+								StatusEnum.updateStatus(StatusEnum.NOTREADY, "start");
+							}
 						}
 						// 20170222 Lin
 					}
