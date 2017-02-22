@@ -30,7 +30,7 @@ function messagetoRoomJson(aType, aACtype, aText, aId, aUserName, aRoomID, aChan
 	this.date = aDate;
 }			
 
-function updateStatusJson(aACType, aID, aUserName, aStatus, aReason, aStartORend, aDbid){
+function updateStatusJson(aACType, aID, aUserName, aStatus, aReason, aStartORend, aDbid, aRoomID){
 	this.type = "updateStatus";
 	this.ACtype = aACType;
 	this.id = aID;
@@ -40,6 +40,7 @@ function updateStatusJson(aACType, aID, aUserName, aStatus, aReason, aStartORend
 	this.startORend = aStartORend,
 	this.dbid = aDbid,
 	this.channel = "chat";
+	this.roomID = aRoomID;
 	var now = new Date();
 	this.date = "" + now.getHours() + ":" + now.getMinutes() + ":" + now.getSeconds();
 }

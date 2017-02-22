@@ -14,6 +14,7 @@ public class RoomInfo {
 	private Date starttime;
 	private Map<WebSocket, UserInfo> userConns = new HashMap<>();
 	private WebSocket clientConn;
+	private String iestablish_dbid;
 	
 	public String getRoomID() {
 		return roomID;
@@ -39,4 +40,12 @@ public class RoomInfo {
 	public void setClientConn(WebSocket clientConn) {
 		this.clientConn = clientConn;
 	}
+	public String getIestablish_dbid() {
+		return iestablish_dbid;
+	}
+	public void setIestablish_dbid(String iestablish_dbid) {
+		this.iestablish_dbid = iestablish_dbid;
+	}
+	
+	
 }

@@ -376,6 +376,7 @@ public class CommonFunction {
 		String reason = obj.get("reason").getAsString();
 		String dbid = Util.getGString(obj, "dbid");
 		String startORend = Util.getGString(obj, "startORend"); 
+		String roomID = Util.getGString(obj, "roomID"); 
 				
 		if(status.equals("lose")){
 			WebSocketTypePool.addleaveClient();
@@ -383,10 +384,11 @@ public class CommonFunction {
 		WebSocketTypePool.UserUpdate(ACtype, username, userid, date, status, reason, conn);
 		
 		// 更新DB狀態時間
-		System.out.println("status: " + status);
 		System.out.println("obj: " + obj);
-		System.out.println("dbid: " + dbid);
+		System.out.println("status: " + status);
 		System.out.println("startORend: " + startORend);
+		System.out.println("dbid: " + dbid);
+		System.out.println("roomID: " + roomID);
 		
 		if ("start".equals(startORend)){
 			String userID = Util.getTmpID(userid);
@@ -397,6 +399,13 @@ public class CommonFunction {
 			String dbid_key = currStatusEnum.toString().toLowerCase() + "_dbid";
 			System.out.println("dbid_key: " + dbid_key);
 			obj.addProperty(dbid_key, dbid); // ex. login_dbid
+			
+			// 若為iEstablished狀態,則交由RoomInfo來處理結束時間點
+			if (StatusEnum.IESTABLISHED.getDbid().equals(status)){
+				System.out.println("IESTABLISHED - roomID: " + roomID);
+				RoomInfo roomInfo = WebSocketRoomPool.getRoomInfo(roomID);
+				roomInfo.setIestablish_dbid(dbid);
+			}
 
 			// 先只有新增時寄送EVENT,讓前端能拿到相對應的dbid
 			obj.addProperty("Event", "updateStatus");

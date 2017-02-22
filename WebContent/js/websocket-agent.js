@@ -169,10 +169,11 @@ function Login() {
 //					seeAllKV(obj);
 				
 					// 更新狀態
+//					alert("AcceptEvent - obj.roomID: " + obj.roomID);
 					status_g = StatusEnum.IESTABLISHED;
 					switchStatus(StatusEnum.IESTABLISHED);
 					StatusEnum.ring_dbid = StatusEnum.updateStatus(StatusEnum.RING, "end", StatusEnum.ring_dbid);
-					StatusEnum.updateStatus(StatusEnum.IESTABLISHED, "start");
+					StatusEnum.updateStatus(StatusEnum.IESTABLISHED, "start", null, obj.roomID);
 					
 					
 					// 在這邊興建roomList與其room bean
@@ -544,7 +545,8 @@ function Logoutaction() {
 	StatusEnum.notready_dbid = StatusEnum.updateStatus(StatusEnum.NOTREADY, "end", StatusEnum.notready_dbid);
 	StatusEnum.ready_dbid = StatusEnum.updateStatus(StatusEnum.READY, "end", StatusEnum.ready_dbid);
 	StatusEnum.ring_dbid = StatusEnum.updateStatus(StatusEnum.RING, "end", StatusEnum.ring_dbid);
-	StatusEnum.ring_dbid = StatusEnum.updateStatus(StatusEnum.IESTABLISHED, "end",JSON.stringify(StatusEnum.iestablished_dbid)); // 須用list
+	// 下列改由後端處理 - WebSocketRoomPool.removeUserinroom()
+//	StatusEnum.ring_dbid = StatusEnum.updateStatus(StatusEnum.IESTABLISHED, "end",JSON.stringify(StatusEnum.iestablished_dbid)); // 須用list
 	
 	// 登出動作
 	var now = new Date();
@@ -1133,7 +1135,7 @@ var StatusEnum = {
 			StatusEnum.oestablished_dbid = aObj.oestablished_dbid; 
 	},
 	
-	updateStatus : function( aStatusEnum , aStartORend, aDbid){
+	updateStatus : function( aStatusEnum , aStartORend, aDbid, aRoomID){
 		if ('end' == aStartORend && aDbid === undefined) {
 			console.log("updateStatus - end - " + aStatusEnum.description + " aDbid not found");
 			return;
@@ -1143,7 +1145,7 @@ var StatusEnum = {
 		parent.document.getElementById("status").value = aStatusEnum.description;
 		// 去server更新狀態
 		var myUpdateStatusJson = new updateStatusJson("Agent", parent.UserID_g, parent.UserName_g, 
-														aStatusEnum.dbid, "no reason", aStartORend, aDbid);
+														aStatusEnum.dbid, "no reason", aStartORend, aDbid, aRoomID);
 		parent.ws_g.send(JSON.stringify(myUpdateStatusJson));
 		
 		if ('end' == aStartORend){
