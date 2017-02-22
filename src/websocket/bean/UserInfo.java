@@ -1,6 +1,7 @@
 package websocket.bean;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.Timer;
 
@@ -8,7 +9,7 @@ import java.util.Timer;
 public class UserInfo {
 	private String userid;
 	private String username;
-	private List<String> userRoom = new ArrayList();
+	private List<String> userRoom = Collections.synchronizedList(new ArrayList<String>());
 	private String userinteraction;
 	private String userheartbeat;
 	private Timer heartbeatTimer;

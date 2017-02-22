@@ -101,7 +101,7 @@ public class SystemListener implements ServletContextListener {
     
     
     private void updateStatusEnum(String aStatusname, String aDbid, String aDescription){
-    	StatusEnum currStatusEnum = StatusEnum.getStatusEnum(aStatusname);
+    	StatusEnum currStatusEnum = StatusEnum.getStatusEnumByDescription(aStatusname);
     	currStatusEnum.setDbid(aDbid);
     	currStatusEnum.setDescription(aDescription);
 //    	System.out.println("updateStatusEnum() - " + currStatusEnum);

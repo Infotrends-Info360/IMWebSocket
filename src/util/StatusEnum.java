@@ -18,7 +18,7 @@ public enum StatusEnum {
 		this.description = description;
 	}
 
-	public static StatusEnum getStatusEnum(String aStatusname){
+	public static StatusEnum getStatusEnumByDescription(String aStatusname){
 		aStatusname = aStatusname.toUpperCase();
 		
 		if (LOGIN.toString().equals(aStatusname)){
@@ -38,7 +38,30 @@ public enum StatusEnum {
 		}else if (OESTABLISHED.toString().equals(aStatusname)){
 			return OESTABLISHED;
 		}
-		System.out.println("StatusEnmu - getStatusEnum: " + " no match");
+		System.out.println("StatusEnmu - getStatusEnumByDescription: " + " no match");
+		return null;
+	}
+	
+	public static StatusEnum getStatusEnumByDbid(String aDbid){
+		
+		if (LOGIN.getDbid().equals(aDbid)){
+			return LOGIN;
+		}else if (LOGOUT.getDbid().equals(aDbid)){
+			return LOGOUT;
+		}else if (READY.getDbid().equals(aDbid)){
+			return READY;
+		}else if (NOTREADY.getDbid().equals(aDbid)){
+			return NOTREADY;
+		}else if (PAPERWORK.getDbid().equals(aDbid)){
+			return PAPERWORK;
+		}else if (RING.getDbid().equals(aDbid)){
+			return RING;
+		}else if (IESTABLISHED.getDbid().equals(aDbid)){
+			return IESTABLISHED;
+		}else if (OESTABLISHED.getDbid().equals(aDbid)){
+			return OESTABLISHED;
+		}
+		System.out.println("StatusEnmu - getStatusEnumByDbid: " + " no match");
 		return null;
 	}
 	
