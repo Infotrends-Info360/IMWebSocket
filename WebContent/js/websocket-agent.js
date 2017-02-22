@@ -294,20 +294,33 @@ function Login() {
 
 					// 接收到有人登入的訊息
 				} else if ("userjoin" == obj.Event) {
+//					alert('userjoin'); // win
+//					console.log("userjoin!");
+					// 拿取參數
 					parent.UserID_g = obj.from;
 					maxRoomCount_g = obj.MaxCount; // 正式用
 //					maxRoomCount_g = 2; // 測試用
+					var statusList = obj.statusList;
+					var reasonList = obj.reasonList;
+					
+					// 更新maxCount畫面
 					$('#maxRoomCount')[0].innerHTML = currRoomCount_g + " / " + maxRoomCount_g;
 					
-					// 更新enum
+					// 更新reasonList - 位置: AgentChat.jsp -> id="reasonList"
+					alert("JSON.stringify( reasonList ): " + JSON.stringify( reasonList ));
+//					console.log("userjoin - reasonList: " + reasonList);
+					
+					// 更新statusList - enum
+					// 格式: {Login={description=登入, dbid=1}, Ring={description=響鈴, dbid=6}
 					console.log("***Enum - 更新enum: ");
-					jQuery.each(obj.statusList, function(key, val) {
+					jQuery.each(statusList, function(key, val) {
 						var currStatusEnum = StatusEnum.getStatusEnum(key);
 						currStatusEnum.dbid = val.dbid;
 						currStatusEnum.description = val.description;
 					});
 					
 					// 更新狀態
+					console.log("更新狀態");
 					status_g = StatusEnum.LOGIN;
 					switchStatus(status_g);
 					StatusEnum.updateStatus(StatusEnum.LOGIN, "start");

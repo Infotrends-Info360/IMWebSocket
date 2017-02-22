@@ -1,4 +1,4 @@
-﻿<%@ page language="java" import="java.util.*" contentType="text/html; charset=UTF-8"  pageEncoding="UTF-8" %>
+﻿﻿<%@ page language="java" import="java.util.*" contentType="text/html; charset=UTF-8"  pageEncoding="UTF-8" %>
 
 <!DOCTYPE html>
 <html xmlns="http://www.w3.org/1999/xhtml">
@@ -134,7 +134,7 @@ td {
                         <button id="notready" class="btn btn-primary" style="width:100px" disabled onclick="notready();">Not Ready</button>
                 	</div>
                 	<div class="col-xs-6 col-sm-6 col-md-6 col-lg-6">
-                        <select id="reason" class="form-control">
+                        <select id="reasonList" class="form-control">
                             <option value="reason01">reason01</option>
                             <option value="reason02">reason02</option>
                             <option value="reason03">reason03</option>

@@ -154,20 +154,21 @@ public class AgentFunction {
 			e.printStackTrace();
 		}
 		JSONObject jsonobject = new JSONObject(responseSB.toString());
-		System.out.println("jsonobject: "+jsonobject);
+//		System.out.println("jsonobject: "+jsonobject);
 		JSONArray jsonarray= jsonobject.getJSONArray("agentreason");
+//		System.out.println("GetAgentReasonInfo - jsonarray: " + jsonarray);
 		Map<String, Map<String, String>> agentreasonmap = new HashMap<String, Map<String, String>>();
 		for(int a = 0; a < jsonarray.length(); a++){
 			Map<String, String> agentreasonmapinfo = new HashMap<String, String>();
 			agentreasonmapinfo.put("flag", jsonarray.getJSONObject(a).getString("flag"));
-			agentreasonmapinfo.put("statusname", jsonarray.getJSONObject(a).getString("statusname"));
+			agentreasonmapinfo.put("dbid", String.valueOf(jsonarray.getJSONObject(a).getInt("dbid")));
 			agentreasonmapinfo.put("description", jsonarray.getJSONObject(a).getString("description"));
 			agentreasonmapinfo.put("alarmcolor", jsonarray.getJSONObject(a).getString("alarmcolor"));
 			agentreasonmapinfo.put("statusname_tw", jsonarray.getJSONObject(a).getString("statusname_tw"));
 			agentreasonmapinfo.put("statusname_en", jsonarray.getJSONObject(a).getString("statusname_en"));
 			agentreasonmapinfo.put("statusname_cn", jsonarray.getJSONObject(a).getString("statusname_cn"));
 			agentreasonmapinfo.put("alarmduration", jsonarray.getJSONObject(a).getString("alarmduration"));
-			agentreasonmap.put(String.valueOf(jsonarray.getJSONObject(a).getString("dbid")), agentreasonmapinfo);
+			agentreasonmap.put(jsonarray.getJSONObject(a).getString("statusname"), agentreasonmapinfo);
 		}
 		Util.setAgentReason(agentreasonmap);
 	}

@@ -75,7 +75,7 @@ public class CommonFunction {
 		String userId = java.util.UUID.randomUUID().toString();
 		String username = obj.getString("UserName");
 		String MaxCount = obj.getString("MaxCount"); //新增 MaxCount
-		System.out.println("MaxCount: "+MaxCount);
+//		System.out.println("MaxCount: "+MaxCount);
 		String ACtype = obj.getString("ACtype");
 		String channel = obj.getString("channel");
 		WebSocketUserPool.addUser(username, userId, aConn, ACtype); // 在此刻,已將user conn加入倒Pool中
@@ -91,6 +91,10 @@ public class CommonFunction {
 //		sendjson.put("login_dbid", login_dbid); // 此key-value只須Agent接就好(先不做過濾)
 //		sendjson.put("notready_dbid", notready_dbid); // 此key-value只須Agent接就好(先不做過濾)
 		sendjson.put("MaxCount", MaxCount); // 此key-value只須Agent接就好(先不做過濾)
+		AgentFunction.GetAgentReasonInfo("0");
+		sendjson.put("reasonList", Util.getAgentReason()); // 此key-value只須Agent接就好(先不做過濾)
+		System.out.println("Util.getAgentReason(): " + Util.getAgentReason());
+		System.out.println("Util.getAgentStatus(): " + Util.getAgentStatus());
 		WebSocketUserPool.sendMessageToUser(aConn, sendjson.toString());
 //		WebSocketUserPool.sendMessage("online people: "
 //				+ WebSocketUserPool.getOnlineUser().toString());

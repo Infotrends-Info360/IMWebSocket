@@ -53,13 +53,15 @@ public class SystemListener implements ServletContextListener {
 //        System.out.println("AfterCallStatus: "+afterCallStatus);
 //        System.out.println("EstablishedStatus: "+establishedStatus);
         
-        //Set in WebSocket
+        // 更新系統參數
         Map<String, String> systemParam = new HashMap<String, String>();
         systemParam.put("MaxRingTime", maxRingTime);
         systemParam.put("AfterCallStatus", afterCallStatus);
         systemParam.put("EstablishedStatus", establishedStatus);
         Util.setSystemParam(systemParam);
-        Cfg_AgentStatus agentstatus = new Cfg_AgentStatus();
+        
+        // 更新statusList
+        Cfg_AgentStatus agentstatus = new Cfg_AgentStatus(); 
         MaintainService maintainservice = new MaintainService();		
 		List<Cfg_AgentStatus> agentstatuslist = maintainservice.Select_cfg_agentstatus(agentstatus);
 		Map<String, Map<String, String>> agentstatusmap = new HashMap<String, Map<String, String>>();
@@ -81,10 +83,7 @@ public class SystemListener implements ServletContextListener {
 			 }
 		 }
 		 Util.setAgentStatus(agentstatusmap);
-		 
 		 System.out.println("agentstatusmap: "+agentstatusmap);
-		 
-		 
 		 
 //		 System.out.println("結果驗證: ");
 //		 System.out.println("StatusEnum.LOGIN.getDbid(): " + StatusEnum.LOGIN.getDbid());
