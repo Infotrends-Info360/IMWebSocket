@@ -22,6 +22,9 @@ public class Util {
 	public static String getAfterCallStatus() {
 		return Attr.SystemParam.get("AfterCallStatus");
 	}
+	public static String getEstablishedStatus() {
+		return Attr.SystemParam.get("EstablishedStatus");
+	}
 	public static Map<String, String> getSystemParam() {
 		return Attr.SystemParam;
 	}

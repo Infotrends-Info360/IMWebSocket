@@ -47,14 +47,17 @@ public class SystemListener implements ServletContextListener {
         ServletContext context = event.getServletContext();
         String maxRingTime = context.getInitParameter("MaxRingTime");
         String afterCallStatus = context.getInitParameter("AfterCallStatus");
+        String establishedStatus = context.getInitParameter("EstablishedStatus");
 
 //        System.out.println("MaxRingTime: "+maxRingTime);
 //        System.out.println("AfterCallStatus: "+afterCallStatus);
+//        System.out.println("EstablishedStatus: "+establishedStatus);
         
         //Set in WebSocket
         Map<String, String> systemParam = new HashMap<String, String>();
         systemParam.put("MaxRingTime", maxRingTime);
         systemParam.put("AfterCallStatus", afterCallStatus);
+        systemParam.put("EstablishedStatus", establishedStatus);
         Util.setSystemParam(systemParam);
         Cfg_AgentStatus agentstatus = new Cfg_AgentStatus();
         MaintainService maintainservice = new MaintainService();		
@@ -92,6 +95,7 @@ public class SystemListener implements ServletContextListener {
 //		 System.out.println("agentstatusmap: "+Util.getAgentStatus());
 //        System.out.println("MaxRingTime: "+Util.getMaxRingTime());
 //        System.out.println("AfterCallStatus: "+Util.getAfterCallStatus());
+//        System.out.println("EstablishedStatus: "+Util.getEstablishedStatus());
     }
      
     @Override
