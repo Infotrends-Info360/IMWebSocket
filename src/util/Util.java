@@ -51,9 +51,9 @@ public class Util {
 	public static String getGString(JsonObject aObj, String aKey){
 		return (aObj.get(aKey) != null && !(aObj.get(aKey)instanceof JsonNull))?aObj.get(aKey).getAsString():null;
 	}
-	public static String getTmpID(String aID){
-		return aID.replaceAll( "[^\\d]", "" ).substring(0,6);
-	}
+//	public static String getTmpID(String aID){
+//		return aID.replaceAll( "[^\\d]", "" ).substring(0,6);
+//	}
 
 
 	private static class Attr {
