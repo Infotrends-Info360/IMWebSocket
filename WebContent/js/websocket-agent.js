@@ -367,6 +367,21 @@ function Login() {
 					
 					// 更新reasonList - 位置: AgentChat.jsp -> id="reasonList"
 					alert("JSON.stringify( reasonList ): " + JSON.stringify( reasonList ));
+					
+//					var m = new Map();
+//					m.set(1, "black");
+//					m.set(2, "red");
+//					m.set("colors", 2);
+//					m.set({x:1}, 3);
+
+//					reasonList.forEach(function (item, key, mapObj) {
+////					    document.write(item.toString() + "<br />");
+//						alert("key: "+key);
+//						alert("item: "+item);
+//					});
+										
+					var new_option = new Option('t','v');
+					document.getElementById('reasonList').options.add(new_option)
 //					console.log("userjoin - reasonList: " + reasonList);
 					
 					// 更新statusList - enum

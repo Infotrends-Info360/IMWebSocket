@@ -57,6 +57,7 @@
     <mapper	resource="com/Info360/config/sqlxml/activitymenu.xml"/>
     <mapper	resource="com/Info360/config/sqlxml/activitydata.xml"/>
     <mapper	resource="com/Info360/config/sqlxml/activitygroups.xml"/>
+    <mapper	resource="com/Info360/config/sqlxml/rpt_activitylog.xml"/>
   </mappers>
 
 </configuration>
