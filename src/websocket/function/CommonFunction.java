@@ -72,13 +72,17 @@ public class CommonFunction {
 	public static void userjoin(String user, org.java_websocket.WebSocket aConn) {
 		System.out.println("userjoin() called");
 		JSONObject obj = new JSONObject(user);
-//		String userId = java.util.UUID.randomUUID().toString();
-		String userId = obj.get("id").toString(); //20170222 Lin
 		String username = obj.getString("UserName");
 		String MaxCount = obj.getString("MaxCount"); //新增 MaxCount
 //		System.out.println("MaxCount: "+MaxCount);
 		String ACtype = obj.getString("ACtype");
 		String channel = obj.getString("channel");
+		String userId = null;
+		if(ACtype.equals("Agent")){
+			userId = obj.get("id").toString(); //20170222 Lin
+		}else if(ACtype.equals("Client")){
+			userId = java.util.UUID.randomUUID().toString();
+		}
 		WebSocketUserPool.addUser(username, userId, aConn, ACtype); // 在此刻,已將user conn加入倒Pool中
 //		String joinMsg = "[Server]" + username + " Online";
 //		WebSocketUserPool.sendMessage(joinMsg);
