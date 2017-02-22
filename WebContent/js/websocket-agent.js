@@ -451,7 +451,7 @@ function Login() {
 				} else if ("removeUserinroom" == obj.Event){
 //					document.getElementById("currUsers").innerHTML = obj.roomMembers;
 					// 若此房間已經關了, 則更新roomInfo
-					if (obj.roomSize == 0){
+					if (obj.roomSize == 0){ 
 						var roomInfo = roomInfoMap_g.get(obj.roomID);
 						roomInfo.close = true;
 						// 若為當前頁面,則更新roomInfo
