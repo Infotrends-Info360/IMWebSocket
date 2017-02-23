@@ -585,10 +585,8 @@ function Login() {
 						
 //						alert(obj.AfterCallStatus);
 						// 20170222 Lin
-//						alert("ACS - StatusEnum.currStatusEnum: " + StatusEnum.currStatusEnum);
-//						alert("ACS - StatusEnum.statusname: " + StatusEnum.currStatusEnum.statusname);
 						if(obj.AfterCallStatus == StatusEnum.READY.dbid){ //如果AfterCallStatus == ready
-							if(StatusEnum.currStatusEnum != StatusEnum.READY){
+							if(StatusEnum.ready_dbid == null){
 								$('#notready')[0].disabled = true;
 								$('#ready')[0].disabled = false;
 //								status_g = StatusEnum.READY;
@@ -597,7 +595,7 @@ function Login() {
 								StatusEnum.updateStatus(StatusEnum.READY, "start");
 							}
 						}else if(obj.AfterCallStatus == StatusEnum.NOTREADY.dbid){ //如果AfterCallStatus == not ready
-							if(StatusEnum.currStatusEnum != StatusEnum.NOTREADY){
+							if(StatusEnum.notready_dbid == null){
 								$('#notready')[0].disabled = false;
 								$('#ready')[0].disabled = true;
 //								status_g = StatusEnum.NOTREADY;
@@ -663,6 +661,11 @@ function Login() {
 					console.log("before - waittingClientIDList_g.length: " + waittingClientIDList_g.length);
 					waittingClientIDList_g.splice(index_remove,1);
 					console.log("after - waittingClientIDList_g.length: " + waittingClientIDList_g.length);
+				} else if ("Exit" == obj.Event){
+					alert("Exit");
+//					console.log("ws 連線關閉。");
+//					parent.ws_g.close(); // 在這邊關閉websocket,要特別注意會不會牽連到其他人!
+
 				}
 			// 非指令訊息
 			// (Billy哥部分)
@@ -671,8 +674,8 @@ function Login() {
 				// 非指令訊息
 				if (e.data.indexOf("Offline") > 0 && e.data.indexOf(parent.UserName_g) > 0) {
 					// 關閉websocket
-					console.log("ws 連線關閉。");
-					parent.ws_g.close(); // 在這邊關閉websocket,要特別注意會不會牽連到其他人!
+//					console.log("ws 連線關閉。");
+//					parent.ws_g.close(); // 在這邊關閉websocket,要特別注意會不會牽連到其他人!
 				}
 			} else {
 				document.getElementById("text").innerHTML += e.data + "<br>";
@@ -1129,9 +1132,6 @@ function RefreshRoomList(){
 
 /** 2017/02/15 - 新增方法 **/
 function switchStatus(aStatusEnum){
-	//更新現有狀態
-	StatusEnum.currStatusEnum = aStatusEnum;
-	
 	switch(aStatusEnum) {
     case StatusEnum.LOGIN:
 		var frames = window.parent.frames; // or // var frames = window.parent.frames;
@@ -1296,6 +1296,9 @@ var StatusEnum = {
 	},
 	
 	updateStatus : function( aStatusEnum , aStartORend, aDbid, aRoomID, aClientID, aReason_dbid){
+		//更新現有狀態
+		StatusEnum.currStatusEnum = aStatusEnum;
+		 
 		if ('end' == aStartORend && aDbid === undefined) {
 			console.log("updateStatus - end - " + aStatusEnum.description + " aDbid not found");
 			return;
