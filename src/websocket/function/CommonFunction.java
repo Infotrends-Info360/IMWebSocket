@@ -384,31 +384,37 @@ public class CommonFunction {
 		String userid = obj.get("id").getAsString();
 		String date = obj.get("date").getAsString();
 		String status = obj.get("status").getAsString(); // 以數字代表
-		String reason = obj.get("reason").getAsString();
+		String reason_dbid =  Util.getGString(obj, "reason_dbid");
 		String dbid = Util.getGString(obj, "dbid");
 		String startORend = Util.getGString(obj, "startORend"); 
 		String roomID = Util.getGString(obj, "roomID"); 
 		String clientID = Util.getGString(obj, "clientID");
 		UserInfo userInfo = WebSocketUserPool.getUserInfoByKey(aConn);
 				
+		// 原方法區塊
 		if(status.equals("lose")){
 			WebSocketTypePool.addleaveClient();
 		}
-		WebSocketTypePool.UserUpdate(ACtype, username, userid, date, status, reason, aConn);
+		WebSocketTypePool.UserUpdate(ACtype, username, userid, date, status, reason_dbid, aConn);
 		
 		// 更新DB狀態時間
 //		System.out.println("status	startORend	dbid	roomID	clientID");
-		System.out.printf("%10s	%10s %10s %10s %10s" , "status", "startORend", "dbid", "roomID", "clientID");
+		System.out.printf("%10s	%10s %10s %10s %10s %10s" , "status", "startORend", "dbid", "roomID", "clientID", "reason");
 		System.out.println();
 		System.out.println("----------------------------------------------------------------------------");
-		System.out.printf("%10s	%10s %10s %10s %10s" , status, startORend, dbid, roomID, clientID);
+		System.out.printf("%10s	%10s %10s %10s %10s %10s" , status, startORend, dbid, roomID, clientID, reason_dbid);
 		System.out.println();
 //		System.out.println("obj: " + obj);
 		
 		if ("start".equals(startORend)){
 //			String userID = Util.getTmpID(userid);
 			// 將開始時間寫入DB
-			dbid = AgentFunction.RecordStatusStart(userid, status, "8");
+				// 若為NOTREADY,則會多reason_dbid參數
+			if (StatusEnum.NOTREADY.getDbid().equals(status)){
+				dbid = AgentFunction.RecordStatusStart(userid, status, reason_dbid);
+			}else{
+				dbid = AgentFunction.RecordStatusStart(userid, status, "0");
+			}
 			// 將xxxx_dbid值傳給前端
 			StatusEnum currStatusEnum = StatusEnum.getStatusEnumByDbid(status);
 			System.out.println("currStatusEnum: " + currStatusEnum);
@@ -434,6 +440,7 @@ public class CommonFunction {
 				 //agentUserInfo
 			}
 			
+			// 如果是READY,則多將readytime重置
 			if (StatusEnum.READY.getDbid().equals(status)){
 				// 重置Agent readytime
 				SimpleDateFormat sdf = new SimpleDateFormat( Util.getSdfTimeFormat() );

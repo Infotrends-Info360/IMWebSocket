@@ -10,7 +10,7 @@ var waittingClientIDList_g = [];
 var waittingAgentIDList_g = [];
 var maxRoomCount_g;
 var currRoomCount_g = 0;
-var notreadyreason = 0; //not ready Reason
+var notreadyreason_dbid_g = 0; //not ready Reason
 //var afterCallStatus_g = 'WORKHARD'; // 先這樣  //20170222 Lin
 //var count = 0;
 //var RoomIDList = []; // 接通後產生Group的ID List
@@ -352,7 +352,8 @@ function Login() {
 					status_g = StatusEnum.RING;
 					switchStatus(status_g);
 					StatusEnum.ready_dbid = StatusEnum.updateStatus(StatusEnum.READY, "end", StatusEnum.ready_dbid); 
-					StatusEnum.updateStatus(StatusEnum.NOTREADY, "start");
+//					( aStatusEnum , aStartORend, aDbid, aRoomID, aClientID, aReason_dbid)
+					StatusEnum.updateStatus(StatusEnum.NOTREADY, "start", null, null, null, notreadyreason_dbid_g);
 					//												  未新增無dbid, 非iestablished無roomID, 傳入clientID
 					StatusEnum.updateStatus(StatusEnum.RING, "start", null, null, clientID);
 					
@@ -388,7 +389,7 @@ function Login() {
 					    var x = document.getElementById("reasonList");
 					    console.log("Not Ready Reason --- "+ x.options[x.selectedIndex].text);
 					    console.log("Not Ready Reason Value --- "+ x.value);
-					    notreadyreason = x.value;
+					    notreadyreason_dbid_g = x.value;
 					}
 					//20170222 Lin
 
@@ -408,7 +409,8 @@ function Login() {
 					status_g = StatusEnum.LOGIN;
 					switchStatus(status_g);
 					StatusEnum.updateStatus(StatusEnum.LOGIN, "start");
-					StatusEnum.updateStatus(StatusEnum.NOTREADY, "start");
+					StatusEnum.updateStatus(StatusEnum.NOTREADY, "start", null, null, null, notreadyreason_dbid_g);
+//					StatusEnum.updateStatus(StatusEnum.NOTREADY, "start");
 					
 					// 計算LOGIN狀態持續時間用:
 //					alert("login_dbid: " + login_dbid);
@@ -585,7 +587,8 @@ function Login() {
 								status_g = StatusEnum.NOTREADY;
 								switchStatus(status_g);
 								StatusEnum.ready_dbid = StatusEnum.updateStatus(StatusEnum.READY, "end", StatusEnum.ready_dbid);
-								StatusEnum.updateStatus(StatusEnum.NOTREADY, "start");
+								StatusEnum.updateStatus(StatusEnum.NOTREADY, "start", null, null, null, notreadyreason_dbid_g);
+//								StatusEnum.updateStatus(StatusEnum.NOTREADY, "start");
 							}
 						}
 						// 20170222 Lin
@@ -746,7 +749,9 @@ function notready() {
 	status_g = StatusEnum.NOTREADY;
 	switchStatus(status_g);
 	StatusEnum.ready_dbid = StatusEnum.updateStatus(StatusEnum.READY, "end", StatusEnum.ready_dbid);
-	StatusEnum.updateStatus(StatusEnum.NOTREADY, "start");
+	alert("notreadyreason_dbid_g: " + notreadyreason_dbid_g);
+	StatusEnum.updateStatus(StatusEnum.NOTREADY, "start", null, null, null, notreadyreason_dbid_g);
+//	StatusEnum.updateStatus(StatusEnum.NOTREADY, "start");
 }
 
 //同意與Client交談
@@ -1287,7 +1292,7 @@ var StatusEnum = {
 			StatusEnum.oestablished_dbid = aObj.oestablished_dbid; 
 	},
 	
-	updateStatus : function( aStatusEnum , aStartORend, aDbid, aRoomID, aClientID){
+	updateStatus : function( aStatusEnum , aStartORend, aDbid, aRoomID, aClientID, aReason_dbid){
 		if ('end' == aStartORend && aDbid === undefined) {
 			console.log("updateStatus - end - " + aStatusEnum.description + " aDbid not found");
 			return;
@@ -1297,7 +1302,9 @@ var StatusEnum = {
 		parent.document.getElementById("status").value = aStatusEnum.description;
 		// 去server更新狀態
 		var myUpdateStatusJson = new updateStatusJson("Agent", parent.UserID_g, parent.UserName_g, 
-														aStatusEnum.dbid, "no reason", aStartORend, aDbid, aRoomID, aClientID);
+														aStatusEnum.dbid, "no reason", aStartORend, 
+														aDbid, aRoomID, aClientID,
+														aReason_dbid);
 		parent.ws_g.send(JSON.stringify(myUpdateStatusJson));
 		
 		if ('end' == aStartORend){
