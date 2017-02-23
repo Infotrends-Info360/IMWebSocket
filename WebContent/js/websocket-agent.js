@@ -10,6 +10,7 @@ var waittingClientIDList_g = [];
 var waittingAgentIDList_g = [];
 var maxRoomCount_g;
 var currRoomCount_g = 0;
+var notreadyreason = 0; //not ready Reason
 //var afterCallStatus_g = 'WORKHARD'; // 先這樣  //20170222 Lin
 //var count = 0;
 //var RoomIDList = []; // 接通後產生Group的ID List
@@ -372,7 +373,25 @@ function Login() {
 					$('#maxRoomCount')[0].innerHTML = currRoomCount_g + " / " + maxRoomCount_g;
 					
 					// 更新reasonList - 位置: AgentChat.jsp -> id="reasonList"
+
+					//20170222 Lin
 //					alert("JSON.stringify( reasonList ): " + JSON.stringify( reasonList ));
+					 
+					for(var key in reasonList){
+						var new_option = new Option(reasonList[key].statusname_tw, reasonList[key].dbid);
+						document.getElementById('reasonList').options.add(new_option)
+					}
+					
+					document.getElementById("reasonList").addEventListener("change", myFunction);
+
+					function myFunction() {
+					    var x = document.getElementById("reasonList");
+					    console.log("Not Ready Reason --- "+ x.options[x.selectedIndex].text);
+					    console.log("Not Ready Reason Value --- "+ x.value);
+					    notreadyreason = x.value;
+					}
+					//20170222 Lin
+
 //					console.log("userjoin - reasonList: " + reasonList);
 					
 					// 更新statusList - enum

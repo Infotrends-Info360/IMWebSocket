@@ -70,7 +70,7 @@ public class RingCountDownTask extends TimerTask {
 	}
 	
 	public void operate(){
-		this.timer = new Timer("some name");
+		this.timer = new Timer();
 		timer.scheduleAtFixedRate(this, RingCountDownTask.delay, RingCountDownTask.period);
 		
 	}

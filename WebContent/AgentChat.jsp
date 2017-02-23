@@ -148,9 +148,10 @@ td {
                 	</div>
                 	<div class="col-xs-6 col-sm-6 col-md-6 col-lg-6">
                         <select id="reasonList" class="form-control">
-                            <option value="reason01">reason01</option>
-                            <option value="reason02">reason02</option>
-                            <option value="reason03">reason03</option>
+                        		<option value="請選擇">請選擇</option>
+<!--                             <option value="reason01">reason01</option> -->
+<!--                             <option value="reason02">reason02</option> -->
+<!--                             <option value="reason03">reason03</option> -->
                         </select>
                 	</div>
                        

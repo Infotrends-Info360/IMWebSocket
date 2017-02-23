@@ -116,17 +116,17 @@ from tblInteraction where 1=1
    	 
   	</insert>
   	
-<!--   	<update id="Update_Interaction" parameterType="com.Info360.bean.ContactData"> -->
+  	<update id="Update_Interaction_comment" parameterType="com.Info360.bean.Interaction">
     
-<!--     update  TBLCONTACTDATA  set modifieddate=#{modifieddate} -->
+    update  TBLINTERACTION  set THECOMMENT=#{thecomment}
     
 <!-- 	<foreach item="value" index="key" collection="userdata" -->
 <!--      open="," separator="," close=""> -->
 <!--         ${key}=#{value} -->
 <!--    	</foreach> -->
     
-<!--     where contactid=#{contactid} and ${pkey}=#{pvalue} -->
+    where IXNID=#{ixnid}
   
-<!--   </update> -->
+  </update>
   
 </mapper>

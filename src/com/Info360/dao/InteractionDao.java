@@ -72,9 +72,8 @@ public class InteractionDao {
 	
 	
 	/**
-	 * 查詢個人資訊或所有資訊
-	 * Account Query
-	 * @param cfg_servicename
+	 * Account insert
+	 * @param insert_Interaction
 	 */
 	public int insert_Interaction(Interaction   interaction){
 		DBAccess dbAccess = new DBAccess();
@@ -87,6 +86,34 @@ public class InteractionDao {
 			sqlSession = dbAccess.getSqlSession();
 			//通過sqlSession執行SQL語句
 			interactionInt = sqlSession.insert("interaction.Insert_Interaction", interaction);
+			sqlSession.commit();
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+			IsError.GET_EXCEPTION = e.getMessage();
+		} finally {
+			if(sqlSession != null){
+			   sqlSession.close();
+			}
+		}
+		return interactionInt;
+	}
+	
+	/**
+	 * Account update
+	 * @param update_Interaction_comment
+	 */
+	public int update_Interaction_comment(Interaction   interaction){
+		DBAccess dbAccess = new DBAccess();
+		//List<ServiceEntry> serviceentrylist = new ArrayList<ServiceEntry>();
+		int interactionInt = 0;
+		SqlSession sqlSession = null;
+		
+		
+		try {
+			sqlSession = dbAccess.getSqlSession();
+			//通過sqlSession執行SQL語句
+			interactionInt = sqlSession.update("interaction.Update_Interaction_comment", interaction);
 			sqlSession.commit();
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
