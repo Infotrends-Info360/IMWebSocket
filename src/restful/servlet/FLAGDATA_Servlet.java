@@ -61,19 +61,12 @@ public class FLAGDATA_Servlet {
     			
         	  	  	JSONObject activitygroupsObject = new JSONObject();
         	  	activitygroupsObject.put("dbid", activitygroupslist.get(a).getDbid());
-        	  	activitygroupsObject.put("createdatetime", activitygroupslist.get(a).getCreatedatetime().substring(0, 19));
+        	  	activitygroupsObject.put("createdatetime", activitygroupslist.get(a).getCreatedatetime());
+        	  	activitygroupsObject.put("deletedatetime", activitygroupslist.get(a).getDeletedatetime());
         	  	activitygroupsObject.put("activitymenuid", activitygroupslist.get(a).getActivitymenuid());
         	  	activitygroupsObject.put("groupname", activitygroupslist.get(a).getGroupname());
         	  	activitygroupsObject.put("sort", activitygroupslist.get(a).getSort());
-        	  	
-        	  	if(activitygroupslist.get(a).getDeletedatetime()!=""){
-            	  	activitygroupsObject.put("deletedatetime", activitygroupslist.get(a).getDeletedatetime().substring(0, 19));
-
-        	  	}else{
-            	  	activitygroupsObject.put("deletedatetime", activitygroupslist.get(a).getDeletedatetime());
-
-        	  	}
-
+        		
         	  	
         	  	ActivitygroupsJsonArray.put(activitygroupsObject);
         	  	
@@ -87,8 +80,8 @@ public class FLAGDATA_Servlet {
         	  		
         	  		JSONObject activitydataObject = new JSONObject();
         			activitydataObject.put("dbid", activitydatalist.get(g).getDbid());
-        			activitydataObject.put("createdatetime", activitydatalist.get(a).getCreatedatetime().substring(0, 19));
-        			activitydataObject.put("deletedatetime", activitydatalist.get(a).getDeletedatetime().substring(0, 19));
+        			activitydataObject.put("createdatetime", activitydatalist.get(a).getCreatedatetime());
+        			activitydataObject.put("deletedatetime", activitydatalist.get(a).getDeletedatetime());
         			activitydataObject.put("activitygroupsid", activitydatalist.get(g).getActivitygroupsid());
         			activitydataObject.put("codename", activitydatalist.get(g).getCodename());
         			activitydataObject.put("color", activitydatalist.get(g).getColor());
