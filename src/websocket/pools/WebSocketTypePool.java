@@ -161,6 +161,9 @@ public class WebSocketTypePool{
 	
 	/** * Get Online count in Agent or Client * @return */
 	public static int getOnlineUserIDinTYPECount(String aTYPE) {
+		if (TYPEconnections.get(aTYPE) == null){
+			return 0;
+		}
 		return TYPEconnections.get(aTYPE).size();
 	}
 	
