@@ -278,7 +278,24 @@ function Login() {
 //					}
 					//20170222 Lin
 					
-				} else if ("getUserStatus" == obj.Event) {
+				}else if ("RejectEvent" == obj.Event){
+//					alert("RejectEvent received");
+					// 將此clientID從waittingClientIDList_g中去除
+					var index_remove;
+					for (var index in waittingClientIDList_g) {
+						clientIDJson = waittingClientIDList_g[index];
+						var clientID = clientIDJson.clientID;
+						if (currClientID == clientID){
+							index_remove = index;
+						}
+//						console.log("clietIDJson.clientID: " + clientIDJson.clientID);
+					}
+					waittingClientIDList_g.splice(index_remove,1);
+//					console.log("waittingClientIDList_g.length: " + waittingClientIDList_g.length);		
+					
+					//更新狀態
+					StatusEnum.ring_dbid = StatusEnum.updateStatus(StatusEnum.RING, "end", StatusEnum.ring_dbid);
+				}else if ("getUserStatus" == obj.Event) {
 //					console.log("onMessage(): getUserStatus called");
 //					document.getElementById("status").innerHTML = "狀態: "
 //							+ obj.Status + "<br>Reason: " + obj.Reason; 
@@ -832,23 +849,6 @@ function RejectEvent() {
 		};
 		// 發送消息
 		parent.ws_g.send(JSON.stringify(msg));		
-		
-		// 將此clientID從waittingClientIDList_g中去除
-		var index_remove;
-		for (var index in waittingClientIDList_g) {
-			clientIDJson = waittingClientIDList_g[index];
-			var clientID = clientIDJson.clientID;
-			if (currClientID == clientID){
-				index_remove = index;
-			}
-//			console.log("clietIDJson.clientID: " + clientIDJson.clientID);
-		}
-		waittingClientIDList_g.splice(index_remove,1);
-//		console.log("waittingClientIDList_g.length: " + waittingClientIDList_g.length);		
-		
-		//更新狀態
-		StatusEnum.ring_dbid = StatusEnum.updateStatus(StatusEnum.RING, "end", StatusEnum.ring_dbid);
-		
 	}
 	
 	// 將此請求從request list中去除掉

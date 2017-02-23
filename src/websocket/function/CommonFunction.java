@@ -399,6 +399,7 @@ public class CommonFunction {
 		
 		// 更新DB狀態時間
 //		System.out.println("status	startORend	dbid	roomID	clientID");
+		System.out.println("" + StatusEnum.getStatusEnumByDbid(status) + ": ");
 		System.out.printf("%10s	%10s %10s %10s %10s %10s" , "status", "startORend", "dbid", "roomID", "clientID", "reason");
 		System.out.println();
 		System.out.println("----------------------------------------------------------------------------");
@@ -417,9 +418,9 @@ public class CommonFunction {
 			}
 			// 將xxxx_dbid值傳給前端
 			StatusEnum currStatusEnum = StatusEnum.getStatusEnumByDbid(status);
-			System.out.println("currStatusEnum: " + currStatusEnum);
+//			System.out.println("currStatusEnum: " + currStatusEnum);
 			String dbid_key = currStatusEnum.toString().toLowerCase() + "_dbid";
-			System.out.println("dbid_key: " + dbid_key);
+//			System.out.println("dbid_key: " + dbid_key);
 			obj.addProperty(dbid_key, dbid); // ex. login_dbid
 			
 			// 若為iEstablished狀態,則交由RoomInfo來處理結束時間點

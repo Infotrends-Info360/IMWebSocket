@@ -43,7 +43,7 @@ public class AgentFunction {
 
 	/** * RejectEvent */
 	public static void RejectEvent(String message,
-			org.java_websocket.WebSocket conn) {
+			org.java_websocket.WebSocket aConn) {
 		JSONObject obj = new JSONObject(message);
 		org.java_websocket.WebSocket sendto = WebSocketUserPool
 				.getWebSocketByUser(obj.getString("sendto"));
@@ -53,6 +53,7 @@ public class AgentFunction {
 		sendjson.put("fromName", obj.getString("UserName"));
 		sendjson.put("channel", obj.getString("channel"));
 		WebSocketUserPool.sendMessageToUser(sendto, sendjson.toString());
+		WebSocketUserPool.sendMessageToUser(aConn, sendjson.toString());
 	}
 
 	/** * get Agent Status */
