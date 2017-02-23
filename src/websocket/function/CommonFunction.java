@@ -142,11 +142,7 @@ public class CommonFunction {
 		JsonObject jsonIn = Util.getGJsonObject(aMsg);
 		String id = jsonIn.get("id").getAsString();
 		String UserName = jsonIn.get("UserName").getAsString();
-		
-		//Billy哥部分前端需求:
-		String joinMsg = "[Server] - " + UserName + " Offline";
-		WebSocketUserPool.sendMessageToUser(aConn, joinMsg); // 只須原登出Agent收到此訊息即可
-		
+				
 		// 關係Heartbeat
 		Timer timer = WebSocketUserPool.getUserHeartbeatTimerByKey(aConn);
 		if (timer != null){
@@ -212,6 +208,16 @@ public class CommonFunction {
 //				System.out.println("userExit() - " + clientID);
 //			}
 		}
+		
+		// 寄送Exit訊息回去,告知server已處理好,可以關閉連線了
+	    JsonObject jsonOut = new JsonObject();
+		jsonOut.addProperty("Event", "Exit");
+		WebSocketUserPool.sendMessageToUser(aConn, jsonOut.toString());
+
+		//Billy哥部分前端需求:
+		String joinMsg = "[Server] - " + UserName + " Offline";
+		WebSocketUserPool.sendMessageToUser(aConn, joinMsg); // 只須原登出Agent收到此訊息即可
+		
 		
 //		System.out.println("before close: " + WebSocketUserPool.getUserID(aConn));
 		// 最後關閉連線

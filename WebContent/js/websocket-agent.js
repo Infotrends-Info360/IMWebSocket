@@ -663,6 +663,8 @@ function Login() {
 					console.log("before - waittingClientIDList_g.length: " + waittingClientIDList_g.length);
 					waittingClientIDList_g.splice(index_remove,1);
 					console.log("after - waittingClientIDList_g.length: " + waittingClientIDList_g.length);
+				} else if ("Exit" == obj.Event){
+					alert("Exit");
 				}
 			// 非指令訊息
 			// (Billy哥部分)
@@ -672,7 +674,7 @@ function Login() {
 				if (e.data.indexOf("Offline") > 0 && e.data.indexOf(parent.UserName_g) > 0) {
 					// 關閉websocket
 					console.log("ws 連線關閉。");
-					parent.ws_g.close(); // 在這邊關閉websocket,要特別注意會不會牽連到其他人!
+//					parent.ws_g.close(); // 在這邊關閉websocket,要特別注意會不會牽連到其他人!
 				}
 			} else {
 				document.getElementById("text").innerHTML += e.data + "<br>";
