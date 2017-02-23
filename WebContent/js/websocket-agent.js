@@ -1,21 +1,18 @@
 var ws_g; // websocket
 var UserName_g; // 使用者名稱全域變數
 var UserID_g; // 使用者ID全域變數
-var RoomID_g; // 此為第一個加入的RoomID, 僅為開發過程使用, 不符合目前架構, 為過度開發期間保留的全域變數
+var agentIDMap_g = new Map(); // 用於私訊部分, 更新現在在線的Agent清單
+var waittingClientIDList_g = []; // 用處: 當LOGOUT時,告知所有有寄給此Agent請求的其他Client不用再等了
+var waittingAgentIDList_g = []; // 用處: 當LOGOUT時,告知所有有寄給此Agent請求的其他Agents不用再等了
+/** 狀態相關 **/
 var isonline_g = false; // 判斷是否上線的開關
-var status_g;
-var roomInfoMap_g = new Map();
-var agentIDMap_g = new Map();
-var waittingClientIDList_g = [];
-var waittingAgentIDList_g = [];
-var maxRoomCount_g;
-var currRoomCount_g = 0;
-var notreadyreason_dbid_g = 0; //not ready Reason
-//var afterCallStatus_g = 'WORKHARD'; // 先這樣  //20170222 Lin
-//var count = 0;
-//var RoomIDList = []; // 接通後產生Group的ID List
-//var RoomIDLinkedList = new SinglyList(); // 接通後產生Group的ID Linked List
-
+var status_g; // 狀態全域變數
+var notreadyreason_dbid_g = 0; //not ready Reason - 於皆換成NOTREADY狀態時傳入StatusEnum.updateState()方法中
+/** room相關 **/
+var RoomID_g; // 此為第一個加入的RoomID, 僅為開發過程使用, 不符合目前架構, 為過度開發期間保留的全域變數
+var roomInfoMap_g = new Map(); // 用於房間列表,存著目前已開啟的通話相關資訊,詳細屬性成員請見util.js - RoomInfo
+var maxRoomCount_g; // 每個Agent最多可接通話數
+var currRoomCount_g = 0; //每個Agent現在已接通話數
 /** layui相關 **/
 var AgentID; // Agent的ID // layim使用, 以及onlineinTYPE使用, 之後可考慮精簡
 var AgentName; // Agent的名稱 // layim使用, 以及onlineinTYPE使用, 之後可考慮精簡
@@ -230,7 +227,7 @@ function Login() {
 				
 					// 更新狀態
 //					alert("AcceptEvent - obj.roomID: " + obj.roomID);
-					status_g = StatusEnum.IESTABLISHED;
+//					status_g = StatusEnum.IESTABLISHED;
 					switchStatus(StatusEnum.IESTABLISHED);
 					StatusEnum.ring_dbid = StatusEnum.updateStatus(StatusEnum.RING, "end", StatusEnum.ring_dbid);
 					StatusEnum.updateStatus(StatusEnum.IESTABLISHED, "start", null, obj.roomID);
@@ -267,15 +264,15 @@ function Login() {
 					//Ring時已切換為NOTREADY，如設定為READY才做切換動作
 					}else if (obj.EstablishedStatus == StatusEnum.READY.dbid){
 						// 更新狀態(唯一在RING事件之後會將狀態切換為READY的情況)
-						status_g = StatusEnum.READY;
-						switchStatus(status_g);
+//						status_g = StatusEnum.READY;
+						switchStatus(StatusEnum.READY);
 						StatusEnum.notready_dbid = StatusEnum.updateStatus(StatusEnum.NOTREADY, "end", StatusEnum.notready_dbid);
 						StatusEnum.updateStatus(StatusEnum.READY, "start");
 					}
 //					else if (obj.EstablishedStatus == StatusEnum.NOTREADY.dbid){
 //						// 更新狀態(唯一在RING事件之後會將狀態切換為NOTREADY的情況)
-//						status_g = StatusEnum.NOTREADY;
-//						switchStatus(status_g);
+////					status_g = StatusEnum.NOTREADY;
+//						switchStatus(StatusEnum.NOTREADY);
 //						StatusEnum.ready_dbid = StatusEnum.updateStatus(StatusEnum.READY, "end", StatusEnum.ready_dbid);
 //						StatusEnum.updateStatus(StatusEnum.NOTREADY, "start");
 //					}
@@ -349,8 +346,8 @@ function Login() {
 					}; // 設定 AcceptEventInit
 				    	
 					// 更改架構為 - 最多一次只收一個ring
-					status_g = StatusEnum.RING;
-					switchStatus(status_g);
+//					status_g = StatusEnum.RING;
+					switchStatus(StatusEnum.RING);
 					StatusEnum.ready_dbid = StatusEnum.updateStatus(StatusEnum.READY, "end", StatusEnum.ready_dbid); 
 //					( aStatusEnum , aStartORend, aDbid, aRoomID, aClientID, aReason_dbid)
 					StatusEnum.updateStatus(StatusEnum.NOTREADY, "start", null, null, null, notreadyreason_dbid_g);
@@ -399,15 +396,15 @@ function Login() {
 					// 格式: {Login={description=登入, dbid=1}, Ring={description=響鈴, dbid=6}
 					console.log("***Enum - 更新enum: ");
 					jQuery.each(statusList, function(key, val) {
-						var currStatusEnum = StatusEnum.getStatusEnum(key);
-						currStatusEnum.dbid = val.dbid;
-						currStatusEnum.description = val.description;
+						var tmpStatusEnum = StatusEnum.getStatusEnum(key);
+						tmpStatusEnum.dbid = val.dbid;
+						tmpStatusEnum.description = val.description;
 					});
 					
 					// 更新狀態
 					console.log("更新狀態");
-					status_g = StatusEnum.LOGIN;
-					switchStatus(status_g);
+//					status_g = StatusEnum.LOGIN;
+					switchStatus(StatusEnum.LOGIN);
 					StatusEnum.updateStatus(StatusEnum.LOGIN, "start");
 					StatusEnum.updateStatus(StatusEnum.NOTREADY, "start", null, null, null, notreadyreason_dbid_g);
 //					StatusEnum.updateStatus(StatusEnum.NOTREADY, "start");
@@ -527,7 +524,7 @@ function Login() {
 					console.log("userdata: " + userdata);
 
 					// 更新狀態
-					status_g = StatusEnum.IESTABLISHED;
+//					status_g = StatusEnum.IESTABLISHED;
 					switchStatus(StatusEnum.IESTABLISHED);
 					
 					// 在這邊興建roomList與其room bean
@@ -571,21 +568,23 @@ function Login() {
 						
 //						alert(obj.AfterCallStatus);
 						// 20170222 Lin
+//						alert("ACS - StatusEnum.currStatusEnum: " + StatusEnum.currStatusEnum);
+//						alert("ACS - StatusEnum.statusname: " + StatusEnum.currStatusEnum.statusname);
 						if(obj.AfterCallStatus == StatusEnum.READY.dbid){ //如果AfterCallStatus == ready
-							if(status_g != StatusEnum.READY){
+							if(StatusEnum.currStatusEnum != StatusEnum.READY){
 								$('#notready')[0].disabled = true;
 								$('#ready')[0].disabled = false;
-								status_g = StatusEnum.READY;
-								switchStatus(status_g);
+//								status_g = StatusEnum.READY;
+								switchStatus(StatusEnum.READY);
 								StatusEnum.notready_dbid = StatusEnum.updateStatus(StatusEnum.NOTREADY, "end", StatusEnum.notready_dbid);
 								StatusEnum.updateStatus(StatusEnum.READY, "start");
 							}
 						}else if(obj.AfterCallStatus == StatusEnum.NOTREADY.dbid){ //如果AfterCallStatus == not ready
-							if(status_g != StatusEnum.NOTREADY){
+							if(StatusEnum.currStatusEnum != StatusEnum.NOTREADY){
 								$('#notready')[0].disabled = false;
 								$('#ready')[0].disabled = true;
-								status_g = StatusEnum.NOTREADY;
-								switchStatus(status_g);
+//								status_g = StatusEnum.NOTREADY;
+								switchStatus(StatusEnum.NOTREADY);
 								StatusEnum.ready_dbid = StatusEnum.updateStatus(StatusEnum.READY, "end", StatusEnum.ready_dbid);
 								StatusEnum.updateStatus(StatusEnum.NOTREADY, "start", null, null, null, notreadyreason_dbid_g);
 //								StatusEnum.updateStatus(StatusEnum.NOTREADY, "start");
@@ -689,8 +688,8 @@ function Logout() {
 function Logoutaction() {	
 	// 向websocket送出登出指令
 	// 關閉上線開關
-	status_g = StatusEnum.LOGOUT;
-	switchStatus(status_g);
+//	status_g = StatusEnum.LOGOUT;
+	switchStatus(StatusEnum.LOGOUT);
 	console.log("StatusEnum.login_dbid: " + StatusEnum.login_dbid);
 	console.log("StatusEnum.notready_dbid: " + StatusEnum.notready_dbid);
 	console.log("StatusEnum.ready_dbid: " + StatusEnum.ready_dbid);
@@ -737,8 +736,8 @@ function checktoLeave() {
 //Agent準備就緒
 function ready() {
 	// 更新頁面
-	status_g = StatusEnum.READY;
-	switchStatus(status_g);
+//	status_g = StatusEnum.READY;
+	switchStatus(StatusEnum.READY);
 	StatusEnum.notready_dbid = StatusEnum.updateStatus(StatusEnum.NOTREADY, "end", StatusEnum.notready_dbid);
 	StatusEnum.updateStatus(StatusEnum.READY, "start");
 	
@@ -746,8 +745,8 @@ function ready() {
 // Agent尚未準備就緒
 function notready() {
 	// 更新頁面
-	status_g = StatusEnum.NOTREADY;
-	switchStatus(status_g);
+//	status_g = StatusEnum.NOTREADY;
+	switchStatus(StatusEnum.NOTREADY);
 	StatusEnum.ready_dbid = StatusEnum.updateStatus(StatusEnum.READY, "end", StatusEnum.ready_dbid);
 	alert("notreadyreason_dbid_g: " + notreadyreason_dbid_g);
 	StatusEnum.updateStatus(StatusEnum.NOTREADY, "start", null, null, null, notreadyreason_dbid_g);
@@ -800,7 +799,7 @@ function AcceptEventInit() {
 	$('#' + userID).remove(); // <tr>的id
 	
 	// 開啟ready功能:
-	status_g = StatusEnum.NOTREADY;
+//	status_g = StatusEnum.NOTREADY;
 	switchStatus(StatusEnum.NOTREADY); // 這邊之後要用全域變數來控制不同的工作模式-是否要在established之後變成not ready
 //	document.getElementById("ready").disabled = false;
 //	document.getElementById("notready").disabled = true;		
@@ -1130,7 +1129,9 @@ function RefreshRoomList(){
 
 /** 2017/02/15 - 新增方法 **/
 function switchStatus(aStatusEnum){
-
+	//更新現有狀態
+	StatusEnum.currStatusEnum = aStatusEnum;
+	
 	switch(aStatusEnum) {
     case StatusEnum.LOGIN:
 		var frames = window.parent.frames; // or // var frames = window.parent.frames;
@@ -1239,6 +1240,8 @@ var StatusEnum = {
 	RING: { statusname : 'RING', dbid : '0',description : '中文'}, 
 	IESTABLISHED: { statusname : 'IESTABLISHED', dbid : '0',description : '中文'}, 
 	OESTABLISHED: { statusname : 'OESTABLISHED', dbid : '0',description : '中文'}, 
+	
+	currStatusEnum : '',
 	
 	login_dbid : null,
 	logout_dbid :  null,
