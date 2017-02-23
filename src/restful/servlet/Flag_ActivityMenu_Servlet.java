@@ -5,6 +5,8 @@ import java.io.IOException;
 
 
 import java.math.BigDecimal;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.List;
 
 import javax.ws.rs.FormParam;
@@ -49,13 +51,14 @@ public class Flag_ActivityMenu_Servlet {
 		
 		JSONArray ActivitymenuJsonArray = new JSONArray();
   	 
+	
 		List<Activitymenu> activitymenulist = maintainservice.Flag_activitymenu(activitymenu);
 	    
   	  for (int i = 0; i < activitymenulist.size(); i++) {
   		  	JSONObject activitymenuObject = new JSONObject();
   	  		activitymenuObject.put("dbid", activitymenulist.get(i).getDbid());
-  	  		activitymenuObject.put("createdatetime", activitymenulist.get(i).getCreatedatetime());
-  	  		activitymenuObject.put("deletedatetime", activitymenulist.get(i).getDeletedatetime());
+  	  		activitymenuObject.put("createdatetime", activitymenulist.get(i).getCreatedatetime().substring(0, 19));
+  	  		activitymenuObject.put("deletedatetime", activitymenulist.get(i).getDeletedatetime().substring(0, 19));
   	  		activitymenuObject.put("deleteflag", activitymenulist.get(i).getDeleteflag());
   	  		activitymenuObject.put("menuname", activitymenulist.get(i).getMenuname());
   	  		activitymenuObject.put("sort", activitymenulist.get(i).getSort());

@@ -57,13 +57,18 @@ public class AgentReason_Select_Servlet {
 	    	agentreasonObject.put("description", agentreasonlist.get(a).getDescription());
 	    	agentreasonObject.put("alarmduration", agentreasonlist.get(a).getAlarmduration());
 	    	agentreasonObject.put("alarmcolor", agentreasonlist.get(a).getAlarmcolor());
-	    	agentreasonObject.put("flag", "啟用");
 	    	agentreasonObject.put("createdatetime", agentreasonlist.get(a).getCreatedatetime());
 	    	agentreasonObject.put("createuserid", agentreasonlist.get(a).getCreateuserid());
 	    	
-	    	agentreasonJsonArray.put(agentreasonObject);
+	    	if(agentreasonlist.get(a).getFlag()==2){
+		    	agentreasonObject.put("flag", "鎖定");
+		    	agentreasonJsonArray.put(agentreasonObject);
+
+	    	}else {
+		    	agentreasonObject.put("flag", "");
+		    	agentreasonJsonArray.put(agentreasonObject);
+	    	}
   		 }
-  		//System.out.println("set FLAG==0");
   	 }
   	  if(flag==1){
     	for(int a = 0; a < agentreasonlist.size(); a++){
@@ -78,17 +83,14 @@ public class AgentReason_Select_Servlet {
 	    	agentreasonObject.put("description", agentreasonlist.get(a).getDescription());
 	    	agentreasonObject.put("alarmduration", agentreasonlist.get(a).getAlarmduration());
 	    	agentreasonObject.put("alarmcolor", agentreasonlist.get(a).getAlarmcolor());
-	    	agentreasonObject.put("flag", "停用");
+	    	agentreasonObject.put("flag", "");
 	    	agentreasonObject.put("createdatetime", agentreasonlist.get(a).getCreatedatetime());
 	    	agentreasonObject.put("createuserid", agentreasonlist.get(a).getCreateuserid());
 
 	    	agentreasonJsonArray.put(agentreasonObject);
   	}
-    	
-  	  }else{
-  		 
   	  }
-    		jsonObject.put("agentreason", agentreasonJsonArray);
+    jsonObject.put("agentreason", agentreasonJsonArray);
   
   	  
 		return Response.status(200).entity(jsonObject.toString())
