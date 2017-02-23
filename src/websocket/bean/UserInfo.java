@@ -25,7 +25,7 @@ public class UserInfo {
 	// 以下為原本TypeInfo部分的屬性
 	private String reason;
 	private String status;
-	private String time;
+	private String readyTime;
 	private AtomicBoolean stopRing = new AtomicBoolean(false); // 處理concurrent問題
 	private AtomicBoolean timeout = new AtomicBoolean(false); // 處理concurrent問題
 	
@@ -90,11 +90,11 @@ public class UserInfo {
 	public void setStatus(String status) {
 		this.status = status;
 	}
-	public String getTime() {
-		return time;
+	public String getReadyTime() {
+		return readyTime;
 	}
-	public void setTime(String time) {
-		this.time = time;
+	public void setReadyTime(String readTime) {
+		this.readyTime = readTime;
 	}
 	public boolean isStopRing() {
 		return stopRing.get();
