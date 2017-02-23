@@ -91,7 +91,7 @@ public class FLAGDATA_Servlet {
         			activitydataObject.put("sort", activitydatalist.get(g).getSort());
         					
         			
-        			if(activitydatalist.get(g).getDeleteflag().trim().equals("0")){
+        			if(activitydatalist.get(g).getTitlegroup()==0){
         				ActivitydataJsonArray.put(activitydataObject);
                 		
         			}else{
