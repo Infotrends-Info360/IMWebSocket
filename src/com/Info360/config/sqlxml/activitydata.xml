@@ -13,7 +13,7 @@
     <result column="CODENAME" 			jdbcType="VARCHAR" property="codename"/>
     <result column="COLOR"     			jdbcType="VARCHAR" property="color"/>
     <result column="SORT" 				jdbcType="VARCHAR" property="sort"/>
-    <result column="TITLEFLAG"     		jdbcType="VARCHAR" property="titleflag"/>
+    <result column="TITLEFLAG"     		jdbcType="INTEGER" property="titleflag"/>
 	<result column="TITLEGROUP" 		jdbcType="INTEGER" property="titlegroup"/>
     <result column="DELETEFLAG"     	jdbcType="VARCHAR" property="deleteflag"/>
     <result column="DELETEDATETIME" 	jdbcType="VARCHAR" property="deletedatetime"/>

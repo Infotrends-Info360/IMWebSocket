@@ -40,7 +40,7 @@ public class Insert_ActivityData_Servlet {
 			@FormParam("activitygroupsid") 	int activitygroupsid,
 			@FormParam("codename") 			String codename,
 			@FormParam("color") 			String color,
-			@FormParam("titleflag") 		String titleflag,
+			@FormParam("titleflag") 		int titleflag,
 			@FormParam("titlegroup") 		int titlegroup,
 			@FormParam("deleteflag") 		String deleteflag,
 			@FormParam("createdatetime") 	String createdatetime,

@@ -89,7 +89,7 @@ public class Query_ActivityGroup_Servlet {
         			activitydataObject.put("sort", activitydatalist.get(g).getSort());
         					
         			
-        			if(activitydatalist.get(g).getTitleflag().trim().equals("0")){
+        			if(activitydatalist.get(g).getTitlegroup()==0){
         				ActivitydataJsonArray.put(activitydataObject);
                 		
         			}else{
