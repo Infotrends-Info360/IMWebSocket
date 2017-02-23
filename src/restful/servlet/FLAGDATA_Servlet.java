@@ -62,11 +62,18 @@ public class FLAGDATA_Servlet {
         	  	  	JSONObject activitygroupsObject = new JSONObject();
         	  	activitygroupsObject.put("dbid", activitygroupslist.get(a).getDbid());
         	  	activitygroupsObject.put("createdatetime", activitygroupslist.get(a).getCreatedatetime().substring(0, 19));
-        	  	activitygroupsObject.put("deletedatetime", activitygroupslist.get(a).getDeletedatetime().substring(0, 19));
         	  	activitygroupsObject.put("activitymenuid", activitygroupslist.get(a).getActivitymenuid());
         	  	activitygroupsObject.put("groupname", activitygroupslist.get(a).getGroupname());
         	  	activitygroupsObject.put("sort", activitygroupslist.get(a).getSort());
-        		
+        	  	
+        	  	if(activitygroupslist.get(a).getDeletedatetime()!=""){
+            	  	activitygroupsObject.put("deletedatetime", activitygroupslist.get(a).getDeletedatetime().substring(0, 19));
+
+        	  	}else{
+            	  	activitygroupsObject.put("deletedatetime", activitygroupslist.get(a).getDeletedatetime());
+
+        	  	}
+
         	  	
         	  	ActivitygroupsJsonArray.put(activitygroupsObject);
         	  	
