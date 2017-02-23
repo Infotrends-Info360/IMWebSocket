@@ -101,24 +101,32 @@ public class WebSocketTypePool{
 	
 	/** * Get Online Longest User(Agent) * @return */
 	public static String getOnlineLongestUserinTYPE(String aTYPE) {
+		System.out.println();
 		Map<WebSocket,  UserInfo> TYPEmap = TYPEconnections.get(aTYPE);
 		//List<String> setUsers = new ArrayList<String>();
 		String settingUser = null;
 		Date date = new Date();
 		long UserStayTime = date.getTime();
 		Collection<UserInfo> setUser = TYPEmap.values();
+//		System.out.println("setUser.size()" + setUser.size());
 		for (UserInfo userInfo : setUser) {
+			if (!userInfo.getStatus().trim().equals(StatusEnum.READY.getDbid())) {
+				continue;
+			}
 			//setUsers.add(u.get("userid").toString());
 			SimpleDateFormat sdf = new SimpleDateFormat(Util.getSdfTimeFormat());
 			String userdatestring = userInfo.getReadyTime(); // 關鍵是這行
+//			System.out.println("userdatestring: " + userdatestring);
 			Date userdate = null;
 			try { 
 				userdate = sdf.parse(userdatestring);
 			} catch (ParseException e) {
 				e.printStackTrace();
+			} catch (Exception e){
+				e.printStackTrace();
 			}
-//			System.out.println("Agent Status - u.getStatus(): " + u.getStatus());
-//			System.out.println("Agent Status - StatusEnum.READY.getValue(): " + StatusEnum.READY.getValue());
+//			System.out.println("Agent Status - userInfo.getStatus(): " + userInfo.getStatus());
+//			System.out.println("Agent Status - StatusEnum.READY.getValue(): " + StatusEnum.READY.getDbid());
 			if(userdate.getTime() <= UserStayTime && userInfo.getStatus().trim().equals(StatusEnum.READY.getDbid())){
 				UserStayTime = userdate.getTime(); // 每次都會將UserStayTime拿去當作"上一個"Uset的等待時間
 				settingUser = userInfo.getUserid();

@@ -52,8 +52,9 @@ public class ClientFunction {
 			sendjson.put("AgentName", WebSocketUserPool.getUserNameByKey(WebSocketUserPool.getWebSocketByUser(Agent)));
 		} catch (Exception e) {
 			Agent = null;
+			e.printStackTrace();
 		}
-		
+		System.out.println("findAgent : " + Agent);
 		sendjson.put("Event", "findAgent");
 		sendjson.put("from", obj.getString("id"));
 		sendjson.put("Agent",  Agent);

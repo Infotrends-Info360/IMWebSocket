@@ -91,6 +91,7 @@ public class UserInfo {
 		this.status = status;
 	}
 	public String getReadyTime() {
+		System.out.println("getReadyTime");
 		return readyTime;
 	}
 	public void setReadyTime(String readTime) {
