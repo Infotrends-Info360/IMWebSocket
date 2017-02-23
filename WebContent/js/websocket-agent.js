@@ -1,21 +1,18 @@
 var ws_g; // websocket
 var UserName_g; // 使用者名稱全域變數
 var UserID_g; // 使用者ID全域變數
-var RoomID_g; // 此為第一個加入的RoomID, 僅為開發過程使用, 不符合目前架構, 為過度開發期間保留的全域變數
+var agentIDMap_g = new Map(); // 用於私訊部分, 更新現在在線的Agent清單
+var waittingClientIDList_g = []; // 用處: 當LOGOUT時,告知所有有寄給此Agent請求的其他Client不用再等了
+var waittingAgentIDList_g = []; // 用處: 當LOGOUT時,告知所有有寄給此Agent請求的其他Agents不用再等了
+/** 狀態相關 **/
 var isonline_g = false; // 判斷是否上線的開關
-var status_g;
-var roomInfoMap_g = new Map();
-var agentIDMap_g = new Map();
-var waittingClientIDList_g = [];
-var waittingAgentIDList_g = [];
-var maxRoomCount_g;
-var currRoomCount_g = 0;
-var notreadyreason_dbid_g = 0; //not ready Reason
-//var afterCallStatus_g = 'WORKHARD'; // 先這樣  //20170222 Lin
-//var count = 0;
-//var RoomIDList = []; // 接通後產生Group的ID List
-//var RoomIDLinkedList = new SinglyList(); // 接通後產生Group的ID Linked List
-
+var status_g; // 狀態全域變數
+var notreadyreason_dbid_g = 0; //not ready Reason - 於皆換成NOTREADY狀態時傳入StatusEnum.updateState()方法中
+/** room相關 **/
+var RoomID_g; // 此為第一個加入的RoomID, 僅為開發過程使用, 不符合目前架構, 為過度開發期間保留的全域變數
+var roomInfoMap_g = new Map(); // 用於房間列表,存著目前已開啟的通話相關資訊,詳細屬性成員請見util.js - RoomInfo
+var maxRoomCount_g; // 每個Agent最多可接通話數
+var currRoomCount_g = 0; //每個Agent現在已接通話數
 /** layui相關 **/
 var AgentID; // Agent的ID // layim使用, 以及onlineinTYPE使用, 之後可考慮精簡
 var AgentName; // Agent的名稱 // layim使用, 以及onlineinTYPE使用, 之後可考慮精簡
