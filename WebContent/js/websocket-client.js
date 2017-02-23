@@ -237,8 +237,13 @@ function Login() {
 //					document.getElementById("currUsers").innerHTML = obj.roomMembers;
 					
 				}  else if ("removeUserinroom" == obj.Event){
-					alert(obj.result);
 					updateAgentInfo(obj.roomMemberIDs, obj.roomMembers, obj.roomSize); //格式為[agentid, clientid]
+					if (obj.roomSize == 0){
+						alert("room empty - \n" + obj.result);
+						Logout();
+					}else{
+						alert("some left - \n" + obj.result);
+					}
 				} else if ("addUserInRoom" == obj.Event){
 					console.log("obj.roomMemberIDs: " + obj.roomMemberIDs);
 					console.log("obj.roomMembers: " + obj.roomMembers);

@@ -384,32 +384,40 @@ public class CommonFunction {
 		String userid = obj.get("id").getAsString();
 		String date = obj.get("date").getAsString();
 		String status = obj.get("status").getAsString(); // 以數字代表
-		String reason = obj.get("reason").getAsString();
+		String reason_dbid =  Util.getGString(obj, "reason_dbid");
 		String dbid = Util.getGString(obj, "dbid");
 		String startORend = Util.getGString(obj, "startORend"); 
 		String roomID = Util.getGString(obj, "roomID"); 
-		String clientID = Util.getGString(obj, "clientID"); 
+		String clientID = Util.getGString(obj, "clientID");
+		UserInfo userInfo = WebSocketUserPool.getUserInfoByKey(aConn);
 				
+		// 原方法區塊
 		if(status.equals("lose")){
 			WebSocketTypePool.addleaveClient();
 		}
-		WebSocketTypePool.UserUpdate(ACtype, username, userid, date, status, reason, aConn);
+		WebSocketTypePool.UserUpdate(ACtype, username, userid, date, status, reason_dbid, aConn);
 		
 		// 更新DB狀態時間
 //		System.out.println("status	startORend	dbid	roomID	clientID");
-		System.out.printf("%10s	%10s %10s %10s %10s" , "status", "startORend", "dbid", "roomID", "clientID");
+		System.out.printf("%10s	%10s %10s %10s %10s %10s" , "status", "startORend", "dbid", "roomID", "clientID", "reason");
 		System.out.println();
 		System.out.println("----------------------------------------------------------------------------");
-		System.out.printf("%10s	%10s %10s %10s %10s" , status, startORend, dbid, roomID, clientID);
+		System.out.printf("%10s	%10s %10s %10s %10s %10s" , status, startORend, dbid, roomID, clientID, reason_dbid);
 		System.out.println();
 //		System.out.println("obj: " + obj);
 		
 		if ("start".equals(startORend)){
 //			String userID = Util.getTmpID(userid);
-			// 如果是LOGIN狀態,則同時新增NOTREADY狀態
+			// 將開始時間寫入DB
+				// 若為NOTREADY,則會多reason_dbid參數
+			if (StatusEnum.NOTREADY.getDbid().equals(status)){
+				dbid = AgentFunction.RecordStatusStart(userid, status, reason_dbid);
+			}else{
+				dbid = AgentFunction.RecordStatusStart(userid, status, "0");
+			}
+			// 將xxxx_dbid值傳給前端
 			StatusEnum currStatusEnum = StatusEnum.getStatusEnumByDbid(status);
 			System.out.println("currStatusEnum: " + currStatusEnum);
-			dbid = AgentFunction.RecordStatusStart(userid, status, "8");
 			String dbid_key = currStatusEnum.toString().toLowerCase() + "_dbid";
 			System.out.println("dbid_key: " + dbid_key);
 			obj.addProperty(dbid_key, dbid); // ex. login_dbid
@@ -423,35 +431,42 @@ public class CommonFunction {
 			
 			// 若為RING狀態,則交由RingCountDownTask來處理結束時間點
 			if (StatusEnum.RING.getDbid().equals(status)){
-				UserInfo userInfo = WebSocketUserPool.getUserInfoByKey(aConn);
+				//將RINGHEARTBEAT放進UserInfo
 				userInfo.setStopRing(false); // 回復為預設false
 				userInfo.setTimeout(false); // 回復為預設false
 				WebSocket clientConn = WebSocketUserPool.getWebSocketByUser(clientID);
 				RingCountDownTask ringCountDownTask = new RingCountDownTask(clientConn, dbid, userInfo);
 				ringCountDownTask.operate();
 				 //agentUserInfo
-				//將RINGHEARTBEAT放進UserInfo
-				
 			}
+			
+			// 如果是READY,則多將readytime重置
+			if (StatusEnum.READY.getDbid().equals(status)){
+				// 重置Agent readytime
+				SimpleDateFormat sdf = new SimpleDateFormat( Util.getSdfTimeFormat() );
+				String nowDate = sdf.format(new java.util.Date());
+				userInfo.setReadyTime(nowDate);
+				System.out.println("update Agent ready time: ");
+				System.out.println("Agent name: " + userInfo.getUsername() + " set readytime to " + userInfo.getReadyTime());
+			}
+			
+			
 
 			// 先只有新增時寄送EVENT,讓前端能拿到相對應的dbid
 			obj.addProperty("Event", "updateStatus");
 			WebSocketUserPool.sendMessageToUser(aConn, obj.toString());
 
-		}else if ("end".equals(startORend)){
+		}else if ("end".equals(startORend)){ 
 			System.out.println("end");
 			if (dbid != null){
 				System.out.println("dbid: " + dbid);
 				
 				// 如果是RING結束,現在交由後端統一處理
 				if (StatusEnum.RING.getDbid().equals(status)){
-					UserInfo userInfo = WebSocketUserPool.getUserInfoByKey(aConn);
 					userInfo.setStopRing(true);
 					System.out.println("RING");
 					return;
 				}
-
-				
 				
 				AgentFunction.RecordStatusEnd(dbid);					
 			}

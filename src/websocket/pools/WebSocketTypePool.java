@@ -46,7 +46,7 @@ public class WebSocketTypePool{
 		}else if(aTYPE.equals("Client")){
 			userInfo.setStatus("wait");
 		}
-		userInfo.setTime(aDate);
+//		userInfo.setReadyTime(aDate);
 		// 放入Map
 		TYPEMap.put(aConn, userInfo);
 		TYPEconnections.put(aTYPE, TYPEMap);
@@ -58,7 +58,7 @@ public class WebSocketTypePool{
 		UserInfo userInfo = TYPEmap.get(aConn);
 		userInfo.setStatus(aStatus);
 		userInfo.setReason(aReason);
-		userInfo.setTime(aDate); // 更新時間?離開時間?->登入時間是否會被覆蓋掉 ?還是這是專給Agent用的,算等待時間的?
+//		userInfo.setReadyTime(aDate); // 更新時間?離開時間?->登入時間是否會被覆蓋掉 ?還是這是專給Agent用的,算等待時間的?
 		TYPEmap.put(aConn, userInfo);
 		TYPEconnections.put(aTYPE, TYPEmap);
 	}
@@ -107,21 +107,21 @@ public class WebSocketTypePool{
 		Date date = new Date();
 		long UserStayTime = date.getTime();
 		Collection<UserInfo> setUser = TYPEmap.values();
-		for (UserInfo u : setUser) {
+		for (UserInfo userInfo : setUser) {
 			//setUsers.add(u.get("userid").toString());
 			SimpleDateFormat sdf = new SimpleDateFormat(Util.getSdfTimeFormat());
-			String userdatestring = u.getTime();
+			String userdatestring = userInfo.getReadyTime(); // 關鍵是這行
 			Date userdate = null;
-			try {
+			try { 
 				userdate = sdf.parse(userdatestring);
 			} catch (ParseException e) {
 				e.printStackTrace();
 			}
 //			System.out.println("Agent Status - u.getStatus(): " + u.getStatus());
 //			System.out.println("Agent Status - StatusEnum.READY.getValue(): " + StatusEnum.READY.getValue());
-			if(userdate.getTime() <= UserStayTime && u.getStatus().trim().equals(StatusEnum.READY.getDbid())){
+			if(userdate.getTime() <= UserStayTime && userInfo.getStatus().trim().equals(StatusEnum.READY.getDbid())){
 				UserStayTime = userdate.getTime(); // 每次都會將UserStayTime拿去當作"上一個"Uset的等待時間
-				settingUser = u.getUserid();
+				settingUser = userInfo.getUserid();
 			}
 		}
 		return settingUser;
