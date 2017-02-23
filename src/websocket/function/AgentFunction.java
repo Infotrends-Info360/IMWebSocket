@@ -43,7 +43,7 @@ public class AgentFunction {
 
 	/** * RejectEvent */
 	public static void RejectEvent(String message,
-			org.java_websocket.WebSocket conn) {
+			org.java_websocket.WebSocket aConn) {
 		JSONObject obj = new JSONObject(message);
 		org.java_websocket.WebSocket sendto = WebSocketUserPool
 				.getWebSocketByUser(obj.getString("sendto"));
@@ -53,6 +53,7 @@ public class AgentFunction {
 		sendjson.put("fromName", obj.getString("UserName"));
 		sendjson.put("channel", obj.getString("channel"));
 		WebSocketUserPool.sendMessageToUser(sendto, sendjson.toString());
+		WebSocketUserPool.sendMessageToUser(aConn, sendjson.toString());
 	}
 
 	/** * get Agent Status */
@@ -95,12 +96,12 @@ public class AgentFunction {
 	}
 
 	public static void refreshAgentList() {
+		System.out.println("refreshAgentList() called");
 		Map<WebSocket, UserInfo> agentMap = WebSocketTypePool
 				.getTypeconnections().get("Agent");
 		Collection<String> agentIDList = WebSocketTypePool
 				.getOnlineUserIDinTYPE("Agent");
-		System.out.println("userjoin() - agentIDList.size(): "
-				+ agentIDList.size());
+//		System.out.println("refreshAgentList() - agentIDList.size(): " 	+ agentIDList.size());
 		Set<WebSocket> agentConnList = agentMap.keySet();
 		for (WebSocket tmpConn : agentConnList) {
 
@@ -154,20 +155,21 @@ public class AgentFunction {
 			e.printStackTrace();
 		}
 		JSONObject jsonobject = new JSONObject(responseSB.toString());
-		System.out.println("jsonobject: "+jsonobject);
+//		System.out.println("jsonobject: "+jsonobject);
 		JSONArray jsonarray= jsonobject.getJSONArray("agentreason");
+//		System.out.println("GetAgentReasonInfo - jsonarray: " + jsonarray);
 		Map<String, Map<String, String>> agentreasonmap = new HashMap<String, Map<String, String>>();
 		for(int a = 0; a < jsonarray.length(); a++){
 			Map<String, String> agentreasonmapinfo = new HashMap<String, String>();
 			agentreasonmapinfo.put("flag", jsonarray.getJSONObject(a).getString("flag"));
-			agentreasonmapinfo.put("statusname", jsonarray.getJSONObject(a).getString("statusname"));
+			agentreasonmapinfo.put("dbid", String.valueOf(jsonarray.getJSONObject(a).getInt("dbid")));
 			agentreasonmapinfo.put("description", jsonarray.getJSONObject(a).getString("description"));
 			agentreasonmapinfo.put("alarmcolor", jsonarray.getJSONObject(a).getString("alarmcolor"));
 			agentreasonmapinfo.put("statusname_tw", jsonarray.getJSONObject(a).getString("statusname_tw"));
 			agentreasonmapinfo.put("statusname_en", jsonarray.getJSONObject(a).getString("statusname_en"));
 			agentreasonmapinfo.put("statusname_cn", jsonarray.getJSONObject(a).getString("statusname_cn"));
 			agentreasonmapinfo.put("alarmduration", jsonarray.getJSONObject(a).getString("alarmduration"));
-			agentreasonmap.put(String.valueOf(jsonarray.getJSONObject(a).getString("dbid")), agentreasonmapinfo);
+			agentreasonmap.put(jsonarray.getJSONObject(a).getString("statusname"), agentreasonmapinfo);
 		}
 		Util.setAgentReason(agentreasonmap);
 	}
@@ -214,9 +216,13 @@ public class AgentFunction {
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
+		} catch (Exception e) {
+			e.printStackTrace();
 		}
 		JSONObject jsonobject = new JSONObject(responseSB.toString());
-		String dbid = jsonobject.getString("dbid");
+//		String dbid = jsonobject.getString("dbid"); // exception: "dbid" not a String type
+		String dbid = Integer.toString(jsonobject.getInt("dbid"));
+//		System.out.println("RecordStatusStart() - dbid: " + dbid);
 		
 		return dbid;
 	}
@@ -262,6 +268,7 @@ public class AgentFunction {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
+		
 		
 		return responseSB.toString();
 	}

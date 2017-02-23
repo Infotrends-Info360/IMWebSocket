@@ -1,32 +1,31 @@
 package com.Info360.dao;
 
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.List;
 
 import org.apache.ibatis.session.SqlSession;
 
-import com.Info360.bean.Cfg_AgentStatus;
+import com.Info360.bean.Rpt_Activitylog;
+import com.Info360.bean.Rpt_AgentStatus;
 import com.Info360.db.DBAccess;
 import com.Info360.util.IsError;
 
 
-public class Cfg_AgentStatusDao {
+public class Rpt_ActivitylogDao {
 	
 	/**
 	 * 
-	 * Select
-	 * @param agentstatus
+	 * Insert
+	 * @param Rpt_Activitylog
 	 */
-	public List<Cfg_AgentStatus> Select_agentstatus(Cfg_AgentStatus agentstatus){
+	public int Insert_activitylog(Rpt_Activitylog   activitylog){
 		DBAccess dbAccess = new DBAccess();
-		List<Cfg_AgentStatus> agentstatuslist = new ArrayList<Cfg_AgentStatus>();
+		int activitylogInt = 0;
 		SqlSession sqlSession = null;
 		
 		try {
 			sqlSession = dbAccess.getSqlSession();
 			//通過sqlSession執行SQL語句
-			agentstatuslist = sqlSession.selectList("cfg_agentstatus.Select_agentstatus", agentstatus);
+			activitylogInt = sqlSession.insert("rpt_activitylog.Insert_activitylog", activitylog);
 			sqlSession.commit();
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
@@ -37,7 +36,7 @@ public class Cfg_AgentStatusDao {
 			   sqlSession.close();
 			}
 		}
-		return agentstatuslist;
+		return activitylogInt;
 	}
 	
 }

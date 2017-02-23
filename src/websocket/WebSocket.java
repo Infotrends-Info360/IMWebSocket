@@ -2,9 +2,13 @@ package websocket;
 
 import java.net.InetSocketAddress;
 import java.net.UnknownHostException;
+import java.util.ArrayList;
 import java.util.Collection;
+import java.util.HashSet;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 import org.apache.log4j.Logger;
 //import org.java_websocket.WebSocket;
@@ -46,8 +50,8 @@ public class WebSocket extends WebSocketServer {
 		//userLeave(conn);
 //		System.out.println("Someone unlink in Socket conn:" + conn);
 //		System.out.println("conn: " + conn + " is disconnected. !!!!!");
-		System.out.println("onClose(): " + WebSocketUserPool.getACTypeByKey(conn) + " conn: " + conn + " is disconnected. (onClose)");				
-		System.out.println("onClose(): " + WebSocketUserPool.getUserID(conn));
+		System.out.println("onClose(): " + WebSocketUserPool.getACTypeByKey(conn) + conn + " is disconnected. (onClose)");				
+//		System.out.println("onClose(): " + WebSocketUserPool.getUserID(conn));
 		// 將Heartbeat功能移轉到這裡:
 		inputInteractionLog(conn,reason);
 		clearUserData(conn); // 包含removeUser, removerUserinTYPE, removeUserinroom
@@ -67,6 +71,10 @@ public class WebSocket extends WebSocketServer {
 	public void onOpen(org.java_websocket.WebSocket conn,
 			ClientHandshake handshake) {
 		System.out.println("Someone link in Socket conn:" + conn);
+		// status測試
+//		String dbid = AgentFunction.RecordStatusStart("123", "1", "2");
+//		AgentFunction.RecordStatusEnd(dbid);
+
 		l++;
 	}
 
@@ -194,18 +202,21 @@ public class WebSocket extends WebSocketServer {
 		// 清GROUP:
 		// 取得一個user所屬的所有roomid
 		List<String> roomids = WebSocketUserPool.getUserRoomByKey(conn);
+		List<String> tmpRoomids = new ArrayList<String>(roomids); // 重要: 為了接下來要動態移除掉UserInfo.userRoom List, 為了在跑迴圈時仍保留著reference variable, 故須用light copy建立另一相對物件, 這樣就能實現動態刪除
+		System.out.println("before - roomids.size(): " + roomids.size());
 //		if (roomids != null) {
 //			System.out.println("roomids.size(): " + roomids.size()); //
 //		}
-		if (roomids != null){
-			for (String roomid: roomids){
-				System.out.println("***** get roomid: " + roomid);
-				System.out.println(WebSocketUserPool.getUserNameByKey(conn));
-				System.out.println(WebSocketUserPool.getUserID(conn));
-				//使用每個roomid,並找出相對應的room,再將其中的conn remove掉
-				WebSocketRoomPool.removeUserinroom(roomid, conn);
-			}			
+		Iterator<String> itr = tmpRoomids.iterator();
+		while(itr.hasNext()){
+			String roomid = itr.next();
+			System.out.println("***** get roomid: " + roomid);
+			System.out.println(WebSocketUserPool.getUserNameByKey(conn));
+			System.out.println(WebSocketUserPool.getUserID(conn));
+			//使用每個roomid,並找出相對應的room,再將其中的conn remove掉
+			WebSocketRoomPool.removeUserinroom(roomid, conn);
 		}
+		System.out.println("after - roomids.size(): " + roomids.size());
 
 		// 清TYPE:
 		String ACType = WebSocketUserPool.getACTypeByKey(conn);
@@ -403,6 +414,7 @@ public class WebSocket extends WebSocketServer {
 			sendJson.addProperty("fromName", WebSocketUserPool.getUserNameByKey(aConn));
 			sendJson.addProperty("roomID",  roomID);
 			sendJson.addProperty("channel", channel);
+			sendJson.addProperty("EstablishedStatus", Util.getEstablishedStatus()); //增加AfterCallStatus變數 20170222 Lin
 			sendJson.add("roomList", roomIDListJson);
 
 			WebSocketUserPool.sendMessageToUser(

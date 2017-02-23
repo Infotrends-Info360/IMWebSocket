@@ -1,17 +1,18 @@
 var ws_g; // websocket
 var UserName_g; // 使用者名稱全域變數
 var UserID_g; // 使用者ID全域變數
-var RoomID_g; // 此為第一個加入的RoomID, 僅為開發過程使用, 不符合目前架構, 為過度開發期間保留的全域變數
+var agentIDMap_g = new Map(); // 用於私訊部分, 更新現在在線的Agent清單
+var waittingClientIDList_g = []; // 用處: 當LOGOUT時,告知所有有寄給此Agent請求的其他Client不用再等了
+var waittingAgentIDList_g = []; // 用處: 當LOGOUT時,告知所有有寄給此Agent請求的其他Agents不用再等了
+/** 狀態相關 **/
 var isonline_g = false; // 判斷是否上線的開關
-var status_g;
-var roomInfoMap_g = new Map();
-var agentIDMap_g = new Map();
-var waittingClientIDList_g = [];
-var waittingAgentIDList_g = [];
-//var count = 0;
-//var RoomIDList = []; // 接通後產生Group的ID List
-//var RoomIDLinkedList = new SinglyList(); // 接通後產生Group的ID Linked List
-
+var status_g; // 狀態全域變數
+var notreadyreason_dbid_g = 0; //not ready Reason - 於皆換成NOTREADY狀態時傳入StatusEnum.updateState()方法中
+/** room相關 **/
+var RoomID_g; // 此為第一個加入的RoomID, 僅為開發過程使用, 不符合目前架構, 為過度開發期間保留的全域變數
+var roomInfoMap_g = new Map(); // 用於房間列表,存著目前已開啟的通話相關資訊,詳細屬性成員請見util.js - RoomInfo
+var maxRoomCount_g; // 每個Agent最多可接通話數
+var currRoomCount_g = 0; //每個Agent現在已接通話數
 /** layui相關 **/
 var AgentID; // Agent的ID // layim使用, 以及onlineinTYPE使用, 之後可考慮精簡
 var AgentName; // Agent的名稱 // layim使用, 以及onlineinTYPE使用, 之後可考慮精簡
@@ -57,15 +58,74 @@ function onloadFunctionAgent(){
 	
 }
 
+//帳號密碼驗證
+function loginValidate() {
+	var account = document.getElementById('Account').value;
+	var password = document.getElementById('Password').value;
+	$
+			.ajax({
+				url : "http://ws.crm.com.tw:8080/Info360_Setting/RESTful/Login",
+				data : {
+					account : account,
+					password : password
+				},
+				type : "POST",
+				dataType : 'json',
+				error : function(e) {
+					console.log("請重新整理");
+				},
+				success : function(data) {
+					console.log("login", data)
+
+					// 測試用必驗證過
+					// 							doConnect();
+
+					if (account == "" || password == "") {
+						// 未輸入帳號與密碼
+						console.log(data.error)
+						$("#loginDialogButton").trigger("click");
+					} else if (data.error != null) {
+						// 其他可能錯誤
+						console.log(data.error);
+						$("#loginDialogButton").trigger("click");
+					} else {
+						// 驗證通過
+						//console.log(JSON.stringify(data));
+						maxCount = data.person[0].max_count;
+						//console.log(data.person[0].max_count);
+						document.getElementById('UserName').value = data.person[0].user_name;
+						document.getElementById('UserID').value = data.person[0].dbid;
+						parent.UserID_g = data.person[0].dbid;
+						parent.UserName_g = data.person[0].user_name;
+
+						// Step-1 載入時連線ws
+						Login();
+					}
+
+				},
+				beforeSend : function() {
+					// 					$('#loading').show();
+				},
+				complete : function() {
+					// 					$('#loading').hide();
+
+				}
+			});
+}
+
 
 // 連上websocket
 function Login() {
 	console.log("Agent Login() function");
+	//20170222 Lin
 	// 登入使用者
-	parent.UserName_g = document.getElementById('UserName').value;
-	if (null == parent.UserName_g || "" == parent.UserName_g) {
-		alert("請輸入UserName");
-	} else {
+//	parent.UserName_g = document.getElementById('Account').value;
+//	if (null == parent.UserName_g || "" == parent.UserName_g) {
+//		alert("請輸入Account");
+//	} else {
+	//20170222 Lin
+//	alert(parent.UserID_g);
+//	alert(parent.UserName_g);
 		// 連上websocket
 		console.log("window.location.hostname: " + window.location.hostname);
 		var hostname = window.location.hostname;
@@ -79,9 +139,9 @@ function Login() {
 			// 向websocket送出登入指令
 			var msg = {
 				type : "login",
-				// id: parent.UserID_g,
+				id: parent.UserID_g,
 				UserName : parent.UserName_g,
-				MaxCount: '3',
+				MaxCount: '2', //要改接收Login Event (動態)
 				ACtype : "Agent",
 				channel : "chat",
 				date : now.getHours() + ":" + now.getMinutes() + ":"
@@ -166,8 +226,12 @@ function Login() {
 //					seeAllKV(obj);
 				
 					// 更新狀態
-					status_g = StatusEnum.I_ESTABLISHED;
-					switchStatus(StatusEnum.I_ESTABLISHED);
+//					alert("AcceptEvent - obj.roomID: " + obj.roomID);
+//					status_g = StatusEnum.IESTABLISHED;
+					switchStatus(StatusEnum.IESTABLISHED);
+					StatusEnum.ring_dbid = StatusEnum.updateStatus(StatusEnum.RING, "end", StatusEnum.ring_dbid);
+					StatusEnum.updateStatus(StatusEnum.IESTABLISHED, "start", null, obj.roomID);
+					
 					
 					// 在這邊興建roomList與其room bean
 					RoomID_g = obj.roomID; // 之後要改成local variable
@@ -181,22 +245,77 @@ function Login() {
 					// 1. 研究一下這個map的json長什麼樣 2. 看怎麼拿值
 					updateRoomIDList(obj.roomID);
 					
-				} else if ("getUserStatus" == obj.Event) {
+					// maxCount機制
+					currRoomCount_g++ // here
+					$('#maxRoomCount')[0].innerHTML = currRoomCount_g + " / " + maxRoomCount_g;
+
+//					alert("currRoomCount_g: " + currRoomCount_g);
+						// 判斷是否已達上限
+					if (currRoomCount_g == maxRoomCount_g) {
+						alert("reach max count");
+						$('#maxRoomCount').css('color', 'red');
+						$('#notready')[0].disabled = true;
+						$('#ready')[0].disabled = true;
+						// 若未達上限,判斷是否要切換為READY
+						
+//					}else if (afterCallStatus_g == 'WORKHARD'){ //20170222 Lin
+						
+					//20170222 Lin 
+					//Ring時已切換為NOTREADY，如設定為READY才做切換動作
+					}else if (obj.EstablishedStatus == StatusEnum.READY.dbid){
+						// 更新狀態(唯一在RING事件之後會將狀態切換為READY的情況)
+//						status_g = StatusEnum.READY;
+						switchStatus(StatusEnum.READY);
+						StatusEnum.notready_dbid = StatusEnum.updateStatus(StatusEnum.NOTREADY, "end", StatusEnum.notready_dbid);
+						StatusEnum.updateStatus(StatusEnum.READY, "start");
+					}
+//					else if (obj.EstablishedStatus == StatusEnum.NOTREADY.dbid){
+//						// 更新狀態(唯一在RING事件之後會將狀態切換為NOTREADY的情況)
+////					status_g = StatusEnum.NOTREADY;
+//						switchStatus(StatusEnum.NOTREADY);
+//						StatusEnum.ready_dbid = StatusEnum.updateStatus(StatusEnum.READY, "end", StatusEnum.ready_dbid);
+//						StatusEnum.updateStatus(StatusEnum.NOTREADY, "start");
+//					}
+					//20170222 Lin
+					
+				}else if ("RejectEvent" == obj.Event){
+//					alert("RejectEvent received");
+					// 將此clientID從waittingClientIDList_g中去除
+					var index_remove;
+					for (var index in waittingClientIDList_g) {
+						clientIDJson = waittingClientIDList_g[index];
+						var clientID = clientIDJson.clientID;
+						if (currClientID == clientID){
+							index_remove = index;
+						}
+//						console.log("clietIDJson.clientID: " + clientIDJson.clientID);
+					}
+					waittingClientIDList_g.splice(index_remove,1);
+//					console.log("waittingClientIDList_g.length: " + waittingClientIDList_g.length);		
+					
+					//更新狀態
+					StatusEnum.ring_dbid = StatusEnum.updateStatus(StatusEnum.RING, "end", StatusEnum.ring_dbid);
+				}else if ("getUserStatus" == obj.Event) {
 //					console.log("onMessage(): getUserStatus called");
 //					document.getElementById("status").innerHTML = "狀態: "
 //							+ obj.Status + "<br>Reason: " + obj.Reason; 
 					// 接收到找尋Client的UserData的訊息
 				} else if ("senduserdata" == obj.Event) {
 					// 在這邊取代原本findAgentEvent事件所做的事情
+					console.log("senduserdata - ")
+//					alert("senduserdata - obj.clientID: " + obj.clientID)
+//					alert("senduserdata - obj.userdata.id: " + obj.userdata.id)
 					console.log("obj.clientName: " + obj.clientName);
 					console.log("obj.clientID: " + obj.clientID);
+					var clientID = obj.clientID; 
+					var clientName = obj.clientName; 
 					
 					waittingClientIDList_g.push( new function(){
 						this.clientID = obj.userdata.id
 					});
-					console.log("**********waittingClientIDMap.length: " + waittingClientIDList_g.length);
-					console.log("**********waittingClientIDMap: " + waittingClientIDList_g);
-					console.log("**********waittingClientIDMap: " + JSON.stringify( waittingClientIDList_g ));
+//					console.log("**********waittingClientIDMap.length: " + waittingClientIDList_g.length);
+//					console.log("**********waittingClientIDMap: " + waittingClientIDList_g);
+//					console.log("**********waittingClientIDMap: " + JSON.stringify( waittingClientIDList_g ));
 					
 					// 在這邊動態增加request list
 				    var tr = document.createElement('tr');   
@@ -240,18 +359,78 @@ function Login() {
 						$('#Reject')[0].reqType = 'Client';
 						$('#Reject')[0].userID = this.getAttribute("userID");
 //						$('#Reject')[0].userdata = this.getAttribute("userdata");
+												
 					}; // 設定 AcceptEventInit
-				    				    
+				    	
+					// 更改架構為 - 最多一次只收一個ring
+//					status_g = StatusEnum.RING;
+					switchStatus(StatusEnum.RING);
+					StatusEnum.ready_dbid = StatusEnum.updateStatus(StatusEnum.READY, "end", StatusEnum.ready_dbid); 
+//					( aStatusEnum , aStartORend, aDbid, aRoomID, aClientID, aReason_dbid)
+					StatusEnum.updateStatus(StatusEnum.NOTREADY, "start", null, null, null, notreadyreason_dbid_g);
+					//												  未新增無dbid, 非iestablished無roomID, 傳入clientID
+					StatusEnum.updateStatus(StatusEnum.RING, "start", null, null, clientID);
 					
 				} else if ("userjointoTYPE" == obj.Event) {
 
 					// 接收到有人登入的訊息
 				} else if ("userjoin" == obj.Event) {
-					console.log("userjoin - UserID: " + obj.from);
+//					alert('userjoin'); // win
+//					console.log("userjoin!");
+					// 拿取參數
 					parent.UserID_g = obj.from;
+					maxRoomCount_g = obj.MaxCount; // 正式用
+//					maxRoomCount_g = 2; // 測試用
+					var statusList = obj.statusList;
+					var reasonList = obj.reasonList;
+					
+					// 更新maxCount畫面
+					$('#maxRoomCount')[0].innerHTML = currRoomCount_g + " / " + maxRoomCount_g;
+					
+					// 更新reasonList - 位置: AgentChat.jsp -> id="reasonList"
+
+					//20170222 Lin
+//					alert("JSON.stringify( reasonList ): " + JSON.stringify( reasonList ));
+					 
+					for(var key in reasonList){
+						var new_option = new Option(reasonList[key].statusname_tw, reasonList[key].dbid);
+						document.getElementById('reasonList').options.add(new_option)
+					}
+					
+					document.getElementById("reasonList").addEventListener("change", myFunction);
+
+					function myFunction() {
+					    var x = document.getElementById("reasonList");
+					    console.log("Not Ready Reason --- "+ x.options[x.selectedIndex].text);
+					    console.log("Not Ready Reason Value --- "+ x.value);
+					    notreadyreason_dbid_g = x.value;
+					}
+					//20170222 Lin
+
+//					console.log("userjoin - reasonList: " + reasonList);
+					
+					// 更新statusList - enum
+					// 格式: {Login={description=登入, dbid=1}, Ring={description=響鈴, dbid=6}
+					console.log("***Enum - 更新enum: ");
+					jQuery.each(statusList, function(key, val) {
+						var tmpStatusEnum = StatusEnum.getStatusEnum(key);
+						tmpStatusEnum.dbid = val.dbid;
+						tmpStatusEnum.description = val.description;
+					});
+					
 					// 更新狀態
-					status_g = StatusEnum.LOGIN;
-					switchStatus(status_g);
+					console.log("更新狀態");
+//					status_g = StatusEnum.LOGIN;
+					switchStatus(StatusEnum.LOGIN);
+					StatusEnum.updateStatus(StatusEnum.LOGIN, "start");
+					StatusEnum.updateStatus(StatusEnum.NOTREADY, "start", null, null, null, notreadyreason_dbid_g);
+//					StatusEnum.updateStatus(StatusEnum.NOTREADY, "start");
+					
+					// 計算LOGIN狀態持續時間用:
+//					alert("login_dbid: " + login_dbid);
+//					$('#Login')[0].setAttribute("login_dbid",login_dbid);
+//					$('#notready')[0].setAttribute("notready_dbid",notready_dbid);
+//					alert("$('#Login')[0].getAttribute(\"login_dbid\"):\n" + $('#Login')[0].getAttribute("login_dbid"));
 										
 				} else if ("refreshRoomList" == obj.Event) {
 					// debug: 確認全部key-value:
@@ -362,8 +541,8 @@ function Login() {
 					console.log("userdata: " + userdata);
 
 					// 更新狀態
-					status_g = StatusEnum.I_ESTABLISHED;
-					switchStatus(StatusEnum.I_ESTABLISHED);
+//					status_g = StatusEnum.IESTABLISHED;
+					switchStatus(StatusEnum.IESTABLISHED);
 					
 					// 在這邊興建roomList與其room bean
 					RoomID_g = roomID; // 之後要改成local variable
@@ -385,7 +564,7 @@ function Login() {
 				} else if ("removeUserinroom" == obj.Event){
 //					document.getElementById("currUsers").innerHTML = obj.roomMembers;
 					// 若此房間已經關了, 則更新roomInfo
-					if (obj.roomSize == 0){
+					if (obj.roomSize == 0){ 
 						var roomInfo = roomInfoMap_g.get(obj.roomID);
 						roomInfo.close = true;
 						// 若為當前頁面,則更新roomInfo
@@ -393,6 +572,42 @@ function Login() {
 						if (currRoomID == obj.roomID){
 							updateRoomInfo(roomInfo);
 						}
+						// maxCount機制 here
+						// 若前一次達到最大roomCount值,則恢復其狀態,且確認若會進入到此區塊,則目前狀態一定為NOTREADY
+						if(currRoomCount_g == maxRoomCount_g){
+							$('#notready')[0].disabled = true;
+							$('#ready')[0].disabled = false; // 讓Agent可以再使用這個功能
+							$('#maxRoomCount').css('color', 'black');
+						}
+						currRoomCount_g--;
+						$('#maxRoomCount')[0].innerHTML = currRoomCount_g + " / " + maxRoomCount_g;
+//						alert("currRoomCount_g: " + currRoomCount_g);
+						
+//						alert(obj.AfterCallStatus);
+						// 20170222 Lin
+//						alert("ACS - StatusEnum.currStatusEnum: " + StatusEnum.currStatusEnum);
+//						alert("ACS - StatusEnum.statusname: " + StatusEnum.currStatusEnum.statusname);
+						if(obj.AfterCallStatus == StatusEnum.READY.dbid){ //如果AfterCallStatus == ready
+							if(StatusEnum.currStatusEnum != StatusEnum.READY){
+								$('#notready')[0].disabled = true;
+								$('#ready')[0].disabled = false;
+//								status_g = StatusEnum.READY;
+								switchStatus(StatusEnum.READY);
+								StatusEnum.notready_dbid = StatusEnum.updateStatus(StatusEnum.NOTREADY, "end", StatusEnum.notready_dbid);
+								StatusEnum.updateStatus(StatusEnum.READY, "start");
+							}
+						}else if(obj.AfterCallStatus == StatusEnum.NOTREADY.dbid){ //如果AfterCallStatus == not ready
+							if(StatusEnum.currStatusEnum != StatusEnum.NOTREADY){
+								$('#notready')[0].disabled = false;
+								$('#ready')[0].disabled = true;
+//								status_g = StatusEnum.NOTREADY;
+								switchStatus(StatusEnum.NOTREADY);
+								StatusEnum.ready_dbid = StatusEnum.updateStatus(StatusEnum.READY, "end", StatusEnum.ready_dbid);
+								StatusEnum.updateStatus(StatusEnum.NOTREADY, "start", null, null, null, notreadyreason_dbid_g);
+//								StatusEnum.updateStatus(StatusEnum.NOTREADY, "start");
+							}
+						}
+						// 20170222 Lin
 					}
 					alert(obj.result);
 				} else if ("clientLeft" == obj.Event){
@@ -426,6 +641,28 @@ function Login() {
 					updateAgentIDList();
 				} else if ("agentLeftThirdParty" == obj.Event){
 					alert("agentLeftThirdParty - agent " + obj.id + " left ");
+				} else if ("updateStatus" == obj.Event){
+					StatusEnum.updateDbid(obj);
+				} else if ("ringTimeout" == obj.Event){
+					alert("ringTimeout");
+					var currClientID = obj.clientID;
+					console.log("obj.clientID: " + obj.clientID); 
+					// 清理畫面
+						// 1. 將此請求從request list中去除掉	
+					$('#' + currClientID).remove(); // <tr>的id
+						// 2. 將此clientID從waittingClientIDList_g中去除
+					var index_remove;
+					for (var index in waittingClientIDList_g) {
+						clientIDJson = waittingClientIDList_g[index];
+						var clientID = clientIDJson.clientID;
+						if (currClientID == clientID){
+							index_remove = index;
+						}
+//						console.log("clietIDJson.clientID: " + clientIDJson.clientID);
+					}
+					console.log("before - waittingClientIDList_g.length: " + waittingClientIDList_g.length);
+					waittingClientIDList_g.splice(index_remove,1);
+					console.log("after - waittingClientIDList_g.length: " + waittingClientIDList_g.length);
 				}
 			// 非指令訊息
 			// (Billy哥部分)
@@ -452,7 +689,7 @@ function Login() {
 		parent.ws_g.onerror = function() {
 			console.log("出現錯誤");
 		};
-	}
+	//} //20170222 Lin
 
 }
 
@@ -467,6 +704,22 @@ function Logout() {
 // 執行登出
 function Logoutaction() {	
 	// 向websocket送出登出指令
+	// 關閉上線開關
+//	status_g = StatusEnum.LOGOUT;
+	switchStatus(StatusEnum.LOGOUT);
+	console.log("StatusEnum.login_dbid: " + StatusEnum.login_dbid);
+	console.log("StatusEnum.notready_dbid: " + StatusEnum.notready_dbid);
+	console.log("StatusEnum.ready_dbid: " + StatusEnum.ready_dbid);
+	console.log("StatusEnum.ring_dbid: " + StatusEnum.ring_dbid);
+	console.log("StatusEnum.iestablished_dbid: " + StatusEnum.iestablished_dbid);
+	StatusEnum.login_dbid = StatusEnum.updateStatus(StatusEnum.LOGOUT, "end", StatusEnum.login_dbid);
+	StatusEnum.notready_dbid = StatusEnum.updateStatus(StatusEnum.NOTREADY, "end", StatusEnum.notready_dbid);
+	StatusEnum.ready_dbid = StatusEnum.updateStatus(StatusEnum.READY, "end", StatusEnum.ready_dbid);
+	StatusEnum.ring_dbid = StatusEnum.updateStatus(StatusEnum.RING, "end", StatusEnum.ring_dbid);
+	// 下列改由後端處理 - WebSocketRoomPool.removeUserinroom()
+//	StatusEnum.ring_dbid = StatusEnum.updateStatus(StatusEnum.IESTABLISHED, "end",JSON.stringify(StatusEnum.iestablished_dbid)); // 須用list
+	
+	// 登出動作
 	var now = new Date();
 	var msg = {
 		type : "Exit",
@@ -476,16 +729,16 @@ function Logoutaction() {
 		channel : "chat",
 		waittingClientIDList : waittingClientIDList_g, // 告訴寄出要求的clients不用等了
 		waittingAgentIDList : waittingAgentIDList_g, // 告訴寄出三方/轉接邀請的Agents不用等了
+		login_dbid : $('#Login')[0].getAttribute("login_dbid"),
+		notready_dbid : $('#notready')[0].getAttribute("notready_dbid"),
 		// waitingAgentRoomIDList : waitingAgentRoomIDList_g; //  告訴寄出三方/轉接邀請的Agents不用等了 - 若有需要,再考慮增加是對應到哪個roomID
 		date : now.getHours() + ":" + now.getMinutes() + ":" + now.getSeconds()
 	};
-
+ 
 	// 發送消息
 	parent.ws_g.send(JSON.stringify(msg));
 
-	// 關閉上線開關
-	status_g = StatusEnum.LOGOUT;
-	switchStatus(status_g);	
+
 	
 //	// 關閉websocket
 //	parent.ws_g.close();
@@ -500,15 +753,21 @@ function checktoLeave() {
 //Agent準備就緒
 function ready() {
 	// 更新頁面
-	status_g = StatusEnum.READY;
-	switchStatus(status_g);
+//	status_g = StatusEnum.READY;
+	switchStatus(StatusEnum.READY);
+	StatusEnum.notready_dbid = StatusEnum.updateStatus(StatusEnum.NOTREADY, "end", StatusEnum.notready_dbid);
+	StatusEnum.updateStatus(StatusEnum.READY, "start");
 	
 }
 // Agent尚未準備就緒
 function notready() {
-	// 更新狀態
-	status_g = StatusEnum.NOT_READY;
-	switchStatus(StatusEnum.NOT_READY);	
+	// 更新頁面
+//	status_g = StatusEnum.NOTREADY;
+	switchStatus(StatusEnum.NOTREADY);
+	StatusEnum.ready_dbid = StatusEnum.updateStatus(StatusEnum.READY, "end", StatusEnum.ready_dbid);
+	alert("notreadyreason_dbid_g: " + notreadyreason_dbid_g);
+	StatusEnum.updateStatus(StatusEnum.NOTREADY, "start", null, null, null, notreadyreason_dbid_g);
+//	StatusEnum.updateStatus(StatusEnum.NOTREADY, "start");
 }
 
 //同意與Client交談
@@ -516,7 +775,6 @@ function AcceptEventInit() {
 	console.log("AcceptEventInit(): ");
 	var reqType = $('#Accept')[0].reqType;
 	if (reqType == 'thirdParty' || reqType == 'transfer'){
-		//here
 		var roomID = $('#Accept')[0].roomID;
 		var fromAgentID = $('#Accept')[0].userID;
 		responseThirdParty(reqType, roomID, fromAgentID, 'accept');
@@ -531,6 +789,7 @@ function AcceptEventInit() {
 		var mem2 = new myRoomMemberJsonObj(parent.UserID_g);
 		memberListToJoin.push(mem1);
 		memberListToJoin.push(mem2);
+		// addRoomForMany成功呼叫後,會收到"AcceptEvent"事件回應
 		addRoomForMany("none", memberListToJoin); // "none"是一個keyword, 會影響websocket server的邏輯判斷處理
 		
 		// 將此clientID從waittingClientIDList_g中去除
@@ -545,7 +804,9 @@ function AcceptEventInit() {
 		}
 		waittingClientIDList_g.splice(index_remove,1);
 //		console.log("waittingClientIDList_g.length: " + waittingClientIDList_g.length);
-				
+		
+
+
 	}
 	
 	// 將此請求從request list中去除掉
@@ -555,7 +816,8 @@ function AcceptEventInit() {
 	$('#' + userID).remove(); // <tr>的id
 	
 	// 開啟ready功能:
-	switchStatus(StatusEnum.NOT_READY); // 這邊之後要用全域變數來控制不同的工作模式-是否要在established之後變成not ready
+//	status_g = StatusEnum.NOTREADY;
+	switchStatus(StatusEnum.NOTREADY); // 這邊之後要用全域變數來控制不同的工作模式-是否要在established之後變成not ready
 //	document.getElementById("ready").disabled = false;
 //	document.getElementById("notready").disabled = true;		
 
@@ -573,16 +835,6 @@ function RejectEvent() {
 		responseThirdParty(reqType, roomID, fromAgentID, 'reject');
 	// Client to Agent 請求	
 	}else{
-		// 一次將Agent與Client加入到room中
-//		var currClientID = $('#Accept')[0].userID;
-////		var userdata = $('#Accept')[0].userdata;
-//			// 在此使用新的方法,將一個list的成員都加入到同一群組中
-//		var memberListToJoin = [];
-//		var mem1 = new myRoomMemberJsonObj(currClientID);
-//		var mem2 = new myRoomMemberJsonObj(parent.UserID_g);
-//		memberListToJoin.push(mem1);
-//		memberListToJoin.push(mem2);
-//		addRoomForMany("none", memberListToJoin); // "none"是一個keyword, 會影響websocket server的邏輯判斷處理
 		var currClientID = $('#Accept')[0].userID;
 		var now = new Date();
 		var msg = {
@@ -597,20 +849,6 @@ function RejectEvent() {
 		};
 		// 發送消息
 		parent.ws_g.send(JSON.stringify(msg));		
-		
-		// 將此clientID從waittingClientIDList_g中去除
-		var index_remove;
-		for (var index in waittingClientIDList_g) {
-			clientIDJson = waittingClientIDList_g[index];
-			var clientID = clientIDJson.clientID;
-			if (currClientID == clientID){
-				index_remove = index;
-			}
-//			console.log("clietIDJson.clientID: " + clientIDJson.clientID);
-		}
-		waittingClientIDList_g.splice(index_remove,1);
-//		console.log("waittingClientIDList_g.length: " + waittingClientIDList_g.length);		
-		
 	}
 	
 	// 將此請求從request list中去除掉
@@ -619,7 +857,8 @@ function RejectEvent() {
 	$('#' + userID).remove(); // <tr>的id
 	
 	// 開啟ready功能:
-	switchStatus(StatusEnum.READY); // 拒絕之後就持續著READY狀態
+//	status_g = StatusEnum.READY;
+//	switchStatus(StatusEnum.READY); // 拒絕之後就持續著READY狀態
 	
 	// 向websocket送出拒絕交談指令  
 
@@ -660,6 +899,8 @@ function ReleaseEvent(aRoomID) {
 // 將多人同時加入房間
 // aMemberListToJoin船入格式如下:
 // [{"ID":"c8013217-2b20-46c4-ba2d-848fa430775e"},{"ID":"773bc9f4-3462-4360-8b11-e35be56b820a"}]
+// addRoomForMany成功呼叫後:
+// 會收到"AcceptEvent"事件回應
 function addRoomForMany(aRoomID, aMemberListToJoin){
 	if (aRoomID === undefined) aRoomID = RoomID_g; // 開發過渡期使用,之後會修掉
 	//JSONObject jo = new JSONObject(aMemberListToJoin);
@@ -777,7 +1018,7 @@ function getStatus() {
 }
 
 // 只有在aStatus狀態為not ready時,才會傳入aReason參數
-function updateStatus(aStatus, aReason){
+function updateStatus(aStatus, aReason){	
 	if (aReason === undefined) aReason = 'no reason'; 
 	// 向websocket送出變更狀態至未就緒指令
 	var now = new Date();
@@ -887,17 +1128,11 @@ function RefreshRoomList(){
 
 
 /** 2017/02/15 - 新增方法 **/
-function switchStatus(aStatus){
-	// 更新狀態資訊
-	parent.document.getElementById("status").value = StatusEnum.toChinese(aStatus);
-	// 去server更新狀態
-	var myUpdateStatusJson = new updateStatusJson("Agent", parent.UserID_g, parent.UserName_g, aStatus, "no reason");
-	parent.ws_g.send(JSON.stringify(myUpdateStatusJson));
-//	updateStatus("ready");
-	// 從server取得狀態
-	getStatus();
-
-	switch(aStatus) {
+function switchStatus(aStatusEnum){
+	//更新現有狀態
+	StatusEnum.currStatusEnum = aStatusEnum;
+	
+	switch(aStatusEnum) {
     case StatusEnum.LOGIN:
 		var frames = window.parent.frames; // or // var frames = window.parent.frames;
 		for (var i = 0; i < frames.length; i++) { 
@@ -909,7 +1144,10 @@ function switchStatus(aStatus){
 			}
 //			frames[i].document.body.style.background = "red";
 		}
+		// 改為離線
 		isonline = true;
+		// 將現有roomCount歸零
+		currRoomCount_g = 0;
 		
 		document.getElementById("UserID").value = parent.UserID_g;
 		document.getElementById("Login").disabled = true;
@@ -930,6 +1168,8 @@ function switchStatus(aStatus){
 		}
 		// 改為離線
 		isonline = false;
+		// 將現有roomCount歸零
+		currRoomCount_g = 0;
 		
 		// 控制前端頁面
 		document.getElementById("Logout").disabled = true;
@@ -960,23 +1200,27 @@ function switchStatus(aStatus){
     	document.getElementById("notready").disabled = false;
         //code block
         break;
-    case StatusEnum.NOT_READY:
+    case StatusEnum.NOTREADY:
     	//code block
     	document.getElementById("ready").disabled = false;
     	document.getElementById("notready").disabled = true;
     	break;
-    case StatusEnum.AFTER_CALL_WORK:
+    case StatusEnum.AFTERCALLWORK:
     	//code block
     	break;
-    case StatusEnum.RING:
+    case StatusEnum.RING: // 當有RING事件時,同時也會切換為NOTREADY,故畫面更新同NOTREADY
+    	switchStatus(StatusEnum.NOTREADY);
+//      document.getElementById("ready").disabled = false;
+//    	document.getElementById("notready").disabled = true;
+ 
     	//code block
     	break;
-    case StatusEnum.I_ESTABLISHED:
+    case StatusEnum.IESTABLISHED:
     	//code block
 		document.getElementById("Accept").disabled = true;
 		document.getElementById("Reject").disabled = true;
     	break;
-    case StatusEnum.O_ESTABLISHED:
+    case StatusEnum.OESTABLISHED:
     	//code block
     	break;
 //    case StatusEnum.:
@@ -986,29 +1230,94 @@ function switchStatus(aStatus){
         break;
 	}
 }
-var StatusEnum = Object.freeze({
-	LOGIN: '1', 
-	LOGOUT: '2', 
-	READY: '3',
-	NOT_READY: '4',
-	AFTER_CALL_WORK: '5',
-	RING: '6',
-	I_ESTABLISHED: '7',
-	O_ESTABLISHED: '8',
+//var StatusEnum = Object.freeze({
+var StatusEnum = {
+	LOGIN: { statusname : 'LOGIN', dbid : '0',description : '中文'}, 
+	LOGOUT: { statusname : 'LOGOUT', dbid : '0',description : '中文'}, 
+	READY: { statusname : 'READY', dbid : '0',description : '中文'}, 
+	NOTREADY: { statusname : 'NOTREADY', dbid : '0',description : '中文'}, 
+	PAPERWORK: { statusname : 'PAPERWORK', dbid : '0',description : '中文'}, 
+	RING: { statusname : 'RING', dbid : '0',description : '中文'}, 
+	IESTABLISHED: { statusname : 'IESTABLISHED', dbid : '0',description : '中文'}, 
+	OESTABLISHED: { statusname : 'OESTABLISHED', dbid : '0',description : '中文'}, 
 	
-	toChinese : function(aStatusEnumIndex) { // Method which will display type of Animal
-//		console.log(this.type);
-//		console.log("aStatusEnumIndex: " + aStatusEnumIndex);
-		aStatusEnumIndex -= 1; // 為了符合array起始為零
-//						 0	    1      2        3      4        5      6        7		
-		var converter = ["登入", "登出", "準備就緒", "離席", "文書處理", "響鈴", "進線通話", "外撥通話"];
-//		alert(converter[aStatusEnumIndex]);
-//		alert(converter[2]);
-//		console.log("converter[aStatusEnumIndex]: " + converter[aStatusEnumIndex]);
-		return converter[aStatusEnumIndex];
-	}	
+	currStatusEnum : '',
 	
-});
+	login_dbid : null,
+	logout_dbid :  null,
+	ready_dbid : null,
+	notready_dbid : null,
+	paperwork_dbid : null,
+	ring_dbid : null,
+	iestablished_dbid : [],
+	oestablished_dbid : null,
+	
+	getStatusEnum : function(aStatusname){
+		aStatusname = aStatusname.toUpperCase();
+		
+		if (StatusEnum.LOGIN.statusname == aStatusname){
+			return StatusEnum.LOGIN;
+		}else if (StatusEnum.LOGOUT.statusname == aStatusname){
+			return StatusEnum.LOGOUT;
+		}else if (StatusEnum.READY.statusname == aStatusname){
+			return StatusEnum.READY;
+		}else if (StatusEnum.NOTREADY.statusname == aStatusname){
+			return StatusEnum.NOTREADY;
+		}else if (StatusEnum.PAPERWORK.statusname == aStatusname){
+			return StatusEnum.PAPERWORK;
+		}else if (StatusEnum.RING.statusname == aStatusname){
+			return StatusEnum.RING;
+		}else if (StatusEnum.IESTABLISHED.statusname == aStatusname){
+			return StatusEnum.IESTABLISHED;
+		}else if (StatusEnum.OESTABLISHED.statusname == aStatusname){
+			return StatusEnum.OESTABLISHED;
+		}
+		System.out.println("StatusEnmu - getStatusEnum: " + " no match");
+		return null;
+	},
+	
+	updateDbid : function(aObj){
+		if (aObj.login_dbid != null)
+			StatusEnum.login_dbid = aObj.login_dbid; 
+		if (aObj.logout_dbid != null)
+			StatusEnum.logout_dbid = aObj.logout_dbid; 
+		if (aObj.ready_dbid != null)
+			StatusEnum.ready_dbid = aObj.ready_dbid; 
+		if (aObj.notready_dbid != null)
+			StatusEnum.notready_dbid = aObj.notready_dbid; 
+		if (aObj.paperwork_dbid != null)
+			StatusEnum.paperwork_dbid = aObj.paperwork_dbid; 
+		if (aObj.ring_dbid != null)
+			StatusEnum.ring_dbid = aObj.ring_dbid; 
+		if (aObj.iestablished_dbid != null)
+			StatusEnum.iestablished_dbid.push(aObj.iestablished_dbid); 
+		if (aObj.oestablished_dbid != null)
+			StatusEnum.oestablished_dbid = aObj.oestablished_dbid; 
+	},
+	
+	updateStatus : function( aStatusEnum , aStartORend, aDbid, aRoomID, aClientID, aReason_dbid){
+		if ('end' == aStartORend && aDbid === undefined) {
+			console.log("updateStatus - end - " + aStatusEnum.description + " aDbid not found");
+			return;
+		}
+		
+		// 更新狀態資訊
+		parent.document.getElementById("status").value = aStatusEnum.description;
+		// 去server更新狀態
+		var myUpdateStatusJson = new updateStatusJson("Agent", parent.UserID_g, parent.UserName_g, 
+														aStatusEnum.dbid, "no reason", aStartORend, 
+														aDbid, aRoomID, aClientID,
+														aReason_dbid);
+		parent.ws_g.send(JSON.stringify(myUpdateStatusJson));
+		
+		if ('end' == aStartORend){
+			return null;
+		}
+//		// 從server取得狀態
+//		getStatus();
+	}
+	
+};
 
 var Animal = {
 		type: "Invertebrates", // Default value of properties

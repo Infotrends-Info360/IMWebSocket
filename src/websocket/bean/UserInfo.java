@@ -1,14 +1,22 @@
 package websocket.bean;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.Timer;
+import java.util.TimerTask;
+import java.util.concurrent.atomic.AtomicBoolean;
+
+import org.java_websocket.WebSocket;
+
+import util.Util;
+
 
 //此類別給WebSocketPool.userallconnections使用
 public class UserInfo {
 	private String userid;
 	private String username;
-	private List<String> userRoom = new ArrayList();
+	private List<String> userRoom = Collections.synchronizedList(new ArrayList<String>());
 	private String userinteraction;
 	private String userheartbeat;
 	private Timer heartbeatTimer;
@@ -17,8 +25,9 @@ public class UserInfo {
 	// 以下為原本TypeInfo部分的屬性
 	private String reason;
 	private String status;
-	private String time;
-	
+	private String readyTime;
+	private AtomicBoolean stopRing = new AtomicBoolean(false); // 處理concurrent問題
+	private AtomicBoolean timeout = new AtomicBoolean(false); // 處理concurrent問題
 	
 	
 	public String getUserid() {
@@ -81,12 +90,28 @@ public class UserInfo {
 	public void setStatus(String status) {
 		this.status = status;
 	}
-	public String getTime() {
-		return time;
+	public String getReadyTime() {
+		System.out.println("getReadyTime");
+		return readyTime;
 	}
-	public void setTime(String time) {
-		this.time = time;
+	public void setReadyTime(String readTime) {
+		this.readyTime = readTime;
+	}
+	public boolean isStopRing() {
+		return stopRing.get();
+	}
+	public void setStopRing(boolean stopRing) {
+		this.stopRing.set(stopRing);
+	}
+	public boolean getTimeout() {
+		return timeout.get();
+	}
+	public void setTimeout(boolean timeout) {
+		this.timeout.set(timeout);;
 	}
 	
 	
 }
+
+
+

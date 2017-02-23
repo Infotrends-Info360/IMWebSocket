@@ -36,12 +36,18 @@ public class WebSocketUserPool {
 	
 	/** * Get User Name By Key * @param session */ /* Done */
 	public static String getUserNameByKey(WebSocket conn) {
+		if(userallconnections.get(conn) == null){
+			return "none";
+		}
 		return userallconnections.get(conn).getUsername();
 	}
 	
 	/** * Get User Room By Key * @param session */ /* Done */
 	public static List<String> getUserRoomByKey(WebSocket conn) {
 //		System.out.println("getUserRoomByKey(WebSocket conn) called");
+		if(userallconnections.get(conn) == null){
+			return new ArrayList<String>();
+		}
 		return userallconnections.get(conn).getUserRoom();
 	}
 
@@ -66,6 +72,9 @@ public class WebSocketUserPool {
 	
 	/** * Get Online User Room Count * @param */ /* Done */
 	public static int getUserRoomCount(WebSocket conn) {
+		if(userallconnections.get(conn) == null || userallconnections.get(conn).getUserRoom() == null){
+			return 0;
+		}
 		return userallconnections.get(conn).getUserRoom().size();
 	}
 
@@ -148,10 +157,10 @@ public class WebSocketUserPool {
 	}
 	
 	/** * Remove User Room from WebSocket Pool * @param inbound */ /* Done */
-	public static boolean removeUserRoom(WebSocket conn) {
+	public static boolean removeUserRoom(WebSocket conn, String aRoomID) {
 		
 		if (userallconnections.containsKey(conn)) {
-			userallconnections.get(conn).setUserRoom(null); // 看是要null還是"",目前覺得null比較同於原本的Map.remove(USERGROUP)
+			userallconnections.get(conn).getUserRoom().remove(aRoomID); // 改成clear, 不然會清過頭,不能重複用
 			return true;
 		} else {
 			return false;

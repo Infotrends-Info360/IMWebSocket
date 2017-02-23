@@ -12,6 +12,7 @@ import com.Info360.bean.Cfg_ServiceName_Setting;
 import com.Info360.bean.CommonLink;
 import com.Info360.bean.ContactData;
 import com.Info360.bean.Interaction;
+import com.Info360.bean.Rpt_Activitylog;
 import com.Info360.bean.Rpt_AgentStatus;
 import com.Info360.bean.ServiceEntry;
 import com.Info360.dao.ActivitydataDao;
@@ -23,6 +24,7 @@ import com.Info360.dao.Cfg_ServiceName_SettingDao;
 import com.Info360.dao.CommonlinkDao;
 import com.Info360.dao.ContactDataDao;
 import com.Info360.dao.InteractionDao;
+import com.Info360.dao.Rpt_ActivitylogDao;
 import com.Info360.dao.Rpt_AgentStatusDao;
 import com.Info360.dao.ServiceEntryDao;
 import com.Info360.util.IsError;
@@ -602,6 +604,7 @@ public class MaintainService {
 			count = agentstatusdao.Insert_agentstatus(agentstatus);
 		} catch (Exception e) {
 			IsError.GET_EXCEPTION = e.getMessage();
+			e.printStackTrace();
 		}
 		return count;
 	}
@@ -640,5 +643,42 @@ public class MaintainService {
 	   return agentstatuslist;
 	 
 	 }
+	 
+	 /**
+		 * 
+		 * insert
+		 * 
+		 * @param Insert_rpt_activitylog
+		 */
+
+		public int Insert_rpt_activitylog(Rpt_Activitylog activitylog) {
+			int count = 0;
+			try {
+				Rpt_ActivitylogDao activitylogdao = new Rpt_ActivitylogDao();
+				count = activitylogdao.Insert_activitylog(activitylog);
+			} catch (Exception e) {
+				IsError.GET_EXCEPTION = e.getMessage();
+				e.printStackTrace();
+			}
+			return count;
+		}
+		
+		/**
+		 * 
+		 * update
+		 * 
+		 * @param Interaction comment
+		 */
+
+		public int update_Interaction_comment(Interaction interaction) {
+			int count = 0;
+			try {
+				InteractionDao interactiondao = new InteractionDao();
+				count = interactiondao.update_Interaction_comment(interaction);
+			} catch (Exception e) {
+				IsError.GET_EXCEPTION = e.getMessage();
+			}
+			return count;
+		}
 
 }

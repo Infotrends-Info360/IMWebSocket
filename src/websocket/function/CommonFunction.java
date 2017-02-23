@@ -15,7 +15,10 @@ import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 
+import util.StatusEnum;
 import util.Util;
+
+
 
 
 
@@ -33,6 +36,7 @@ import util.Util;
 import com.google.gson.JsonParser;
 
 import websocket.HeartBeat;
+import websocket.bean.RingCountDownTask;
 import websocket.bean.RoomInfo;
 import websocket.bean.UserInfo;
 //import websocket.HeartBeat;
@@ -70,12 +74,17 @@ public class CommonFunction {
 	public static void userjoin(String user, org.java_websocket.WebSocket aConn) {
 		System.out.println("userjoin() called");
 		JSONObject obj = new JSONObject(user);
-		String userId = java.util.UUID.randomUUID().toString();
 		String username = obj.getString("UserName");
 		String MaxCount = obj.getString("MaxCount"); //新增 MaxCount
-		System.out.println("MaxCount: "+MaxCount);
+//		System.out.println("MaxCount: "+MaxCount);
 		String ACtype = obj.getString("ACtype");
 		String channel = obj.getString("channel");
+		String userId = null;
+		if(ACtype.equals("Agent")){
+			userId = obj.get("id").toString(); //20170222 Lin
+		}else if(ACtype.equals("Client")){
+			userId = java.util.UUID.randomUUID().toString();
+		}
 		WebSocketUserPool.addUser(username, userId, aConn, ACtype); // 在此刻,已將user conn加入倒Pool中
 //		String joinMsg = "[Server]" + username + " Online";
 //		WebSocketUserPool.sendMessage(joinMsg);
@@ -85,6 +94,14 @@ public class CommonFunction {
 		sendjson.put("Event", "userjoin");
 		sendjson.put("from", userId);
 		sendjson.put("channel", channel);
+		sendjson.put("statusList", Util.getAgentStatus());
+//		sendjson.put("login_dbid", login_dbid); // 此key-value只須Agent接就好(先不做過濾)
+//		sendjson.put("notready_dbid", notready_dbid); // 此key-value只須Agent接就好(先不做過濾)
+		sendjson.put("MaxCount", MaxCount); // 此key-value只須Agent接就好(先不做過濾)
+		AgentFunction.GetAgentReasonInfo("0");
+		sendjson.put("reasonList", Util.getAgentReason()); // 此key-value只須Agent接就好(先不做過濾)
+		System.out.println("Util.getAgentReason(): " + Util.getAgentReason());
+		System.out.println("Util.getAgentStatus(): " + Util.getAgentStatus());
 		WebSocketUserPool.sendMessageToUser(aConn, sendjson.toString());
 //		WebSocketUserPool.sendMessage("online people: "
 //				+ WebSocketUserPool.getOnlineUser().toString());
@@ -140,11 +157,11 @@ public class CommonFunction {
 		// 若已經有Agent正在決定是否Accept此通通話, 若Client先離開了, 則告知此Agent此Client已經離開, 不用再等了
 //		String waittingAgent = jsonIn.get("waittingAgent").getAsBoolean();
 		if ( WebSocketTypePool.isClient(aConn) && jsonIn.get("waittingAgent") != null){
-			System.out.println("userExit() - waittingAgent: " + jsonIn.get("waittingAgent").getAsBoolean());
+//			System.out.println("userExit() - waittingAgent: " + jsonIn.get("waittingAgent").getAsBoolean());
 			if (jsonIn.get("waittingAgent").getAsBoolean()){
 				String waittingAgentID = jsonIn.get("waittingAgentID").getAsString();
 				WebSocket agentConn = WebSocketUserPool.getWebSocketByUser(waittingAgentID);
-				System.out.println("userExit() - waittingAgentID: " + waittingAgentID);
+//				System.out.println("userExit() - waittingAgentID: " + waittingAgentID);
 				// "clientLeft"
 				JsonObject jsonTo = new JsonObject();
 				jsonTo.addProperty("Event", "clientLeft");
@@ -158,8 +175,8 @@ public class CommonFunction {
 //		waittingClientIDList
 		if (WebSocketTypePool.isAgent(aConn)){
 			if (!"[]".equals(jsonIn.get("waittingClientIDList"))){
-				System.out.println("userExit() - waittingClientIDList got here");
-				System.out.println("userExit() - " + jsonIn.get("waittingClientIDList").toString());
+//				System.out.println("userExit() - waittingClientIDList got here");
+//				System.out.println("userExit() - " + jsonIn.get("waittingClientIDList").toString());
 				JsonArray clientIDJsonAry = jsonIn.getAsJsonArray("waittingClientIDList");
 //				String clientIDStr = jsonIn.get("waittingClientIDList").toString();
 //				String[] waittingClientIDList = clientIDStr.substring(1, clientIDStr.length()-1).split(",");
@@ -176,17 +193,17 @@ public class CommonFunction {
 			}
 			
 			if (!"[]".equals(jsonIn.get("waittingAgentIDList").toString())){
-				System.out.println("userExit() - waittingAgentIDList got here");
-				System.out.println("userExit() - " + jsonIn.get("waittingAgentIDList").toString());
+//				System.out.println("userExit() - waittingAgentIDList got here");
+//				System.out.println("userExit() - " + jsonIn.get("waittingAgentIDList").toString());
 				JsonArray agentIDJsonAry = jsonIn.getAsJsonArray("waittingAgentIDList");
 //				String clientIDStr = jsonIn.get("waittingClientIDList").toString();
 //				String[] waittingClientIDList = clientIDStr.substring(1, clientIDStr.length()-1).split(",");
 //				System.out.println("userExit() - " + waittingClientIDList.length);
-				System.out.println("userExit() - agentIDJsonAry: " + agentIDJsonAry);
+//				System.out.println("userExit() - agentIDJsonAry: " + agentIDJsonAry);
 				for(final JsonElement agentID_je : agentIDJsonAry) {
 				    String agentID = agentID_je.getAsJsonObject().get("agentID").getAsString();
 				    WebSocket agentConn = WebSocketUserPool.getWebSocketByUser(agentID);
-				    System.out.println("userExit() - agentID: " + agentID);
+//				    System.out.println("userExit() - agentID: " + agentID);
 				    jsonIn.addProperty("Event", "agentLeftThirdParty");
 					WebSocketUserPool.sendMessageToUser(agentConn, jsonIn.toString());
 				}
@@ -196,11 +213,9 @@ public class CommonFunction {
 //			}
 		}
 		
-		System.out.println("before close: " + WebSocketUserPool.getUserID(aConn));
+//		System.out.println("before close: " + WebSocketUserPool.getUserID(aConn));
 		// 最後關閉連線
 		aConn.close();
-//		WebSocketPool.removeUserID(conn);
-//		WebSocketPool.removeUserName(conn);
 	}
 	
 	/** * user join room */
@@ -360,18 +375,107 @@ public class CommonFunction {
 	}
 	
 	/** * update Agent Status */
-	public static void updateStatus(String message, org.java_websocket.WebSocket conn) {
-		JSONObject obj = new JSONObject(message);
-		String ACtype = obj.getString("ACtype");
-		String username = obj.getString("UserName");
-		String userid = obj.getString("id");
-		String date = obj.getString("date");
-		String status = obj.getString("status");
+	public static void updateStatus(String message, org.java_websocket.WebSocket aConn) {
+		System.out.println("updateStatus() called");
+		JsonObject obj = Util.getGJsonObject(message);
+//		JSONObject obj = new JSONObject(message); 
+		String ACtype = obj.get("ACtype").getAsString();
+		String username = obj.get("UserName").getAsString();
+		String userid = obj.get("id").getAsString();
+		String date = obj.get("date").getAsString();
+		String status = obj.get("status").getAsString(); // 以數字代表
+		String reason_dbid =  Util.getGString(obj, "reason_dbid");
+		String dbid = Util.getGString(obj, "dbid");
+		String startORend = Util.getGString(obj, "startORend"); 
+		String roomID = Util.getGString(obj, "roomID"); 
+		String clientID = Util.getGString(obj, "clientID");
+		UserInfo userInfo = WebSocketUserPool.getUserInfoByKey(aConn);
+				
+		// 原方法區塊
 		if(status.equals("lose")){
 			WebSocketTypePool.addleaveClient();
 		}
-		String reason = obj.getString("reason");
-		WebSocketTypePool.UserUpdate(ACtype, username, userid, date, status, reason, conn);
+		WebSocketTypePool.UserUpdate(ACtype, username, userid, date, status, reason_dbid, aConn);
+		
+		// 更新DB狀態時間
+//		System.out.println("status	startORend	dbid	roomID	clientID");
+		System.out.println("" + StatusEnum.getStatusEnumByDbid(status) + ": ");
+		System.out.printf("%10s	%10s %10s %10s %10s %10s" , "status", "startORend", "dbid", "roomID", "clientID", "reason");
+		System.out.println();
+		System.out.println("----------------------------------------------------------------------------");
+		System.out.printf("%10s	%10s %10s %10s %10s %10s" , status, startORend, dbid, roomID, clientID, reason_dbid);
+		System.out.println();
+//		System.out.println("obj: " + obj);
+		
+		if ("start".equals(startORend)){
+//			String userID = Util.getTmpID(userid);
+			// 將開始時間寫入DB
+				// 若為NOTREADY,則會多reason_dbid參數
+			if (StatusEnum.NOTREADY.getDbid().equals(status)){
+				dbid = AgentFunction.RecordStatusStart(userid, status, reason_dbid);
+			}else{
+				dbid = AgentFunction.RecordStatusStart(userid, status, "0");
+			}
+			// 將xxxx_dbid值傳給前端
+			StatusEnum currStatusEnum = StatusEnum.getStatusEnumByDbid(status);
+//			System.out.println("currStatusEnum: " + currStatusEnum);
+			String dbid_key = currStatusEnum.toString().toLowerCase() + "_dbid";
+//			System.out.println("dbid_key: " + dbid_key);
+			obj.addProperty(dbid_key, dbid); // ex. login_dbid
+			
+			// 若為iEstablished狀態,則交由RoomInfo來處理結束時間點
+			if (StatusEnum.IESTABLISHED.getDbid().equals(status)){
+				System.out.println("IESTABLISHED - roomID: " + roomID);
+				RoomInfo roomInfo = WebSocketRoomPool.getRoomInfo(roomID);
+				roomInfo.setIestablish_dbid(dbid);
+			}
+			
+			// 若為RING狀態,則交由RingCountDownTask來處理結束時間點
+			if (StatusEnum.RING.getDbid().equals(status)){
+				//將RINGHEARTBEAT放進UserInfo
+				userInfo.setStopRing(false); // 回復為預設false
+				userInfo.setTimeout(false); // 回復為預設false
+				WebSocket clientConn = WebSocketUserPool.getWebSocketByUser(clientID);
+				RingCountDownTask ringCountDownTask = new RingCountDownTask(clientConn, dbid, userInfo);
+				ringCountDownTask.operate();
+				 //agentUserInfo
+			}
+			
+			// 如果是READY,則多將readytime重置
+			if (StatusEnum.READY.getDbid().equals(status)){
+				// 重置Agent readytime
+				SimpleDateFormat sdf = new SimpleDateFormat( Util.getSdfTimeFormat() );
+				String nowDate = sdf.format(new java.util.Date());
+				userInfo.setReadyTime(nowDate);
+				System.out.println("update Agent ready time: ");
+				System.out.println("Agent name: " + userInfo.getUsername() + " set readytime to " + userInfo.getReadyTime());
+			}
+			
+			
+
+			// 先只有新增時寄送EVENT,讓前端能拿到相對應的dbid
+			obj.addProperty("Event", "updateStatus");
+			WebSocketUserPool.sendMessageToUser(aConn, obj.toString());
+
+		}else if ("end".equals(startORend)){ 
+			System.out.println("end");
+			if (dbid != null){
+				System.out.println("dbid: " + dbid);
+				
+				// 如果是RING結束,現在交由後端統一處理
+				if (StatusEnum.RING.getDbid().equals(status)){
+					userInfo.setStopRing(true);
+					System.out.println("RING");
+					return;
+				}
+				
+				AgentFunction.RecordStatusEnd(dbid);					
+			}
+		}
+		
+		
+		
+		
 	}
 	
 	public static void refreshRoomList(org.java_websocket.WebSocket conn){
