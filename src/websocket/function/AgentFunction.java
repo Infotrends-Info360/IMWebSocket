@@ -273,4 +273,52 @@ public class AgentFunction {
 		return responseSB.toString();
 	}
 
+	//寫入Activity log與更新interaction
+	public static String RecordActivitylog(String interactionid, String activitydataids, String comment) {
+			
+			StringBuilder responseSB = null;
+			
+			String postData = "interactionid=" + interactionid
+					+"&activitydataids=" + activitydataids
+					+"&comment="+comment;
+
+			try {
+				// Connect to URL
+				URL url = new URL(
+						"http://127.0.0.1:8080/IMWebSocket/RESTful/Insert_rpt_activitylog");
+
+				HttpURLConnection connection = (HttpURLConnection) url
+						.openConnection();
+				connection.setDoOutput(true);
+				connection.setRequestMethod("POST");
+				connection.setRequestProperty("Content-Type",
+						"application/x-www-form-urlencoded");
+				connection.setRequestProperty("Content-Length",
+						String.valueOf(postData.length()));
+				// Write data
+				OutputStream os = connection.getOutputStream();
+				os.write(postData.getBytes());
+				// Read response
+				responseSB = new StringBuilder();
+				BufferedReader br = new BufferedReader(new InputStreamReader(
+						connection.getInputStream(), "UTF-8"));
+				String line;
+				while ((line = br.readLine()) != null)
+					responseSB.append(line);
+				// Close streams
+				br.close();
+				os.close();
+				// System.out.println(responseSB);
+			} catch (MalformedURLException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			} catch (IOException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+			
+			
+			return responseSB.toString();
+		}
+	
 }

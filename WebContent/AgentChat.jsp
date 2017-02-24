@@ -230,10 +230,10 @@ td {
 	                		</div>
 	                		<div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
 			                	<div class="col-xs-6 col-sm-6 col-md-6 col-lg-6 ">
-			                        <input type="text" id="" class="form-control" value="comment..." disabled/>
+			                        <input type="text" id="commentContent" class="form-control" value="" disabled/>
 			                	</div>
 			                	<div class="col-xs-6 col-sm-6 col-md-6 col-lg-6">
-			                        <button id="" class="btn btn-primary" disabled>SEND</button>
+			                        <button id="commentSend" class="btn btn-primary" onclick="sendComment();" disabled>SEND</button>
 			                	</div>	                		                		
 	                		</div>
 	                	</div>

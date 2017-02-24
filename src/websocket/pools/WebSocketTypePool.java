@@ -119,6 +119,7 @@ public class WebSocketTypePool{
 			//setUsers.add(u.get("userid").toString());
 			SimpleDateFormat sdf = new SimpleDateFormat(Util.getSdfTimeFormat());
 			String userdatestring = userInfo.getReadyTime(); // 關鍵是這行
+			if (userdatestring == null) continue;
 //			System.out.println("userdatestring: " + userdatestring);
 			Date userdate = null;
 			try { 
