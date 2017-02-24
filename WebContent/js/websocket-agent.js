@@ -611,7 +611,11 @@ function Login() {
 						}
 					}
 					// 20170222 Lin
-					
+				
+					// ACW
+					// 新增ACW開始時間
+//					StatusEnum.updateStatus(StatusEnum.A, "start");
+					// 開啟畫面
 					
 					
 					
@@ -1243,7 +1247,7 @@ var StatusEnum = {
 	LOGOUT: { statusname : 'LOGOUT', dbid : '0',description : '中文'}, 
 	READY: { statusname : 'READY', dbid : '0',description : '中文'}, 
 	NOTREADY: { statusname : 'NOTREADY', dbid : '0',description : '中文'}, 
-	PAPERWORK: { statusname : 'PAPERWORK', dbid : '0',description : '中文'}, 
+	AFTERCALLWORK: { statusname : 'AFTERCALLWORK', dbid : '0',description : '中文'}, 
 	RING: { statusname : 'RING', dbid : '0',description : '中文'}, 
 	IESTABLISHED: { statusname : 'IESTABLISHED', dbid : '0',description : '中文'}, 
 	OESTABLISHED: { statusname : 'OESTABLISHED', dbid : '0',description : '中文'}, 
@@ -1270,8 +1274,8 @@ var StatusEnum = {
 			return StatusEnum.READY;
 		}else if (StatusEnum.NOTREADY.statusname == aStatusname){
 			return StatusEnum.NOTREADY;
-		}else if (StatusEnum.PAPERWORK.statusname == aStatusname){
-			return StatusEnum.PAPERWORK;
+		}else if (StatusEnum.AFTERCALLWORK.statusname == aStatusname){
+			return StatusEnum.AFTERCALLWORK;
 		}else if (StatusEnum.RING.statusname == aStatusname){
 			return StatusEnum.RING;
 		}else if (StatusEnum.IESTABLISHED.statusname == aStatusname){

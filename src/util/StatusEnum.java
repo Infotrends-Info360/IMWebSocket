@@ -1,7 +1,7 @@
 package util;
 
 public enum StatusEnum {
-	LOGIN(), LOGOUT(), READY(), NOTREADY(), PAPERWORK(), RING(), 
+	LOGIN(), LOGOUT(), READY(), NOTREADY(), AFTERCALLWORK(), RING(), 
 	IESTABLISHED(), OESTABLISHED();
 	private String dbid; // ex. 3
 	private String description; // ex. 準備就緒
@@ -29,8 +29,8 @@ public enum StatusEnum {
 			return READY;
 		}else if (NOTREADY.toString().equals(aStatusname)){
 			return NOTREADY;
-		}else if (PAPERWORK.toString().equals(aStatusname)){
-			return PAPERWORK;
+		}else if (AFTERCALLWORK.toString().equals(aStatusname)){
+			return AFTERCALLWORK;
 		}else if (RING.toString().equals(aStatusname)){
 			return RING;
 		}else if (IESTABLISHED.toString().equals(aStatusname)){
@@ -52,8 +52,8 @@ public enum StatusEnum {
 			return READY;
 		}else if (NOTREADY.getDbid().equals(aDbid)){
 			return NOTREADY;
-		}else if (PAPERWORK.getDbid().equals(aDbid)){
-			return PAPERWORK;
+		}else if (AFTERCALLWORK.getDbid().equals(aDbid)){
+			return AFTERCALLWORK;
 		}else if (RING.getDbid().equals(aDbid)){
 			return RING;
 		}else if (IESTABLISHED.getDbid().equals(aDbid)){
