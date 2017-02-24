@@ -176,12 +176,14 @@ public class WebSocket extends WebSocketServer {
 		case "addRoomForMany":
 			addRoomForMany(message.toString(), conn);
 			break;
+		case "sendComment":
+			sendComment(message.toString(), conn);
+			break;
 		case "test":
 			this.test();
 			break;
 		}
 	}
-	
 
 	/** * user leave websocket (Demo) */
 	// 此方法沒有用到,先放著,並不會影響到主流程
@@ -285,7 +287,6 @@ public class WebSocket extends WebSocketServer {
 	}
 
 	private void responseThirdParty(String message, org.java_websocket.WebSocket aConn) {
-		// TODO Auto-generated method stub
 		JSONObject obj = new JSONObject(message);
 		System.out.println("responseThirdParty - obj: " + obj);
 		String ACtype = obj.getString("ACtype");
@@ -421,6 +422,18 @@ public class WebSocket extends WebSocketServer {
 					userConn,sendJson.toString());	
 		}
 	}
+	
+	private void sendComment(String aMsg, org.java_websocket.WebSocket aConn) {
+		JsonObject jsonIn = Util.getGJsonObject(aMsg);
+		String interactionid = Util.getGString(jsonIn, "interactionid");
+		String activitydataids = Util.getGString(jsonIn, "activitydataids");
+		String comment = Util.getGString(jsonIn, "comment"); 
+		System.out.println("interactionid: " + interactionid);
+		System.out.println("activitydataids " + activitydataids);
+		System.out.println("comment: " + comment);
+		AgentFunction.RecordActivitylog(interactionid, activitydataids, comment);
+	}
+
 	
 	
 	private void test() {

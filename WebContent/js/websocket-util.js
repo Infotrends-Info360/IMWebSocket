@@ -16,6 +16,7 @@ function RoomInfo(aRoomID, aUserdata, aText){
 	this.userdata = aUserdata;
 	this.text = aText;
 	this.close = false;
+	this.isAfterCallWorkDone = false;
 }
 
 function messagetoRoomJson(aType, aACtype, aText, aId, aUserName, aRoomID, aChannel, aDate) {  // Method which will display type of Animal
@@ -28,7 +29,14 @@ function messagetoRoomJson(aType, aACtype, aText, aId, aUserName, aRoomID, aChan
 	this.channel = "chat";
 	this.channel = aChannel;
 	this.date = aDate;
-}			
+}		
+
+function sendCommentJson(aInteractionid, aActivitydataids, aComment){
+	this.type = "sendComment";
+	this.interactionid = aInteractionid;
+	this.activitydataids = aActivitydataids;
+	this.comment = aComment;
+}
 
 function updateStatusJson(aACType, aID, aUserName, aStatus, aReason, aStartORend, aDbid, aRoomID, aClientID, aReason_dbid){
 	this.type = "updateStatus";

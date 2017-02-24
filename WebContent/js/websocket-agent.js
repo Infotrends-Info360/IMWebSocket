@@ -614,10 +614,8 @@ function Login() {
 				
 					// ACW
 					// 新增ACW開始時間
-//					StatusEnum.updateStatus(StatusEnum.A, "start");
-					// 開啟畫面
-					
-					
+					StatusEnum.updateStatus(StatusEnum.AFTERCALLWORK, "start");
+
 					
 				} else if ("clientLeft" == obj.Event){
 					// 在這邊進行一連串的善後處理
@@ -1296,8 +1294,8 @@ var StatusEnum = {
 			StatusEnum.ready_dbid = aObj.ready_dbid; 
 		if (aObj.notready_dbid != null)
 			StatusEnum.notready_dbid = aObj.notready_dbid; 
-		if (aObj.paperwork_dbid != null)
-			StatusEnum.paperwork_dbid = aObj.paperwork_dbid; 
+		if (aObj.aftercallwork_dbid != null)
+			StatusEnum.aftercallwork_dbid = aObj.aftercallwork_dbid; 
 		if (aObj.ring_dbid != null)
 			StatusEnum.ring_dbid = aObj.ring_dbid; 
 		if (aObj.iestablished_dbid != null)
@@ -1481,15 +1479,51 @@ function updateRoomInfo(aRoomInfo){
 		$('#sendToRoom')[0].disabled = false;
 		$('#inviteTransfer')[0].disabled = false;
 		$('#inviteThirdParty')[0].disabled = false;		
-		$('#message')[0].disabled = false;		
+		$('#message')[0].disabled = false;	
+		$('#commentContent')[0].disabled = true; // ACW :  此為room關閉才開啟的功能
+		$('#commentSend')[0].disabled = true; // ACW :  此為room關閉才開啟的功能
+		
 	}else{
 		$('#leaveRoom')[0].disabled = true;
 		$('#sendToRoom')[0].disabled = true;
 		$('#inviteTransfer')[0].disabled = true;
 		$('#inviteThirdParty')[0].disabled = true;				
 		$('#message')[0].disabled = true;				
+		
+		if (!aRoomInfo.isAfterCallWorkDone){
+			$('#commentContent')[0].disabled = false; //ACW :  此為room關閉才開啟的功能
+			$('#commentSend')[0].disabled = false; // ACW :  此為room關閉才開啟的功能
+		}else if(aRoomInfo.isAfterCallWorkDone){
+			$('#commentContent')[0].disabled = true;
+			$('#commentSend')[0].disabled = true;
+		}
+		
 	}
 
+}
+
+function sendComment(aInteractionid, aActivitydataids, aComment){
+//	alert("sendComment()");
+	// 寄送請求至WS
+	if (aInteractionid === undefined) aInteractionid = $('#roomList').val();
+	if (aActivitydataids === undefined) aActivitydataids = '0';
+	if (aComment === undefined) aComment = $('#commentContent').val();
+	
+	var mySendCommentJson = new sendCommentJson(aInteractionid, aActivitydataids, aComment);
+	parent.ws_g.send(JSON.stringify(mySendCommentJson));	
+	
+	// 更新AFTERCALLWORK狀態結束時間
+//	alert("StatusEnum.aftercallwork_dbid: " + StatusEnum.aftercallwork_dbid);
+	StatusEnum.aftercallwork_dbid = StatusEnum.updateStatus(StatusEnum.AFTERCALLWORK, "end", StatusEnum.aftercallwork_dbid);
+	
+	// 關閉ACW按鈕功能
+	var roomInfo = roomInfoMap_g.get(aInteractionid);
+	roomInfo.isAfterCallWorkDone = true;
+	// 判斷若當前頁面就是這個訊息所傳的room, 則馬上更新
+	var currRoomID = $('#roomList').val();
+	if (currRoomID == roomInfo.roomID){
+		updateRoomInfo(roomInfo);	
+	}
 }
 
 // 測試按鈕
