@@ -55,10 +55,14 @@ public class Rpt_Agentstatus_usetime_avg_Select_Servlet {
 //		String strDate = sdFormat.format(date);
 //		agentstatus.setStartdatetime(strDate);
 		
+		if(person_dbid != null && !person_dbid.equals("") && status_dbid != null && !status_dbid.equals("")){
+			MaintainService maintainservice = new MaintainService();		
+			int insert = maintainservice.Select_rpt_agentstatus_usetime_avg(agentstatus);
+			jsonObject.put("second", insert);
+		}else{
+			jsonObject.put("second", 0);
+		}
 		
-		MaintainService maintainservice = new MaintainService();		
-		int insert = maintainservice.Select_rpt_agentstatus_usetime_avg(agentstatus);
-		jsonObject.put("second", insert);
   
   	  
 		return Response.status(200).entity(jsonObject.toString())

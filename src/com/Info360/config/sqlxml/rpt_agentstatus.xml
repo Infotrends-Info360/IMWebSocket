@@ -21,13 +21,13 @@
 
 
 <select id="Select_agentstatus_usetime" parameterType="com.Info360.bean.Rpt_AgentStatus"  resultType="integer">
-select SUM(cast(DURATION as int)) AS DURATION 
+select IsNull(SUM(cast(IsNull(DURATION,0) as int)),0) AS DURATION 
 from tblRpt_AgentStatus
 where STATUS_DBID = #{status_dbid} AND PERSON_DBID = #{person_dbid} AND convert(date, STARTDATETIME) = convert(date, SYSDATETIME())
 </select>
 
 <select id="Select_agentstatus_usetime_avg" parameterType="com.Info360.bean.Rpt_AgentStatus"  resultType="integer">
-select AVG(cast(DURATION as int)) AS DURATION 
+select IsNull(AVG(cast(IsNull(DURATION,0) as int)),0) AS DURATION 
 from tblRpt_AgentStatus
 where STATUS_DBID = #{status_dbid} AND PERSON_DBID = #{person_dbid} AND convert(date, STARTDATETIME) = convert(date, SYSDATETIME())
 </select>

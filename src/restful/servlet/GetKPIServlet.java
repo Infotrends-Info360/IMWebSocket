@@ -96,10 +96,7 @@ public class GetKPIServlet {
 		jsonObject.put("roomcount", WebSocketRoomPool.getRoomCount());
 		jsonObject.put("agentcount", WebSocketTypePool.getOnlineUserIDinTYPECount("Agent"));
 		jsonObject.put("clientcount", WebSocketTypePool.getOnlineUserIDinTYPECount("Client"));
-		jsonObject.put("notready_usetime", getagentstatus_usetime(user, StatusEnum.NOTREADY.getDbid()));
-		jsonObject.put("ready_usetime", getagentstatus_usetime(user, StatusEnum.READY.getDbid()));
-		jsonObject.put("iestablished_usetime", getagentstatus_usetime(user, StatusEnum.IESTABLISHED.getDbid()));
-		jsonObject.put("iestablished_usetime_avg", getagentstatus_usetime_avg(user, StatusEnum.IESTABLISHED.getDbid()));
+		
 		
 		jsonObject.put("leaveclientcount", WebSocketTypePool.getleaveClient());
 		
@@ -118,6 +115,11 @@ public class GetKPIServlet {
 				userroomjsonarray.put(userroomjsonObject);
 			}
 			jsonObject.put("userrooms", userroomjsonarray);
+			
+			jsonObject.put("notready_usetime", getagentstatus_usetime(user, StatusEnum.NOTREADY.getDbid()));
+			jsonObject.put("ready_usetime", getagentstatus_usetime(user, StatusEnum.READY.getDbid()));
+			jsonObject.put("iestablished_usetime", getagentstatus_usetime(user, StatusEnum.IESTABLISHED.getDbid()));
+			jsonObject.put("iestablished_usetime_avg", getagentstatus_usetime_avg(user, StatusEnum.IESTABLISHED.getDbid()));
 			
 		}
 
