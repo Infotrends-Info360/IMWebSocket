@@ -19,6 +19,19 @@
     
 </resultMap>
 
+
+<select id="Select_agentstatus_usetime" parameterType="com.Info360.bean.Rpt_AgentStatus"  resultType="integer">
+select SUM(cast(DURATION as int)) AS DURATION 
+from tblRpt_AgentStatus
+where STATUS_DBID = #{status_dbid} AND PERSON_DBID = #{person_dbid} AND convert(date, STARTDATETIME) = convert(date, SYSDATETIME())
+</select>
+
+<select id="Select_agentstatus_usetime_avg" parameterType="com.Info360.bean.Rpt_AgentStatus"  resultType="integer">
+select AVG(cast(DURATION as int)) AS DURATION 
+from tblRpt_AgentStatus
+where STATUS_DBID = #{status_dbid} AND PERSON_DBID = #{person_dbid} AND convert(date, STARTDATETIME) = convert(date, SYSDATETIME())
+</select>
+
 <update id="Update_agentstatus" parameterType="com.Info360.bean.Rpt_AgentStatus">
 update  tblRpt_AgentStatus  set ENDDATETIME=#{enddatetime},DURATION=
 (SELECT DATEDIFF(second, STARTDATETIME, #{enddatetime}))
