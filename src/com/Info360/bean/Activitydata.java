@@ -12,7 +12,7 @@ public class Activitydata {
 	
 	private String sort;
 	
-	private String titleflag;
+	private int titleflag;
 	
 	private int titlegroup;
 	
@@ -21,6 +21,16 @@ public class Activitydata {
 	private String deletedatetime;
 	
 	private String createdatetime;
+	
+	
+
+	public int getTitleflag() {
+		return titleflag;
+	}
+
+	public void setTitleflag(int titleflag) {
+		this.titleflag = titleflag;
+	}
 
 	public int getDbid() {
 		return dbid;
@@ -62,14 +72,7 @@ public class Activitydata {
 		this.sort = sort;
 	}
 
-	public String getTitleflag() {
-		return titleflag;
-	}
-
-	public void setTitleflag(String titleflag) {
-		this.titleflag = titleflag;
-	}
-
+	
 	public int getTitlegroup() {
 		return titlegroup;
 	}

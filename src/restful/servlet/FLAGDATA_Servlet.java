@@ -61,8 +61,8 @@ public class FLAGDATA_Servlet {
     			
         	  	  	JSONObject activitygroupsObject = new JSONObject();
         	  	activitygroupsObject.put("dbid", activitygroupslist.get(a).getDbid());
-        	  	activitygroupsObject.put("createdatetime", activitygroupslist.get(a).getCreatedatetime().substring(0, 19));
-        	  	activitygroupsObject.put("deletedatetime", activitygroupslist.get(a).getDeletedatetime().substring(0, 19));
+        	  	activitygroupsObject.put("createdatetime", activitygroupslist.get(a).getCreatedatetime());
+        	  	activitygroupsObject.put("deletedatetime", activitygroupslist.get(a).getDeletedatetime());
         	  	activitygroupsObject.put("activitymenuid", activitygroupslist.get(a).getActivitymenuid());
         	  	activitygroupsObject.put("groupname", activitygroupslist.get(a).getGroupname());
         	  	activitygroupsObject.put("sort", activitygroupslist.get(a).getSort());
@@ -80,8 +80,8 @@ public class FLAGDATA_Servlet {
         	  		
         	  		JSONObject activitydataObject = new JSONObject();
         			activitydataObject.put("dbid", activitydatalist.get(g).getDbid());
-        			activitydataObject.put("createdatetime", activitydatalist.get(a).getCreatedatetime().substring(0, 19));
-        			activitydataObject.put("deletedatetime", activitydatalist.get(a).getDeletedatetime().substring(0, 19));
+        			activitydataObject.put("createdatetime", activitydatalist.get(a).getCreatedatetime());
+        			activitydataObject.put("deletedatetime", activitydatalist.get(a).getDeletedatetime());
         			activitydataObject.put("activitygroupsid", activitydatalist.get(g).getActivitygroupsid());
         			activitydataObject.put("codename", activitydatalist.get(g).getCodename());
         			activitydataObject.put("color", activitydatalist.get(g).getColor());
@@ -91,7 +91,7 @@ public class FLAGDATA_Servlet {
         			activitydataObject.put("sort", activitydatalist.get(g).getSort());
         					
         			
-        			if(activitydatalist.get(g).getDeleteflag().trim().equals("0")){
+        			if(activitydatalist.get(g).getTitlegroup()==0){
         				ActivitydataJsonArray.put(activitydataObject);
                 		
         			}else{
