@@ -44,7 +44,7 @@ public class AgentReason_Select_Servlet {
   	  	
   	  	//System.out.println("agentstatuslist: "+agentstatuslist.size());
 
-  	 if(flag==0){
+  	 if(flag==0 && flag==2){
   		 for(int a = 0; a < agentreasonlist.size(); a++){
     		
 	    	JSONObject agentreasonObject = new JSONObject();
