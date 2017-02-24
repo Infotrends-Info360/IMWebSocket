@@ -562,52 +562,59 @@ function Login() {
 					document.getElementById("text").innerHTML += obj.UserName + ": " + obj.text + "&#13;&#10" + "<br>";
 					
 				} else if ("removeUserinroom" == obj.Event){
-//					document.getElementById("currUsers").innerHTML = obj.roomMembers;
-					// 若此房間已經關了, 則更新roomInfo
-					if (obj.roomSize == 0){ 
-						var roomInfo = roomInfoMap_g.get(obj.roomID);
-						roomInfo.close = true;
-						// 若為當前頁面,則更新roomInfo
-						var currRoomID = $('#roomList').val();
-						if (currRoomID == obj.roomID){
-							updateRoomInfo(roomInfo);
-						}
-						// maxCount機制 here
-						// 若前一次達到最大roomCount值,則恢復其狀態,且確認若會進入到此區塊,則目前狀態一定為NOTREADY
-						if(currRoomCount_g == maxRoomCount_g){
-							$('#notready')[0].disabled = true;
-							$('#ready')[0].disabled = false; // 讓Agent可以再使用這個功能
-							$('#maxRoomCount').css('color', 'black');
-						}
-						currRoomCount_g--;
-						$('#maxRoomCount')[0].innerHTML = currRoomCount_g + " / " + maxRoomCount_g;
-//						alert("currRoomCount_g: " + currRoomCount_g);
-						
-//						alert(obj.AfterCallStatus);
-						// 20170222 Lin
-						if(obj.AfterCallStatus == StatusEnum.READY.dbid){ //如果AfterCallStatus == ready
-							if(StatusEnum.ready_dbid == null){
-								$('#notready')[0].disabled = true;
-								$('#ready')[0].disabled = false;
-//								status_g = StatusEnum.READY;
-								switchStatus(StatusEnum.READY);
-								StatusEnum.notready_dbid = StatusEnum.updateStatus(StatusEnum.NOTREADY, "end", StatusEnum.notready_dbid);
-								StatusEnum.updateStatus(StatusEnum.READY, "start");
-							}
-						}else if(obj.AfterCallStatus == StatusEnum.NOTREADY.dbid){ //如果AfterCallStatus == not ready
-							if(StatusEnum.notready_dbid == null){
-								$('#notready')[0].disabled = false;
-								$('#ready')[0].disabled = true;
-//								status_g = StatusEnum.NOTREADY;
-								switchStatus(StatusEnum.NOTREADY);
-								StatusEnum.ready_dbid = StatusEnum.updateStatus(StatusEnum.READY, "end", StatusEnum.ready_dbid);
-								StatusEnum.updateStatus(StatusEnum.NOTREADY, "start", null, null, null, notreadyreason_dbid_g);
-//								StatusEnum.updateStatus(StatusEnum.NOTREADY, "start");
-							}
-						}
-						// 20170222 Lin
-					}
 					alert(obj.result);
+					// 如果還沒關,就不往下走
+					if (obj.roomSize != 0) return;
+					
+					// 若此房間已經關了, 則更新roomInfo
+					// 將對應到的roomInfo標示為close
+					var roomInfo = roomInfoMap_g.get(obj.roomID);
+					roomInfo.close = true;
+						// 若為當前頁面,則更新roomInfo
+					var currRoomID = $('#roomList').val();
+					if (currRoomID == obj.roomID){
+						updateRoomInfo(roomInfo);
+					}
+					
+					// maxCount機制
+					// 若前一次達到最大roomCount值,則恢復其狀態,且確認若會進入到此區塊,則目前狀態一定為NOTREADY
+					if(currRoomCount_g == maxRoomCount_g){
+						$('#notready')[0].disabled = true;
+						$('#ready')[0].disabled = false; // 讓Agent可以再使用這個功能
+						$('#maxRoomCount').css('color', 'black');
+					}
+					currRoomCount_g--;
+					$('#maxRoomCount')[0].innerHTML = currRoomCount_g + " / " + maxRoomCount_g;
+//						alert("currRoomCount_g: " + currRoomCount_g);
+					
+//						alert(obj.AfterCallStatus);
+					// 20170222 Lin
+					// 判斷當通話結束後,要將狀態切為READY或是NOTREADY
+					if(obj.AfterCallStatus == StatusEnum.READY.dbid){ //如果AfterCallStatus == ready
+						if(StatusEnum.ready_dbid == null){
+							$('#notready')[0].disabled = true;
+							$('#ready')[0].disabled = false;
+//								status_g = StatusEnum.READY;
+							switchStatus(StatusEnum.READY);
+							StatusEnum.notready_dbid = StatusEnum.updateStatus(StatusEnum.NOTREADY, "end", StatusEnum.notready_dbid);
+							StatusEnum.updateStatus(StatusEnum.READY, "start");
+						}
+					}else if(obj.AfterCallStatus == StatusEnum.NOTREADY.dbid){ //如果AfterCallStatus == not ready
+						if(StatusEnum.notready_dbid == null){
+							$('#notready')[0].disabled = false;
+							$('#ready')[0].disabled = true;
+//								status_g = StatusEnum.NOTREADY;
+							switchStatus(StatusEnum.NOTREADY);
+							StatusEnum.ready_dbid = StatusEnum.updateStatus(StatusEnum.READY, "end", StatusEnum.ready_dbid);
+							StatusEnum.updateStatus(StatusEnum.NOTREADY, "start", null, null, null, notreadyreason_dbid_g);
+//								StatusEnum.updateStatus(StatusEnum.NOTREADY, "start");
+						}
+					}
+					// 20170222 Lin
+					
+					
+					
+					
 				} else if ("clientLeft" == obj.Event){
 					// 在這邊進行一連串的善後處理
 					alert("Client left : " + obj.from);
