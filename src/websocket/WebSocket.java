@@ -33,8 +33,6 @@ import websocket.pools.WebSocketTypePool;
 import websocket.pools.WebSocketUserPool;
 
 public class WebSocket extends WebSocketServer {
-//	static final Logger fileLogger = Logger.getLogger("fileLogger");
-//	static final Logger consoleLogger = Logger.getLogger("consoleLogger");
 	
 	public WebSocket(InetSocketAddress address) {
 		super(address);
