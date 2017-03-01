@@ -14,6 +14,7 @@ import java.util.Timer;
 import org.java_websocket.WebSocket;
 import org.java_websocket.exceptions.WebsocketNotConnectedException;
 
+import util.Util;
 import websocket.bean.UserInfo;
 
 //此類別給AgentFunction.java共同使用
@@ -44,7 +45,7 @@ public class WebSocketUserPool {
 	
 	/** * Get User Room By Key * @param session */ /* Done */
 	public static List<String> getUserRoomByKey(WebSocket conn) {
-//		System.out.println("getUserRoomByKey(WebSocket conn) called");
+//		Util.getConsoleLogger().debug("getUserRoomByKey(WebSocket conn) called");
 		if(userallconnections.get(conn) == null){
 			return new ArrayList<String>();
 		}
@@ -84,10 +85,10 @@ public class WebSocketUserPool {
 		synchronized (conns) {
 			for (WebSocket conn : conns) {
 				String cuser = userallconnections.get(conn).getUserid();
-//				System.out.println("***cuser: " + cuser);
-//				System.out.println("***user: " + user);
+//				Util.getConsoleLogger().debug("***cuser: " + cuser);
+//				Util.getConsoleLogger().debug("***user: " + user);
 				if (cuser.equals(user)) {
-//					System.out.println("(getWebSocketByUser)found user id: " + cuser + "的connection");
+//					Util.getConsoleLogger().debug("(getWebSocketByUser)found user id: " + cuser + "的connection");
 					return conn;
 				}
 			}
@@ -112,7 +113,7 @@ public class WebSocketUserPool {
 	
 	/** * Add User to WebSocket Pool* @param inbound */ /* Done */
 	public static void addUserInteraction(String userinteraction, WebSocket conn) {
-		System.out.println("addUserInteraction() called");
+		Util.getConsoleLogger().debug("addUserInteraction() called");
 		userallconnections.get(conn).setUserinteraction(userinteraction);
 	}
 	
@@ -181,9 +182,9 @@ public class WebSocketUserPool {
 
 	/** * Send Message to a User * @param user * @param message */ /* Done */
 	public static void sendMessageToUser(WebSocket conn, String message) throws WebsocketNotConnectedException{
-//		System.out.println("sendMessageToUser() called - to - conn: " + conn);
+//		Util.getConsoleLogger().debug("sendMessageToUser() called - to - conn: " + conn);
 		if (null != conn) {
-//			System.out.println("conn.send(message) called");
+//			Util.getConsoleLogger().debug("conn.send(message) called");
 			conn.send(message);
 		}
 	}
