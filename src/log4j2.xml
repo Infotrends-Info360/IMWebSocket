@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Configuration status="WARN">
+    <Appenders>
+        <Console name="Console" target="SYSTEM_OUT">
+<!--             <PatternLayout pattern="%d{HH:mm:ss.SSS} [%t] %-5level %logger{36} - %msg%n"/> -->
+            <PatternLayout pattern="%msg%n"/>
+        </Console>
+	    <File name="MyFile" fileName="log_2/Log4j2.log">
+	      <PatternLayout>
+<!-- 	        <Pattern>%d %p %c{1.} [%t] %m%n</Pattern> -->
+	        <Pattern>%m%n</Pattern>
+	      </PatternLayout>
+	    </File>        
+<!--     <Async name="Async"> -->
+<!--       <AppenderRef ref="MyFile"/> -->
+<!--     </Async> -->
+    </Appenders>
+    <Loggers>
+        <Root level="OFF"> <!-- INFO --> <!-- 若改成DEBUG,會印出許多非自行設定的資訊, ex mybatis -->
+            <AppenderRef ref="Console"/> <!-- this ref 對到 上面的 naem="Console" --> 
+            <AppenderRef ref="MyFile"/>
+        </Root>
+    </Loggers>
+</Configuration>

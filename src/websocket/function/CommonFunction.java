@@ -7,6 +7,9 @@ import java.util.Map;
 import java.util.Set;
 import java.util.Timer;
 
+import org.apache.logging.log4j.Level;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.java_websocket.WebSocket;
 import org.json.JSONArray;
 import org.json.JSONObject;
@@ -17,6 +20,7 @@ import com.google.gson.JsonObject;
 
 import util.StatusEnum;
 import util.Util;
+
 
 
 
@@ -406,11 +410,14 @@ public class CommonFunction {
 		WebSocketTypePool.UserUpdate(ACtype, username, userid, date, StatusEnum.getStatusEnumByDbid(status_dbid), reason_dbid, aConn);
 		
 		// 更新DB狀態時間
+		Logger log = LogManager.getLogger(WebSocket.class);
+		log.info("" + StatusEnum.getStatusEnumByDbid(status_dbid) + ": ");
+		log.printf(Level.INFO,"%10s	%10s %10s %10s %10s %10s" , "status", "startORend", "dbid", "roomID", "clientID", "reason");
+		log.info("----------------------------------------------------------------------------");
+		log.printf(Level.INFO,"%10s	%10s %10s %10s %10s %10s" , status_dbid, startORend, dbid, roomID, clientID, reason_dbid);
 //		Util.getConsoleLogger().debug("status	startORend	dbid	roomID	clientID");
-//		Util.getConsoleLogger().debug("" + StatusEnum.getStatusEnumByDbid(status_dbid) + ": ");
 //		System.out.printf("%10s	%10s %10s %10s %10s %10s" , "status", "startORend", "dbid", "roomID", "clientID", "reason");
 //		Util.getConsoleLogger().debug();
-//		Util.getConsoleLogger().debug("----------------------------------------------------------------------------");
 //		System.out.printf("%10s	%10s %10s %10s %10s %10s" , status_dbid, startORend, dbid, roomID, clientID, reason_dbid);
 //		Util.getConsoleLogger().debug();
 //		Util.getConsoleLogger().debug("obj: " + obj);
