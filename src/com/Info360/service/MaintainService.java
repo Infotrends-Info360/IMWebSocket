@@ -589,6 +589,45 @@ public class MaintainService {
 		}
 		return cfg_servicename_settinglist;
 	}
+	
+	
+	/**
+	 * 
+	 * Select
+	 * 
+	 * @param Select_rpt_agentstatus_usetime
+	 */
+
+	public int Select_rpt_agentstatus_usetime(Rpt_AgentStatus agentstatus) {
+		int second = 0;
+		try {
+			Rpt_AgentStatusDao agentstatusdao = new Rpt_AgentStatusDao();
+			second = agentstatusdao.Select_agentstatus_usetime(agentstatus);
+		} catch (Exception e) {
+			IsError.GET_EXCEPTION = e.getMessage();
+			e.printStackTrace();
+		}
+		return second;
+	}
+	
+	/**
+	 * 
+	 * Select
+	 * 
+	 * @param Select_rpt_agentstatus_usetime
+	 */
+
+	public int Select_rpt_agentstatus_usetime_avg(Rpt_AgentStatus agentstatus) {
+		int second = 0;
+		try {
+			Rpt_AgentStatusDao agentstatusdao = new Rpt_AgentStatusDao();
+			second = agentstatusdao.Select_agentstatus_usetime_avg(agentstatus);
+		} catch (Exception e) {
+			IsError.GET_EXCEPTION = e.getMessage();
+			e.printStackTrace();
+		}
+		return second;
+	}
 
 	/**
 	 * 

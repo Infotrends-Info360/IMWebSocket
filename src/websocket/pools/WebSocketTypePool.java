@@ -101,7 +101,7 @@ public class WebSocketTypePool{
 	
 	/** * Get Online Longest User(Agent) * @return */
 	public static String getOnlineLongestUserinTYPE(String aTYPE) {
-		System.out.println("getOnlineLongestUserinTYPE() called");
+//		System.out.println("getOnlineLongestUserinTYPE() called");
 		Map<WebSocket,  UserInfo> TYPEmap = TYPEconnections.get(aTYPE);
 		if (TYPEmap == null || TYPEmap.isEmpty()){
 			return null;

@@ -167,12 +167,14 @@ function Login() {
 //							+ ": " + obj.text + "<br>";
 
 				} else if ("senduserdata" == obj.Event) {
+//					alert("obj.userdata.SetContactLog: "+JSON.stringify(obj.userdata.SetContactLog));
 					if (obj.userdata.SetContactLog != null){
 						contactID_g = obj.userdata.SetContactLog.contactID;
 //						setinteractionDemo(ixnstatus, ixnactivitycode);	
 						setinteraction(ixnstatus_g, ixnactivitycode_g); 
 					}else{
 						console.log("senduserdata - " + "contactID not found! ");
+						setinteraction(ixnstatus_g, ixnactivitycode_g); 
 					}
 					console.log("senduserdata done from WS ******************* ");	
 					// alert(obj.userdata.SetContactLog.contactID);
