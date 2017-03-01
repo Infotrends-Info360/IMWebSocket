@@ -1,2 +1,20 @@
-[17/02/02 09:42:34][INFO][websocket.WebSocket-372] Hi Log4j, this will appear in console and log file
-[17/02/02 09:42:34][ERROR][websocket.WebSocket-373] This is error message!!!
+[17/03/01 17:38:35][INFO][websocket.WebSocket-86] Someone link in Socket conn:org.java_websocket.WebSocketImpl@28b929fa
+[17/03/01 17:38:42][INFO][websocket.WebSocket-63] onClose(): Clientorg.java_websocket.WebSocketImpl@28b929fa is disconnected. (onClose)
+[17/03/01 17:39:42][INFO][websocket.WebSocket-50] Port: 8888
+[17/03/01 17:55:56][INFO][websocket.WebSocket-48] Port: 8888
+[17/03/01 17:56:14][INFO][websocket.WebSocket-80] Someone link in Socket conn:org.java_websocket.WebSocketImpl@2a9843ef
+[17/03/01 17:56:27][INFO][websocket.WebSocket-80] Someone link in Socket conn:org.java_websocket.WebSocketImpl@329bbe66
+[17/03/01 17:56:32][INFO][websocket.WebSocket-58] onClose(): Agentorg.java_websocket.WebSocketImpl@329bbe66 is disconnected. (onClose)
+[17/03/01 17:56:36][INFO][websocket.WebSocket-80] Someone link in Socket conn:org.java_websocket.WebSocketImpl@3684c7e9
+[17/03/01 17:56:53][INFO][websocket.WebSocket-80] Someone link in Socket conn:org.java_websocket.WebSocketImpl@68c4ed7f
+[17/03/01 17:57:00][INFO][websocket.WebSocket-58] onClose(): Agentorg.java_websocket.WebSocketImpl@68c4ed7f is disconnected. (onClose)
+[17/03/01 17:57:05][INFO][websocket.WebSocket-80] Someone link in Socket conn:org.java_websocket.WebSocketImpl@6f9301b9
+[17/03/01 17:57:35][INFO][websocket.WebSocket-58] onClose(): Agentorg.java_websocket.WebSocketImpl@6f9301b9 is disconnected. (onClose)
+[17/03/01 17:58:03][INFO][websocket.WebSocket-58] onClose(): Agentorg.java_websocket.WebSocketImpl@3684c7e9 is disconnected. (onClose)
+[17/03/01 17:58:06][INFO][websocket.WebSocket-58] onClose(): Clientorg.java_websocket.WebSocketImpl@2a9843ef is disconnected. (onClose)
+[17/03/01 17:59:39][INFO][websocket.WebSocket-48] Port: 8888
+[17/03/01 17:59:52][INFO][websocket.WebSocket-80] Someone link in Socket conn:org.java_websocket.WebSocketImpl@1fca18c6
+[17/03/01 18:00:04][INFO][websocket.WebSocket-58] onClose(): Agentorg.java_websocket.WebSocketImpl@1fca18c6 is disconnected. (onClose)
+[17/03/01 18:00:24][INFO][websocket.WebSocket-48] Port: 8888
+[17/03/01 18:00:34][INFO][websocket.WebSocket-80] Someone link in Socket conn:org.java_websocket.WebSocketImpl@1221d89
+[17/03/01 18:00:37][INFO][websocket.WebSocket-58] onClose(): Agentorg.java_websocket.WebSocketImpl@1221d89 is disconnected. (onClose)
