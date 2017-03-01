@@ -25,8 +25,12 @@
 
 <select id="Select_agentreason" parameterType="com.Info360.bean.Cfg_AgentReason"  resultMap="agentreasonResult">
  Select DBID,STATUSNAME,STATUSNAME_CN,STATUSNAME_EN,STATUSNAME_TW,DESCRIPTION,ALARMDURATION,ALARMCOLOR,FLAG from tblCfg_AgentReason 
-
- where flag=#{flag}
+ <if test="flag == 1">
+     	where flag = 1
+    </if>
+ <if test="flag == 0">
+     	where flag=0 or flag=2
+    </if>
 </select>
 
 <update id="Update_agentreason" parameterType="com.Info360.bean.Cfg_AgentReason">

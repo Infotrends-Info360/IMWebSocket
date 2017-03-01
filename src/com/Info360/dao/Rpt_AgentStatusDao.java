@@ -13,6 +13,63 @@ public class Rpt_AgentStatusDao {
 	
 	/**
 	 * 
+	 * Select
+	 * @param agentstatus
+	 */
+	public int Select_agentstatus_usetime(Rpt_AgentStatus   agentstatus){
+		DBAccess dbAccess = new DBAccess();
+		int agentstatusInt = 0;
+		SqlSession sqlSession = null;
+		
+		try {
+			sqlSession = dbAccess.getSqlSession();
+			//通過sqlSession執行SQL語句
+//			agentstatusInt = sqlSession.insert("rpt_agentstatus.Insert_agentstatus", agentstatus);
+			agentstatusInt = sqlSession.selectOne("rpt_agentstatus.Select_agentstatus_usetime", agentstatus);
+			sqlSession.commit();
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+			IsError.GET_EXCEPTION = e.getMessage();
+		} finally {
+			if(sqlSession != null){
+			   sqlSession.close();
+			}
+		}
+		return agentstatusInt;
+	}
+	
+	/**
+	 * 
+	 * Select
+	 * @param agentstatus
+	 */
+	public int Select_agentstatus_usetime_avg(Rpt_AgentStatus   agentstatus){
+		DBAccess dbAccess = new DBAccess();
+		int agentstatusInt = 0;
+		SqlSession sqlSession = null;
+		
+		try {
+			sqlSession = dbAccess.getSqlSession();
+			//通過sqlSession執行SQL語句
+//			agentstatusInt = sqlSession.insert("rpt_agentstatus.Insert_agentstatus", agentstatus);
+			agentstatusInt = sqlSession.selectOne("rpt_agentstatus.Select_agentstatus_usetime_avg", agentstatus);
+			sqlSession.commit();
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+			IsError.GET_EXCEPTION = e.getMessage();
+		} finally {
+			if(sqlSession != null){
+			   sqlSession.close();
+			}
+		}
+		return agentstatusInt;
+	}
+	
+	
+	/**
+	 * 
 	 * Insert
 	 * @param ContactData
 	 */
