@@ -53,10 +53,10 @@ public class WebSocketTypePool{
 	}
 	
 	/** * Agent or Client User Information Update */
-	public static void UserUpdate(String aTYPE,String aUsername, String aUserid,String aDate,String aStatus_dbid,String aReason, WebSocket aConn) {
+	public static void UserUpdate(String aTYPE,String aUsername, String aUserid,String aDate,StatusEnum aStatusEnum,String aReason, WebSocket aConn) {
 		Map<WebSocket, UserInfo> TYPEmap = TYPEconnections.get(aTYPE);
 		UserInfo userInfo = TYPEmap.get(aConn);
-		userInfo.setStatusEnum( StatusEnum.getStatusEnumByDbid(aStatus_dbid));
+		userInfo.setStatusEnum(aStatusEnum);
 		userInfo.setReason(aReason);
 //		userInfo.setReadyTime(aDate); // 更新時間?離開時間?->登入時間是否會被覆蓋掉 ?還是這是專給Agent用的,算等待時間的?
 		TYPEmap.put(aConn, userInfo);

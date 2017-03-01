@@ -401,7 +401,7 @@ public class CommonFunction {
 		if(status_dbid.equals("lose")){
 			WebSocketTypePool.addleaveClient();
 		}
-		WebSocketTypePool.UserUpdate(ACtype, username, userid, date, status_dbid, reason_dbid, aConn);
+		WebSocketTypePool.UserUpdate(ACtype, username, userid, date, StatusEnum.getStatusEnumByDbid(status_dbid), reason_dbid, aConn);
 		
 		// 更新DB狀態時間
 //		System.out.println("status	startORend	dbid	roomID	clientID");
