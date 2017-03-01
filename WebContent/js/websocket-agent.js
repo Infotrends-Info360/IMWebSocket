@@ -1527,6 +1527,17 @@ function sendComment(aInteractionid, aActivitydataids, aComment){
 }
 
 // 測試按鈕
+function account01(){
+	$('#Account')[0].value = 'Holylin';
+	$('#Password')[0].value = 'info@1111';
+}
+
+function account02(){
+	$('#Account')[0].value = 'lintsai';
+	$('#Password')[0].value = '123123';
+}
+
+// 測試按鈕
 function test() {
 	console.log("test method called");
 	var testmsg = {
