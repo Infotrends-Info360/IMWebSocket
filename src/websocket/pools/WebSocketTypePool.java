@@ -12,9 +12,13 @@ import java.util.Set;
 
 import org.java_websocket.WebSocket;
 
+import com.google.gson.Gson;
+
 import util.StatusEnum;
 import util.Util;
+import websocket.bean.UpdateStatusBean;
 import websocket.bean.UserInfo;
+import websocket.function.CommonFunction;
 
 //此類別給AgentFunction.java共同使用
 //此類別給ClientFunction.java共同使用
@@ -53,10 +57,10 @@ public class WebSocketTypePool{
 	}
 	
 	/** * Agent or Client User Information Update */
-	public static void UserUpdate(String aTYPE,String aUsername, String aUserid,String aDate,String aStatus_dbid,String aReason, WebSocket aConn) {
+	public static void UserUpdate(String aTYPE,String aUsername, String aUserid,String aDate,StatusEnum aStatusEnum,String aReason, WebSocket aConn) {
 		Map<WebSocket, UserInfo> TYPEmap = TYPEconnections.get(aTYPE);
 		UserInfo userInfo = TYPEmap.get(aConn);
-		userInfo.setStatusEnum( StatusEnum.getStatusEnumByDbid(aStatus_dbid));
+		userInfo.setStatusEnum(aStatusEnum);
 		userInfo.setReason(aReason);
 //		userInfo.setReadyTime(aDate); // 更新時間?離開時間?->登入時間是否會被覆蓋掉 ?還是這是專給Agent用的,算等待時間的?
 		TYPEmap.put(aConn, userInfo);
@@ -100,10 +104,10 @@ public class WebSocketTypePool{
 	}
 	
 	/** * Get Online Longest User(Agent) * @return */
-	synchronized public static String getOnlineLongestUserinTYPE(String aTYPE) {
-		System.out.println("getOnlineLongestUserinTYPE() called");
+	synchronized public static String getOnlineLongestUserinTYPE(WebSocket aConn, String aTYPE) {
+//		System.out.println("getOnlineLongestUserinTYPE() called");
 		Map<WebSocket,  UserInfo> TYPEmap = TYPEconnections.get(aTYPE);
-		if (TYPEmap == null || TYPEmap.isEmpty()){
+		if (TYPEmap == null || TYPEmap.isEmpty()){ 
 			return null;
 		}
 		//List<String> setUsers = new ArrayList<String>();
@@ -142,6 +146,29 @@ public class WebSocketTypePool{
 		// 若沒有任何Agent處於READY狀態,則回傳null
 		if (settingUserInfo == null) return null;
 		settingUserInfo.setStatusEnum(StatusEnum.NOTREADY); // 直接改了,避免一個以上Client找到同一個Agent
+		
+		// 開始更新狀態: 
+		Gson gson = new Gson();
+		WebSocket agentConn = WebSocketUserPool.getWebSocketByUser(settingUserInfo.getUserid());
+		// 1. READY狀態結束
+		UpdateStatusBean usb = new UpdateStatusBean();
+		usb.setStatus(StatusEnum.READY.getDbid());
+		usb.setDbid(settingUserInfo.getStatusDBIDMap().get(StatusEnum.READY));
+		usb.setStartORend("end");
+		CommonFunction.updateStatus(gson.toJson(usb), agentConn);
+		// 2. NOTREADY狀態開始
+		usb = new UpdateStatusBean();
+		usb.setStatus(StatusEnum.NOTREADY.getDbid());
+		usb.setStartORend("start");
+		usb.setReason_dbid("9"); // 先暫時這樣
+		CommonFunction.updateStatus(gson.toJson(usb), agentConn);
+//		// 3. RING狀態開始
+		usb = new UpdateStatusBean();
+		usb.setStatus(StatusEnum.RING.getDbid());
+		usb.setStartORend("start");
+		usb.setClientID( WebSocketUserPool.getUserID(aConn));
+		CommonFunction.updateStatus(gson.toJson(usb), agentConn);
+		
 		return settingUserInfo.getUserid();
 	}
 	
@@ -252,5 +279,13 @@ public class WebSocketTypePool{
 		return false;
 	}	
 	
+	public static String getUserType(WebSocket conn){
+		if (isAgent(conn)){
+			return "Agent";
+		}else if (isClient(conn)){
+			return "Client";
+		}
+		return null;
+	}
 	
 }

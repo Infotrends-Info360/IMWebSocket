@@ -385,23 +385,25 @@ public class CommonFunction {
 		System.out.println("updateStatus() called");
 		JsonObject obj = Util.getGJsonObject(message);
 //		JSONObject obj = new JSONObject(message); 
-		String ACtype = obj.get("ACtype").getAsString();
-		String username = obj.get("UserName").getAsString();
-		String userid = obj.get("id").getAsString();
-		String date = obj.get("date").getAsString();
-		String status_dbid = obj.get("status").getAsString(); // 以數字代表 dbid
-		String reason_dbid =  Util.getGString(obj, "reason_dbid");
-		String dbid = Util.getGString(obj, "dbid");
+		String ACtype = WebSocketTypePool.getUserType(aConn);
+		String username = WebSocketUserPool.getUserNameByKey(aConn);
+		String userid = WebSocketUserPool.getUserID(aConn);
+		SimpleDateFormat sdf = new SimpleDateFormat( Util.getSdfDateFormat() );
+		String date = sdf.format(new java.util.Date());
+		
+		String status_dbid = Util.getGString(obj, "status"); // 以數字代表 dbid
 		String startORend = Util.getGString(obj, "startORend"); 
-		String roomID = Util.getGString(obj, "roomID"); 
-		String clientID = Util.getGString(obj, "clientID");
+		String dbid = Util.getGString(obj, "dbid"); // 所有值,代表此次是要寫end的 // for "end"
+		String reason_dbid =  Util.getGString(obj, "reason_dbid"); // for NOTREADY
+		String roomID = Util.getGString(obj, "roomID");  // for IESTABLISHED
+		String clientID = Util.getGString(obj, "clientID"); // for RING
 		UserInfo userInfo = WebSocketUserPool.getUserInfoByKey(aConn);
 				
 		// 原方法區塊 - 更新Agent UserInfo中的status
 		if(status_dbid.equals("lose")){
 			WebSocketTypePool.addleaveClient();
 		}
-		WebSocketTypePool.UserUpdate(ACtype, username, userid, date, status_dbid, reason_dbid, aConn);
+		WebSocketTypePool.UserUpdate(ACtype, username, userid, date, StatusEnum.getStatusEnumByDbid(status_dbid), reason_dbid, aConn);
 		
 		// 更新DB狀態時間
 //		System.out.println("status	startORend	dbid	roomID	clientID");
@@ -428,6 +430,7 @@ public class CommonFunction {
 			String dbid_key = currStatusEnum.toString().toLowerCase() + "_dbid";
 //			System.out.println("dbid_key: " + dbid_key);
 			obj.addProperty(dbid_key, dbid); // ex. login_dbid
+			userInfo.getStatusDBIDMap().put(currStatusEnum, dbid); // 更新Bean
 			
 			// 若為iEstablished狀態,則交由RoomInfo來處理結束時間點
 			if (StatusEnum.IESTABLISHED.getDbid().equals(status_dbid)){
@@ -450,8 +453,8 @@ public class CommonFunction {
 			// 如果是READY,則多將readytime重置
 			if (StatusEnum.READY.getDbid().equals(status_dbid)){
 				// 重置Agent readytime
-				SimpleDateFormat sdf = new SimpleDateFormat( Util.getSdfTimeFormat() );
-				String nowDate = sdf.format(new java.util.Date());
+				SimpleDateFormat tmpSdf = new SimpleDateFormat( Util.getSdfTimeFormat() );
+				String nowDate = tmpSdf.format(new java.util.Date());
 				userInfo.setReadyTime(nowDate);
 				System.out.println("update Agent ready time: ");
 				System.out.println("Agent name: " + userInfo.getUsername() + " set readytime to " + userInfo.getReadyTime());
@@ -475,7 +478,11 @@ public class CommonFunction {
 					return;
 				}
 				
-				AgentFunction.RecordStatusEnd(dbid);					
+				AgentFunction.RecordStatusEnd(dbid);
+				
+				// 清理Bean
+				StatusEnum currStatusEnum = StatusEnum.getStatusEnumByDbid(status_dbid);
+				userInfo.getStatusDBIDMap().remove(currStatusEnum); 
 			}
 		}
 		

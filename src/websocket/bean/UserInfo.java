@@ -2,7 +2,9 @@ package websocket.bean;
 
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Timer;
 import java.util.TimerTask;
 import java.util.concurrent.atomic.AtomicBoolean;
@@ -30,6 +32,8 @@ public class UserInfo {
 	private AtomicBoolean stopRing = new AtomicBoolean(false); // 處理concurrent問題
 	private AtomicBoolean timeout = new AtomicBoolean(false); // 處理concurrent問題
 	
+	// 狀態更新使用 - 存放status log dbid - "end"時寫入DB用
+	private Map<StatusEnum, String> statusDBIDMap = new HashMap<>();
 	
 	public String getUserid() {
 		return userid;
@@ -109,6 +113,12 @@ public class UserInfo {
 	}
 	public void setTimeout(boolean timeout) {
 		this.timeout.set(timeout);;
+	}
+	public Map<StatusEnum, String> getStatusDBIDMap() {
+		return statusDBIDMap;
+	}
+	public void setStatusDBIDMap(Map<StatusEnum, String> statusDBIDMap) {
+		this.statusDBIDMap = statusDBIDMap;
 	}
 	
 	
