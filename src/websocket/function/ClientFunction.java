@@ -43,23 +43,47 @@ public class ClientFunction {
 	}
 	
 	/** * find online Longest Agent */
-	public static void findAgent(String message, org.java_websocket.WebSocket conn) {
-		JSONObject obj = new JSONObject(message);
-		String Agent;
+	public static void findAgent(String aMessage, org.java_websocket.WebSocket aConn) {
+		JSONObject obj = new JSONObject(aMessage);
+		String userID = WebSocketUserPool.getUserID(aConn);
+		String userName = WebSocketUserPool.getUserNameByKey(aConn);
+		String ACType = WebSocketTypePool.getUserType(aConn);
+		String AgentID;
 		JSONObject sendjson = new JSONObject();
 		try {
-			Agent = WebSocketTypePool.getOnlineLongestUserinTYPE("Agent");
-			sendjson.put("AgentName", WebSocketUserPool.getUserNameByKey(WebSocketUserPool.getWebSocketByUser(Agent)));
+			AgentID = WebSocketTypePool.getOnlineLongestUserinTYPE("Agent");
+			sendjson.put("AgentName", WebSocketUserPool.getUserNameByKey(WebSocketUserPool.getWebSocketByUser(AgentID)));
 		} catch (Exception e) {
-			Agent = null;
+			AgentID = null;
 			e.printStackTrace();
 		}
 //		System.out.println("findAgent : " + Agent);
+		
+		// 在這邊執行senduserdata
+		// 若有找到Agent, 去抓senduserdata, 並將此資訊送給Agent
+		if (AgentID != null){
+			JsonObject senduserdataObj = new JsonObject();
+			senduserdataObj.addProperty("lang", "chiname");
+			senduserdataObj.addProperty("sendto", AgentID); // 重點
+			senduserdataObj.addProperty("searchtype", "A");
+			JsonObject attributes = new JsonObject();
+			attributes.addProperty("attributenames", "Phone,id,service1,service2");
+			attributes.addProperty("Phone",userName); // 特別注意一下名稱並沒對到
+			attributes.addProperty("id",userID);
+			attributes.addProperty("service1","service one");
+			attributes.addProperty("service2","service two");
+			senduserdataObj.add("attributes", attributes);
+			senduserdataObj.addProperty("channel", "chat");
+			
+			ClientFunction.senduserdata(senduserdataObj.toString(), aConn);
+		}
+		
+		
 		sendjson.put("Event", "findAgent");
 		sendjson.put("from", obj.getString("id"));
-		sendjson.put("Agent",  Agent);
+		sendjson.put("Agent",  AgentID);
 		sendjson.put("channel", obj.getString("channel"));
-		WebSocketUserPool.sendMessageToUser(conn, sendjson.toString());
+		WebSocketUserPool.sendMessageToUser(aConn, sendjson.toString());
 	}
 	
 	/** * Get user data */
@@ -70,8 +94,9 @@ public class ClientFunction {
 		String lang = obj.getString("lang");
 		String searchtype = obj.getString("searchtype");
 		JSONObject attributes = obj.getJSONObject("attributes");
-		String attributenames = obj.getJSONObject("attributes").getString(
-				"attributenames");
+		String attributenames = attributes.getString("attributenames");
+		String channel = obj.getString("channel");
+		String sendto = obj.getString("sendto");
 		StringBuilder responseSB = null;
 //		System.out.println("http://127.0.0.1:8080/IMWebSocket/RESTful/searchUserdata start ****");
 		long startTime = System.currentTimeMillis();
@@ -119,20 +144,20 @@ public class ClientFunction {
 		JSONObject sendjson = new JSONObject();
 		
 		sendjson.put("Event", "senduserdata");
-		sendjson.put("from", obj.getJSONObject("attributes").getString("id"));
+		sendjson.put("from", attributes.getString("id"));
 		sendjson.put("userdata",  responseSBjson);
-		sendjson.put("channel", obj.getString("channel"));
+		sendjson.put("channel", channel);
 //		System.out.println("senduserdata() - sendjson" + sendjson);
 		WebSocketUserPool.sendMessageToUser(conn, sendjson.toString());
 		// 掉換順序
 		// 若尚未找到Agent,則會出現JSONException
 		// 之後若熟悉RESTful,則可試著將抓取contactID與找到Agent後通知兩方這兩件事情分開處理
 		try{
-			org.java_websocket.WebSocket sendto = WebSocketUserPool
-					.getWebSocketByUser(obj.getString("sendto"));
+			org.java_websocket.WebSocket sendtoConn = WebSocketUserPool
+					.getWebSocketByUser(sendto);
 			sendjson.put("clientID", WebSocketUserPool.getUserID(conn).trim());
 			sendjson.put("clientName", WebSocketUserPool.getUserNameByKey(conn).trim());
-			WebSocketUserPool.sendMessageToUser(sendto, sendjson.toString());			
+			WebSocketUserPool.sendMessageToUser(sendtoConn, sendjson.toString());			
 		}catch(org.json.JSONException e) {
 			System.out.println("JSONObject[\"sendto\"] not found.");
 		}

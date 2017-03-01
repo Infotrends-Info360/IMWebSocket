@@ -148,9 +148,8 @@ function Login() {
 						// 更新資訊
 						switchStatus(StatusEnum.WAIT_AGENT);
 						// 寫入log(告知雙方彼此的資訊)
-						senduserdata(obj.Agent);
-						console.log("senduserdata done ******************* ");						
-
+//						senduserdata(obj.Agent); // 交由Server處理
+//						console.log("senduserdata done ******************* ");						
 						
 						// 告知Agent, Client這邊知道找到一個Agent了
 						find(waittingAgentID_g); // 省略 - senduserdata已經能做到這件事情

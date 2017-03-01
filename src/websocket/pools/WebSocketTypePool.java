@@ -101,7 +101,7 @@ public class WebSocketTypePool{
 	
 	/** * Get Online Longest User(Agent) * @return */
 	synchronized public static String getOnlineLongestUserinTYPE(String aTYPE) {
-		System.out.println("getOnlineLongestUserinTYPE() called");
+//		System.out.println("getOnlineLongestUserinTYPE() called");
 		Map<WebSocket,  UserInfo> TYPEmap = TYPEconnections.get(aTYPE);
 		if (TYPEmap == null || TYPEmap.isEmpty()){ 
 			return null;
@@ -142,6 +142,17 @@ public class WebSocketTypePool{
 		// 若沒有任何Agent處於READY狀態,則回傳null
 		if (settingUserInfo == null) return null;
 		settingUserInfo.setStatusEnum(StatusEnum.NOTREADY); // 直接改了,避免一個以上Client找到同一個Agent
+		// 將以下三種動作在這邊完成: 
+		
+		
+		// 1. 
+//		StatusEnum.ready_dbid = StatusEnum.updateStatus(StatusEnum.READY, "end", StatusEnum.ready_dbid); // 要存入UserInfo 
+//		// 2.
+//		StatusEnum.updateStatus(StatusEnum.NOTREADY, "start", null, null, null, notreadyreason_dbid_g); // reason OK
+//		// 3.											  未新增無dbid, 非iestablished無roomID, 傳入clientID
+//		StatusEnum.updateStatus(StatusEnum.RING, "start", null, null, clientID); // clientID OK
+		
+		
 		return settingUserInfo.getUserid();
 	}
 	
@@ -252,5 +263,13 @@ public class WebSocketTypePool{
 		return false;
 	}	
 	
+	public static String getUserType(WebSocket conn){
+		if (isAgent(conn)){
+			return "Agent";
+		}else if (isClient(conn)){
+			return "Client";
+		}
+		return null;
+	}
 	
 }
