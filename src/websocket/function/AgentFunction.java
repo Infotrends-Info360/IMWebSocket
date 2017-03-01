@@ -16,6 +16,7 @@ import org.java_websocket.WebSocket;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
+import util.StatusEnum;
 import util.Util;
 import websocket.bean.UserInfo;
 import websocket.pools.WebSocketRoomPool;
@@ -61,14 +62,13 @@ public class AgentFunction {
 			org.java_websocket.WebSocket conn) {
 		JSONObject obj = new JSONObject(message);
 		String ACtype = obj.getString("ACtype");
-		String status = WebSocketTypePool
-				.getUserStatusByKeyinTYPE(ACtype, conn);
+		StatusEnum statusEnum = WebSocketTypePool.getUserStatusByKeyinTYPE(ACtype, conn);
 		String reason = WebSocketTypePool
 				.getUserReasonByKeyinTYPE(ACtype, conn);
 		JSONObject sendjson = new JSONObject();
 		sendjson.put("Event", "getUserStatus");
 		sendjson.put("from", obj.getString("id"));
-		sendjson.put("Status", status);
+		sendjson.put("Status", statusEnum.getDbid());
 		sendjson.put("Reason", reason);
 		sendjson.put("channel", obj.getString("channel"));
 		WebSocketUserPool.sendMessageToUser(conn, sendjson.toString());

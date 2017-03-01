@@ -389,7 +389,7 @@ public class CommonFunction {
 		String username = obj.get("UserName").getAsString();
 		String userid = obj.get("id").getAsString();
 		String date = obj.get("date").getAsString();
-		String status = obj.get("status").getAsString(); // 以數字代表
+		String status_dbid = obj.get("status").getAsString(); // 以數字代表 dbid
 		String reason_dbid =  Util.getGString(obj, "reason_dbid");
 		String dbid = Util.getGString(obj, "dbid");
 		String startORend = Util.getGString(obj, "startORend"); 
@@ -397,19 +397,19 @@ public class CommonFunction {
 		String clientID = Util.getGString(obj, "clientID");
 		UserInfo userInfo = WebSocketUserPool.getUserInfoByKey(aConn);
 				
-		// 原方法區塊
-		if(status.equals("lose")){
+		// 原方法區塊 - 更新Agent UserInfo中的status
+		if(status_dbid.equals("lose")){
 			WebSocketTypePool.addleaveClient();
 		}
-		WebSocketTypePool.UserUpdate(ACtype, username, userid, date, status, reason_dbid, aConn);
+		WebSocketTypePool.UserUpdate(ACtype, username, userid, date, status_dbid, reason_dbid, aConn);
 		
 		// 更新DB狀態時間
 //		System.out.println("status	startORend	dbid	roomID	clientID");
-		System.out.println("" + StatusEnum.getStatusEnumByDbid(status) + ": ");
+		System.out.println("" + StatusEnum.getStatusEnumByDbid(status_dbid) + ": ");
 		System.out.printf("%10s	%10s %10s %10s %10s %10s" , "status", "startORend", "dbid", "roomID", "clientID", "reason");
 		System.out.println();
 		System.out.println("----------------------------------------------------------------------------");
-		System.out.printf("%10s	%10s %10s %10s %10s %10s" , status, startORend, dbid, roomID, clientID, reason_dbid);
+		System.out.printf("%10s	%10s %10s %10s %10s %10s" , status_dbid, startORend, dbid, roomID, clientID, reason_dbid);
 		System.out.println();
 //		System.out.println("obj: " + obj);
 		
@@ -417,27 +417,27 @@ public class CommonFunction {
 //			String userID = Util.getTmpID(userid);
 			// 將開始時間寫入DB
 				// 若為NOTREADY,則會多reason_dbid參數
-			if (StatusEnum.NOTREADY.getDbid().equals(status)){
-				dbid = AgentFunction.RecordStatusStart(userid, status, reason_dbid);
+			if (StatusEnum.NOTREADY.getDbid().equals(status_dbid)){
+				dbid = AgentFunction.RecordStatusStart(userid, status_dbid, reason_dbid);
 			}else{
-				dbid = AgentFunction.RecordStatusStart(userid, status, "0");
+				dbid = AgentFunction.RecordStatusStart(userid, status_dbid, "0");
 			}
 			// 將xxxx_dbid值傳給前端
-			StatusEnum currStatusEnum = StatusEnum.getStatusEnumByDbid(status);
+			StatusEnum currStatusEnum = StatusEnum.getStatusEnumByDbid(status_dbid);
 //			System.out.println("currStatusEnum: " + currStatusEnum);
 			String dbid_key = currStatusEnum.toString().toLowerCase() + "_dbid";
 //			System.out.println("dbid_key: " + dbid_key);
 			obj.addProperty(dbid_key, dbid); // ex. login_dbid
 			
 			// 若為iEstablished狀態,則交由RoomInfo來處理結束時間點
-			if (StatusEnum.IESTABLISHED.getDbid().equals(status)){
+			if (StatusEnum.IESTABLISHED.getDbid().equals(status_dbid)){
 				System.out.println("IESTABLISHED - roomID: " + roomID);
 				RoomInfo roomInfo = WebSocketRoomPool.getRoomInfo(roomID);
 				roomInfo.setIestablish_dbid(dbid);
 			}
 			
 			// 若為RING狀態,則交由RingCountDownTask來處理結束時間點
-			if (StatusEnum.RING.getDbid().equals(status)){
+			if (StatusEnum.RING.getDbid().equals(status_dbid)){
 				//將RINGHEARTBEAT放進UserInfo
 				userInfo.setStopRing(false); // 回復為預設false
 				userInfo.setTimeout(false); // 回復為預設false
@@ -448,7 +448,7 @@ public class CommonFunction {
 			}
 			
 			// 如果是READY,則多將readytime重置
-			if (StatusEnum.READY.getDbid().equals(status)){
+			if (StatusEnum.READY.getDbid().equals(status_dbid)){
 				// 重置Agent readytime
 				SimpleDateFormat sdf = new SimpleDateFormat( Util.getSdfTimeFormat() );
 				String nowDate = sdf.format(new java.util.Date());
@@ -469,7 +469,7 @@ public class CommonFunction {
 				System.out.println("dbid: " + dbid);
 				
 				// 如果是RING結束,現在交由後端統一處理
-				if (StatusEnum.RING.getDbid().equals(status)){
+				if (StatusEnum.RING.getDbid().equals(status_dbid)){
 					userInfo.setStopRing(true);
 					System.out.println("RING");
 					return;
