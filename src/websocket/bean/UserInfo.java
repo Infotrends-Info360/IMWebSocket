@@ -96,7 +96,7 @@ public class UserInfo {
 		this.statusEnum = status;
 	}
 	public String getReadyTime() {
-		System.out.println("getReadyTime");
+		Util.getConsoleLogger().debug("getReadyTime");
 		return readyTime;
 	}
 	public void setReadyTime(String readTime) {

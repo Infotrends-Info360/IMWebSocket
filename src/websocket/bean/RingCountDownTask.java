@@ -40,7 +40,7 @@ public class RingCountDownTask extends TimerTask {
 	@Override
 	public void run() {
 		if (this.agentUserInfo.isStopRing()) {
-			System.out.println("TimerTaskRingHeartBeat - "  + "RING STOPPED");
+			Util.getConsoleLogger().debug("TimerTaskRingHeartBeat - "  + "RING STOPPED");
 			this.timer.cancel();
 			// 若為超過時間狀況,告知Client,此通通話已經超過等待時間,請繼續找下一位Agent
 			if (this.agentUserInfo.getTimeout()){
@@ -57,13 +57,13 @@ public class RingCountDownTask extends TimerTask {
 			return;
 		}
 		
-		System.out.println("TimerTaskRingHeartBeat - " + ++currCount);
+		Util.getConsoleLogger().debug("TimerTaskRingHeartBeat - " + ++currCount);
 //		if (currCount == 5){
-//			System.out.println("here");
+//			Util.getConsoleLogger().debug("here");
 //			agentUserInfo.setStopRing(true);
 //		}
 		if (this.currCount >= this.maxRingTime){
-			System.out.println("TimerTaskRingHeartBeat - "  + "RING TIMEOUT");
+			Util.getConsoleLogger().debug("TimerTaskRingHeartBeat - "  + "RING TIMEOUT");
 			this.agentUserInfo.setStopRing(true);
 			this.agentUserInfo.setTimeout(true);
 		}
