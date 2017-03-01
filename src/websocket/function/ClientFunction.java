@@ -51,7 +51,7 @@ public class ClientFunction {
 		String AgentID;
 		JSONObject sendjson = new JSONObject();
 		try {
-			AgentID = WebSocketTypePool.getOnlineLongestUserinTYPE("Agent");
+			AgentID = WebSocketTypePool.getOnlineLongestUserinTYPE(aConn, "Agent");
 			sendjson.put("AgentName", WebSocketUserPool.getUserNameByKey(WebSocketUserPool.getWebSocketByUser(AgentID)));
 		} catch (Exception e) {
 			AgentID = null;

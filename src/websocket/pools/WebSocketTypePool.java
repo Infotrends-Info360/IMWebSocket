@@ -12,9 +12,13 @@ import java.util.Set;
 
 import org.java_websocket.WebSocket;
 
+import com.google.gson.Gson;
+
 import util.StatusEnum;
 import util.Util;
+import websocket.bean.UpdateStatusBean;
 import websocket.bean.UserInfo;
+import websocket.function.CommonFunction;
 
 //此類別給AgentFunction.java共同使用
 //此類別給ClientFunction.java共同使用
@@ -100,7 +104,7 @@ public class WebSocketTypePool{
 	}
 	
 	/** * Get Online Longest User(Agent) * @return */
-	synchronized public static String getOnlineLongestUserinTYPE(String aTYPE) {
+	synchronized public static String getOnlineLongestUserinTYPE(WebSocket aConn, String aTYPE) {
 //		System.out.println("getOnlineLongestUserinTYPE() called");
 		Map<WebSocket,  UserInfo> TYPEmap = TYPEconnections.get(aTYPE);
 		if (TYPEmap == null || TYPEmap.isEmpty()){ 
@@ -142,16 +146,28 @@ public class WebSocketTypePool{
 		// 若沒有任何Agent處於READY狀態,則回傳null
 		if (settingUserInfo == null) return null;
 		settingUserInfo.setStatusEnum(StatusEnum.NOTREADY); // 直接改了,避免一個以上Client找到同一個Agent
-		// 將以下三種動作在這邊完成: 
 		
-		
-		// 1. 
-//		StatusEnum.ready_dbid = StatusEnum.updateStatus(StatusEnum.READY, "end", StatusEnum.ready_dbid); // 要存入UserInfo 
-//		// 2.
-//		StatusEnum.updateStatus(StatusEnum.NOTREADY, "start", null, null, null, notreadyreason_dbid_g); // reason OK
-//		// 3.											  未新增無dbid, 非iestablished無roomID, 傳入clientID
-//		StatusEnum.updateStatus(StatusEnum.RING, "start", null, null, clientID); // clientID OK
-		
+		// 開始更新狀態: 
+		Gson gson = new Gson();
+		WebSocket agentConn = WebSocketUserPool.getWebSocketByUser(settingUserInfo.getUserid());
+		// 1. READY狀態結束
+		UpdateStatusBean usb = new UpdateStatusBean();
+		usb.setStatus(StatusEnum.READY.getDbid());
+		usb.setDbid(settingUserInfo.getStatusDBIDMap().get(StatusEnum.READY));
+		usb.setStartORend("end");
+		CommonFunction.updateStatus(gson.toJson(usb), agentConn);
+		// 2. NOTREADY狀態開始
+		usb = new UpdateStatusBean();
+		usb.setStatus(StatusEnum.NOTREADY.getDbid());
+		usb.setStartORend("start");
+		usb.setReason_dbid("9"); // 先暫時這樣
+		CommonFunction.updateStatus(gson.toJson(usb), agentConn);
+//		// 3. RING狀態開始
+		usb = new UpdateStatusBean();
+		usb.setStatus(StatusEnum.RING.getDbid());
+		usb.setStartORend("start");
+		usb.setClientID( WebSocketUserPool.getUserID(aConn));
+		CommonFunction.updateStatus(gson.toJson(usb), agentConn);
 		
 		return settingUserInfo.getUserid();
 	}

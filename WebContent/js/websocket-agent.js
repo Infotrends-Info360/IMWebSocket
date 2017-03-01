@@ -365,11 +365,12 @@ function Login() {
 					// 更改架構為 - 最多一次只收一個ring
 //					status_g = StatusEnum.RING;
 					switchStatus(StatusEnum.RING);
-					StatusEnum.ready_dbid = StatusEnum.updateStatus(StatusEnum.READY, "end", StatusEnum.ready_dbid); 
+					StatusEnum.ready_dbid = null; // 先這樣寫死,因為在過渡期,此狀態已由server端處理
+//					StatusEnum.ready_dbid = StatusEnum.updateStatus(StatusEnum.READY, "end", StatusEnum.ready_dbid); 
 //					( aStatusEnum , aStartORend, aDbid, aRoomID, aClientID, aReason_dbid)
-					StatusEnum.updateStatus(StatusEnum.NOTREADY, "start", null, null, null, notreadyreason_dbid_g);
+//					StatusEnum.updateStatus(StatusEnum.NOTREADY, "start", null, null, null, notreadyreason_dbid_g);
 					//												  未新增無dbid, 非iestablished無roomID, 傳入clientID
-					StatusEnum.updateStatus(StatusEnum.RING, "start", null, null, clientID);
+//					StatusEnum.updateStatus(StatusEnum.RING, "start", null, null, clientID);
 					
 				} else if ("userjointoTYPE" == obj.Event) {
 
