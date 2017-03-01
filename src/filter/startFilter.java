@@ -15,6 +15,7 @@ import org.apache.log4j.Logger;
 import org.apache.log4j.PropertyConfigurator;
 import org.java_websocket.WebSocketImpl;
 
+import util.Util;
 import websocket.WebSocket;
 
 public class startFilter implements Filter {
@@ -26,7 +27,7 @@ public class startFilter implements Filter {
 	/** * Start Socket Service */
 	public void startWebsocketOnline() {
 
-		System.out.println("Starting websocket");
+		Util.getConsoleLogger().debug("Starting websocket");
 		WebSocketImpl.DEBUG = false;
 		int port = 8888;
 		WebSocket s = null;
@@ -34,10 +35,10 @@ public class startFilter implements Filter {
 			s = new WebSocket(port);
 			s.start();
 		} catch (UnknownHostException e) {
-			System.out.println("Start websocket fail！");
+			Util.getConsoleLogger().debug("Start websocket fail！");
 			e.printStackTrace();
 		}
-		System.out.println("Start websocket success！");
+		Util.getConsoleLogger().debug("Start websocket success！");
 
 //		Log4jDemo();
 

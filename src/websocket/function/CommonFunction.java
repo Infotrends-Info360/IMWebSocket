@@ -407,13 +407,13 @@ public class CommonFunction {
 		
 		// 更新DB狀態時間
 //		Util.getConsoleLogger().debug("status	startORend	dbid	roomID	clientID");
-		System.out.println("" + StatusEnum.getStatusEnumByDbid(status_dbid) + ": ");
-		System.out.printf("%10s	%10s %10s %10s %10s %10s" , "status", "startORend", "dbid", "roomID", "clientID", "reason");
-		System.out.println();
-		System.out.println("----------------------------------------------------------------------------");
-		System.out.printf("%10s	%10s %10s %10s %10s %10s" , status_dbid, startORend, dbid, roomID, clientID, reason_dbid);
-		System.out.println();
-//		System.out.println("obj: " + obj);
+//		Util.getConsoleLogger().debug("" + StatusEnum.getStatusEnumByDbid(status_dbid) + ": ");
+//		System.out.printf("%10s	%10s %10s %10s %10s %10s" , "status", "startORend", "dbid", "roomID", "clientID", "reason");
+//		Util.getConsoleLogger().debug();
+//		Util.getConsoleLogger().debug("----------------------------------------------------------------------------");
+//		System.out.printf("%10s	%10s %10s %10s %10s %10s" , status_dbid, startORend, dbid, roomID, clientID, reason_dbid);
+//		Util.getConsoleLogger().debug();
+//		Util.getConsoleLogger().debug("obj: " + obj);
 		
 		if ("start".equals(startORend)){
 //			String userID = Util.getTmpID(userid);

@@ -55,15 +55,15 @@ public class SystemListener implements ServletContextListener {
     @Override
     public void contextInitialized(ServletContextEvent event) {
 //         initialize log4j here
-    	System.out.println("System Config - contextInitialized() called");
+    	Util.getConsoleLogger().debug("System Config - contextInitialized() called");
         ServletContext context = event.getServletContext();
         String maxRingTime = context.getInitParameter("MaxRingTime");
         String afterCallStatus = context.getInitParameter("AfterCallStatus");
         String establishedStatus = context.getInitParameter("EstablishedStatus");
 
-//        System.out.println("MaxRingTime: "+maxRingTime);
-//        System.out.println("AfterCallStatus: "+afterCallStatus);
-//        System.out.println("EstablishedStatus: "+establishedStatus);
+//        Util.getConsoleLogger().debug("MaxRingTime: "+maxRingTime);
+//        Util.getConsoleLogger().debug("AfterCallStatus: "+afterCallStatus);
+//        Util.getConsoleLogger().debug("EstablishedStatus: "+establishedStatus);
         
         // 更新系統參數
         Map<String, String> systemParam = new HashMap<String, String>();
@@ -89,17 +89,17 @@ public class SystemListener implements ServletContextListener {
 				 agentstatusmap.put(statusname, agentstatusmapinfo);
 				 
 				 // 更新enum:
-//				 System.out.println("statusname: " + statusname);
-//				 System.out.println("StatusEnum.READY.toString(): " + StatusEnum.READY.toString());
+//				 Util.getConsoleLogger().debug("statusname: " + statusname);
+//				 Util.getConsoleLogger().debug("StatusEnum.READY.toString(): " + StatusEnum.READY.toString());
 				 updateStatusEnum(statusname, dbid, description);
 			 }
 		 }
 		 Util.setAgentStatus(agentstatusmap);
-		 System.out.println("agentstatusmap: "+agentstatusmap);
+		 Util.getConsoleLogger().debug("agentstatusmap: "+agentstatusmap);
 		 
 		  
 		 //測試區
-//		 System.out.println("TimerTaskRingHeartBeat test: ");
+//		 Util.getConsoleLogger().debug("TimerTaskRingHeartBeat test: ");
 //		 UserInfo agentUserInfo = new UserInfo();
 //		 RingCountDownTask timertask = new RingCountDownTask(null, "", agentUserInfo);
 //		 timertask.operate();
@@ -125,7 +125,7 @@ public class SystemListener implements ServletContextListener {
     	StatusEnum currStatusEnum = StatusEnum.getStatusEnumByDescription(aStatusname);
     	currStatusEnum.setDbid(aDbid);
     	currStatusEnum.setDescription(aDescription);
-//    	System.out.println("updateStatusEnum() - " + currStatusEnum);
+//    	Util.getConsoleLogger().debug("updateStatusEnum() - " + currStatusEnum);
     }
     
     

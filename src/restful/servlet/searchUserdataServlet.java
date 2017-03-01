@@ -56,7 +56,7 @@ public class searchUserdataServlet {
 		long startTime;
 		long endTime;
 
-		// System.out.println("attributes: "+attributes);
+		// Util.getConsoleLogger().debug("attributes: "+attributes);
 
 		JSONObject CfgServiceNameSettingjsonObject = null;
 		String searchkey = null;
@@ -66,7 +66,7 @@ public class searchUserdataServlet {
 			searchkey = CfgServiceNameSettingjsonObject.getString("searchkey");
 			pkey = CfgServiceNameSettingjsonObject.getString("uniquekey");
 		} catch (org.json.JSONException e) {
-			System.out.println("org.json.JSONException - "
+			Util.getConsoleLogger().debug("org.json.JSONException - "
 					+ "searchUserdataServlet.java");
 			// e.printStackTrace();
 		} catch (Exception e) {
@@ -112,11 +112,11 @@ public class searchUserdataServlet {
 				// Set Contact Log
 				try {
 					for (int j = 0; j < CustomerLeveljsonarray.length(); j++) {
-						System.out.println("CustomerLeveljsonarray: "
+						Util.getConsoleLogger().debug("CustomerLeveljsonarray: "
 								+ CustomerLeveljsonarray);
 						JsonObject jsonObj = Util.getGJsonObject(CustomerLeveljsonarray
 								.getJSONObject(j).toString());
-						System.out.println("jsonObj: "+jsonObj);
+						Util.getConsoleLogger().debug("jsonObj: "+jsonObj);
 						if(jsonObj.get(searchkey) != null){
 
 							SimpleDateFormat sdf = new SimpleDateFormat(
@@ -187,7 +187,7 @@ public class searchUserdataServlet {
 		br.close();
 		os.close();
 
-		// System.out.println("responseSB: "+responseSB.toString().trim());
+		// Util.getConsoleLogger().debug("responseSB: "+responseSB.toString().trim());
 		JSONObject CfgServiceNameSettingjsonObject = new JSONObject(
 				responseSB.toString());
 		return CfgServiceNameSettingjsonObject;
@@ -236,7 +236,7 @@ public class searchUserdataServlet {
 		br.close();
 		os.close();
 
-		// System.out.println("responseSB: "+responseSB.toString().trim());
+		// Util.getConsoleLogger().debug("responseSB: "+responseSB.toString().trim());
 
 		DocumentBuilderFactory factory_xpath = DocumentBuilderFactory
 				.newInstance();
@@ -249,7 +249,7 @@ public class searchUserdataServlet {
 		int count = ((Number) xpath.evaluate(
 				"count(DataSet/diffgram/NewDataSet/CustomerData)", doc,
 				javax.xml.xpath.XPathConstants.NUMBER)).intValue();
-		// System.out.println("count: "+count);
+		// Util.getConsoleLogger().debug("count: "+count);
 		jsonObject.put("CustomerDataCount", count);
 
 		JSONArray jsonarray = new JSONArray();
@@ -314,7 +314,7 @@ public class searchUserdataServlet {
 		br.close();
 		// os.close();
 
-		// System.out.println("responseSB: "+responseSB.toString().trim());
+		// Util.getConsoleLogger().debug("responseSB: "+responseSB.toString().trim());
 		JSONObject ServiceNameCachejsonObj = new JSONObject(
 				responseSB.toString());
 		return ServiceNameCachejsonObj;
@@ -355,7 +355,7 @@ public class searchUserdataServlet {
 		br.close();
 		os.close();
 
-		// System.out.println("responseSB: "+responseSB.toString().trim());
+		// Util.getConsoleLogger().debug("responseSB: "+responseSB.toString().trim());
 		JSONObject SetContactLogjsonObject = new JSONObject(
 				responseSB.toString());
 		return SetContactLogjsonObject;

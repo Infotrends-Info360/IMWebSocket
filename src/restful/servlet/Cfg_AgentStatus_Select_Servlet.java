@@ -43,7 +43,7 @@ public class Cfg_AgentStatus_Select_Servlet {
 	    
   	  JSONArray agentstatusJsonArray = new JSONArray();
   	  	
-  	  	//System.out.println("agentstatuslist: "+agentstatuslist.size());
+  	  	//Util.getConsoleLogger().debug("agentstatuslist: "+agentstatuslist.size());
 
   	 
   		 for(int a = 0; a < agentstatuslist.size(); a++){

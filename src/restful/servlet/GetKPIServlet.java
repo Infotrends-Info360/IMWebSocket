@@ -163,7 +163,7 @@ public class GetKPIServlet {
 					// Close streams
 					br.close();
 					os.close();
-					// System.out.println(responseSB);
+					// Util.getConsoleLogger().debug(responseSB);
 				} catch (MalformedURLException e) {
 					// TODO Auto-generated catch block
 					e.printStackTrace();
@@ -221,7 +221,7 @@ public class GetKPIServlet {
 				// Close streams
 				br.close();
 				os.close();
-				// System.out.println(responseSB);
+				// Util.getConsoleLogger().debug(responseSB);
 			} catch (MalformedURLException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();

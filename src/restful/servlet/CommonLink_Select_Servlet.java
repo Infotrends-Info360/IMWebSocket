@@ -16,6 +16,8 @@ import javax.ws.rs.core.Response;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
+import util.Util;
+
 import com.Info360.bean.CommonLink;
 import com.Info360.service.MaintainService;
 
@@ -69,7 +71,6 @@ public class CommonLink_Select_Servlet {
 	    		String b = "#";
 	    		Pid = b;
 	    	}
-	    		System.out.println();
 	    		
 	    	TreeJsonObject.put("a_attr", hrefJsonObject );
 	    	TreeJsonObject.put("parent", Pid);

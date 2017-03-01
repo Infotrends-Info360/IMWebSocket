@@ -15,6 +15,8 @@ import javax.ws.rs.core.Response;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
+import util.Util;
+
 import com.Info360.bean.Interaction;
 import com.Info360.service.MaintainService;
 
@@ -52,7 +54,7 @@ public class QueryAll_InteractionServlet {
 		List<Interaction> interactionlist = maintainservice.SelcetAll_interaction(interaction);
 		JSONArray InteractionJsonArray = new JSONArray();
 		
-		System.out.println(interactionlist.size());
+		Util.getConsoleLogger().debug(interactionlist.size());
 		
 		InteractionJsonArray.put(interactionlist.size());
 //  	    	for(int a = 0; a < interactionlist.size(); a++){

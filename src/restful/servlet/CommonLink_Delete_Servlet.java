@@ -17,6 +17,8 @@ import javax.ws.rs.core.Response;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
+import util.Util;
+
 import com.Info360.bean.CommonLink;
 import com.Info360.service.MaintainService;
 
@@ -47,7 +49,7 @@ public class CommonLink_Delete_Servlet {
 		if(children_list.length()>0){
 				String [] dd = children_list.split(",");
 				for(int i=0 ;i<dd.length;i++){
-					System.out.println(dd[i]);			
+					Util.getConsoleLogger().debug(dd[i]);			
 					children_list2.add(Integer.valueOf(dd[i]));
 				}
 				commonlink.setChildren_list(children_list2);
