@@ -2,13 +2,16 @@ package websocket.bean;
 
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Timer;
 import java.util.TimerTask;
 import java.util.concurrent.atomic.AtomicBoolean;
 
 import org.java_websocket.WebSocket;
 
+import util.StatusEnum;
 import util.Util;
 
 
@@ -24,11 +27,13 @@ public class UserInfo {
 	private java.util.Date startdate;
 	// 以下為原本TypeInfo部分的屬性
 	private String reason;
-	private String status;
+	private StatusEnum statusEnum;
 	private String readyTime;
 	private AtomicBoolean stopRing = new AtomicBoolean(false); // 處理concurrent問題
 	private AtomicBoolean timeout = new AtomicBoolean(false); // 處理concurrent問題
 	
+	// 狀態更新使用 - 存放status log dbid - "end"時寫入DB用
+	private Map<StatusEnum, String> statusDBIDMap = new HashMap<>();
 	
 	public String getUserid() {
 		return userid;
@@ -84,14 +89,14 @@ public class UserInfo {
 	public void setReason(String reason) {
 		this.reason = reason;
 	}
-	public String getStatus() {
-		return status;
+	public StatusEnum getStatusEnum() {
+		return this.statusEnum;
 	}
-	public void setStatus(String status) {
-		this.status = status;
+	public void setStatusEnum(StatusEnum status) {
+		this.statusEnum = status;
 	}
 	public String getReadyTime() {
-		System.out.println("getReadyTime");
+		Util.getConsoleLogger().debug("getReadyTime");
 		return readyTime;
 	}
 	public void setReadyTime(String readTime) {
@@ -108,6 +113,12 @@ public class UserInfo {
 	}
 	public void setTimeout(boolean timeout) {
 		this.timeout.set(timeout);;
+	}
+	public Map<StatusEnum, String> getStatusDBIDMap() {
+		return statusDBIDMap;
+	}
+	public void setStatusDBIDMap(Map<StatusEnum, String> statusDBIDMap) {
+		this.statusDBIDMap = statusDBIDMap;
 	}
 	
 	

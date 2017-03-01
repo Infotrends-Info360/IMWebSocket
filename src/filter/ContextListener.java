@@ -22,12 +22,12 @@ public class ContextListener implements ServletContextListener {
     @Override
     public void contextInitialized(ServletContextEvent event) {
 //         initialize log4j here
-//    	System.out.println("log4j-config-location called");
+//    	Util.getConsoleLogger().debug("log4j-config-location called");
         ServletContext context = event.getServletContext();
         String log4jConfigFile = context.getInitParameter("log4j-config-location");
         String fullPath = context.getRealPath("") + File.separator + log4jConfigFile;
 //         example path: C:\Users\sam\git\IMWebSocket\WebContent\WEB-INF/log4j.properties
-//        System.out.println("Log4j path: "+ fullPath);
+//        Util.getConsoleLogger().debug("Log4j path: "+ fullPath);
          
         PropertyConfigurator.configure(fullPath);
         

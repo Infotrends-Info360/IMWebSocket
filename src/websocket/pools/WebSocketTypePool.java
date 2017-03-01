@@ -12,9 +12,13 @@ import java.util.Set;
 
 import org.java_websocket.WebSocket;
 
+import com.google.gson.Gson;
+
 import util.StatusEnum;
 import util.Util;
+import websocket.bean.UpdateStatusBean;
 import websocket.bean.UserInfo;
+import websocket.function.CommonFunction;
 
 //此類別給AgentFunction.java共同使用
 //此類別給ClientFunction.java共同使用
@@ -33,7 +37,7 @@ public class WebSocketTypePool{
 
 	/** * Add User to Agent or Client * @param inbound */
 	public static void addUserinTYPE(String aTYPE,String aUsername, String aUserID,String aDate, WebSocket aConn) {
-		System.out.println("addUserinTYPE() called");
+		Util.getConsoleLogger().debug("addUserinTYPE() called");
 		Map<WebSocket, UserInfo> TYPEMap = TYPEconnections.get(aTYPE);
 		if (TYPEMap == null || TYPEMap.isEmpty()){
 			TYPEMap = new HashMap<>();
@@ -42,9 +46,9 @@ public class WebSocketTypePool{
 		// 拿取對應的userInfo,並對其資料做更新
 		UserInfo userInfo = WebSocketUserPool.getUserallconnections().get(aConn);
 		if(aTYPE.equals("Agent")){
-			userInfo.setStatus("not ready");
+			userInfo.setStatusEnum(StatusEnum.NOTREADY);
 		}else if(aTYPE.equals("Client")){
-			userInfo.setStatus("wait");
+//			userInfo.setStatusEnum("wait"); // 應該用不到吧,觀察一下
 		}
 //		userInfo.setReadyTime(aDate);
 		// 放入Map
@@ -53,10 +57,11 @@ public class WebSocketTypePool{
 	}
 	
 	/** * Agent or Client User Information Update */
-	public static void UserUpdate(String aTYPE,String aUsername, String aUserid,String aDate,String aStatus,String aReason, WebSocket aConn) {
+	public static void UserUpdate(String aTYPE,String aUsername, String aUserid,String aDate,StatusEnum aStatusEnum,String aReason, WebSocket aConn) {
+		Util.getConsoleLogger().debug("UserUpdate() called");
 		Map<WebSocket, UserInfo> TYPEmap = TYPEconnections.get(aTYPE);
 		UserInfo userInfo = TYPEmap.get(aConn);
-		userInfo.setStatus(aStatus);
+		userInfo.setStatusEnum(aStatusEnum);
 		userInfo.setReason(aReason);
 //		userInfo.setReadyTime(aDate); // 更新時間?離開時間?->登入時間是否會被覆蓋掉 ?還是這是專給Agent用的,算等待時間的?
 		TYPEmap.put(aConn, userInfo);
@@ -65,15 +70,14 @@ public class WebSocketTypePool{
 	
 	/** * Remove User from Agent or Client* @param inbound */
 	public static void removeUserinTYPE(String aTYPE,WebSocket aConn) {
-		System.out.println("removeUserinTYPE() called");
+		Util.getConsoleLogger().debug("removeUserinTYPE() called");
 		Map<WebSocket,  UserInfo> TYPEmap = TYPEconnections.get(aTYPE);
 		if (TYPEmap == null){
-			System.out.println("注意: " + " can not find TYPEmap for " + aTYPE);
+			Util.getConsoleLogger().warn("注意: " + " can not find TYPEmap for " + aTYPE);
+			Util.getFileLogger().warn("注意: " + " can not find TYPEmap for " + aTYPE);
 			return;
 		}
 		
-//		System.out.println("TYPE: " + aTYPE);
-//		System.out.println("TYPEmap.size(): " + TYPEmap.size());
 		if (TYPEmap != null && TYPEmap.containsKey(aConn)) {
 			TYPEmap.remove(aConn);
 		}
@@ -100,27 +104,25 @@ public class WebSocketTypePool{
 	}
 	
 	/** * Get Online Longest User(Agent) * @return */
-	public static String getOnlineLongestUserinTYPE(String aTYPE) {
-//		System.out.println("getOnlineLongestUserinTYPE() called");
+	synchronized public static String getOnlineLongestUserinTYPE(WebSocket aConn, String aTYPE) {
+//		Util.getConsoleLogger().debug("getOnlineLongestUserinTYPE() called");
 		Map<WebSocket,  UserInfo> TYPEmap = TYPEconnections.get(aTYPE);
-		if (TYPEmap == null || TYPEmap.isEmpty()){
+		if (TYPEmap == null || TYPEmap.isEmpty()){ 
 			return null;
 		}
-		//List<String> setUsers = new ArrayList<String>();
 		String settingUser = null;
+		UserInfo settingUserInfo = null;
 		Date date = new Date();
 		long UserStayTime = date.getTime();
 		Collection<UserInfo> setUser = TYPEmap.values();
-//		System.out.println("setUser.size()" + setUser.size());
 		for (UserInfo userInfo : setUser) {
-			if (!userInfo.getStatus().trim().equals(StatusEnum.READY.getDbid())) {
+			if (!userInfo.getStatusEnum().equals(StatusEnum.READY)) {
 				continue;
 			}
 			//setUsers.add(u.get("userid").toString());
 			SimpleDateFormat sdf = new SimpleDateFormat(Util.getSdfTimeFormat());
 			String userdatestring = userInfo.getReadyTime(); // 關鍵是這行
 			if (userdatestring == null) continue;
-//			System.out.println("userdatestring: " + userdatestring);
 			Date userdate = null;
 			try { 
 				userdate = sdf.parse(userdatestring);
@@ -129,14 +131,42 @@ public class WebSocketTypePool{
 			} catch (Exception e){
 				e.printStackTrace();
 			}
-//			System.out.println("Agent Status - userInfo.getStatus(): " + userInfo.getStatus());
-//			System.out.println("Agent Status - StatusEnum.READY.getValue(): " + StatusEnum.READY.getDbid());
-			if(userdate.getTime() <= UserStayTime && userInfo.getStatus().trim().equals(StatusEnum.READY.getDbid())){
+//			Util.getConsoleLogger().debug("Agent Status - userInfo.getStatus(): " + userInfo.getStatus());
+//			Util.getConsoleLogger().debug("Agent Status - StatusEnum.READY.getValue(): " + StatusEnum.READY.getDbid());
+			if(userdate.getTime() <= UserStayTime && userInfo.getStatusEnum().equals(StatusEnum.READY)){
 				UserStayTime = userdate.getTime(); // 每次都會將UserStayTime拿去當作"上一個"Uset的等待時間
 				settingUser = userInfo.getUserid();
+				settingUserInfo = userInfo;
 			}
 		}
-		return settingUser;
+//		return settingUser;
+		// 若沒有任何Agent處於READY狀態,則回傳null
+		if (settingUserInfo == null) return null;
+		settingUserInfo.setStatusEnum(StatusEnum.NOTREADY); // 直接改了,避免一個以上Client找到同一個Agent
+		
+		// 開始更新狀態: 
+		Gson gson = new Gson();
+		WebSocket agentConn = WebSocketUserPool.getWebSocketByUser(settingUserInfo.getUserid());
+		// 1. READY狀態結束
+		UpdateStatusBean usb = new UpdateStatusBean();
+		usb.setStatus(StatusEnum.READY.getDbid());
+		usb.setDbid(settingUserInfo.getStatusDBIDMap().get(StatusEnum.READY));
+		usb.setStartORend("end");
+		CommonFunction.updateStatus(gson.toJson(usb), agentConn);
+		// 2. NOTREADY狀態開始
+		usb = new UpdateStatusBean();
+		usb.setStatus(StatusEnum.NOTREADY.getDbid());
+		usb.setStartORend("start");
+		usb.setReason_dbid("9"); // 先暫時這樣
+		CommonFunction.updateStatus(gson.toJson(usb), agentConn);
+//		// 3. RING狀態開始
+		usb = new UpdateStatusBean();
+		usb.setStatus(StatusEnum.RING.getDbid());
+		usb.setStartORend("start");
+		usb.setClientID( WebSocketUserPool.getUserID(aConn));
+		CommonFunction.updateStatus(gson.toJson(usb), agentConn);
+		
+		return settingUserInfo.getUserid();
 	}
 	
 	/** * Get Online User Name in Agent or Client * @return */
@@ -172,9 +202,9 @@ public class WebSocketTypePool{
 	}
 	
 	/** * Get User Status in Agent or Client * ready * not ready * established * party remove * @param session */
-	public static String getUserStatusByKeyinTYPE(String aTYPE, WebSocket aConn) {
+	public static StatusEnum getUserStatusByKeyinTYPE(String aTYPE, WebSocket aConn) {
 		Map<WebSocket,  UserInfo> TYPEmap = TYPEconnections.get(aTYPE);
-		return TYPEmap.get(aConn).getStatus();
+		return TYPEmap.get(aConn).getStatusEnum();
 	}
 	
 	/** * Get User Status in Agent or Client * ready * not ready * established * party remove * @param session */
@@ -246,5 +276,13 @@ public class WebSocketTypePool{
 		return false;
 	}	
 	
+	public static String getUserType(WebSocket conn){
+		if (isAgent(conn)){
+			return "Agent";
+		}else if (isClient(conn)){
+			return "Client";
+		}
+		return null;
+	}
 	
 }

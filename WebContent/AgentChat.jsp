@@ -124,10 +124,12 @@ td {
 						    <input type="text" id="UserName" class="form-control" value="" placeholder="UserName" disabled/>
 						</div>
 		            </div>
-		            <div class="col-xs-6 col-sm-6 col-md-6 col-lg-6">
+		            <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
 <!-- 		                <button id="Login" class="btn btn-primary btn-sm" onclick="Login();">Login</button> -->
 		                <button id="Login" class="btn btn-primary btn-sm" onclick="loginValidate();">Login</button>
 		                <button id="Logout" class="btn btn-primary btn-sm" onclick="Logout();" disabled>Logout</button>
+		                <button id="account01" class="btn btn-info btn-sm" onclick="account01();"> account01 </button>
+		                <button id="account02" class="btn btn-info btn-sm" onclick="account02();"> account02 </button>
 		            </div>
 		            
 		            

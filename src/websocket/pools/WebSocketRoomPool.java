@@ -68,7 +68,6 @@ public class WebSocketRoomPool{
 		sendJson.addProperty("roomSize", roomInfo.getUserConns().size());
 		WebSocketRoomPool.sendMessageinroom(aRoomID, sendJson.toString());
 		
-//		System.out.println("room: " + room + " now has " + roomuserconnections.get(room).size() + " users online");
 	}
 	
 	/** * Remove User from Room * @param inbound */
@@ -84,12 +83,11 @@ public class WebSocketRoomPool{
 	
 	/** * Remove User from Room * @param inbound */
 	public static void removeUserinroom(String aRoomID,WebSocket aConn) {
-		System.out.println("removeUserinroom() called");
+		Util.getConsoleLogger().info("removeUserinroom() called");
 		// 把離開的邏輯坐在這裡
 		// 1. 若是Client離開 -> 則把所有人都踢出此room
 		// 2. 若是Agent離開 && 剩餘人數 > 1 -> 自己退出就好
 		// 3. 若是Agent離開 && 剩餘人數 == 1 -> 則把所有人都踢出此room
-//		System.out.println("removeUserinroom(String aRoomID,WebSocket aConn) called");
 		RoomInfo roomInfo = roomMap.get(aRoomID);
 //		Set<WebSocket> tmpMemberConns = new HashSet(roommap.keySet());
 		Map<WebSocket, UserInfo> connsInRoomMap = roomInfo.getUserConns();
@@ -101,13 +99,11 @@ public class WebSocketRoomPool{
 		sendJson.put("AfterCallStatus", Util.getAfterCallStatus()); //增加AfterCallStatus變數 20170222 Lin
 		
 		if (connsInRoomMap != null && connsInRoomMap.containsKey(aConn)) {
-//			System.out.println(conn + "'s room is " + " removed");
 			String currACType = WebSocketUserPool.getACTypeByKey(aConn);
-//			System.out.println("ACType: " + WebSocketUserPool.getACTypeByKey(aConn));
 			
 			/** 清除room相關資料 **/
 			if ("Client".equals(currACType)){
-				System.out.println("Client 全清");
+				Util.getConsoleLogger().debug("Client 全清");
 				//全清:
 				for (WebSocket conn: tmpConnsInRoom){
 					WebSocketUserPool.removeUserRoom(conn, aRoomID);
@@ -116,7 +112,7 @@ public class WebSocketRoomPool{
 				sendJson.put("result", WebSocketUserPool.getUserNameByKey(aConn) + " closed the room" + aRoomID);
 			// 之後可將一二條件式合併:
 			}else if (connsInRoomMap.size() == 2){ 
-				System.out.println("connsInRoom.size() == 2 全清");
+				Util.getConsoleLogger().debug("connsInRoom.size() == 2 全清");
 				//也全清:
 				for (WebSocket conn: tmpConnsInRoom){
 					WebSocketUserPool.removeUserRoom(conn, aRoomID);
@@ -124,18 +120,18 @@ public class WebSocketRoomPool{
 				connsInRoomMap.clear();
 				sendJson.put("result", WebSocketUserPool.getUserNameByKey(aConn) + " closed the room" + aRoomID);				
 			}else if (connsInRoomMap.size() > 2){
-				System.out.println("connsInRoom.size() > 2  清自己");
+				Util.getConsoleLogger().debug("connsInRoom.size() > 2  清自己");
 				//清Agent自己
 				WebSocketUserPool.removeUserRoom(aConn, aRoomID);
 				connsInRoomMap.remove(aConn);
 				sendJson.put("result", WebSocketUserPool.getUserNameByKey(aConn) + " left the room" + aRoomID);				
 			}
-			System.out.println("roomId: " + aRoomID + " size: " + connsInRoomMap.size());
+			Util.getConsoleLogger().debug("roomId: " + aRoomID + " size: " + connsInRoomMap.size());
 			sendJson.put("roomMembers", getOnlineUserNameinroom(aRoomID).toString());
 			sendJson.put("roomMemberIDs", getOnlineUserIDinroom(aRoomID).toString());
 			sendJson.put("roomSize", connsInRoomMap.size());
 			
-//			System.out.println("removeUserinroom() - sendJson: " + sendJson);
+//			Util.getConsoleLogger().debug("removeUserinroom() - sendJson: " + sendJson);
 			
 			/** 告知所有成員有人離開room,請更新前端頁面 **/
 			for (WebSocket conn: tmpConnsInRoom){
@@ -147,17 +143,17 @@ public class WebSocketRoomPool{
 				WebSocketUserPool.sendMessageToUser(conn, sendJson.toString());
 			}
 			
-//			System.out.println("roomMap.size() - before: " + roomMap.size());
+//			Util.getConsoleLogger().debug("roomMap.size() - before: " + roomMap.size());
 			// 須在最後面做,因為還需要通知connsInRoomMap裡面的人有人離開/關閉房間了
 			if (connsInRoomMap.size() == 0){
 				// 1. 將此roomID所擁有的iEstablised_dbid寫入結束時間
-//				System.out.println("insert endtime iestablished");
-//				System.out.println("roomInfo.getIestablish_dbid(): " + roomInfo.getIestablish_dbid());
+//				Util.getConsoleLogger().debug("insert endtime iestablished");
+//				Util.getConsoleLogger().debug("roomInfo.getIestablish_dbid(): " + roomInfo.getIestablish_dbid());
 				AgentFunction.RecordStatusEnd(roomInfo.getIestablish_dbid());
 				// 2. 如果一個room都空了,就把它從Map中清掉
 				roomMap.remove(aRoomID);
 			}
-//			System.out.println("roomMap.size() - after: " + roomMap.size());
+//			Util.getConsoleLogger().debug("roomMap.size() - after: " + roomMap.size());
 		}
 	}
 	
@@ -245,7 +241,6 @@ public class WebSocketRoomPool{
 		List<String> setRooms = new ArrayList<String>();
 		Collection<String> setRoom = roomMap.keySet();
 		for (String u : setRoom) {
-			//System.out.println("u: "+u);
 			setRooms.add(u);
 		}
 		return setRooms;

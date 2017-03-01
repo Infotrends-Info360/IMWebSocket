@@ -70,7 +70,7 @@ public class FLAGDATA_Servlet {
         	  	
         	  	ActivitygroupsJsonArray.put(activitygroupsObject);
         	  	
-        	 // 	System.out.println("GroupDbid: "+activitygroupslist.get(a).getDbid());
+        	 // 	Util.getConsoleLogger().debug("GroupDbid: "+activitygroupslist.get(a).getDbid());
         	  	
         	  	if(dbid!=0){	
         	  	activitydata.setActivitygroupsid(activitygroupslist.get(a).getDbid());

@@ -59,7 +59,7 @@ public class CommonLink_Insert_Servlet {
 		SimpleDateFormat sdFormat = new SimpleDateFormat("yyyy/MM/dd HH:mm:ss.sss");
 		Date date = new Date();
 		String strDate = sdFormat.format(date);
-		//System.out.println(strDate);
+		//Util.getConsoleLogger().debug(strDate);
 		commonlink.setCreatedatetime(strDate);
 		
 		

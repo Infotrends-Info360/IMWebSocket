@@ -42,7 +42,7 @@ public class AgentReason_Select_Servlet {
 	    
   	  JSONArray agentreasonJsonArray = new JSONArray();
   	  	
-  	  	//System.out.println("agentstatuslist: "+agentstatuslist.size());
+  	  	//Util.getConsoleLogger().debug("agentstatuslist: "+agentstatuslist.size());
 
   	 if(flag==0 ){
   		 for(int a = 0; a < agentreasonlist.size(); a++){
