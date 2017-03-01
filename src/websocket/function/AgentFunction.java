@@ -96,12 +96,12 @@ public class AgentFunction {
 	}
 
 	public static void refreshAgentList() {
-		System.out.println("refreshAgentList() called");
+		Util.getConsoleLogger().debug("refreshAgentList() called");
 		Map<WebSocket, UserInfo> agentMap = WebSocketTypePool
 				.getTypeconnections().get("Agent");
 		Collection<String> agentIDList = WebSocketTypePool
 				.getOnlineUserIDinTYPE("Agent");
-//		System.out.println("refreshAgentList() - agentIDList.size(): " 	+ agentIDList.size());
+//		Util.getConsoleLogger().debug("refreshAgentList() - agentIDList.size(): " 	+ agentIDList.size());
 		Set<WebSocket> agentConnList = agentMap.keySet();
 		for (WebSocket tmpConn : agentConnList) {
 
@@ -146,18 +146,16 @@ public class AgentFunction {
 			// Close streams
 			br.close();
 			os.close();
-			// System.out.println(responseSB);
+			// Util.getConsoleLogger().debug(responseSB);
 		} catch (MalformedURLException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		} catch (IOException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 		JSONObject jsonobject = new JSONObject(responseSB.toString());
-//		System.out.println("jsonobject: "+jsonobject);
+//		Util.getConsoleLogger().debug("jsonobject: "+jsonobject);
 		JSONArray jsonarray= jsonobject.getJSONArray("agentreason");
-//		System.out.println("GetAgentReasonInfo - jsonarray: " + jsonarray);
+//		Util.getConsoleLogger().debug("GetAgentReasonInfo - jsonarray: " + jsonarray);
 		Map<String, Map<String, String>> agentreasonmap = new HashMap<String, Map<String, String>>();
 		for(int a = 0; a < jsonarray.length(); a++){
 			Map<String, String> agentreasonmapinfo = new HashMap<String, String>();
@@ -209,12 +207,10 @@ public class AgentFunction {
 			// Close streams
 			br.close();
 			os.close();
-			// System.out.println(responseSB);
+			// Util.getConsoleLogger().debug(responseSB);
 		} catch (MalformedURLException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		} catch (IOException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -222,7 +218,7 @@ public class AgentFunction {
 		JSONObject jsonobject = new JSONObject(responseSB.toString());
 //		String dbid = jsonobject.getString("dbid"); // exception: "dbid" not a String type
 		String dbid = Integer.toString(jsonobject.getInt("dbid"));
-//		System.out.println("RecordStatusStart() - dbid: " + dbid);
+//		Util.getConsoleLogger().debug("RecordStatusStart() - dbid: " + dbid);
 		
 		return dbid;
 	}
@@ -260,12 +256,10 @@ public class AgentFunction {
 			// Close streams
 			br.close();
 			os.close();
-			// System.out.println(responseSB);
+			// Util.getConsoleLogger().debug(responseSB);
 		} catch (MalformedURLException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		} catch (IOException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 		
@@ -308,12 +302,10 @@ public class AgentFunction {
 				// Close streams
 				br.close();
 				os.close();
-				// System.out.println(responseSB);
+				// Util.getConsoleLogger().debug(responseSB);
 			} catch (MalformedURLException e) {
-				// TODO Auto-generated catch block
 				e.printStackTrace();
 			} catch (IOException e) {
-				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
 			

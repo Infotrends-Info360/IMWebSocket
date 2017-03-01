@@ -13,7 +13,7 @@ public class AgentServlet extends HttpServlet {
 	protected void doGet(HttpServletRequest req, HttpServletResponse resp)
 			throws ServletException, IOException {
 //		super.doPost(req, resp);
-		//System.out.println("content" + req.getParameter("content"));
+		//Util.getConsoleLogger().debug("content" + req.getParameter("content"));
 		//req.getSession().setAttribute("content", req.getParameter("content"));
 		req.getRequestDispatcher("/Agent.jsp").forward(req, resp);
 	}
@@ -21,7 +21,7 @@ public class AgentServlet extends HttpServlet {
 	@Override
 	protected void doPost(HttpServletRequest req, HttpServletResponse resp)
 			throws ServletException, IOException {
-//		System.out.println("content" + req.getParameter("content"));
+//		Util.getConsoleLogger().debug("content" + req.getParameter("content"));
 //		req.getSession().setAttribute("content", req.getParameter("content"));
 //		req.getRequestDispatcher("/Agent.jsp").forward(req, resp);
 		super.doGet(req, resp);

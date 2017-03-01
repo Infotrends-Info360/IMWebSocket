@@ -37,7 +37,7 @@ public class WebSocketTypePool{
 
 	/** * Add User to Agent or Client * @param inbound */
 	public static void addUserinTYPE(String aTYPE,String aUsername, String aUserID,String aDate, WebSocket aConn) {
-		System.out.println("addUserinTYPE() called");
+		Util.getConsoleLogger().debug("addUserinTYPE() called");
 		Map<WebSocket, UserInfo> TYPEMap = TYPEconnections.get(aTYPE);
 		if (TYPEMap == null || TYPEMap.isEmpty()){
 			TYPEMap = new HashMap<>();
@@ -58,6 +58,7 @@ public class WebSocketTypePool{
 	
 	/** * Agent or Client User Information Update */
 	public static void UserUpdate(String aTYPE,String aUsername, String aUserid,String aDate,StatusEnum aStatusEnum,String aReason, WebSocket aConn) {
+		Util.getConsoleLogger().debug("UserUpdate() called");
 		Map<WebSocket, UserInfo> TYPEmap = TYPEconnections.get(aTYPE);
 		UserInfo userInfo = TYPEmap.get(aConn);
 		userInfo.setStatusEnum(aStatusEnum);
@@ -69,15 +70,14 @@ public class WebSocketTypePool{
 	
 	/** * Remove User from Agent or Client* @param inbound */
 	public static void removeUserinTYPE(String aTYPE,WebSocket aConn) {
-		System.out.println("removeUserinTYPE() called");
+		Util.getConsoleLogger().debug("removeUserinTYPE() called");
 		Map<WebSocket,  UserInfo> TYPEmap = TYPEconnections.get(aTYPE);
 		if (TYPEmap == null){
-			System.out.println("注意: " + " can not find TYPEmap for " + aTYPE);
+			Util.getConsoleLogger().warn("注意: " + " can not find TYPEmap for " + aTYPE);
+			Util.getFileLogger().warn("注意: " + " can not find TYPEmap for " + aTYPE);
 			return;
 		}
 		
-//		System.out.println("TYPE: " + aTYPE);
-//		System.out.println("TYPEmap.size(): " + TYPEmap.size());
 		if (TYPEmap != null && TYPEmap.containsKey(aConn)) {
 			TYPEmap.remove(aConn);
 		}
@@ -105,18 +105,16 @@ public class WebSocketTypePool{
 	
 	/** * Get Online Longest User(Agent) * @return */
 	synchronized public static String getOnlineLongestUserinTYPE(WebSocket aConn, String aTYPE) {
-//		System.out.println("getOnlineLongestUserinTYPE() called");
+//		Util.getConsoleLogger().debug("getOnlineLongestUserinTYPE() called");
 		Map<WebSocket,  UserInfo> TYPEmap = TYPEconnections.get(aTYPE);
 		if (TYPEmap == null || TYPEmap.isEmpty()){ 
 			return null;
 		}
-		//List<String> setUsers = new ArrayList<String>();
 		String settingUser = null;
 		UserInfo settingUserInfo = null;
 		Date date = new Date();
 		long UserStayTime = date.getTime();
 		Collection<UserInfo> setUser = TYPEmap.values();
-//		System.out.println("setUser.size()" + setUser.size());
 		for (UserInfo userInfo : setUser) {
 			if (!userInfo.getStatusEnum().equals(StatusEnum.READY)) {
 				continue;
@@ -125,7 +123,6 @@ public class WebSocketTypePool{
 			SimpleDateFormat sdf = new SimpleDateFormat(Util.getSdfTimeFormat());
 			String userdatestring = userInfo.getReadyTime(); // 關鍵是這行
 			if (userdatestring == null) continue;
-//			System.out.println("userdatestring: " + userdatestring);
 			Date userdate = null;
 			try { 
 				userdate = sdf.parse(userdatestring);
@@ -134,8 +131,8 @@ public class WebSocketTypePool{
 			} catch (Exception e){
 				e.printStackTrace();
 			}
-//			System.out.println("Agent Status - userInfo.getStatus(): " + userInfo.getStatus());
-//			System.out.println("Agent Status - StatusEnum.READY.getValue(): " + StatusEnum.READY.getDbid());
+//			Util.getConsoleLogger().debug("Agent Status - userInfo.getStatus(): " + userInfo.getStatus());
+//			Util.getConsoleLogger().debug("Agent Status - StatusEnum.READY.getValue(): " + StatusEnum.READY.getDbid());
 			if(userdate.getTime() <= UserStayTime && userInfo.getStatusEnum().equals(StatusEnum.READY)){
 				UserStayTime = userdate.getTime(); // 每次都會將UserStayTime拿去當作"上一個"Uset的等待時間
 				settingUser = userInfo.getUserid();

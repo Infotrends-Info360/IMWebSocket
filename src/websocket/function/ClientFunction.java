@@ -30,7 +30,7 @@ public class ClientFunction {
 	
 	/** * findAgentEvent */
 	public static void findAgentEvent(String message, org.java_websocket.WebSocket conn) {
-		System.out.println("findAgentEvent() called");
+		Util.getConsoleLogger().debug("findAgentEvent() called");
 		JSONObject obj = new JSONObject(message);
 		org.java_websocket.WebSocket sendto = WebSocketUserPool
 				.getWebSocketByUser(obj.getString("sendto"));
@@ -57,7 +57,7 @@ public class ClientFunction {
 			AgentID = null;
 			e.printStackTrace();
 		}
-//		System.out.println("findAgent : " + Agent);
+//		Util.getConsoleLogger().debug("findAgent : " + Agent);
 		
 		// 在這邊執行senduserdata
 		// 若有找到Agent, 去抓senduserdata, 並將此資訊送給Agent
@@ -88,8 +88,8 @@ public class ClientFunction {
 	
 	/** * Get user data */
 	public static void senduserdata(String message, org.java_websocket.WebSocket conn) {
-//		System.out.println("senduserdata()" + message);
-		System.out.println("senduserdata() called ");
+//		Util.getConsoleLogger().debug("senduserdata()" + message);
+		Util.getConsoleLogger().debug("senduserdata() called ");
 		JSONObject obj = new JSONObject(message);
 		String lang = obj.getString("lang");
 		String searchtype = obj.getString("searchtype");
@@ -98,7 +98,7 @@ public class ClientFunction {
 		String channel = obj.getString("channel");
 		String sendto = obj.getString("sendto");
 		StringBuilder responseSB = null;
-//		System.out.println("http://127.0.0.1:8080/IMWebSocket/RESTful/searchUserdata start ****");
+//		Util.getConsoleLogger().debug("http://127.0.0.1:8080/IMWebSocket/RESTful/searchUserdata start ****");
 		long startTime = System.currentTimeMillis();
 		try {
 			// Encode the query
@@ -131,14 +131,14 @@ public class ClientFunction {
 			// Close streams
 			br.close();
 			os.close();
-			// System.out.println(responseSB);
+			// Util.getConsoleLogger().debug(responseSB);
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 		long endTime = System.currentTimeMillis();
-		System.out.println("RESTful searchUserdata search time: " + (endTime - startTime)/1000 + "s" );
-//		System.out.println("http://127.0.0.1:8080/IMWebSocket/RESTful/searchUserdata done ****");
+		Util.getConsoleLogger().debug("RESTful searchUserdata search time: " + (endTime - startTime)/1000 + "s" );
+//		Util.getConsoleLogger().debug("http://127.0.0.1:8080/IMWebSocket/RESTful/searchUserdata done ****");
 		
 		JSONObject responseSBjson = new JSONObject(responseSB.toString());
 		JSONObject sendjson = new JSONObject();
@@ -147,7 +147,7 @@ public class ClientFunction {
 		sendjson.put("from", attributes.getString("id"));
 		sendjson.put("userdata",  responseSBjson);
 		sendjson.put("channel", channel);
-//		System.out.println("senduserdata() - sendjson" + sendjson);
+//		Util.getConsoleLogger().debug("senduserdata() - sendjson" + sendjson);
 		WebSocketUserPool.sendMessageToUser(conn, sendjson.toString());
 		// 掉換順序
 		// 若尚未找到Agent,則會出現JSONException
@@ -159,7 +159,7 @@ public class ClientFunction {
 			sendjson.put("clientName", WebSocketUserPool.getUserNameByKey(conn).trim());
 			WebSocketUserPool.sendMessageToUser(sendtoConn, sendjson.toString());			
 		}catch(org.json.JSONException e) {
-			System.out.println("JSONObject[\"sendto\"] not found.");
+			Util.getConsoleLogger().debug("JSONObject[\"sendto\"] not found.");
 		}
 
 	}
@@ -211,7 +211,7 @@ public class ClientFunction {
 			// Close streams
 			br.close();
 			os.close();
-			// System.out.println(responseSB);
+			// Util.getConsoleLogger().debug(responseSB);
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -220,7 +220,7 @@ public class ClientFunction {
 	
 	/** * send interaction log */
 	public static void interactionlog(String message, org.java_websocket.WebSocket conn) {
-		System.out.println("interactionlog() called");
+		Util.getConsoleLogger().debug("interactionlog() called");
 //		JSONObject obj = new JSONObject(message);
 		JsonObject obj = Util.getGJsonObject(message);
 
@@ -243,7 +243,7 @@ public class ClientFunction {
 
 		Set<Map.Entry<String, JsonElement>> entriesSet = obj.entrySet(); //will return members of your object
 //		for (Map.Entry<String, JsonElement> entry: entrieSet) {
-//		    System.out.println(entry.getKey());
+//		    Util.getConsoleLogger().debug(entry.getKey());
 //		}				
 //		Set<String> keySet = obj. .keySet();
 		synchronized (entriesSet) {
@@ -256,7 +256,7 @@ public class ClientFunction {
 					ixnid = entry.getValue().getAsString();
 					break;
 				case "agentid":
-					System.out.println("entry.getValue(): " + entry.getValue());
+					Util.getConsoleLogger().debug("entry.getValue(): " + entry.getValue());
 //					agentid = entry.getValue().getAsString();
 					agentid = entry.getValue().toString();
 					break;
@@ -318,8 +318,8 @@ public class ClientFunction {
 		StringBuilder responseSB = null;
 		try {
 			// Encode the query
-//			System.out.println("obj.get(\"text\")" + obj.get("text"));
-//			System.out.println("obj.get(\"structuredtext\")" + obj.get("structuredtext"));
+//			Util.getConsoleLogger().debug("obj.get(\"text\")" + obj.get("text"));
+//			Util.getConsoleLogger().debug("obj.get(\"structuredtext\")" + obj.get("structuredtext"));
 			// 將RoomInfo對話歷史訊息更新上去
 			if (obj.get("text") != null &&
 				obj.get("structuredtext") != null){
@@ -364,7 +364,7 @@ public class ClientFunction {
 			// Close streams
 			br.close();
 			os.close();
-			// System.out.println(responseSB);
+			// Util.getConsoleLogger().debug(responseSB);
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -372,14 +372,14 @@ public class ClientFunction {
 	}
 	
 	public static void setinteraction(String aMsg, org.java_websocket.WebSocket aConn){
-		System.out.println("setinteraction() called");
+		Util.getConsoleLogger().debug("setinteraction() called");
 		// 在此更新RoomInfo中的text, structuredtext到interaction log中
 			// 拿取需要物件
 		JsonObject msgJson = Util.getGJsonObject(aMsg);
 		// 如果有room歷史訊息,則更新上最新的interaction上 (這邊邏輯較特別,本應該是拿原本的來更新,但因為setinteraction欄位太多,暫時倒過來處理)
 		if (WebSocketUserPool.getUserInteractionByKey(aConn) != null){
 			JsonObject msgJsonOld = Util.getGJsonObject(WebSocketUserPool.getUserInteractionByKey(aConn));
-			System.out.println("setinteraction() - msgJsonOld: " + msgJsonOld);
+			Util.getConsoleLogger().debug("setinteraction() - msgJsonOld: " + msgJsonOld);
 			if (msgJsonOld.get("text") != null &&
 				msgJsonOld.get("structuredtext") != null){
 				msgJson.addProperty("text", msgJsonOld.get("text").getAsString());
@@ -398,7 +398,7 @@ public class ClientFunction {
 //			msgJson.add("structuredtext", null);			
 //		}
 		
-//		System.out.println("setinteraction - msgJson: " + msgJson);
+//		Util.getConsoleLogger().debug("setinteraction - msgJson: " + msgJson);
 		
 		// 更新UserInteraction
 		WebSocketUserPool.addUserInteraction(msgJson.toString(), aConn);

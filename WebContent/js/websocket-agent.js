@@ -1282,7 +1282,7 @@ var StatusEnum = {
 		}else if (StatusEnum.OESTABLISHED.statusname == aStatusname){
 			return StatusEnum.OESTABLISHED;
 		}
-//		System.out.println("StatusEnmu - getStatusEnum: " + " no match");
+//		Util.getConsoleLogger().debug("StatusEnmu - getStatusEnum: " + " no match");
 		return null;
 	},
 	

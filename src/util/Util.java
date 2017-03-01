@@ -2,6 +2,8 @@ package util;
  
 import java.util.Map;
 
+import org.apache.log4j.Logger;
+
 import com.google.gson.JsonNull;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
@@ -51,10 +53,15 @@ public class Util {
 	public static String getGString(JsonObject aObj, String aKey){
 		return (aObj.get(aKey) != null && !(aObj.get(aKey)instanceof JsonNull))?aObj.get(aKey).getAsString():null;
 	}
+	public static Logger getFileLogger(){
+		return Attr.fileLogger;
+	}
+	public static Logger getConsoleLogger(){
+		return Attr.consoleLogger;
+	}
 //	public static String getTmpID(String aID){
 //		return aID.replaceAll( "[^\\d]", "" ).substring(0,6);
 //	}
-
 
 	private static class Attr {
 		private static final String sdfDateFormat = "yyyy-MM-dd";
@@ -63,6 +70,9 @@ public class Util {
 		private static Map<String,String> SystemParam = null;
 		private static Map<String, Map<String, String>> AgentStatus = null;
 		private static Map<String, Map<String, String>> AgentReason = null;
+		private static final Logger fileLogger = Logger.getLogger("fileLogger");
+		private static final Logger consoleLogger = Logger.getLogger("consoleLogger");
+
 	}
 
 }

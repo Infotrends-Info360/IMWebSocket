@@ -7,6 +7,9 @@ import java.util.Map;
 import java.util.Set;
 import java.util.Timer;
 
+import org.apache.logging.log4j.Level;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.java_websocket.WebSocket;
 import org.json.JSONArray;
 import org.json.JSONObject;
@@ -17,6 +20,7 @@ import com.google.gson.JsonObject;
 
 import util.StatusEnum;
 import util.Util;
+
 
 
 
@@ -64,19 +68,19 @@ public class CommonFunction {
 		
 		/*** 三方-私訊: A2A ***/
 		obj.put("Event", "privateMsg");
-		System.out.println("conn" +  conn);
-		System.out.println("sendto" +  sendto);
+//		Util.getConsoleLogger().debug("conn" +  conn);
+//		Util.getConsoleLogger().debug("sendto" +  sendto);
 		WebSocketUserPool.sendMessageToUser(conn, obj.toString());
 		WebSocketUserPool.sendMessageToUser(sendto, obj.toString());
 	}
 	
 	/** * user join websocket * @param user */
 	public static void userjoin(String user, org.java_websocket.WebSocket aConn) {
-		System.out.println("userjoin() called");
+		Util.getConsoleLogger().debug("userjoin() called");
 		JSONObject obj = new JSONObject(user);
 		String username = obj.getString("UserName");
 		String MaxCount = obj.getString("MaxCount"); //新增 MaxCount
-//		System.out.println("MaxCount: "+MaxCount);
+//		Util.getConsoleLogger().debug("MaxCount: "+MaxCount);
 		String ACtype = obj.getString("ACtype");
 		String channel = obj.getString("channel");
 		String userId = null;
@@ -100,8 +104,8 @@ public class CommonFunction {
 		sendjson.put("MaxCount", MaxCount); // 此key-value只須Agent接就好(先不做過濾)
 		AgentFunction.GetAgentReasonInfo("0");
 		sendjson.put("reasonList", Util.getAgentReason()); // 此key-value只須Agent接就好(先不做過濾)
-		System.out.println("Util.getAgentReason(): " + Util.getAgentReason());
-		System.out.println("Util.getAgentStatus(): " + Util.getAgentStatus());
+		Util.getConsoleLogger().debug("Util.getAgentReason(): " + Util.getAgentReason());
+		Util.getConsoleLogger().debug("Util.getAgentStatus(): " + Util.getAgentStatus());
 		WebSocketUserPool.sendMessageToUser(aConn, sendjson.toString());
 //		WebSocketUserPool.sendMessage("online people: "
 //				+ WebSocketUserPool.getOnlineUser().toString());
@@ -138,7 +142,7 @@ public class CommonFunction {
 	
 	/** * user leave websocket */
 	public static void userExit(String aMsg, org.java_websocket.WebSocket aConn) {
-		System.out.println("userExit() called");
+		Util.getConsoleLogger().debug("userExit() called");
 		JsonObject jsonIn = Util.getGJsonObject(aMsg);
 		String id = jsonIn.get("id").getAsString();
 		String UserName = jsonIn.get("UserName").getAsString();
@@ -153,11 +157,11 @@ public class CommonFunction {
 		// 若已經有Agent正在決定是否Accept此通通話, 若Client先離開了, 則告知此Agent此Client已經離開, 不用再等了
 //		String waittingAgent = jsonIn.get("waittingAgent").getAsBoolean();
 		if ( WebSocketTypePool.isClient(aConn) && jsonIn.get("waittingAgent") != null){
-//			System.out.println("userExit() - waittingAgent: " + jsonIn.get("waittingAgent").getAsBoolean());
+//			Util.getConsoleLogger().debug("userExit() - waittingAgent: " + jsonIn.get("waittingAgent").getAsBoolean());
 			if (jsonIn.get("waittingAgent").getAsBoolean()){
 				String waittingAgentID = jsonIn.get("waittingAgentID").getAsString();
 				WebSocket agentConn = WebSocketUserPool.getWebSocketByUser(waittingAgentID);
-//				System.out.println("userExit() - waittingAgentID: " + waittingAgentID);
+//				Util.getConsoleLogger().debug("userExit() - waittingAgentID: " + waittingAgentID);
 				// "clientLeft"
 				JsonObject jsonTo = new JsonObject();
 				jsonTo.addProperty("Event", "clientLeft");
@@ -171,17 +175,17 @@ public class CommonFunction {
 //		waittingClientIDList
 		if (WebSocketTypePool.isAgent(aConn)){
 			if (!"[]".equals(jsonIn.get("waittingClientIDList"))){
-//				System.out.println("userExit() - waittingClientIDList got here");
-//				System.out.println("userExit() - " + jsonIn.get("waittingClientIDList").toString());
+//				Util.getConsoleLogger().debug("userExit() - waittingClientIDList got here");
+//				Util.getConsoleLogger().debug("userExit() - " + jsonIn.get("waittingClientIDList").toString());
 				JsonArray clientIDJsonAry = jsonIn.getAsJsonArray("waittingClientIDList");
 //				String clientIDStr = jsonIn.get("waittingClientIDList").toString();
 //				String[] waittingClientIDList = clientIDStr.substring(1, clientIDStr.length()-1).split(",");
-//				System.out.println("userExit() - " + waittingClientIDList.length);
-//				System.out.println("userExit() - clientIDJsonAry: " + clientIDJsonAry);
+//				Util.getConsoleLogger().debug("userExit() - " + waittingClientIDList.length);
+//				Util.getConsoleLogger().debug("userExit() - clientIDJsonAry: " + clientIDJsonAry);
 				for(final JsonElement clientID_je : clientIDJsonAry) {
 				    String clientID = clientID_je.getAsJsonObject().get("clientID").getAsString();
 				    WebSocket clientConn = WebSocketUserPool.getWebSocketByUser(clientID);
-				    System.out.println("userExit() - clientID: " + clientID);
+				    Util.getConsoleLogger().debug("userExit() - waitting clientID: " + clientID);
 				    jsonIn.addProperty("Event", "agentLeft");
 					WebSocketUserPool.sendMessageToUser(clientConn, jsonIn.toString());
 				    
@@ -189,23 +193,23 @@ public class CommonFunction {
 			}
 			
 			if (!"[]".equals(jsonIn.get("waittingAgentIDList").toString())){
-//				System.out.println("userExit() - waittingAgentIDList got here");
-//				System.out.println("userExit() - " + jsonIn.get("waittingAgentIDList").toString());
+//				Util.getConsoleLogger().debug("userExit() - waittingAgentIDList got here");
+//				Util.getConsoleLogger().debug("userExit() - " + jsonIn.get("waittingAgentIDList").toString());
 				JsonArray agentIDJsonAry = jsonIn.getAsJsonArray("waittingAgentIDList");
 //				String clientIDStr = jsonIn.get("waittingClientIDList").toString();
 //				String[] waittingClientIDList = clientIDStr.substring(1, clientIDStr.length()-1).split(",");
-//				System.out.println("userExit() - " + waittingClientIDList.length);
-//				System.out.println("userExit() - agentIDJsonAry: " + agentIDJsonAry);
+//				Util.getConsoleLogger().debug("userExit() - " + waittingClientIDList.length);
+//				Util.getConsoleLogger().debug("userExit() - agentIDJsonAry: " + agentIDJsonAry);
 				for(final JsonElement agentID_je : agentIDJsonAry) {
 				    String agentID = agentID_je.getAsJsonObject().get("agentID").getAsString();
 				    WebSocket agentConn = WebSocketUserPool.getWebSocketByUser(agentID);
-//				    System.out.println("userExit() - agentID: " + agentID);
+//				    Util.getConsoleLogger().debug("userExit() - agentID: " + agentID);
 				    jsonIn.addProperty("Event", "agentLeftThirdParty");
 					WebSocketUserPool.sendMessageToUser(agentConn, jsonIn.toString());
 				}
 			}
 //			for(String clientID: waittingClientIDList){
-//				System.out.println("userExit() - " + clientID);
+//				Util.getConsoleLogger().debug("userExit() - " + clientID);
 //			}
 		}
 		
@@ -219,7 +223,7 @@ public class CommonFunction {
 		WebSocketUserPool.sendMessageToUser(aConn, joinMsg); // 只須原登出Agent收到此訊息即可
 		
 		
-//		System.out.println("before close: " + WebSocketUserPool.getUserID(aConn));
+//		Util.getConsoleLogger().debug("before close: " + WebSocketUserPool.getUserID(aConn));
 		// 最後關閉連線
 		aConn.close();
 	}
@@ -227,7 +231,7 @@ public class CommonFunction {
 	/** * user join room */
 	public static void userjointoRoom(String message,
 			org.java_websocket.WebSocket conn) {
-		System.out.println("userjointoRoom() called - conn: " + conn);
+		Util.getConsoleLogger().debug("userjointoRoom() called - conn: " + conn);
 		JSONObject obj = new JSONObject(message);
 		String roomID = obj.getString("roomID");
 		String userid = obj.getString("id");
@@ -243,7 +247,7 @@ public class CommonFunction {
 		// 尚有例外: JSONObject["ACtype"] not found.
 		String ACtype = obj.getString("ACtype");
 		if ("Agent".equals(ACtype)){
-			System.out.println("userjointoroom - one Agent joined");
+			Util.getConsoleLogger().debug("userjointoroom - one Agent joined");
 			refreshRoomList(conn);						
 		}
 		
@@ -252,7 +256,7 @@ public class CommonFunction {
 	/** * user leave room */
 	public static void userExitfromRoom(String message,
 			org.java_websocket.WebSocket conn) {
-		System.out.println("userExitfromRoom() called");
+		Util.getConsoleLogger().debug("userExitfromRoom() called");
 		JSONObject obj = new JSONObject(message);
 		String roomID = obj.getString("roomID");
 		String username = obj.getString("UserName");
@@ -274,7 +278,7 @@ public class CommonFunction {
 			// 更新UserInteraction 
 		String userinteractionMsg = WebSocketUserPool.getUserInteractionByKey(clientConn);
 		JsonObject userinteractionJsonMsg = Util.getGJsonObject(userinteractionMsg);
-//		System.out.println("getMessageinRoom() - userinteractionMsg: " + userinteractionMsg);
+//		Util.getConsoleLogger().debug("getMessageinRoom() - userinteractionMsg: " + userinteractionMsg);
 		// 因此方法只有Client呼叫,故最多一個Client也就只有一個roomID,若有再更新即可
 				//更新text
 		String text = "";
@@ -296,14 +300,14 @@ public class CommonFunction {
 		userinteractionJsonMsg.add("structuredtext", structuredtext);
 		
 		WebSocketUserPool.addUserInteraction(userinteractionJsonMsg.toString(), clientConn); // final step
-//		System.out.println("after - getMessageinRoom() - userinteractionMsg: " + WebSocketUserPool.getUserInteractionByKey(roomInfo.getClientConn()));
+//		Util.getConsoleLogger().debug("after - getMessageinRoom() - userinteractionMsg: " + WebSocketUserPool.getUserInteractionByKey(roomInfo.getClientConn()));
 
 		// 將訊息寄給room線上使用者:
 		if (msgJsonNew.get("roomID") == null) return;
 		msgJsonNew.addProperty("Event", "messagetoRoom");
 		WebSocketRoomPool.sendMessageinroom(msgJsonNew.get("roomID").getAsString(), msgJsonNew.toString());
 		
-//		System.out.println("final msgJson: \n"+ msgJson); // for debugging
+//		Util.getConsoleLogger().debug("final msgJson: \n"+ msgJson); // for debugging
 	}
 	
 	// room
@@ -317,7 +321,7 @@ public class CommonFunction {
 	
 	/** * search online people from Agent or client */
 	public static void onlineinTYPE(String message, org.java_websocket.WebSocket conn) {
-//		System.out.println("onlineinTYPE");
+//		Util.getConsoleLogger().debug("onlineinTYPE");
 		JSONObject obj = new JSONObject(message);
 		String ACtype = obj.getString("ACtype"); // 請求者的TYPE
 
@@ -382,7 +386,7 @@ public class CommonFunction {
 	
 	/** * update Agent Status */
 	public static void updateStatus(String message, org.java_websocket.WebSocket aConn) {
-		System.out.println("updateStatus() called");
+		Util.getConsoleLogger().debug("updateStatus() called");
 		JsonObject obj = Util.getGJsonObject(message);
 //		JSONObject obj = new JSONObject(message); 
 		String ACtype = WebSocketTypePool.getUserType(aConn);
@@ -406,14 +410,17 @@ public class CommonFunction {
 		WebSocketTypePool.UserUpdate(ACtype, username, userid, date, StatusEnum.getStatusEnumByDbid(status_dbid), reason_dbid, aConn);
 		
 		// 更新DB狀態時間
-//		System.out.println("status	startORend	dbid	roomID	clientID");
-		System.out.println("" + StatusEnum.getStatusEnumByDbid(status_dbid) + ": ");
-		System.out.printf("%10s	%10s %10s %10s %10s %10s" , "status", "startORend", "dbid", "roomID", "clientID", "reason");
-		System.out.println();
-		System.out.println("----------------------------------------------------------------------------");
-		System.out.printf("%10s	%10s %10s %10s %10s %10s" , status_dbid, startORend, dbid, roomID, clientID, reason_dbid);
-		System.out.println();
-//		System.out.println("obj: " + obj);
+		Logger log = LogManager.getLogger(WebSocket.class);
+		log.info("" + StatusEnum.getStatusEnumByDbid(status_dbid) + ": ");
+		log.printf(Level.INFO,"%10s	%10s %10s %10s %10s %10s" , "status", "startORend", "dbid", "roomID", "clientID", "reason");
+		log.info("----------------------------------------------------------------------------");
+		log.printf(Level.INFO,"%10s	%10s %10s %10s %10s %10s" , status_dbid, startORend, dbid, roomID, clientID, reason_dbid);
+//		Util.getConsoleLogger().debug("status	startORend	dbid	roomID	clientID");
+//		System.out.printf("%10s	%10s %10s %10s %10s %10s" , "status", "startORend", "dbid", "roomID", "clientID", "reason");
+//		Util.getConsoleLogger().debug();
+//		System.out.printf("%10s	%10s %10s %10s %10s %10s" , status_dbid, startORend, dbid, roomID, clientID, reason_dbid);
+//		Util.getConsoleLogger().debug();
+//		Util.getConsoleLogger().debug("obj: " + obj);
 		
 		if ("start".equals(startORend)){
 //			String userID = Util.getTmpID(userid);
@@ -426,15 +433,15 @@ public class CommonFunction {
 			}
 			// 將xxxx_dbid值傳給前端
 			StatusEnum currStatusEnum = StatusEnum.getStatusEnumByDbid(status_dbid);
-//			System.out.println("currStatusEnum: " + currStatusEnum);
+//			Util.getConsoleLogger().debug("currStatusEnum: " + currStatusEnum);
 			String dbid_key = currStatusEnum.toString().toLowerCase() + "_dbid";
-//			System.out.println("dbid_key: " + dbid_key);
+//			Util.getConsoleLogger().debug("dbid_key: " + dbid_key);
 			obj.addProperty(dbid_key, dbid); // ex. login_dbid
 			userInfo.getStatusDBIDMap().put(currStatusEnum, dbid); // 更新Bean
 			
 			// 若為iEstablished狀態,則交由RoomInfo來處理結束時間點
 			if (StatusEnum.IESTABLISHED.getDbid().equals(status_dbid)){
-				System.out.println("IESTABLISHED - roomID: " + roomID);
+				Util.getConsoleLogger().debug("IESTABLISHED - roomID: " + roomID);
 				RoomInfo roomInfo = WebSocketRoomPool.getRoomInfo(roomID);
 				roomInfo.setIestablish_dbid(dbid);
 			}
@@ -456,8 +463,8 @@ public class CommonFunction {
 				SimpleDateFormat tmpSdf = new SimpleDateFormat( Util.getSdfTimeFormat() );
 				String nowDate = tmpSdf.format(new java.util.Date());
 				userInfo.setReadyTime(nowDate);
-				System.out.println("update Agent ready time: ");
-				System.out.println("Agent name: " + userInfo.getUsername() + " set readytime to " + userInfo.getReadyTime());
+				Util.getConsoleLogger().debug("update Agent ready time: ");
+				Util.getConsoleLogger().debug("Agent name: " + userInfo.getUsername() + " set readytime to " + userInfo.getReadyTime());
 			}
 			
 			
@@ -467,14 +474,14 @@ public class CommonFunction {
 			WebSocketUserPool.sendMessageToUser(aConn, obj.toString());
 
 		}else if ("end".equals(startORend)){ 
-			System.out.println("end");
+			Util.getConsoleLogger().debug("end");
 			if (dbid != null){
-				System.out.println("dbid: " + dbid);
+				Util.getConsoleLogger().debug("dbid: " + dbid);
 				
 				// 如果是RING結束,現在交由後端統一處理
 				if (StatusEnum.RING.getDbid().equals(status_dbid)){
 					userInfo.setStopRing(true);
-					System.out.println("RING");
+					Util.getConsoleLogger().debug("RING");
 					return;
 				}
 				
@@ -492,7 +499,7 @@ public class CommonFunction {
 	}
 	
 	public static void refreshRoomList(org.java_websocket.WebSocket conn){
-		System.out.println("refreshRoomList() called");
+		Util.getConsoleLogger().debug("refreshRoomList() called");
 		JsonObject sendJson = new JsonObject();
 		sendJson.addProperty("Event", "refreshRoomList");
 		sendJson.addProperty("UserID", conn.toString());
@@ -505,7 +512,7 @@ public class CommonFunction {
 		
 		// 將 此Agent所屬的Room list 塞入json中
 		List<String> roomIDList = WebSocketUserPool.getUserRoomByKey(conn);
-//		System.out.println("roomIDList.size(): " + roomIDList.size());
+//		Util.getConsoleLogger().debug("roomIDList.size(): " + roomIDList.size());
 		for (String roomID: roomIDList){
 			RoomInfo roomInfo = WebSocketRoomPool.getRoomInfo(roomID);
 			UserInfo clientInfo = WebSocketUserPool.getUserInfoByKey(roomInfo.getClientConn());
@@ -516,7 +523,7 @@ public class CommonFunction {
 			// 如果有room歷史訊息,則放到room物件中傳給client
 			if (WebSocketUserPool.getUserInteractionByKey(roomInfo.getClientConn()) != null){
 				JsonObject msgJsonOld = Util.getGJsonObject(WebSocketUserPool.getUserInteractionByKey(roomInfo.getClientConn()));
-				System.out.println("setinteraction() - msgJsonOld: " + msgJsonOld);
+				Util.getConsoleLogger().debug("setinteraction() - msgJsonOld: " + msgJsonOld);
 				if (msgJsonOld.get("text") != null &&
 					msgJsonOld.get("structuredtext") != null){
 					textListJson.add(msgJsonOld.get("text").getAsString());
@@ -539,8 +546,8 @@ public class CommonFunction {
 		sendJson.add("textList", textListJson);
 		sendJson.add("structuredtextList", structuredtextListJson);
 		
-//		System.out.println("roomIDListJson.size(): " + roomIDListJson.size());
-//		System.out.println("sendJson: " + sendJson);
+//		Util.getConsoleLogger().debug("roomIDListJson.size(): " + roomIDListJson.size());
+//		Util.getConsoleLogger().debug("sendJson: " + sendJson);
 		
 		
 		// end of 將此Agent所屬的Room list塞入json中
@@ -557,7 +564,7 @@ public class CommonFunction {
 		// end of 再來把所有client list放入JsonArray
 		Collection<String> agentList = WebSocketTypePool.getOnlineUserIDinTYPE("Agent");
 		for (String agent : agentList){
-			System.out.println("agent: " + agent);
+			Util.getConsoleLogger().debug("agent: " + agent);
 			// 再來跟每個Agent講要更新client list了
 		}
 		

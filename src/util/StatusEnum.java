@@ -38,7 +38,7 @@ public enum StatusEnum {
 		}else if (OESTABLISHED.toString().equals(aStatusname)){
 			return OESTABLISHED;
 		}
-		System.out.println("StatusEnmu - getStatusEnumByDescription: " + " no match");
+		Util.getConsoleLogger().debug("StatusEnmu - getStatusEnumByDescription: " + " no match");
 		return null;
 	}
 	
@@ -61,7 +61,7 @@ public enum StatusEnum {
 		}else if (OESTABLISHED.getDbid().equals(aDbid)){
 			return OESTABLISHED;
 		}
-		System.out.println("StatusEnmu - getStatusEnumByDbid: " + " no match");
+		Util.getConsoleLogger().debug("StatusEnmu - getStatusEnumByDbid: " + " no match");
 		return null;
 	}
 	

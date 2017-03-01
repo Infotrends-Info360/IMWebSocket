@@ -10,7 +10,12 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
-import org.apache.log4j.Logger;
+
+
+
+import org.apache.logging.log4j.Level;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 //import org.java_websocket.WebSocket;
 import org.java_websocket.WebSocketImpl;
 import org.java_websocket.handshake.ClientHandshake;
@@ -22,6 +27,7 @@ import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 
+import filter.startFilter;
 import util.Util;
 import websocket.bean.RoomInfo;
 import websocket.function.AgentFunction;
@@ -32,14 +38,20 @@ import websocket.pools.WebSocketTypePool;
 import websocket.pools.WebSocketUserPool;
 
 public class WebSocket extends WebSocketServer {
+	
 	public WebSocket(InetSocketAddress address) {
 		super(address);
-		System.out.println("IP address: " + address);
+		Util.getConsoleLogger().info("IP address: " + address);
+		Util.getFileLogger().info("IP address: " + address);
 	}
 
 	public WebSocket(int port) throws UnknownHostException {
 		super(new InetSocketAddress(port));
-		System.out.println("Port: " + port);
+		Util.getConsoleLogger().info("Port: " + port);
+		Util.getFileLogger().info("Port: " + port);
+		
+//		Logger log = LogManager.getLogger(WebSocket.class);
+//		log.printf(Level.INFO,"%s *********************************************%n",5);
 	}
 
 	/** * trigger close Event */
@@ -48,10 +60,8 @@ public class WebSocket extends WebSocketServer {
 			String reason, boolean remote) {
 		// 此方法沒有用到,先放著,並不會影響到主流程
 		//userLeave(conn);
-//		System.out.println("Someone unlink in Socket conn:" + conn);
-//		System.out.println("conn: " + conn + " is disconnected. !!!!!");
-		System.out.println("onClose(): " + WebSocketUserPool.getACTypeByKey(conn) + conn + " is disconnected. (onClose)");				
-//		System.out.println("onClose(): " + WebSocketUserPool.getUserID(conn));
+		Util.getConsoleLogger().info("onClose(): " + WebSocketUserPool.getACTypeByKey(conn) + conn + " is disconnected. (onClose)");
+		Util.getFileLogger().info("onClose(): " + WebSocketUserPool.getACTypeByKey(conn) + conn + " is disconnected. (onClose)");
 		// 將Heartbeat功能移轉到這裡:
 		inputInteractionLog(conn,reason);
 		clearUserData(conn); // 包含removeUser, removerUserinTYPE, removeUserinroom
@@ -61,7 +71,9 @@ public class WebSocket extends WebSocketServer {
 	/** * trigger Exception Event */
 	@Override
 	public void onError(org.java_websocket.WebSocket conn, Exception message) {
-		System.out.println("On Error: Socket Exception:" + message.toString());
+		Util.getConsoleLogger().warn("On Error: Socket Exception:" + message.toString());
+		Util.getFileLogger().warn("On Error: Socket Exception:" + message.toString());
+		
 		message.printStackTrace();
 		e++;
 	}
@@ -70,11 +82,8 @@ public class WebSocket extends WebSocketServer {
 	@Override
 	public void onOpen(org.java_websocket.WebSocket conn,
 			ClientHandshake handshake) {
-		System.out.println("Someone link in Socket conn:" + conn);
-		// status測試
-//		String dbid = AgentFunction.RecordStatusStart("123", "1", "2");
-//		AgentFunction.RecordStatusEnd(dbid);
-
+		Util.getConsoleLogger().info("Someone link in Socket conn:" + conn);
+		Util.getFileLogger().info("Someone link in Socket conn:" + conn);
 		l++;
 	}
 
@@ -94,7 +103,8 @@ public class WebSocket extends WebSocketServer {
 	@Override
 	public void onMessage(org.java_websocket.WebSocket conn, String message) {
 		message = message.toString();
-//		System.out.println("WebSocket :\n " +message);
+		Util.getConsoleLogger().trace("WebSocket :\n " +message);
+		Util.getFileLogger().trace("WebSocket :\n " +message);
 		JSONObject obj = new JSONObject(message);
 		switch (obj.getString("type").trim()) {
 		case "message":
@@ -167,7 +177,6 @@ public class WebSocket extends WebSocketServer {
 			inviteAgentThirdParty(message.toString(), conn);
 			break;
 		case "responseThirdParty":
-//			System.out.println("responseThirdParty got here!");
 			responseThirdParty(message.toString(), conn);			
 			break;			
 		case "refreshRoomList":
@@ -189,8 +198,6 @@ public class WebSocket extends WebSocketServer {
 	// 此方法沒有用到,先放著,並不會影響到主流程
 	public void userLeave(org.java_websocket.WebSocket conn) {
 		String user = WebSocketUserPool.getUserByKey(conn);
-//		boolean b = WebSocketPool.removeUserID(conn);
-//		WebSocketPool.removeUserName(conn);
 		boolean b = WebSocketUserPool.removeUser(conn);
 		if (b) {
 			WebSocketUserPool.sendMessage(user.toString());
@@ -200,25 +207,20 @@ public class WebSocket extends WebSocketServer {
 	}
 	
 	private void clearUserData(org.java_websocket.WebSocket conn) {
-		System.out.println("clearUserData() called");
+		Util.getConsoleLogger().debug("clearUserData() called");
 		// 清GROUP:
 		// 取得一個user所屬的所有roomid
 		List<String> roomids = WebSocketUserPool.getUserRoomByKey(conn);
 		List<String> tmpRoomids = new ArrayList<String>(roomids); // 重要: 為了接下來要動態移除掉UserInfo.userRoom List, 為了在跑迴圈時仍保留著reference variable, 故須用light copy建立另一相對物件, 這樣就能實現動態刪除
-		System.out.println("before - roomids.size(): " + roomids.size());
-//		if (roomids != null) {
-//			System.out.println("roomids.size(): " + roomids.size()); //
-//		}
+		Util.getConsoleLogger().debug("before - roomids.size(): " + roomids.size());
 		Iterator<String> itr = tmpRoomids.iterator();
 		while(itr.hasNext()){
 			String roomid = itr.next();
-			System.out.println("***** get roomid: " + roomid);
-			System.out.println(WebSocketUserPool.getUserNameByKey(conn));
-			System.out.println(WebSocketUserPool.getUserID(conn));
+			Util.getConsoleLogger().debug("***** get roomid: " + roomid);
 			//使用每個roomid,並找出相對應的room,再將其中的conn remove掉
 			WebSocketRoomPool.removeUserinroom(roomid, conn);
 		}
-		System.out.println("after - roomids.size(): " + roomids.size());
+		Util.getConsoleLogger().debug("after - roomids.size(): " + roomids.size());
 
 		// 清TYPE:
 		String ACType = WebSocketUserPool.getACTypeByKey(conn);
@@ -233,7 +235,7 @@ public class WebSocket extends WebSocketServer {
 	}
 	
 	private void inputInteractionLog(org.java_websocket.WebSocket conn, String reason) {
-		System.out.println("inputInteractionLog() called");
+		Util.getConsoleLogger().debug("inputInteractionLog() called");
 		
 		// only Client stores userInteraction
 		String message = WebSocketUserPool.getUserInteractionByKey(conn); // 一定取得到: 1. 在user login時就會呼叫setUserInteraction, 2. 在user logut or 重整時也會呼叫setUserInteraction
@@ -247,9 +249,7 @@ public class WebSocket extends WebSocketServer {
 				obj.put("status", 3);
 				obj.put("stoppedreason", "server:HeartBeatLose"); // 看之後是否考慮更改為變數reason
 				obj.put("closefrom", "server:HeartBeatLose"); 
-//				message = obj.toString();
 			}
-//			System.out.println("inputInteractionLog() - " + message);
 			ClientFunction.interactionlog(obj.toString(), conn);			
 		}
 
@@ -257,7 +257,7 @@ public class WebSocket extends WebSocketServer {
 	
 	private void inviteAgentThirdParty(String message, org.java_websocket.WebSocket conn){
 		// 讀出送進來的JSON物件
-		System.out.println("inviteAgentThirdParty() called");
+		Util.getConsoleLogger().debug("inviteAgentThirdParty() called");
 		JSONObject obj = new JSONObject(message);
 		String ACtype = obj.getString("ACtype");
 		String roomID = obj.getString("roomID");
@@ -267,15 +267,13 @@ public class WebSocket extends WebSocketServer {
 		String inviteType = obj.getString("inviteType");
 		String userdata = obj.getJSONObject("userdata").toString();
 		String text = obj.getString("text");
-		System.out.println("inviteAgentThirdParty - userdata: " + userdata);
+		Util.getConsoleLogger().trace("inviteAgentThirdParty - userdata: " + userdata);
 				
 		//籌備要寄出的JSON物件
 		obj.put("Event", "inviteAgentThirdParty");
-//		System.out.println("inviteAgentThirdParty() - userdata: " + userdata);
 		
 		// 寄給invitedAgent:
 		org.java_websocket.WebSocket invitedAgent_conn = WebSocketUserPool.getWebSocketByUser(invitedAgentID);
-//		System.out.println("invitedAgent_conn: " + invitedAgent_conn);
 		WebSocketUserPool.sendMessageToUser(invitedAgent_conn, obj.toString());
 		
 //		type : "inviteAgentThirdParty",
@@ -287,8 +285,8 @@ public class WebSocket extends WebSocketServer {
 	}
 
 	private void responseThirdParty(String message, org.java_websocket.WebSocket aConn) {
+		Util.getConsoleLogger().debug("responseThirdParty() called");
 		JSONObject obj = new JSONObject(message);
-		System.out.println("responseThirdParty - obj: " + obj);
 		String ACtype = obj.getString("ACtype");
 		String roomID = obj.getString("roomID");
 		String fromAgentID = obj.getString("fromAgentID");
@@ -302,28 +300,16 @@ public class WebSocket extends WebSocketServer {
 		
 		obj.put("Event", "responseThirdParty");		
 		if ("accept".equals(response)){
-			System.out.println("responseThirdParty() - accept");
+			Util.getConsoleLogger().debug("responseThirdParty() - accept");
 			/** 新增room成員 **/
 			WebSocketRoomPool.addUserInRoom(roomID, invitedAgentName, invitedAgentID, aConn);
 			/** 新增user所加入的room list **/
 			WebSocketUserPool.addUserRoom(roomID, aConn);
 			
 			// 通知更新roomList
-//			CommonFunction.refreshRoomList(conn);				
-//			CommonFunction.refreshRoomList(WebSocketUserPool.getWebSocketByUser(fromAgentID));				
-			
-//			JSONObject sendJson = new JSONObject();
-//			sendJson.put("Event", "responseThirdParty");
-//			sendJson.put("roomID", roomID);
-//			sendJson.put("fromAgentID", fromAgentID);
-//			sendJson.put("invitedAgentID", invitedAgentID);
-//			sendJson.put("roomMembers", WebSocketRoomPool.getOnlineUserNameinroom(roomID).toString());
-//			sendJson.put("userdata", userdata);
-//			sendJson.put("text", text);
-			
 			// 若是屬於轉接的要求,則將原Agent(邀請者)踢出
 			if ("transfer".equals(inviteType)){
-				System.out.println("responseThirdParty() - transfer");
+				Util.getConsoleLogger().debug("responseThirdParty() - transfer");
 				// 通知使用者清除前端頁面
 				WebSocketUserPool.sendMessageToUser(WebSocketUserPool.getWebSocketByUser(fromAgentID), obj.toString());
 				WebSocketRoomPool.removeUserinroom(roomID, WebSocketUserPool.getWebSocketByUser(fromAgentID));
@@ -332,17 +318,16 @@ public class WebSocket extends WebSocketServer {
 			WebSocketRoomPool.sendMessageinroom(roomID, obj.toString());
 			
 		}else if("reject".equals(response)){
-			System.out.println("responseThirdParty() - reject");			
+			Util.getConsoleLogger().debug("responseThirdParty() - reject");			
 			WebSocketUserPool.sendMessageToUser(WebSocketUserPool.getWebSocketByUser(fromAgentID), obj.toString());
 		}
 	
 	}
 	
 	private void addRoomForMany(String aMsg, org.java_websocket.WebSocket aConn) {
-		System.out.println("addRoomForMany() called");
+		Util.getConsoleLogger().debug("addRoomForMany() called");
 		JsonObject msgJson = Util.getGJsonObject(aMsg);
-//		System.out.println("addRoomForMany - msgJson: " + msgJson);
-//		String roomID = msgJson.get("roomID").getAsString();
+		Util.getConsoleLogger().trace("addRoomForMany - msgJson: " + msgJson);
 		// hardcoded - 之後想想看如何改善"none"這樣寫死的判斷方式
 		String roomID = "";
 		if ("none".equals(msgJson.get("roomID").getAsString())){
@@ -353,31 +338,32 @@ public class WebSocket extends WebSocketServer {
 		
 		String channel = msgJson.get("channel").getAsString();
 		JsonArray userIDJsonAry = msgJson.getAsJsonArray("memberListToJoin");
-		System.out.println("addRoomForMany() - userIDJsonAry: " + userIDJsonAry);
+		Util.getConsoleLogger().trace("addRoomForMany() - userIDJsonAry: " + userIDJsonAry);
 		String clientID = null;
 		
-//		System.out.println("addRoomForMany() - userIDJsonAry: " + userIDJsonAry);
 		for (JsonElement userIDJsonE : userIDJsonAry){
 			JsonObject userIDJsonObj = userIDJsonE.getAsJsonObject();
 			String userID = userIDJsonObj.get("ID").getAsString();
-//			System.out.println("userID: " + userID);
 			org.java_websocket.WebSocket userConn = WebSocketUserPool.getWebSocketByUser(userID);
 			// 處理於Client登入後 到 Agent按下AcceptEvent期間, 有人登出的狀況:
 			if (userConn == null || userConn.isClosed() || userConn.isClosing()){
 				String ACType = WebSocketUserPool.getACTypeByKey(userConn);
-				System.out.println("addRoomForMany() someone is disconnected");
+				Util.getConsoleLogger().warn("addRoomForMany() someone is disconnected");
+				Util.getFileLogger().warn("addRoomForMany() someone is disconnected");
 				if ("Client".equals(ACType)){
-					System.out.println("addRoomForMany() Client is disconnected - addRoomFailed");
+					Util.getConsoleLogger().warn("addRoomForMany() Client:" + userID +" is disconnected - addRoomFailed");
+					Util.getFileLogger().warn("addRoomForMany() Client:" + userID +" is disconnected - addRoomFailed");
 					return;
 				}else if (userIDJsonAry.size() <= 2){
-					System.out.println("addRoomForMany() room member only 1 - addRoomFailed");
+					Util.getConsoleLogger().warn("addRoomForMany() room member only 1 - addRoomFailed");
+					Util.getFileLogger().warn("addRoomForMany() room member only 1 - addRoomFailed");
 					return;
 				}else{
-					System.out.println("addRoomForMany() skip one");
+					Util.getConsoleLogger().warn("addRoomForMany() skip one");
+					Util.getFileLogger().warn("addRoomForMany() skip one");
 					continue;
 				}				
 			}
-//			System.out.println("userConn: " + userConn);
 			String username = WebSocketUserPool.getUserNameByKey(userConn);
 			String joinMsg = "[Server]" + username + " join " + roomID + " room";
 			
@@ -390,7 +376,7 @@ public class WebSocket extends WebSocketServer {
 			// 更新room list
 //			String ACtype = WebSocketUserPool.getACTypeByKey(userConn);
 //			if ("Agent".equals(ACtype)){
-////				System.out.println("userjointoroom - one Agent joined");
+//				Util.getConsoleLogger().debug("userjointoroom - one Agent joined");
 //				CommonFunction.refreshRoomList(userConn);
 //			}else if ("Client".equals(ACtype)){
 //				clientID = userID;
@@ -424,30 +410,28 @@ public class WebSocket extends WebSocketServer {
 	}
 	
 	private void sendComment(String aMsg, org.java_websocket.WebSocket aConn) {
+		Util.getConsoleLogger().debug("sendComment() called");
 		JsonObject jsonIn = Util.getGJsonObject(aMsg);
 		String interactionid = Util.getGString(jsonIn, "interactionid");
 		String activitydataids = Util.getGString(jsonIn, "activitydataids");
 		String comment = Util.getGString(jsonIn, "comment"); 
-		System.out.println("interactionid: " + interactionid);
-		System.out.println("activitydataids " + activitydataids);
-		System.out.println("comment: " + comment);
 		AgentFunction.RecordActivitylog(interactionid, activitydataids, comment);
 	}
 
 	
 	
 	private void test() {
-	System.out.println("test method");
+		Util.getConsoleLogger().debug("test() called");
 
-	/*********** log4j測試 **************/
-	Logger logger = Logger.getLogger(WebSocket.class);
-
-	// 對應的 Log4j.properties 設定要在等級 Info 之上才會顯示，所以logger.debug 不會出現
-	logger.debug("Hello Log4j, this is debug message");
-
-	// 以下的訊息會出現在 console 和 log file 中
-	logger.info("Hi Log4j, this will appear in console and log file");
-	logger.error("This is error message!!!");
+	/*********** log4j 1測試 **************/
+//	Logger logger = Logger.getLogger(WebSocket.class);
+//
+//	// 對應的 Log4j.properties 設定要在等級 Info 之上才會顯示，所以logger.debug 不會出現
+//	logger.debug("Hello Log4j, this is debug message");
+//
+//	// 以下的訊息會出現在 console 和 log file 中
+//	logger.info("Hi Log4j, this will appear in console and log file");
+//	logger.error("This is error message!!!");
 	
 	}
 	

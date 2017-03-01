@@ -50,6 +50,7 @@ public class MaintainService {
 					.LogicDelete_activitygroups(activitygroups);
 		} catch (Exception e) {
 			IsError.GET_EXCEPTION = e.getMessage();
+			e.printStackTrace();
 		}
 		return count;
 	}
@@ -67,6 +68,7 @@ public class MaintainService {
 			count = activitydatadaodao.LogicDelete_ActivityData(activitydata);
 		} catch (Exception e) {
 			IsError.GET_EXCEPTION = e.getMessage();
+			e.printStackTrace();
 		}
 		return count;
 	}
@@ -85,6 +87,7 @@ public class MaintainService {
 			activitydatalist = ActivitydataDao.Flag_activitydata(activitydata);
 		} catch (Exception e) {
 			IsError.GET_EXCEPTION = e.getMessage();
+			e.printStackTrace();
 		}
 		return activitydatalist;
 	}
@@ -102,6 +105,7 @@ public class MaintainService {
 			count = activitymenudaodao.LogicDelete_activitymenu(activitymenu);
 		} catch (Exception e) {
 			IsError.GET_EXCEPTION = e.getMessage();
+			e.printStackTrace();
 		}
 		return count;
 	}
@@ -118,6 +122,7 @@ public class MaintainService {
 			count = agentreasondaodao.Delete_agentreason(agentreason);
 		} catch (Exception e) {
 			IsError.GET_EXCEPTION = e.getMessage();
+			e.printStackTrace();
 		}
 		return count;
 	}
@@ -136,6 +141,7 @@ public class MaintainService {
 			activitymenulist = activitymenudao.Flag_activitymenu(activitymenu);
 		} catch (Exception e) {
 			IsError.GET_EXCEPTION = e.getMessage();
+			e.printStackTrace();
 		}
 		return activitymenulist;
 	}
@@ -152,6 +158,7 @@ public class MaintainService {
 			count = activitydatadaodao.Update_activitydata(activitydata);
 		} catch (Exception e) {
 			IsError.GET_EXCEPTION = e.getMessage();
+			e.printStackTrace();
 		}
 		return count;
 	}
@@ -168,6 +175,7 @@ public class MaintainService {
 			count = activitygroupsdaodao.Update_activitygroups(activitygroups);
 		} catch (Exception e) {
 			IsError.GET_EXCEPTION = e.getMessage();
+			e.printStackTrace();
 		}
 		return count;
 	}
@@ -184,6 +192,7 @@ public class MaintainService {
 			count = activitymenudaodao.Update_activitymenu(activitymenu);
 		} catch (Exception e) {
 			IsError.GET_EXCEPTION = e.getMessage();
+			e.printStackTrace();
 		}
 		return count;
 	}
@@ -202,6 +211,7 @@ public class MaintainService {
 			count = activitydatadao.Insert_activitydata(activitydata);
 		} catch (Exception e) {
 			IsError.GET_EXCEPTION = e.getMessage();
+			e.printStackTrace();
 		}
 		return count;
 	}
@@ -220,6 +230,7 @@ public class MaintainService {
 			count = activitygroupsdao.Insert_activitygroups(activitygroups);
 		} catch (Exception e) {
 			IsError.GET_EXCEPTION = e.getMessage();
+			e.printStackTrace();
 		}
 		return count;
 	}
@@ -238,6 +249,7 @@ public class MaintainService {
 			count = activitymenudao.Insert_activitymenu(activitymenu);
 		} catch (Exception e) {
 			IsError.GET_EXCEPTION = e.getMessage();
+			e.printStackTrace();
 		}
 		return count;
 	}
@@ -256,6 +268,7 @@ public class MaintainService {
 			count = agentreasondao.Insert_agentreason(agentreason);
 		} catch (Exception e) {
 			IsError.GET_EXCEPTION = e.getMessage();
+			e.printStackTrace();
 		}
 		return count;
 	}
@@ -275,6 +288,7 @@ public class MaintainService {
 					.Select_activitydata(activitydata);
 		} catch (Exception e) {
 			IsError.GET_EXCEPTION = e.getMessage();
+			e.printStackTrace();
 		}
 		return activitydatalist;
 	}
@@ -295,6 +309,7 @@ public class MaintainService {
 					.Select_activitygroups(activitygroups);
 		} catch (Exception e) {
 			IsError.GET_EXCEPTION = e.getMessage();
+			e.printStackTrace();
 		}
 		return activitygroupslist;
 
@@ -315,6 +330,7 @@ public class MaintainService {
 					.Select_activitymenu(activitymenu);
 		} catch (Exception e) {
 			IsError.GET_EXCEPTION = e.getMessage();
+			e.printStackTrace();
 		}
 		return activitymenulist;
 	}
@@ -332,6 +348,7 @@ public class MaintainService {
 			count = agentreasondaodao.LogicDelete_agentreason(agentreason);
 		} catch (Exception e) {
 			IsError.GET_EXCEPTION = e.getMessage();
+			e.printStackTrace();
 		}
 		return count;
 	}
@@ -349,6 +366,7 @@ public class MaintainService {
 			count = agentreasondaodao.Update_agentreason(agentreason);
 		} catch (Exception e) {
 			IsError.GET_EXCEPTION = e.getMessage();
+			e.printStackTrace();
 		}
 		return count;
 	}
@@ -366,6 +384,7 @@ public class MaintainService {
 			count = commonlinkdaodao.Delete_commonlink(commonlink);
 		} catch (Exception e) {
 			IsError.GET_EXCEPTION = e.getMessage();
+			e.printStackTrace();
 		}
 		return count;
 	}
@@ -383,6 +402,7 @@ public class MaintainService {
 			count = commonlinkdaodao.Update_commonlink(commonlink);
 		} catch (Exception e) {
 			IsError.GET_EXCEPTION = e.getMessage();
+			e.printStackTrace();
 		}
 		return count;
 	}
@@ -401,6 +421,7 @@ public class MaintainService {
 			count = commonlinkdao.Insert_commonlink(commonlink);
 		} catch (Exception e) {
 			IsError.GET_EXCEPTION = e.getMessage();
+			e.printStackTrace();
 		}
 		return count;
 	}
@@ -419,6 +440,7 @@ public class MaintainService {
 			interactionlist = interactiondao.Selcet_interaction(interaction);
 		} catch (Exception e) {
 			IsError.GET_EXCEPTION = e.getMessage();
+			e.printStackTrace();
 		}
 		return interactionlist;
 
@@ -438,6 +460,7 @@ public class MaintainService {
 			agentreasonlist = agentreasondao.Select_agentreason(agentreason);
 		} catch (Exception e) {
 			IsError.GET_EXCEPTION = e.getMessage();
+			e.printStackTrace();
 		}
 		return agentreasonlist;
 
@@ -457,6 +480,7 @@ public class MaintainService {
 			interactionlist = interactiondao.SelcetAll_interaction(interaction);
 		} catch (Exception e) {
 			IsError.GET_EXCEPTION = e.getMessage();
+			e.printStackTrace();
 		}
 		return interactionlist;
 
@@ -476,6 +500,7 @@ public class MaintainService {
 			commonlinklist = commonlinkdao.Select_commonlink(commonlink);
 		} catch (Exception e) {
 			IsError.GET_EXCEPTION = e.getMessage();
+			e.printStackTrace();
 		}
 		return commonlinklist;
 	}
@@ -494,6 +519,7 @@ public class MaintainService {
 			count = serviceentrydao.insert_ServiceEntry(serviceentry);
 		} catch (Exception e) {
 			IsError.GET_EXCEPTION = e.getMessage();
+			e.printStackTrace();
 		}
 		return count;
 	}
@@ -512,6 +538,7 @@ public class MaintainService {
 			contactID = contactdatadao.query_ContactData(contactdata);
 		} catch (Exception e) {
 			IsError.GET_EXCEPTION = e.getMessage();
+			e.printStackTrace();
 		}
 		return contactID;
 	}
@@ -530,6 +557,7 @@ public class MaintainService {
 			count = contactdatadao.insert_ContactData(contactdata);
 		} catch (Exception e) {
 			IsError.GET_EXCEPTION = e.getMessage();
+			e.printStackTrace();
 		}
 		return count;
 	}
@@ -548,6 +576,7 @@ public class MaintainService {
 			count = contactdatadao.update_ContactData(contactdata);
 		} catch (Exception e) {
 			IsError.GET_EXCEPTION = e.getMessage();
+			e.printStackTrace();
 		}
 		return count;
 	}
@@ -566,6 +595,7 @@ public class MaintainService {
 			count = interactiondao.insert_Interaction(interaction);
 		} catch (Exception e) {
 			IsError.GET_EXCEPTION = e.getMessage();
+			e.printStackTrace();
 		}
 		return count;
 	}
@@ -586,6 +616,7 @@ public class MaintainService {
 					.query_Cfg_ServiceName_Setting(cfg_servicename_setting);
 		} catch (Exception e) {
 			IsError.GET_EXCEPTION = e.getMessage();
+			e.printStackTrace();
 		}
 		return cfg_servicename_settinglist;
 	}
@@ -661,6 +692,7 @@ public class MaintainService {
 			count = agentstatusdao.Update_agentstatus(agentstatus);
 		} catch (Exception e) {
 			IsError.GET_EXCEPTION = e.getMessage();
+			e.printStackTrace();
 		}
 		return count;
 	}
@@ -678,6 +710,7 @@ public class MaintainService {
 	    agentstatuslist = agentstatusdao.Select_agentstatus(agentstatus);
 	   } catch (Exception e) {
 	    IsError.GET_EXCEPTION = e.getMessage();
+	    e.printStackTrace();
 	   }
 	   return agentstatuslist;
 	 
@@ -716,6 +749,7 @@ public class MaintainService {
 				count = interactiondao.update_Interaction_comment(interaction);
 			} catch (Exception e) {
 				IsError.GET_EXCEPTION = e.getMessage();
+				e.printStackTrace();
 			}
 			return count;
 		}
