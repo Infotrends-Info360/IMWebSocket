@@ -42,9 +42,9 @@ public class WebSocketTypePool{
 		// 拿取對應的userInfo,並對其資料做更新
 		UserInfo userInfo = WebSocketUserPool.getUserallconnections().get(aConn);
 		if(aTYPE.equals("Agent")){
-			userInfo.setStatus("not ready");
+			userInfo.setStatusEnum(StatusEnum.NOTREADY);
 		}else if(aTYPE.equals("Client")){
-			userInfo.setStatus("wait");
+//			userInfo.setStatusEnum("wait"); // 應該用不到吧,觀察一下
 		}
 //		userInfo.setReadyTime(aDate);
 		// 放入Map
@@ -53,10 +53,10 @@ public class WebSocketTypePool{
 	}
 	
 	/** * Agent or Client User Information Update */
-	public static void UserUpdate(String aTYPE,String aUsername, String aUserid,String aDate,String aStatus,String aReason, WebSocket aConn) {
+	public static void UserUpdate(String aTYPE,String aUsername, String aUserid,String aDate,String aStatus_dbid,String aReason, WebSocket aConn) {
 		Map<WebSocket, UserInfo> TYPEmap = TYPEconnections.get(aTYPE);
 		UserInfo userInfo = TYPEmap.get(aConn);
-		userInfo.setStatus(aStatus);
+		userInfo.setStatusEnum( StatusEnum.getStatusEnumByDbid(aStatus_dbid));
 		userInfo.setReason(aReason);
 //		userInfo.setReadyTime(aDate); // 更新時間?離開時間?->登入時間是否會被覆蓋掉 ?還是這是專給Agent用的,算等待時間的?
 		TYPEmap.put(aConn, userInfo);
@@ -100,20 +100,21 @@ public class WebSocketTypePool{
 	}
 	
 	/** * Get Online Longest User(Agent) * @return */
-	public static String getOnlineLongestUserinTYPE(String aTYPE) {
-//		System.out.println("getOnlineLongestUserinTYPE() called");
+	synchronized public static String getOnlineLongestUserinTYPE(String aTYPE) {
+		System.out.println("getOnlineLongestUserinTYPE() called");
 		Map<WebSocket,  UserInfo> TYPEmap = TYPEconnections.get(aTYPE);
 		if (TYPEmap == null || TYPEmap.isEmpty()){
 			return null;
 		}
 		//List<String> setUsers = new ArrayList<String>();
 		String settingUser = null;
+		UserInfo settingUserInfo = null;
 		Date date = new Date();
 		long UserStayTime = date.getTime();
 		Collection<UserInfo> setUser = TYPEmap.values();
 //		System.out.println("setUser.size()" + setUser.size());
 		for (UserInfo userInfo : setUser) {
-			if (!userInfo.getStatus().trim().equals(StatusEnum.READY.getDbid())) {
+			if (!userInfo.getStatusEnum().equals(StatusEnum.READY)) {
 				continue;
 			}
 			//setUsers.add(u.get("userid").toString());
@@ -131,12 +132,17 @@ public class WebSocketTypePool{
 			}
 //			System.out.println("Agent Status - userInfo.getStatus(): " + userInfo.getStatus());
 //			System.out.println("Agent Status - StatusEnum.READY.getValue(): " + StatusEnum.READY.getDbid());
-			if(userdate.getTime() <= UserStayTime && userInfo.getStatus().trim().equals(StatusEnum.READY.getDbid())){
+			if(userdate.getTime() <= UserStayTime && userInfo.getStatusEnum().equals(StatusEnum.READY)){
 				UserStayTime = userdate.getTime(); // 每次都會將UserStayTime拿去當作"上一個"Uset的等待時間
 				settingUser = userInfo.getUserid();
+				settingUserInfo = userInfo;
 			}
 		}
-		return settingUser;
+//		return settingUser;
+		// 若沒有任何Agent處於READY狀態,則回傳null
+		if (settingUserInfo == null) return null;
+		settingUserInfo.setStatusEnum(StatusEnum.NOTREADY); // 直接改了,避免一個以上Client找到同一個Agent
+		return settingUserInfo.getUserid();
 	}
 	
 	/** * Get Online User Name in Agent or Client * @return */
@@ -172,9 +178,9 @@ public class WebSocketTypePool{
 	}
 	
 	/** * Get User Status in Agent or Client * ready * not ready * established * party remove * @param session */
-	public static String getUserStatusByKeyinTYPE(String aTYPE, WebSocket aConn) {
+	public static StatusEnum getUserStatusByKeyinTYPE(String aTYPE, WebSocket aConn) {
 		Map<WebSocket,  UserInfo> TYPEmap = TYPEconnections.get(aTYPE);
-		return TYPEmap.get(aConn).getStatus();
+		return TYPEmap.get(aConn).getStatusEnum();
 	}
 	
 	/** * Get User Status in Agent or Client * ready * not ready * established * party remove * @param session */

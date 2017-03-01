@@ -20,7 +20,7 @@
 
 <select id="Select_activitygroups" parameterType="com.Info360.bean.Activitygroups"  resultMap="activitygroupsResult">
  Select DBID,ACTIVITYMENUID,GROUPNAME,DELETEDATETIME,CREATEDATETIME,SORT,DELETEFLAG from tblCfg_ActivityGroups
- <if test="dbid!=0">
+ <if test="activitymenuid!=0">
   where activitymenuid=#{activitymenuid}
   </if>
    ORDER BY SORT
