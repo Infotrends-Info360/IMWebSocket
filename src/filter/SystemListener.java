@@ -111,6 +111,9 @@ public class SystemListener implements ServletContextListener {
 		String  websocket_protocol = prop.getProperty("websocket.protocol");
 		String  websocket_hostname = prop.getProperty("websocket.hostname");
 		String  websocket_port = prop.getProperty("websocket.port");
+		String  IMWebSocket_protocol = prop.getProperty("IMWebSocket.protocol");
+		String  IMWebSocket_hostname = prop.getProperty("IMWebSocket.hostname");
+		String  IMWebSocket_port = prop.getProperty("IMWebSocket.port");
 		String  info360_protocol = prop.getProperty("info360.protocol");
 		String  info360_hostname = prop.getProperty("info360.hostname");
 		String  info360_port = prop.getProperty("info360.port");
@@ -124,25 +127,12 @@ public class SystemListener implements ServletContextListener {
 		String  ServiceNameCache_hostname = prop.getProperty("ServiceNameCache.hostname");
 		String  ServiceNameCache_port = prop.getProperty("ServiceNameCache.port");
 
-//		Util.getConsoleLogger().debug("websocket_protocol: " + websocket_protocol);
-//		Util.getConsoleLogger().debug("websocket_hostname: " + websocket_hostname);
-//		Util.getConsoleLogger().debug("websocket_port: " + websocket_port);
-//		Util.getConsoleLogger().debug("info360_protocol: " + info360_protocol);
-//		Util.getConsoleLogger().debug("info360_hostname: " + info360_hostname);
-//		Util.getConsoleLogger().debug("info360_port: " + info360_port);
-//		Util.getConsoleLogger().debug("Info360_Setting_protocol: " + Info360_Setting_protocol);
-//		Util.getConsoleLogger().debug("Info360_Setting_hostname: " + Info360_Setting_hostname);
-//		Util.getConsoleLogger().debug("Info360_Setting_port: " + Info360_Setting_port);
-//		Util.getConsoleLogger().debug("Upload_Files_protocol: " + Upload_Files_protocol);
-//		Util.getConsoleLogger().debug("Upload_Files_hostname: " + Upload_Files_hostname);
-//		Util.getConsoleLogger().debug("Upload_Files_port: " + Upload_Files_port);
-//		Util.getConsoleLogger().debug("ServiceNameCache_protocol: " + ServiceNameCache_protocol);
-//		Util.getConsoleLogger().debug("ServiceNameCache_hostname: " + ServiceNameCache_hostname);
-//		Util.getConsoleLogger().debug("ServiceNameCache_port: " + ServiceNameCache_port);
-		
 		systemParam.put("websocket_protocol", websocket_protocol);
 		systemParam.put("websocket_hostname", websocket_hostname);
 		systemParam.put("websocket_port", websocket_port);
+		systemParam.put("IMWebSocket_protocol", IMWebSocket_protocol);
+		systemParam.put("IMWebSocket_hostname", IMWebSocket_hostname);
+		systemParam.put("IMWebSocket_port", IMWebSocket_port);
 		systemParam.put("info360_protocol", info360_protocol);
 		systemParam.put("info360_hostname", info360_hostname);
 		systemParam.put("info360_port", info360_port);
@@ -239,7 +229,6 @@ public class SystemListener implements ServletContextListener {
         return map;
     }
     
-    @SuppressWarnings("unchecked")
     private Map<String, Object> createTree(List<String> keys, Map<String, Object> map) {
         Map<String, Object> valueMap = (Map<String, Object>) map.get(keys.get(0));
         if (valueMap == null) {
