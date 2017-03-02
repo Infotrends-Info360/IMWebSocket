@@ -338,7 +338,7 @@ td {
 
 <!-- for dynamically get hostname address -->
 <script>
-// EL test
+//EL test
 // var systemParam = ;
 // alert("systemParam: " + systemParam);
 // $('#Login')[0].value = systemParam;
