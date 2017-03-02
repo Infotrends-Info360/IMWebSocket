@@ -23,14 +23,13 @@ public class Cfg_ServiceName_SettingDao {
 	 * @param Cfg_ServiceName_Setting
 	 */
 	public List<Cfg_ServiceName_Setting> query_Cfg_ServiceName_Setting(Cfg_ServiceName_Setting   cfg_servicename_setting){
-		DBAccess dbAccess = new DBAccess();
 		List<Cfg_ServiceName_Setting> cfg_servicename_settinglist = new ArrayList<Cfg_ServiceName_Setting>();
 		//int serviceentryInt = 0;
 		SqlSession sqlSession = null;
 		
 		
 		try {
-			sqlSession = dbAccess.getSqlSession();
+			sqlSession = DBAccess.getSqlSession();
 			//通過sqlSession執行SQL語句
 			cfg_servicename_settinglist = sqlSession.selectList("cfg_servicename_setting.Query_Cfg_ServiceName_SettingInfo", cfg_servicename_setting);
 			sqlSession.commit();

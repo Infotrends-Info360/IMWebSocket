@@ -22,14 +22,13 @@ public class ServiceEntryDao {
 	 * @param cfg_servicename
 	 */
 	public int insert_ServiceEntry(ServiceEntry   serviceentry){
-		DBAccess dbAccess = new DBAccess();
 		//List<ServiceEntry> serviceentrylist = new ArrayList<ServiceEntry>();
 		int serviceentryInt = 0;
 		SqlSession sqlSession = null;
 		
 		
 		try {
-			sqlSession = dbAccess.getSqlSession();
+			sqlSession = DBAccess.getSqlSession();
 			//通過sqlSession執行SQL語句
 			serviceentryInt = sqlSession.insert("serviceentry.Insert_ServiceEntry", serviceentry);
 			sqlSession.commit();

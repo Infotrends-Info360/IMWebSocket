@@ -21,8 +21,7 @@ public class DBAccess {
 		SqlSession sqlSession = sqlSessionFactory.openSession();
 		return sqlSession;
 	}
-	
-	public DBAccess(){
+	protected DBAccess(){
 		
 	}
 	

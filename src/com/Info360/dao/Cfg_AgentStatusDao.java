@@ -19,12 +19,11 @@ public class Cfg_AgentStatusDao {
 	 * @param agentstatus
 	 */
 	public List<Cfg_AgentStatus> Select_agentstatus(Cfg_AgentStatus agentstatus){
-		DBAccess dbAccess = new DBAccess();
 		List<Cfg_AgentStatus> agentstatuslist = new ArrayList<Cfg_AgentStatus>();
 		SqlSession sqlSession = null;
 		
 		try {
-			sqlSession = dbAccess.getSqlSession();
+			sqlSession = DBAccess.getSqlSession();
 			//通過sqlSession執行SQL語句
 			agentstatuslist = sqlSession.selectList("cfg_agentstatus.Select_agentstatus", agentstatus);
 			sqlSession.commit();

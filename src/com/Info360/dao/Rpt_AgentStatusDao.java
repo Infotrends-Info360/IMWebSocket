@@ -17,12 +17,11 @@ public class Rpt_AgentStatusDao {
 	 * @param agentstatus
 	 */
 	public int Select_agentstatus_usetime(Rpt_AgentStatus   agentstatus){
-		DBAccess dbAccess = new DBAccess();
 		int agentstatusInt = 0;
 		SqlSession sqlSession = null;
 		
 		try {
-			sqlSession = dbAccess.getSqlSession();
+			sqlSession = DBAccess.getSqlSession();
 			//通過sqlSession執行SQL語句
 //			agentstatusInt = sqlSession.insert("rpt_agentstatus.Insert_agentstatus", agentstatus);
 			agentstatusInt = sqlSession.selectOne("rpt_agentstatus.Select_agentstatus_usetime", agentstatus);
@@ -45,12 +44,11 @@ public class Rpt_AgentStatusDao {
 	 * @param agentstatus
 	 */
 	public int Select_agentstatus_usetime_avg(Rpt_AgentStatus   agentstatus){
-		DBAccess dbAccess = new DBAccess();
 		int agentstatusInt = 0;
 		SqlSession sqlSession = null;
 		
 		try {
-			sqlSession = dbAccess.getSqlSession();
+			sqlSession = DBAccess.getSqlSession();
 			//通過sqlSession執行SQL語句
 //			agentstatusInt = sqlSession.insert("rpt_agentstatus.Insert_agentstatus", agentstatus);
 			agentstatusInt = sqlSession.selectOne("rpt_agentstatus.Select_agentstatus_usetime_avg", agentstatus);
@@ -74,12 +72,11 @@ public class Rpt_AgentStatusDao {
 	 * @param ContactData
 	 */
 	public int Insert_agentstatus(Rpt_AgentStatus   agentstatus){
-		DBAccess dbAccess = new DBAccess();
 		int agentstatusInt = 0;
 		SqlSession sqlSession = null;
 		
 		try {
-			sqlSession = dbAccess.getSqlSession();
+			sqlSession = DBAccess.getSqlSession();
 			//通過sqlSession執行SQL語句
 //			agentstatusInt = sqlSession.insert("rpt_agentstatus.Insert_agentstatus", agentstatus);
 			agentstatusInt = sqlSession.selectOne("rpt_agentstatus.Insert_agentstatus", agentstatus);
@@ -102,12 +99,11 @@ public class Rpt_AgentStatusDao {
 	 */
 	public int Update_agentstatus(
 			Rpt_AgentStatus   agentstatus	){
-		DBAccess dbAccess = new DBAccess();
 		int agentstatusInt = 0;
 		SqlSession sqlSession = null;
 
 		try {
-			sqlSession = dbAccess.getSqlSession();
+			sqlSession = DBAccess.getSqlSession();
 			//通過sqlSession執行SQL語句
 			agentstatusInt = sqlSession.update("rpt_agentstatus.Update_agentstatus", agentstatus);
 			sqlSession.commit();
