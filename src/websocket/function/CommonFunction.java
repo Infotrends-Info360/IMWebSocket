@@ -77,7 +77,6 @@ public class CommonFunction {
 	/** * user join websocket * @param user */
 	public static void userjoin(String user, org.java_websocket.WebSocket aConn) {
 		Util.getConsoleLogger().debug("userjoin() called");
-		System.out.println("userjoin() called");
 		JSONObject obj = new JSONObject(user);
 		String username = obj.getString("UserName");
 		String MaxCount = obj.getString("MaxCount"); //新增 MaxCount

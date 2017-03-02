@@ -16,7 +16,7 @@
 <!--     </Async> -->
     </Appenders>
     <Loggers>
-        <Root level="INFO"> <!-- INFO --> <!-- 若改成DEBUG,會印出許多非自行設定的資訊, ex mybatis -->
+        <Root level="OFF"> <!-- INFO --> <!-- 若改成DEBUG,會印出許多非自行設定的資訊, ex mybatis -->
             <AppenderRef ref="Console"/> <!-- this ref 對到 上面的 naem="Console" --> 
             <AppenderRef ref="MyFile"/>
         </Root>

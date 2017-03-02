@@ -13,7 +13,6 @@ import java.util.Set;
 
 
 
-
 import org.apache.logging.log4j.Level;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -103,7 +102,6 @@ public class WebSocket extends WebSocketServer {
 	 */
 	@Override
 	public void onMessage(org.java_websocket.WebSocket conn, String message) {
-		System.out.println("WS() called");
 		message = message.toString();
 		Util.getConsoleLogger().trace("WebSocket :\n " +message);
 		Util.getFileLogger().trace("WebSocket :\n " +message);

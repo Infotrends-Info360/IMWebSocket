@@ -44,7 +44,6 @@ public class ClientFunction {
 	
 	/** * find online Longest Agent */
 	public static void findAgent(String aMessage, org.java_websocket.WebSocket aConn) {
-		System.out.println("findAgent() called");
 		JSONObject obj = new JSONObject(aMessage);
 		String userID = WebSocketUserPool.getUserID(aConn);
 		String userName = WebSocketUserPool.getUserNameByKey(aConn);
@@ -109,12 +108,8 @@ public class ClientFunction {
 					+ "&attributenames=" + attributenames
 					+ "&lang=" + lang;
 			// Connect to URL
-			String hostURL = Util.getSystemParam().get("IMWebSocket_protocol") + "//" +
-						 Util.getSystemParam().get("IMWebSocket_hostname") + ":" +
-						 Util.getSystemParam().get("IMWebSocket_port"); 
-			Util.getConsoleLogger().debug("hostURL:" + hostURL);
-			System.out.println("hostURL:" + hostURL);
-			URL url = new URL( hostURL + "/IMWebSocket/RESTful/searchUserdata");
+			URL url = new URL(
+					"http://127.0.0.1:8080/IMWebSocket/RESTful/searchUserdata");
 			HttpURLConnection connection = (HttpURLConnection) url
 					.openConnection();
 			connection.setDoOutput(true);
