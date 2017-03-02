@@ -5,6 +5,7 @@ var UserID_g; // 使用者ID全域變數
 var agentIDMap_g = new Map(); // 用於私訊部分, 更新現在在線的Agent清單
 var waittingClientIDList_g = []; // 用處: 當LOGOUT時,告知所有有寄給此Agent請求的其他Client不用再等了
 var waittingAgentIDList_g = []; // 用處: 當LOGOUT時,告知所有有寄給此Agent請求的其他Agents不用再等了
+var systemParam_g;
 /** 狀態相關 **/
 var isonline_g = false; // 判斷是否上線的開關
 var status_g; // 狀態全域變數
@@ -42,6 +43,8 @@ function onloadFunctionAgent(){
 	    }
 	});
 	
+	// get systemParam , ex. protocol, hostname, port
+	systemParam_g = JSON.parse( document.getElementById('systemParam').value );
 	
 //	$('#roomList').change(function() {alert("hey"); });
 	
@@ -62,12 +65,11 @@ function onloadFunctionAgent(){
 //帳號密碼驗證
 function loginValidate() {
 	console.log("document.getElementById('systemParam').value: " + document.getElementById('systemParam').value);
-	var systemParam = JSON.parse( document.getElementById('systemParam').value );
 //	alert("systemParam.Info360_Setting: " + systemParam.Info360_Setting);
 //	alert("systemParam.Info360_Setting.protocol: " + systemParam.Info360_Setting.protocol);
 //	alert("systemParam.Info360_Setting.hostname: " + systemParam.Info360_Setting.hostname);
 //	alert("systemParam.Info360_Setting.port: " + systemParam.Info360_Setting.port);
-	var url = systemParam.Info360_Setting.protocol + "//" + systemParam.Info360_Setting.hostname + ":" + systemParam.Info360_Setting.port;
+	var url = systemParam_g.Info360_Setting.protocol + "//" + systemParam_g.Info360_Setting.hostname + ":" + systemParam_g.Info360_Setting.port;
 //	alert("url: " + url);
 	var account = document.getElementById('Account').value;
 	var password = document.getElementById('Password').value;
@@ -139,7 +141,10 @@ function Login() {
 		// 連上websocket
 		console.log("window.location.hostname: " + window.location.hostname);
 		var hostname = window.location.hostname;
-		parent.ws_g = new WebSocket('ws://' + hostname + ':8888');
+		var url = systemParam_g.websocket.protocol + "//" + systemParam_g.websocket.hostname + ":" + systemParam_g.websocket.port;
+		//	alert("url: " + url);
+		//	parent.ws_g = new WebSocket('ws://' + hostname + ':8888');
+		parent.ws_g = new WebSocket(url);
 
 		// 當websocket連接建立成功時
 		parent.ws_g.onopen = function() {
