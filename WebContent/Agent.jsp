@@ -12,6 +12,9 @@
 
 <script type="text/javascript" src="js/websocket-agent.js" charset="utf-8"></script>
 
+<script>
+
+</script>
 
 <!-- <script src="Scripts/jquery-2.1.4.js"></script> -->
 <!-- <script src="Scripts/bootstrap.js"></script> -->

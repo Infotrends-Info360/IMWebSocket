@@ -1,3 +1,4 @@
+
 var ws_g; // websocket
 var UserName_g; // 使用者名稱全域變數
 var UserID_g; // 使用者ID全域變數
@@ -60,11 +61,20 @@ function onloadFunctionAgent(){
 
 //帳號密碼驗證
 function loginValidate() {
+	console.log("document.getElementById('systemParam').value: " + document.getElementById('systemParam').value);
+	var systemParam = JSON.parse( document.getElementById('systemParam').value );
+//	alert("systemParam.Info360_Setting: " + systemParam.Info360_Setting);
+//	alert("systemParam.Info360_Setting.protocol: " + systemParam.Info360_Setting.protocol);
+//	alert("systemParam.Info360_Setting.hostname: " + systemParam.Info360_Setting.hostname);
+//	alert("systemParam.Info360_Setting.port: " + systemParam.Info360_Setting.port);
+	var url = systemParam.Info360_Setting.protocol + "//" + systemParam.Info360_Setting.hostname + ":" + systemParam.Info360_Setting.port;
+//	alert("url: " + url);
 	var account = document.getElementById('Account').value;
 	var password = document.getElementById('Password').value;
 	$
 			.ajax({
-				url : "http://ws.crm.com.tw:8080/Info360_Setting/RESTful/Login",
+//				url : aUrl,
+				url : url + "/Info360_Setting/RESTful/Login",
 				data : {
 					account : account,
 					password : password
