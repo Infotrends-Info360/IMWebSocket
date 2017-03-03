@@ -67,11 +67,11 @@ function Login() {
 	} else {
 		// 開啟WebSocket的通道
 		// 開啟WebSocket的通道
-		var url = systemParam_g.websocket.protocol + "//" + systemParam_g.websocket.hostname + ":" + systemParam_g.websocket.port;
-		ws_g = new WebSocket(url);
-//		console.log("window.location.hostname: " + window.location.hostname);
-//		var hostname = window.location.hostname;
-//		ws_g = new WebSocket('ws://' + hostname +':8888');
+//		var url = systemParam_g.websocket.protocol + "//" + systemParam_g.websocket.hostname + ":" + systemParam_g.websocket.port;
+//		ws_g = new WebSocket(url);
+		console.log("window.location.hostname: " + window.location.hostname);
+		var hostname = window.location.hostname;
+		ws_g = new WebSocket('ws://' + hostname +':8888');
 		// 當websocket連接建立成功時
 		ws_g.onopen = function() {
 			console.log('websocket 打開成功');
