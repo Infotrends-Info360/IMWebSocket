@@ -122,8 +122,11 @@ public class AgentFunction {
 
 		try {
 			// Connect to URL
-			URL url = new URL(
-					"http://127.0.0.1:8080/IMWebSocket/RESTful/Select_agentreason");
+			String hostURL = Util.getHostURLStr("IMWebSocket");
+			Util.getConsoleLogger().debug("hostURL: " + hostURL);
+			URL url = new URL( hostURL + "/IMWebSocket/RESTful/Select_agentreason");
+//			URL url = new URL(
+//					"http://127.0.0.1:8080/IMWebSocket/RESTful/Select_agentreason");
 
 			HttpURLConnection connection = (HttpURLConnection) url
 					.openConnection();
@@ -183,8 +186,11 @@ public class AgentFunction {
 
 		try {
 			// Connect to URL
-			URL url = new URL(
-					"http://127.0.0.1:8080/IMWebSocket/RESTful/Insert_rpt_agentstatus");
+			String hostURL = Util.getHostURLStr("IMWebSocket");
+			Util.getConsoleLogger().debug("hostURL: " + hostURL);
+			URL url = new URL( hostURL + "/IMWebSocket/RESTful/Insert_rpt_agentstatus");
+//			URL url = new URL(
+//					"http://127.0.0.1:8080/IMWebSocket/RESTful/Insert_rpt_agentstatus");
 
 			HttpURLConnection connection = (HttpURLConnection) url
 					.openConnection();
@@ -232,8 +238,11 @@ public class AgentFunction {
 
 		try {
 			// Connect to URL
-			URL url = new URL(
-					"http://127.0.0.1:8080/IMWebSocket/RESTful/Update_rpt_agentstatus");
+			String hostURL = Util.getHostURLStr("IMWebSocket");
+			Util.getConsoleLogger().debug("hostURL: " + hostURL);
+			URL url = new URL( hostURL + "/IMWebSocket/RESTful/Update_rpt_agentstatus");
+//			URL url = new URL(
+//					"http://127.0.0.1:8080/IMWebSocket/RESTful/Update_rpt_agentstatus");
 
 			HttpURLConnection connection = (HttpURLConnection) url
 					.openConnection();
@@ -278,8 +287,11 @@ public class AgentFunction {
 
 			try {
 				// Connect to URL
-				URL url = new URL(
-						"http://127.0.0.1:8080/IMWebSocket/RESTful/Insert_rpt_activitylog");
+				String hostURL = Util.getHostURLStr("IMWebSocket");
+				Util.getConsoleLogger().debug("hostURL: " + hostURL);
+				URL url = new URL( hostURL + "/IMWebSocket/RESTful/Insert_rpt_activitylog");
+//				URL url = new URL(
+//						"http://127.0.0.1:8080/IMWebSocket/RESTful/Insert_rpt_activitylog");
 
 				HttpURLConnection connection = (HttpURLConnection) url
 						.openConnection();
