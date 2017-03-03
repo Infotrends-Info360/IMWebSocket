@@ -142,9 +142,12 @@ function Login() {
 //	alert(parent.UserID_g);
 //	alert(parent.UserName_g);
 		// 連上websocket
-		console.log("window.location.hostname: " + window.location.hostname);
-		var hostname = window.location.hostname;
-		parent.ws_g = new WebSocket('ws://' + hostname + ':8888');
+		var url = systemParam_g.websocket.protocol + "//" + systemParam_g.websocket.hostname + ":" + systemParam_g.websocket.port;
+		parent.ws_g = new WebSocket(url);
+		
+//		console.log("window.location.hostname: " + window.location.hostname);
+//		var hostname = window.location.hostname;
+//		parent.ws_g = new WebSocket('ws://' + hostname + ':8888');
 
 		// 當websocket連接建立成功時
 		parent.ws_g.onopen = function() {
