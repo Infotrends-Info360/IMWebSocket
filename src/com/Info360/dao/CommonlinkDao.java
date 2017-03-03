@@ -22,12 +22,11 @@ public class CommonlinkDao {
 	public int Delete_commonlink(
 			CommonLink   commonlink)
 			{
-		DBAccess dbAccess = new DBAccess();
 		int commonlinkInt = 0;
 		SqlSession sqlSession = null;
 
        try {
-			sqlSession = dbAccess.getSqlSession();
+			sqlSession = DBAccess.getSqlSession();
 			//通過sqlSession執行SQL語句
 			commonlinkInt = sqlSession.insert("commonlink.Delete_commonlink", commonlink);
 			sqlSession.commit();
@@ -46,12 +45,11 @@ public class CommonlinkDao {
 	
 	
 	public List<CommonLink> Select_commonlink(CommonLink commonlink){
-		DBAccess dbAccess = new DBAccess();
 		List<CommonLink> commonlinklist = new ArrayList<CommonLink>();
 		SqlSession sqlSession = null;
 	
 		try {
-			sqlSession = dbAccess.getSqlSession();
+			sqlSession = DBAccess.getSqlSession();
 			//通過sqlSession執行SQL語句
 			commonlinklist = sqlSession.selectList("commonlink.Select_commonlink", commonlink);
 			sqlSession.commit();
@@ -76,12 +74,11 @@ public class CommonlinkDao {
 	public int Insert_commonlink(
 			CommonLink   commonlink)
 			{
-		DBAccess dbAccess = new DBAccess();
 		int commonlinkInt = 0;
 		SqlSession sqlSession = null;
 
        try {
-			sqlSession = dbAccess.getSqlSession();
+			sqlSession = DBAccess.getSqlSession();
 			//通過sqlSession執行SQL語句
 			commonlinkInt = sqlSession.insert("commonlink.Insert_commonlink", commonlink);
 			sqlSession.commit();
@@ -103,12 +100,11 @@ public class CommonlinkDao {
 	 */
 	public int Update_commonlink(
 			CommonLink   commonlink	){
-		DBAccess dbAccess = new DBAccess();
 		int commonlinkInt = 0;
 		SqlSession sqlSession = null;
 
 		try {
-			sqlSession = dbAccess.getSqlSession();
+			sqlSession = DBAccess.getSqlSession();
 			//通過sqlSession執行SQL語句
 			commonlinkInt = sqlSession.update("commonlink.Update_commonlink", commonlink);
 			sqlSession.commit();

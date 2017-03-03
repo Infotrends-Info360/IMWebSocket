@@ -24,14 +24,13 @@ public class ContactDataDao {
 	 * @param ContactData
 	 */
 	public String query_ContactData(ContactData   contactdata){
-		DBAccess dbAccess = new DBAccess();
 		//List<String> contactdatalist = new ArrayList<String>();
 		String contactID = null;
 		SqlSession sqlSession = null;
 		
 		
 		try {
-			sqlSession = dbAccess.getSqlSession();
+			sqlSession = DBAccess.getSqlSession();
 			//通過sqlSession執行SQL語句
 			contactID = sqlSession.selectOne("contactdata.Query_ContactID",  contactdata);
 			sqlSession.commit();
@@ -53,14 +52,13 @@ public class ContactDataDao {
 	 * @param ContactData
 	 */
 	public int insert_ContactData(ContactData   contactdata){
-		DBAccess dbAccess = new DBAccess();
 		//List<ServiceEntry> serviceentrylist = new ArrayList<ServiceEntry>();
 		int contactdataInt = 0;
 		SqlSession sqlSession = null;
 		
 		
 		try {
-			sqlSession = dbAccess.getSqlSession();
+			sqlSession = DBAccess.getSqlSession();
 			//通過sqlSession執行SQL語句
 			contactdataInt = sqlSession.insert("contactdata.Insert_ContactData", contactdata);
 			sqlSession.commit();
@@ -82,14 +80,13 @@ public class ContactDataDao {
 	 * @param ContactData
 	 */
 	public int update_ContactData(ContactData   contactdata){
-		DBAccess dbAccess = new DBAccess();
 		//List<ServiceEntry> serviceentrylist = new ArrayList<ServiceEntry>();
 		int contactdataInt = 0;
 		SqlSession sqlSession = null;
 		
 		
 		try {
-			sqlSession = dbAccess.getSqlSession();
+			sqlSession = DBAccess.getSqlSession();
 			//通過sqlSession執行SQL語句
 			contactdataInt = sqlSession.update("contactdata.Update_ContactData", contactdata);
 			sqlSession.commit();

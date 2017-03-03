@@ -23,12 +23,11 @@ public class ActivitymenuDao {
 	 */
 	public int LogicDelete_activitymenu(
 			Activitymenu   activitymenu	){
-		DBAccess dbAccess = new DBAccess();
 		int activitymenuInt = 0;
 		SqlSession sqlSession = null;
 
 		try {
-			sqlSession = dbAccess.getSqlSession();
+			sqlSession = DBAccess.getSqlSession();
 			//通過sqlSession執行SQL語句
 			activitymenuInt = sqlSession.update("activitymenu.LogicDelete_activitymenu", activitymenu);
 			sqlSession.commit();
@@ -49,12 +48,11 @@ public class ActivitymenuDao {
 	 * @param Flag_activitymenu
 	 */
 	public List<Activitymenu> Flag_activitymenu(Activitymenu activitymenu){
-		DBAccess dbAccess = new DBAccess();
 		List<Activitymenu> activitymenulist = new ArrayList<Activitymenu>();
 		SqlSession sqlSession = null;
 	
 		try {
-			sqlSession = dbAccess.getSqlSession();
+			sqlSession = DBAccess.getSqlSession();
 			//通過sqlSession執行SQL語句
 			activitymenulist = sqlSession.selectList("activitymenu.Flag_activitymenu", activitymenu);
 			sqlSession.commit();
@@ -78,12 +76,11 @@ public class ActivitymenuDao {
 	 */
 	public int Update_activitymenu(
 			Activitymenu   activitymenu	){
-		DBAccess dbAccess = new DBAccess();
 		int activitymenuInt = 0;
 		SqlSession sqlSession = null;
 
 		try {
-			sqlSession = dbAccess.getSqlSession();
+			sqlSession = DBAccess.getSqlSession();
 			//通過sqlSession執行SQL語句
 			activitymenuInt = sqlSession.update("activitymenu.Update_activitymenu", activitymenu);
 			sqlSession.commit();
@@ -104,12 +101,11 @@ public class ActivitymenuDao {
 	 * @param Select_activitymenu
 	 */
 	public List<Activitymenu> Select_activitymenu(Activitymenu activitymenu){
-		DBAccess dbAccess = new DBAccess();
 		List<Activitymenu> activitymenulist = new ArrayList<Activitymenu>();
 		SqlSession sqlSession = null;
 	
 		try {
-			sqlSession = dbAccess.getSqlSession();
+			sqlSession = DBAccess.getSqlSession();
 			//通過sqlSession執行SQL語句
 			activitymenulist = sqlSession.selectList("activitymenu.Select_activitymenu", activitymenu);
 			sqlSession.commit();
@@ -131,13 +127,12 @@ public class ActivitymenuDao {
 	 * @param Insert_activitymenu
 	 */
 	public int Insert_activitymenu(Activitymenu activitymenu){
-		DBAccess dbAccess = new DBAccess();
 		int activitymenuInt = 0;
 		SqlSession sqlSession = null;
 		
 		
 		try {
-			sqlSession = dbAccess.getSqlSession();
+			sqlSession = DBAccess.getSqlSession();
 			//通過sqlSession執行SQL語句
 			activitymenuInt = sqlSession.insert("activitymenu.Insert_activitymenu", activitymenu);
 			sqlSession.commit();

@@ -1,5 +1,8 @@
 ﻿﻿<%@ page language="java" import="java.util.*" contentType="text/html; charset=UTF-8"  pageEncoding="UTF-8" %>
 
+
+
+
 <!DOCTYPE html>
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
@@ -126,7 +129,7 @@ td {
 		            </div>
 		            <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
 <!-- 		                <button id="Login" class="btn btn-primary btn-sm" onclick="Login();">Login</button> -->
-		                <button id="Login" class="btn btn-primary btn-sm" onclick="loginValidate();">Login</button>
+		                <button id="Login" class="btn btn-primary btn-sm" onclick="loginValidate()" value="">Login</button>
 		                <button id="Logout" class="btn btn-primary btn-sm" onclick="Logout();" disabled>Logout</button>
 		                <button id="account01" class="btn btn-info btn-sm" onclick="account01();"> account01 </button>
 		                <button id="account02" class="btn btn-info btn-sm" onclick="account02();"> account02 </button>
@@ -328,7 +331,17 @@ td {
             </div>
         </div><!-- end of 右方區塊 -->
     </div>
-
+<input type='hidden' id="systemParam" value='${systemParam}' disabled>
 
 </body>
 </html>
+
+<!-- for dynamically get hostname address -->
+<script>
+//EL test
+// var systemParam = ;
+// alert("systemParam: " + systemParam);
+// $('#Login')[0].value = systemParam;
+// alert("systemPraram.IMWebSocket.hostname: " + systemPraram.IMWebSocket.hostname);
+</script>
+

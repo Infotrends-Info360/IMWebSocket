@@ -23,7 +23,7 @@ import com.Info360.bean.Activitymenu;
 import com.Info360.bean.Cfg_AgentReason;
 import com.Info360.bean.CommonLink;
 import com.Info360.service.MaintainService;
-
+ 
 
 @Path("/Delete_AgentReason")
 public class AgentReason_Delete_Servlet {

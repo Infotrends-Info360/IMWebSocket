@@ -36,7 +36,7 @@ import websocket.function.CommonFunction;
 import websocket.pools.WebSocketRoomPool;
 import websocket.pools.WebSocketTypePool;
 import websocket.pools.WebSocketUserPool;
-
+ 
 public class WebSocket extends WebSocketServer {
 	
 	public WebSocket(InetSocketAddress address) {
