@@ -12,7 +12,6 @@ import java.text.SimpleDateFormat;
 import java.util.Collection;
 import java.util.Date;
 
-import javax.rmi.CORBA.Util;
 import javax.ws.rs.FormParam;
 import javax.ws.rs.GET;
 import javax.ws.rs.POST;
@@ -24,6 +23,7 @@ import org.json.JSONObject;
 import org.java_websocket.WebSocket;
 
 import util.StatusEnum;
+import util.Util;
 import websocket.pools.WebSocketRoomPool;
 import websocket.pools.WebSocketTypePool;
 import websocket.pools.WebSocketUserPool;
@@ -139,8 +139,11 @@ public class GetKPIServlet {
 
 				try {
 					// Connect to URL
-					URL url = new URL(
-							"http://127.0.0.1:8080/IMWebSocket/RESTful/Select_rpt_agentstatus_usetime");
+					String hostURL = Util.getHostURLStr("IMWebSocket");
+					Util.getConsoleLogger().debug("hostURL: " + hostURL);
+					URL url = new URL( hostURL + "/IMWebSocket/RESTful/Select_rpt_agentstatus_usetime");
+//					URL url = new URL(
+//							"http://127.0.0.1:8080/IMWebSocket/RESTful/Select_rpt_agentstatus_usetime");
 
 					HttpURLConnection connection = (HttpURLConnection) url
 							.openConnection();
@@ -197,8 +200,11 @@ public class GetKPIServlet {
 
 			try {
 				// Connect to URL
-				URL url = new URL(
-						"http://127.0.0.1:8080/IMWebSocket/RESTful/Select_rpt_agentstatus_usetime_avg");
+				String hostURL = Util.getHostURLStr("IMWebSocket");
+				Util.getConsoleLogger().debug("hostURL: " + hostURL);
+				URL url = new URL( hostURL + "/IMWebSocket/RESTful/Select_rpt_agentstatus_usetime_avg");
+//				URL url = new URL(
+//						"http://127.0.0.1:8080/IMWebSocket/RESTful/Select_rpt_agentstatus_usetime_avg");
 
 				HttpURLConnection connection = (HttpURLConnection) url
 						.openConnection();

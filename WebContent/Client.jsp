@@ -167,6 +167,6 @@ WEB_SOCKET_SWF_LOCATION = "WebSocketMain.swf";
 			</div>
 		</div>
 	</div> <!-- end of row -->
-<input id="systemParam" value='${systemParam}' disabled>
+<input type='hidden' id="systemParam" value='${systemParam}' disabled>
 </body>
 </html>
