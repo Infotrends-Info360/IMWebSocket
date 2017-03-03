@@ -126,6 +126,9 @@ public class SystemListener implements ServletContextListener {
 		String  ServiceNameCache_protocol = prop.getProperty("ServiceNameCache.protocol");
 		String  ServiceNameCache_hostname = prop.getProperty("ServiceNameCache.hostname");
 		String  ServiceNameCache_port = prop.getProperty("ServiceNameCache.port");
+		String  infoacd_protocol = prop.getProperty("infoacd.protocol");
+		String  infoacd_hostname = prop.getProperty("infoacd.hostname");
+		String  infoacd_port = prop.getProperty("infoacd.port");
 
 //		Util.getConsoleLogger().debug("websocket_protocol: " + websocket_protocol);
 //		Util.getConsoleLogger().debug("websocket_hostname: " + websocket_hostname);
@@ -161,6 +164,9 @@ public class SystemListener implements ServletContextListener {
 		systemParam.put("ServiceNameCache_protocol", ServiceNameCache_protocol);
 		systemParam.put("ServiceNameCache_hostname", ServiceNameCache_hostname);
 		systemParam.put("ServiceNameCache_port", ServiceNameCache_port);
+		systemParam.put("infoacd_protocol", infoacd_protocol);
+		systemParam.put("infoacd_hostname", infoacd_hostname);
+		systemParam.put("infoacd_port", infoacd_port);
 		
         Util.setSystemParam(systemParam);
 
