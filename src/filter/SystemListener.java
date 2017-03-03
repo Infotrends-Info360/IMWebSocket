@@ -111,6 +111,9 @@ public class SystemListener implements ServletContextListener {
 		String  websocket_protocol = prop.getProperty("websocket.protocol");
 		String  websocket_hostname = prop.getProperty("websocket.hostname");
 		String  websocket_port = prop.getProperty("websocket.port");
+		String  IMWebSocket_protocol = prop.getProperty("IMWebSocket.protocol");
+		String  IMWebSocket_hostname = prop.getProperty("IMWebSocket.hostname");
+		String  IMWebSocket_port = prop.getProperty("IMWebSocket.port");
 		String  info360_protocol = prop.getProperty("info360.protocol");
 		String  info360_hostname = prop.getProperty("info360.hostname");
 		String  info360_port = prop.getProperty("info360.port");
@@ -143,6 +146,9 @@ public class SystemListener implements ServletContextListener {
 		systemParam.put("websocket_protocol", websocket_protocol);
 		systemParam.put("websocket_hostname", websocket_hostname);
 		systemParam.put("websocket_port", websocket_port);
+		systemParam.put("IMWebSocket_protocol", IMWebSocket_protocol);
+		systemParam.put("IMWebSocket_hostname", IMWebSocket_hostname);
+		systemParam.put("IMWebSocket_port", IMWebSocket_port);		
 		systemParam.put("info360_protocol", info360_protocol);
 		systemParam.put("info360_hostname", info360_hostname);
 		systemParam.put("info360_port", info360_port);
