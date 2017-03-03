@@ -29,7 +29,9 @@ public class startFilter implements Filter {
 
 		Util.getConsoleLogger().debug("Starting websocket");
 		WebSocketImpl.DEBUG = false;
-		int port = 8888;
+		int port = Integer.parseInt(Util.getSystemParam().get("websocket_port"));
+		Util.getConsoleLogger().debug("WebSocket port: " + port);
+//		int port = 8888;
 		WebSocket s = null;
 		try {
 			s = new WebSocket(port);
