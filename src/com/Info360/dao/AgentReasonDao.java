@@ -22,12 +22,11 @@ public class AgentReasonDao {
 	public int Delete_agentreason(
 			Cfg_AgentReason   agentreason)
 			{
-		DBAccess dbAccess = new DBAccess();
 		int agentreasonInt = 0;
 		SqlSession sqlSession = null;
 
        try {
-			sqlSession = dbAccess.getSqlSession();
+			sqlSession = DBAccess.getSqlSession();
 			//通過sqlSession執行SQL語句
 			agentreasonInt = sqlSession.delete("agentreason.Delete_agentreason", agentreason);
 			sqlSession.commit();
@@ -49,12 +48,11 @@ public class AgentReasonDao {
 	 * @param Insert_agentreason
 	 */
 	public int Insert_agentreason(Cfg_AgentReason   agentreason){
-		DBAccess dbAccess = new DBAccess();
 		int agentreasonInt = 0;
 		SqlSession sqlSession = null;
 		
 		try {
-			sqlSession = dbAccess.getSqlSession();
+			sqlSession = DBAccess.getSqlSession();
 			//通過sqlSession執行SQL語句
 			agentreasonInt = sqlSession.insert("agentreason.Insert_agentreason", agentreason);
 			sqlSession.commit();
@@ -75,12 +73,11 @@ public class AgentReasonDao {
 	 * @param Select_agentreason
 	 */
 	public List<Cfg_AgentReason> Select_agentreason(Cfg_AgentReason agentreason){
-		DBAccess dbAccess = new DBAccess();
 		List<Cfg_AgentReason> agentreasonlist = new ArrayList<Cfg_AgentReason>();
 		SqlSession sqlSession = null;
 	
 		try {
-			sqlSession = dbAccess.getSqlSession();
+			sqlSession = DBAccess.getSqlSession();
 			//通過sqlSession執行SQL語句
 			agentreasonlist = sqlSession.selectList("agentreason.Select_agentreason", agentreason);
 			sqlSession.commit();
@@ -102,12 +99,11 @@ public class AgentReasonDao {
 	 */
 	public int Update_agentreason(
 			Cfg_AgentReason   agentreason	){
-		DBAccess dbAccess = new DBAccess();
 		int agentreasonInt = 0;
 		SqlSession sqlSession = null;
 
 		try {
-			sqlSession = dbAccess.getSqlSession();
+			sqlSession = DBAccess.getSqlSession();
 			//通過sqlSession執行SQL語句
 			agentreasonInt = sqlSession.update("agentreason.Update_agentreason", agentreason);
 			sqlSession.commit();
@@ -129,12 +125,11 @@ public class AgentReasonDao {
 	 */
 	public int LogicDelete_agentreason(
 			Cfg_AgentReason   agentreason	){
-		DBAccess dbAccess = new DBAccess();
 		int agentreasonInt = 0;
 		SqlSession sqlSession = null;
 
 		try {
-			sqlSession = dbAccess.getSqlSession();
+			sqlSession = DBAccess.getSqlSession();
 			//通過sqlSession執行SQL語句
 			agentreasonInt = sqlSession.update("agentreason.LogicDelete_agentreason", agentreason);
 			sqlSession.commit();

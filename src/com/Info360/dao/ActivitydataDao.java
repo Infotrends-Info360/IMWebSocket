@@ -24,12 +24,11 @@ public class ActivitydataDao {
 	 * @param Flag_activitymenu
 	 */
 	public List<Activitydata> Flag_activitydata(Activitydata activitydata){
-		DBAccess dbAccess = new DBAccess();
 		List<Activitydata> activitydatalist = new ArrayList<Activitydata>();
 		SqlSession sqlSession = null;
 	
 		try {
-			sqlSession = dbAccess.getSqlSession();
+			sqlSession = DBAccess.getSqlSession();
 			//通過sqlSession執行SQL語句
 			activitydatalist = sqlSession.selectList("activitydata.Flag_activitydata", activitydata);
 			sqlSession.commit();
@@ -51,12 +50,11 @@ public class ActivitydataDao {
 	 */
 	public int LogicDelete_ActivityData(
 			Activitydata   activitydata	){
-		DBAccess dbAccess = new DBAccess();
 		int activitydataInt = 0;
 		SqlSession sqlSession = null;
 
 		try {
-			sqlSession = dbAccess.getSqlSession();
+			sqlSession = DBAccess.getSqlSession();
 			//通過sqlSession執行SQL語句
 			activitydataInt = sqlSession.update("activitydata.LogicDelete_ActivityData", activitydata);
 			sqlSession.commit();
@@ -78,12 +76,11 @@ public class ActivitydataDao {
 	 */
 	public int Update_activitydata(
 			Activitydata   activitydata	){
-		DBAccess dbAccess = new DBAccess();
 		int activitydataInt = 0;
 		SqlSession sqlSession = null;
 
 		try {
-			sqlSession = dbAccess.getSqlSession();
+			sqlSession = DBAccess.getSqlSession();
 			//通過sqlSession執行SQL語句
 			activitydataInt = sqlSession.update("activitydata.Update_activitydata", activitydata);
 			sqlSession.commit();
@@ -104,12 +101,11 @@ public class ActivitydataDao {
 	 * @param Insert_activitydata
 	 */
 	public int Insert_activitydata(Activitydata activitydata){
-		DBAccess dbAccess = new DBAccess();
 		int activitydataInt = 0;
 		SqlSession sqlSession = null;
 		
 		try {
-			sqlSession = dbAccess.getSqlSession();
+			sqlSession = DBAccess.getSqlSession();
 			//通過sqlSession執行SQL語句
 			activitydataInt = sqlSession.insert("activitydata.Insert_activitydata", activitydata);
 			sqlSession.commit();
@@ -130,12 +126,11 @@ public class ActivitydataDao {
 	 * @param Select_activitydata
 	 */
 	public List<Activitydata> Select_activitydata(Activitydata activitydata){
-		DBAccess dbAccess = new DBAccess();
 		List<Activitydata> activitydatalist = new ArrayList<Activitydata>();
 		SqlSession sqlSession = null;
 	
 		try {
-			sqlSession = dbAccess.getSqlSession();
+			sqlSession = DBAccess.getSqlSession();
 			//通過sqlSession執行SQL語句
 			activitydatalist = sqlSession.selectList("activitydata.Select_activitydata", activitydata);
 			sqlSession.commit();

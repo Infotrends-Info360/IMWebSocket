@@ -24,12 +24,11 @@ public class ActivitygroupsDao {
 	 */
 	public int LogicDelete_activitygroups(
 			Activitygroups   activitygroups	){
-		DBAccess dbAccess = new DBAccess();
 		int activitygroupsInt = 0;
 		SqlSession sqlSession = null;
 
 		try {
-			sqlSession = dbAccess.getSqlSession();
+			sqlSession = DBAccess.getSqlSession();
 			//通過sqlSession執行SQL語句
 			activitygroupsInt = sqlSession.update("activitygroups.LogicDelete_activitygroups", activitygroups);
 			sqlSession.commit();
@@ -51,12 +50,11 @@ public class ActivitygroupsDao {
 	 */
 	public int Update_activitygroups(
 			Activitygroups   activitygroups	){
-		DBAccess dbAccess = new DBAccess();
 		int activitygroupsInt = 0;
 		SqlSession sqlSession = null;
 
 		try {
-			sqlSession = dbAccess.getSqlSession();
+			sqlSession = DBAccess.getSqlSession();
 			//通過sqlSession執行SQL語句
 			activitygroupsInt = sqlSession.update("activitygroups.Update_activitygroups", activitygroups);
 			sqlSession.commit();
@@ -76,12 +74,11 @@ public class ActivitygroupsDao {
 	 * @param Insert_activitygroups
 	 */
 	public int Insert_activitygroups(Activitygroups activitygroups){
-		DBAccess dbAccess = new DBAccess();
 		int activitygroupsInt = 0;
 		SqlSession sqlSession = null;
 		
 		try {
-			sqlSession = dbAccess.getSqlSession();
+			sqlSession = DBAccess.getSqlSession();
 			//通過sqlSession執行SQL語句
 			activitygroupsInt = sqlSession.insert("activitygroups.Insert_activitygroups", activitygroups);
 			sqlSession.commit();
@@ -102,12 +99,11 @@ public class ActivitygroupsDao {
 	 * @param Select_activitygroups
 	 */
 	public List<Activitygroups> Select_activitygroups(Activitygroups activitygroups){
-		DBAccess dbAccess = new DBAccess();
 		List<Activitygroups> activitygroupslist = new ArrayList<Activitygroups>();
 		SqlSession sqlSession = null;
 	
 		try {
-			sqlSession = dbAccess.getSqlSession();
+			sqlSession = DBAccess.getSqlSession();
 			//通過sqlSession執行SQL語句
 			activitygroupslist = sqlSession.selectList("activitygroups.Select_activitygroups", activitygroups);
 			sqlSession.commit();

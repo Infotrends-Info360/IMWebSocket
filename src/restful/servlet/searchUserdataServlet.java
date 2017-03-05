@@ -160,8 +160,11 @@ public class searchUserdataServlet {
 		String postData = "typeid=" + typeid;
 
 		// Connect to URL
-		URL url = new URL(
-				"http://127.0.0.1:8080/IMWebSocket/RESTful/Cfg_ServiceName_Setting");
+		String hostURL = Util.getHostURLStr("IMWebSocket");
+		Util.getConsoleLogger().debug("hostURL: " + hostURL);
+		URL url = new URL( hostURL + "/IMWebSocket/RESTful/Cfg_ServiceName_Setting");
+//		URL url = new URL(
+//				"http://127.0.0.1:8080/IMWebSocket/RESTful/Cfg_ServiceName_Setting");
 		HttpURLConnection connection = (HttpURLConnection) url.openConnection();
 		connection.setDoOutput(true);
 		connection.setRequestMethod("POST");
@@ -202,8 +205,11 @@ public class searchUserdataServlet {
 
 		// Connect to URL
 		// 小林哥表示: 須建立判斷機制log,設定timeout協助以後判斷問題來源:
-		URL url = new URL(
-				"http://192.168.10.7/infoacd/infoCenterWebService.asmx/GetCustomerLevel");
+		String hostURL = Util.getHostURLStr("infoacd");
+		Util.getConsoleLogger().debug("hostURL(infoacd): " + hostURL);
+		URL url = new URL( hostURL + "/infoacd/infoCenterWebService.asmx/GetCustomerLevel");
+//		URL url = new URL(
+//				"http://192.168.10.7/infoacd/infoCenterWebService.asmx/GetCustomerLevel");
 		// URL url = new
 		// URL("http://192.168.10.40:8080/infoacd/infoCenterWebService.asmx/GetCustomerLevel");
 		// // 當192.168.10.7掛點時,使用此server
@@ -286,9 +292,12 @@ public class searchUserdataServlet {
 		String GetData = "typeid=" + searchtype + "&method=get" + "&key=all";
 
 		// Connect to URL
-		URL url = new URL(
-				"http://ws.crm.com.tw:8080/ServiceNameCache/RESTful/datacache?"
-						+ GetData);
+		String hostURL = Util.getHostURLStr("ServiceNameCache");
+		Util.getConsoleLogger().debug("hostURL(ServiceNameCache): " + hostURL);
+		URL url = new URL( hostURL + "/ServiceNameCache/RESTful/datacache?"+ GetData);
+//		URL url = new URL(
+//				"http://ws.crm.com.tw:8080/ServiceNameCache/RESTful/datacache?"
+//						+ GetData);
 		HttpURLConnection connection = (HttpURLConnection) url.openConnection();
 		connection.setDoOutput(true);
 		connection.setRequestMethod("GET");
@@ -328,8 +337,11 @@ public class searchUserdataServlet {
 				+ date + "&userdata=" + userdata;
 
 		// Connect to URL
-		URL url = new URL(
-				"http://127.0.0.1:8080/IMWebSocket/RESTful/ContactData");
+		String hostURL = Util.getHostURLStr("IMWebSocket");
+		Util.getConsoleLogger().debug("hostURL: " + hostURL);
+		URL url = new URL( hostURL + "/IMWebSocket/RESTful/ContactData");
+//		URL url = new URL(
+//				"http://127.0.0.1:8080/IMWebSocket/RESTful/ContactData");
 		HttpURLConnection connection = (HttpURLConnection) url.openConnection();
 		connection.setDoOutput(true);
 		connection.setRequestMethod("POST");

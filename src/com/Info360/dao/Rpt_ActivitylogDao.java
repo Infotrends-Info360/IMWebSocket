@@ -18,12 +18,11 @@ public class Rpt_ActivitylogDao {
 	 * @param Rpt_Activitylog
 	 */
 	public int Insert_activitylog(Rpt_Activitylog   activitylog){
-		DBAccess dbAccess = new DBAccess();
 		int activitylogInt = 0;
 		SqlSession sqlSession = null;
 		
 		try {
-			sqlSession = dbAccess.getSqlSession();
+			sqlSession = DBAccess.getSqlSession();
 			//通過sqlSession執行SQL語句
 			activitylogInt = sqlSession.insert("rpt_activitylog.Insert_activitylog", activitylog);
 			sqlSession.commit();

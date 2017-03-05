@@ -22,12 +22,11 @@ public class InteractionDao {
 	 * @param interaction
 	 */
 	public List<Interaction> Selcet_interaction(Interaction interaction){
-		DBAccess dbAccess = new DBAccess();
 		List<Interaction> interactionList = new ArrayList<Interaction>();
 		SqlSession sqlSession = null;
 
 		try {
-			sqlSession = dbAccess.getSqlSession();
+			sqlSession = DBAccess.getSqlSession();
 			//通過sqlSession執行SQL語句
 			interactionList = sqlSession.selectList("interaction.Selcet_interaction", interaction);
 			sqlSession.commit();
@@ -48,12 +47,11 @@ public class InteractionDao {
 	 * @param interaction
 	 */
 	public List<Interaction> SelcetAll_interaction(Interaction interaction){
-		DBAccess dbAccess = new DBAccess();
 		List<Interaction> interactionList = new ArrayList<Interaction>();
 		SqlSession sqlSession = null;
 
 		try {
-			sqlSession = dbAccess.getSqlSession();
+			sqlSession = DBAccess.getSqlSession();
 			//通過sqlSession執行SQL語句
 			interactionList = sqlSession.selectList("interaction.SelcetAll_interaction", interaction);
 			sqlSession.commit();
@@ -76,14 +74,13 @@ public class InteractionDao {
 	 * @param insert_Interaction
 	 */
 	public int insert_Interaction(Interaction   interaction){
-		DBAccess dbAccess = new DBAccess();
 		//List<ServiceEntry> serviceentrylist = new ArrayList<ServiceEntry>();
 		int interactionInt = 0;
 		SqlSession sqlSession = null;
 		
 		
 		try {
-			sqlSession = dbAccess.getSqlSession();
+			sqlSession = DBAccess.getSqlSession();
 			//通過sqlSession執行SQL語句
 			interactionInt = sqlSession.insert("interaction.Insert_Interaction", interaction);
 			sqlSession.commit();
@@ -104,14 +101,13 @@ public class InteractionDao {
 	 * @param update_Interaction_comment
 	 */
 	public int update_Interaction_comment(Interaction   interaction){
-		DBAccess dbAccess = new DBAccess();
 		//List<ServiceEntry> serviceentrylist = new ArrayList<ServiceEntry>();
 		int interactionInt = 0;
 		SqlSession sqlSession = null;
 		
 		
 		try {
-			sqlSession = dbAccess.getSqlSession();
+			sqlSession = DBAccess.getSqlSession();
 			//通過sqlSession執行SQL語句
 			interactionInt = sqlSession.update("interaction.Update_Interaction_comment", interaction);
 			sqlSession.commit();
