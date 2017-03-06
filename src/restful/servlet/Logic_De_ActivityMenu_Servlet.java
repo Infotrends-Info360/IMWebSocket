@@ -6,6 +6,7 @@ import java.io.IOException;
 
 import java.math.BigDecimal;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
@@ -38,12 +39,25 @@ public class Logic_De_ActivityMenu_Servlet {
 	
 			@FormParam("menuname") String menuname,
 			@FormParam("deletedatetime") String deletedatetime,
-			@FormParam("deleteflag") String deleteflag
+			@FormParam("deleteflag") String deleteflag,
+    		@FormParam("ActivityMenu_DBID_list") String ActivityMenu_DBID_list
+
 			
 			) throws IOException {
 		
 		JSONObject jsonObject = new JSONObject();
 		Activitymenu activitymenu = new Activitymenu();
+		List<Integer> ActivityMenu_DBID_list2 = new ArrayList<Integer>();
+
+		
+		if(ActivityMenu_DBID_list.length()>0){
+			String [] dd = ActivityMenu_DBID_list.split(",");
+			for(int i=0 ;i<dd.length;i++){
+				ActivityMenu_DBID_list2.add(Integer.valueOf(dd[i]));
+			}
+			activitymenu.setActivityMenu_DBID_list(ActivityMenu_DBID_list2);
+		}
+		
 		
 		activitymenu.setMenuname(menuname);
 		activitymenu.setDeleteflag(deleteflag);
