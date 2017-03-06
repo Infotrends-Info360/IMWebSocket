@@ -3,6 +3,8 @@ package com.Info360.service;
 import java.util.ArrayList;
 import java.util.List;
 
+import util.Util;
+
 import com.Info360.bean.Activitydata;
 import com.Info360.bean.Activitygroups;
 import com.Info360.bean.Activitymenu;
@@ -51,6 +53,7 @@ public class MaintainService {
 		} catch (Exception e) {
 			IsError.GET_EXCEPTION = e.getMessage();
 			e.printStackTrace();
+			Util.getFileLogger().error(e.getMessage());
 		}
 		return count;
 	}
@@ -69,6 +72,7 @@ public class MaintainService {
 		} catch (Exception e) {
 			IsError.GET_EXCEPTION = e.getMessage();
 			e.printStackTrace();
+			Util.getFileLogger().error(e.getMessage());
 		}
 		return count;
 	}
@@ -88,6 +92,7 @@ public class MaintainService {
 		} catch (Exception e) {
 			IsError.GET_EXCEPTION = e.getMessage();
 			e.printStackTrace();
+			Util.getFileLogger().error(e.getMessage());
 		}
 		return activitydatalist;
 	}
@@ -106,6 +111,7 @@ public class MaintainService {
 		} catch (Exception e) {
 			IsError.GET_EXCEPTION = e.getMessage();
 			e.printStackTrace();
+			Util.getFileLogger().error(e.getMessage());
 		}
 		return count;
 	}
@@ -123,6 +129,7 @@ public class MaintainService {
 		} catch (Exception e) {
 			IsError.GET_EXCEPTION = e.getMessage();
 			e.printStackTrace();
+			Util.getFileLogger().error(e.getMessage());
 		}
 		return count;
 	}
@@ -142,6 +149,7 @@ public class MaintainService {
 		} catch (Exception e) {
 			IsError.GET_EXCEPTION = e.getMessage();
 			e.printStackTrace();
+			Util.getFileLogger().error(e.getMessage());
 		}
 		return activitymenulist;
 	}
@@ -159,6 +167,7 @@ public class MaintainService {
 		} catch (Exception e) {
 			IsError.GET_EXCEPTION = e.getMessage();
 			e.printStackTrace();
+			Util.getFileLogger().error(e.getMessage());
 		}
 		return count;
 	}
@@ -176,6 +185,7 @@ public class MaintainService {
 		} catch (Exception e) {
 			IsError.GET_EXCEPTION = e.getMessage();
 			e.printStackTrace();
+			Util.getFileLogger().error(e.getMessage());
 		}
 		return count;
 	}
@@ -193,6 +203,7 @@ public class MaintainService {
 		} catch (Exception e) {
 			IsError.GET_EXCEPTION = e.getMessage();
 			e.printStackTrace();
+			Util.getFileLogger().error(e.getMessage());
 		}
 		return count;
 	}
@@ -212,6 +223,7 @@ public class MaintainService {
 		} catch (Exception e) {
 			IsError.GET_EXCEPTION = e.getMessage();
 			e.printStackTrace();
+			Util.getFileLogger().error(e.getMessage());
 		}
 		return count;
 	}
@@ -231,6 +243,7 @@ public class MaintainService {
 		} catch (Exception e) {
 			IsError.GET_EXCEPTION = e.getMessage();
 			e.printStackTrace();
+			Util.getFileLogger().error(e.getMessage());
 		}
 		return count;
 	}
@@ -250,6 +263,7 @@ public class MaintainService {
 		} catch (Exception e) {
 			IsError.GET_EXCEPTION = e.getMessage();
 			e.printStackTrace();
+			Util.getFileLogger().error(e.getMessage());
 		}
 		return count;
 	}
@@ -269,6 +283,7 @@ public class MaintainService {
 		} catch (Exception e) {
 			IsError.GET_EXCEPTION = e.getMessage();
 			e.printStackTrace();
+			Util.getFileLogger().error(e.getMessage());
 		}
 		return count;
 	}
@@ -289,6 +304,7 @@ public class MaintainService {
 		} catch (Exception e) {
 			IsError.GET_EXCEPTION = e.getMessage();
 			e.printStackTrace();
+			Util.getFileLogger().error(e.getMessage());
 		}
 		return activitydatalist;
 	}
@@ -310,6 +326,7 @@ public class MaintainService {
 		} catch (Exception e) {
 			IsError.GET_EXCEPTION = e.getMessage();
 			e.printStackTrace();
+			Util.getFileLogger().error(e.getMessage());
 		}
 		return activitygroupslist;
 
@@ -331,6 +348,7 @@ public class MaintainService {
 		} catch (Exception e) {
 			IsError.GET_EXCEPTION = e.getMessage();
 			e.printStackTrace();
+			Util.getFileLogger().error(e.getMessage());
 		}
 		return activitymenulist;
 	}
@@ -349,6 +367,7 @@ public class MaintainService {
 		} catch (Exception e) {
 			IsError.GET_EXCEPTION = e.getMessage();
 			e.printStackTrace();
+			Util.getFileLogger().error(e.getMessage());
 		}
 		return count;
 	}
@@ -367,6 +386,7 @@ public class MaintainService {
 		} catch (Exception e) {
 			IsError.GET_EXCEPTION = e.getMessage();
 			e.printStackTrace();
+			Util.getFileLogger().error(e.getMessage());
 		}
 		return count;
 	}
@@ -385,6 +405,7 @@ public class MaintainService {
 		} catch (Exception e) {
 			IsError.GET_EXCEPTION = e.getMessage();
 			e.printStackTrace();
+			Util.getFileLogger().error(e.getMessage());
 		}
 		return count;
 	}
@@ -403,6 +424,7 @@ public class MaintainService {
 		} catch (Exception e) {
 			IsError.GET_EXCEPTION = e.getMessage();
 			e.printStackTrace();
+			Util.getFileLogger().error(e.getMessage());
 		}
 		return count;
 	}
@@ -422,6 +444,7 @@ public class MaintainService {
 		} catch (Exception e) {
 			IsError.GET_EXCEPTION = e.getMessage();
 			e.printStackTrace();
+			Util.getFileLogger().error(e.getMessage());
 		}
 		return count;
 	}
@@ -441,6 +464,7 @@ public class MaintainService {
 		} catch (Exception e) {
 			IsError.GET_EXCEPTION = e.getMessage();
 			e.printStackTrace();
+			Util.getFileLogger().error(e.getMessage());
 		}
 		return interactionlist;
 
@@ -461,6 +485,7 @@ public class MaintainService {
 		} catch (Exception e) {
 			IsError.GET_EXCEPTION = e.getMessage();
 			e.printStackTrace();
+			Util.getFileLogger().error(e.getMessage());
 		}
 		return agentreasonlist;
 
@@ -481,6 +506,7 @@ public class MaintainService {
 		} catch (Exception e) {
 			IsError.GET_EXCEPTION = e.getMessage();
 			e.printStackTrace();
+			Util.getFileLogger().error(e.getMessage());
 		}
 		return interactionlist;
 
@@ -501,6 +527,7 @@ public class MaintainService {
 		} catch (Exception e) {
 			IsError.GET_EXCEPTION = e.getMessage();
 			e.printStackTrace();
+			Util.getFileLogger().error(e.getMessage());
 		}
 		return commonlinklist;
 	}
@@ -520,6 +547,7 @@ public class MaintainService {
 		} catch (Exception e) {
 			IsError.GET_EXCEPTION = e.getMessage();
 			e.printStackTrace();
+			Util.getFileLogger().error(e.getMessage());
 		}
 		return count;
 	}
@@ -539,6 +567,7 @@ public class MaintainService {
 		} catch (Exception e) {
 			IsError.GET_EXCEPTION = e.getMessage();
 			e.printStackTrace();
+			Util.getFileLogger().error(e.getMessage());
 		}
 		return contactID;
 	}
@@ -558,6 +587,7 @@ public class MaintainService {
 		} catch (Exception e) {
 			IsError.GET_EXCEPTION = e.getMessage();
 			e.printStackTrace();
+			Util.getFileLogger().error(e.getMessage());
 		}
 		return count;
 	}
@@ -577,6 +607,7 @@ public class MaintainService {
 		} catch (Exception e) {
 			IsError.GET_EXCEPTION = e.getMessage();
 			e.printStackTrace();
+			Util.getFileLogger().error(e.getMessage());
 		}
 		return count;
 	}
@@ -596,6 +627,7 @@ public class MaintainService {
 		} catch (Exception e) {
 			IsError.GET_EXCEPTION = e.getMessage();
 			e.printStackTrace();
+			Util.getFileLogger().error(e.getMessage());
 		}
 		return count;
 	}
@@ -617,6 +649,7 @@ public class MaintainService {
 		} catch (Exception e) {
 			IsError.GET_EXCEPTION = e.getMessage();
 			e.printStackTrace();
+			Util.getFileLogger().error(e.getMessage());
 		}
 		return cfg_servicename_settinglist;
 	}
@@ -637,6 +670,7 @@ public class MaintainService {
 		} catch (Exception e) {
 			IsError.GET_EXCEPTION = e.getMessage();
 			e.printStackTrace();
+			Util.getFileLogger().error(e.getMessage());
 		}
 		return second;
 	}
@@ -656,6 +690,7 @@ public class MaintainService {
 		} catch (Exception e) {
 			IsError.GET_EXCEPTION = e.getMessage();
 			e.printStackTrace();
+			Util.getFileLogger().error(e.getMessage());
 		}
 		return second;
 	}
@@ -675,6 +710,7 @@ public class MaintainService {
 		} catch (Exception e) {
 			IsError.GET_EXCEPTION = e.getMessage();
 			e.printStackTrace();
+			Util.getFileLogger().error(e.getMessage());
 		}
 		return count;
 	}
@@ -693,6 +729,7 @@ public class MaintainService {
 		} catch (Exception e) {
 			IsError.GET_EXCEPTION = e.getMessage();
 			e.printStackTrace();
+			Util.getFileLogger().error(e.getMessage());
 		}
 		return count;
 	}
@@ -711,6 +748,7 @@ public class MaintainService {
 	   } catch (Exception e) {
 	    IsError.GET_EXCEPTION = e.getMessage();
 	    e.printStackTrace();
+		Util.getFileLogger().error(e.getMessage());
 	   }
 	   return agentstatuslist;
 	 
@@ -731,6 +769,7 @@ public class MaintainService {
 			} catch (Exception e) {
 				IsError.GET_EXCEPTION = e.getMessage();
 				e.printStackTrace();
+				Util.getFileLogger().error(e.getMessage());
 			}
 			return count;
 		}
@@ -750,6 +789,7 @@ public class MaintainService {
 			} catch (Exception e) {
 				IsError.GET_EXCEPTION = e.getMessage();
 				e.printStackTrace();
+				Util.getFileLogger().error(e.getMessage());
 			}
 			return count;
 		}
