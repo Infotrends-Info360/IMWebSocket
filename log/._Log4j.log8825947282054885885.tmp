@@ -10,5 +10,3 @@ org.java_websocket.WebSocketImpl@2df481d is connected        - [17/03/06 13:01:1
 林智凱 is connected. (HeartBeat)                                - [17/03/06 13:01:17][INFO][websocket.HeartBeat-24]
 SqlSessionFactoryBuilder created.                            - [17/03/06 13:32:36][INFO][com.Info360.db.DBAccess-42]
 WebSocket Port initialized: 8888                             - [17/03/06 13:32:36][INFO][websocket.WebSocket-51]
-SqlSessionFactoryBuilder created.                            - [17/03/06 13:34:04][INFO][com.Info360.db.DBAccess-42]
-WebSocket Port initialized: 8888                             - [17/03/06 13:34:05][INFO][websocket.WebSocket-51]
