@@ -114,7 +114,7 @@ public class ClientFunction {
 					+ "&lang=" + lang;
 			// Connect to URL
 			String hostURL = Util.getHostURLStr("IMWebSocket");
-			Util.getConsoleLogger().debug("hostURL: " + hostURL);
+//			Util.getConsoleLogger().debug("hostURL: " + hostURL);
 			URL url = new URL( hostURL + "/IMWebSocket/RESTful/searchUserdata");
 //			URL url = new URL(
 //					"http://127.0.0.1:8080/IMWebSocket/RESTful/searchUserdata");
@@ -199,7 +199,7 @@ public class ClientFunction {
 					+ "&enterkey=" + enterkey;
 			// Connect to URL
 			String hostURL = Util.getHostURLStr("IMWebSocket");
-			Util.getConsoleLogger().debug("hostURL: " + hostURL);
+//			Util.getConsoleLogger().debug("hostURL: " + hostURL);
 			URL url = new URL( hostURL + "/IMWebSocket/RESTful/ServiceEntry");			
 //			URL url = new URL(
 //					"http://127.0.0.1:8080/IMWebSocket/RESTful/ServiceEntry");
@@ -357,7 +357,7 @@ public class ClientFunction {
 
 			// Connect to URL
 			String hostURL = Util.getHostURLStr("IMWebSocket");
-			Util.getConsoleLogger().debug("hostURL: " + hostURL);
+//			Util.getConsoleLogger().debug("hostURL: " + hostURL);
 			URL url = new URL( hostURL + "/IMWebSocket/RESTful/Interaction");
 //			URL url = new URL(
 //					"http://127.0.0.1:8080/IMWebSocket/RESTful/Interaction");
