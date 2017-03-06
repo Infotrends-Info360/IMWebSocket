@@ -108,27 +108,33 @@ public class SystemListener implements ServletContextListener {
 			Util.getFileLogger().warn("property file '" + propFileName + "' not found in the classpath");
 		}
 		
-		String  websocket_protocol = prop.getProperty("websocket.protocol");
-		String  websocket_hostname = prop.getProperty("websocket.hostname");
-		String  websocket_port = prop.getProperty("websocket.port");
-		String  IMWebSocket_protocol = prop.getProperty("IMWebSocket.protocol");
-		String  IMWebSocket_hostname = prop.getProperty("IMWebSocket.hostname");
-		String  IMWebSocket_port = prop.getProperty("IMWebSocket.port");
-		String  info360_protocol = prop.getProperty("info360.protocol");
-		String  info360_hostname = prop.getProperty("info360.hostname");
-		String  info360_port = prop.getProperty("info360.port");
-		String  Info360_Setting_protocol = prop.getProperty("Info360_Setting.protocol");
-		String  Info360_Setting_hostname = prop.getProperty("Info360_Setting.hostname");
-		String  Info360_Setting_port = prop.getProperty("Info360_Setting.port");
-		String  Upload_Files_protocol = prop.getProperty("Upload_Files.protocol");
-		String  Upload_Files_hostname = prop.getProperty("Upload_Files.hostname");
-		String  Upload_Files_port = prop.getProperty("Upload_Files.port");
-		String  ServiceNameCache_protocol = prop.getProperty("ServiceNameCache.protocol");
-		String  ServiceNameCache_hostname = prop.getProperty("ServiceNameCache.hostname");
-		String  ServiceNameCache_port = prop.getProperty("ServiceNameCache.port");
-		String  infoacd_protocol = prop.getProperty("infoacd.protocol");
-		String  infoacd_hostname = prop.getProperty("infoacd.hostname");
-		String  infoacd_port = prop.getProperty("infoacd.port");
+		for (final String name: prop.stringPropertyNames()){
+			Util.getConsoleLogger().debug("name: " + name);
+			Util.getConsoleLogger().debug("prop.getProperty(name): " + prop.getProperty(name));
+			systemParam.put(name.replace(".", "_"), prop.getProperty(name));
+		}
+		
+//		String  websocket_protocol = prop.getProperty("websocket.protocol");
+//		String  websocket_hostname = prop.getProperty("websocket.hostname");
+//		String  websocket_port = prop.getProperty("websocket.port");
+//		String  IMWebSocket_protocol = prop.getProperty("IMWebSocket.protocol");
+//		String  IMWebSocket_hostname = prop.getProperty("IMWebSocket.hostname");
+//		String  IMWebSocket_port = prop.getProperty("IMWebSocket.port");
+//		String  info360_protocol = prop.getProperty("info360.protocol");
+//		String  info360_hostname = prop.getProperty("info360.hostname");
+//		String  info360_port = prop.getProperty("info360.port");
+//		String  Info360_Setting_protocol = prop.getProperty("Info360_Setting.protocol");
+//		String  Info360_Setting_hostname = prop.getProperty("Info360_Setting.hostname");
+//		String  Info360_Setting_port = prop.getProperty("Info360_Setting.port");
+//		String  Upload_Files_protocol = prop.getProperty("Upload_Files.protocol");
+//		String  Upload_Files_hostname = prop.getProperty("Upload_Files.hostname");
+//		String  Upload_Files_port = prop.getProperty("Upload_Files.port");
+//		String  ServiceNameCache_protocol = prop.getProperty("ServiceNameCache.protocol");
+//		String  ServiceNameCache_hostname = prop.getProperty("ServiceNameCache.hostname");
+//		String  ServiceNameCache_port = prop.getProperty("ServiceNameCache.port");
+//		String  infoacd_protocol = prop.getProperty("infoacd.protocol");
+//		String  infoacd_hostname = prop.getProperty("infoacd.hostname");
+//		String  infoacd_port = prop.getProperty("infoacd.port");
 
 //		Util.getConsoleLogger().debug("websocket_protocol: " + websocket_protocol);
 //		Util.getConsoleLogger().debug("websocket_hostname: " + websocket_hostname);
@@ -146,42 +152,38 @@ public class SystemListener implements ServletContextListener {
 //		Util.getConsoleLogger().debug("ServiceNameCache_hostname: " + ServiceNameCache_hostname);
 //		Util.getConsoleLogger().debug("ServiceNameCache_port: " + ServiceNameCache_port);
 		
-		systemParam.put("websocket_protocol", websocket_protocol);
-		systemParam.put("websocket_hostname", websocket_hostname);
-		systemParam.put("websocket_port", websocket_port);
-		systemParam.put("IMWebSocket_protocol", IMWebSocket_protocol);
-		systemParam.put("IMWebSocket_hostname", IMWebSocket_hostname);
-		systemParam.put("IMWebSocket_port", IMWebSocket_port);		
-		systemParam.put("info360_protocol", info360_protocol);
-		systemParam.put("info360_hostname", info360_hostname);
-		systemParam.put("info360_port", info360_port);
-		systemParam.put("Info360_Setting_protocol", Info360_Setting_protocol);
-		systemParam.put("Info360_Setting_hostname", Info360_Setting_hostname);
-		systemParam.put("Info360_Setting_port", Info360_Setting_port);
-		systemParam.put("Upload_Files_protocol", Upload_Files_protocol);
-		systemParam.put("Upload_Files_hostname", Upload_Files_hostname);
-		systemParam.put("Upload_Files_port", Upload_Files_port);
-		systemParam.put("ServiceNameCache_protocol", ServiceNameCache_protocol);
-		systemParam.put("ServiceNameCache_hostname", ServiceNameCache_hostname);
-		systemParam.put("ServiceNameCache_port", ServiceNameCache_port);
-		systemParam.put("infoacd_protocol", infoacd_protocol);
-		systemParam.put("infoacd_hostname", infoacd_hostname);
-		systemParam.put("infoacd_port", infoacd_port);
+//		systemParam.put("websocket_protocol", websocket_protocol);
+//		systemParam.put("websocket_hostname", websocket_hostname);
+//		systemParam.put("websocket_port", websocket_port);
+//		systemParam.put("IMWebSocket_protocol", IMWebSocket_protocol);
+//		systemParam.put("IMWebSocket_hostname", IMWebSocket_hostname);
+//		systemParam.put("IMWebSocket_port", IMWebSocket_port);		
+//		systemParam.put("info360_protocol", info360_protocol);
+//		systemParam.put("info360_hostname", info360_hostname);
+//		systemParam.put("info360_port", info360_port);
+//		systemParam.put("Info360_Setting_protocol", Info360_Setting_protocol);
+//		systemParam.put("Info360_Setting_hostname", Info360_Setting_hostname);
+//		systemParam.put("Info360_Setting_port", Info360_Setting_port);
+//		systemParam.put("Upload_Files_protocol", Upload_Files_protocol);
+//		systemParam.put("Upload_Files_hostname", Upload_Files_hostname);
+//		systemParam.put("Upload_Files_port", Upload_Files_port);
+//		systemParam.put("ServiceNameCache_protocol", ServiceNameCache_protocol);
+//		systemParam.put("ServiceNameCache_hostname", ServiceNameCache_hostname);
+//		systemParam.put("ServiceNameCache_port", ServiceNameCache_port);
+//		systemParam.put("infoacd_protocol", infoacd_protocol);
+//		systemParam.put("infoacd_hostname", infoacd_hostname);
+//		systemParam.put("infoacd_port", infoacd_port);
 		
         Util.setSystemParam(systemParam);
 
-//        Properties properties = ...;
-
+        // 將IP,port資訊轉換為JSON格式,傳給前端頁面
         Map<String, Object> propertiesMap = convertProperties2TreeMap(prop);
         Gson gson = new GsonBuilder().setPrettyPrinting().create();
         String propertiesJson = gson.toJson(propertiesMap);
 //        System.out.println("Ready, converts " + prop.size() + " entries.");        
-        System.out.println("propertiesJson: " + propertiesJson );        
-        context.setAttribute("systemParam", propertiesJson); // 將此物件放入大廳中
+        Util.getConsoleLogger().debug("propertiesJson: " + propertiesJson );        
+        context.setAttribute("systemParam", propertiesJson); // 將此物件放入大廳中,讓前端使用者可取得相關URL資訊
 
-		
-		
-        
         // 更新statusList
         Cfg_AgentStatus agentstatus = new Cfg_AgentStatus(); 
         MaintainService maintainservice = new MaintainService();		
