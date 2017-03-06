@@ -159,12 +159,6 @@ public class WebSocketTypePool{
 		usb.setStartORend("start");
 		usb.setReason_dbid("9"); // 先暫時這樣
 		CommonFunction.updateStatus(gson.toJson(usb), agentConn);
-//		// 3. RING狀態開始
-		usb = new UpdateStatusBean();
-		usb.setStatus(StatusEnum.RING.getDbid());
-		usb.setStartORend("start");
-		usb.setClientID( WebSocketUserPool.getUserID(aConn));
-		CommonFunction.updateStatus(gson.toJson(usb), agentConn);
 		
 		return settingUserInfo.getUserid();
 	}

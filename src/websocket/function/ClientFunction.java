@@ -15,12 +15,15 @@ import java.util.Set;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
+import com.google.gson.Gson;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 
+import util.StatusEnum;
 import util.Util;
 import websocket.bean.RoomInfo;
+import websocket.bean.UpdateStatusBean;
 import websocket.pools.WebSocketRoomPool;
 import websocket.pools.WebSocketTypePool;
 import websocket.pools.WebSocketUserPool;
@@ -151,6 +154,8 @@ public class ClientFunction {
 		
 		
 		JSONObject responseSBjson = new JSONObject(responseSB.toString());
+		Util.getFileLogger().debug("senduserdata result: " + responseSBjson);
+		
 		JSONObject sendjson = new JSONObject();
 		
 		sendjson.put("Event", "senduserdata");
@@ -159,18 +164,28 @@ public class ClientFunction {
 		sendjson.put("channel", channel);
 //		Util.getConsoleLogger().debug("senduserdata() - sendjson" + sendjson);
 		WebSocketUserPool.sendMessageToUser(conn, sendjson.toString());
+		// 通知Agent,有新的通話請求 RING
 		// 掉換順序
 		// 若尚未找到Agent,則會出現JSONException
 		// 之後若熟悉RESTful,則可試著將抓取contactID與找到Agent後通知兩方這兩件事情分開處理
-		try{
-			org.java_websocket.WebSocket sendtoConn = WebSocketUserPool
-					.getWebSocketByUser(sendto);
+		org.java_websocket.WebSocket sendtoConn = null;
+		sendtoConn = WebSocketUserPool.getWebSocketByUser(sendto);
+		if (sendtoConn != null){
 			sendjson.put("clientID", WebSocketUserPool.getUserID(conn).trim());
 			sendjson.put("clientName", WebSocketUserPool.getUserNameByKey(conn).trim());
 			WebSocketUserPool.sendMessageToUser(sendtoConn, sendjson.toString());			
-		}catch(org.json.JSONException e) {
-			Util.getConsoleLogger().debug("JSONObject[\"sendto\"] not found.");
-		}
+			
+			// 開始RING倒數機制
+//				// 3. RING狀態開始
+			UpdateStatusBean usb = new UpdateStatusBean();
+			usb.setStatus(StatusEnum.RING.getDbid());
+			usb.setStartORend("start");
+			usb.setClientID( WebSocketUserPool.getUserID(conn));
+			CommonFunction.updateStatus(new Gson().toJson(usb), sendtoConn);				
+		}// end of if 
+//		String status_dbid = Util.getGString(obj, "status"); // 以數字代表 dbid
+//		String startORend = Util.getGString(obj, "startORend"); 
+//		String clientID = Util.getGString(obj, "clientID"); // for RING
 
 	}
 	

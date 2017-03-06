@@ -146,6 +146,9 @@ public class WebSocket extends WebSocketServer {
 		case "RejectEvent":
 			AgentFunction.RejectEvent(message.toString(), conn);
 			break;
+		case "findAgent":
+			ClientFunction.findAgent(message.toString(), conn);
+			break;
 		case "findAgentEvent":
 			ClientFunction.findAgentEvent(message.toString(), conn);
 			break;
@@ -154,9 +157,6 @@ public class WebSocket extends WebSocketServer {
 			break;
 		case "getUserStatus":
 			AgentFunction.getUserStatus(message.toString(), conn);
-			break;
-		case "findAgent":
-			ClientFunction.findAgent(message.toString(), conn);
 			break;
 		case "createroomId":
 			AgentFunction.createRoomId(message.toString(), conn);
