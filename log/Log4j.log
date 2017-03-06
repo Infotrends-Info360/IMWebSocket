@@ -1,3 +1,39 @@
 org.java_websocket.WebSocketImpl@47beb199 is connected       - [17/03/06 11:48:11][INFO][websocket.WebSocket-86]
 林智凱 is connected. (HeartBeat)                                - [17/03/06 11:48:11][INFO][websocket.HeartBeat-24]
 林智凱 is disconnected. (onClose)                               - [17/03/06 11:48:27][INFO][websocket.WebSocket-64]
+WebSocket Port initialized: 8888                             - [17/03/06 12:05:38][INFO][websocket.WebSocket-51]
+org.java_websocket.WebSocketImpl@3c6f1fb0 is connected       - [17/03/06 12:05:50][INFO][websocket.WebSocket-86]
+林智凱 is connected. (HeartBeat)                                - [17/03/06 12:05:50][INFO][websocket.HeartBeat-24]
+林智凱 is disconnected. (onClose)                               - [17/03/06 12:06:23][INFO][websocket.WebSocket-64]
+WebSocket Port initialized: 8888                             - [17/03/06 12:06:47][INFO][websocket.WebSocket-51]
+org.java_websocket.WebSocketImpl@1eb080f is connected        - [17/03/06 12:07:02][INFO][websocket.WebSocket-86]
+林智凱 is connected. (HeartBeat)                                - [17/03/06 12:07:03][INFO][websocket.HeartBeat-24]
+林智凱 is disconnected. (onClose)                               - [17/03/06 12:07:18][INFO][websocket.WebSocket-64]
+WebSocket Port initialized: 8888                             - [17/03/06 12:08:31][INFO][websocket.WebSocket-51]
+org.java_websocket.WebSocketImpl@ae84998 is connected        - [17/03/06 12:08:40][INFO][websocket.WebSocket-86]
+林智凱 is connected. (HeartBeat)                                - [17/03/06 12:08:40][INFO][websocket.HeartBeat-24]
+林智凱 is disconnected. (onClose)                               - [17/03/06 12:08:41][INFO][websocket.WebSocket-64]
+WebSocket Port initialized: 8888                             - [17/03/06 12:10:25][INFO][websocket.WebSocket-51]
+org.java_websocket.WebSocketImpl@6ea8fb10 is connected       - [17/03/06 12:10:34][INFO][websocket.WebSocket-86]
+林智凱 is connected. (HeartBeat)                                - [17/03/06 12:10:34][INFO][websocket.HeartBeat-24]
+林智凱 is disconnected. (onClose)                               - [17/03/06 12:10:36][INFO][websocket.WebSocket-64]
+WebSocket Port initialized: 8888                             - [17/03/06 12:18:51][INFO][websocket.WebSocket-51]
+org.java_websocket.WebSocketImpl@23897acf is connected       - [17/03/06 12:19:05][INFO][websocket.WebSocket-86]
+林智凱 is connected. (HeartBeat)                                - [17/03/06 12:19:05][INFO][websocket.HeartBeat-24]
+
+### Error updating database.  Cause: com.microsoft.sqlserver.jdbc.SQLServerException: 無效的物件名稱 'tblRpt_AgentStatusXXX'。
+### The error may involve rpt_agentstatus.Update_agentstatus-Inline
+### The error occurred while setting parameters
+### SQL: update  tblRpt_AgentStatusXXX  set ENDDATETIME=?,DURATION= (SELECT DATEDIFF(second, STARTDATETIME, ?))           where DBID=?
+### Cause: com.microsoft.sqlserver.jdbc.SQLServerException: 無效的物件名稱 'tblRpt_AgentStatusXXX'。 - [17/03/06 12:19:06][ERROR][com.Info360.dao.Rpt_AgentStatusDao-126]
+
+### Error updating database.  Cause: com.microsoft.sqlserver.jdbc.SQLServerException: 無效的物件名稱 'tblRpt_AgentStatusXXX'。
+### The error may involve rpt_agentstatus.Update_agentstatus-Inline
+### The error occurred while setting parameters
+### SQL: update  tblRpt_AgentStatusXXX  set ENDDATETIME=?,DURATION= (SELECT DATEDIFF(second, STARTDATETIME, ?))           where DBID=?
+### Cause: com.microsoft.sqlserver.jdbc.SQLServerException: 無效的物件名稱 'tblRpt_AgentStatusXXX'。 - [17/03/06 12:19:06][ERROR][com.Info360.dao.Rpt_AgentStatusDao-126]
+林智凱 is disconnected. (onClose)                               - [17/03/06 12:19:06][INFO][websocket.WebSocket-64]
+WebSocket Port initialized: 8888                             - [17/03/06 12:23:50][INFO][websocket.WebSocket-51]
+org.java_websocket.WebSocketImpl@67d6b10c is connected       - [17/03/06 12:24:46][INFO][websocket.WebSocket-86]
+林智凱 is connected. (HeartBeat)                                - [17/03/06 12:24:46][INFO][websocket.HeartBeat-24]
+林智凱 is disconnected. (onClose)                               - [17/03/06 12:24:48][INFO][websocket.WebSocket-64]
