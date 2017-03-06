@@ -36,14 +36,23 @@ values
 <update id="Update_activitygroups" parameterType="com.Info360.bean.Activitygroups">
 update  tblCfg_ActivityGroups 
 set 
-	ACTIVITYMENUID=#{activitymenuid},GROUPNAME=#{groupname},SORT=#{sort}
+	GROUPNAME=#{groupname}
 
 where DBID=#{dbid}
 </update>
 
 <update id="LogicDelete_activitygroups" parameterType="com.Info360.bean.Activitygroups">
 update  tblCfg_ActivityGroups 
-set  DELETEFLAG=#{deleteflag},DELETEDATETIME=#{deletedatetime} where GROUPNAME=#{groupname}
+set  DELETEFLAG=#{deleteflag},DELETEDATETIME=#{deletedatetime} 
+where GROUPNAME=#{groupname}
+or dbid=#{dbid}
+	<if test="ActivityGroup_DBID_list.size() > 0">
+ 		<foreach item="value" index="key" collection="ActivityGroup_DBID_list"
+			open="or" separator="or" close="">
+ 	 		dbid=#{value}
+		</foreach>
+	</if>
+
 </update>
 
  

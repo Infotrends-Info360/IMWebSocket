@@ -1,5 +1,8 @@
 package com.Info360.bean;
 
+import java.util.ArrayList;
+import java.util.List;
+
 public class Activitydata {
 	
 	private int dbid;
@@ -22,7 +25,17 @@ public class Activitydata {
 	
 	private String createdatetime;
 	
+	private List<Integer> ActivityData_DBID_list = new ArrayList<Integer>();
+
 	
+
+	public List<Integer> getActivityData_DBID_list() {
+		return ActivityData_DBID_list;
+	}
+
+	public void setActivityData_DBID_list(List<Integer> activityData_DBID_list) {
+		ActivityData_DBID_list = activityData_DBID_list;
+	}
 
 	public int getTitleflag() {
 		return titleflag;
