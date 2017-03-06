@@ -63,6 +63,7 @@ public class searchUserdataServlet {
 
 		// Util.getConsoleLogger().debug("attributes: "+attributes);
 		/** 拿取searchkey, pkey - 透過GetServiceNameSetting() **/
+		startTime = System.currentTimeMillis();
 		JSONObject CfgServiceNameSettingjsonObject = null;
 		String searchkey = null;
 		String pkey = null;
@@ -77,6 +78,10 @@ public class searchUserdataServlet {
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
+		endTime = System.currentTimeMillis();
+		Util.getConsoleLogger().info("RESTful GetServiceNameSetting time: " + (endTime - startTime)/1000 + "s" );
+		Util.getFileLogger().info("RESTful GetServiceNameSetting time: " + (endTime - startTime)/1000 + "s" );
+
 		
 		jsonObject.put("searchkey", searchkey);
 		jsonObject.put("pkey", pkey);
@@ -112,8 +117,8 @@ public class searchUserdataServlet {
 					jsonObject.put("error", e.getMessage());
 				}
 				endTime = System.currentTimeMillis();
-				Util.getConsoleLogger().debug("RESTful GetCustomerLevel time: " + (endTime - startTime)/1000 + "s" );
-				Util.getFileLogger().debug("RESTful GetCustomerLevel time: " + (endTime - startTime)/1000 + "s" );
+				Util.getConsoleLogger().info("RESTful GetCustomerLevel time: " + (endTime - startTime)/1000 + "s" );
+				Util.getFileLogger().info("RESTful GetCustomerLevel time: " + (endTime - startTime)/1000 + "s" );
 
 
 				// GetServiceNameCache
@@ -126,8 +131,8 @@ public class searchUserdataServlet {
 					jsonObject.put("error", e.getMessage());
 				}
 				endTime = System.currentTimeMillis();
-				Util.getConsoleLogger().debug("RESTful GetServiceNameCache time: " + (endTime - startTime)/1000 + "s" );
-				Util.getFileLogger().debug("RESTful GetServiceNameCache time: " + (endTime - startTime)/1000 + "s" );
+				Util.getConsoleLogger().info("RESTful GetServiceNameCache time: " + (endTime - startTime)/1000 + "s" );
+				Util.getFileLogger().info("RESTful GetServiceNameCache time: " + (endTime - startTime)/1000 + "s" );
 				
 				// Set Contact Log
 				// 使用CustomerLeveljsonarray迴圈內資料
@@ -160,8 +165,8 @@ public class searchUserdataServlet {
 					jsonObject.put("error", e.getMessage());
 				}
 				endTime = System.currentTimeMillis();
-				Util.getConsoleLogger().debug("RESTful SetContactLog time: " + (endTime - startTime)/1000 + "s" );
-				Util.getFileLogger().debug("RESTful SetContactLog time: " + (endTime - startTime)/1000 + "s" );
+				Util.getConsoleLogger().info("RESTful SetContactLog time: " + (endTime - startTime)/1000 + "s" );
+				Util.getFileLogger().info("RESTful SetContactLog time: " + (endTime - startTime)/1000 + "s" );
 
 
 			}// end of if
