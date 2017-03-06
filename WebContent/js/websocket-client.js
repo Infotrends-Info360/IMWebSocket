@@ -371,7 +371,7 @@ function find(aAgentFound) {
 }
 
 
-//Send userdata
+//Send userdata (已廢棄)
 function senduserdata(aSendto) {
 	if (aSendto === undefined) aSendto = "";
 	

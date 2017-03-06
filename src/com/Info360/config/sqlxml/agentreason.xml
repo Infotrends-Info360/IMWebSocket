@@ -41,6 +41,12 @@ update  tblCfg_AgentReason  set STATUSNAME=#{statusname},STATUSNAME_CN=#{statusn
  
 <update id="LogicDelete_agentreason" parameterType="com.Info360.bean.Cfg_AgentReason">
 update  tblCfg_AgentReason set FLAG=#{flag}	where DBID=#{dbid}
+	<if test="Agentreason_DBID_list.size() > 0">
+ 	<foreach item="value" index="key" collection="Agentreason_DBID_list"
+		open="or" separator="or" close="">
+ 	 dbid=#{value}
+	</foreach>
+	</if>
 </update>
  
 <insert id="Insert_agentreason" parameterType="com.Info360.bean.Cfg_AgentReason">
@@ -54,6 +60,12 @@ values
 
 <delete id="Delete_agentreason" parameterType="com.Info360.bean.Cfg_AgentReason">
 delete from tblCfg_AgentReason where DBID=#{dbid}
+ 	<if test="Agentreason_DBID_list.size() > 0">
+ 	<foreach item="value" index="key" collection="Agentreason_DBID_list"
+		open="or" separator="or" close="">
+ 	 dbid=#{value}
+	</foreach>
+	</if>
 </delete>
  
 </mapper>

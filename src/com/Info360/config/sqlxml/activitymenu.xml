@@ -26,6 +26,17 @@
  ORDER BY SORT
 </select>
 
+<!-- <select id="Flag_activitymenu" parameterType="com.Info360.bean.Activitymenu"  resultMap="activitymenuResult"> -->
+<!--  Select DBID,MENUNAME,DELETEFLAG,DELETEDATETIME,CREATEDATETIME,SORT from tblCfg_ActivityMenu -->
+<!--  <if test="deleteflag != null &amp;&amp; deleteflag!=&quot;&quot; &amp;&amp; deleteflag.equals(&quot;0&quot;)"> -->
+<!--  	where deleteflag=#{deleteflag}  -->
+<!--  </if> -->
+<!--   <if test="deleteflag != null &amp;&amp; deleteflag!=&quot;&quot; &amp;&amp; deleteflag.equals(&quot;1&quot;)"> -->
+<!--  	where deleteflag=#{deleteflag}  -->
+<!--  </if> -->
+<!--  ORDER BY SORT -->
+<!-- </select> -->
+
 <select id="Flag_activitymenu" parameterType="com.Info360.bean.Activitymenu"  resultMap="activitymenuResult">
  Select DBID,MENUNAME,DELETEFLAG,DELETEDATETIME,CREATEDATETIME,SORT from tblCfg_ActivityMenu
  <if test="deleteflag != null &amp;&amp; deleteflag!=&quot;&quot; &amp;&amp; deleteflag.equals(&quot;0&quot;)">
@@ -54,7 +65,15 @@ set
 where DBID=#{dbid}
 </update>
 <update id="LogicDelete_activitymenu" parameterType="com.Info360.bean.Activitymenu">
-update  tblCfg_ActivityMenu set deleteflag=#{deleteflag},deletedatetime=#{deletedatetime} where menuname=#{menuname}
+update  tblCfg_ActivityMenu set deleteflag=#{deleteflag},deletedatetime=#{deletedatetime} 
+where menuname=#{menuname} 
+or dbid=#{dbid} 
+	<if test="ActivityMenu_DBID_list.size() > 0">
+ 		<foreach item="value" index="key" collection="ActivityMenu_DBID_list"
+			open="or" separator="or" close="">
+ 	 		dbid=#{value}
+		</foreach>
+	</if>
 </update>
 
 </mapper>
