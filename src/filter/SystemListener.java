@@ -109,8 +109,8 @@ public class SystemListener implements ServletContextListener {
 		}
 		
 		for (final String name: prop.stringPropertyNames()){
-			Util.getConsoleLogger().debug("name: " + name);
-			Util.getConsoleLogger().debug("prop.getProperty(name): " + prop.getProperty(name));
+			Util.getConsoleLogger().trace("name: " + name);
+			Util.getConsoleLogger().trace("prop.getProperty(name): " + prop.getProperty(name));
 			systemParam.put(name.replace(".", "_"), prop.getProperty(name));
 		}
 		
@@ -182,6 +182,7 @@ public class SystemListener implements ServletContextListener {
         String propertiesJson = gson.toJson(propertiesMap);
 //        System.out.println("Ready, converts " + prop.size() + " entries.");        
         Util.getConsoleLogger().debug("propertiesJson: " + propertiesJson );        
+        Util.getFileLogger().info("propertiesJson: " + propertiesJson );        
         context.setAttribute("systemParam", propertiesJson); // 將此物件放入大廳中,讓前端使用者可取得相關URL資訊
 
         // 更新statusList

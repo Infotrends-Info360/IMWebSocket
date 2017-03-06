@@ -103,9 +103,11 @@ public class CommonFunction {
 //		sendjson.put("notready_dbid", notready_dbid); // 此key-value只須Agent接就好(先不做過濾)
 		sendjson.put("MaxCount", MaxCount); // 此key-value只須Agent接就好(先不做過濾)
 		AgentFunction.GetAgentReasonInfo("0");
-		sendjson.put("reasonList", Util.getAgentReason()); // 此key-value只須Agent接就好(先不做過濾)
+		sendjson.put("reasonList", Util.getAgentReason()); // 此key-value只須Agent接就好(先不做過濾) ; 此內容已於伺服器啟動時拿取
 		Util.getConsoleLogger().debug("Util.getAgentReason(): " + Util.getAgentReason());
+		Util.getFileLogger().info("Util.getAgentReason(): " + Util.getAgentReason());
 		Util.getConsoleLogger().debug("Util.getAgentStatus(): " + Util.getAgentStatus());
+		Util.getFileLogger().info("Util.getAgentStatus(): " + Util.getAgentStatus());
 		WebSocketUserPool.sendMessageToUser(aConn, sendjson.toString());
 //		WebSocketUserPool.sendMessage("online people: "
 //				+ WebSocketUserPool.getOnlineUser().toString());
@@ -417,6 +419,7 @@ public class CommonFunction {
 		log2.info("----------------------------------------------------------------------------");
 		log2.printf(Level.INFO,"%10s	%10s %10s %10s %10s %10s" , status_dbid, startORend, dbid, roomID, clientID, reason_dbid);
 
+		Util.getConsoleLogger().info("updateStatus: " + startORend + " - " + currStatusEnum + " - " + username);
 		Util.getFileLogger().info("updateStatus: " + startORend + " - " + currStatusEnum + " - " + username);
 //		Util.getConsoleLogger().debug("status	startORend	dbid	roomID	clientID");
 //		System.out.printf("%10s	%10s %10s %10s %10s %10s" , "status", "startORend", "dbid", "roomID", "clientID", "reason");
@@ -443,6 +446,7 @@ public class CommonFunction {
 			userInfo.getStatusDBIDMap().put(currStatusEnum, dbid); // 更新Bean
 			
 			// 若為iEstablished狀態,則交由RoomInfo來處理結束時間點
+			// 結束時間點 - 由WebSocketRoomPool.removeUserinroom裡面判斷式進行
 			if (StatusEnum.IESTABLISHED.getDbid().equals(status_dbid)){
 				Util.getConsoleLogger().debug("IESTABLISHED - roomID: " + roomID);
 				RoomInfo roomInfo = WebSocketRoomPool.getRoomInfo(roomID);
@@ -450,6 +454,7 @@ public class CommonFunction {
 			}
 			
 			// 若為RING狀態,則交由RingCountDownTask來處理結束時間點
+			// 結束時間點 - 由RingCountDownTask - run()判斷式決定
 			if (StatusEnum.RING.getDbid().equals(status_dbid)){
 				//將RINGHEARTBEAT放進UserInfo
 				userInfo.setStopRing(false); // 回復為預設false
@@ -477,7 +482,6 @@ public class CommonFunction {
 			WebSocketUserPool.sendMessageToUser(aConn, obj.toString());
 
 		}else if ("end".equals(startORend)){ 
-			Util.getConsoleLogger().debug("end");
 			if (dbid != null){
 				Util.getConsoleLogger().debug("dbid: " + dbid);
 				

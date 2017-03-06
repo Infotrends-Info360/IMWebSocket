@@ -218,7 +218,7 @@ public class WebSocket extends WebSocketServer {
 			String roomid = itr.next();
 			Util.getConsoleLogger().debug("***** get roomid: " + roomid);
 			//使用每個roomid,並找出相對應的room,再將其中的conn remove掉
-			WebSocketRoomPool.removeUserinroom(roomid, conn);
+			WebSocketRoomPool.removeUserinroom(roomid, conn); // 當room裡面user為 <=1 時,會把room從conatiner中去除掉,所以才需要light copy
 		}
 		Util.getConsoleLogger().debug("after - roomids.size(): " + roomids.size());
 
