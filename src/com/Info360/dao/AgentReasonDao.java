@@ -44,6 +44,8 @@ public class AgentReasonDao {
 		} finally {
 			if(sqlSession != null){
 				sqlSession.close();
+				DBAccess.sessonCount.decrementAndGet();
+				Util.getFileLogger().debug("DB session count: " + DBAccess.sessonCount.get());
 			}
 		}
 		return agentreasonInt;
@@ -75,6 +77,8 @@ public class AgentReasonDao {
 		} finally {
 			if(sqlSession != null){
 			   sqlSession.close();
+				DBAccess.sessonCount.decrementAndGet();
+				Util.getFileLogger().debug("DB session count: " + DBAccess.sessonCount.get());
 			}
 		}
 		return agentreasonInt;
@@ -105,6 +109,8 @@ public class AgentReasonDao {
 		} finally {
 			if(sqlSession != null){
 			   sqlSession.close();
+				DBAccess.sessonCount.decrementAndGet();
+				Util.getFileLogger().debug("DB session count: " + DBAccess.sessonCount.get());
 			}
 		}
 		return agentreasonlist;
@@ -136,6 +142,8 @@ public class AgentReasonDao {
 		} finally {
 			if(sqlSession != null){
 				sqlSession.close();
+				DBAccess.sessonCount.decrementAndGet();
+				Util.getFileLogger().debug("DB session count: " + DBAccess.sessonCount.get());
 			}
 		}
 		return agentreasonInt;
@@ -167,6 +175,8 @@ public class AgentReasonDao {
 		} finally {
 			if(sqlSession != null){
 				sqlSession.close();
+				DBAccess.sessonCount.decrementAndGet();
+				Util.getFileLogger().debug("DB session count: " + DBAccess.sessonCount.get());
 			}
 		}
 		return agentreasonInt;

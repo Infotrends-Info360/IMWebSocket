@@ -41,6 +41,8 @@ public class Rpt_AgentStatusDao {
 		} finally {
 			if(sqlSession != null){
 			   sqlSession.close();
+				DBAccess.sessonCount.decrementAndGet();
+				Util.getFileLogger().debug("DB session count: " + DBAccess.sessonCount.get());
 			}
 		}
 		return agentstatusInt;
@@ -73,6 +75,8 @@ public class Rpt_AgentStatusDao {
 		} finally {
 			if(sqlSession != null){
 			   sqlSession.close();
+				DBAccess.sessonCount.decrementAndGet();
+				Util.getFileLogger().debug("DB session count: " + DBAccess.sessonCount.get());
 			}
 		}
 		return agentstatusInt;
@@ -106,6 +110,8 @@ public class Rpt_AgentStatusDao {
 		} finally {
 			if(sqlSession != null){
 			   sqlSession.close();
+				DBAccess.sessonCount.decrementAndGet();
+				Util.getFileLogger().debug("DB session count: " + DBAccess.sessonCount.get());
 			}
 		}
 		return agentstatusInt;
@@ -128,7 +134,7 @@ public class Rpt_AgentStatusDao {
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
 			Util.getFileLogger().debug(e.getMessage());
-			Util.getFileLogger().info(e.getMessage());
+			Util.getFileLogger().debug(e.getMessage());
 			e.printStackTrace();
 			IsError.GET_EXCEPTION = e.getMessage();
 			Util.getFileLogger().error(e.getMessage());
@@ -139,6 +145,8 @@ public class Rpt_AgentStatusDao {
 		} finally {
 			if(sqlSession != null){
 				sqlSession.close();
+				DBAccess.sessonCount.decrementAndGet();
+				Util.getFileLogger().debug("DB session count: " + DBAccess.sessonCount.get());
 			}
 		}
 		return agentstatusInt;

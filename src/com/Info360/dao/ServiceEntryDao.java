@@ -46,6 +46,8 @@ public class ServiceEntryDao {
 		} finally {
 			if(sqlSession != null){
 			   sqlSession.close();
+				DBAccess.sessonCount.decrementAndGet();
+				Util.getFileLogger().debug("DB session count: " + DBAccess.sessonCount.get());
 			}
 		}
 		return serviceentryInt;

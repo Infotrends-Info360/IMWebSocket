@@ -1,77 +1,10 @@
-<<<<<<< HEAD
-org.java_websocket.WebSocketImpl@47beb199 is connected       - [17/03/06 11:48:11][INFO][websocket.WebSocket-86]
-林智凱 is connected. (HeartBeat)                                - [17/03/06 11:48:11][INFO][websocket.HeartBeat-24]
-林智凱 is disconnected. (onClose)                               - [17/03/06 11:48:27][INFO][websocket.WebSocket-64]
-WebSocket Port initialized: 8888                             - [17/03/06 12:05:38][INFO][websocket.WebSocket-51]
-org.java_websocket.WebSocketImpl@3c6f1fb0 is connected       - [17/03/06 12:05:50][INFO][websocket.WebSocket-86]
-林智凱 is connected. (HeartBeat)                                - [17/03/06 12:05:50][INFO][websocket.HeartBeat-24]
-林智凱 is disconnected. (onClose)                               - [17/03/06 12:06:23][INFO][websocket.WebSocket-64]
-WebSocket Port initialized: 8888                             - [17/03/06 12:06:47][INFO][websocket.WebSocket-51]
-org.java_websocket.WebSocketImpl@1eb080f is connected        - [17/03/06 12:07:02][INFO][websocket.WebSocket-86]
-林智凱 is connected. (HeartBeat)                                - [17/03/06 12:07:03][INFO][websocket.HeartBeat-24]
-林智凱 is disconnected. (onClose)                               - [17/03/06 12:07:18][INFO][websocket.WebSocket-64]
-WebSocket Port initialized: 8888                             - [17/03/06 12:08:31][INFO][websocket.WebSocket-51]
-org.java_websocket.WebSocketImpl@ae84998 is connected        - [17/03/06 12:08:40][INFO][websocket.WebSocket-86]
-林智凱 is connected. (HeartBeat)                                - [17/03/06 12:08:40][INFO][websocket.HeartBeat-24]
-林智凱 is disconnected. (onClose)                               - [17/03/06 12:08:41][INFO][websocket.WebSocket-64]
-WebSocket Port initialized: 8888                             - [17/03/06 12:10:25][INFO][websocket.WebSocket-51]
-org.java_websocket.WebSocketImpl@6ea8fb10 is connected       - [17/03/06 12:10:34][INFO][websocket.WebSocket-86]
-林智凱 is connected. (HeartBeat)                                - [17/03/06 12:10:34][INFO][websocket.HeartBeat-24]
-林智凱 is disconnected. (onClose)                               - [17/03/06 12:10:36][INFO][websocket.WebSocket-64]
-WebSocket Port initialized: 8888                             - [17/03/06 12:18:51][INFO][websocket.WebSocket-51]
-org.java_websocket.WebSocketImpl@23897acf is connected       - [17/03/06 12:19:05][INFO][websocket.WebSocket-86]
-林智凱 is connected. (HeartBeat)                                - [17/03/06 12:19:05][INFO][websocket.HeartBeat-24]
-
-### Error updating database.  Cause: com.microsoft.sqlserver.jdbc.SQLServerException: 無效的物件名稱 'tblRpt_AgentStatusXXX'。
-### The error may involve rpt_agentstatus.Update_agentstatus-Inline
-### The error occurred while setting parameters
-### SQL: update  tblRpt_AgentStatusXXX  set ENDDATETIME=?,DURATION= (SELECT DATEDIFF(second, STARTDATETIME, ?))           where DBID=?
-### Cause: com.microsoft.sqlserver.jdbc.SQLServerException: 無效的物件名稱 'tblRpt_AgentStatusXXX'。 - [17/03/06 12:19:06][ERROR][com.Info360.dao.Rpt_AgentStatusDao-126]
-
-### Error updating database.  Cause: com.microsoft.sqlserver.jdbc.SQLServerException: 無效的物件名稱 'tblRpt_AgentStatusXXX'。
-### The error may involve rpt_agentstatus.Update_agentstatus-Inline
-### The error occurred while setting parameters
-### SQL: update  tblRpt_AgentStatusXXX  set ENDDATETIME=?,DURATION= (SELECT DATEDIFF(second, STARTDATETIME, ?))           where DBID=?
-### Cause: com.microsoft.sqlserver.jdbc.SQLServerException: 無效的物件名稱 'tblRpt_AgentStatusXXX'。 - [17/03/06 12:19:06][ERROR][com.Info360.dao.Rpt_AgentStatusDao-126]
-林智凱 is disconnected. (onClose)                               - [17/03/06 12:19:06][INFO][websocket.WebSocket-64]
-WebSocket Port initialized: 8888                             - [17/03/06 12:23:50][INFO][websocket.WebSocket-51]
-org.java_websocket.WebSocketImpl@67d6b10c is connected       - [17/03/06 12:24:46][INFO][websocket.WebSocket-86]
-林智凱 is connected. (HeartBeat)                                - [17/03/06 12:24:46][INFO][websocket.HeartBeat-24]
-林智凱 is disconnected. (onClose)                               - [17/03/06 12:24:48][INFO][websocket.WebSocket-64]
-=======
-<<<<<<< HEAD
-                    Port: 8888 - [17/03/03 15:45:39][INFO][websocket.WebSocket-51]
-=======
-Port: 8888                                                   - [17/03/03 08:58:53][INFO][websocket.WebSocket-51]
-Someone link in Socket conn:org.java_websocket.WebSocketImpl@1177bb2 - [17/03/03 08:59:04][INFO][websocket.WebSocket-86]
-conn: org.java_websocket.WebSocketImpl@1177bb2 is connected. (HeartBeat) - [17/03/03 08:59:05][INFO][websocket.HeartBeat-24]
-Port: 8888                                                   - [17/03/03 09:01:09][INFO][websocket.WebSocket-51]
-Port: 8888                                                   - [17/03/03 09:02:37][INFO][websocket.WebSocket-51]
-Someone link in Socket conn:org.java_websocket.WebSocketImpl@2abb2469 - [17/03/03 09:02:44][INFO][websocket.WebSocket-86]
-conn: org.java_websocket.WebSocketImpl@2abb2469 is connected. (HeartBeat) - [17/03/03 09:02:45][INFO][websocket.HeartBeat-24]
-Port: 8888                                                   - [17/03/03 09:06:01][INFO][websocket.WebSocket-51]
-Someone link in Socket conn:org.java_websocket.WebSocketImpl@23273aa0 - [17/03/03 09:06:19][INFO][websocket.WebSocket-86]
-conn: org.java_websocket.WebSocketImpl@23273aa0 is connected. (HeartBeat) - [17/03/03 09:06:20][INFO][websocket.HeartBeat-24]
-Someone link in Socket conn:org.java_websocket.WebSocketImpl@25c27ebe - [17/03/03 09:07:09][INFO][websocket.WebSocket-86]
-onClose(): Agentorg.java_websocket.WebSocketImpl@23273aa0 is disconnected. (onClose) - [17/03/03 09:07:09][INFO][websocket.WebSocket-64]
-conn: org.java_websocket.WebSocketImpl@25c27ebe is connected. (HeartBeat) - [17/03/03 09:07:14][INFO][websocket.HeartBeat-24]
-onClose(): Agentorg.java_websocket.WebSocketImpl@25c27ebe is disconnected. (onClose) - [17/03/03 09:07:20][INFO][websocket.WebSocket-64]
-Someone link in Socket conn:org.java_websocket.WebSocketImpl@6052cc4e - [17/03/03 09:07:20][INFO][websocket.WebSocket-86]
-conn: org.java_websocket.WebSocketImpl@6052cc4e is connected. (HeartBeat) - [17/03/03 09:07:21][INFO][websocket.HeartBeat-24]
-conn: org.java_websocket.WebSocketImpl@25c27ebe is disconnected. (HeartBeat) - [17/03/03 09:07:21][INFO][websocket.TimerTaskSendHeartBeat-81]
-Port: 8888                                                   - [17/03/03 09:16:33][INFO][websocket.WebSocket-51]
-Port: 8888                                                   - [17/03/03 10:04:21][INFO][websocket.WebSocket-51]
-Port: 8888                                                   - [17/03/03 10:07:02][INFO][websocket.WebSocket-51]
-Someone link in Socket conn:org.java_websocket.WebSocketImpl@c653ad9 - [17/03/03 10:07:12][INFO][websocket.WebSocket-86]
-conn: org.java_websocket.WebSocketImpl@c653ad9 is connected. (HeartBeat) - [17/03/03 10:07:13][INFO][websocket.HeartBeat-24]
-Port: 8888                                                   - [17/03/03 10:24:00][INFO][websocket.WebSocket-51]
-Someone link in Socket conn:org.java_websocket.WebSocketImpl@4aef64f8 - [17/03/03 10:24:14][INFO][websocket.WebSocket-86]
-conn: org.java_websocket.WebSocketImpl@4aef64f8 is connected. (HeartBeat) - [17/03/03 10:24:14][INFO][websocket.HeartBeat-24]
-Port: 8888                                                   - [17/03/03 10:25:22][INFO][websocket.WebSocket-51]
-Someone link in Socket conn:org.java_websocket.WebSocketImpl@64aa1ed5 - [17/03/03 10:25:31][INFO][websocket.WebSocket-86]
-conn: org.java_websocket.WebSocketImpl@64aa1ed5 is connected. (HeartBeat) - [17/03/03 10:25:32][INFO][websocket.HeartBeat-24]
-Someone link in Socket conn:org.java_websocket.WebSocketImpl@6fb9fb27 - [17/03/03 10:25:38][INFO][websocket.WebSocket-86]
-conn: org.java_websocket.WebSocketImpl@6fb9fb27 is connected. (HeartBeat) - [17/03/03 10:25:38][INFO][websocket.HeartBeat-24]
->>>>>>> branch 'master' of https://github.com/Infotrends-Info360/IMWebSocket.git
->>>>>>> refs/remotes/origin/master
-WebSocket Port initialized: 8888                             - [17/03/06 12:30:41][INFO][websocket.WebSocket-51]
+org.java_websocket.WebSocketImpl@6e56c1cc is connected       - [17/03/06 12:59:50][INFO][websocket.WebSocket-86]
+SqlSessionFactoryBuilder created.                            - [17/03/06 13:00:19][INFO][com.Info360.db.DBAccess-42]
+WebSocket Port initialized: 8888                             - [17/03/06 13:00:20][INFO][websocket.WebSocket-51]
+org.java_websocket.WebSocketImpl@21b80513 is connected       - [17/03/06 13:00:27][INFO][websocket.WebSocket-86]
+林智凱 is connected. (HeartBeat)                                - [17/03/06 13:00:28][INFO][websocket.HeartBeat-24]
+林智凱 is disconnected. (onClose)                               - [17/03/06 13:00:42][INFO][websocket.WebSocket-64]
+SqlSessionFactoryBuilder created.                            - [17/03/06 13:01:07][INFO][com.Info360.db.DBAccess-42]
+WebSocket Port initialized: 8888                             - [17/03/06 13:01:08][INFO][websocket.WebSocket-51]
+org.java_websocket.WebSocketImpl@2df481d is connected        - [17/03/06 13:01:17][INFO][websocket.WebSocket-86]
+林智凱 is connected. (HeartBeat)                                - [17/03/06 13:01:17][INFO][websocket.HeartBeat-24]

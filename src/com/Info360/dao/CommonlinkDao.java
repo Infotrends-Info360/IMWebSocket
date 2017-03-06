@@ -44,6 +44,8 @@ public class CommonlinkDao {
 		} finally {
 			if(sqlSession != null){
 				sqlSession.close();
+				DBAccess.sessonCount.decrementAndGet();
+				Util.getFileLogger().debug("DB session count: " + DBAccess.sessonCount.get());
 			}
 		}
 		return commonlinkInt;
@@ -72,6 +74,8 @@ public class CommonlinkDao {
 		} finally {
 			if(sqlSession != null){
 			   sqlSession.close();
+				DBAccess.sessonCount.decrementAndGet();
+				Util.getFileLogger().debug("DB session count: " + DBAccess.sessonCount.get());
 			}
 		}
 		return commonlinklist;
@@ -106,6 +110,8 @@ public class CommonlinkDao {
 		} finally {
 			if(sqlSession != null){
 				sqlSession.close();
+				DBAccess.sessonCount.decrementAndGet();
+				Util.getFileLogger().debug("DB session count: " + DBAccess.sessonCount.get());
 			}
 		}
 		return commonlinkInt;
@@ -137,6 +143,8 @@ public class CommonlinkDao {
 		} finally {
 			if(sqlSession != null){
 				sqlSession.close();
+				DBAccess.sessonCount.decrementAndGet();
+				Util.getFileLogger().debug("DB session count: " + DBAccess.sessonCount.get());
 			}
 		}
 		return commonlinkInt;

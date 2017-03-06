@@ -40,6 +40,8 @@ public class InteractionDao {
 		} finally {
 			if(sqlSession != null){
 			   sqlSession.close();
+				DBAccess.sessonCount.decrementAndGet();
+				Util.getFileLogger().debug("DB session count: " + DBAccess.sessonCount.get());
 			}
 		}
 		return interactionList;
@@ -70,6 +72,8 @@ public class InteractionDao {
 		} finally {
 			if(sqlSession != null){
 			   sqlSession.close();
+				DBAccess.sessonCount.decrementAndGet();
+				Util.getFileLogger().debug("DB session count: " + DBAccess.sessonCount.get());
 			}
 		}
 		return interactionList;
@@ -104,6 +108,8 @@ public class InteractionDao {
 		} finally {
 			if(sqlSession != null){
 			   sqlSession.close();
+				DBAccess.sessonCount.decrementAndGet();
+				Util.getFileLogger().debug("DB session count: " + DBAccess.sessonCount.get());
 			}
 		}
 		return interactionInt;
@@ -136,6 +142,8 @@ public class InteractionDao {
 		} finally {
 			if(sqlSession != null){
 			   sqlSession.close();
+				DBAccess.sessonCount.decrementAndGet();
+				Util.getFileLogger().debug("DB session count: " + DBAccess.sessonCount.get());
 			}
 		}
 		return interactionInt;

@@ -45,6 +45,8 @@ public class ActivitymenuDao {
 		} finally {
 			if(sqlSession != null){
 				sqlSession.close();
+				DBAccess.sessonCount.decrementAndGet();
+				Util.getFileLogger().debug("DB session count: " + DBAccess.sessonCount.get());
 			}
 		}
 		return activitymenuInt;
@@ -75,6 +77,8 @@ public class ActivitymenuDao {
 		} finally {
 			if(sqlSession != null){
 			   sqlSession.close();
+				DBAccess.sessonCount.decrementAndGet();
+				Util.getFileLogger().debug("DB session count: " + DBAccess.sessonCount.get());
 			}
 		}
 		return activitymenulist;
@@ -108,6 +112,8 @@ public class ActivitymenuDao {
 		} finally {
 			if(sqlSession != null){
 				sqlSession.close();
+				DBAccess.sessonCount.decrementAndGet();
+				Util.getFileLogger().debug("DB session count: " + DBAccess.sessonCount.get());
 			}
 		}
 		return activitymenuInt;
@@ -138,6 +144,8 @@ public class ActivitymenuDao {
 		} finally {
 			if(sqlSession != null){
 			   sqlSession.close();
+				DBAccess.sessonCount.decrementAndGet();
+				Util.getFileLogger().debug("DB session count: " + DBAccess.sessonCount.get());
 			}
 		}
 		return activitymenulist;
@@ -170,6 +178,8 @@ public class ActivitymenuDao {
 		} finally {
 			if(sqlSession != null){
 			   sqlSession.close();
+				DBAccess.sessonCount.decrementAndGet();
+				Util.getFileLogger().debug("DB session count: " + DBAccess.sessonCount.get());
 			}
 		}
 		return activitymenuInt;
