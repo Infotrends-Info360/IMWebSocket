@@ -108,8 +108,6 @@ public class FLAGDATA_Servlet {
         	  		
         	  		JSONObject activitydataObject = new JSONObject();
         			activitydataObject.put("dbid", activitydatalist.get(g).getDbid());
-        			activitydataObject.put("createdatetime", activitydatalist.get(a).getCreatedatetime());
-        			activitydataObject.put("deletedatetime", activitydatalist.get(a).getDeletedatetime());
         			activitydataObject.put("activitygroupsid", activitydatalist.get(g).getActivitygroupsid());
         			activitydataObject.put("codename", activitydatalist.get(g).getCodename());
         			activitydataObject.put("color", activitydatalist.get(g).getColor());
@@ -120,9 +118,13 @@ public class FLAGDATA_Servlet {
         					
         			
         			if(activitydatalist.get(g).getDeleteflag().equals("0")){
+            			activitydataObject.put("createdatetime", activitydatalist.get(a).getCreatedatetime());
+
         				flag0JsonArray.put(activitydataObject);
                 		
         			}else{
+            			activitydataObject.put("deletedatetime", activitydatalist.get(a).getDeletedatetime());
+
         				flag1JsonArray.put(activitydataObject);
         			}
         			
