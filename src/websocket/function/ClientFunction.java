@@ -77,6 +77,7 @@ public class ClientFunction {
 //			attributes.addProperty("attributenames", "IDNO_");
 //			attributes.addProperty("IDNO_",userName);
 //			attributes.addProperty("id",userID);
+			
 			senduserdataObj.add("attributes", attributes);
 			senduserdataObj.addProperty("channel", "chat");
 			

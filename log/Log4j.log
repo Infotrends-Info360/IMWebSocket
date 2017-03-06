@@ -74,3 +74,4 @@ Someone link in Socket conn:org.java_websocket.WebSocketImpl@6fb9fb27 - [17/03/0
 conn: org.java_websocket.WebSocketImpl@6fb9fb27 is connected. (HeartBeat) - [17/03/03 10:25:38][INFO][websocket.HeartBeat-24]
 >>>>>>> branch 'master' of https://github.com/Infotrends-Info360/IMWebSocket.git
 >>>>>>> refs/remotes/origin/master
+WebSocket Port initialized: 8888                             - [17/03/06 12:30:41][INFO][websocket.WebSocket-51]
