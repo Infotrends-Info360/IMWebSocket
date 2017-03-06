@@ -417,7 +417,7 @@ public class CommonFunction {
 		log2.info("----------------------------------------------------------------------------");
 		log2.printf(Level.INFO,"%10s	%10s %10s %10s %10s %10s" , status_dbid, startORend, dbid, roomID, clientID, reason_dbid);
 
-		Util.getFileLogger().info("updateStatus: " + startORend + " - " + currStatusEnum);
+		Util.getFileLogger().info("updateStatus: " + startORend + " - " + currStatusEnum + " - " + username);
 //		Util.getConsoleLogger().debug("status	startORend	dbid	roomID	clientID");
 //		System.out.printf("%10s	%10s %10s %10s %10s %10s" , "status", "startORend", "dbid", "roomID", "clientID", "reason");
 //		Util.getConsoleLogger().debug();
