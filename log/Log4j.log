@@ -1,3 +1,6 @@
+<<<<<<< HEAD
+                    Port: 8888 - [17/03/03 15:45:39][INFO][websocket.WebSocket-51]
+=======
 Port: 8888                                                   - [17/03/03 08:58:53][INFO][websocket.WebSocket-51]
 Someone link in Socket conn:org.java_websocket.WebSocketImpl@1177bb2 - [17/03/03 08:59:04][INFO][websocket.WebSocket-86]
 conn: org.java_websocket.WebSocketImpl@1177bb2 is connected. (HeartBeat) - [17/03/03 08:59:05][INFO][websocket.HeartBeat-24]
@@ -28,3 +31,4 @@ Someone link in Socket conn:org.java_websocket.WebSocketImpl@64aa1ed5 - [17/03/0
 conn: org.java_websocket.WebSocketImpl@64aa1ed5 is connected. (HeartBeat) - [17/03/03 10:25:32][INFO][websocket.HeartBeat-24]
 Someone link in Socket conn:org.java_websocket.WebSocketImpl@6fb9fb27 - [17/03/03 10:25:38][INFO][websocket.WebSocket-86]
 conn: org.java_websocket.WebSocketImpl@6fb9fb27 is connected. (HeartBeat) - [17/03/03 10:25:38][INFO][websocket.HeartBeat-24]
+>>>>>>> branch 'master' of https://github.com/Infotrends-Info360/IMWebSocket.git
