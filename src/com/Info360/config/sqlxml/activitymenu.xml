@@ -54,7 +54,14 @@ set
 where DBID=#{dbid}
 </update>
 <update id="LogicDelete_activitymenu" parameterType="com.Info360.bean.Activitymenu">
-update  tblCfg_ActivityMenu set deleteflag=#{deleteflag},deletedatetime=#{deletedatetime} where menuname=#{menuname}
+update  tblCfg_ActivityMenu set deleteflag=#{deleteflag},deletedatetime=#{deletedatetime} where menuname=#{menuname} 
+or dbid=#{dbid} 
+	<if test="ActivityMenu_DBID_list.size() > 0">
+ 		<foreach item="value" index="key" collection="ActivityMenu_DBID_list"
+			open="or" separator="or" close="">
+ 	 		dbid=#{value}
+		</foreach>
+	</if>
 </update>
 
 </mapper>

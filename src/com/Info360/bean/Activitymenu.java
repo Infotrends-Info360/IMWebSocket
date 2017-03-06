@@ -1,5 +1,8 @@
 package com.Info360.bean;
 
+import java.util.ArrayList;
+import java.util.List;
+
 public class Activitymenu {
 
 	private int dbid;
@@ -13,6 +16,18 @@ public class Activitymenu {
 	private String createdatetime;
 	
 	private String sort;
+	
+	private List<Integer> ActivityMenu_DBID_list = new ArrayList<Integer>();
+
+	
+
+	public List<Integer> getActivityMenu_DBID_list() {
+		return ActivityMenu_DBID_list;
+	}
+
+	public void setActivityMenu_DBID_list(List<Integer> activityMenu_DBID_list) {
+		ActivityMenu_DBID_list = activityMenu_DBID_list;
+	}
 
 	public int getDbid() {
 		return dbid;
