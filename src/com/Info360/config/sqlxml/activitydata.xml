@@ -46,7 +46,7 @@ values
 </insert>
 
 <update id="Update_activitydata" parameterType="com.Info360.bean.Activitydata">
-update  tblCfg_ActivityData set CODENAME=#{codename},COLOR=#{color},SORT=#{sort}
+update  tblCfg_ActivityData set CODENAME=#{codename},COLOR=#{color}
 where DBID=#{dbid}
 </update>
 

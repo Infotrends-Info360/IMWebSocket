@@ -39,8 +39,8 @@ public class Update_ActivityData_Servlet {
 		
 			@FormParam("codename") 			String codename,
 			@FormParam("color") 			String color,
-			@FormParam("dbid") 				int dbid,
-			@FormParam("sort") 				String sort
+			@FormParam("dbid") 				int dbid
+		
 			
 			) throws IOException {
 		
@@ -49,7 +49,7 @@ public class Update_ActivityData_Servlet {
 		
 		activitydata.setCodename(codename);
 		activitydata.setColor(color);
-		activitydata.setSort(sort);
+	
 		activitydata.setDbid(dbid);
 		
 		MaintainService maintainservice = new MaintainService();		
