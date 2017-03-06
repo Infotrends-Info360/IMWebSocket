@@ -99,6 +99,7 @@ public class ClientFunction {
 	public static void senduserdata(String message, org.java_websocket.WebSocket conn) {
 //		Util.getConsoleLogger().debug("senduserdata()" + message);
 		Util.getConsoleLogger().debug("senduserdata() called ");
+		Util.getFileLogger().info("senduserdata() called ");
 		JSONObject obj = new JSONObject(message);
 		String lang = obj.getString("lang");
 		String searchtype = obj.getString("searchtype");

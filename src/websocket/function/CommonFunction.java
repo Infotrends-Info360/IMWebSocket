@@ -402,6 +402,7 @@ public class CommonFunction {
 		String roomID = Util.getGString(obj, "roomID");  // for IESTABLISHED
 		String clientID = Util.getGString(obj, "clientID"); // for RING
 		UserInfo userInfo = WebSocketUserPool.getUserInfoByKey(aConn);
+		StatusEnum currStatusEnum = StatusEnum.getStatusEnumByDbid(status_dbid);
 				
 		// 原方法區塊 - 更新Agent UserInfo中的status
 		if(status_dbid.equals("lose")){
@@ -410,11 +411,13 @@ public class CommonFunction {
 		WebSocketTypePool.UserUpdate(ACtype, username, userid, date, StatusEnum.getStatusEnumByDbid(status_dbid), reason_dbid, aConn);
 		
 		// 更新DB狀態時間
-		Logger log = LogManager.getLogger(WebSocket.class);
-		log.info("" + StatusEnum.getStatusEnumByDbid(status_dbid) + ": ");
-		log.printf(Level.INFO,"%10s	%10s %10s %10s %10s %10s" , "status", "startORend", "dbid", "roomID", "clientID", "reason");
-		log.info("----------------------------------------------------------------------------");
-		log.printf(Level.INFO,"%10s	%10s %10s %10s %10s %10s" , status_dbid, startORend, dbid, roomID, clientID, reason_dbid);
+		Logger log2 = LogManager.getLogger(WebSocket.class);
+		log2.info("" + currStatusEnum + ": ");
+		log2.printf(Level.INFO,"%10s	%10s %10s %10s %10s %10s" , "status", "startORend", "dbid", "roomID", "clientID", "reason");
+		log2.info("----------------------------------------------------------------------------");
+		log2.printf(Level.INFO,"%10s	%10s %10s %10s %10s %10s" , status_dbid, startORend, dbid, roomID, clientID, reason_dbid);
+
+		Util.getFileLogger().info("updateStatus: " + startORend + " - " + currStatusEnum);
 //		Util.getConsoleLogger().debug("status	startORend	dbid	roomID	clientID");
 //		System.out.printf("%10s	%10s %10s %10s %10s %10s" , "status", "startORend", "dbid", "roomID", "clientID", "reason");
 //		Util.getConsoleLogger().debug();
@@ -432,7 +435,7 @@ public class CommonFunction {
 				dbid = AgentFunction.RecordStatusStart(userid, status_dbid, "0");
 			}
 			// 將xxxx_dbid值傳給前端
-			StatusEnum currStatusEnum = StatusEnum.getStatusEnumByDbid(status_dbid);
+//			StatusEnum currStatusEnum = StatusEnum.getStatusEnumByDbid(status_dbid);
 //			Util.getConsoleLogger().debug("currStatusEnum: " + currStatusEnum);
 			String dbid_key = currStatusEnum.toString().toLowerCase() + "_dbid";
 //			Util.getConsoleLogger().debug("dbid_key: " + dbid_key);
@@ -488,7 +491,7 @@ public class CommonFunction {
 				AgentFunction.RecordStatusEnd(dbid);
 				
 				// 清理Bean
-				StatusEnum currStatusEnum = StatusEnum.getStatusEnumByDbid(status_dbid);
+//				StatusEnum currStatusEnum = StatusEnum.getStatusEnumByDbid(status_dbid);
 				userInfo.getStatusDBIDMap().remove(currStatusEnum); 
 			}
 		}
