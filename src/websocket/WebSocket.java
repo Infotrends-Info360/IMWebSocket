@@ -41,14 +41,14 @@ public class WebSocket extends WebSocketServer {
 	
 	public WebSocket(InetSocketAddress address) {
 		super(address);
-		Util.getConsoleLogger().info("IP address: " + address);
-		Util.getFileLogger().info("IP address: " + address);
+		Util.getConsoleLogger().info("WebSocket IP address initialized: " + address);
+		Util.getFileLogger().info("WebSocket IP address initialized: " + address);
 	}
 
 	public WebSocket(int port) throws UnknownHostException {
 		super(new InetSocketAddress(port));
-		Util.getConsoleLogger().info("Port: " + port);
-		Util.getFileLogger().info("Port: " + port);
+		Util.getConsoleLogger().info("WebSocket Port initialized: " + port);
+		Util.getFileLogger().info("WebSocket Port initialized: " + port);
 		
 //		Logger log = LogManager.getLogger(WebSocket.class);
 //		log.printf(Level.INFO,"%s *********************************************%n",5);
@@ -60,8 +60,8 @@ public class WebSocket extends WebSocketServer {
 			String reason, boolean remote) {
 		// 此方法沒有用到,先放著,並不會影響到主流程
 		//userLeave(conn);
-		Util.getConsoleLogger().info("onClose(): " + WebSocketUserPool.getACTypeByKey(conn) + conn + " is disconnected. (onClose)");
-		Util.getFileLogger().info("onClose(): " + WebSocketUserPool.getACTypeByKey(conn) + conn + " is disconnected. (onClose)");
+		Util.getConsoleLogger().info( WebSocketUserPool.getUserNameByKey(conn) + " is disconnected. (onClose)");
+		Util.getFileLogger().info( WebSocketUserPool.getUserNameByKey(conn) + " is disconnected. (onClose)");
 		// 將Heartbeat功能移轉到這裡:
 		inputInteractionLog(conn,reason);
 		clearUserData(conn); // 包含removeUser, removerUserinTYPE, removeUserinroom
@@ -82,8 +82,8 @@ public class WebSocket extends WebSocketServer {
 	@Override
 	public void onOpen(org.java_websocket.WebSocket conn,
 			ClientHandshake handshake) {
-		Util.getConsoleLogger().info("Someone link in Socket conn:" + conn);
-		Util.getFileLogger().info("Someone link in Socket conn:" + conn);
+		Util.getConsoleLogger().info( conn + " is connected");
+		Util.getFileLogger().info( conn + " is connected");
 		l++;
 	}
 

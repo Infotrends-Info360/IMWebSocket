@@ -20,8 +20,8 @@ public class HeartBeat {
 
 	public void heartbeating(org.java_websocket.WebSocket conn) {
 		HeartBeat hb = new HeartBeat();
-		Util.getConsoleLogger().info("conn: " + conn + " is connected. (HeartBeat)");
-		Util.getFileLogger().info("conn: " + conn + " is connected. (HeartBeat)");
+		Util.getConsoleLogger().info( WebSocketUserPool.getUserNameByKey(conn) + " is connected. (HeartBeat)");
+		Util.getFileLogger().info( WebSocketUserPool.getUserNameByKey(conn) + " is connected. (HeartBeat)");
 		Timer timer = new Timer(conn.toString());
 		TimerTask taskToExecute = new TimerTaskSendHeartBeat(hb, conn, timer);
 		timer.scheduleAtFixedRate(taskToExecute, 1000, 1000);
@@ -77,8 +77,9 @@ class TimerTaskSendHeartBeat extends TimerTask {
 		if ("GREEN".equals(this.healthStatusHolder.getHealthStatus())){
 			HeartBeat.heartbeattouser(conn,this.healthStatusHolder);
 		}else{
-			Util.getConsoleLogger().info("conn: " + conn + " is disconnected. (HeartBeat)");				
-			Util.getFileLogger().info("conn: " + conn + " is disconnected. (HeartBeat)");				
+			if (conn.isClosing() || conn.isClosed()) return;
+			Util.getConsoleLogger().info( WebSocketUserPool.getUserNameByKey(conn) + " is disconnected. (HeartBeat)");				
+			Util.getFileLogger().info( WebSocketUserPool.getUserNameByKey(conn) + " is disconnected. (HeartBeat)");				
 			timer.cancel();
 		}
 		
