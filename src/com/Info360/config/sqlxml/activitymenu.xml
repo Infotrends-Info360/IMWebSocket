@@ -60,7 +60,7 @@ values
 <update id="Update_activitymenu" parameterType="com.Info360.bean.Activitymenu">
 update  tblCfg_ActivityMenu 
 set 
-	MENUNAME=#{menuname},SORT=#{sort}
+	MENUNAME=#{menuname}
 
 where DBID=#{dbid}
 </update>
