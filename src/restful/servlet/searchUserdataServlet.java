@@ -10,6 +10,7 @@ import java.net.MalformedURLException;
 import java.net.URL;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.Set;
 
 import javax.ws.rs.FormParam;
 import javax.ws.rs.POST;
@@ -52,12 +53,16 @@ public class searchUserdataServlet {
 			@FormParam("attributes") String attributes,
 			@FormParam("attributenames") String attributenames,
 			@FormParam("lang") String lang) throws IOException {
+		
+		jsonObject.put("searchtype", searchtype);
+		jsonObject.put("lang", lang);
+		
 		/*** debug - 測試時間 ***/
 		long startTime;
 		long endTime;
 
 		// Util.getConsoleLogger().debug("attributes: "+attributes);
-
+		/** 拿取searchkey, pkey - 透過GetServiceNameSetting() **/
 		JSONObject CfgServiceNameSettingjsonObject = null;
 		String searchkey = null;
 		String pkey = null;
@@ -72,17 +77,25 @@ public class searchUserdataServlet {
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
+		
 		jsonObject.put("searchkey", searchkey);
 		jsonObject.put("pkey", pkey);
-
+		
+		/** 拿取CustomerData - 透過GetCustomerLevel() **/
+		/** 拿取mapping - 透過GetServiceNameCache() **/
+		/** 拿取SetContactLog - 透過SetContactLog() **/
 		JSONObject attributesjsonObject = new JSONObject(attributes);
-
-		jsonObject.put("searchtype", searchtype);
-		jsonObject.put("lang", lang);
+		// 可考慮是否將attributenames傳入參數省去,改用keys替代就好，程式碼較好維護
+//		Set<String> keys = attributesjsonObject.keySet();
+//		for (String s : keys){
+//			System.out.println("s: " + s);
+//		}
 
 		String[] attributenamesArray = attributenames.split(",");
 		for (int i = 0; i < attributenamesArray.length; i++) {
 			JSONArray CustomerLeveljsonarray = null;
+			// 待詢問: attributenamesArray[i].equals(searchkey)的必要性?
+			// 可否將for迴圈省略,直接使用searchkey作為GetCustomerLevel的引數與回傳物件的key-value
 			if (attributenamesArray[i].equals(searchkey)) {
 				// GetCustomerLevel
 				try {
@@ -94,7 +107,6 @@ public class searchUserdataServlet {
 									.toString(), searchtype, bSelect);
 					jsonObject.put("CustomerData", CustomerLeveljsonarray);
 				} catch (Exception e) {
-					// TODO Auto-generated catch block
 					// e.printStackTrace();
 					jsonObject.put("error", e.getMessage());
 				}
@@ -104,12 +116,13 @@ public class searchUserdataServlet {
 					JSONObject ServiceNameCachejsonObj = GetServiceNameCache(searchtype);
 					jsonObject.put("mapping", ServiceNameCachejsonObj);
 				} catch (Exception e) {
-					// TODO Auto-generated catch block
 					// e.printStackTrace();
 					jsonObject.put("error", e.getMessage());
 				}
 				
 				// Set Contact Log
+				// 使用CustomerLeveljsonarray迴圈內資料
+				// 疑問: 什麼時候 CustomerLeveljsonarray.length() > 1
 				try {
 					for (int j = 0; j < CustomerLeveljsonarray.length(); j++) {
 						Util.getConsoleLogger().debug("CustomerLeveljsonarray: "
@@ -133,15 +146,14 @@ public class searchUserdataServlet {
 						}
 					}
 				} catch (Exception e) {
-					// TODO Auto-generated catch block
 					// e.printStackTrace();
 					jsonObject.put("error", e.getMessage());
 				}
 
-			}
+			}// end of if
 			jsonObject.put(attributenamesArray[i],
 					attributesjsonObject.get(attributenamesArray[i]));
-		}
+		}// end of for
 
 		return Response
 				.status(200)
@@ -155,11 +167,12 @@ public class searchUserdataServlet {
 	}
 
 	public JSONObject GetServiceNameSetting(String typeid) throws Exception {
+		Util.getConsoleLogger().debug("GetServiceNameSetting() called");
 		StringBuilder responseSB = null;
 		// Encode the query
 		String postData = "typeid=" + typeid;
 
-		// Connect to URL
+		// Connect to URL (是否可考慮在此直接呼叫DAO即可,可省去網路請求,提升效能)
 		String hostURL = Util.getHostURLStr("IMWebSocket");
 		Util.getConsoleLogger().debug("hostURL: " + hostURL);
 		URL url = new URL( hostURL + "/IMWebSocket/RESTful/Cfg_ServiceName_Setting");
@@ -189,7 +202,9 @@ public class searchUserdataServlet {
 		// Close streams
 		br.close();
 		os.close();
-
+		
+		// ex. {"status":"POST","uniquekey":"id","searchkey":"Phone"} 
+//		Util.getConsoleLogger().debug("responseSB: " + responseSB);
 		// Util.getConsoleLogger().debug("responseSB: "+responseSB.toString().trim());
 		JSONObject CfgServiceNameSettingjsonObject = new JSONObject(
 				responseSB.toString());
