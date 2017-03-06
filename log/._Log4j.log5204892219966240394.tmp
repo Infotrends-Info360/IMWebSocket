@@ -1,0 +1,3 @@
+org.java_websocket.WebSocketImpl@47beb199 is connected       - [17/03/06 11:48:11][INFO][websocket.WebSocket-86]
+林智凱 is connected. (HeartBeat)                                - [17/03/06 11:48:11][INFO][websocket.HeartBeat-24]
+林智凱 is disconnected. (onClose)                               - [17/03/06 11:48:27][INFO][websocket.WebSocket-64]

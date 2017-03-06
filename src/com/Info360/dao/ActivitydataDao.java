@@ -6,6 +6,8 @@ import java.util.List;
 
 import org.apache.ibatis.session.SqlSession;
 
+import util.Util;
+
 import com.Info360.bean.Activitydata;
 import com.Info360.bean.Activitygroups;
 import com.Info360.bean.Activitymenu;
@@ -36,6 +38,11 @@ public class ActivitydataDao {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 			IsError.GET_EXCEPTION = e.getMessage();
+			Util.getFileLogger().error(e.getMessage());
+		} catch (Exception e){
+			e.printStackTrace();
+			IsError.GET_EXCEPTION = e.getMessage();
+			Util.getFileLogger().error(e.getMessage());
 		} finally {
 			if(sqlSession != null){
 			   sqlSession.close();
@@ -62,6 +69,11 @@ public class ActivitydataDao {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 			IsError.GET_EXCEPTION = e.getMessage();
+			Util.getFileLogger().error(e.getMessage());
+		} catch (Exception e){
+			e.printStackTrace();
+			IsError.GET_EXCEPTION = e.getMessage();
+			Util.getFileLogger().error(e.getMessage());
 		} finally {
 			if(sqlSession != null){
 				sqlSession.close();
@@ -88,6 +100,11 @@ public class ActivitydataDao {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 			IsError.GET_EXCEPTION = e.getMessage();
+			Util.getFileLogger().error(e.getMessage());
+		} catch (Exception e){
+			e.printStackTrace();
+			IsError.GET_EXCEPTION = e.getMessage();
+			Util.getFileLogger().error(e.getMessage());
 		} finally {
 			if(sqlSession != null){
 				sqlSession.close();
@@ -113,6 +130,11 @@ public class ActivitydataDao {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 			IsError.GET_EXCEPTION = e.getMessage();
+			Util.getFileLogger().error(e.getMessage());
+		} catch (Exception e){
+			e.printStackTrace();
+			IsError.GET_EXCEPTION = e.getMessage();
+			Util.getFileLogger().error(e.getMessage());
 		} finally {
 			if(sqlSession != null){
 			   sqlSession.close();
@@ -138,6 +160,11 @@ public class ActivitydataDao {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 			IsError.GET_EXCEPTION = e.getMessage();
+			Util.getFileLogger().error(e.getMessage());
+		} catch (Exception e){
+			e.printStackTrace();
+			IsError.GET_EXCEPTION = e.getMessage();
+			Util.getFileLogger().error(e.getMessage());
 		} finally {
 			if(sqlSession != null){
 			   sqlSession.close();

@@ -123,7 +123,7 @@ public class AgentFunction {
 		try {
 			// Connect to URL
 			String hostURL = Util.getHostURLStr("IMWebSocket");
-			Util.getConsoleLogger().debug("hostURL: " + hostURL);
+//			Util.getConsoleLogger().debug("hostURL: " + hostURL);
 			URL url = new URL( hostURL + "/IMWebSocket/RESTful/Select_agentreason");
 //			URL url = new URL(
 //					"http://127.0.0.1:8080/IMWebSocket/RESTful/Select_agentreason");
@@ -187,7 +187,7 @@ public class AgentFunction {
 		try {
 			// Connect to URL
 			String hostURL = Util.getHostURLStr("IMWebSocket");
-			Util.getConsoleLogger().debug("hostURL: " + hostURL);
+//			Util.getConsoleLogger().debug("hostURL: " + hostURL);
 			URL url = new URL( hostURL + "/IMWebSocket/RESTful/Insert_rpt_agentstatus");
 //			URL url = new URL(
 //					"http://127.0.0.1:8080/IMWebSocket/RESTful/Insert_rpt_agentstatus");
@@ -239,7 +239,7 @@ public class AgentFunction {
 		try {
 			// Connect to URL
 			String hostURL = Util.getHostURLStr("IMWebSocket");
-			Util.getConsoleLogger().debug("hostURL: " + hostURL);
+//			Util.getConsoleLogger().debug("hostURL: " + hostURL);
 			URL url = new URL( hostURL + "/IMWebSocket/RESTful/Update_rpt_agentstatus");
 //			URL url = new URL(
 //					"http://127.0.0.1:8080/IMWebSocket/RESTful/Update_rpt_agentstatus");
@@ -288,7 +288,7 @@ public class AgentFunction {
 			try {
 				// Connect to URL
 				String hostURL = Util.getHostURLStr("IMWebSocket");
-				Util.getConsoleLogger().debug("hostURL: " + hostURL);
+//				Util.getConsoleLogger().debug("hostURL: " + hostURL);
 				URL url = new URL( hostURL + "/IMWebSocket/RESTful/Insert_rpt_activitylog");
 //				URL url = new URL(
 //						"http://127.0.0.1:8080/IMWebSocket/RESTful/Insert_rpt_activitylog");
