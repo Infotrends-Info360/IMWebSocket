@@ -98,6 +98,7 @@ public class searchUserdataServlet {
 			// 可否將for迴圈省略,直接使用searchkey作為GetCustomerLevel的引數與回傳物件的key-value
 			if (attributenamesArray[i].equals(searchkey)) {
 				// GetCustomerLevel
+				startTime = System.currentTimeMillis();
 				try {
 					// String sID = "A123456789";
 					// String sCustLevel = "A";
@@ -110,8 +111,13 @@ public class searchUserdataServlet {
 					// e.printStackTrace();
 					jsonObject.put("error", e.getMessage());
 				}
+				endTime = System.currentTimeMillis();
+				Util.getConsoleLogger().debug("RESTful GetCustomerLevel time: " + (endTime - startTime)/1000 + "s" );
+				Util.getFileLogger().debug("RESTful GetCustomerLevel time: " + (endTime - startTime)/1000 + "s" );
+
 
 				// GetServiceNameCache
+				startTime = System.currentTimeMillis();
 				try {
 					JSONObject ServiceNameCachejsonObj = GetServiceNameCache(searchtype);
 					jsonObject.put("mapping", ServiceNameCachejsonObj);
@@ -119,10 +125,14 @@ public class searchUserdataServlet {
 					// e.printStackTrace();
 					jsonObject.put("error", e.getMessage());
 				}
+				endTime = System.currentTimeMillis();
+				Util.getConsoleLogger().debug("RESTful GetServiceNameCache time: " + (endTime - startTime)/1000 + "s" );
+				Util.getFileLogger().debug("RESTful GetServiceNameCache time: " + (endTime - startTime)/1000 + "s" );
 				
 				// Set Contact Log
 				// 使用CustomerLeveljsonarray迴圈內資料
 				// 疑問: 什麼時候 CustomerLeveljsonarray.length() > 1
+				startTime = System.currentTimeMillis();
 				try {
 					for (int j = 0; j < CustomerLeveljsonarray.length(); j++) {
 						Util.getConsoleLogger().debug("CustomerLeveljsonarray: "
@@ -149,8 +159,14 @@ public class searchUserdataServlet {
 					// e.printStackTrace();
 					jsonObject.put("error", e.getMessage());
 				}
+				endTime = System.currentTimeMillis();
+				Util.getConsoleLogger().debug("RESTful SetContactLog time: " + (endTime - startTime)/1000 + "s" );
+				Util.getFileLogger().debug("RESTful SetContactLog time: " + (endTime - startTime)/1000 + "s" );
+
 
 			}// end of if
+			
+			/** 將所有attributes key-value放入 **/
 			jsonObject.put(attributenamesArray[i],
 					attributesjsonObject.get(attributenamesArray[i]));
 		}// end of for
