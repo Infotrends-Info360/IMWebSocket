@@ -5,6 +5,7 @@ import java.io.IOException;
 
 
 import java.math.BigDecimal;
+import java.util.ArrayList;
 import java.util.List;
 
 import javax.ws.rs.FormParam;
@@ -48,12 +49,25 @@ public class AgentReason_LogicDelete_Servlet {
 	public Response PostFromPath(
 	
 			@FormParam("flag") int flag,
-			@FormParam("dbid") int dbid
+			@FormParam("dbid") int dbid,
+    		@FormParam("Agentreason_DBID_list") String Agentreason_DBID_list
+
 			
 			) throws IOException {
 		
 		JSONObject jsonObject = new JSONObject();
 		Cfg_AgentReason agentreason = new Cfg_AgentReason();
+		
+		List<Integer> Agentreason_DBID_list2 = new ArrayList<Integer>();
+
+		
+		if(Agentreason_DBID_list.length()>0){
+			String [] dd = Agentreason_DBID_list.split(",");
+			for(int i=0 ;i<dd.length;i++){
+				Agentreason_DBID_list2.add(Integer.valueOf(dd[i]));
+			}
+			agentreason.setAgentreason_DBID_list(Agentreason_DBID_list2);
+		}
 		
 		agentreason.setFlag(flag);
 		agentreason.setDbid(dbid);

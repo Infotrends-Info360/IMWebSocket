@@ -1,5 +1,8 @@
 package com.Info360.bean;
 
+import java.util.ArrayList;
+import java.util.List;
+
 public class Cfg_AgentReason {
 	private int dbid;
 	
@@ -23,9 +26,18 @@ public class Cfg_AgentReason {
 	
 	private String createuserid;
 
+	private List<Integer> Agentreason_DBID_list = new ArrayList<Integer>();
+
 	
 	
-	
+	public List<Integer> getAgentreason_DBID_list() {
+		return Agentreason_DBID_list;
+	}
+
+	public void setAgentreason_DBID_list(List<Integer> agentreason_DBID_list) {
+		Agentreason_DBID_list = agentreason_DBID_list;
+	}
+
 	public String getCreatedatetime() {
 		return createdatetime;
 	}
