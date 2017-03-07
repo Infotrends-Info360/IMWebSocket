@@ -10,10 +10,10 @@ import java.util.TimerTask;
 import java.util.concurrent.atomic.AtomicBoolean;
 
 import org.java_websocket.WebSocket;
- 
+  
 import util.StatusEnum;
 import util.Util;
-  
+   
   
 //此類別給WebSocketPool.userallconnections使用
 public class UserInfo {
