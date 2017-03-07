@@ -151,3 +151,42 @@
 [17/03/07 12:17:37][ INFO][websocket.function.CommonFunction  -110  ] - Util.getAgentStatus(): {Login={description=登入, dbid=1}, Ring={description=響鈴, dbid=6}, iEstablished={description=進線通話, dbid=7}, AfterCallWork={description=文書處理, dbid=5}, Logout={description=登出, dbid=2}, NotReady={description=離席, dbid=4}, Ready={description=準備就緒, dbid=3}, oEstablished={description=外撥通話, dbid=8}}
 [17/03/07 12:17:37][ INFO][websocket.HeartBeat                -24   ] - 林智凱 is connected. (HeartBeat)
 [17/03/07 12:17:40][ INFO][websocket.WebSocket                -69   ] - 林智凱 is disconnected. (onClose)
+[17/03/07 13:31:35][ INFO][filter.SystemListener              -115  ] - propertiesJson: {
+  "IMWebSocket": {
+    "port": "8080",
+    "protocol": "http:",
+    "hostname": "localhost"
+  },
+  "Info360_Setting": {
+    "port": "8080",
+    "protocol": "http:",
+    "hostname": "ws.crm.com.tw"
+  },
+  "ServiceNameCache": {
+    "port": "8080",
+    "protocol": "http:",
+    "hostname": "ws.crm.com.tw"
+  },
+  "Upload_Files": {
+    "port": "8080",
+    "protocol": "http:",
+    "hostname": "ws.crm.com.tw"
+  },
+  "info360": {
+    "port": "8080",
+    "protocol": "http:",
+    "hostname": "ws.crm.com.tw"
+  },
+  "infoacd": {
+    "port": "80",
+    "protocol": "http:",
+    "hostname": "192.168.10.7"
+  },
+  "websocket": {
+    "port": "8888",
+    "protocol": "ws:",
+    "hostname": "localhost"
+  }
+}
+[17/03/07 13:31:36][ INFO][com.Info360.db.DBAccess            -42   ] - SqlSessionFactoryBuilder created.
+[17/03/07 13:31:37][ INFO][websocket.WebSocket                -53   ] - WebSocket Port initialized: 8888
