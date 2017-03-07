@@ -190,3 +190,332 @@
 }
 [17/03/07 13:31:36][ INFO][com.Info360.db.DBAccess            -42   ] - SqlSessionFactoryBuilder created.
 [17/03/07 13:31:37][ INFO][websocket.WebSocket                -53   ] - WebSocket Port initialized: 8888
+[17/03/07 14:40:57][ INFO][filter.SystemListener              -115  ] - propertiesJson: {
+  "IMWebSocket": {
+    "port": "8080",
+    "protocol": "http:",
+    "hostname": "localhost"
+  },
+  "Info360_Setting": {
+    "port": "8080",
+    "protocol": "http:",
+    "hostname": "ws.crm.com.tw"
+  },
+  "ServiceNameCache": {
+    "port": "8080",
+    "protocol": "http:",
+    "hostname": "ws.crm.com.tw"
+  },
+  "Upload_Files": {
+    "port": "8080",
+    "protocol": "http:",
+    "hostname": "ws.crm.com.tw"
+  },
+  "info360": {
+    "port": "8080",
+    "protocol": "http:",
+    "hostname": "ws.crm.com.tw"
+  },
+  "infoacd": {
+    "port": "80",
+    "protocol": "http:",
+    "hostname": "192.168.10.7"
+  },
+  "websocket": {
+    "port": "8888",
+    "protocol": "ws:",
+    "hostname": "localhost"
+  }
+}
+[17/03/07 14:40:57][ INFO][com.Info360.db.DBAccess            -42   ] - SqlSessionFactoryBuilder created.
+[17/03/07 14:40:58][ INFO][websocket.WebSocket                -53   ] - WebSocket Port initialized: 8888
+[17/03/07 14:41:20][ INFO][websocket.WebSocket                -91   ] - org.java_websocket.WebSocketImpl@787cd7b2 is connected
+[17/03/07 14:41:20][ INFO][websocket.function.CommonFunction  -108  ] - Util.getAgentReason(): {WC={statusname_cn=厕所, flag=, description=上廁所, statusname_en=WC, statusname_tw=廁所, alarmcolor=000000, dbid=41, alarmduration=1.00}, 1111={statusname_cn=11, flag=, description=11, statusname_en=11, statusname_tw=11, alarmcolor=11, dbid=50, alarmduration=11.00}, AUX={statusname_cn=暂时离开, flag=, description=暫時離開, statusname_en=AUX, statusname_tw=暫時離開, alarmcolor=00000, dbid=3, alarmduration=2.00}, 抽菸={statusname_cn=食菸, flag=, description=抽菸~, statusname_en=Smokes, statusname_tw=抽煙, alarmcolor=111111, dbid=34, alarmduration=1.00}}
+[17/03/07 14:41:20][ INFO][websocket.function.CommonFunction  -110  ] - Util.getAgentStatus(): {Login={description=登入, dbid=1}, Ring={description=響鈴, dbid=6}, iEstablished={description=進線通話, dbid=7}, AfterCallWork={description=文書處理, dbid=5}, Logout={description=登出, dbid=2}, NotReady={description=離席, dbid=4}, Ready={description=準備就緒, dbid=3}, oEstablished={description=外撥通話, dbid=8}}
+[17/03/07 14:41:20][ INFO][websocket.HeartBeat                -24   ] - 林智凱 is connected. (HeartBeat)
+[17/03/07 14:41:23][ INFO][websocket.WebSocket                -91   ] - org.java_websocket.WebSocketImpl@73cddbd6 is connected
+[17/03/07 14:41:23][ INFO][websocket.function.CommonFunction  -108  ] - Util.getAgentReason(): {WC={statusname_cn=厕所, flag=, description=上廁所, statusname_en=WC, statusname_tw=廁所, alarmcolor=000000, dbid=41, alarmduration=1.00}, 1111={statusname_cn=11, flag=, description=11, statusname_en=11, statusname_tw=11, alarmcolor=11, dbid=50, alarmduration=11.00}, AUX={statusname_cn=暂时离开, flag=, description=暫時離開, statusname_en=AUX, statusname_tw=暫時離開, alarmcolor=00000, dbid=3, alarmduration=2.00}, 抽菸={statusname_cn=食菸, flag=, description=抽菸~, statusname_en=Smokes, statusname_tw=抽煙, alarmcolor=111111, dbid=34, alarmduration=1.00}}
+[17/03/07 14:41:23][ INFO][websocket.function.CommonFunction  -110  ] - Util.getAgentStatus(): {Login={description=登入, dbid=1}, Ring={description=響鈴, dbid=6}, iEstablished={description=進線通話, dbid=7}, AfterCallWork={description=文書處理, dbid=5}, Logout={description=登出, dbid=2}, NotReady={description=離席, dbid=4}, Ready={description=準備就緒, dbid=3}, oEstablished={description=外撥通話, dbid=8}}
+[17/03/07 14:41:23][ INFO][websocket.HeartBeat                -24   ] - 林蔡 is connected. (HeartBeat)
+[17/03/07 14:41:30][ INFO][websocket.WebSocket                -91   ] - org.java_websocket.WebSocketImpl@667d09c1 is connected
+[17/03/07 14:41:31][ INFO][websocket.function.CommonFunction  -108  ] - Util.getAgentReason(): {WC={statusname_cn=厕所, flag=, description=上廁所, statusname_en=WC, statusname_tw=廁所, alarmcolor=000000, dbid=41, alarmduration=1.00}, 1111={statusname_cn=11, flag=, description=11, statusname_en=11, statusname_tw=11, alarmcolor=11, dbid=50, alarmduration=11.00}, AUX={statusname_cn=暂时离开, flag=, description=暫時離開, statusname_en=AUX, statusname_tw=暫時離開, alarmcolor=00000, dbid=3, alarmduration=2.00}, 抽菸={statusname_cn=食菸, flag=, description=抽菸~, statusname_en=Smokes, statusname_tw=抽煙, alarmcolor=111111, dbid=34, alarmduration=1.00}}
+[17/03/07 14:41:31][ INFO][websocket.function.CommonFunction  -110  ] - Util.getAgentStatus(): {Login={description=登入, dbid=1}, Ring={description=響鈴, dbid=6}, iEstablished={description=進線通話, dbid=7}, AfterCallWork={description=文書處理, dbid=5}, Logout={description=登出, dbid=2}, NotReady={description=離席, dbid=4}, Ready={description=準備就緒, dbid=3}, oEstablished={description=外撥通話, dbid=8}}
+[17/03/07 14:41:31][ INFO][websocket.HeartBeat                -24   ] - A123456789 is connected. (HeartBeat)
+[17/03/07 14:41:31][ INFO][websocket.function.ClientFunction  -102  ] - senduserdata() called 
+[17/03/07 14:41:31][ INFO][restful.servlet.searchUserdataServlet-83   ] - RESTful GetServiceNameSetting time: 0s
+[17/03/07 14:41:32][ INFO][restful.servlet.searchUserdataServlet-121  ] - RESTful GetCustomerLevel time: 1s
+[17/03/07 14:41:32][ INFO][restful.servlet.searchUserdataServlet-135  ] - RESTful GetServiceNameCache time: 0s
+[17/03/07 14:41:34][ INFO][restful.servlet.searchUserdataServlet-169  ] - RESTful SetContactLog time: 1s
+[17/03/07 14:41:38][ INFO][websocket.function.ClientFunction  -102  ] - senduserdata() called 
+[17/03/07 14:41:39][ INFO][restful.servlet.searchUserdataServlet-83   ] - RESTful GetServiceNameSetting time: 0s
+[17/03/07 14:41:39][ INFO][restful.servlet.searchUserdataServlet-121  ] - RESTful GetCustomerLevel time: 0s
+[17/03/07 14:41:39][ INFO][restful.servlet.searchUserdataServlet-135  ] - RESTful GetServiceNameCache time: 0s
+[17/03/07 14:41:40][ INFO][restful.servlet.searchUserdataServlet-169  ] - RESTful SetContactLog time: 0s
+[17/03/07 14:41:40][ INFO][websocket.bean.RingCountDownTask   -78   ] - TimerTaskRingHeartBeat - RING STARTED
+[17/03/07 14:41:44][ INFO][websocket.bean.RingCountDownTask   -44   ] - TimerTaskRingHeartBeat - RING STOPPED
+[17/03/07 14:42:45][ INFO][websocket.WebSocket                -69   ] - A123456789 is disconnected. (onClose)
+[17/03/07 14:44:44][ INFO][filter.SystemListener              -115  ] - propertiesJson: {
+  "IMWebSocket": {
+    "port": "8080",
+    "protocol": "http:",
+    "hostname": "localhost"
+  },
+  "Info360_Setting": {
+    "port": "8080",
+    "protocol": "http:",
+    "hostname": "ws.crm.com.tw"
+  },
+  "ServiceNameCache": {
+    "port": "8080",
+    "protocol": "http:",
+    "hostname": "ws.crm.com.tw"
+  },
+  "Upload_Files": {
+    "port": "8080",
+    "protocol": "http:",
+    "hostname": "ws.crm.com.tw"
+  },
+  "info360": {
+    "port": "8080",
+    "protocol": "http:",
+    "hostname": "ws.crm.com.tw"
+  },
+  "infoacd": {
+    "port": "80",
+    "protocol": "http:",
+    "hostname": "192.168.10.7"
+  },
+  "websocket": {
+    "port": "8888",
+    "protocol": "ws:",
+    "hostname": "localhost"
+  }
+}
+[17/03/07 14:44:44][ INFO][com.Info360.db.DBAccess            -42   ] - SqlSessionFactoryBuilder created.
+[17/03/07 14:44:45][ INFO][websocket.WebSocket                -53   ] - WebSocket Port initialized: 8888
+[17/03/07 14:45:17][ INFO][websocket.WebSocket                -91   ] - org.java_websocket.WebSocketImpl@4c53953f is connected
+[17/03/07 14:45:18][ INFO][websocket.function.CommonFunction  -108  ] - Util.getAgentReason(): {WC={statusname_cn=厕所, flag=, description=上廁所, statusname_en=WC, statusname_tw=廁所, alarmcolor=000000, dbid=41, alarmduration=1.00}, 1111={statusname_cn=11, flag=, description=11, statusname_en=11, statusname_tw=11, alarmcolor=11, dbid=50, alarmduration=11.00}, AUX={statusname_cn=暂时离开, flag=, description=暫時離開, statusname_en=AUX, statusname_tw=暫時離開, alarmcolor=00000, dbid=3, alarmduration=2.00}, 抽菸={statusname_cn=食菸, flag=, description=抽菸~, statusname_en=Smokes, statusname_tw=抽煙, alarmcolor=111111, dbid=34, alarmduration=1.00}}
+[17/03/07 14:45:18][ INFO][websocket.function.CommonFunction  -110  ] - Util.getAgentStatus(): {Login={description=登入, dbid=1}, Ring={description=響鈴, dbid=6}, iEstablished={description=進線通話, dbid=7}, AfterCallWork={description=文書處理, dbid=5}, Logout={description=登出, dbid=2}, NotReady={description=離席, dbid=4}, Ready={description=準備就緒, dbid=3}, oEstablished={description=外撥通話, dbid=8}}
+[17/03/07 14:45:18][ INFO][websocket.HeartBeat                -24   ] - A123456789 is connected. (HeartBeat)
+[17/03/07 14:45:18][ INFO][websocket.function.ClientFunction  -102  ] - senduserdata() called 
+[17/03/07 14:45:18][ INFO][restful.servlet.searchUserdataServlet-83   ] - RESTful GetServiceNameSetting time: 0s
+[17/03/07 14:45:18][ INFO][restful.servlet.searchUserdataServlet-121  ] - RESTful GetCustomerLevel time: 0s
+[17/03/07 14:45:18][ INFO][restful.servlet.searchUserdataServlet-135  ] - RESTful GetServiceNameCache time: 0s
+[17/03/07 14:45:19][ INFO][restful.servlet.searchUserdataServlet-169  ] - RESTful SetContactLog time: 0s
+[17/03/07 14:45:21][ INFO][websocket.WebSocket                -91   ] - org.java_websocket.WebSocketImpl@7fdaae9a is connected
+[17/03/07 14:45:21][ INFO][websocket.function.CommonFunction  -108  ] - Util.getAgentReason(): {WC={statusname_cn=厕所, flag=, description=上廁所, statusname_en=WC, statusname_tw=廁所, alarmcolor=000000, dbid=41, alarmduration=1.00}, 1111={statusname_cn=11, flag=, description=11, statusname_en=11, statusname_tw=11, alarmcolor=11, dbid=50, alarmduration=11.00}, AUX={statusname_cn=暂时离开, flag=, description=暫時離開, statusname_en=AUX, statusname_tw=暫時離開, alarmcolor=00000, dbid=3, alarmduration=2.00}, 抽菸={statusname_cn=食菸, flag=, description=抽菸~, statusname_en=Smokes, statusname_tw=抽煙, alarmcolor=111111, dbid=34, alarmduration=1.00}}
+[17/03/07 14:45:21][ INFO][websocket.function.CommonFunction  -110  ] - Util.getAgentStatus(): {Login={description=登入, dbid=1}, Ring={description=響鈴, dbid=6}, iEstablished={description=進線通話, dbid=7}, AfterCallWork={description=文書處理, dbid=5}, Logout={description=登出, dbid=2}, NotReady={description=離席, dbid=4}, Ready={description=準備就緒, dbid=3}, oEstablished={description=外撥通話, dbid=8}}
+[17/03/07 14:45:21][ INFO][websocket.HeartBeat                -24   ] - 林智凱 is connected. (HeartBeat)
+[17/03/07 14:45:25][ INFO][websocket.function.ClientFunction  -102  ] - senduserdata() called 
+[17/03/07 14:45:26][ INFO][restful.servlet.searchUserdataServlet-83   ] - RESTful GetServiceNameSetting time: 0s
+[17/03/07 14:45:26][ INFO][restful.servlet.searchUserdataServlet-121  ] - RESTful GetCustomerLevel time: 0s
+[17/03/07 14:45:26][ INFO][restful.servlet.searchUserdataServlet-135  ] - RESTful GetServiceNameCache time: 0s
+[17/03/07 14:45:27][ INFO][restful.servlet.searchUserdataServlet-169  ] - RESTful SetContactLog time: 0s
+[17/03/07 14:45:27][ INFO][websocket.bean.RingCountDownTask   -78   ] - TimerTaskRingHeartBeat - RING STARTED
+[17/03/07 14:45:31][ INFO][websocket.bean.RingCountDownTask   -44   ] - TimerTaskRingHeartBeat - RING STOPPED
+[17/03/07 14:45:33][ INFO][websocket.WebSocket                -69   ] - A123456789 is disconnected. (onClose)
+[17/03/07 14:48:11][ INFO][filter.SystemListener              -115  ] - propertiesJson: {
+  "IMWebSocket": {
+    "port": "8080",
+    "protocol": "http:",
+    "hostname": "localhost"
+  },
+  "Info360_Setting": {
+    "port": "8080",
+    "protocol": "http:",
+    "hostname": "ws.crm.com.tw"
+  },
+  "ServiceNameCache": {
+    "port": "8080",
+    "protocol": "http:",
+    "hostname": "ws.crm.com.tw"
+  },
+  "Upload_Files": {
+    "port": "8080",
+    "protocol": "http:",
+    "hostname": "ws.crm.com.tw"
+  },
+  "info360": {
+    "port": "8080",
+    "protocol": "http:",
+    "hostname": "ws.crm.com.tw"
+  },
+  "infoacd": {
+    "port": "80",
+    "protocol": "http:",
+    "hostname": "192.168.10.7"
+  },
+  "websocket": {
+    "port": "8888",
+    "protocol": "ws:",
+    "hostname": "localhost"
+  }
+}
+[17/03/07 14:48:12][ INFO][com.Info360.db.DBAccess            -42   ] - SqlSessionFactoryBuilder created.
+[17/03/07 14:48:13][ INFO][websocket.WebSocket                -53   ] - WebSocket Port initialized: 8888
+[17/03/07 14:48:29][ INFO][websocket.WebSocket                -91   ] - org.java_websocket.WebSocketImpl@21c7cf61 is connected
+[17/03/07 14:48:30][ INFO][websocket.function.CommonFunction  -108  ] - Util.getAgentReason(): {WC={statusname_cn=厕所, flag=, description=上廁所, statusname_en=WC, statusname_tw=廁所, alarmcolor=000000, dbid=41, alarmduration=1.00}, 1111={statusname_cn=11, flag=, description=11, statusname_en=11, statusname_tw=11, alarmcolor=11, dbid=50, alarmduration=11.00}, AUX={statusname_cn=暂时离开, flag=, description=暫時離開, statusname_en=AUX, statusname_tw=暫時離開, alarmcolor=00000, dbid=3, alarmduration=2.00}, 抽菸={statusname_cn=食菸, flag=, description=抽菸~, statusname_en=Smokes, statusname_tw=抽煙, alarmcolor=111111, dbid=34, alarmduration=1.00}}
+[17/03/07 14:48:30][ INFO][websocket.function.CommonFunction  -110  ] - Util.getAgentStatus(): {Login={description=登入, dbid=1}, Ring={description=響鈴, dbid=6}, iEstablished={description=進線通話, dbid=7}, AfterCallWork={description=文書處理, dbid=5}, Logout={description=登出, dbid=2}, NotReady={description=離席, dbid=4}, Ready={description=準備就緒, dbid=3}, oEstablished={description=外撥通話, dbid=8}}
+[17/03/07 14:48:30][ INFO][websocket.HeartBeat                -24   ] - A123456789 is connected. (HeartBeat)
+[17/03/07 14:48:30][ INFO][websocket.function.ClientFunction  -102  ] - senduserdata() called 
+[17/03/07 14:48:30][ INFO][restful.servlet.searchUserdataServlet-83   ] - RESTful GetServiceNameSetting time: 0s
+[17/03/07 14:48:30][ INFO][restful.servlet.searchUserdataServlet-121  ] - RESTful GetCustomerLevel time: 0s
+[17/03/07 14:48:31][ INFO][restful.servlet.searchUserdataServlet-135  ] - RESTful GetServiceNameCache time: 0s
+[17/03/07 14:48:31][ INFO][restful.servlet.searchUserdataServlet-169  ] - RESTful SetContactLog time: 0s
+[17/03/07 14:48:43][ INFO][websocket.WebSocket                -91   ] - org.java_websocket.WebSocketImpl@6ee28500 is connected
+[17/03/07 14:48:43][ INFO][websocket.function.CommonFunction  -108  ] - Util.getAgentReason(): {WC={statusname_cn=厕所, flag=, description=上廁所, statusname_en=WC, statusname_tw=廁所, alarmcolor=000000, dbid=41, alarmduration=1.00}, 1111={statusname_cn=11, flag=, description=11, statusname_en=11, statusname_tw=11, alarmcolor=11, dbid=50, alarmduration=11.00}, AUX={statusname_cn=暂时离开, flag=, description=暫時離開, statusname_en=AUX, statusname_tw=暫時離開, alarmcolor=00000, dbid=3, alarmduration=2.00}, 抽菸={statusname_cn=食菸, flag=, description=抽菸~, statusname_en=Smokes, statusname_tw=抽煙, alarmcolor=111111, dbid=34, alarmduration=1.00}}
+[17/03/07 14:48:43][ INFO][websocket.function.CommonFunction  -110  ] - Util.getAgentStatus(): {Login={description=登入, dbid=1}, Ring={description=響鈴, dbid=6}, iEstablished={description=進線通話, dbid=7}, AfterCallWork={description=文書處理, dbid=5}, Logout={description=登出, dbid=2}, NotReady={description=離席, dbid=4}, Ready={description=準備就緒, dbid=3}, oEstablished={description=外撥通話, dbid=8}}
+[17/03/07 14:48:43][ INFO][websocket.HeartBeat                -24   ] - 林智凱 is connected. (HeartBeat)
+[17/03/07 14:48:45][ INFO][websocket.function.ClientFunction  -102  ] - senduserdata() called 
+[17/03/07 14:48:46][ INFO][restful.servlet.searchUserdataServlet-83   ] - RESTful GetServiceNameSetting time: 0s
+[17/03/07 14:48:46][ INFO][restful.servlet.searchUserdataServlet-121  ] - RESTful GetCustomerLevel time: 0s
+[17/03/07 14:48:46][ INFO][restful.servlet.searchUserdataServlet-135  ] - RESTful GetServiceNameCache time: 0s
+[17/03/07 14:48:47][ INFO][restful.servlet.searchUserdataServlet-169  ] - RESTful SetContactLog time: 0s
+[17/03/07 14:48:47][ INFO][websocket.bean.RingCountDownTask   -78   ] - TimerTaskRingHeartBeat - RING STARTED
+[17/03/07 14:48:54][ INFO][websocket.bean.RingCountDownTask   -44   ] - TimerTaskRingHeartBeat - RING STOPPED
+[17/03/07 14:49:00][ INFO][websocket.WebSocket                -69   ] - A123456789 is disconnected. (onClose)
+[17/03/07 14:49:57][ INFO][filter.SystemListener              -115  ] - propertiesJson: {
+  "IMWebSocket": {
+    "port": "8080",
+    "protocol": "http:",
+    "hostname": "localhost"
+  },
+  "Info360_Setting": {
+    "port": "8080",
+    "protocol": "http:",
+    "hostname": "ws.crm.com.tw"
+  },
+  "ServiceNameCache": {
+    "port": "8080",
+    "protocol": "http:",
+    "hostname": "ws.crm.com.tw"
+  },
+  "Upload_Files": {
+    "port": "8080",
+    "protocol": "http:",
+    "hostname": "ws.crm.com.tw"
+  },
+  "info360": {
+    "port": "8080",
+    "protocol": "http:",
+    "hostname": "ws.crm.com.tw"
+  },
+  "infoacd": {
+    "port": "80",
+    "protocol": "http:",
+    "hostname": "192.168.10.7"
+  },
+  "websocket": {
+    "port": "8888",
+    "protocol": "ws:",
+    "hostname": "localhost"
+  }
+}
+[17/03/07 14:49:57][ INFO][com.Info360.db.DBAccess            -42   ] - SqlSessionFactoryBuilder created.
+[17/03/07 14:49:58][ INFO][websocket.WebSocket                -53   ] - WebSocket Port initialized: 8888
+[17/03/07 14:50:09][ INFO][websocket.WebSocket                -91   ] - org.java_websocket.WebSocketImpl@3ed8e582 is connected
+[17/03/07 14:50:10][ INFO][websocket.function.CommonFunction  -108  ] - Util.getAgentReason(): {WC={statusname_cn=厕所, flag=, description=上廁所, statusname_en=WC, statusname_tw=廁所, alarmcolor=000000, dbid=41, alarmduration=1.00}, 1111={statusname_cn=11, flag=, description=11, statusname_en=11, statusname_tw=11, alarmcolor=11, dbid=50, alarmduration=11.00}, AUX={statusname_cn=暂时离开, flag=, description=暫時離開, statusname_en=AUX, statusname_tw=暫時離開, alarmcolor=00000, dbid=3, alarmduration=2.00}, 抽菸={statusname_cn=食菸, flag=, description=抽菸~, statusname_en=Smokes, statusname_tw=抽煙, alarmcolor=111111, dbid=34, alarmduration=1.00}}
+[17/03/07 14:50:10][ INFO][websocket.function.CommonFunction  -110  ] - Util.getAgentStatus(): {Login={description=登入, dbid=1}, Ring={description=響鈴, dbid=6}, iEstablished={description=進線通話, dbid=7}, AfterCallWork={description=文書處理, dbid=5}, Logout={description=登出, dbid=2}, NotReady={description=離席, dbid=4}, Ready={description=準備就緒, dbid=3}, oEstablished={description=外撥通話, dbid=8}}
+[17/03/07 14:50:10][ INFO][websocket.HeartBeat                -24   ] - A123456789 is connected. (HeartBeat)
+[17/03/07 14:50:10][ INFO][websocket.function.ClientFunction  -102  ] - senduserdata() called 
+[17/03/07 14:50:10][ INFO][restful.servlet.searchUserdataServlet-83   ] - RESTful GetServiceNameSetting time: 0s
+[17/03/07 14:50:10][ INFO][restful.servlet.searchUserdataServlet-121  ] - RESTful GetCustomerLevel time: 0s
+[17/03/07 14:50:10][ INFO][restful.servlet.searchUserdataServlet-135  ] - RESTful GetServiceNameCache time: 0s
+[17/03/07 14:50:11][ INFO][restful.servlet.searchUserdataServlet-169  ] - RESTful SetContactLog time: 0s
+[17/03/07 14:50:24][ INFO][websocket.WebSocket                -91   ] - org.java_websocket.WebSocketImpl@28a6a735 is connected
+[17/03/07 14:50:25][ INFO][websocket.function.CommonFunction  -108  ] - Util.getAgentReason(): {WC={statusname_cn=厕所, flag=, description=上廁所, statusname_en=WC, statusname_tw=廁所, alarmcolor=000000, dbid=41, alarmduration=1.00}, 1111={statusname_cn=11, flag=, description=11, statusname_en=11, statusname_tw=11, alarmcolor=11, dbid=50, alarmduration=11.00}, AUX={statusname_cn=暂时离开, flag=, description=暫時離開, statusname_en=AUX, statusname_tw=暫時離開, alarmcolor=00000, dbid=3, alarmduration=2.00}, 抽菸={statusname_cn=食菸, flag=, description=抽菸~, statusname_en=Smokes, statusname_tw=抽煙, alarmcolor=111111, dbid=34, alarmduration=1.00}}
+[17/03/07 14:50:25][ INFO][websocket.function.CommonFunction  -110  ] - Util.getAgentStatus(): {Login={description=登入, dbid=1}, Ring={description=響鈴, dbid=6}, iEstablished={description=進線通話, dbid=7}, AfterCallWork={description=文書處理, dbid=5}, Logout={description=登出, dbid=2}, NotReady={description=離席, dbid=4}, Ready={description=準備就緒, dbid=3}, oEstablished={description=外撥通話, dbid=8}}
+[17/03/07 14:50:25][ INFO][websocket.HeartBeat                -24   ] - 林智凱 is connected. (HeartBeat)
+[17/03/07 14:50:28][ INFO][websocket.function.ClientFunction  -102  ] - senduserdata() called 
+[17/03/07 14:50:29][ INFO][restful.servlet.searchUserdataServlet-83   ] - RESTful GetServiceNameSetting time: 0s
+[17/03/07 14:50:29][ INFO][restful.servlet.searchUserdataServlet-121  ] - RESTful GetCustomerLevel time: 0s
+[17/03/07 14:50:29][ INFO][restful.servlet.searchUserdataServlet-135  ] - RESTful GetServiceNameCache time: 0s
+[17/03/07 14:50:30][ INFO][restful.servlet.searchUserdataServlet-169  ] - RESTful SetContactLog time: 0s
+[17/03/07 14:50:30][ INFO][websocket.bean.RingCountDownTask   -78   ] - TimerTaskRingHeartBeat - RING STARTED
+[17/03/07 14:50:36][ INFO][websocket.bean.RingCountDownTask   -44   ] - TimerTaskRingHeartBeat - RING STOPPED
+[17/03/07 14:50:43][ INFO][websocket.WebSocket                -69   ] - A123456789 is disconnected. (onClose)
+[17/03/07 14:51:22][ INFO][websocket.WebSocket                -91   ] - org.java_websocket.WebSocketImpl@577670ee is connected
+[17/03/07 14:51:23][ INFO][websocket.function.CommonFunction  -108  ] - Util.getAgentReason(): {WC={statusname_cn=厕所, flag=, description=上廁所, statusname_en=WC, statusname_tw=廁所, alarmcolor=000000, dbid=41, alarmduration=1.00}, 1111={statusname_cn=11, flag=, description=11, statusname_en=11, statusname_tw=11, alarmcolor=11, dbid=50, alarmduration=11.00}, AUX={statusname_cn=暂时离开, flag=, description=暫時離開, statusname_en=AUX, statusname_tw=暫時離開, alarmcolor=00000, dbid=3, alarmduration=2.00}, 抽菸={statusname_cn=食菸, flag=, description=抽菸~, statusname_en=Smokes, statusname_tw=抽煙, alarmcolor=111111, dbid=34, alarmduration=1.00}}
+[17/03/07 14:51:23][ INFO][websocket.function.CommonFunction  -110  ] - Util.getAgentStatus(): {Login={description=登入, dbid=1}, Ring={description=響鈴, dbid=6}, iEstablished={description=進線通話, dbid=7}, AfterCallWork={description=文書處理, dbid=5}, Logout={description=登出, dbid=2}, NotReady={description=離席, dbid=4}, Ready={description=準備就緒, dbid=3}, oEstablished={description=外撥通話, dbid=8}}
+[17/03/07 14:51:23][ INFO][websocket.HeartBeat                -24   ] - 林蔡 is connected. (HeartBeat)
+[17/03/07 14:51:44][ INFO][websocket.WebSocket                -91   ] - org.java_websocket.WebSocketImpl@3a5f092b is connected
+[17/03/07 14:51:44][ INFO][websocket.function.CommonFunction  -108  ] - Util.getAgentReason(): {WC={statusname_cn=厕所, flag=, description=上廁所, statusname_en=WC, statusname_tw=廁所, alarmcolor=000000, dbid=41, alarmduration=1.00}, 1111={statusname_cn=11, flag=, description=11, statusname_en=11, statusname_tw=11, alarmcolor=11, dbid=50, alarmduration=11.00}, AUX={statusname_cn=暂时离开, flag=, description=暫時離開, statusname_en=AUX, statusname_tw=暫時離開, alarmcolor=00000, dbid=3, alarmduration=2.00}, 抽菸={statusname_cn=食菸, flag=, description=抽菸~, statusname_en=Smokes, statusname_tw=抽煙, alarmcolor=111111, dbid=34, alarmduration=1.00}}
+[17/03/07 14:51:44][ INFO][websocket.function.CommonFunction  -110  ] - Util.getAgentStatus(): {Login={description=登入, dbid=1}, Ring={description=響鈴, dbid=6}, iEstablished={description=進線通話, dbid=7}, AfterCallWork={description=文書處理, dbid=5}, Logout={description=登出, dbid=2}, NotReady={description=離席, dbid=4}, Ready={description=準備就緒, dbid=3}, oEstablished={description=外撥通話, dbid=8}}
+[17/03/07 14:51:44][ INFO][websocket.HeartBeat                -24   ] - A123456789 is connected. (HeartBeat)
+[17/03/07 14:51:44][ INFO][websocket.function.ClientFunction  -102  ] - senduserdata() called 
+[17/03/07 14:51:44][ INFO][restful.servlet.searchUserdataServlet-83   ] - RESTful GetServiceNameSetting time: 0s
+[17/03/07 14:51:45][ INFO][restful.servlet.searchUserdataServlet-121  ] - RESTful GetCustomerLevel time: 0s
+[17/03/07 14:51:45][ INFO][restful.servlet.searchUserdataServlet-135  ] - RESTful GetServiceNameCache time: 0s
+[17/03/07 14:51:46][ INFO][restful.servlet.searchUserdataServlet-169  ] - RESTful SetContactLog time: 1s
+[17/03/07 14:51:50][ INFO][websocket.function.ClientFunction  -102  ] - senduserdata() called 
+[17/03/07 14:51:51][ INFO][restful.servlet.searchUserdataServlet-83   ] - RESTful GetServiceNameSetting time: 0s
+[17/03/07 14:51:51][ INFO][restful.servlet.searchUserdataServlet-121  ] - RESTful GetCustomerLevel time: 0s
+[17/03/07 14:51:51][ INFO][restful.servlet.searchUserdataServlet-135  ] - RESTful GetServiceNameCache time: 0s
+[17/03/07 14:51:52][ INFO][restful.servlet.searchUserdataServlet-169  ] - RESTful SetContactLog time: 0s
+[17/03/07 14:51:52][ INFO][websocket.bean.RingCountDownTask   -78   ] - TimerTaskRingHeartBeat - RING STARTED
+[17/03/07 14:51:54][ INFO][websocket.bean.RingCountDownTask   -44   ] - TimerTaskRingHeartBeat - RING STOPPED
+[17/03/07 14:52:07][ INFO][websocket.WebSocket                -69   ] - A123456789 is disconnected. (onClose)
+[17/03/07 14:57:00][ INFO][filter.SystemListener              -115  ] - propertiesJson: {
+  "IMWebSocket": {
+    "port": "8080",
+    "protocol": "http:",
+    "hostname": "localhost"
+  },
+  "Info360_Setting": {
+    "port": "8080",
+    "protocol": "http:",
+    "hostname": "ws.crm.com.tw"
+  },
+  "ServiceNameCache": {
+    "port": "8080",
+    "protocol": "http:",
+    "hostname": "ws.crm.com.tw"
+  },
+  "Upload_Files": {
+    "port": "8080",
+    "protocol": "http:",
+    "hostname": "ws.crm.com.tw"
+  },
+  "info360": {
+    "port": "8080",
+    "protocol": "http:",
+    "hostname": "ws.crm.com.tw"
+  },
+  "infoacd": {
+    "port": "80",
+    "protocol": "http:",
+    "hostname": "192.168.10.7"
+  },
+  "websocket": {
+    "port": "8888",
+    "protocol": "ws:",
+    "hostname": "localhost"
+  }
+}
+[17/03/07 14:57:00][ INFO][com.Info360.db.DBAccess            -42   ] - SqlSessionFactoryBuilder created.
+[17/03/07 14:57:01][ INFO][websocket.WebSocket                -53   ] - WebSocket Port initialized: 8888
+[17/03/07 14:57:10][ INFO][websocket.WebSocket                -91   ] - org.java_websocket.WebSocketImpl@d67373d is connected
+[17/03/07 14:57:10][ INFO][websocket.function.CommonFunction  -108  ] - Util.getAgentReason(): {WC={statusname_cn=厕所, flag=, description=上廁所, statusname_en=WC, statusname_tw=廁所, alarmcolor=000000, dbid=41, alarmduration=1.00}, 1111={statusname_cn=11, flag=, description=11, statusname_en=11, statusname_tw=11, alarmcolor=11, dbid=50, alarmduration=11.00}, AUX={statusname_cn=暂时离开, flag=, description=暫時離開, statusname_en=AUX, statusname_tw=暫時離開, alarmcolor=00000, dbid=3, alarmduration=2.00}, 抽菸={statusname_cn=食菸, flag=, description=抽菸~, statusname_en=Smokes, statusname_tw=抽煙, alarmcolor=111111, dbid=34, alarmduration=1.00}}
+[17/03/07 14:57:10][ INFO][websocket.function.CommonFunction  -110  ] - Util.getAgentStatus(): {Login={description=登入, dbid=1}, Ring={description=響鈴, dbid=6}, iEstablished={description=進線通話, dbid=7}, AfterCallWork={description=文書處理, dbid=5}, Logout={description=登出, dbid=2}, NotReady={description=離席, dbid=4}, Ready={description=準備就緒, dbid=3}, oEstablished={description=外撥通話, dbid=8}}
+[17/03/07 14:57:10][ INFO][websocket.HeartBeat                -24   ] - A123456789 is connected. (HeartBeat)
+[17/03/07 14:57:10][ INFO][websocket.function.ClientFunction  -102  ] - senduserdata() called 
+[17/03/07 14:57:11][ INFO][restful.servlet.searchUserdataServlet-83   ] - RESTful GetServiceNameSetting time: 0s
+[17/03/07 14:57:11][ INFO][restful.servlet.searchUserdataServlet-121  ] - RESTful GetCustomerLevel time: 0s
+[17/03/07 14:57:11][ INFO][restful.servlet.searchUserdataServlet-135  ] - RESTful GetServiceNameCache time: 0s
+[17/03/07 14:57:12][ INFO][restful.servlet.searchUserdataServlet-169  ] - RESTful SetContactLog time: 0s
+[17/03/07 14:57:13][ INFO][websocket.WebSocket                -91   ] - org.java_websocket.WebSocketImpl@1cae295f is connected
+[17/03/07 14:57:14][ INFO][websocket.function.CommonFunction  -108  ] - Util.getAgentReason(): {WC={statusname_cn=厕所, flag=, description=上廁所, statusname_en=WC, statusname_tw=廁所, alarmcolor=000000, dbid=41, alarmduration=1.00}, 1111={statusname_cn=11, flag=, description=11, statusname_en=11, statusname_tw=11, alarmcolor=11, dbid=50, alarmduration=11.00}, AUX={statusname_cn=暂时离开, flag=, description=暫時離開, statusname_en=AUX, statusname_tw=暫時離開, alarmcolor=00000, dbid=3, alarmduration=2.00}, 抽菸={statusname_cn=食菸, flag=, description=抽菸~, statusname_en=Smokes, statusname_tw=抽煙, alarmcolor=111111, dbid=34, alarmduration=1.00}}
+[17/03/07 14:57:14][ INFO][websocket.function.CommonFunction  -110  ] - Util.getAgentStatus(): {Login={description=登入, dbid=1}, Ring={description=響鈴, dbid=6}, iEstablished={description=進線通話, dbid=7}, AfterCallWork={description=文書處理, dbid=5}, Logout={description=登出, dbid=2}, NotReady={description=離席, dbid=4}, Ready={description=準備就緒, dbid=3}, oEstablished={description=外撥通話, dbid=8}}
+[17/03/07 14:57:14][ INFO][websocket.HeartBeat                -24   ] - 林智凱 is connected. (HeartBeat)
+[17/03/07 14:57:18][ INFO][websocket.WebSocket                -91   ] - org.java_websocket.WebSocketImpl@4209b8f2 is connected
+[17/03/07 14:57:18][ INFO][websocket.function.CommonFunction  -108  ] - Util.getAgentReason(): {WC={statusname_cn=厕所, flag=, description=上廁所, statusname_en=WC, statusname_tw=廁所, alarmcolor=000000, dbid=41, alarmduration=1.00}, 1111={statusname_cn=11, flag=, description=11, statusname_en=11, statusname_tw=11, alarmcolor=11, dbid=50, alarmduration=11.00}, AUX={statusname_cn=暂时离开, flag=, description=暫時離開, statusname_en=AUX, statusname_tw=暫時離開, alarmcolor=00000, dbid=3, alarmduration=2.00}, 抽菸={statusname_cn=食菸, flag=, description=抽菸~, statusname_en=Smokes, statusname_tw=抽煙, alarmcolor=111111, dbid=34, alarmduration=1.00}}
+[17/03/07 14:57:18][ INFO][websocket.function.CommonFunction  -110  ] - Util.getAgentStatus(): {Login={description=登入, dbid=1}, Ring={description=響鈴, dbid=6}, iEstablished={description=進線通話, dbid=7}, AfterCallWork={description=文書處理, dbid=5}, Logout={description=登出, dbid=2}, NotReady={description=離席, dbid=4}, Ready={description=準備就緒, dbid=3}, oEstablished={description=外撥通話, dbid=8}}
+[17/03/07 14:57:18][ INFO][websocket.HeartBeat                -24   ] - 林蔡 is connected. (HeartBeat)
+[17/03/07 14:57:22][ INFO][websocket.function.ClientFunction  -102  ] - senduserdata() called 
+[17/03/07 14:57:23][ INFO][restful.servlet.searchUserdataServlet-83   ] - RESTful GetServiceNameSetting time: 0s
+[17/03/07 14:57:23][ INFO][restful.servlet.searchUserdataServlet-121  ] - RESTful GetCustomerLevel time: 0s
+[17/03/07 14:57:23][ INFO][restful.servlet.searchUserdataServlet-135  ] - RESTful GetServiceNameCache time: 0s
+[17/03/07 14:57:24][ INFO][restful.servlet.searchUserdataServlet-169  ] - RESTful SetContactLog time: 0s
+[17/03/07 14:57:24][ INFO][websocket.bean.RingCountDownTask   -78   ] - TimerTaskRingHeartBeat - RING STARTED
+[17/03/07 14:57:26][ INFO][websocket.bean.RingCountDownTask   -44   ] - TimerTaskRingHeartBeat - RING STOPPED
+[17/03/07 14:57:49][ INFO][websocket.WebSocket                -69   ] - A123456789 is disconnected. (onClose)

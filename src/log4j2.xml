@@ -30,7 +30,7 @@
 			<!-- <AppenderRef ref="commonFile"/> -->
 		</Root>
 		<!-- 給一般file使用 -->
-		<logger name="util.consoleLogger" level="info" additivity="false">
+		<logger name="util.consoleLogger" level="debug" additivity="false">
 			<AppenderRef ref="commonConsole" />
 		</logger>
 		<logger name="util.fileLogger" level="info" additivity="false">

@@ -287,9 +287,9 @@ public class ClientFunction {
 					ixnid = entry.getValue().getAsString();
 					break;
 				case "agentid":
-					Util.getConsoleLogger().debug("entry.getValue(): " + entry.getValue());
+					Util.getConsoleLogger().debug("entry.getValue().getAsString(): " + entry.getValue().getAsString());
 //					agentid = entry.getValue().getAsString();
-					agentid = entry.getValue().toString();
+					agentid = entry.getValue().getAsString();
 					break;
 				case "status":
 					status = entry.getValue().getAsInt();
