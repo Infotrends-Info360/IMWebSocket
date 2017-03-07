@@ -22,8 +22,12 @@
     
 </resultMap>
 
+<select id="IXN_activitydata" parameterType="com.Info360.bean.Activitydata"  resultMap="activitydataResult">
+ Select DBID,ACTIVITYGROUPSID,CODENAME,COLOR,SORT,TITLEFLAG,TITLEGROUP,DELETEFLAG,DELETEDATETIME,CREATEDATETIME from tblCfg_ActivityData where DBID=#{dbid}
+</select>
+
 <select id="Select_activitydata" parameterType="com.Info360.bean.Activitydata"  resultMap="activitydataResult">
- Select DBID,ACTIVITYGROUPSID,CODENAME,COLOR,SORT,TITLEFLAG,TITLEGROUP,DELETEFLAG,CREATEDATETIME,DELETEDATETIME from tblCfg_ActivityData where activitygroupsid=#{activitygroupsid} ORDER BY SORT
+ Select DBID,ACTIVITYGROUPSID,CODENAME,COLOR,SORT,TITLEFLAG,TITLEGROUP,DELETEFLAG,DELETEDATETIME,CREATEDATETIME from tblCfg_ActivityData where activitygroupsid=#{activitygroupsid} ORDER BY SORT
 </select>
 
 <select id="Flag_activitydata" parameterType="com.Info360.bean.Activitydata"  resultMap="activitydataResult">

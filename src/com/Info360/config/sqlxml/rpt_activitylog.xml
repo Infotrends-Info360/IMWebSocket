@@ -20,5 +20,9 @@ insert into tblRpt_Activitylog
 values
 (#{interactionid},#{activitydataid},#{datetime})
 </insert>
+
+<select id="Selcet_activitylog" parameterType="com.Info360.bean.Rpt_Activitylog"  resultMap="activitylogResult">
+Select  ACTIVITYDATAID,DATETIME,INTERACTIONID from tblRpt_Activitylog where INTERACTIONID=#{interactionid}
+</select>
  
 </mapper>

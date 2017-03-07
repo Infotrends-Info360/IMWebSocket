@@ -22,6 +22,37 @@ import com.Info360.util.IsError;
 public class ActivitydataDao {
 	
 	/**
+	 * Select
+	 * @param IXN_activitydata
+	 */
+	public List<Activitydata> IXN_activitydata(Activitydata activitydata){
+		List<Activitydata> activitydatalist = new ArrayList<Activitydata>();
+		SqlSession sqlSession = null;
+	
+		try {
+			sqlSession = DBAccess.getSqlSession();
+			//通過sqlSession執行SQL語句
+			activitydatalist = sqlSession.selectList("activitydata.IXN_activitydata", activitydata);
+			sqlSession.commit();
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+			IsError.GET_EXCEPTION = e.getMessage();
+			Util.getFileLogger().error(e.getMessage());
+		} catch (Exception e){
+			e.printStackTrace();
+			IsError.GET_EXCEPTION = e.getMessage();
+			Util.getFileLogger().error(e.getMessage());
+		} finally {
+			if(sqlSession != null){
+			   sqlSession.close();
+			}
+		}
+		return activitydatalist;
+	}
+	
+	
+	/**
 	 * Flag_activitymenu
 	 * @param Flag_activitymenu
 	 */
