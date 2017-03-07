@@ -1385,3 +1385,126 @@
   }
 }
 [17/03/07 17:31:25][ INFO][com.Info360.db.DBAccess            -42   ] - SqlSessionFactoryBuilder created.
+[17/03/07 19:53:57][ INFO][filter.SystemListener              -115  ] - propertiesJson: {
+  "IMWebSocket": {
+    "port": "8080",
+    "protocol": "http:",
+    "hostname": "ws.crm.com.tw"
+  },
+  "Info360_Setting": {
+    "port": "8080",
+    "protocol": "http:",
+    "hostname": "ws.crm.com.tw"
+  },
+  "ServiceNameCache": {
+    "port": "8080",
+    "protocol": "http:",
+    "hostname": "ws.crm.com.tw"
+  },
+  "Upload_Files": {
+    "port": "8080",
+    "protocol": "http:",
+    "hostname": "ws.crm.com.tw"
+  },
+  "info360": {
+    "port": "8080",
+    "protocol": "http:",
+    "hostname": "ws.crm.com.tw"
+  },
+  "infoacd": {
+    "port": "80",
+    "protocol": "http:",
+    "hostname": "192.168.10.7"
+  },
+  "websocket": {
+    "port": "8888",
+    "protocol": "ws:",
+    "hostname": "ws.crm.com.tw"
+  }
+}
+[17/03/07 19:53:57][ INFO][com.Info360.db.DBAccess            -42   ] - SqlSessionFactoryBuilder created.
+[17/03/07 19:53:59][ INFO][websocket.WebSocket                -53   ] - WebSocket Port initialized: 8888
+[17/03/07 20:58:19][ INFO][filter.SystemListener              -115  ] - propertiesJson: {
+  "IMWebSocket": {
+    "port": "8080",
+    "protocol": "http:",
+    "hostname": "ws.crm.com.tw"
+  },
+  "Info360_Setting": {
+    "port": "8080",
+    "protocol": "http:",
+    "hostname": "ws.crm.com.tw"
+  },
+  "ServiceNameCache": {
+    "port": "8080",
+    "protocol": "http:",
+    "hostname": "ws.crm.com.tw"
+  },
+  "Upload_Files": {
+    "port": "8080",
+    "protocol": "http:",
+    "hostname": "ws.crm.com.tw"
+  },
+  "info360": {
+    "port": "8080",
+    "protocol": "http:",
+    "hostname": "ws.crm.com.tw"
+  },
+  "infoacd": {
+    "port": "80",
+    "protocol": "http:",
+    "hostname": "192.168.10.7"
+  },
+  "websocket": {
+    "port": "8888",
+    "protocol": "ws:",
+    "hostname": "ws.crm.com.tw"
+  }
+}
+[17/03/07 20:58:19][ INFO][com.Info360.db.DBAccess            -42   ] - SqlSessionFactoryBuilder created.
+[17/03/07 20:58:35][ERROR][com.Info360.dao.Cfg_AgentStatusDao -40   ] - 
+### Error querying database.  Cause: com.microsoft.sqlserver.jdbc.SQLServerException: 連接到主機 192.168.10.42 (連接埠 1433) 的 TCP/IP 連接已經失敗。錯誤: "connect timed out。確認連接屬性。確認 SQL Server 執行個體是否在主機上執行並接受在通訊埠的 TCP/IP 連接。確認防火牆未封鎖通訊埠的 TCP 連接。"。
+### The error may exist in com/Info360/config/sqlxml/cfg_agentstatus.xml
+### The error may involve cfg_agentstatus.Select_agentstatus
+### The error occurred while executing a query
+### Cause: com.microsoft.sqlserver.jdbc.SQLServerException: 連接到主機 192.168.10.42 (連接埠 1433) 的 TCP/IP 連接已經失敗。錯誤: "connect timed out。確認連接屬性。確認 SQL Server 執行個體是否在主機上執行並接受在通訊埠的 TCP/IP 連接。確認防火牆未封鎖通訊埠的 TCP 連接。"。
+[17/03/07 20:58:35][ INFO][websocket.WebSocket                -53   ] - WebSocket Port initialized: 8888
+[17/03/07 20:59:12][ INFO][filter.SystemListener              -115  ] - propertiesJson: {
+  "IMWebSocket": {
+    "port": "8080",
+    "protocol": "http:",
+    "hostname": "ws.crm.com.tw"
+  },
+  "Info360_Setting": {
+    "port": "8080",
+    "protocol": "http:",
+    "hostname": "ws.crm.com.tw"
+  },
+  "ServiceNameCache": {
+    "port": "8080",
+    "protocol": "http:",
+    "hostname": "ws.crm.com.tw"
+  },
+  "Upload_Files": {
+    "port": "8080",
+    "protocol": "http:",
+    "hostname": "ws.crm.com.tw"
+  },
+  "info360": {
+    "port": "8080",
+    "protocol": "http:",
+    "hostname": "ws.crm.com.tw"
+  },
+  "infoacd": {
+    "port": "80",
+    "protocol": "http:",
+    "hostname": "192.168.10.7"
+  },
+  "websocket": {
+    "port": "8888",
+    "protocol": "ws:",
+    "hostname": "ws.crm.com.tw"
+  }
+}
+[17/03/07 20:59:13][ INFO][com.Info360.db.DBAccess            -42   ] - SqlSessionFactoryBuilder created.
+[17/03/07 20:59:14][ INFO][websocket.WebSocket                -53   ] - WebSocket Port initialized: 8888
