@@ -1,6 +1,6 @@
 package websocket.bean;
 
-import java.util.ArrayList;
+import java.util.ArrayList; 
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
@@ -10,7 +10,7 @@ import java.util.TimerTask;
 import java.util.concurrent.atomic.AtomicBoolean;
 
 import org.java_websocket.WebSocket;
-
+ 
 import util.StatusEnum;
 import util.Util;
  

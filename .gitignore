@@ -3,4 +3,6 @@
 /target/
 /log/Log4j.log
 /log4j2/*
+/log4j2/common.log
 log4j2/*
+log4j2/common.log
