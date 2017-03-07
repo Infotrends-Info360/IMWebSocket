@@ -251,6 +251,8 @@ public class ClientFunction {
 	
 	/** * send interaction log */
 	public static void interactionlog(String message, org.java_websocket.WebSocket conn) {
+		// 可考慮去除在client.js儲存的多於資訊,只讓client.js傳入重要key值,如ixnid, contactid,
+		// 其餘資料皆由server保存,在透過key值去取用,如取得typeid, status, text等,之後整理可考慮進行
 		Util.getConsoleLogger().debug("interactionlog() called");
 //		JSONObject obj = new JSONObject(message);
 		JsonObject obj = Util.getGJsonObject(message);

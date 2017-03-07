@@ -264,6 +264,11 @@ public class WebSocket extends WebSocketServer {
 				obj.put("stoppedreason", "server:HeartBeatLose"); // 看之後是否考慮更改為變數reason
 				obj.put("closefrom", "server:HeartBeatLose"); 
 			}
+			// 更新RoomOwnerAgentID
+			String roomID =  obj.getString("ixnid"); // ixnid 就是 roomID
+			obj.put("agentid", WebSocketRoomPool.getRoomInfo(roomID).getRoomOwnerAgentID()); // 取代前端傳入值
+			
+			// 最後寫入
 			ClientFunction.interactionlog(obj.toString(), conn);			
 		}
 
@@ -324,6 +329,10 @@ public class WebSocket extends WebSocketServer {
 			// 若是屬於轉接的要求,則將原Agent(邀請者)踢出
 			if ("transfer".equals(inviteType)){
 				Util.getConsoleLogger().debug("responseThirdParty() - transfer");
+				// 更新roomInfo - owner資訊
+				RoomInfo roomInfo = WebSocketRoomPool.getRoomInfo(roomID);
+				roomInfo.setRoomOwnerAgentID(invitedAgentID);
+				
 				// 通知使用者清除前端頁面
 				WebSocketUserPool.sendMessageToUser(WebSocketUserPool.getWebSocketByUser(fromAgentID), obj.toString());
 				WebSocketRoomPool.removeUserinroom(roomID, WebSocketUserPool.getWebSocketByUser(fromAgentID));
@@ -341,6 +350,7 @@ public class WebSocket extends WebSocketServer {
 	private void addRoomForMany(String aMsg, org.java_websocket.WebSocket aConn) {
 		Util.getConsoleLogger().debug("addRoomForMany() called");
 		JsonObject msgJson = Util.getGJsonObject(aMsg);
+		String agentID = WebSocketUserPool.getUserID(aConn);
 		Util.getConsoleLogger().trace("addRoomForMany - msgJson: " + msgJson);
 		// hardcoded - 之後想想看如何改善"none"這樣寫死的判斷方式
 		String roomID = "";
@@ -396,6 +406,10 @@ public class WebSocket extends WebSocketServer {
 //				clientID = userID;
 //			}
 		}
+		
+		// 更新roomInfo - owner資訊
+		RoomInfo roomInfo = WebSocketRoomPool.getRoomInfo(roomID);
+		roomInfo.setRoomOwnerAgentID(agentID);
 		
 		// 通知Client與Agent,要開啟layim(將原本AcceptEvent移到此處)
 		for (JsonElement userIDJsonE : userIDJsonAry){
