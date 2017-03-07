@@ -13,7 +13,7 @@ import org.java_websocket.WebSocket;
   
 import util.StatusEnum;
 import util.Util;
-     
+      
   
 //此類別給WebSocketPool.userallconnections使用
 public class UserInfo {
