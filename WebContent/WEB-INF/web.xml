@@ -40,11 +40,7 @@
 		<param-name>log4j-config-location</param-name>
 		<param-value>WEB-INF/log4j.properties</param-value>
 	</context-param>
-	<!-- 	Log4j configuration -->
-	<listener>
-		<listener-class>filter.ContextListener</listener-class>
-	</listener>
-	
+		
 	<!-- 	System configuration -->
 	<context-param>
 		<param-name>MaxRingTime</param-name>
