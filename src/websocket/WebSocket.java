@@ -14,6 +14,7 @@ import java.util.Set;
 
 
 
+
 import org.apache.logging.log4j.Level;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -32,6 +33,7 @@ import filter.SystemListener;
 import filter.startFilter;
 import util.Util;
 import websocket.bean.RoomInfo;
+import websocket.bean.UserInfo;
 import websocket.function.AgentFunction;
 import websocket.function.ClientFunction;
 import websocket.function.CommonFunction;
@@ -265,8 +267,16 @@ public class WebSocket extends WebSocketServer {
 				obj.put("closefrom", "server:HeartBeatLose"); 
 			}
 			// 更新RoomOwnerAgentID
-			String roomID =  obj.getString("ixnid"); // ixnid 就是 roomID
-			obj.put("agentid", WebSocketRoomPool.getRoomInfo(roomID).getRoomOwnerAgentID()); // 取代前端傳入值
+//			String roomID =  obj.getString("ixnid"); // ixnid 就是 roomID
+//			System.out.println("roomID: " + roomID);
+//			if (!roomID.isEmpty()){
+//				RoomInfo roomInfo = WebSocketRoomPool.getRoomInfo(roomID);
+//				obj.put("agentid", roomInfo.getRoomOwnerAgentID()); // 取代前端傳入值
+//			}
+			if (WebSocketTypePool.isClient(conn)){
+				UserInfo clientUserInfo = WebSocketUserPool.getUserInfoByKey(conn);
+				obj.put("agentid", clientUserInfo.getRoomOwner()); // 取代前端傳入值
+			}
 			
 			// 最後寫入
 			ClientFunction.interactionlog(obj.toString(), conn);			
@@ -331,7 +341,9 @@ public class WebSocket extends WebSocketServer {
 				Util.getConsoleLogger().debug("responseThirdParty() - transfer");
 				// 更新roomInfo - owner資訊
 				RoomInfo roomInfo = WebSocketRoomPool.getRoomInfo(roomID);
-				roomInfo.setRoomOwnerAgentID(invitedAgentID);
+//				roomInfo.setRoomOwnerAgentID(invitedAgentID);
+				UserInfo clientUserInfo = WebSocketUserPool.getUserInfoByKey(roomInfo.getClientConn());
+				clientUserInfo.setRoomOwner(invitedAgentID);
 				
 				// 通知使用者清除前端頁面
 				WebSocketUserPool.sendMessageToUser(WebSocketUserPool.getWebSocketByUser(fromAgentID), obj.toString());
@@ -409,7 +421,9 @@ public class WebSocket extends WebSocketServer {
 		
 		// 更新roomInfo - owner資訊
 		RoomInfo roomInfo = WebSocketRoomPool.getRoomInfo(roomID);
-		roomInfo.setRoomOwnerAgentID(agentID);
+//		roomInfo.setRoomOwnerAgentID(agentID);
+		UserInfo clientUserInfo = WebSocketUserPool.getUserInfoByKey(roomInfo.getClientConn());
+		clientUserInfo.setRoomOwner(agentID);
 		
 		// 通知Client與Agent,要開啟layim(將原本AcceptEvent移到此處)
 		for (JsonElement userIDJsonE : userIDJsonAry){

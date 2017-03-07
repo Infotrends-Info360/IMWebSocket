@@ -71,15 +71,15 @@ public class ClientFunction {
 			senduserdataObj.addProperty("searchtype", "A");
 			JsonObject attributes = new JsonObject();
 			// localhost, 192.168.10.42版本:
-//			attributes.addProperty("attributenames", "Phone,id,service1,service2");
-//			attributes.addProperty("Phone",userName); // 特別注意一下名稱並沒對到
-//			attributes.addProperty("id",userID);
-//			attributes.addProperty("service1","service one");
-//			attributes.addProperty("service2","service two");
-			// 客戶端版本:
-			attributes.addProperty("attributenames", "IDNO_");
-			attributes.addProperty("IDNO_",userName);
+			attributes.addProperty("attributenames", "Phone,id,service1,service2");
+			attributes.addProperty("Phone",userName); // 特別注意一下名稱並沒對到
 			attributes.addProperty("id",userID);
+			attributes.addProperty("service1","service one");
+			attributes.addProperty("service2","service two");
+			// 客戶端版本:
+//			attributes.addProperty("attributenames", "IDNO_");
+//			attributes.addProperty("IDNO_",userName);
+//			attributes.addProperty("id",userID);
 			
 			senduserdataObj.add("attributes", attributes);
 			senduserdataObj.addProperty("channel", "chat");

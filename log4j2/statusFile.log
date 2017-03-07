@@ -1944,3 +1944,431 @@
 [17/03/07 17:01:28][ INFO][websocket.function.CommonFunction  -421  ] -     status	startORend       dbid     roomID   clientID     reason
 [17/03/07 17:01:28][ INFO][websocket.function.CommonFunction  -422  ] - ----------------------------------------------------------------------------
 [17/03/07 17:01:28][ INFO][websocket.function.CommonFunction  -423  ] -          5	     start       null       null       null       null
+[17/03/07 21:28:04][ INFO][websocket.function.CommonFunction  -392  ] - ###### updateStatus() called ######
+[17/03/07 21:28:04][ INFO][websocket.function.CommonFunction  -418  ] - updateStatus: start - LOGIN - 林智凱
+[17/03/07 21:28:04][ INFO][websocket.function.CommonFunction  -420  ] - LOGIN: 
+[17/03/07 21:28:04][ INFO][websocket.function.CommonFunction  -421  ] -     status	startORend       dbid     roomID   clientID     reason
+[17/03/07 21:28:04][ INFO][websocket.function.CommonFunction  -422  ] - ----------------------------------------------------------------------------
+[17/03/07 21:28:04][ INFO][websocket.function.CommonFunction  -423  ] -          1	     start       null       null       null       null
+[17/03/07 21:28:05][ INFO][websocket.function.CommonFunction  -392  ] - ###### updateStatus() called ######
+[17/03/07 21:28:05][ INFO][websocket.function.CommonFunction  -418  ] - updateStatus: start - NOTREADY - 林智凱
+[17/03/07 21:28:05][ INFO][websocket.function.CommonFunction  -420  ] - NOTREADY: 
+[17/03/07 21:28:05][ INFO][websocket.function.CommonFunction  -421  ] -     status	startORend       dbid     roomID   clientID     reason
+[17/03/07 21:28:05][ INFO][websocket.function.CommonFunction  -422  ] - ----------------------------------------------------------------------------
+[17/03/07 21:28:05][ INFO][websocket.function.CommonFunction  -423  ] -          4	     start       null       null       null          0
+[17/03/07 21:28:09][ INFO][websocket.function.CommonFunction  -392  ] - ###### updateStatus() called ######
+[17/03/07 21:28:09][ INFO][websocket.function.CommonFunction  -418  ] - updateStatus: end - NOTREADY - 林智凱
+[17/03/07 21:28:09][ INFO][websocket.function.CommonFunction  -420  ] - NOTREADY: 
+[17/03/07 21:28:09][ INFO][websocket.function.CommonFunction  -421  ] -     status	startORend       dbid     roomID   clientID     reason
+[17/03/07 21:28:09][ INFO][websocket.function.CommonFunction  -422  ] - ----------------------------------------------------------------------------
+[17/03/07 21:28:09][ INFO][websocket.function.CommonFunction  -423  ] -          4	       end       5610       null       null       null
+[17/03/07 21:28:10][ INFO][websocket.function.CommonFunction  -392  ] - ###### updateStatus() called ######
+[17/03/07 21:28:10][ INFO][websocket.function.CommonFunction  -418  ] - updateStatus: start - READY - 林智凱
+[17/03/07 21:28:10][ INFO][websocket.function.CommonFunction  -420  ] - READY: 
+[17/03/07 21:28:10][ INFO][websocket.function.CommonFunction  -421  ] -     status	startORend       dbid     roomID   clientID     reason
+[17/03/07 21:28:10][ INFO][websocket.function.CommonFunction  -422  ] - ----------------------------------------------------------------------------
+[17/03/07 21:28:10][ INFO][websocket.function.CommonFunction  -423  ] -          3	     start       null       null       null       null
+[17/03/07 21:28:11][ INFO][websocket.function.CommonFunction  -474  ] - update Agent ready time: 
+[17/03/07 21:28:11][ INFO][websocket.function.CommonFunction  -475  ] - Agent name: 林智凱 set readytime to 21:28:11
+[17/03/07 21:28:13][ INFO][websocket.function.CommonFunction  -392  ] - ###### updateStatus() called ######
+[17/03/07 21:28:13][ INFO][websocket.function.CommonFunction  -418  ] - updateStatus: end - READY - 林智凱
+[17/03/07 21:28:13][ INFO][websocket.function.CommonFunction  -420  ] - READY: 
+[17/03/07 21:28:13][ INFO][websocket.function.CommonFunction  -421  ] -     status	startORend       dbid     roomID   clientID     reason
+[17/03/07 21:28:13][ INFO][websocket.function.CommonFunction  -422  ] - ----------------------------------------------------------------------------
+[17/03/07 21:28:13][ INFO][websocket.function.CommonFunction  -423  ] -          3	       end       5611       null       null       null
+[17/03/07 21:28:14][ INFO][websocket.function.CommonFunction  -392  ] - ###### updateStatus() called ######
+[17/03/07 21:28:14][ INFO][websocket.function.CommonFunction  -418  ] - updateStatus: start - NOTREADY - 林智凱
+[17/03/07 21:28:14][ INFO][websocket.function.CommonFunction  -420  ] - NOTREADY: 
+[17/03/07 21:28:14][ INFO][websocket.function.CommonFunction  -421  ] -     status	startORend       dbid     roomID   clientID     reason
+[17/03/07 21:28:14][ INFO][websocket.function.CommonFunction  -422  ] - ----------------------------------------------------------------------------
+[17/03/07 21:28:14][ INFO][websocket.function.CommonFunction  -423  ] -          4	     start       null       null       null          9
+[17/03/07 21:28:36][ INFO][websocket.function.CommonFunction  -392  ] - ###### updateStatus() called ######
+[17/03/07 21:28:36][ INFO][websocket.function.CommonFunction  -418  ] - updateStatus: start - RING - 林智凱
+[17/03/07 21:28:36][ INFO][websocket.function.CommonFunction  -420  ] - RING: 
+[17/03/07 21:28:36][ INFO][websocket.function.CommonFunction  -421  ] -     status	startORend       dbid     roomID   clientID     reason
+[17/03/07 21:28:36][ INFO][websocket.function.CommonFunction  -422  ] - ----------------------------------------------------------------------------
+[17/03/07 21:28:36][ INFO][websocket.function.CommonFunction  -423  ] -          6	     start       null       null cce49219-b9a1-47a8-92bf-641209fa91bd       null
+[17/03/07 21:29:03][ INFO][websocket.function.CommonFunction  -392  ] - ###### updateStatus() called ######
+[17/03/07 21:29:03][ INFO][websocket.function.CommonFunction  -418  ] - updateStatus: end - NOTREADY - 林智凱
+[17/03/07 21:29:03][ INFO][websocket.function.CommonFunction  -420  ] - NOTREADY: 
+[17/03/07 21:29:03][ INFO][websocket.function.CommonFunction  -421  ] -     status	startORend       dbid     roomID   clientID     reason
+[17/03/07 21:29:03][ INFO][websocket.function.CommonFunction  -422  ] - ----------------------------------------------------------------------------
+[17/03/07 21:29:03][ INFO][websocket.function.CommonFunction  -423  ] -          4	       end       5612       null       null       null
+[17/03/07 21:29:04][ INFO][websocket.function.CommonFunction  -392  ] - ###### updateStatus() called ######
+[17/03/07 21:29:04][ INFO][websocket.function.CommonFunction  -418  ] - updateStatus: start - READY - 林智凱
+[17/03/07 21:29:04][ INFO][websocket.function.CommonFunction  -420  ] - READY: 
+[17/03/07 21:29:04][ INFO][websocket.function.CommonFunction  -421  ] -     status	startORend       dbid     roomID   clientID     reason
+[17/03/07 21:29:04][ INFO][websocket.function.CommonFunction  -422  ] - ----------------------------------------------------------------------------
+[17/03/07 21:29:04][ INFO][websocket.function.CommonFunction  -423  ] -          3	     start       null       null       null       null
+[17/03/07 21:29:05][ INFO][websocket.function.CommonFunction  -474  ] - update Agent ready time: 
+[17/03/07 21:29:05][ INFO][websocket.function.CommonFunction  -475  ] - Agent name: 林智凱 set readytime to 21:29:05
+[17/03/07 21:29:07][ INFO][websocket.function.CommonFunction  -392  ] - ###### updateStatus() called ######
+[17/03/07 21:29:07][ INFO][websocket.function.CommonFunction  -418  ] - updateStatus: end - READY - 林智凱
+[17/03/07 21:29:07][ INFO][websocket.function.CommonFunction  -420  ] - READY: 
+[17/03/07 21:29:07][ INFO][websocket.function.CommonFunction  -421  ] -     status	startORend       dbid     roomID   clientID     reason
+[17/03/07 21:29:07][ INFO][websocket.function.CommonFunction  -422  ] - ----------------------------------------------------------------------------
+[17/03/07 21:29:07][ INFO][websocket.function.CommonFunction  -423  ] -          3	       end       5614       null       null       null
+[17/03/07 21:29:07][ INFO][websocket.function.CommonFunction  -392  ] - ###### updateStatus() called ######
+[17/03/07 21:29:07][ INFO][websocket.function.CommonFunction  -418  ] - updateStatus: start - NOTREADY - 林智凱
+[17/03/07 21:29:07][ INFO][websocket.function.CommonFunction  -420  ] - NOTREADY: 
+[17/03/07 21:29:07][ INFO][websocket.function.CommonFunction  -421  ] -     status	startORend       dbid     roomID   clientID     reason
+[17/03/07 21:29:07][ INFO][websocket.function.CommonFunction  -422  ] - ----------------------------------------------------------------------------
+[17/03/07 21:29:07][ INFO][websocket.function.CommonFunction  -423  ] -          4	     start       null       null       null          9
+[17/03/07 21:29:30][ INFO][websocket.function.CommonFunction  -392  ] - ###### updateStatus() called ######
+[17/03/07 21:29:30][ INFO][websocket.function.CommonFunction  -418  ] - updateStatus: start - RING - 林智凱
+[17/03/07 21:29:30][ INFO][websocket.function.CommonFunction  -420  ] - RING: 
+[17/03/07 21:29:30][ INFO][websocket.function.CommonFunction  -421  ] -     status	startORend       dbid     roomID   clientID     reason
+[17/03/07 21:29:30][ INFO][websocket.function.CommonFunction  -422  ] - ----------------------------------------------------------------------------
+[17/03/07 21:29:30][ INFO][websocket.function.CommonFunction  -423  ] -          6	     start       null       null cce49219-b9a1-47a8-92bf-641209fa91bd       null
+[17/03/07 21:29:46][ INFO][websocket.function.CommonFunction  -392  ] - ###### updateStatus() called ######
+[17/03/07 21:29:46][ INFO][websocket.function.CommonFunction  -418  ] - updateStatus: end - NOTREADY - 林智凱
+[17/03/07 21:29:46][ INFO][websocket.function.CommonFunction  -420  ] - NOTREADY: 
+[17/03/07 21:29:46][ INFO][websocket.function.CommonFunction  -421  ] -     status	startORend       dbid     roomID   clientID     reason
+[17/03/07 21:29:46][ INFO][websocket.function.CommonFunction  -422  ] - ----------------------------------------------------------------------------
+[17/03/07 21:29:46][ INFO][websocket.function.CommonFunction  -423  ] -          4	       end       5615       null       null       null
+[17/03/07 21:29:47][ INFO][websocket.function.CommonFunction  -392  ] - ###### updateStatus() called ######
+[17/03/07 21:29:47][ INFO][websocket.function.CommonFunction  -418  ] - updateStatus: start - READY - 林智凱
+[17/03/07 21:29:47][ INFO][websocket.function.CommonFunction  -420  ] - READY: 
+[17/03/07 21:29:47][ INFO][websocket.function.CommonFunction  -421  ] -     status	startORend       dbid     roomID   clientID     reason
+[17/03/07 21:29:47][ INFO][websocket.function.CommonFunction  -422  ] - ----------------------------------------------------------------------------
+[17/03/07 21:29:47][ INFO][websocket.function.CommonFunction  -423  ] -          3	     start       null       null       null       null
+[17/03/07 21:29:48][ INFO][websocket.function.CommonFunction  -474  ] - update Agent ready time: 
+[17/03/07 21:29:48][ INFO][websocket.function.CommonFunction  -475  ] - Agent name: 林智凱 set readytime to 21:29:48
+[17/03/07 21:29:48][ INFO][websocket.function.CommonFunction  -392  ] - ###### updateStatus() called ######
+[17/03/07 21:29:48][ INFO][websocket.function.CommonFunction  -418  ] - updateStatus: end - READY - 林智凱
+[17/03/07 21:29:48][ INFO][websocket.function.CommonFunction  -420  ] - READY: 
+[17/03/07 21:29:48][ INFO][websocket.function.CommonFunction  -421  ] -     status	startORend       dbid     roomID   clientID     reason
+[17/03/07 21:29:48][ INFO][websocket.function.CommonFunction  -422  ] - ----------------------------------------------------------------------------
+[17/03/07 21:29:48][ INFO][websocket.function.CommonFunction  -423  ] -          3	       end       5617       null       null       null
+[17/03/07 21:29:49][ INFO][websocket.function.CommonFunction  -392  ] - ###### updateStatus() called ######
+[17/03/07 21:29:49][ INFO][websocket.function.CommonFunction  -418  ] - updateStatus: start - NOTREADY - 林智凱
+[17/03/07 21:29:49][ INFO][websocket.function.CommonFunction  -420  ] - NOTREADY: 
+[17/03/07 21:29:49][ INFO][websocket.function.CommonFunction  -421  ] -     status	startORend       dbid     roomID   clientID     reason
+[17/03/07 21:29:49][ INFO][websocket.function.CommonFunction  -422  ] - ----------------------------------------------------------------------------
+[17/03/07 21:29:49][ INFO][websocket.function.CommonFunction  -423  ] -          4	     start       null       null       null          9
+[17/03/07 21:30:11][ INFO][websocket.function.CommonFunction  -392  ] - ###### updateStatus() called ######
+[17/03/07 21:30:11][ INFO][websocket.function.CommonFunction  -418  ] - updateStatus: start - RING - 林智凱
+[17/03/07 21:30:11][ INFO][websocket.function.CommonFunction  -420  ] - RING: 
+[17/03/07 21:30:11][ INFO][websocket.function.CommonFunction  -421  ] -     status	startORend       dbid     roomID   clientID     reason
+[17/03/07 21:30:11][ INFO][websocket.function.CommonFunction  -422  ] - ----------------------------------------------------------------------------
+[17/03/07 21:30:11][ INFO][websocket.function.CommonFunction  -423  ] -          6	     start       null       null cce49219-b9a1-47a8-92bf-641209fa91bd       null
+[17/03/07 21:30:13][ INFO][websocket.function.CommonFunction  -392  ] - ###### updateStatus() called ######
+[17/03/07 21:30:13][ INFO][websocket.function.CommonFunction  -418  ] - updateStatus: end - RING - 林智凱
+[17/03/07 21:30:13][ INFO][websocket.function.CommonFunction  -420  ] - RING: 
+[17/03/07 21:30:13][ INFO][websocket.function.CommonFunction  -421  ] -     status	startORend       dbid     roomID   clientID     reason
+[17/03/07 21:30:13][ INFO][websocket.function.CommonFunction  -422  ] - ----------------------------------------------------------------------------
+[17/03/07 21:30:13][ INFO][websocket.function.CommonFunction  -423  ] -          6	       end       5619       null       null       null
+[17/03/07 21:30:13][ INFO][websocket.function.CommonFunction  -392  ] - ###### updateStatus() called ######
+[17/03/07 21:30:13][ INFO][websocket.function.CommonFunction  -418  ] - updateStatus: start - IESTABLISHED - 林智凱
+[17/03/07 21:30:13][ INFO][websocket.function.CommonFunction  -420  ] - IESTABLISHED: 
+[17/03/07 21:30:13][ INFO][websocket.function.CommonFunction  -421  ] -     status	startORend       dbid     roomID   clientID     reason
+[17/03/07 21:30:13][ INFO][websocket.function.CommonFunction  -422  ] - ----------------------------------------------------------------------------
+[17/03/07 21:30:13][ INFO][websocket.function.CommonFunction  -423  ] -          7	     start       null 4fbff666-5574-4f9e-befa-9c4167c6c6fd       null       null
+[17/03/07 21:30:13][ INFO][websocket.function.CommonFunction  -392  ] - ###### updateStatus() called ######
+[17/03/07 21:30:13][ INFO][websocket.function.CommonFunction  -418  ] - updateStatus: null - null - A123456789
+[17/03/07 21:30:13][ INFO][websocket.function.CommonFunction  -420  ] - null: 
+[17/03/07 21:30:13][ INFO][websocket.function.CommonFunction  -421  ] -     status	startORend       dbid     roomID   clientID     reason
+[17/03/07 21:30:13][ INFO][websocket.function.CommonFunction  -422  ] - ----------------------------------------------------------------------------
+[17/03/07 21:30:13][ INFO][websocket.function.CommonFunction  -423  ] -       chat	      null       null       null       null       null
+[17/03/07 21:30:14][ INFO][websocket.function.CommonFunction  -392  ] - ###### updateStatus() called ######
+[17/03/07 21:30:14][ INFO][websocket.function.CommonFunction  -418  ] - updateStatus: end - NOTREADY - 林智凱
+[17/03/07 21:30:14][ INFO][websocket.function.CommonFunction  -420  ] - NOTREADY: 
+[17/03/07 21:30:14][ INFO][websocket.function.CommonFunction  -421  ] -     status	startORend       dbid     roomID   clientID     reason
+[17/03/07 21:30:14][ INFO][websocket.function.CommonFunction  -422  ] - ----------------------------------------------------------------------------
+[17/03/07 21:30:14][ INFO][websocket.function.CommonFunction  -423  ] -          4	       end       5618       null       null       null
+[17/03/07 21:30:14][ INFO][websocket.function.CommonFunction  -392  ] - ###### updateStatus() called ######
+[17/03/07 21:30:14][ INFO][websocket.function.CommonFunction  -418  ] - updateStatus: start - READY - 林智凱
+[17/03/07 21:30:14][ INFO][websocket.function.CommonFunction  -420  ] - READY: 
+[17/03/07 21:30:14][ INFO][websocket.function.CommonFunction  -421  ] -     status	startORend       dbid     roomID   clientID     reason
+[17/03/07 21:30:14][ INFO][websocket.function.CommonFunction  -422  ] - ----------------------------------------------------------------------------
+[17/03/07 21:30:14][ INFO][websocket.function.CommonFunction  -423  ] -          3	     start       null       null       null       null
+[17/03/07 21:30:15][ INFO][websocket.function.CommonFunction  -474  ] - update Agent ready time: 
+[17/03/07 21:30:15][ INFO][websocket.function.CommonFunction  -475  ] - Agent name: 林智凱 set readytime to 21:30:15
+[17/03/07 21:30:23][ INFO][websocket.function.CommonFunction  -392  ] - ###### updateStatus() called ######
+[17/03/07 21:30:23][ INFO][websocket.function.CommonFunction  -418  ] - updateStatus: end - READY - 林智凱
+[17/03/07 21:30:23][ INFO][websocket.function.CommonFunction  -420  ] - READY: 
+[17/03/07 21:30:23][ INFO][websocket.function.CommonFunction  -421  ] -     status	startORend       dbid     roomID   clientID     reason
+[17/03/07 21:30:23][ INFO][websocket.function.CommonFunction  -422  ] - ----------------------------------------------------------------------------
+[17/03/07 21:30:23][ INFO][websocket.function.CommonFunction  -423  ] -          3	       end       5621       null       null       null
+[17/03/07 21:30:23][ INFO][websocket.function.CommonFunction  -392  ] - ###### updateStatus() called ######
+[17/03/07 21:30:23][ INFO][websocket.function.CommonFunction  -418  ] - updateStatus: start - NOTREADY - 林智凱
+[17/03/07 21:30:23][ INFO][websocket.function.CommonFunction  -420  ] - NOTREADY: 
+[17/03/07 21:30:23][ INFO][websocket.function.CommonFunction  -421  ] -     status	startORend       dbid     roomID   clientID     reason
+[17/03/07 21:30:23][ INFO][websocket.function.CommonFunction  -422  ] - ----------------------------------------------------------------------------
+[17/03/07 21:30:23][ INFO][websocket.function.CommonFunction  -423  ] -          4	     start       null       null       null          0
+[17/03/07 21:30:24][ INFO][websocket.function.CommonFunction  -392  ] - ###### updateStatus() called ######
+[17/03/07 21:30:24][ INFO][websocket.function.CommonFunction  -418  ] - updateStatus: start - AFTERCALLWORK - 林智凱
+[17/03/07 21:30:24][ INFO][websocket.function.CommonFunction  -420  ] - AFTERCALLWORK: 
+[17/03/07 21:30:24][ INFO][websocket.function.CommonFunction  -421  ] -     status	startORend       dbid     roomID   clientID     reason
+[17/03/07 21:30:24][ INFO][websocket.function.CommonFunction  -422  ] - ----------------------------------------------------------------------------
+[17/03/07 21:30:24][ INFO][websocket.function.CommonFunction  -423  ] -          5	     start       null       null       null       null
+[17/03/07 21:30:30][ INFO][websocket.function.CommonFunction  -392  ] - ###### updateStatus() called ######
+[17/03/07 21:30:30][ INFO][websocket.function.CommonFunction  -418  ] - updateStatus: end - NOTREADY - 林智凱
+[17/03/07 21:30:30][ INFO][websocket.function.CommonFunction  -420  ] - NOTREADY: 
+[17/03/07 21:30:30][ INFO][websocket.function.CommonFunction  -421  ] -     status	startORend       dbid     roomID   clientID     reason
+[17/03/07 21:30:30][ INFO][websocket.function.CommonFunction  -422  ] - ----------------------------------------------------------------------------
+[17/03/07 21:30:30][ INFO][websocket.function.CommonFunction  -423  ] -          4	       end       5622       null       null       null
+[17/03/07 21:30:31][ INFO][websocket.function.CommonFunction  -392  ] - ###### updateStatus() called ######
+[17/03/07 21:30:31][ INFO][websocket.function.CommonFunction  -418  ] - updateStatus: start - READY - 林智凱
+[17/03/07 21:30:31][ INFO][websocket.function.CommonFunction  -420  ] - READY: 
+[17/03/07 21:30:31][ INFO][websocket.function.CommonFunction  -421  ] -     status	startORend       dbid     roomID   clientID     reason
+[17/03/07 21:30:31][ INFO][websocket.function.CommonFunction  -422  ] - ----------------------------------------------------------------------------
+[17/03/07 21:30:31][ INFO][websocket.function.CommonFunction  -423  ] -          3	     start       null       null       null       null
+[17/03/07 21:30:32][ INFO][websocket.function.CommonFunction  -474  ] - update Agent ready time: 
+[17/03/07 21:30:32][ INFO][websocket.function.CommonFunction  -475  ] - Agent name: 林智凱 set readytime to 21:30:32
+[17/03/07 21:30:49][ INFO][websocket.function.CommonFunction  -392  ] - ###### updateStatus() called ######
+[17/03/07 21:30:49][ INFO][websocket.function.CommonFunction  -418  ] - updateStatus: end - READY - 林智凱
+[17/03/07 21:30:49][ INFO][websocket.function.CommonFunction  -420  ] - READY: 
+[17/03/07 21:30:49][ INFO][websocket.function.CommonFunction  -421  ] -     status	startORend       dbid     roomID   clientID     reason
+[17/03/07 21:30:49][ INFO][websocket.function.CommonFunction  -422  ] - ----------------------------------------------------------------------------
+[17/03/07 21:30:49][ INFO][websocket.function.CommonFunction  -423  ] -          3	       end       5624       null       null       null
+[17/03/07 21:30:50][ INFO][websocket.function.CommonFunction  -392  ] - ###### updateStatus() called ######
+[17/03/07 21:30:50][ INFO][websocket.function.CommonFunction  -418  ] - updateStatus: start - NOTREADY - 林智凱
+[17/03/07 21:30:50][ INFO][websocket.function.CommonFunction  -420  ] - NOTREADY: 
+[17/03/07 21:30:50][ INFO][websocket.function.CommonFunction  -421  ] -     status	startORend       dbid     roomID   clientID     reason
+[17/03/07 21:30:50][ INFO][websocket.function.CommonFunction  -422  ] - ----------------------------------------------------------------------------
+[17/03/07 21:30:50][ INFO][websocket.function.CommonFunction  -423  ] -          4	     start       null       null       null          9
+[17/03/07 21:31:14][ INFO][websocket.function.CommonFunction  -392  ] - ###### updateStatus() called ######
+[17/03/07 21:31:14][ INFO][websocket.function.CommonFunction  -418  ] - updateStatus: start - RING - 林智凱
+[17/03/07 21:31:14][ INFO][websocket.function.CommonFunction  -420  ] - RING: 
+[17/03/07 21:31:14][ INFO][websocket.function.CommonFunction  -421  ] -     status	startORend       dbid     roomID   clientID     reason
+[17/03/07 21:31:14][ INFO][websocket.function.CommonFunction  -422  ] - ----------------------------------------------------------------------------
+[17/03/07 21:31:14][ INFO][websocket.function.CommonFunction  -423  ] -          6	     start       null       null 9b70f5a3-1100-472c-a33d-9f5fb85439f8       null
+[17/03/07 21:31:17][ INFO][websocket.function.CommonFunction  -392  ] - ###### updateStatus() called ######
+[17/03/07 21:31:17][ INFO][websocket.function.CommonFunction  -418  ] - updateStatus: end - RING - 林智凱
+[17/03/07 21:31:17][ INFO][websocket.function.CommonFunction  -420  ] - RING: 
+[17/03/07 21:31:17][ INFO][websocket.function.CommonFunction  -421  ] -     status	startORend       dbid     roomID   clientID     reason
+[17/03/07 21:31:17][ INFO][websocket.function.CommonFunction  -422  ] - ----------------------------------------------------------------------------
+[17/03/07 21:31:17][ INFO][websocket.function.CommonFunction  -423  ] -          6	       end       5630       null       null       null
+[17/03/07 21:31:17][ INFO][websocket.function.CommonFunction  -392  ] - ###### updateStatus() called ######
+[17/03/07 21:31:17][ INFO][websocket.function.CommonFunction  -418  ] - updateStatus: start - IESTABLISHED - 林智凱
+[17/03/07 21:31:17][ INFO][websocket.function.CommonFunction  -420  ] - IESTABLISHED: 
+[17/03/07 21:31:17][ INFO][websocket.function.CommonFunction  -421  ] -     status	startORend       dbid     roomID   clientID     reason
+[17/03/07 21:31:17][ INFO][websocket.function.CommonFunction  -422  ] - ----------------------------------------------------------------------------
+[17/03/07 21:31:17][ INFO][websocket.function.CommonFunction  -423  ] -          7	     start       null 07cef97f-6725-4e34-8505-16582af11d9f       null       null
+[17/03/07 21:31:17][ INFO][websocket.function.CommonFunction  -392  ] - ###### updateStatus() called ######
+[17/03/07 21:31:17][ INFO][websocket.function.CommonFunction  -418  ] - updateStatus: null - null - A123456789
+[17/03/07 21:31:17][ INFO][websocket.function.CommonFunction  -420  ] - null: 
+[17/03/07 21:31:17][ INFO][websocket.function.CommonFunction  -421  ] -     status	startORend       dbid     roomID   clientID     reason
+[17/03/07 21:31:17][ INFO][websocket.function.CommonFunction  -422  ] - ----------------------------------------------------------------------------
+[17/03/07 21:31:17][ INFO][websocket.function.CommonFunction  -423  ] -       chat	      null       null       null       null       null
+[17/03/07 21:31:18][ INFO][websocket.function.CommonFunction  -392  ] - ###### updateStatus() called ######
+[17/03/07 21:31:18][ INFO][websocket.function.CommonFunction  -418  ] - updateStatus: end - NOTREADY - 林智凱
+[17/03/07 21:31:18][ INFO][websocket.function.CommonFunction  -420  ] - NOTREADY: 
+[17/03/07 21:31:18][ INFO][websocket.function.CommonFunction  -421  ] -     status	startORend       dbid     roomID   clientID     reason
+[17/03/07 21:31:18][ INFO][websocket.function.CommonFunction  -422  ] - ----------------------------------------------------------------------------
+[17/03/07 21:31:18][ INFO][websocket.function.CommonFunction  -423  ] -          4	       end       5627       null       null       null
+[17/03/07 21:31:18][ INFO][websocket.function.CommonFunction  -392  ] - ###### updateStatus() called ######
+[17/03/07 21:31:18][ INFO][websocket.function.CommonFunction  -418  ] - updateStatus: start - READY - 林智凱
+[17/03/07 21:31:18][ INFO][websocket.function.CommonFunction  -420  ] - READY: 
+[17/03/07 21:31:18][ INFO][websocket.function.CommonFunction  -421  ] -     status	startORend       dbid     roomID   clientID     reason
+[17/03/07 21:31:18][ INFO][websocket.function.CommonFunction  -422  ] - ----------------------------------------------------------------------------
+[17/03/07 21:31:18][ INFO][websocket.function.CommonFunction  -423  ] -          3	     start       null       null       null       null
+[17/03/07 21:31:19][ INFO][websocket.function.CommonFunction  -474  ] - update Agent ready time: 
+[17/03/07 21:31:19][ INFO][websocket.function.CommonFunction  -475  ] - Agent name: 林智凱 set readytime to 21:31:19
+[17/03/07 21:31:24][ INFO][websocket.function.CommonFunction  -392  ] - ###### updateStatus() called ######
+[17/03/07 21:31:24][ INFO][websocket.function.CommonFunction  -418  ] - updateStatus: end - READY - 林智凱
+[17/03/07 21:31:24][ INFO][websocket.function.CommonFunction  -420  ] - READY: 
+[17/03/07 21:31:24][ INFO][websocket.function.CommonFunction  -421  ] -     status	startORend       dbid     roomID   clientID     reason
+[17/03/07 21:31:24][ INFO][websocket.function.CommonFunction  -422  ] - ----------------------------------------------------------------------------
+[17/03/07 21:31:24][ INFO][websocket.function.CommonFunction  -423  ] -          3	       end       5632       null       null       null
+[17/03/07 21:31:24][ INFO][websocket.function.CommonFunction  -392  ] - ###### updateStatus() called ######
+[17/03/07 21:31:24][ INFO][websocket.function.CommonFunction  -418  ] - updateStatus: start - NOTREADY - 林智凱
+[17/03/07 21:31:24][ INFO][websocket.function.CommonFunction  -420  ] - NOTREADY: 
+[17/03/07 21:31:24][ INFO][websocket.function.CommonFunction  -421  ] -     status	startORend       dbid     roomID   clientID     reason
+[17/03/07 21:31:24][ INFO][websocket.function.CommonFunction  -422  ] - ----------------------------------------------------------------------------
+[17/03/07 21:31:24][ INFO][websocket.function.CommonFunction  -423  ] -          4	     start       null       null       null          0
+[17/03/07 21:31:25][ INFO][websocket.function.CommonFunction  -392  ] - ###### updateStatus() called ######
+[17/03/07 21:31:25][ INFO][websocket.function.CommonFunction  -418  ] - updateStatus: start - AFTERCALLWORK - 林智凱
+[17/03/07 21:31:25][ INFO][websocket.function.CommonFunction  -420  ] - AFTERCALLWORK: 
+[17/03/07 21:31:25][ INFO][websocket.function.CommonFunction  -421  ] -     status	startORend       dbid     roomID   clientID     reason
+[17/03/07 21:31:25][ INFO][websocket.function.CommonFunction  -422  ] - ----------------------------------------------------------------------------
+[17/03/07 21:31:25][ INFO][websocket.function.CommonFunction  -423  ] -          5	     start       null       null       null       null
+[17/03/07 21:38:07][ INFO][websocket.function.CommonFunction  -392  ] - ###### updateStatus() called ######
+[17/03/07 21:38:07][ INFO][websocket.function.CommonFunction  -418  ] - updateStatus: start - LOGIN - 林智凱
+[17/03/07 21:38:07][ INFO][websocket.function.CommonFunction  -420  ] - LOGIN: 
+[17/03/07 21:38:07][ INFO][websocket.function.CommonFunction  -421  ] -     status	startORend       dbid     roomID   clientID     reason
+[17/03/07 21:38:07][ INFO][websocket.function.CommonFunction  -422  ] - ----------------------------------------------------------------------------
+[17/03/07 21:38:07][ INFO][websocket.function.CommonFunction  -423  ] -          1	     start       null       null       null       null
+[17/03/07 21:38:08][ INFO][websocket.function.CommonFunction  -392  ] - ###### updateStatus() called ######
+[17/03/07 21:38:08][ INFO][websocket.function.CommonFunction  -418  ] - updateStatus: start - NOTREADY - 林智凱
+[17/03/07 21:38:08][ INFO][websocket.function.CommonFunction  -420  ] - NOTREADY: 
+[17/03/07 21:38:08][ INFO][websocket.function.CommonFunction  -421  ] -     status	startORend       dbid     roomID   clientID     reason
+[17/03/07 21:38:08][ INFO][websocket.function.CommonFunction  -422  ] - ----------------------------------------------------------------------------
+[17/03/07 21:38:08][ INFO][websocket.function.CommonFunction  -423  ] -          4	     start       null       null       null          0
+[17/03/07 21:38:09][ INFO][websocket.function.CommonFunction  -392  ] - ###### updateStatus() called ######
+[17/03/07 21:38:09][ INFO][websocket.function.CommonFunction  -418  ] - updateStatus: end - NOTREADY - 林智凱
+[17/03/07 21:38:09][ INFO][websocket.function.CommonFunction  -420  ] - NOTREADY: 
+[17/03/07 21:38:09][ INFO][websocket.function.CommonFunction  -421  ] -     status	startORend       dbid     roomID   clientID     reason
+[17/03/07 21:38:09][ INFO][websocket.function.CommonFunction  -422  ] - ----------------------------------------------------------------------------
+[17/03/07 21:38:09][ INFO][websocket.function.CommonFunction  -423  ] -          4	       end       null       null       null       null
+[17/03/07 21:38:09][ INFO][websocket.function.CommonFunction  -392  ] - ###### updateStatus() called ######
+[17/03/07 21:38:09][ INFO][websocket.function.CommonFunction  -418  ] - updateStatus: start - READY - 林智凱
+[17/03/07 21:38:09][ INFO][websocket.function.CommonFunction  -420  ] - READY: 
+[17/03/07 21:38:09][ INFO][websocket.function.CommonFunction  -421  ] -     status	startORend       dbid     roomID   clientID     reason
+[17/03/07 21:38:09][ INFO][websocket.function.CommonFunction  -422  ] - ----------------------------------------------------------------------------
+[17/03/07 21:38:09][ INFO][websocket.function.CommonFunction  -423  ] -          3	     start       null       null       null       null
+[17/03/07 21:38:10][ INFO][websocket.function.CommonFunction  -474  ] - update Agent ready time: 
+[17/03/07 21:38:10][ INFO][websocket.function.CommonFunction  -475  ] - Agent name: 林智凱 set readytime to 21:38:10
+[17/03/07 21:38:11][ INFO][websocket.function.CommonFunction  -392  ] - ###### updateStatus() called ######
+[17/03/07 21:38:11][ INFO][websocket.function.CommonFunction  -418  ] - updateStatus: end - READY - 林智凱
+[17/03/07 21:38:11][ INFO][websocket.function.CommonFunction  -420  ] - READY: 
+[17/03/07 21:38:11][ INFO][websocket.function.CommonFunction  -421  ] -     status	startORend       dbid     roomID   clientID     reason
+[17/03/07 21:38:11][ INFO][websocket.function.CommonFunction  -422  ] - ----------------------------------------------------------------------------
+[17/03/07 21:38:11][ INFO][websocket.function.CommonFunction  -423  ] -          3	       end       5645       null       null       null
+[17/03/07 21:38:11][ INFO][websocket.function.CommonFunction  -392  ] - ###### updateStatus() called ######
+[17/03/07 21:38:11][ INFO][websocket.function.CommonFunction  -418  ] - updateStatus: start - NOTREADY - 林智凱
+[17/03/07 21:38:11][ INFO][websocket.function.CommonFunction  -420  ] - NOTREADY: 
+[17/03/07 21:38:11][ INFO][websocket.function.CommonFunction  -421  ] -     status	startORend       dbid     roomID   clientID     reason
+[17/03/07 21:38:11][ INFO][websocket.function.CommonFunction  -422  ] - ----------------------------------------------------------------------------
+[17/03/07 21:38:11][ INFO][websocket.function.CommonFunction  -423  ] -          4	     start       null       null       null          9
+[17/03/07 21:38:34][ INFO][websocket.function.CommonFunction  -392  ] - ###### updateStatus() called ######
+[17/03/07 21:38:34][ INFO][websocket.function.CommonFunction  -418  ] - updateStatus: start - RING - 林智凱
+[17/03/07 21:38:34][ INFO][websocket.function.CommonFunction  -420  ] - RING: 
+[17/03/07 21:38:34][ INFO][websocket.function.CommonFunction  -421  ] -     status	startORend       dbid     roomID   clientID     reason
+[17/03/07 21:38:34][ INFO][websocket.function.CommonFunction  -422  ] - ----------------------------------------------------------------------------
+[17/03/07 21:38:34][ INFO][websocket.function.CommonFunction  -423  ] -          6	     start       null       null 388a554c-1821-4ffd-a15d-3a6afd421856       null
+[17/03/07 21:38:44][ INFO][websocket.function.CommonFunction  -392  ] - ###### updateStatus() called ######
+[17/03/07 21:38:44][ INFO][websocket.function.CommonFunction  -418  ] - updateStatus: end - RING - 林智凱
+[17/03/07 21:38:44][ INFO][websocket.function.CommonFunction  -420  ] - RING: 
+[17/03/07 21:38:44][ INFO][websocket.function.CommonFunction  -421  ] -     status	startORend       dbid     roomID   clientID     reason
+[17/03/07 21:38:44][ INFO][websocket.function.CommonFunction  -422  ] - ----------------------------------------------------------------------------
+[17/03/07 21:38:44][ INFO][websocket.function.CommonFunction  -423  ] -          6	       end       5647       null       null       null
+[17/03/07 21:38:44][ INFO][websocket.function.CommonFunction  -392  ] - ###### updateStatus() called ######
+[17/03/07 21:38:44][ INFO][websocket.function.CommonFunction  -418  ] - updateStatus: start - IESTABLISHED - 林智凱
+[17/03/07 21:38:44][ INFO][websocket.function.CommonFunction  -420  ] - IESTABLISHED: 
+[17/03/07 21:38:44][ INFO][websocket.function.CommonFunction  -421  ] -     status	startORend       dbid     roomID   clientID     reason
+[17/03/07 21:38:44][ INFO][websocket.function.CommonFunction  -422  ] - ----------------------------------------------------------------------------
+[17/03/07 21:38:44][ INFO][websocket.function.CommonFunction  -423  ] -          7	     start       null 9b65d209-8d7f-4e31-9a78-b6a045b32f80       null       null
+[17/03/07 21:38:45][ INFO][websocket.function.CommonFunction  -392  ] - ###### updateStatus() called ######
+[17/03/07 21:38:45][ INFO][websocket.function.CommonFunction  -418  ] - updateStatus: end - NOTREADY - 林智凱
+[17/03/07 21:38:45][ INFO][websocket.function.CommonFunction  -420  ] - NOTREADY: 
+[17/03/07 21:38:45][ INFO][websocket.function.CommonFunction  -421  ] -     status	startORend       dbid     roomID   clientID     reason
+[17/03/07 21:38:45][ INFO][websocket.function.CommonFunction  -422  ] - ----------------------------------------------------------------------------
+[17/03/07 21:38:45][ INFO][websocket.function.CommonFunction  -423  ] -          4	       end       5646       null       null       null
+[17/03/07 21:38:46][ INFO][websocket.function.CommonFunction  -392  ] - ###### updateStatus() called ######
+[17/03/07 21:38:46][ INFO][websocket.function.CommonFunction  -392  ] - ###### updateStatus() called ######
+[17/03/07 21:38:46][ INFO][websocket.function.CommonFunction  -418  ] - updateStatus: start - READY - 林智凱
+[17/03/07 21:38:46][ INFO][websocket.function.CommonFunction  -420  ] - READY: 
+[17/03/07 21:38:46][ INFO][websocket.function.CommonFunction  -421  ] -     status	startORend       dbid     roomID   clientID     reason
+[17/03/07 21:38:46][ INFO][websocket.function.CommonFunction  -422  ] - ----------------------------------------------------------------------------
+[17/03/07 21:38:46][ INFO][websocket.function.CommonFunction  -418  ] - updateStatus: null - null - A123456789
+[17/03/07 21:38:46][ INFO][websocket.function.CommonFunction  -420  ] - null: 
+[17/03/07 21:38:46][ INFO][websocket.function.CommonFunction  -423  ] -          3	     start       null       null       null       null
+[17/03/07 21:38:46][ INFO][websocket.function.CommonFunction  -421  ] -     status	startORend       dbid     roomID   clientID     reason
+[17/03/07 21:38:46][ INFO][websocket.function.CommonFunction  -422  ] - ----------------------------------------------------------------------------
+[17/03/07 21:38:46][ INFO][websocket.function.CommonFunction  -423  ] -       chat	      null       null       null       null       null
+[17/03/07 21:38:46][ INFO][websocket.function.CommonFunction  -474  ] - update Agent ready time: 
+[17/03/07 21:38:46][ INFO][websocket.function.CommonFunction  -475  ] - Agent name: 林智凱 set readytime to 21:38:46
+[17/03/07 21:38:48][ INFO][websocket.function.CommonFunction  -392  ] - ###### updateStatus() called ######
+[17/03/07 21:38:48][ INFO][websocket.function.CommonFunction  -418  ] - updateStatus: end - READY - 林智凱
+[17/03/07 21:38:48][ INFO][websocket.function.CommonFunction  -420  ] - READY: 
+[17/03/07 21:38:48][ INFO][websocket.function.CommonFunction  -421  ] -     status	startORend       dbid     roomID   clientID     reason
+[17/03/07 21:38:48][ INFO][websocket.function.CommonFunction  -422  ] - ----------------------------------------------------------------------------
+[17/03/07 21:38:48][ INFO][websocket.function.CommonFunction  -423  ] -          3	       end       5649       null       null       null
+[17/03/07 21:38:49][ INFO][websocket.function.CommonFunction  -392  ] - ###### updateStatus() called ######
+[17/03/07 21:38:49][ INFO][websocket.function.CommonFunction  -418  ] - updateStatus: start - NOTREADY - 林智凱
+[17/03/07 21:38:49][ INFO][websocket.function.CommonFunction  -420  ] - NOTREADY: 
+[17/03/07 21:38:49][ INFO][websocket.function.CommonFunction  -421  ] -     status	startORend       dbid     roomID   clientID     reason
+[17/03/07 21:38:49][ INFO][websocket.function.CommonFunction  -422  ] - ----------------------------------------------------------------------------
+[17/03/07 21:38:49][ INFO][websocket.function.CommonFunction  -423  ] -          4	     start       null       null       null          0
+[17/03/07 21:38:49][ INFO][websocket.function.CommonFunction  -392  ] - ###### updateStatus() called ######
+[17/03/07 21:38:49][ INFO][websocket.function.CommonFunction  -418  ] - updateStatus: start - AFTERCALLWORK - 林智凱
+[17/03/07 21:38:49][ INFO][websocket.function.CommonFunction  -420  ] - AFTERCALLWORK: 
+[17/03/07 21:38:49][ INFO][websocket.function.CommonFunction  -421  ] -     status	startORend       dbid     roomID   clientID     reason
+[17/03/07 21:38:49][ INFO][websocket.function.CommonFunction  -422  ] - ----------------------------------------------------------------------------
+[17/03/07 21:38:49][ INFO][websocket.function.CommonFunction  -423  ] -          5	     start       null       null       null       null
+[17/03/07 21:59:28][ INFO][websocket.function.CommonFunction  -392  ] - ###### updateStatus() called ######
+[17/03/07 21:59:28][ INFO][websocket.function.CommonFunction  -418  ] - updateStatus: start - LOGIN - 林智凱
+[17/03/07 21:59:28][ INFO][websocket.function.CommonFunction  -420  ] - LOGIN: 
+[17/03/07 21:59:28][ INFO][websocket.function.CommonFunction  -421  ] -     status	startORend       dbid     roomID   clientID     reason
+[17/03/07 21:59:28][ INFO][websocket.function.CommonFunction  -422  ] - ----------------------------------------------------------------------------
+[17/03/07 21:59:28][ INFO][websocket.function.CommonFunction  -423  ] -          1	     start       null       null       null       null
+[17/03/07 21:59:29][ INFO][websocket.function.CommonFunction  -392  ] - ###### updateStatus() called ######
+[17/03/07 21:59:29][ INFO][websocket.function.CommonFunction  -418  ] - updateStatus: start - NOTREADY - 林智凱
+[17/03/07 21:59:29][ INFO][websocket.function.CommonFunction  -420  ] - NOTREADY: 
+[17/03/07 21:59:29][ INFO][websocket.function.CommonFunction  -421  ] -     status	startORend       dbid     roomID   clientID     reason
+[17/03/07 21:59:29][ INFO][websocket.function.CommonFunction  -422  ] - ----------------------------------------------------------------------------
+[17/03/07 21:59:29][ INFO][websocket.function.CommonFunction  -423  ] -          4	     start       null       null       null          0
+[17/03/07 21:59:29][ INFO][websocket.function.CommonFunction  -392  ] - ###### updateStatus() called ######
+[17/03/07 21:59:29][ INFO][websocket.function.CommonFunction  -418  ] - updateStatus: end - NOTREADY - 林智凱
+[17/03/07 21:59:29][ INFO][websocket.function.CommonFunction  -420  ] - NOTREADY: 
+[17/03/07 21:59:29][ INFO][websocket.function.CommonFunction  -421  ] -     status	startORend       dbid     roomID   clientID     reason
+[17/03/07 21:59:29][ INFO][websocket.function.CommonFunction  -422  ] - ----------------------------------------------------------------------------
+[17/03/07 21:59:29][ INFO][websocket.function.CommonFunction  -423  ] -          4	       end       null       null       null       null
+[17/03/07 21:59:29][ INFO][websocket.function.CommonFunction  -392  ] - ###### updateStatus() called ######
+[17/03/07 21:59:29][ INFO][websocket.function.CommonFunction  -418  ] - updateStatus: start - READY - 林智凱
+[17/03/07 21:59:29][ INFO][websocket.function.CommonFunction  -420  ] - READY: 
+[17/03/07 21:59:29][ INFO][websocket.function.CommonFunction  -421  ] -     status	startORend       dbid     roomID   clientID     reason
+[17/03/07 21:59:29][ INFO][websocket.function.CommonFunction  -422  ] - ----------------------------------------------------------------------------
+[17/03/07 21:59:29][ INFO][websocket.function.CommonFunction  -423  ] -          3	     start       null       null       null       null
+[17/03/07 21:59:30][ INFO][websocket.function.CommonFunction  -474  ] - update Agent ready time: 
+[17/03/07 21:59:30][ INFO][websocket.function.CommonFunction  -475  ] - Agent name: 林智凱 set readytime to 21:59:30
+[17/03/07 21:59:31][ INFO][websocket.function.CommonFunction  -392  ] - ###### updateStatus() called ######
+[17/03/07 21:59:31][ INFO][websocket.function.CommonFunction  -418  ] - updateStatus: end - READY - 林智凱
+[17/03/07 21:59:31][ INFO][websocket.function.CommonFunction  -420  ] - READY: 
+[17/03/07 21:59:31][ INFO][websocket.function.CommonFunction  -421  ] -     status	startORend       dbid     roomID   clientID     reason
+[17/03/07 21:59:31][ INFO][websocket.function.CommonFunction  -422  ] - ----------------------------------------------------------------------------
+[17/03/07 21:59:31][ INFO][websocket.function.CommonFunction  -423  ] -          3	       end       5654       null       null       null
+[17/03/07 21:59:31][ INFO][websocket.function.CommonFunction  -392  ] - ###### updateStatus() called ######
+[17/03/07 21:59:31][ INFO][websocket.function.CommonFunction  -418  ] - updateStatus: start - NOTREADY - 林智凱
+[17/03/07 21:59:31][ INFO][websocket.function.CommonFunction  -420  ] - NOTREADY: 
+[17/03/07 21:59:31][ INFO][websocket.function.CommonFunction  -421  ] -     status	startORend       dbid     roomID   clientID     reason
+[17/03/07 21:59:31][ INFO][websocket.function.CommonFunction  -422  ] - ----------------------------------------------------------------------------
+[17/03/07 21:59:31][ INFO][websocket.function.CommonFunction  -423  ] -          4	     start       null       null       null          9
+[17/03/07 21:59:54][ INFO][websocket.function.CommonFunction  -392  ] - ###### updateStatus() called ######
+[17/03/07 21:59:54][ INFO][websocket.function.CommonFunction  -418  ] - updateStatus: start - RING - 林智凱
+[17/03/07 21:59:54][ INFO][websocket.function.CommonFunction  -420  ] - RING: 
+[17/03/07 21:59:54][ INFO][websocket.function.CommonFunction  -421  ] -     status	startORend       dbid     roomID   clientID     reason
+[17/03/07 21:59:54][ INFO][websocket.function.CommonFunction  -422  ] - ----------------------------------------------------------------------------
+[17/03/07 21:59:54][ INFO][websocket.function.CommonFunction  -423  ] -          6	     start       null       null 24a16429-67af-4b73-a513-3f787a496735       null
+[17/03/07 21:59:57][ INFO][websocket.function.CommonFunction  -392  ] - ###### updateStatus() called ######
+[17/03/07 21:59:57][ INFO][websocket.function.CommonFunction  -418  ] - updateStatus: end - RING - 林智凱
+[17/03/07 21:59:57][ INFO][websocket.function.CommonFunction  -420  ] - RING: 
+[17/03/07 21:59:57][ INFO][websocket.function.CommonFunction  -421  ] -     status	startORend       dbid     roomID   clientID     reason
+[17/03/07 21:59:57][ INFO][websocket.function.CommonFunction  -422  ] - ----------------------------------------------------------------------------
+[17/03/07 21:59:57][ INFO][websocket.function.CommonFunction  -423  ] -          6	       end       5656       null       null       null
+[17/03/07 21:59:57][ INFO][websocket.function.CommonFunction  -392  ] - ###### updateStatus() called ######
+[17/03/07 21:59:57][ INFO][websocket.function.CommonFunction  -418  ] - updateStatus: start - IESTABLISHED - 林智凱
+[17/03/07 21:59:57][ INFO][websocket.function.CommonFunction  -420  ] - IESTABLISHED: 
+[17/03/07 21:59:57][ INFO][websocket.function.CommonFunction  -421  ] -     status	startORend       dbid     roomID   clientID     reason
+[17/03/07 21:59:57][ INFO][websocket.function.CommonFunction  -422  ] - ----------------------------------------------------------------------------
+[17/03/07 21:59:57][ INFO][websocket.function.CommonFunction  -423  ] -          7	     start       null d1317403-eb10-45aa-a96e-ba520725897e       null       null
+[17/03/07 21:59:57][ INFO][websocket.function.CommonFunction  -392  ] - ###### updateStatus() called ######
+[17/03/07 21:59:57][ INFO][websocket.function.CommonFunction  -418  ] - updateStatus: null - null - A123456789
+[17/03/07 21:59:57][ INFO][websocket.function.CommonFunction  -420  ] - null: 
+[17/03/07 21:59:57][ INFO][websocket.function.CommonFunction  -421  ] -     status	startORend       dbid     roomID   clientID     reason
+[17/03/07 21:59:57][ INFO][websocket.function.CommonFunction  -422  ] - ----------------------------------------------------------------------------
+[17/03/07 21:59:57][ INFO][websocket.function.CommonFunction  -423  ] -       chat	      null       null       null       null       null
+[17/03/07 21:59:57][ INFO][websocket.function.CommonFunction  -392  ] - ###### updateStatus() called ######
+[17/03/07 21:59:57][ INFO][websocket.function.CommonFunction  -418  ] - updateStatus: end - NOTREADY - 林智凱
+[17/03/07 21:59:57][ INFO][websocket.function.CommonFunction  -420  ] - NOTREADY: 
+[17/03/07 21:59:57][ INFO][websocket.function.CommonFunction  -421  ] -     status	startORend       dbid     roomID   clientID     reason
+[17/03/07 21:59:57][ INFO][websocket.function.CommonFunction  -422  ] - ----------------------------------------------------------------------------
+[17/03/07 21:59:57][ INFO][websocket.function.CommonFunction  -423  ] -          4	       end       5655       null       null       null
+[17/03/07 21:59:58][ INFO][websocket.function.CommonFunction  -392  ] - ###### updateStatus() called ######
+[17/03/07 21:59:58][ INFO][websocket.function.CommonFunction  -418  ] - updateStatus: start - READY - 林智凱
+[17/03/07 21:59:58][ INFO][websocket.function.CommonFunction  -420  ] - READY: 
+[17/03/07 21:59:58][ INFO][websocket.function.CommonFunction  -421  ] -     status	startORend       dbid     roomID   clientID     reason
+[17/03/07 21:59:58][ INFO][websocket.function.CommonFunction  -422  ] - ----------------------------------------------------------------------------
+[17/03/07 21:59:58][ INFO][websocket.function.CommonFunction  -423  ] -          3	     start       null       null       null       null
+[17/03/07 21:59:58][ INFO][websocket.function.CommonFunction  -474  ] - update Agent ready time: 
+[17/03/07 21:59:58][ INFO][websocket.function.CommonFunction  -475  ] - Agent name: 林智凱 set readytime to 21:59:58
+[17/03/07 22:00:03][ INFO][websocket.function.CommonFunction  -392  ] - ###### updateStatus() called ######
+[17/03/07 22:00:03][ INFO][websocket.function.CommonFunction  -418  ] - updateStatus: end - READY - 林智凱
+[17/03/07 22:00:03][ INFO][websocket.function.CommonFunction  -420  ] - READY: 
+[17/03/07 22:00:03][ INFO][websocket.function.CommonFunction  -421  ] -     status	startORend       dbid     roomID   clientID     reason
+[17/03/07 22:00:03][ INFO][websocket.function.CommonFunction  -422  ] - ----------------------------------------------------------------------------
+[17/03/07 22:00:03][ INFO][websocket.function.CommonFunction  -423  ] -          3	       end       5658       null       null       null
+[17/03/07 22:00:03][ INFO][websocket.function.CommonFunction  -392  ] - ###### updateStatus() called ######
+[17/03/07 22:00:03][ INFO][websocket.function.CommonFunction  -418  ] - updateStatus: start - NOTREADY - 林智凱
+[17/03/07 22:00:03][ INFO][websocket.function.CommonFunction  -420  ] - NOTREADY: 
+[17/03/07 22:00:03][ INFO][websocket.function.CommonFunction  -421  ] -     status	startORend       dbid     roomID   clientID     reason
+[17/03/07 22:00:03][ INFO][websocket.function.CommonFunction  -422  ] - ----------------------------------------------------------------------------
+[17/03/07 22:00:03][ INFO][websocket.function.CommonFunction  -423  ] -          4	     start       null       null       null          0
+[17/03/07 22:00:04][ INFO][websocket.function.CommonFunction  -392  ] - ###### updateStatus() called ######
+[17/03/07 22:00:04][ INFO][websocket.function.CommonFunction  -418  ] - updateStatus: start - AFTERCALLWORK - 林智凱
+[17/03/07 22:00:04][ INFO][websocket.function.CommonFunction  -420  ] - AFTERCALLWORK: 
+[17/03/07 22:00:04][ INFO][websocket.function.CommonFunction  -421  ] -     status	startORend       dbid     roomID   clientID     reason
+[17/03/07 22:00:04][ INFO][websocket.function.CommonFunction  -422  ] - ----------------------------------------------------------------------------
+[17/03/07 22:00:04][ INFO][websocket.function.CommonFunction  -423  ] -          5	     start       null       null       null       null
