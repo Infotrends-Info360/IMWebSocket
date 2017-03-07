@@ -428,6 +428,10 @@ public class CommonFunction {
 				// 若為NOTREADY,則會多reason_dbid參數
 			if (StatusEnum.NOTREADY.getDbid().equals(status_dbid)){
 				dbid = AgentFunction.RecordStatusStart(userid, status_dbid, reason_dbid);
+				// 去除ReadyAgent
+				boolean result = WebSocketUserPool.getReadyAgentQueue().remove(userid);
+				Util.getConsoleLogger().debug("(NOTREADY)WebSocketUserPool.getReadyAgentQueue().remove(userid): " + result);
+				Util.getConsoleLogger().debug("(NOTREADY)WebSocketUserPool.getReadyAgentQueue().size(): " + WebSocketUserPool.getReadyAgentQueue().size());
 			}else{
 				dbid = AgentFunction.RecordStatusStart(userid, status_dbid, "0");
 			}
@@ -469,6 +473,9 @@ public class CommonFunction {
 				Util.getConsoleLogger().debug("Agent name: " + userInfo.getUsername() + " set readytime to " + userInfo.getReadyTime());
 				Util.getStatusFileLogger().info("update Agent ready time: ");
 				Util.getStatusFileLogger().info("Agent name: " + userInfo.getUsername() + " set readytime to " + userInfo.getReadyTime());
+				
+				WebSocketUserPool.getReadyAgentQueue().offer(userid);
+				Util.getConsoleLogger().debug("(READY)WebSocketUserPool.getReadyAgentQueue().size(): " + WebSocketUserPool.getReadyAgentQueue().size());
 			}
 			
 			

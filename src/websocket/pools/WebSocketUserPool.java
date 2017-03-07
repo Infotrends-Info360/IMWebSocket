@@ -241,5 +241,11 @@ public class WebSocketUserPool {
 	public static UserInfo getUserInfoByKey(WebSocket conn){
 		return userallconnections.get(conn);
 	}
+
+	public static BlockingQueue<String> getReadyAgentQueue() {
+		return readyAgentQueue;
+	}
+	
+	
 	
 }

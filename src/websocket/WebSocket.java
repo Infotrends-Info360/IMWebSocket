@@ -213,6 +213,15 @@ public class WebSocket extends WebSocketServer {
 	
 	private void clearUserData(org.java_websocket.WebSocket conn) {
 		Util.getConsoleLogger().debug("clearUserData() called");
+		// 清ReadyAgentQueue
+		if (WebSocketTypePool.isAgent(conn)){
+			String userid = WebSocketUserPool.getUserID(conn);
+			boolean result = WebSocketUserPool.getReadyAgentQueue().remove(userid);
+			Util.getConsoleLogger().debug("(onClose)WebSocketUserPool.getReadyAgentQueue().remove(userid): " + result);
+			Util.getConsoleLogger().debug("(onClose)WebSocketUserPool.getReadyAgentQueue().size(): " + WebSocketUserPool.getReadyAgentQueue().size());
+		}
+
+		
 		// 清GROUP:
 		// 取得一個user所屬的所有roomid
 		List<String> roomids = WebSocketUserPool.getUserRoomByKey(conn);

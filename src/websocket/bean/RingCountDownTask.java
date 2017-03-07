@@ -23,7 +23,7 @@ public class RingCountDownTask extends TimerTask {
 	private static long delay = 1000;
 	private static long period = 1000;
 //	public static Integer maxRingTime = Integer.parseInt(Util.getMaxRingTime()); // 正式用
-	public static Integer maxRingTime = 20; // 測試用
+	public static Integer maxRingTime = 10; // 測試用
 	private Integer currCount = 0;
 	// RING status所需屬性
 	private WebSocket clientConn;
@@ -57,9 +57,9 @@ public class RingCountDownTask extends TimerTask {
 			
 			return;
 		}
-		
-		Util.getConsoleLogger().debug("TimerTaskRingHeartBeat - " + ++currCount);
-		Util.getFileLogger().debug("TimerTaskRingHeartBeat - " + ++currCount);
+		++currCount;
+		Util.getConsoleLogger().debug("TimerTaskRingHeartBeat - " + currCount);
+		Util.getFileLogger().debug("TimerTaskRingHeartBeat - " + currCount);
 //		if (currCount == 5){
 //			Util.getConsoleLogger().debug("here");
 //			agentUserInfo.setStopRing(true);
