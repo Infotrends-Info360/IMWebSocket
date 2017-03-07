@@ -389,6 +389,7 @@ public class CommonFunction {
 	/** * update Agent Status */
 	public static void updateStatus(String message, org.java_websocket.WebSocket aConn) {
 		Util.getConsoleLogger().debug("updateStatus() called");
+		Util.getStatusFileLogger().info("###### updateStatus() called ######");
 		JsonObject obj = Util.getGJsonObject(message);
 //		JSONObject obj = new JSONObject(message); 
 		String ACtype = WebSocketTypePool.getUserType(aConn);
@@ -413,20 +414,13 @@ public class CommonFunction {
 		WebSocketTypePool.UserUpdate(ACtype, username, userid, date, StatusEnum.getStatusEnumByDbid(status_dbid), reason_dbid, aConn);
 		
 		// 更新DB狀態時間
-		Logger log2 = LogManager.getLogger(WebSocket.class);
-		log2.info("" + currStatusEnum + ": ");
-		log2.printf(Level.INFO,"%10s	%10s %10s %10s %10s %10s" , "status", "startORend", "dbid", "roomID", "clientID", "reason");
-		log2.info("----------------------------------------------------------------------------");
-		log2.printf(Level.INFO,"%10s	%10s %10s %10s %10s %10s" , status_dbid, startORend, dbid, roomID, clientID, reason_dbid);
-
 		Util.getConsoleLogger().info("updateStatus: " + startORend + " - " + currStatusEnum + " - " + username);
-		Util.getFileLogger().info("updateStatus: " + startORend + " - " + currStatusEnum + " - " + username);
-//		Util.getConsoleLogger().debug("status	startORend	dbid	roomID	clientID");
-//		System.out.printf("%10s	%10s %10s %10s %10s %10s" , "status", "startORend", "dbid", "roomID", "clientID", "reason");
-//		Util.getConsoleLogger().debug();
-//		System.out.printf("%10s	%10s %10s %10s %10s %10s" , status_dbid, startORend, dbid, roomID, clientID, reason_dbid);
-//		Util.getConsoleLogger().debug();
-//		Util.getConsoleLogger().debug("obj: " + obj);
+		Util.getStatusFileLogger().info("updateStatus: " + startORend + " - " + currStatusEnum + " - " + username);
+
+		Util.getStatusFileLogger().info("" + currStatusEnum + ": ");
+		Util.getStatusFileLogger().printf(Level.INFO,"%10s	%10s %10s %10s %10s %10s" , "status", "startORend", "dbid", "roomID", "clientID", "reason");
+		Util.getStatusFileLogger().info("----------------------------------------------------------------------------");
+		Util.getStatusFileLogger().printf(Level.INFO,"%10s	%10s %10s %10s %10s %10s" , status_dbid, startORend, dbid, roomID, clientID, reason_dbid);
 		
 		if ("start".equals(startORend)){
 //			String userID = Util.getTmpID(userid);
@@ -473,6 +467,8 @@ public class CommonFunction {
 				userInfo.setReadyTime(nowDate);
 				Util.getConsoleLogger().debug("update Agent ready time: ");
 				Util.getConsoleLogger().debug("Agent name: " + userInfo.getUsername() + " set readytime to " + userInfo.getReadyTime());
+				Util.getStatusFileLogger().info("update Agent ready time: ");
+				Util.getStatusFileLogger().info("Agent name: " + userInfo.getUsername() + " set readytime to " + userInfo.getReadyTime());
 			}
 			
 			
@@ -483,12 +479,10 @@ public class CommonFunction {
 
 		}else if ("end".equals(startORend)){ 
 			if (dbid != null){
-				Util.getConsoleLogger().debug("dbid: " + dbid);
 				
 				// 如果是RING結束,現在交由後端統一處理
 				if (StatusEnum.RING.getDbid().equals(status_dbid)){
 					userInfo.setStopRing(true);
-					Util.getConsoleLogger().debug("RING");
 					return;
 				}
 				

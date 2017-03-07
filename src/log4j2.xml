@@ -8,16 +8,19 @@
 		</Console>
 
 		<Console name="commonConsole" target="SYSTEM_OUT">
-			<!-- <PatternLayout pattern="%d{HH:mm:ss.SSS} [%t] %-5level %logger{36} 
-				[%C-%L] - %msg%n"/> -->
+			<!-- <PatternLayout pattern="%d{HH:mm:ss.SSS} [%t] %-5level %logger{36} [%C-%L] - %msg%n"/> -->
 			<PatternLayout pattern="[%d{yy/MM/dd HH:mm:ss}][%5p][%-35C-%-5L] - %m%n" />
-			<!-- <PatternLayout pattern="2: %msg%n"/> -->
 		</Console>
 
 		<File name="commonFile" fileName="log4j2/common.log">
 			<PatternLayout>
 				<Pattern>[%d{yy/MM/dd HH:mm:ss}][%5p][%-35C-%-5L] - %m%n</Pattern>
-<!-- 				<Pattern>%m%n</Pattern> -->
+			</PatternLayout>
+		</File>
+
+		<File name="statusFile" fileName="log4j2/statusFile.log">
+			<PatternLayout>
+				<Pattern>[%d{yy/MM/dd HH:mm:ss}][%5p][%-35C-%-5L] - %m%n</Pattern>
 			</PatternLayout>
 		</File>
 	</Appenders>
@@ -27,11 +30,16 @@
 			<!-- <AppenderRef ref="commonFile"/> -->
 		</Root>
 		<!-- 給一般file使用 -->
-		<logger name="util.fileLogger" level="info" additivity="false">
+		<logger name="util.consoleLogger" level="info" additivity="false">
 			<AppenderRef ref="commonConsole" />
 		</logger>
-		<logger name="util.consoleLogger" level="info" additivity="false">
+		<logger name="util.fileLogger" level="info" additivity="false">
 			<AppenderRef ref="commonFile" />
 		</logger>
+		<logger name="util.statusFileLogger" level="info" additivity="false">
+			<AppenderRef ref="statusFile" />
+		</logger>
+
+
 	</Loggers>
 </Configuration>
