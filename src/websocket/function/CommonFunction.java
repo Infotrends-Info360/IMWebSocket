@@ -103,9 +103,11 @@ public class CommonFunction {
 //		sendjson.put("notready_dbid", notready_dbid); // 此key-value只須Agent接就好(先不做過濾)
 		sendjson.put("MaxCount", MaxCount); // 此key-value只須Agent接就好(先不做過濾)
 		AgentFunction.GetAgentReasonInfo("0");
-		sendjson.put("reasonList", Util.getAgentReason()); // 此key-value只須Agent接就好(先不做過濾)
+		sendjson.put("reasonList", Util.getAgentReason()); // 此key-value只須Agent接就好(先不做過濾) ; 此內容已於伺服器啟動時拿取
 		Util.getConsoleLogger().debug("Util.getAgentReason(): " + Util.getAgentReason());
+		Util.getFileLogger().info("Util.getAgentReason(): " + Util.getAgentReason());
 		Util.getConsoleLogger().debug("Util.getAgentStatus(): " + Util.getAgentStatus());
+		Util.getFileLogger().info("Util.getAgentStatus(): " + Util.getAgentStatus());
 		WebSocketUserPool.sendMessageToUser(aConn, sendjson.toString());
 //		WebSocketUserPool.sendMessage("online people: "
 //				+ WebSocketUserPool.getOnlineUser().toString());
@@ -387,6 +389,7 @@ public class CommonFunction {
 	/** * update Agent Status */
 	public static void updateStatus(String message, org.java_websocket.WebSocket aConn) {
 		Util.getConsoleLogger().debug("updateStatus() called");
+		Util.getStatusFileLogger().info("###### updateStatus() called ######");
 		JsonObject obj = Util.getGJsonObject(message);
 //		JSONObject obj = new JSONObject(message); 
 		String ACtype = WebSocketTypePool.getUserType(aConn);
@@ -402,6 +405,7 @@ public class CommonFunction {
 		String roomID = Util.getGString(obj, "roomID");  // for IESTABLISHED
 		String clientID = Util.getGString(obj, "clientID"); // for RING
 		UserInfo userInfo = WebSocketUserPool.getUserInfoByKey(aConn);
+		StatusEnum currStatusEnum = StatusEnum.getStatusEnumByDbid(status_dbid);
 				
 		// 原方法區塊 - 更新Agent UserInfo中的status
 		if(status_dbid.equals("lose")){
@@ -410,17 +414,13 @@ public class CommonFunction {
 		WebSocketTypePool.UserUpdate(ACtype, username, userid, date, StatusEnum.getStatusEnumByDbid(status_dbid), reason_dbid, aConn);
 		
 		// 更新DB狀態時間
-		Logger log = LogManager.getLogger(WebSocket.class);
-		log.info("" + StatusEnum.getStatusEnumByDbid(status_dbid) + ": ");
-		log.printf(Level.INFO,"%10s	%10s %10s %10s %10s %10s" , "status", "startORend", "dbid", "roomID", "clientID", "reason");
-		log.info("----------------------------------------------------------------------------");
-		log.printf(Level.INFO,"%10s	%10s %10s %10s %10s %10s" , status_dbid, startORend, dbid, roomID, clientID, reason_dbid);
-//		Util.getConsoleLogger().debug("status	startORend	dbid	roomID	clientID");
-//		System.out.printf("%10s	%10s %10s %10s %10s %10s" , "status", "startORend", "dbid", "roomID", "clientID", "reason");
-//		Util.getConsoleLogger().debug();
-//		System.out.printf("%10s	%10s %10s %10s %10s %10s" , status_dbid, startORend, dbid, roomID, clientID, reason_dbid);
-//		Util.getConsoleLogger().debug();
-//		Util.getConsoleLogger().debug("obj: " + obj);
+		Util.getConsoleLogger().info("updateStatus: " + startORend + " - " + currStatusEnum + " - " + username);
+		Util.getStatusFileLogger().info("updateStatus: " + startORend + " - " + currStatusEnum + " - " + username);
+
+		Util.getStatusFileLogger().info("" + currStatusEnum + ": ");
+		Util.getStatusFileLogger().printf(Level.INFO,"%10s	%10s %10s %10s %10s %10s" , "status", "startORend", "dbid", "roomID", "clientID", "reason");
+		Util.getStatusFileLogger().info("----------------------------------------------------------------------------");
+		Util.getStatusFileLogger().printf(Level.INFO,"%10s	%10s %10s %10s %10s %10s" , status_dbid, startORend, dbid, roomID, clientID, reason_dbid);
 		
 		if ("start".equals(startORend)){
 //			String userID = Util.getTmpID(userid);
@@ -428,11 +428,15 @@ public class CommonFunction {
 				// 若為NOTREADY,則會多reason_dbid參數
 			if (StatusEnum.NOTREADY.getDbid().equals(status_dbid)){
 				dbid = AgentFunction.RecordStatusStart(userid, status_dbid, reason_dbid);
+				// 去除ReadyAgent
+				boolean result = WebSocketUserPool.getReadyAgentQueue().remove(userid);
+				Util.getConsoleLogger().debug("(NOTREADY)WebSocketUserPool.getReadyAgentQueue().remove(userid): " + result);
+				Util.getConsoleLogger().debug("(NOTREADY)WebSocketUserPool.getReadyAgentQueue().size(): " + WebSocketUserPool.getReadyAgentQueue().size());
 			}else{
 				dbid = AgentFunction.RecordStatusStart(userid, status_dbid, "0");
 			}
 			// 將xxxx_dbid值傳給前端
-			StatusEnum currStatusEnum = StatusEnum.getStatusEnumByDbid(status_dbid);
+//			StatusEnum currStatusEnum = StatusEnum.getStatusEnumByDbid(status_dbid);
 //			Util.getConsoleLogger().debug("currStatusEnum: " + currStatusEnum);
 			String dbid_key = currStatusEnum.toString().toLowerCase() + "_dbid";
 //			Util.getConsoleLogger().debug("dbid_key: " + dbid_key);
@@ -440,6 +444,7 @@ public class CommonFunction {
 			userInfo.getStatusDBIDMap().put(currStatusEnum, dbid); // 更新Bean
 			
 			// 若為iEstablished狀態,則交由RoomInfo來處理結束時間點
+			// 結束時間點 - 由WebSocketRoomPool.removeUserinroom裡面判斷式進行
 			if (StatusEnum.IESTABLISHED.getDbid().equals(status_dbid)){
 				Util.getConsoleLogger().debug("IESTABLISHED - roomID: " + roomID);
 				RoomInfo roomInfo = WebSocketRoomPool.getRoomInfo(roomID);
@@ -447,6 +452,7 @@ public class CommonFunction {
 			}
 			
 			// 若為RING狀態,則交由RingCountDownTask來處理結束時間點
+			// 結束時間點 - 由RingCountDownTask - run()判斷式決定
 			if (StatusEnum.RING.getDbid().equals(status_dbid)){
 				//將RINGHEARTBEAT放進UserInfo
 				userInfo.setStopRing(false); // 回復為預設false
@@ -465,6 +471,11 @@ public class CommonFunction {
 				userInfo.setReadyTime(nowDate);
 				Util.getConsoleLogger().debug("update Agent ready time: ");
 				Util.getConsoleLogger().debug("Agent name: " + userInfo.getUsername() + " set readytime to " + userInfo.getReadyTime());
+				Util.getStatusFileLogger().info("update Agent ready time: ");
+				Util.getStatusFileLogger().info("Agent name: " + userInfo.getUsername() + " set readytime to " + userInfo.getReadyTime());
+				
+				WebSocketUserPool.getReadyAgentQueue().offer(userid);
+				Util.getConsoleLogger().debug("(READY)WebSocketUserPool.getReadyAgentQueue().size(): " + WebSocketUserPool.getReadyAgentQueue().size());
 			}
 			
 			
@@ -474,21 +485,18 @@ public class CommonFunction {
 			WebSocketUserPool.sendMessageToUser(aConn, obj.toString());
 
 		}else if ("end".equals(startORend)){ 
-			Util.getConsoleLogger().debug("end");
 			if (dbid != null){
-				Util.getConsoleLogger().debug("dbid: " + dbid);
 				
 				// 如果是RING結束,現在交由後端統一處理
 				if (StatusEnum.RING.getDbid().equals(status_dbid)){
 					userInfo.setStopRing(true);
-					Util.getConsoleLogger().debug("RING");
 					return;
 				}
 				
 				AgentFunction.RecordStatusEnd(dbid);
 				
 				// 清理Bean
-				StatusEnum currStatusEnum = StatusEnum.getStatusEnumByDbid(status_dbid);
+//				StatusEnum currStatusEnum = StatusEnum.getStatusEnumByDbid(status_dbid);
 				userInfo.getStatusDBIDMap().remove(currStatusEnum); 
 			}
 		}

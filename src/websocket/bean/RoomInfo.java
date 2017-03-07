@@ -15,6 +15,7 @@ public class RoomInfo {
 	private Map<WebSocket, UserInfo> userConns = new HashMap<>();
 	private WebSocket clientConn;
 	private String iestablish_dbid;
+	private String roomOwnerAgentID;
 	
 	public String getRoomID() {
 		return roomID;
@@ -45,6 +46,12 @@ public class RoomInfo {
 	}
 	public void setIestablish_dbid(String iestablish_dbid) {
 		this.iestablish_dbid = iestablish_dbid;
+	}
+	public String getRoomOwnerAgentID() {
+		return roomOwnerAgentID;
+	}
+	public void setRoomOwnerAgentID(String roomOwnerAgentID) {
+		this.roomOwnerAgentID = roomOwnerAgentID;
 	}
 	
 	

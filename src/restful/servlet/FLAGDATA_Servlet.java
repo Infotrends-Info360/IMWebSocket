@@ -53,6 +53,9 @@ public class FLAGDATA_Servlet {
         		Activitydata activitydata = new Activitydata();
         		JSONArray ActivitydataJsonArray = new JSONArray();
         		JSONArray flagJsonArray = new JSONArray();
+        		
+        		JSONArray flag0JsonArray = new JSONArray();
+        		JSONArray flag1JsonArray = new JSONArray();
 
         		activitygroups.setActivitymenuid(dbid);
         		List<Activitygroups> activitygroupslist = maintainservice.Select_activitygroups(activitygroups);
@@ -99,8 +102,38 @@ public class FLAGDATA_Servlet {
         			}
         			
         	  	}
+        	  	
+        	  	
+        	  	for(int g = 0; g < activitydatalist.size(); g++){
+        	  		
+        	  		JSONObject activitydataObject = new JSONObject();
+        			activitydataObject.put("dbid", activitydatalist.get(g).getDbid());
+        			activitydataObject.put("activitygroupsid", activitydatalist.get(g).getActivitygroupsid());
+        			activitydataObject.put("codename", activitydatalist.get(g).getCodename());
+        			activitydataObject.put("color", activitydatalist.get(g).getColor());
+        			activitydataObject.put("deleteflag", activitydatalist.get(g).getDeleteflag());
+        			activitydataObject.put("titlegroup", activitydatalist.get(g).getTitlegroup());
+        			activitydataObject.put("titleflag", activitydatalist.get(g).getTitleflag());
+        			activitydataObject.put("sort", activitydatalist.get(g).getSort());
+        					
+        			
+        			if(activitydatalist.get(g).getDeleteflag().equals("0")){
+            			activitydataObject.put("createdatetime", activitydatalist.get(a).getCreatedatetime());
+
+        				flag0JsonArray.put(activitydataObject);
+                		
+        			}else{
+            			activitydataObject.put("deletedatetime", activitydatalist.get(a).getDeletedatetime());
+
+        				flag1JsonArray.put(activitydataObject);
+        			}
+        			
+        	  	}
+        	  	
 
     		}
+        	  	jsonObject.put("Flag0", flag0JsonArray);
+        	  	jsonObject.put("Flag1", flag1JsonArray);
         		jsonObject.put("Flag", flagJsonArray);
         		jsonObject.put("activitydata", ActivitydataJsonArray);
         		jsonObject.put("activitygroups", ActivitygroupsJsonArray);

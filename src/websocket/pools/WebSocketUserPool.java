@@ -10,6 +10,8 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 import java.util.Timer;
+import java.util.concurrent.BlockingQueue;
+import java.util.concurrent.LinkedBlockingQueue;
 
 import org.java_websocket.WebSocket;
 import org.java_websocket.exceptions.WebsocketNotConnectedException;
@@ -26,9 +28,11 @@ import websocket.bean.UserInfo;
 public class WebSocketUserPool {
 	/**
 	 * online User ID/NAME Map
-	 * 暫時先設為public,測試用
+	 * userallconnections在資料層級上 = WebSocketTypePool.TYPEconnections.get("Client") + 
+	 * 								WebSocketTypePool.TYPEconnections.get("Agent");
 	 */
 	private static final Map<WebSocket, UserInfo> userallconnections = new HashMap<WebSocket,UserInfo>();	
+	private static final BlockingQueue<String> readyAgentQueue = new LinkedBlockingQueue<>(); // (進行中)用在ClientFunction::getOnlineLongestUserinTYPE()
 	
 	/** * Get User ID By Key * @param session */ /* Done */
 	public static String getUserByKey(WebSocket conn) {
@@ -237,5 +241,11 @@ public class WebSocketUserPool {
 	public static UserInfo getUserInfoByKey(WebSocket conn){
 		return userallconnections.get(conn);
 	}
+
+	public static BlockingQueue<String> getReadyAgentQueue() {
+		return readyAgentQueue;
+	}
+	
+	
 	
 }

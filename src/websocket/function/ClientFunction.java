@@ -15,12 +15,15 @@ import java.util.Set;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
+import com.google.gson.Gson;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 
+import util.StatusEnum;
 import util.Util;
 import websocket.bean.RoomInfo;
+import websocket.bean.UpdateStatusBean;
 import websocket.pools.WebSocketRoomPool;
 import websocket.pools.WebSocketTypePool;
 import websocket.pools.WebSocketUserPool;
@@ -67,14 +70,17 @@ public class ClientFunction {
 			senduserdataObj.addProperty("sendto", AgentID); // 重點
 			senduserdataObj.addProperty("searchtype", "A");
 			JsonObject attributes = new JsonObject();
-			attributes.addProperty("attributenames", "Phone,id,service1,service2");
-			attributes.addProperty("Phone",userName); // 特別注意一下名稱並沒對到
-			attributes.addProperty("id",userID);
-			attributes.addProperty("service1","service one");
-			attributes.addProperty("service2","service two");
-//			attributes.addProperty("attributenames", "IDNO_");
-//			attributes.addProperty("IDNO_",userName);
+			// localhost, 192.168.10.42版本:
+//			attributes.addProperty("attributenames", "Phone,id,service1,service2");
+//			attributes.addProperty("Phone",userName); // 特別注意一下名稱並沒對到
 //			attributes.addProperty("id",userID);
+//			attributes.addProperty("service1","service one");
+//			attributes.addProperty("service2","service two");
+			// 客戶端版本:
+			attributes.addProperty("attributenames", "IDNO_");
+			attributes.addProperty("IDNO_",userName);
+			attributes.addProperty("id",userID);
+			
 			senduserdataObj.add("attributes", attributes);
 			senduserdataObj.addProperty("channel", "chat");
 			
@@ -93,6 +99,7 @@ public class ClientFunction {
 	public static void senduserdata(String message, org.java_websocket.WebSocket conn) {
 //		Util.getConsoleLogger().debug("senduserdata()" + message);
 		Util.getConsoleLogger().debug("senduserdata() called ");
+		Util.getFileLogger().info("senduserdata() called ");
 		JSONObject obj = new JSONObject(message);
 		String lang = obj.getString("lang");
 		String searchtype = obj.getString("searchtype");
@@ -111,7 +118,7 @@ public class ClientFunction {
 					+ "&lang=" + lang;
 			// Connect to URL
 			String hostURL = Util.getHostURLStr("IMWebSocket");
-			Util.getConsoleLogger().debug("hostURL: " + hostURL);
+//			Util.getConsoleLogger().debug("hostURL: " + hostURL);
 			URL url = new URL( hostURL + "/IMWebSocket/RESTful/searchUserdata");
 //			URL url = new URL(
 //					"http://127.0.0.1:8080/IMWebSocket/RESTful/searchUserdata");
@@ -144,8 +151,12 @@ public class ClientFunction {
 		}
 		long endTime = System.currentTimeMillis();
 		Util.getConsoleLogger().debug("RESTful searchUserdata search time: " + (endTime - startTime)/1000 + "s" );
+		Util.getFileLogger().debug("RESTful searchUserdata search time: " + (endTime - startTime)/1000 + "s" );
+		
 		
 		JSONObject responseSBjson = new JSONObject(responseSB.toString());
+		Util.getFileLogger().debug("senduserdata result: " + responseSBjson);
+		
 		JSONObject sendjson = new JSONObject();
 		
 		sendjson.put("Event", "senduserdata");
@@ -154,18 +165,28 @@ public class ClientFunction {
 		sendjson.put("channel", channel);
 //		Util.getConsoleLogger().debug("senduserdata() - sendjson" + sendjson);
 		WebSocketUserPool.sendMessageToUser(conn, sendjson.toString());
+		// 通知Agent,有新的通話請求 RING
 		// 掉換順序
 		// 若尚未找到Agent,則會出現JSONException
 		// 之後若熟悉RESTful,則可試著將抓取contactID與找到Agent後通知兩方這兩件事情分開處理
-		try{
-			org.java_websocket.WebSocket sendtoConn = WebSocketUserPool
-					.getWebSocketByUser(sendto);
+		org.java_websocket.WebSocket sendtoConn = null;
+		sendtoConn = WebSocketUserPool.getWebSocketByUser(sendto);
+		if (sendtoConn != null){
 			sendjson.put("clientID", WebSocketUserPool.getUserID(conn).trim());
 			sendjson.put("clientName", WebSocketUserPool.getUserNameByKey(conn).trim());
 			WebSocketUserPool.sendMessageToUser(sendtoConn, sendjson.toString());			
-		}catch(org.json.JSONException e) {
-			Util.getConsoleLogger().debug("JSONObject[\"sendto\"] not found.");
-		}
+			
+			// 開始RING倒數機制
+//				// 3. RING狀態開始
+			UpdateStatusBean usb = new UpdateStatusBean();
+			usb.setStatus(StatusEnum.RING.getDbid());
+			usb.setStartORend("start");
+			usb.setClientID( WebSocketUserPool.getUserID(conn));
+			CommonFunction.updateStatus(new Gson().toJson(usb), sendtoConn);				
+		}// end of if 
+//		String status_dbid = Util.getGString(obj, "status"); // 以數字代表 dbid
+//		String startORend = Util.getGString(obj, "startORend"); 
+//		String clientID = Util.getGString(obj, "clientID"); // for RING
 
 	}
 	
@@ -194,7 +215,7 @@ public class ClientFunction {
 					+ "&enterkey=" + enterkey;
 			// Connect to URL
 			String hostURL = Util.getHostURLStr("IMWebSocket");
-			Util.getConsoleLogger().debug("hostURL: " + hostURL);
+//			Util.getConsoleLogger().debug("hostURL: " + hostURL);
 			URL url = new URL( hostURL + "/IMWebSocket/RESTful/ServiceEntry");			
 //			URL url = new URL(
 //					"http://127.0.0.1:8080/IMWebSocket/RESTful/ServiceEntry");
@@ -230,6 +251,8 @@ public class ClientFunction {
 	
 	/** * send interaction log */
 	public static void interactionlog(String message, org.java_websocket.WebSocket conn) {
+		// 可考慮去除在client.js儲存的多於資訊,只讓client.js傳入重要key值,如ixnid, contactid,
+		// 其餘資料皆由server保存,在透過key值去取用,如取得typeid, status, text等,之後整理可考慮進行
 		Util.getConsoleLogger().debug("interactionlog() called");
 //		JSONObject obj = new JSONObject(message);
 		JsonObject obj = Util.getGJsonObject(message);
@@ -266,9 +289,9 @@ public class ClientFunction {
 					ixnid = entry.getValue().getAsString();
 					break;
 				case "agentid":
-					Util.getConsoleLogger().debug("entry.getValue(): " + entry.getValue());
+					Util.getConsoleLogger().debug("entry.getValue().getAsString(): " + entry.getValue().getAsString());
 //					agentid = entry.getValue().getAsString();
-					agentid = entry.getValue().toString();
+					agentid = entry.getValue().getAsString();
 					break;
 				case "status":
 					status = entry.getValue().getAsInt();
@@ -352,7 +375,7 @@ public class ClientFunction {
 
 			// Connect to URL
 			String hostURL = Util.getHostURLStr("IMWebSocket");
-			Util.getConsoleLogger().debug("hostURL: " + hostURL);
+//			Util.getConsoleLogger().debug("hostURL: " + hostURL);
 			URL url = new URL( hostURL + "/IMWebSocket/RESTful/Interaction");
 //			URL url = new URL(
 //					"http://127.0.0.1:8080/IMWebSocket/RESTful/Interaction");

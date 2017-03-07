@@ -19,8 +19,6 @@ public class Activitymenu {
 	
 	private List<Integer> ActivityMenu_DBID_list = new ArrayList<Integer>();
 
-	
-
 	public List<Integer> getActivityMenu_DBID_list() {
 		return ActivityMenu_DBID_list;
 	}

@@ -140,7 +140,7 @@ public class GetKPIServlet {
 				try {
 					// Connect to URL
 					String hostURL = Util.getHostURLStr("IMWebSocket");
-					Util.getConsoleLogger().debug("hostURL: " + hostURL);
+//					Util.getConsoleLogger().debug("hostURL: " + hostURL);
 					URL url = new URL( hostURL + "/IMWebSocket/RESTful/Select_rpt_agentstatus_usetime");
 //					URL url = new URL(
 //							"http://127.0.0.1:8080/IMWebSocket/RESTful/Select_rpt_agentstatus_usetime");
@@ -201,7 +201,7 @@ public class GetKPIServlet {
 			try {
 				// Connect to URL
 				String hostURL = Util.getHostURLStr("IMWebSocket");
-				Util.getConsoleLogger().debug("hostURL: " + hostURL);
+//				Util.getConsoleLogger().debug("hostURL: " + hostURL);
 				URL url = new URL( hostURL + "/IMWebSocket/RESTful/Select_rpt_agentstatus_usetime_avg");
 //				URL url = new URL(
 //						"http://127.0.0.1:8080/IMWebSocket/RESTful/Select_rpt_agentstatus_usetime_avg");

@@ -1,5 +1,8 @@
 package com.Info360.bean;
 
+import java.util.ArrayList;
+import java.util.List;
+
 public class Activitygroups {
 	
 	private int dbid;
@@ -16,8 +19,17 @@ public class Activitygroups {
 	
 	private String deleteflag;
 
+	private List<Integer> ActivityGroup_DBID_list = new ArrayList<Integer>();
+
 	
-	
+	public List<Integer> getActivityGroup_DBID_list() {
+		return ActivityGroup_DBID_list;
+	}
+
+	public void setActivityGroup_DBID_list(List<Integer> activityGroup_DBID_list) {
+		ActivityGroup_DBID_list = activityGroup_DBID_list;
+	}
+
 	public String getDeleteflag() {
 		return deleteflag;
 	}

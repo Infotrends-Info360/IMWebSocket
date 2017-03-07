@@ -13,6 +13,7 @@ import java.util.Set;
 
 
 
+
 import org.apache.logging.log4j.Level;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -27,6 +28,7 @@ import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 
+import filter.SystemListener;
 import filter.startFilter;
 import util.Util;
 import websocket.bean.RoomInfo;
@@ -41,14 +43,17 @@ public class WebSocket extends WebSocketServer {
 	
 	public WebSocket(InetSocketAddress address) {
 		super(address);
-		Util.getConsoleLogger().info("IP address: " + address);
-		Util.getFileLogger().info("IP address: " + address);
+		Util.getConsoleLogger().info("WebSocket IP address initialized: " + address);
+		Util.getFileLogger().info("WebSocket IP address initialized: " + address);
 	}
 
 	public WebSocket(int port) throws UnknownHostException {
 		super(new InetSocketAddress(port));
-		Util.getConsoleLogger().info("Port: " + port);
-		Util.getFileLogger().info("Port: " + port);
+		Util.getConsoleLogger().info("WebSocket Port initialized: " + port);
+		Util.getFileLogger().info("WebSocket Port initialized: " + port);
+		
+		Logger logger2 = LogManager.getLogger(SystemListener.class);
+    	logger2.error("filter pkg logger test");
 		
 //		Logger log = LogManager.getLogger(WebSocket.class);
 //		log.printf(Level.INFO,"%s *********************************************%n",5);
@@ -60,8 +65,8 @@ public class WebSocket extends WebSocketServer {
 			String reason, boolean remote) {
 		// 此方法沒有用到,先放著,並不會影響到主流程
 		//userLeave(conn);
-		Util.getConsoleLogger().info("onClose(): " + WebSocketUserPool.getACTypeByKey(conn) + conn + " is disconnected. (onClose)");
-		Util.getFileLogger().info("onClose(): " + WebSocketUserPool.getACTypeByKey(conn) + conn + " is disconnected. (onClose)");
+		Util.getConsoleLogger().info( WebSocketUserPool.getUserNameByKey(conn) + " is disconnected. (onClose)");
+		Util.getFileLogger().info( WebSocketUserPool.getUserNameByKey(conn) + " is disconnected. (onClose)");
 		// 將Heartbeat功能移轉到這裡:
 		inputInteractionLog(conn,reason);
 		clearUserData(conn); // 包含removeUser, removerUserinTYPE, removeUserinroom
@@ -82,8 +87,8 @@ public class WebSocket extends WebSocketServer {
 	@Override
 	public void onOpen(org.java_websocket.WebSocket conn,
 			ClientHandshake handshake) {
-		Util.getConsoleLogger().info("Someone link in Socket conn:" + conn);
-		Util.getFileLogger().info("Someone link in Socket conn:" + conn);
+		Util.getConsoleLogger().info( conn + " is connected");
+		Util.getFileLogger().info( conn + " is connected");
 		l++;
 	}
 
@@ -146,6 +151,9 @@ public class WebSocket extends WebSocketServer {
 		case "RejectEvent":
 			AgentFunction.RejectEvent(message.toString(), conn);
 			break;
+		case "findAgent":
+			ClientFunction.findAgent(message.toString(), conn);
+			break;
 		case "findAgentEvent":
 			ClientFunction.findAgentEvent(message.toString(), conn);
 			break;
@@ -154,9 +162,6 @@ public class WebSocket extends WebSocketServer {
 			break;
 		case "getUserStatus":
 			AgentFunction.getUserStatus(message.toString(), conn);
-			break;
-		case "findAgent":
-			ClientFunction.findAgent(message.toString(), conn);
 			break;
 		case "createroomId":
 			AgentFunction.createRoomId(message.toString(), conn);
@@ -208,6 +213,15 @@ public class WebSocket extends WebSocketServer {
 	
 	private void clearUserData(org.java_websocket.WebSocket conn) {
 		Util.getConsoleLogger().debug("clearUserData() called");
+		// 清ReadyAgentQueue
+		if (WebSocketTypePool.isAgent(conn)){
+			String userid = WebSocketUserPool.getUserID(conn);
+			boolean result = WebSocketUserPool.getReadyAgentQueue().remove(userid);
+			Util.getConsoleLogger().debug("(onClose)WebSocketUserPool.getReadyAgentQueue().remove(userid): " + result);
+			Util.getConsoleLogger().debug("(onClose)WebSocketUserPool.getReadyAgentQueue().size(): " + WebSocketUserPool.getReadyAgentQueue().size());
+		}
+
+		
 		// 清GROUP:
 		// 取得一個user所屬的所有roomid
 		List<String> roomids = WebSocketUserPool.getUserRoomByKey(conn);
@@ -218,7 +232,7 @@ public class WebSocket extends WebSocketServer {
 			String roomid = itr.next();
 			Util.getConsoleLogger().debug("***** get roomid: " + roomid);
 			//使用每個roomid,並找出相對應的room,再將其中的conn remove掉
-			WebSocketRoomPool.removeUserinroom(roomid, conn);
+			WebSocketRoomPool.removeUserinroom(roomid, conn); // 當room裡面user為 <=1 時,會把room從conatiner中去除掉,所以才需要light copy
 		}
 		Util.getConsoleLogger().debug("after - roomids.size(): " + roomids.size());
 
@@ -250,6 +264,11 @@ public class WebSocket extends WebSocketServer {
 				obj.put("stoppedreason", "server:HeartBeatLose"); // 看之後是否考慮更改為變數reason
 				obj.put("closefrom", "server:HeartBeatLose"); 
 			}
+			// 更新RoomOwnerAgentID
+			String roomID =  obj.getString("ixnid"); // ixnid 就是 roomID
+			obj.put("agentid", WebSocketRoomPool.getRoomInfo(roomID).getRoomOwnerAgentID()); // 取代前端傳入值
+			
+			// 最後寫入
 			ClientFunction.interactionlog(obj.toString(), conn);			
 		}
 
@@ -310,6 +329,10 @@ public class WebSocket extends WebSocketServer {
 			// 若是屬於轉接的要求,則將原Agent(邀請者)踢出
 			if ("transfer".equals(inviteType)){
 				Util.getConsoleLogger().debug("responseThirdParty() - transfer");
+				// 更新roomInfo - owner資訊
+				RoomInfo roomInfo = WebSocketRoomPool.getRoomInfo(roomID);
+				roomInfo.setRoomOwnerAgentID(invitedAgentID);
+				
 				// 通知使用者清除前端頁面
 				WebSocketUserPool.sendMessageToUser(WebSocketUserPool.getWebSocketByUser(fromAgentID), obj.toString());
 				WebSocketRoomPool.removeUserinroom(roomID, WebSocketUserPool.getWebSocketByUser(fromAgentID));
@@ -327,6 +350,7 @@ public class WebSocket extends WebSocketServer {
 	private void addRoomForMany(String aMsg, org.java_websocket.WebSocket aConn) {
 		Util.getConsoleLogger().debug("addRoomForMany() called");
 		JsonObject msgJson = Util.getGJsonObject(aMsg);
+		String agentID = WebSocketUserPool.getUserID(aConn);
 		Util.getConsoleLogger().trace("addRoomForMany - msgJson: " + msgJson);
 		// hardcoded - 之後想想看如何改善"none"這樣寫死的判斷方式
 		String roomID = "";
@@ -382,6 +406,10 @@ public class WebSocket extends WebSocketServer {
 //				clientID = userID;
 //			}
 		}
+		
+		// 更新roomInfo - owner資訊
+		RoomInfo roomInfo = WebSocketRoomPool.getRoomInfo(roomID);
+		roomInfo.setRoomOwnerAgentID(agentID);
 		
 		// 通知Client與Agent,要開啟layim(將原本AcceptEvent移到此處)
 		for (JsonElement userIDJsonE : userIDJsonAry){

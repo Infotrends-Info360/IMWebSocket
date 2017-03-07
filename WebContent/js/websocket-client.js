@@ -10,10 +10,10 @@ var ixnactivitycode_g;
 var waittingAgent_g = false;
 var waittingAgentID_g = "none";
 
-var AgentIDList_g;
-var AgentNameList_g;
+var AgentIDList_g; // 後端資料處理已經沒在使用,僅前端顯示用
+var RoomOwnerAgentID_g; // 紀錄當下Room的Owner,當三方為transfer時,owner才會轉變
 
-var systemParam_g;
+var systemParam_g; // 系統參數,主要為URL相關資訊
 
 /** layim **/
 var layimswitch = false; // layim開關參數
@@ -113,9 +113,9 @@ function Login() {
 					console.log("AcceptEvent: obj.fromName: " + obj.fromName);
 					AgentIDList_g = [];
 					AgentIDList_g.push(obj.from);
-					AgentNameList_g = [];
-					AgentNameList_g.push(obj.fromName);
-					
+					RoomOwnerAgentID_g = obj.from;
+//					alert("RoomOwnerAgentID_g: " + RoomOwnerAgentID_g);
+
 					// 顯現對話視窗
 					document.getElementById("chatDialogue").classList.remove("hidden");
 					document.getElementById("chatDialogueReverse").classList.add("hidden");
@@ -244,6 +244,10 @@ function Login() {
 				}  else if ("responseThirdParty" == obj.Event){
 					console.log("obj.invitedAgentID: " + obj.invitedAgentID);
 					AgentIDList_g.push(obj.invitedAgentID);
+					if (obj.inviteType == "transfer"){
+						RoomOwnerAgentID_g = obj.invitedAgentID;
+					}
+//					alert("RoomOwnerAgentID_g: " + RoomOwnerAgentID_g);
 //					document.getElementById("currRoomID").innerHTML = obj.roomID;
 //					document.getElementById("currUsers").innerHTML = obj.roomMembers;
 					
@@ -495,7 +499,7 @@ function setinteraction(aStatus, aActivitycode, aClosefrom, aThecomment, aStoppe
 		type : 'setinteraction',
 		contactid : contactID_g,
 		ixnid : RoomID_g,
-		agentid : AgentIDList_g,
+		agentid : RoomOwnerAgentID_g,
 		status : aStatus,
 		typeid : 'Inbound',
 		entitytypeid : 2,

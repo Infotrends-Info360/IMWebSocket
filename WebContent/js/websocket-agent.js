@@ -690,9 +690,9 @@ function Login() {
 					waittingClientIDList_g.splice(index_remove,1);
 					console.log("after - waittingClientIDList_g.length: " + waittingClientIDList_g.length);
 				} else if ("Exit" == obj.Event){
-					alert("Exit");
+//					alert("Exit");
 //					console.log("ws 連線關閉。");
-//					parent.ws_g.close(); // 在這邊關閉websocket,要特別注意會不會牽連到其他人!
+//					parent.ws_g.close(); // 在這邊關閉websocket,要特別注意會不會牽連到其他人
 
 				}
 			// 非指令訊息
@@ -703,7 +703,7 @@ function Login() {
 				if (e.data.indexOf("Offline") > 0 && e.data.indexOf(parent.UserName_g) > 0) {
 					// 關閉websocket
 //					console.log("ws 連線關閉。");
-//					parent.ws_g.close(); // 在這邊關閉websocket,要特別注意會不會牽連到其他人!
+//					parent.ws_g.close(); // 在這邊關閉websocket,要特別注意會不會牽連到其他人
 				}
 			} else {
 				document.getElementById("text").innerHTML += e.data + "<br>";
@@ -796,7 +796,7 @@ function notready() {
 //	status_g = StatusEnum.NOTREADY;
 	switchStatus(StatusEnum.NOTREADY);
 	StatusEnum.ready_dbid = StatusEnum.updateStatus(StatusEnum.READY, "end", StatusEnum.ready_dbid);
-	alert("notreadyreason_dbid_g: " + notreadyreason_dbid_g);
+//	alert("notreadyreason_dbid_g: " + notreadyreason_dbid_g);
 	StatusEnum.updateStatus(StatusEnum.NOTREADY, "start", null, null, null, notreadyreason_dbid_g);
 //	StatusEnum.updateStatus(StatusEnum.NOTREADY, "start");
 }

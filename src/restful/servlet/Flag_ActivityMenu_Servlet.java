@@ -45,6 +45,8 @@ public class Flag_ActivityMenu_Servlet {
 		JSONObject jsonObject = new JSONObject();
 		Activitymenu activitymenu = new Activitymenu();
 		
+		deleteflag.trim();
+		
 		activitymenu.setDeleteflag(deleteflag);
 
 		MaintainService maintainservice = new MaintainService();	
@@ -53,19 +55,40 @@ public class Flag_ActivityMenu_Servlet {
   	 
 	
 		List<Activitymenu> activitymenulist = maintainservice.Flag_activitymenu(activitymenu);
+		
+		if(deleteflag.equals("0")){
+			  for (int i = 0; i < activitymenulist.size(); i++) {
+		  		  	JSONObject activitymenuObject = new JSONObject();
+		  	  		activitymenuObject.put("dbid", activitymenulist.get(i).getDbid());
+		  	  		activitymenuObject.put("createdatetime", activitymenulist.get(i).getCreatedatetime().substring(0, 19));
+//		  	  		activitymenuObject.put("deletedatetime", activitymenulist.get(i).getDeletedatetime().substring(0, 19));
+		  	  		activitymenuObject.put("deleteflag", activitymenulist.get(i).getDeleteflag());
+		  	  		activitymenuObject.put("menuname", activitymenulist.get(i).getMenuname());
+		  	  		activitymenuObject.put("sort", activitymenulist.get(i).getSort());
+		  	  	
+		  	  		ActivitymenuJsonArray.put(activitymenuObject);
+		  	  }
+		    		jsonObject.put("activitymenu", ActivitymenuJsonArray);
+			
+		}else if(deleteflag.equals("1")){
+			
+			  for (int i = 0; i < activitymenulist.size(); i++) {
+		  		  	JSONObject activitymenuObject = new JSONObject();
+		  	  		activitymenuObject.put("dbid", activitymenulist.get(i).getDbid());
+		  	  		activitymenuObject.put("createdatetime", activitymenulist.get(i).getCreatedatetime().substring(0, 19));
+		  	  		activitymenuObject.put("deletedatetime", activitymenulist.get(i).getDeletedatetime().substring(0, 19));
+		  	  		activitymenuObject.put("deleteflag", activitymenulist.get(i).getDeleteflag());
+		  	  		activitymenuObject.put("menuname", activitymenulist.get(i).getMenuname());
+		  	  		activitymenuObject.put("sort", activitymenulist.get(i).getSort());
+		  	  	
+		  	  		ActivitymenuJsonArray.put(activitymenuObject);
+		  	  }
+		    		jsonObject.put("activitymenu", ActivitymenuJsonArray);
+			
+			
+		}
 	    
-  	  for (int i = 0; i < activitymenulist.size(); i++) {
-  		  	JSONObject activitymenuObject = new JSONObject();
-  	  		activitymenuObject.put("dbid", activitymenulist.get(i).getDbid());
-  	  		activitymenuObject.put("createdatetime", activitymenulist.get(i).getCreatedatetime().substring(0, 19));
-  	  		activitymenuObject.put("deletedatetime", activitymenulist.get(i).getDeletedatetime().substring(0, 19));
-  	  		activitymenuObject.put("deleteflag", activitymenulist.get(i).getDeleteflag());
-  	  		activitymenuObject.put("menuname", activitymenulist.get(i).getMenuname());
-  	  		activitymenuObject.put("sort", activitymenulist.get(i).getSort());
-  	  	
-  	  		ActivitymenuJsonArray.put(activitymenuObject);
-  	  }
-    		jsonObject.put("activitymenu", ActivitymenuJsonArray);
+  	
   	  	
     	
 

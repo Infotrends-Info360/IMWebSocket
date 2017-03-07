@@ -106,42 +106,56 @@ public class WebSocketTypePool{
 	/** * Get Online Longest User(Agent) * @return */
 	synchronized public static String getOnlineLongestUserinTYPE(WebSocket aConn, String aTYPE) {
 //		Util.getConsoleLogger().debug("getOnlineLongestUserinTYPE() called");
-		Map<WebSocket,  UserInfo> TYPEmap = TYPEconnections.get(aTYPE);
-		if (TYPEmap == null || TYPEmap.isEmpty()){ 
+		UserInfo settingUserInfo = null;
+		
+		String poppedAgentID = WebSocketUserPool.getReadyAgentQueue().poll();
+		if (poppedAgentID != null){
+			WebSocket poppedAgentConn = WebSocketUserPool.getWebSocketByUser(poppedAgentID);
+			settingUserInfo = WebSocketUserPool.getUserInfoByKey(poppedAgentConn);
+			Util.getConsoleLogger().debug("agentUserInfo.getUsername(): " + settingUserInfo.getUsername() + " popped out");
+			Util.getConsoleLogger().debug("WebSocketUserPool.getReadyAgentQueue().size(): " + WebSocketUserPool.getReadyAgentQueue().size());			
+		// 若沒有任何Queue在裡面,就傳回null
+		}else{
 			return null;
 		}
-		String settingUser = null;
-		UserInfo settingUserInfo = null;
-		Date date = new Date();
-		long UserStayTime = date.getTime();
-		Collection<UserInfo> setUser = TYPEmap.values();
-		for (UserInfo userInfo : setUser) {
-			if (!userInfo.getStatusEnum().equals(StatusEnum.READY)) {
-				continue;
-			}
-			//setUsers.add(u.get("userid").toString());
-			SimpleDateFormat sdf = new SimpleDateFormat(Util.getSdfTimeFormat());
-			String userdatestring = userInfo.getReadyTime(); // 關鍵是這行
-			if (userdatestring == null) continue;
-			Date userdate = null;
-			try { 
-				userdate = sdf.parse(userdatestring);
-			} catch (ParseException e) {
-				e.printStackTrace();
-			} catch (Exception e){
-				e.printStackTrace();
-			}
-//			Util.getConsoleLogger().debug("Agent Status - userInfo.getStatus(): " + userInfo.getStatus());
-//			Util.getConsoleLogger().debug("Agent Status - StatusEnum.READY.getValue(): " + StatusEnum.READY.getDbid());
-			if(userdate.getTime() <= UserStayTime && userInfo.getStatusEnum().equals(StatusEnum.READY)){
-				UserStayTime = userdate.getTime(); // 每次都會將UserStayTime拿去當作"上一個"Uset的等待時間
-				settingUser = userInfo.getUserid();
-				settingUserInfo = userInfo;
-			}
-		}
+		
+		
+//		Map<WebSocket,  UserInfo> TYPEmap = TYPEconnections.get(aTYPE);
+//		if (TYPEmap == null || TYPEmap.isEmpty()){ 
+//			return null;
+//		}
+//		String settingUser = null;
+////		UserInfo settingUserInfo = null;
+//		Date date = new Date();
+//		long UserStayTime = date.getTime();
+//		Collection<UserInfo> setUser = TYPEmap.values();
+//		for (UserInfo userInfo : setUser) {
+//			if (!userInfo.getStatusEnum().equals(StatusEnum.READY)) {
+//				continue;
+//			}
+//			//setUsers.add(u.get("userid").toString());
+//			SimpleDateFormat sdf = new SimpleDateFormat(Util.getSdfTimeFormat());
+//			String userdatestring = userInfo.getReadyTime(); // 關鍵是這行
+//			if (userdatestring == null) continue;
+//			Date userdate = null;
+//			try { 
+//				userdate = sdf.parse(userdatestring);
+//			} catch (ParseException e) {
+//				e.printStackTrace();
+//			} catch (Exception e){
+//				e.printStackTrace();
+//			}
+////			Util.getConsoleLogger().debug("Agent Status - userInfo.getStatus(): " + userInfo.getStatus());
+////			Util.getConsoleLogger().debug("Agent Status - StatusEnum.READY.getValue(): " + StatusEnum.READY.getDbid());
+//			if(userdate.getTime() <= UserStayTime && userInfo.getStatusEnum().equals(StatusEnum.READY)){
+//				UserStayTime = userdate.getTime(); // 每次都會將UserStayTime拿去當作"上一個"Uset的等待時間
+//				settingUser = userInfo.getUserid();
+//				settingUserInfo = userInfo;
+//			}
+//		}
 //		return settingUser;
 		// 若沒有任何Agent處於READY狀態,則回傳null
-		if (settingUserInfo == null) return null;
+//		if (settingUserInfo == null) return null;
 		settingUserInfo.setStatusEnum(StatusEnum.NOTREADY); // 直接改了,避免一個以上Client找到同一個Agent
 		
 		// 開始更新狀態: 
@@ -158,12 +172,6 @@ public class WebSocketTypePool{
 		usb.setStatus(StatusEnum.NOTREADY.getDbid());
 		usb.setStartORend("start");
 		usb.setReason_dbid("9"); // 先暫時這樣
-		CommonFunction.updateStatus(gson.toJson(usb), agentConn);
-//		// 3. RING狀態開始
-		usb = new UpdateStatusBean();
-		usb.setStatus(StatusEnum.RING.getDbid());
-		usb.setStartORend("start");
-		usb.setClientID( WebSocketUserPool.getUserID(aConn));
 		CommonFunction.updateStatus(gson.toJson(usb), agentConn);
 		
 		return settingUserInfo.getUserid();
