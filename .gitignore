@@ -1,10 +1,4 @@
 /WebContent/META-INF/*
 /target/m2e-wtp/web-resources/META-INF/maven/IMWebSocket/IMWebSocket/pom.properties
 /target/
-/log/Log4j.log
 /log4j2/*
-/log4j2/**
-/log4j2/common.log
-log4j2/*
-log4j2/**
-log4j2/common.log
