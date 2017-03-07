@@ -128,7 +128,6 @@ public class UserInfo {
 	public void setRoomOwner(String roomOwner) {
 		this.roomOwner = roomOwner;
 	}
-	 
 	
 }
 
