@@ -32,8 +32,6 @@ public class UserInfo {
 	private AtomicBoolean stopRing = new AtomicBoolean(false); // 處理concurrent問題
 	private AtomicBoolean timeout = new AtomicBoolean(false); // 處理concurrent問題
 	
-	private String roomOwner;
-	
 	// 狀態更新使用 - 存放status log dbid - "end"時寫入DB用
 	private Map<StatusEnum, String> statusDBIDMap = new HashMap<>();
 	
@@ -121,12 +119,6 @@ public class UserInfo {
 	}
 	public void setStatusDBIDMap(Map<StatusEnum, String> statusDBIDMap) {
 		this.statusDBIDMap = statusDBIDMap;
-	}
-	public String getRoomOwner() {
-		return roomOwner;
-	}
-	public void setRoomOwner(String roomOwner) {
-		this.roomOwner = roomOwner;
 	}
 	
 	

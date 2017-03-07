@@ -1,7 +1,7 @@
 var ws_g;
 var UserID_g;
 var UserName_g;
-var RoomID_g = "";
+var RoomID_g;
 var contactID_g;
 var isonline_g = false;
 var startdate_g = new Date();

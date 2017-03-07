@@ -4,6 +4,7 @@ import java.io.IOException;
 
 
 
+import java.util.ArrayList;
 import java.util.List;
 
 import javax.ws.rs.FormParam;
@@ -62,87 +63,78 @@ public class Query_Servlet {
 		MaintainService maintainservice = new MaintainService();		
 		List<Interaction> interactionlist = maintainservice.Selcet_interaction(interaction);
 		
-		JSONArray InteractionJsonArray = new JSONArray();
-		JSONArray Rpt_ActivitylogJsonArray = new JSONArray();
-		JSONArray ActivitydataJsonArray = new JSONArray();
 		JSONArray PersonJsonArray = new JSONArray();
 		JSONArray testArray = new JSONArray();
 		
+//			List<String> name_list = new ArrayList<String>();
+		String name = "";
+
   	    	for(int a = 0; a < interactionlist.size(); a++){
 
-   	    	JSONObject InteractionJsonObject = new JSONObject();
-  	    		
-  	    	InteractionJsonObject.put("agentid", interactionlist.get(a).getAgentid());
-  	    	InteractionJsonObject.put("enddate", interactionlist.get(a).getEnddate());
-  	    	InteractionJsonObject.put("entitytypeid", interactionlist.get(a).getEntitytypeid());
-  	    	InteractionJsonObject.put("ixnid", interactionlist.get(a).getIxnid());
-  	    	InteractionJsonObject.put("startdate", interactionlist.get(a).getStartdate());
-  	    	InteractionJsonObject.put("thecomment", interactionlist.get(a).getThecomment());
-  	    	InteractionJsonObject.put("entitytypeid", interactionlist.get(a).getEntitytypeid());
-
-  	    	InteractionJsonArray.put(InteractionJsonObject);
-  	    	
   	    	
   	    	rpt_activitylog.setInteractionid(interactionlist.get(a).getIxnid());
   	    	List<Rpt_Activitylog> rpt_activityloglist = maintainservice.Selcet_activitylog(rpt_activitylog);
   	    	
   	    	for(int g = 0; g < rpt_activityloglist.size(); g++){
-  	    		JSONObject rpt_activitylogJsonObject = new JSONObject();
-  	    		
-  	    		rpt_activitylogJsonObject.put("interactionid", rpt_activityloglist.get(g).getInteractionid());
-  	    		rpt_activitylogJsonObject.put("activitydataid", rpt_activityloglist.get(g).getActivitydataid());
-  	    		rpt_activitylogJsonObject.put("datetime", rpt_activityloglist.get(g).getDatetime());
-  	    		
-  	    		Rpt_ActivitylogJsonArray.put(rpt_activitylogJsonObject);
-  	    	   		
-  	    		
-  	    		if(rpt_activityloglist.get(g).getActivitydataid()!=null &&!rpt_activityloglist.get(g).getActivitydataid().equals("")){
-  	    			
-  	    				Integer aa = Integer.valueOf(rpt_activityloglist.get(g).getActivitydataid());
-  	    		
-  	    				activitydata.setDbid(aa);
-  	    				List<Activitydata> activitydatalist = maintainservice.IXN_activitydata(activitydata);
-  	  	    
-  	    				for(int b = 0; b < activitydatalist.size(); b++){
-  	    			
-  	    					JSONObject activitydataObject = new JSONObject();
-  	    					activitydataObject.put("activitygroupsid", activitydatalist.get(b).getActivitygroupsid());
-  	    					activitydataObject.put("codename", activitydatalist.get(b).getCodename());
-  	    					activitydataObject.put("deleteflag", activitydatalist.get(b).getDeleteflag());
-        			
-  	    					ActivitydataJsonArray.put(activitydataObject);
-  	    					
-  	    						Integer bb = Integer.valueOf(interactionlist.get(a).getAgentid());
-  	    							cfg_person.setDbid(bb);
-  	    								List<CFG_person> cfg_personlist = maintainservice.query_Person_DBID(cfg_person);
-  	    									for(int d = 0; d < cfg_personlist.size(); d++){
-  	    											JSONObject cfg_personObject = new JSONObject();
-  	    											cfg_personObject.put("username", cfg_personlist.get(d).getUser_name());
 
-  	    											PersonJsonArray.put(cfg_personObject);
-  	    											
-  	    											
-  	    											JSONObject testobj = new JSONObject();
-
-  	    											testobj.put("User_name", cfg_personlist.get(d).getUser_name());
-  	    											testobj.put("Thecomment", interactionlist.get(a).getThecomment());
-  	    											testobj.put("Startdate", interactionlist.get(a).getStartdate());
-  	    											testobj.put("Enddate", interactionlist.get(a).getEnddate());
-  	    											testobj.put("Codename", activitydatalist.get(b).getCodename());
-  	    											
-  	    											if(interactionlist.get(a).getEntitytypeid().equals("2")){
-  	    												testobj.put("src", "chat");
-  	  	    											
-  	    											}
-  	    											
-  	    										
-  	    											testArray.put(testobj);
-  	    									}
-  	    					
-  	    				}
+  	    		
+//  	    		System.out.println(rpt_activityloglist.get(g).getActivitydataid());
+  	    		
+  	    		if(rpt_activityloglist.get(g).getActivitydataid()!=null &&
+  					!rpt_activityloglist.get(g).getActivitydataid().equals("") &&
+  						!rpt_activityloglist.get(g).getActivitydataid().equals("null")){
+  	    		
+  	    			//for(int j =0; j<rpt_activityloglist.size();j++){
+  	    				//if(rpt_activityloglist.get(g).getActivitydataid()!=null && !rpt_activityloglist.get(g).getActivitydataid().equals("")){
+  	    				activitydata.setDbid(Integer.valueOf(rpt_activityloglist.get(g).getActivitydataid()));
+  	  	    			
+  	  	    			List<Activitydata> activitydatalist = maintainservice.IXN_activitydata(activitydata);
+  	  	    			//activitydatalist.get(0).getCodename();
+  	  	    			name+=activitydatalist.get(0).getCodename()+",";
+//  	  	    			name_list.add(activitydatalist.get(0).getCodename());
+  	    				//}
+  	  	    			
+  	    			//}
   	    		}
+  	    		
+  	    	}	
   	    	
-  	    	}
+  	    	
+  	    	
+  	    	
+  	    		if(interactionlist.get(a).getAgentid()!=null &&
+  	  					!interactionlist.get(a).getAgentid().equals("") &&
+  	  						!interactionlist.get(a).getAgentid().equals("null")){	
+  	    		Integer bb = Integer.valueOf(interactionlist.get(a).getAgentid());
+					cfg_person.setDbid(bb);
+  	    		}
+						List<CFG_person> cfg_personlist = maintainservice.query_Person_DBID(cfg_person);
+							for(int d = 0; d < cfg_personlist.size(); d++){
+									JSONObject cfg_personObject = new JSONObject();
+									cfg_personObject.put("username", cfg_personlist.get(d).getUser_name());
+
+									PersonJsonArray.put(cfg_personObject);
+									
+									
+									JSONObject testobj = new JSONObject();
+
+									testobj.put("Agentname", cfg_personlist.get(d).getUser_name());
+									testobj.put("Thecomment", interactionlist.get(a).getThecomment());
+									testobj.put("Startdate", interactionlist.get(a).getStartdate());
+									testobj.put("Enddate", interactionlist.get(a).getEnddate());
+									testobj.put("Codename",name.substring(0, name.length()-1));
+									testobj.put("ixnid", interactionlist.get(a).getIxnid());
+									
+									if(interactionlist.get(a).getEntitytypeid().equals("2")){
+										testobj.put("src", "chat");
+										
+									}
+									
+								
+									testArray.put(testobj);
+							}
+  	    	
+  	    	
   	    	
   	    	}
 //  	    jsonObject.put("Interaction", InteractionJsonArray);
