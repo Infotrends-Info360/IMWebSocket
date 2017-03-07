@@ -1,8 +1,0 @@
-LOGIN: 
-    status	startORend       dbid     roomID   clientID     reason
-----------------------------------------------------------------------------
-         1	     start       null       null       null       null
-NOTREADY: 
-    status	startORend       dbid     roomID   clientID     reason
-----------------------------------------------------------------------------
-         4	     start       null       null       null          0

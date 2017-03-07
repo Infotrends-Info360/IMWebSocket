@@ -13,6 +13,7 @@ import java.util.Set;
 
 
 
+
 import org.apache.logging.log4j.Level;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -27,6 +28,7 @@ import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 
+import filter.SystemListener;
 import filter.startFilter;
 import util.Util;
 import websocket.bean.RoomInfo;
@@ -49,6 +51,9 @@ public class WebSocket extends WebSocketServer {
 		super(new InetSocketAddress(port));
 		Util.getConsoleLogger().info("WebSocket Port initialized: " + port);
 		Util.getFileLogger().info("WebSocket Port initialized: " + port);
+		
+		Logger logger2 = LogManager.getLogger(SystemListener.class);
+    	logger2.error("filter pkg logger test");
 		
 //		Logger log = LogManager.getLogger(WebSocket.class);
 //		log.printf(Level.INFO,"%s *********************************************%n",5);

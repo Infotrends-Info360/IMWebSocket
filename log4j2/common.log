@@ -1,0 +1,20 @@
+[17/03/07 11:42:45][ INFO][filter.startFilter                 -30   ] - Starting websocket
+[17/03/07 11:42:45][ INFO][websocket.WebSocket                -52   ] - WebSocket Port initialized: 8888
+[17/03/07 11:42:45][ INFO][filter.startFilter                 -44   ] - Starting websocket success！
+[17/03/07 11:42:52][ INFO][websocket.WebSocket                -90   ] - org.java_websocket.WebSocketImpl@2601cad is connected
+[17/03/07 11:42:53][ INFO][websocket.HeartBeat                -23   ] - 林智凱 is connected. (HeartBeat)
+[17/03/07 11:42:53][ INFO][websocket.function.CommonFunction  -422  ] - updateStatus: start - LOGIN - 林智凱
+[17/03/07 11:42:53][ INFO][websocket.function.CommonFunction  -422  ] - updateStatus: start - NOTREADY - 林智凱
+[17/03/07 11:42:55][ INFO][websocket.function.CommonFunction  -422  ] - updateStatus: end - NOTREADY - 林智凱
+[17/03/07 11:42:55][ INFO][websocket.function.CommonFunction  -422  ] - updateStatus: start - READY - 林智凱
+[17/03/07 11:43:08][ INFO][websocket.function.CommonFunction  -422  ] - updateStatus: end - LOGOUT - 林智凱
+[17/03/07 11:43:09][ INFO][websocket.function.CommonFunction  -422  ] - updateStatus: end - NOTREADY - 林智凱
+[17/03/07 11:43:09][ INFO][websocket.function.CommonFunction  -422  ] - updateStatus: end - READY - 林智凱
+[17/03/07 11:43:09][ INFO][websocket.function.CommonFunction  -422  ] - updateStatus: end - RING - 林智凱
+[17/03/07 11:43:09][ INFO][websocket.WebSocket                -68   ] - 林智凱 is disconnected. (onClose)
+[17/03/07 11:43:16][ INFO][filter.startFilter                 -30   ] - Starting websocket
+[17/03/07 11:43:16][ INFO][websocket.WebSocket                -52   ] - WebSocket Port initialized: 8888
+[17/03/07 11:43:16][ INFO][filter.startFilter                 -44   ] - Starting websocket success！
+[17/03/07 11:44:45][ INFO][filter.startFilter                 -30   ] - Starting websocket
+[17/03/07 11:44:45][ INFO][websocket.WebSocket                -52   ] - WebSocket Port initialized: 8888
+[17/03/07 11:44:45][ INFO][filter.startFilter                 -44   ] - Starting websocket success！
