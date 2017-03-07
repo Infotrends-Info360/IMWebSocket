@@ -1,0 +1,123 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+
+       Copyright 2009-2016 the original author or authors.
+
+       Licensed under the Apache License, Version 2.0 (the "License");
+       you may not use this file except in compliance with the License.
+       You may obtain a copy of the License at
+
+          http://www.apache.org/licenses/LICENSE-2.0
+
+       Unless required by applicable law or agreed to in writing, software
+       distributed under the License is distributed on an "AS IS" BASIS,
+       WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+       See the License for the specific language governing permissions and
+       limitations under the License.
+
+-->
+<!DOCTYPE mapper
+    PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+    "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="cfg_person">
+
+  <resultMap type="com.Info360.bean.CFG_person" id="cfg_personResult">
+    <id     column="DBID" 			 jdbcType="INTEGER" property="dbid"/>
+    <result column="ACCOUNT" 		 jdbcType="VARCHAR" property="account"/>
+    <result column="FIRSTNAME" 	 	 jdbcType="VARCHAR" property="first_name"/>
+    <result column="LASTNAME"     	 jdbcType="VARCHAR" property="last_name"/>
+    <result column="USER_NAME"    	 jdbcType="VARCHAR" property="user_name"/>
+    <result column="EMAILADDRESS" 	 jdbcType="VARCHAR" property="emailaddress"/>
+    <result column="EMPLOYEE_ID"  	 jdbcType="VARCHAR" property="employee_id"/>
+    <result column="STATE"        	 jdbcType="INTEGER" property="state"/>
+    <result column="DN"              jdbcType="INTEGER" property="dn"/>
+    <result column="CREATEDATETIME"  jdbcType="VARCHAR" property="createdatetime"/>
+    <result column="PASSWORD" 		 jdbcType="VARCHAR" property="password"/>
+    <result column="CREATEUSERID" 	  jdbcType="INTEGER" property="createuserid"/>
+    <result column="CH_PASS_ON_LOGIN" jdbcType="VARCHAR" property="ch_pass_on_login"/>
+    <result column="PASS_ERROR_COUNT" jdbcType="INTEGER" property="pass_error_count"/>
+    <result column="MAX_COUNT" jdbcType="INTEGER" property="max_count"/>
+  </resultMap>
+  
+ 
+  <select id="Login_PersonInfo" parameterType="com.Info360.bean.CFG_person"  resultMap="cfg_personResult">
+    select DBID,ACCOUNT,FIRSTNAME,LASTNAME,USER_NAME,EMAILADDRESS,EMPLOYEE_ID,STATE,DN,CREATEDATETIME,PASSWORD,PASS_ERROR_COUNT,CH_PASS_ON_LOGIN,MAX_COUNT from tblCfg_Person where account=#{account}
+  </select>
+  <select id="Ppermission" parameterType="com.Info360.bean.CFG_person"  resultMap="cfg_personResult">
+    select DBID,ACCOUNT,FIRSTNAME,LASTNAME,USER_NAME,EMAILADDRESS,EMPLOYEE_ID,STATE,DN,CREATEDATETIME,PASSWORD,MAX_COUNT from tblCfg_Person where dbid=#{dbid}
+  </select>
+  <select id="Query_PersonInfo_Account" parameterType="com.Info360.bean.CFG_person"  resultMap="cfg_personResult">
+    select DBID,ACCOUNT,PASSWORD from tblCfg_Person   
+    <if test="account != null and !&quot;&quot;.equals(account.trim())">
+     	where account =#{account}
+    </if>
+  </select>
+  
+   <select id="Query_PersonInfo_DBID" parameterType="com.Info360.bean.CFG_person"  resultMap="cfg_personResult">
+    select DBID,ACCOUNT,FIRSTNAME,LASTNAME,USER_NAME,EMAILADDRESS,EMPLOYEE_ID,STATE,DN,CREATEDATETIME,PASSWORD,DN,MAX_COUNT
+    from  tblcfg_person  
+    <if test="dbid != 0">
+     	where dbid =#{dbid}
+    </if>
+  </select>
+  
+  
+  <select id="Query_PersonInfo_STATE" parameterType="com.Info360.bean.CFG_person"  resultMap="cfg_personResult">
+    select ACCOUNT,FIRSTNAME,LASTNAME,USER_NAME,EMAILADDRESS,EMPLOYEE_ID,STATE,DN,CREATEDATETIME,PASSWORD,DN,MAX_COUNT,DBID
+    from  tblcfg_person  
+    <if test="state == 1">
+     	where state =1
+    </if>
+     <if test="state == 0">
+     	where state =0 or state =2
+    </if>
+  </select>
+
+ <insert id="Insert_PersonInfo" parameterType="com.Info360.bean.CFG_person">
+  	insert into tblcfg_person 
+  	(ACCOUNT,FIRSTNAME,LASTNAME,USER_NAME,EMAILADDRESS,EMPLOYEE_ID,STATE,PASSWORD,DN,CH_PASS_ON_LOGIN,CREATEDATETIME,MAX_COUNT) 
+  	values 
+  	(#{account},#{first_name},#{last_name},#{user_name},#{emailaddress},#{employee_id},#{state},#{password},#{dn},#{ch_pass_on_login},#{createdatetime},#{max_count})                   
+  </insert>
+  
+   <update id="Logic_Delete" parameterType="com.Info360.bean.CFG_person">
+  	update tblcfg_person set STATE=#{state},PASS_ERROR_COUNT=#{pass_error_count}
+  	where dbid=#{dbid}
+  	<if test="personDBID_list.size() > 0">
+ 	<foreach item="value" index="key" collection="personDBID_list"
+		open="or" separator="or" close="">
+ 	 dbid=#{value}
+	</foreach>
+	</if>
+  	         
+  </update>
+  
+    <update id="login_ErrorCount" parameterType="com.Info360.bean.CFG_person">
+  	update tblcfg_person set PASS_ERROR_COUNT=#{pass_error_count},STATE=#{state}
+  	where account=#{account}                 
+   </update>
+  
+  
+  
+  <update id="Update_PersonInfo" parameterType="com.Info360.bean.CFG_person">
+    update  tblcfg_person  set FIRSTNAME=#{first_name},STATE=#{state},PASSWORD=#{password},
+    LASTNAME=#{last_name},USER_NAME=#{user_name},EMAILADDRESS=#{emailaddress},EMPLOYEE_ID=#{employee_id},DN=#{dn},
+    CH_PASS_ON_LOGIN=#{ch_pass_on_login},MAX_COUNT=#{max_count},PASS_ERROR_COUNT=#{pass_error_count}
+    where account=#{account}
+  </update>
+  
+  <delete id="Delete_PersonInfo" parameterType="com.Info360.bean.CFG_person">
+    delete tblcfg_person where dbid=#{dbid}
+    <if test="personDBID_list.size() > 0">
+ 	<foreach item="value" index="key" collection="personDBID_list"
+		open="or" separator="or" close="">
+ 	 dbid=#{value}
+	</foreach>
+	</if>
+    
+  </delete>
+  
+ 
+  
+</mapper>

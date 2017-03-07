@@ -30,6 +30,8 @@ import com.Info360.dao.Rpt_ActivitylogDao;
 import com.Info360.dao.Rpt_AgentStatusDao;
 import com.Info360.dao.ServiceEntryDao;
 import com.Info360.util.IsError;
+import com.Info360.bean.CFG_person;
+import com.Info360.dao.CFG_personDao;
 
 /**
  * 維護相關業務功能
@@ -37,6 +39,66 @@ import com.Info360.util.IsError;
  * @author Lin
  */
 public class MaintainService {
+	
+	/**
+	 * Select個人或全體資料的業務邏輯
+	 * DBID Query
+	 * @param cfg_person.account
+	 */
+
+	public List<CFG_person> query_Person_DBID(CFG_person cfg_person) {
+		
+			List<CFG_person> cfg_personlist = new ArrayList<CFG_person>();
+			try {
+				CFG_personDao cfg_personDao = new CFG_personDao();
+				cfg_personlist = cfg_personDao.query_Person_DBID(cfg_person);
+			} catch (Exception e) {
+				IsError.GET_EXCEPTION = e.getMessage();
+			}
+			return cfg_personlist;
+		
+	}
+	
+	/**
+	 * 
+	 * IXN_activitydata
+	 * 
+	 * @param IXN_activitydata
+	 */
+	public List<Activitydata> IXN_activitydata(Activitydata activitydata) {
+
+		List<Activitydata> activitydatalist = new ArrayList<Activitydata>();
+		try {
+			ActivitydataDao activitydatadao = new ActivitydataDao();
+			activitydatalist = activitydatadao.IXN_activitydata(activitydata);
+		} catch (Exception e) {
+			IsError.GET_EXCEPTION = e.getMessage();
+			e.printStackTrace();
+		}
+		return activitydatalist;
+	}
+	
+	
+	
+	/**
+	 * 
+	 * Selcet_activitylog
+	 * 
+	 * @param Selcet_activitylog
+	 */
+	public List<Rpt_Activitylog> Selcet_activitylog(Rpt_Activitylog rpt_activitylog) {
+
+		List<Rpt_Activitylog> rpt_activityloglist = new ArrayList<Rpt_Activitylog>();
+		try {
+			Rpt_ActivitylogDao Rpt_ActivitylogDaoDao = new Rpt_ActivitylogDao();
+			rpt_activityloglist = Rpt_ActivitylogDaoDao.Selcet_activitylog(rpt_activitylog);
+		} catch (Exception e) {
+			IsError.GET_EXCEPTION = e.getMessage();
+			e.printStackTrace();
+		}
+		return rpt_activityloglist;
+	}
+	
 
 	/**
 	 * 

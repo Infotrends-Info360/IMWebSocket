@@ -60,25 +60,29 @@
 <!-- SUBJECT,TEXT,STRUCTUREDTEXT,STRUCTUREDMIMETYPE,THECOMMENT,STOPPEDREASON,ACTIVITYCODE  -->
 <!--  from tblInteraction  -->
  
-select  DBID,CONTACTID,IXNID,AGENTID,STARTDATE,ENDDATE,STATUS,TYPEID,ENTITYTYPEID,SUBTYPEID,SUBJECT,TEXT,STRUCTUREDTEXT,STRUCTUREDMIMETYPE,THECOMMENT from 
-( select row_number() over(order by dbid asc) as rownumber,DBID,CONTACTID,IXNID,AGENTID,STARTDATE,ENDDATE,STATUS,TYPEID,ENTITYTYPEID,SUBTYPEID,SUBJECT,TEXT,STRUCTUREDTEXT,STRUCTUREDMIMETYPE,THECOMMENT from (select DBID,CONTACTID,IXNID,AGENTID,STARTDATE,ENDDATE,STATUS,TYPEID,ENTITYTYPEID,SUBTYPEID,SUBJECT,TEXT,STRUCTUREDTEXT,STRUCTUREDMIMETYPE,THECOMMENT FROM tblInteraction where 1=1
+select  DBID,CONTACTID,IXNID,AGENTID,STARTDATE,ENDDATE,STATUS,TYPEID,ENTITYTYPEID,SUBTYPEID,SUBJECT,TEXT,STRUCTUREDTEXT,STRUCTUREDMIMETYPE,THECOMMENT
+
+FROM tblInteraction where 1=1
 
 
-<if test="agentid!=&quot;&quot;">
+<if test="agentid!=&quot;&quot; &amp;&amp;agentid!=null ">
  	and 
  		AGENTID =#{agentid}
 </if>
-<if test="startdate!=&quot;&quot;">
+<if test="startdate!=&quot;&quot;&amp;&amp;agentid!=null">
 	and
  		<![CDATA[ Convert(DateTime,StartDate) >=Convert(DateTime,#{startdate})]]>
 </if>
-<if test="enddate!=&quot;&quot;">
+<if test="enddate!=&quot;&quot;&amp;&amp;agentid!=null">
     and  
    		<![CDATA[ Convert(DateTime,EndDate) <= Convert(DateTime,DATEADD(day,1,#{enddate}))  ]]>
 </if>
-) as comImg)
-as numComImg where rownumber>#{page}
+
 </select>
+
+
+
+
 
 
 
