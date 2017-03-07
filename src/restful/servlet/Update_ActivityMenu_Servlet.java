@@ -37,8 +37,8 @@ public class Update_ActivityMenu_Servlet {
 	@Produces("application/json")
 	public Response PostFromPath(
 			@FormParam("dbid") 	int dbid,
-			@FormParam("menuname") 	String menuname,
-			@FormParam("sort") 	String sort
+			@FormParam("menuname") 	String menuname
+		
 		
 			
 			) throws IOException {
@@ -49,7 +49,7 @@ public class Update_ActivityMenu_Servlet {
 		
 		activitymenu.setDbid(dbid);
 		activitymenu.setMenuname(menuname);
-		activitymenu.setSort(sort);
+
 	
 		
 		MaintainService maintainservice = new MaintainService();		

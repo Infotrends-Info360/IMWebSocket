@@ -80,7 +80,6 @@ public class Query_ActivityMenu_Servlet {
         	  	  	JSONObject activitygroupsObject = new JSONObject();
         	  	activitygroupsObject.put("dbid", activitygroupslist.get(a).getDbid());
         	  	activitygroupsObject.put("createdatetime", activitygroupslist.get(a).getCreatedatetime());
-        	  	activitygroupsObject.put("deletedatetime", activitygroupslist.get(a).getDeletedatetime());
         	  	activitygroupsObject.put("activitymenuid", activitygroupslist.get(a).getActivitymenuid());
         	  	activitygroupsObject.put("groupname", activitygroupslist.get(a).getGroupname());
         	  	activitygroupsObject.put("sort", activitygroupslist.get(a).getSort());
@@ -89,8 +88,12 @@ public class Query_ActivityMenu_Servlet {
         	  	ActivitygroupsJsonArray.put(activitygroupsObject);
         	  	
         	  	if(activitygroupslist.get(a).getDeleteflag().equals("0")){
+        	  		
         	  		Flag0groupsJsonArray.put(activitygroupsObject);
         	  	}else{
+        	  		
+            	  	activitygroupsObject.put("deletedatetime", activitygroupslist.get(a).getDeletedatetime());
+
         	  		Flag1groupsJsonArray.put(activitygroupsObject);
         	  	}
         	  	

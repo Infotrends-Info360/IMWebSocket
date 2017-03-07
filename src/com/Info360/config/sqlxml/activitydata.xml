@@ -46,13 +46,21 @@ values
 </insert>
 
 <update id="Update_activitydata" parameterType="com.Info360.bean.Activitydata">
-update  tblCfg_ActivityData set CODENAME=#{codename},COLOR=#{color},SORT=#{sort}
+update  tblCfg_ActivityData set CODENAME=#{codename},COLOR=#{color}
 where DBID=#{dbid}
 </update>
 
 <update id="LogicDelete_ActivityData" parameterType="com.Info360.bean.Activitydata">
 update  tblCfg_ActivityData set deleteflag=#{deleteflag},deletedatetime=#{deletedatetime}
-where codename=#{codename}
+where codename=#{codename} or dbid=#{dbid}
+
+	<if test="ActivityData_DBID_list.size() > 0">
+ 		<foreach item="value" index="key" collection="ActivityData_DBID_list"
+			open="or" separator="or" close="">
+ 	 		dbid=#{value}
+		</foreach>
+	</if>
+
 </update>
 
 

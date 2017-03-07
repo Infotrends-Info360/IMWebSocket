@@ -4,7 +4,9 @@ import java.io.IOException;
 
 
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 
 import javax.ws.rs.FormParam;
 import javax.ws.rs.POST;
@@ -37,12 +39,24 @@ public class Logic_De_ActivityGroup_Servlet {
 	
 			@FormParam("groupname") String groupname,
 			@FormParam("deleteflag") String deleteflag,
-			@FormParam("deletedatetime") String deletedatetime
+			@FormParam("deletedatetime") String deletedatetime,
+    		@FormParam("ActivityGroup_DBID_list") String ActivityGroup_DBID_list
+
 			
 			) throws IOException {
 		
 		JSONObject jsonObject = new JSONObject();
 		Activitygroups activitygroups = new Activitygroups();
+		List<Integer> ActivityGroup_DBID_list2 = new ArrayList<Integer>();
+
+		
+		if(ActivityGroup_DBID_list.length()>0){
+			String [] dd = ActivityGroup_DBID_list.split(",");
+			for(int i=0 ;i<dd.length;i++){
+				ActivityGroup_DBID_list2.add(Integer.valueOf(dd[i]));
+			}
+			activitygroups.setActivityGroup_DBID_list(ActivityGroup_DBID_list2);
+		}
 		
 		deleteflag.trim();
 		activitygroups.setGroupname(groupname);
