@@ -9,6 +9,11 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+import java.util.concurrent.Callable;
+import java.util.concurrent.ExecutionException;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
+import java.util.concurrent.Future;
 
 import org.java_websocket.WebSocket;
 
@@ -106,59 +111,29 @@ public class WebSocketTypePool{
 	/** * Get Online Longest User(Agent) * @return */
 	synchronized public static String getOnlineLongestUserinTYPE(WebSocket aConn, String aTYPE) {
 //		Util.getConsoleLogger().debug("getOnlineLongestUserinTYPE() called");
+		String poppedAgentID = null;
 		UserInfo settingUserInfo = null;
+		try {
+//				String poppedAgentID = WebSocketUserPool.getReadyAgentQueue().poll();
+			poppedAgentID = WebSocketUserPool.getReadyAgentQueue().take();// this will block the current Thread if the queue is empty
+		} catch (InterruptedException e) {
+			// if client logout or disconnect, this task in the current thread will be terminated
+			Util.getFileLogger().debug("[Exception] Client " + WebSocketUserPool.getUserNameByKey(aConn) + " cancelled findAgent task");
+			Util.getConsoleLogger().debug("[Exception] Client " + WebSocketUserPool.getUserNameByKey(aConn) + " cancelled findAgent task");
+//			e.printStackTrace();
+		} 
+		Util.getConsoleLogger().debug("poppedAgentID: " + poppedAgentID);
 		
-		String poppedAgentID = WebSocketUserPool.getReadyAgentQueue().poll();
-		if (poppedAgentID != null){
-			WebSocket poppedAgentConn = WebSocketUserPool.getWebSocketByUser(poppedAgentID);
-			settingUserInfo = WebSocketUserPool.getUserInfoByKey(poppedAgentConn);
-			Util.getConsoleLogger().debug("agentUserInfo.getUsername(): " + settingUserInfo.getUsername() + " popped out");
-			Util.getConsoleLogger().debug("WebSocketUserPool.getReadyAgentQueue().size(): " + WebSocketUserPool.getReadyAgentQueue().size());			
-		// 若沒有任何Queue在裡面,就傳回null
-		}else{
-			return null;
-		}
+		if (poppedAgentID == null) return poppedAgentID;
 		
-		
-//		Map<WebSocket,  UserInfo> TYPEmap = TYPEconnections.get(aTYPE);
-//		if (TYPEmap == null || TYPEmap.isEmpty()){ 
-//			return null;
-//		}
-//		String settingUser = null;
-////		UserInfo settingUserInfo = null;
-//		Date date = new Date();
-//		long UserStayTime = date.getTime();
-//		Collection<UserInfo> setUser = TYPEmap.values();
-//		for (UserInfo userInfo : setUser) {
-//			if (!userInfo.getStatusEnum().equals(StatusEnum.READY)) {
-//				continue;
-//			}
-//			//setUsers.add(u.get("userid").toString());
-//			SimpleDateFormat sdf = new SimpleDateFormat(Util.getSdfTimeFormat());
-//			String userdatestring = userInfo.getReadyTime(); // 關鍵是這行
-//			if (userdatestring == null) continue;
-//			Date userdate = null;
-//			try { 
-//				userdate = sdf.parse(userdatestring);
-//			} catch (ParseException e) {
-//				e.printStackTrace();
-//			} catch (Exception e){
-//				e.printStackTrace();
-//			}
-////			Util.getConsoleLogger().debug("Agent Status - userInfo.getStatus(): " + userInfo.getStatus());
-////			Util.getConsoleLogger().debug("Agent Status - StatusEnum.READY.getValue(): " + StatusEnum.READY.getDbid());
-//			if(userdate.getTime() <= UserStayTime && userInfo.getStatusEnum().equals(StatusEnum.READY)){
-//				UserStayTime = userdate.getTime(); // 每次都會將UserStayTime拿去當作"上一個"Uset的等待時間
-//				settingUser = userInfo.getUserid();
-//				settingUserInfo = userInfo;
-//			}
-//		}
-//		return settingUser;
-		// 若沒有任何Agent處於READY狀態,則回傳null
-//		if (settingUserInfo == null) return null;
-		settingUserInfo.setStatusEnum(StatusEnum.NOTREADY); // 直接改了,避免一個以上Client找到同一個Agent
+		// 拿取相對應UserInfo資訊
+		WebSocket poppedAgentConn = WebSocketUserPool.getWebSocketByUser(poppedAgentID);
+		settingUserInfo = WebSocketUserPool.getUserInfoByKey(poppedAgentConn);
+		Util.getConsoleLogger().debug("agentUserInfo.getUsername(): " + settingUserInfo.getUsername() + " popped out");
+		Util.getConsoleLogger().debug("WebSocketUserPool.getReadyAgentQueue().size(): " + WebSocketUserPool.getReadyAgentQueue().size());			
 		
 		// 開始更新狀態: 
+		settingUserInfo.setStatusEnum(StatusEnum.NOTREADY); // 直接改了,避免一個以上Client找到同一個Agent
 		Gson gson = new Gson();
 		WebSocket agentConn = WebSocketUserPool.getWebSocketByUser(settingUserInfo.getUserid());
 		// 1. READY狀態結束
@@ -172,9 +147,23 @@ public class WebSocketTypePool{
 		usb.setStatus(StatusEnum.NOTREADY.getDbid());
 		usb.setStartORend("start");
 		usb.setReason_dbid("9"); // 先暫時這樣
-		CommonFunction.updateStatus(gson.toJson(usb), agentConn);
-		
-		return settingUserInfo.getUserid();
+		CommonFunction.updateStatus(gson.toJson(usb), agentConn);				
+
+//		ExecutorService service = Executors.newCachedThreadPool();
+//		Future<String> taskResult = service.submit(task);
+//		while(!taskResult.isDone()){
+//			// let current thread do something else
+////			Util.getConsoleLogger().debug("taskResult is not done yet");
+//		}
+//		Util.getConsoleLogger().debug("taskResult.getClass(): " + taskResult.getClass() + " is Done");
+//		
+//		try {
+//			poppedAgentID = taskResult.get(); // blocks if the result haven't come out
+//		} catch (InterruptedException | ExecutionException e) {
+//			e.printStackTrace();
+//		}
+
+		return poppedAgentID;
 	}
 	
 	/** * Get Online User Name in Agent or Client * @return */

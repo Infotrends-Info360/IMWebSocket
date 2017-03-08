@@ -7,10 +7,12 @@ import java.util.List;
 import java.util.Map;
 import java.util.Timer;
 import java.util.TimerTask;
+import java.util.concurrent.Future;
 import java.util.concurrent.atomic.AtomicBoolean;
 
 import org.java_websocket.WebSocket;
   
+
 import util.StatusEnum;
 import util.Util;
       
@@ -33,6 +35,8 @@ public class UserInfo {
 	private AtomicBoolean timeout = new AtomicBoolean(false); // 處理concurrent問題
 	
 	private String roomOwner;
+	
+	private Future<?> findAgentTaskResult;
 	
 	// 狀態更新使用 - 存放status log dbid - "end"時寫入DB用
 	private Map<StatusEnum, String> statusDBIDMap = new HashMap<>();
@@ -128,6 +132,14 @@ public class UserInfo {
 	public void setRoomOwner(String roomOwner) {
 		this.roomOwner = roomOwner;
 	}
+	public Future<?> getFindAgentTaskResult() {
+		return findAgentTaskResult;
+	}
+	public void setFindAgentTaskResult(Future<?> findAgentTaskResult) {
+		this.findAgentTaskResult = findAgentTaskResult;
+	}
+	
+	
 	
 }
 
