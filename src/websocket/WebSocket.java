@@ -15,6 +15,11 @@ import java.util.Set;
 
 
 
+import java.util.concurrent.Callable;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
+import java.util.concurrent.Future;
+
 import org.apache.logging.log4j.Level;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -113,10 +118,10 @@ public class WebSocket extends WebSocketServer {
 	 * Event updateStatus getUserStatus findAgent createroomId senduserdata
 	 */
 	@Override
-	public void onMessage(org.java_websocket.WebSocket conn, String message) {
-		message = message.toString();
+	public void onMessage(final org.java_websocket.WebSocket conn, final String message) {
 		Util.getConsoleLogger().trace("WebSocket :\n " +message);
 		Util.getFileLogger().trace("WebSocket :\n " +message);
+		Callable<Object> task = null;
 		JSONObject obj = new JSONObject(message);
 		switch (obj.getString("type").trim()) {
 		case "message":
@@ -159,7 +164,19 @@ public class WebSocket extends WebSocketServer {
 			AgentFunction.RejectEvent(message.toString(), conn);
 			break;
 		case "findAgent":
-			ClientFunction.findAgent(message.toString(), conn);
+			task = new Callable<Object>(){
+				@Override
+				public Object call() throws Exception {
+					// TODO Auto-generated method stub
+					ClientFunction.findAgent(message.toString(), conn);
+					return null;
+				}
+			};
+			ExecutorService service = Executors.newCachedThreadPool();
+			Future<?> taskResult = service.submit(task);
+			UserInfo userInfo = WebSocketUserPool.getUserInfoByKey(conn);
+			userInfo.setFindAgentTaskResult(taskResult);
+			
 			break;
 		case "findAgentEvent":
 			ClientFunction.findAgentEvent(message.toString(), conn);
@@ -204,6 +221,9 @@ public class WebSocket extends WebSocketServer {
 			this.test();
 			break;
 		}
+		
+
+		
 	}
 
 	/** * user leave websocket (Demo) */
@@ -226,6 +246,11 @@ public class WebSocket extends WebSocketServer {
 			boolean result = WebSocketUserPool.getReadyAgentQueue().remove(userid);
 			Util.getConsoleLogger().debug("(onClose)WebSocketUserPool.getReadyAgentQueue().remove(userid): " + result);
 			Util.getConsoleLogger().debug("(onClose)WebSocketUserPool.getReadyAgentQueue().size(): " + WebSocketUserPool.getReadyAgentQueue().size());
+		}
+		
+		// 清Client-findAgentTaskResult
+		if (WebSocketTypePool.isClient(conn)){
+			WebSocketUserPool.getUserInfoByKey(conn).getFindAgentTaskResult().cancel(true);
 		}
 
 		

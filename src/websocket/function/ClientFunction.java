@@ -11,6 +11,10 @@ import java.util.Date;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+import java.util.concurrent.Callable;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
+import java.util.concurrent.Future;
 
 import org.json.JSONArray;
 import org.json.JSONObject;
@@ -46,7 +50,7 @@ public class ClientFunction {
 	}
 	
 	/** * find online Longest Agent */
-	public static void findAgent(String aMessage, org.java_websocket.WebSocket aConn) {
+	public static void findAgent(final String aMessage, final org.java_websocket.WebSocket aConn) {
 		JSONObject obj = new JSONObject(aMessage);
 		String userID = WebSocketUserPool.getUserID(aConn);
 		String userName = WebSocketUserPool.getUserNameByKey(aConn);
@@ -54,13 +58,13 @@ public class ClientFunction {
 		String AgentID;
 		JSONObject sendjson = new JSONObject();
 		try {
-			AgentID = WebSocketTypePool.getOnlineLongestUserinTYPE(aConn, "Agent");
+			AgentID = WebSocketTypePool.getOnlineLongestUserinTYPE(aConn, "Agent"); // this method will block current thread if readyAgentQueue is empty
 			sendjson.put("AgentName", WebSocketUserPool.getUserNameByKey(WebSocketUserPool.getWebSocketByUser(AgentID)));
 		} catch (Exception e) {
 			AgentID = null;
 			e.printStackTrace();
 		}
-//		Util.getConsoleLogger().debug("findAgent : " + Agent);
+//				Util.getConsoleLogger().debug("findAgent : " + Agent);
 		
 		// 在這邊執行senduserdata
 		// 若有找到Agent, 去抓senduserdata, 並將此資訊送給Agent
@@ -77,9 +81,9 @@ public class ClientFunction {
 			attributes.addProperty("service1","service one");
 			attributes.addProperty("service2","service two");
 			// 客戶端版本:
-//			attributes.addProperty("attributenames", "IDNO_");
-//			attributes.addProperty("IDNO_",userName);
-//			attributes.addProperty("id",userID);
+//					attributes.addProperty("attributenames", "IDNO_");
+//					attributes.addProperty("IDNO_",userName);
+//					attributes.addProperty("id",userID);
 			
 			senduserdataObj.add("attributes", attributes);
 			senduserdataObj.addProperty("channel", "chat");
@@ -93,6 +97,12 @@ public class ClientFunction {
 		sendjson.put("Agent",  AgentID);
 		sendjson.put("channel", obj.getString("channel"));
 		WebSocketUserPool.sendMessageToUser(aConn, sendjson.toString());
+				
+		// execute Callable
+//		ExecutorService service = Executors.newCachedThreadPool();
+//		Future<?> taskResult = service.submit(task);
+		
+
 	}
 	
 	/** * Get user data */

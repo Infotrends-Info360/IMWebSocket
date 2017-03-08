@@ -142,10 +142,12 @@ function Login() {
 
 					// 若仍未找到Agent, 則再找
 					if ("null" == obj.Agent || null == obj.Agent) {
-						if (parent.isonline_g) {
-							console.log(UserName_g + " is looking for an agent ... ");
-							findingAgent();
-						}
+//						//20170308 - 此段可省略 - 後端已改為ReadyAgentQueue機制,只需發出一次請求即可
+						//只有找到Agent才會收到此"findAgent"事件,因此不再有找不到的狀況
+//						if (parent.isonline_g) {
+//							console.log(UserName_g + " is looking for an agent ... ");
+//							findingAgent();
+//						}
 					// 若找到Agent, 則進入等待Agent回應狀態	
 					} else {
 						// 控制前端傳值
