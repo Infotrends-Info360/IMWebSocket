@@ -466,13 +466,13 @@ public class CommonFunction {
 			// 如果是READY,則多將readytime重置
 			if (StatusEnum.READY.getDbid().equals(status_dbid)){
 				// 重置Agent readytime
-				SimpleDateFormat tmpSdf = new SimpleDateFormat( Util.getSdfTimeFormat() );
-				String nowDate = tmpSdf.format(new java.util.Date());
-				userInfo.setReadyTime(nowDate);
-				Util.getConsoleLogger().debug("update Agent ready time: ");
-				Util.getConsoleLogger().debug("Agent name: " + userInfo.getUsername() + " set readytime to " + userInfo.getReadyTime());
-				Util.getStatusFileLogger().info("update Agent ready time: ");
-				Util.getStatusFileLogger().info("Agent name: " + userInfo.getUsername() + " set readytime to " + userInfo.getReadyTime());
+//				SimpleDateFormat tmpSdf = new SimpleDateFormat( Util.getSdfTimeFormat() );
+//				String nowDate = tmpSdf.format(new java.util.Date());
+//				userInfo.setReadyTime(nowDate);
+//				Util.getConsoleLogger().debug("update Agent ready time: ");
+//				Util.getConsoleLogger().debug("Agent name: " + userInfo.getUsername() + " set readytime to " + userInfo.getReadyTime());
+//				Util.getStatusFileLogger().info("update Agent ready time: ");
+//				Util.getStatusFileLogger().info("Agent name: " + userInfo.getUsername() + " set readytime to " + userInfo.getReadyTime());
 				
 				WebSocketUserPool.getReadyAgentQueue().offer(userid);
 				Util.getConsoleLogger().debug("(READY)WebSocketUserPool.getReadyAgentQueue().size(): " + WebSocketUserPool.getReadyAgentQueue().size());

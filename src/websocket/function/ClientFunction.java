@@ -63,6 +63,7 @@ public class ClientFunction {
 		} catch (Exception e) {
 			AgentID = null;
 			e.printStackTrace();
+			Util.getFileLogger().error(e.getMessage());
 		}
 //				Util.getConsoleLogger().debug("findAgent : " + Agent);
 		
