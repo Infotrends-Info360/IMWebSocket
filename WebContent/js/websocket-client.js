@@ -493,9 +493,9 @@ function updateAgentInfo(aRoomMemberIDs, aRoomMembers, aRoomSize){
 }
 
 function setinteraction(aStatus, aActivitycode, aClosefrom, aThecomment, aStoppedreason) {
-	if (aClosefrom === undefined) aClosefrom = 'default';
-	if (aThecomment === undefined) aThecomment = 'thecomment';
-	if (aStoppedreason === undefined) aStoppedreason = 'stoppedreason';
+//	if (aClosefrom === undefined) aClosefrom = 'default';
+//	if (aThecomment === undefined) aThecomment = 'thecomment';
+//	if (aStoppedreason === undefined) aStoppedreason = 'stoppedreason';
 	
 	var msg = {
 		type : 'setinteraction',
