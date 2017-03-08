@@ -41,6 +41,63 @@ import com.Info360.dao.CFG_personDao;
 public class MaintainService {
 	
 	/**
+
+	 * @param Query_AMenu_DBID
+	 */
+
+	public List<Activitymenu> Query_AMenu_DBID(Activitymenu activitymenu) {
+		
+			List<Activitymenu> activitymenulist = new ArrayList<Activitymenu>();
+			try {
+				ActivitymenuDao activitymenudao = new ActivitymenuDao();
+				activitymenulist = activitymenudao.Query_AMenu_DBID(activitymenu);
+			} catch (Exception e) {
+				IsError.GET_EXCEPTION = e.getMessage();
+			}
+			return activitymenulist;
+		
+	}
+	
+	/**
+
+	 * @param Query_AMenu_Sort
+	 */
+
+	public List<Activitymenu> Query_AMenu_Sort(Activitymenu activitymenu) {
+		
+			List<Activitymenu> activitymenulist = new ArrayList<Activitymenu>();
+			try {
+				ActivitymenuDao activitymenudao = new ActivitymenuDao();
+				activitymenulist = activitymenudao.Query_AMenu_Sort(activitymenu);
+			} catch (Exception e) {
+				IsError.GET_EXCEPTION = e.getMessage();
+			}
+			return activitymenulist;
+		
+	}
+	
+	/**
+	 * 
+	 * AMenu_Sort
+	 * 
+	 * @param AMenu_Sort
+	 */
+	public int AMenu_Sort(Activitymenu activitymenu) {
+		int count = 0;
+		try {
+			ActivitymenuDao activitymenudaodao = new ActivitymenuDao();
+			count = activitymenudaodao.AMenu_Sort(activitymenu);
+		} catch (Exception e) {
+			IsError.GET_EXCEPTION = e.getMessage();
+			e.printStackTrace();
+			Util.getFileLogger().error(e.getMessage());
+		}
+		return count;
+	}
+	
+	
+	
+	/**
 	 * Select個人或全體資料的業務邏輯
 	 * DBID Query
 	 * @param cfg_person.account

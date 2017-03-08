@@ -18,6 +18,19 @@ public class Activitymenu {
 	private String sort;
 	
 	private List<Integer> ActivityMenu_DBID_list = new ArrayList<Integer>();
+	
+	private List<String> ActivityMenu_SORT_list = new ArrayList<String>();
+
+	
+
+
+	public List<String> getActivityMenu_SORT_list() {
+		return ActivityMenu_SORT_list;
+	}
+
+	public void setActivityMenu_SORT_list(List<String> activityMenu_SORT_list) {
+		ActivityMenu_SORT_list = activityMenu_SORT_list;
+	}
 
 	public List<Integer> getActivityMenu_DBID_list() {
 		return ActivityMenu_DBID_list;
