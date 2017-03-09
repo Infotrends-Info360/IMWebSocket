@@ -738,15 +738,15 @@ function Logoutaction() {
 	// 關閉上線開關
 //	status_g = StatusEnum.LOGOUT;
 	switchStatus(StatusEnum.LOGOUT);
-	console.log("StatusEnum.login_dbid: " + StatusEnum.login_dbid);
-	console.log("StatusEnum.notready_dbid: " + StatusEnum.notready_dbid);
-	console.log("StatusEnum.ready_dbid: " + StatusEnum.ready_dbid);
-	console.log("StatusEnum.ring_dbid: " + StatusEnum.ring_dbid);
-	console.log("StatusEnum.iestablished_dbid: " + StatusEnum.iestablished_dbid);
-	StatusEnum.login_dbid = StatusEnum.updateStatus(StatusEnum.LOGOUT, "end", StatusEnum.login_dbid);
-	StatusEnum.notready_dbid = StatusEnum.updateStatus(StatusEnum.NOTREADY, "end", StatusEnum.notready_dbid);
-	StatusEnum.ready_dbid = StatusEnum.updateStatus(StatusEnum.READY, "end", StatusEnum.ready_dbid);
-	StatusEnum.ring_dbid = StatusEnum.updateStatus(StatusEnum.RING, "end", StatusEnum.ring_dbid);
+//	console.log("StatusEnum.login_dbid: " + StatusEnum.login_dbid);
+//	console.log("StatusEnum.notready_dbid: " + StatusEnum.notready_dbid);
+//	console.log("StatusEnum.ready_dbid: " + StatusEnum.ready_dbid);
+//	console.log("StatusEnum.ring_dbid: " + StatusEnum.ring_dbid);
+//	console.log("StatusEnum.iestablished_dbid: " + StatusEnum.iestablished_dbid);
+//	StatusEnum.login_dbid = StatusEnum.updateStatus(StatusEnum.LOGOUT, "end", StatusEnum.login_dbid);
+//	StatusEnum.notready_dbid = StatusEnum.updateStatus(StatusEnum.NOTREADY, "end", StatusEnum.notready_dbid);
+//	StatusEnum.ready_dbid = StatusEnum.updateStatus(StatusEnum.READY, "end", StatusEnum.ready_dbid);
+//	StatusEnum.ring_dbid = StatusEnum.updateStatus(StatusEnum.RING, "end", StatusEnum.ring_dbid);
 	// 下列改由後端處理 - WebSocketRoomPool.removeUserinroom()
 //	StatusEnum.ring_dbid = StatusEnum.updateStatus(StatusEnum.IESTABLISHED, "end",JSON.stringify(StatusEnum.iestablished_dbid)); // 須用list
 	

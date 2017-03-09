@@ -172,9 +172,8 @@ public class CommonFunction {
 			timer.cancel();			
 		}
 		
-		// Client
-		// 若已經有Agent正在決定是否Accept此通通話, 若Client先離開了, 則告知此Agent此Client已經離開, 不用再等了
-//		String waittingAgent = jsonIn.get("waittingAgent").getAsBoolean();
+		// for Client
+		// waittingAgent - 當有Agent正在決定是否Accept此通通話, 若Client先離開了, 則告知此Agent此Client已經離開, 不用再等了
 		if ( WebSocketTypePool.isClient(aConn) && jsonIn.get("waittingAgent") != null){
 //			Util.getConsoleLogger().debug("userExit() - waittingAgent: " + jsonIn.get("waittingAgent").getAsBoolean());
 			if (jsonIn.get("waittingAgent").getAsBoolean()){
@@ -190,8 +189,9 @@ public class CommonFunction {
 			}			
 		}
 		
-		// Agent
-//		waittingClientIDList
+		// for Agent
+		// 1. waittingClientIDList - 當Agent離開後,若有Clinet在等待其回應,則告知此Client此Agent已經離開, 不用再等了, 請他再繼續找其他人
+		// 2. waittingAgentIDList - 當Agent離開後,若有其他Agent在等待其回應,如三方/轉接,則告知另一個Agent此Agent已經離開, 不用再等了
 		if (WebSocketTypePool.isAgent(aConn)){
 			if (!"[]".equals(jsonIn.get("waittingClientIDList"))){
 //				Util.getConsoleLogger().debug("userExit() - waittingClientIDList got here");
