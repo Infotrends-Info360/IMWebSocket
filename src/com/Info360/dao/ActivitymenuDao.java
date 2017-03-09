@@ -19,6 +19,106 @@ import com.Info360.util.IsError;
 
 public class ActivitymenuDao {
 	
+	
+	/**
+	 * Query_AMenu_DBID
+	 * @param Query_AMenu_DBID
+	 */
+	public List<Activitymenu> Query_AMenu_DBID(Activitymenu activitymenu){
+		List<Activitymenu> activitymenulist = new ArrayList<Activitymenu>();
+		SqlSession sqlSession = null;
+	
+		try {
+			sqlSession = DBAccess.getSqlSession();
+			//通過sqlSession執行SQL語句
+			activitymenulist = sqlSession.selectList("activitymenu.Query_AMenu_DBID", activitymenu);
+			sqlSession.commit();
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+			IsError.GET_EXCEPTION = e.getMessage();
+			Util.getFileLogger().error(e.getMessage());
+		} catch (Exception e){
+			e.printStackTrace();
+			IsError.GET_EXCEPTION = e.getMessage();
+			Util.getFileLogger().error(e.getMessage());
+		} finally {
+			if(sqlSession != null){
+			   sqlSession.close();
+				DBAccess.sessonCount.decrementAndGet();
+				Util.getFileLogger().debug("DB session count: " + DBAccess.sessonCount.get());
+			}
+		}
+		return activitymenulist;
+	}
+	
+	/**
+	 * Query_AMenu_Sort
+	 * @param Query_AMenu_Sort
+	 */
+	public List<Activitymenu> Query_AMenu_Sort(Activitymenu activitymenu){
+		List<Activitymenu> activitymenulist = new ArrayList<Activitymenu>();
+		SqlSession sqlSession = null;
+	
+		try {
+			sqlSession = DBAccess.getSqlSession();
+			//通過sqlSession執行SQL語句
+			activitymenulist = sqlSession.selectList("activitymenu.Query_AMenu_Sort", activitymenu);
+			sqlSession.commit();
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+			IsError.GET_EXCEPTION = e.getMessage();
+			Util.getFileLogger().error(e.getMessage());
+		} catch (Exception e){
+			e.printStackTrace();
+			IsError.GET_EXCEPTION = e.getMessage();
+			Util.getFileLogger().error(e.getMessage());
+		} finally {
+			if(sqlSession != null){
+			   sqlSession.close();
+				DBAccess.sessonCount.decrementAndGet();
+				Util.getFileLogger().debug("DB session count: " + DBAccess.sessonCount.get());
+			}
+		}
+		return activitymenulist;
+	}
+	
+	
+	/**
+	 * AMenu_Sort
+	 * @param AMenu_Sort
+	 */
+	public int AMenu_Sort(
+			Activitymenu   activitymenu	){
+		int activitymenuInt = 0;
+		SqlSession sqlSession = null;
+
+		try {
+			sqlSession = DBAccess.getSqlSession();
+			//通過sqlSession執行SQL語句
+			activitymenuInt = sqlSession.update("activitymenu.AMenu_Sort", activitymenu);
+			sqlSession.commit();
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+			IsError.GET_EXCEPTION = e.getMessage();
+			Util.getFileLogger().error(e.getMessage());
+		} catch (Exception e){
+			e.printStackTrace();
+			IsError.GET_EXCEPTION = e.getMessage();
+			Util.getFileLogger().error(e.getMessage());
+		} finally {
+			if(sqlSession != null){
+				sqlSession.close();
+				DBAccess.sessonCount.decrementAndGet();
+				Util.getFileLogger().debug("DB session count: " + DBAccess.sessonCount.get());
+			}
+		}
+		return activitymenuInt;
+	}
+	
+	
 	/**
 	 * LogicDelete_activitymenu
 	 * @param LogicDelete_activitymenu

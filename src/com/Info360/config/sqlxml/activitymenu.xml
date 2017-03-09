@@ -76,4 +76,44 @@ or dbid=#{dbid}
 	</if>
 </update>
 
+<update id="AMenu_Sort" parameterType="com.Info360.bean.Activitymenu">
+update  tblCfg_ActivityMenu set SORT=#{sort}
+<if test="ActivityMenu_SORT_list.size() > 0">
+ 		<foreach item="value" index="key" collection="ActivityMenu_SORT_list"
+			open="," separator="," close="">
+ 	 		sort=#{value}
+		</foreach>
+	</if>
+where dbid=#{dbid} 
+	<if test="ActivityMenu_DBID_list.size() > 0">
+ 		<foreach item="value" index="key" collection="ActivityMenu_DBID_list"
+			open="or" separator="or" close="">
+ 	 		dbid=#{value}
+		</foreach>
+	</if>
+</update>
+
+
+<select id="Query_AMenu_Sort" parameterType="com.Info360.bean.Activitymenu"  resultMap="activitymenuResult">
+ Select DBID,SORT from tblCfg_ActivityMenu
+where sort=#{sort}
+<if test="ActivityMenu_SORT_list.size() > 0">
+ 		<foreach item="value" index="key" collection="ActivityMenu_SORT_list"
+			open="or" separator="or" close="">
+ 	 		sort=#{value}
+		</foreach>
+	</if>
+</select>
+
+<select id="Query_AMenu_DBID" parameterType="com.Info360.bean.Activitymenu"  resultMap="activitymenuResult">
+ Select DBID,SORT from tblCfg_ActivityMenu
+where dbid=#{dbid}
+<if test="ActivityMenu_DBID_list.size() > 0">
+ 		<foreach item="value" index="key" collection="ActivityMenu_DBID_list"
+			open="or" separator="or" close="">
+ 	 		dbid=#{value}
+		</foreach>
+	</if>
+</select>
+
 </mapper>
