@@ -115,17 +115,27 @@ public class FLAGDATA_Servlet {
         			activitydataObject.put("titlegroup", activitydatalist.get(g).getTitlegroup());
         			activitydataObject.put("titleflag", activitydatalist.get(g).getTitleflag());
         			activitydataObject.put("sort", activitydatalist.get(g).getSort());
-        					
+        			
         			
         			if(activitydatalist.get(g).getDeleteflag().equals("0")){
-            			activitydataObject.put("createdatetime", activitydatalist.get(a).getCreatedatetime());
+        				
+        				if(activitydatalist.get(g).getCreatedatetime()!=null || activitydatalist.get(g).getCreatedatetime()!= ""){
+        					activitydataObject.put("createdatetime", activitydatalist.get(g).getCreatedatetime());
+            				flag0JsonArray.put(activitydataObject);
+        				}
+            			activitydataObject.put("createdatetime", "");
 
         				flag0JsonArray.put(activitydataObject);
                 		
         			}else{
-            			activitydataObject.put("deletedatetime", activitydatalist.get(a).getDeletedatetime());
-
-        				flag1JsonArray.put(activitydataObject);
+        				if(activitydatalist.get(g).getDeletedatetime()!=null || activitydatalist.get(g).getDeletedatetime()!= ""){
+        					activitydataObject.put("deletedatetime", activitydatalist.get(g).getDeletedatetime());
+            				flag1JsonArray.put(activitydataObject);
+        				}else{
+        					activitydataObject.put("deletedatetime","");
+            				flag1JsonArray.put(activitydataObject);
+        				}
+        
         			}
         			
         	  	}
