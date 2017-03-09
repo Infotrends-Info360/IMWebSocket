@@ -118,8 +118,8 @@ public class WebSocketTypePool{
 			poppedAgentID = WebSocketUserPool.getReadyAgentQueue().take();// this will block the current Thread if the queue is empty
 		} catch (InterruptedException e) {
 			// if client logout or disconnect, this task in the current thread will be terminated
-			Util.getFileLogger().debug("[Exception] Client " + WebSocketUserPool.getUserNameByKey(aConn) + " cancelled findAgent task");
-			Util.getConsoleLogger().debug("[Exception] Client " + WebSocketUserPool.getUserNameByKey(aConn) + " cancelled findAgent task");
+			Util.getFileLogger().error("[Exception] Client " + WebSocketUserPool.getUserNameByKey(aConn) + " cancelled findAgent task");
+			Util.getConsoleLogger().error("[Exception] Client " + WebSocketUserPool.getUserNameByKey(aConn) + " cancelled findAgent task");
 //			e.printStackTrace();
 		} 
 		Util.getConsoleLogger().debug("poppedAgentID: " + poppedAgentID);
