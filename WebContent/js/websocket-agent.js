@@ -441,8 +441,8 @@ function Login() {
 					console.log("更新狀態");
 //					status_g = StatusEnum.LOGIN;
 					switchStatus(StatusEnum.LOGIN);
-					StatusEnum.updateStatus(StatusEnum.LOGIN, "start");
-					StatusEnum.updateStatus(StatusEnum.NOTREADY, "start", null, null, null, notreadyreason_dbid_g);
+//					StatusEnum.updateStatus(StatusEnum.LOGIN, "start");
+//					StatusEnum.updateStatus(StatusEnum.NOTREADY, "start", null, null, null, notreadyreason_dbid_g);
 //					StatusEnum.updateStatus(StatusEnum.NOTREADY, "start");
 					
 					// 計算LOGIN狀態持續時間用:

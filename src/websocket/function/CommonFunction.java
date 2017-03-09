@@ -14,6 +14,7 @@ import org.java_websocket.WebSocket;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
+import com.google.gson.Gson;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
@@ -37,11 +38,14 @@ import util.Util;
 
 
 
+
+
 import com.google.gson.JsonParser;
 
 import websocket.HeartBeat;
 import websocket.bean.RingCountDownTask;
 import websocket.bean.RoomInfo;
+import websocket.bean.UpdateStatusBean;
 import websocket.bean.UserInfo;
 //import websocket.HeartBeat;
 import websocket.pools.WebSocketRoomPool;
@@ -134,6 +138,19 @@ public class CommonFunction {
 		/*** 讓Agent與Client都有Heartbeat ***/
 		HeartBeat heartbeat = new HeartBeat();
 		heartbeat.heartbeating(aConn);
+		
+		/*** Agent - 更新狀態 ***/
+		UpdateStatusBean usb = null;
+		// LOGIN狀態開始
+		usb = new UpdateStatusBean();
+		usb.setStatus(StatusEnum.LOGIN.getDbid());
+		usb.setStartORend("start");
+		CommonFunction.updateStatus(new Gson().toJson(usb), aConn);	
+		// NOTREADY狀態開始
+		usb = new UpdateStatusBean();
+		usb.setStatus(StatusEnum.NOTREADY.getDbid());
+		usb.setStartORend("start");
+		CommonFunction.updateStatus(new Gson().toJson(usb), aConn);
 	}
 	
 	/** ask online people **/
@@ -402,6 +419,7 @@ public class CommonFunction {
 		String startORend = Util.getGString(obj, "startORend"); 
 		String dbid = Util.getGString(obj, "dbid"); // 所有值,代表此次是要寫end的 // for "end"
 		String reason_dbid =  Util.getGString(obj, "reason_dbid"); // for NOTREADY
+		if (reason_dbid == null) reason_dbid = "0"; // 設定reason預設值為'0'
 		String roomID = Util.getGString(obj, "roomID");  // for IESTABLISHED
 		String clientID = Util.getGString(obj, "clientID"); // for RING
 		UserInfo userInfo = WebSocketUserPool.getUserInfoByKey(aConn);
