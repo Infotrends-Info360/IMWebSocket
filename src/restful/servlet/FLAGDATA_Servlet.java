@@ -122,10 +122,12 @@ public class FLAGDATA_Servlet {
         				if(activitydatalist.get(g).getCreatedatetime()!=null || activitydatalist.get(g).getCreatedatetime()!= ""){
         					activitydataObject.put("createdatetime", activitydatalist.get(g).getCreatedatetime());
             				flag0JsonArray.put(activitydataObject);
-        				}
-            			activitydataObject.put("createdatetime", "");
+        				}else if(activitydatalist.get(g).getCreatedatetime()==null && activitydatalist.get(g).getCreatedatetime()!= ""){
+        					activitydataObject.put("createdatetime", "");
 
-        				flag0JsonArray.put(activitydataObject);
+            				flag0JsonArray.put(activitydataObject);
+        				}
+            			
                 		
         			}else{
         				if(activitydatalist.get(g).getDeletedatetime()!=null || activitydatalist.get(g).getDeletedatetime()!= ""){
