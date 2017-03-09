@@ -32,14 +32,17 @@ import org.java_websocket.server.WebSocketServer;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
+import com.google.gson.Gson;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 
 import filter.SystemListener;
 import filter.startFilter;
+import util.StatusEnum;
 import util.Util;
 import websocket.bean.RoomInfo;
+import websocket.bean.UpdateStatusBean;
 import websocket.bean.UserInfo;
 import websocket.function.AgentFunction;
 import websocket.function.ClientFunction;
@@ -80,6 +83,7 @@ public class WebSocket extends WebSocketServer {
 		Util.getFileLogger().info( WebSocketUserPool.getUserNameByKey(conn) + " is disconnected. (onClose)");
 		// 將Heartbeat功能移轉到這裡:
 		inputInteractionLog(conn,reason);
+		updateStatus(conn);
 		clearUserData(conn); // 包含removeUser, removerUserinTYPE, removeUserinroom
 		
 		// 確認最後資訊:
@@ -88,6 +92,31 @@ public class WebSocket extends WebSocketServer {
 		
 	}
 
+
+	private void updateStatus(org.java_websocket.WebSocket aConn) { // here
+		if (!WebSocketTypePool.isAgent(aConn)) return;
+		
+		UserInfo agentUserInfo = WebSocketUserPool.getUserInfoByKey(aConn);
+		Map<StatusEnum, String> statusDBIDMap = agentUserInfo.getStatusDBIDMap();
+		Set<StatusEnum> keys = new HashSet<>( statusDBIDMap.keySet() ); // 因為於更新end後,會將此StatusEnum key從map中移除->使用shallow copy避免出現concurrent Exception
+		UpdateStatusBean usb = null;
+		for (StatusEnum currStatusEnum : keys){
+			if (currStatusEnum.getDbid() == null) continue;
+			Util.getConsoleLogger().debug("currStatusEnum: " + currStatusEnum + " update end time");
+			usb = new UpdateStatusBean();
+			usb.setDbid(statusDBIDMap.get(currStatusEnum));
+			usb.setStatus(currStatusEnum.getDbid());
+			usb.setStartORend("end");
+			
+			if (StatusEnum.NOTREADY == currStatusEnum){
+				// 可於此處設定系統Logout或中斷離線時,預設的notreadyreason
+			}
+			
+			CommonFunction.updateStatus(new Gson().toJson(usb), aConn);	
+		}
+		// 如果有dbid在,則寫入結束時間
+		
+	}
 
 	/** * trigger Exception Event */
 	@Override

@@ -231,7 +231,7 @@ public class AgentFunction {
 	
 	//寫入狀態結束時間，狀態開始時會回傳dbid，請記住並回入在此
 	public static String RecordStatusEnd(String dbid) {
-		
+		Util.getConsoleLogger().debug("RecordStatusEnd() called");
 		StringBuilder responseSB = null;
 		
 		String postData = "dbid=" + dbid;

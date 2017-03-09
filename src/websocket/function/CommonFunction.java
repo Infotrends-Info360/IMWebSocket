@@ -417,7 +417,7 @@ public class CommonFunction {
 		
 		String status_dbid = Util.getGString(obj, "status"); // 以數字代表 dbid
 		String startORend = Util.getGString(obj, "startORend"); 
-		String dbid = Util.getGString(obj, "dbid"); // 所有值,代表此次是要寫end的 // for "end"
+		String dbid = Util.getGString(obj, "dbid"); // 若有值,代表此次是要寫end的 // for "end"
 		String reason_dbid =  Util.getGString(obj, "reason_dbid"); // for NOTREADY
 		if (reason_dbid == null) reason_dbid = "0"; // 設定reason預設值為'0'
 		String roomID = Util.getGString(obj, "roomID");  // for IESTABLISHED
@@ -515,7 +515,7 @@ public class CommonFunction {
 				
 				// 清理Bean
 //				StatusEnum currStatusEnum = StatusEnum.getStatusEnumByDbid(status_dbid);
-				userInfo.getStatusDBIDMap().remove(currStatusEnum); 
+				userInfo.getStatusDBIDMap().remove(currStatusEnum);
 			}
 		}
 		
