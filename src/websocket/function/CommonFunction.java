@@ -443,6 +443,16 @@ public class CommonFunction {
 		if ("start".equals(startORend)){
 //			String userID = Util.getTmpID(userid);
 			// 將開始時間寫入DB
+			if (StatusEnum.READY.getDbid().equals(status_dbid) &&
+				userInfo.isReady()){
+				Util.getConsoleLogger().debug("Agent is READY already. No update is processed to DB");
+				return;
+			}
+			if (StatusEnum.NOTREADY.getDbid().equals(status_dbid) &&
+				userInfo.isNotReady()){
+				Util.getConsoleLogger().debug("Agent is NOTREADY already. No update is processed to DB");
+				return;
+			}
 				// 若為NOTREADY,則會多reason_dbid參數
 			if (StatusEnum.NOTREADY.getDbid().equals(status_dbid)){
 				dbid = AgentFunction.RecordStatusStart(userid, status_dbid, reason_dbid);

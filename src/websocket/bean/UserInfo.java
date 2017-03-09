@@ -148,6 +148,19 @@ public class UserInfo {
 		this.findAgentCallable = findAgentCallable;
 	}
 	
+	public boolean isReady(){
+		if (this.statusDBIDMap.get(StatusEnum.READY) != null){
+			return true;
+		}
+		return false;
+	}
+	
+	public boolean isNotReady(){
+		if (this.statusDBIDMap.get(StatusEnum.NOTREADY) != null){
+			return true;
+		}
+		return false;
+	}
 	
 	
 }

@@ -100,7 +100,7 @@ public class WebSocket extends WebSocketServer {
 		Map<StatusEnum, String> statusDBIDMap = agentUserInfo.getStatusDBIDMap();
 		Set<StatusEnum> keys = new HashSet<>( statusDBIDMap.keySet() ); // 因為於更新end後,會將此StatusEnum key從map中移除->使用shallow copy避免出現concurrent Exception
 		UpdateStatusBean usb = null;
-		for (StatusEnum currStatusEnum : keys){
+		for (StatusEnum currStatusEnum : keys){ 
 			if (currStatusEnum.getDbid() == null) continue;
 			Util.getConsoleLogger().debug("currStatusEnum: " + currStatusEnum + " update end time");
 			usb = new UpdateStatusBean();
