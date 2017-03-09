@@ -79,7 +79,7 @@ public class Query_ActivityMenu_Servlet {
     			
         	  	  	JSONObject activitygroupsObject = new JSONObject();
         	  	activitygroupsObject.put("dbid", activitygroupslist.get(a).getDbid());
-        	  	activitygroupsObject.put("createdatetime", activitygroupslist.get(a).getCreatedatetime());
+//        	  	activitygroupsObject.put("createdatetime", activitygroupslist.get(a).getCreatedatetime());
         	  	activitygroupsObject.put("activitymenuid", activitygroupslist.get(a).getActivitymenuid());
         	  	activitygroupsObject.put("groupname", activitygroupslist.get(a).getGroupname());
         	  	activitygroupsObject.put("sort", activitygroupslist.get(a).getSort());
@@ -89,12 +89,28 @@ public class Query_ActivityMenu_Servlet {
         	  	
         	  	if(activitygroupslist.get(a).getDeleteflag().equals("0")){
         	  		
-        	  		Flag0groupsJsonArray.put(activitygroupsObject);
-        	  	}else{
+        	  		if(activitygroupslist.get(a).getCreatedatetime()!=null && activitygroupslist.get(a).getCreatedatetime()!=""){
+        	  			activitygroupsObject.put("createdatetime",activitygroupslist.get(a).getCreatedatetime());
+        	  			Flag0groupsJsonArray.put(activitygroupsObject);
+        					
+        			}else {
+        				activitygroupsObject.put("createdatetime","");
+        						Flag0groupsJsonArray.put(activitygroupsObject);
+        					}
         	  		
-            	  	activitygroupsObject.put("deletedatetime", activitygroupslist.get(a).getDeletedatetime());
-
-        	  		Flag1groupsJsonArray.put(activitygroupsObject);
+        	  	}
+        	  	
+        	  	
+        	  	
+        	  	if(activitygroupslist.get(a).getDeleteflag().equals("1")){
+        	  		if(activitygroupslist.get(a).getDeletedatetime()!=null && activitygroupslist.get(a).getDeletedatetime()!=""){
+        	  			activitygroupsObject.put("deletedatetime",activitygroupslist.get(a).getDeletedatetime());
+        	  			Flag1groupsJsonArray.put(activitygroupsObject);
+        					
+        			}else {
+        				activitygroupsObject.put("deletedatetime","");
+        				Flag1groupsJsonArray.put(activitygroupsObject);
+        					}
         	  	}
         	  	
     		}
