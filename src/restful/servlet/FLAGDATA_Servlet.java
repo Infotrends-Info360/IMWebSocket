@@ -83,8 +83,8 @@ public class FLAGDATA_Servlet {
         	  		
         	  		JSONObject activitydataObject = new JSONObject();
         			activitydataObject.put("dbid", activitydatalist.get(g).getDbid());
-        			activitydataObject.put("createdatetime", activitydatalist.get(a).getCreatedatetime());
-        			activitydataObject.put("deletedatetime", activitydatalist.get(a).getDeletedatetime());
+        			activitydataObject.put("createdatetime", activitydatalist.get(g).getCreatedatetime());
+        			activitydataObject.put("deletedatetime", activitydatalist.get(g).getDeletedatetime());
         			activitydataObject.put("activitygroupsid", activitydatalist.get(g).getActivitygroupsid());
         			activitydataObject.put("codename", activitydatalist.get(g).getCodename());
         			activitydataObject.put("color", activitydatalist.get(g).getColor());
@@ -92,8 +92,7 @@ public class FLAGDATA_Servlet {
         			activitydataObject.put("titlegroup", activitydatalist.get(g).getTitlegroup());
         			activitydataObject.put("titleflag", activitydatalist.get(g).getTitleflag());
         			activitydataObject.put("sort", activitydatalist.get(g).getSort());
-        					
-        			
+
         			if(activitydatalist.get(g).getTitlegroup()==0){
         				ActivitydataJsonArray.put(activitydataObject);
                 		
@@ -102,7 +101,12 @@ public class FLAGDATA_Servlet {
         			}
         			
         	  	}
+        	  
+    		}
         	  	
+        		if(dbid!=0){	
+            	  	activitydata.setActivitygroupsid(activitygroupslist.get(a).getDbid());
+        	  		List<Activitydata> activitydatalist = maintainservice.Select_activitydata(activitydata);
         	  	
         	  	for(int g = 0; g < activitydatalist.size(); g++){
         	  		
@@ -117,35 +121,37 @@ public class FLAGDATA_Servlet {
         			activitydataObject.put("sort", activitydatalist.get(g).getSort());
         			
         			
-        			if(activitydatalist.get(g).getDeleteflag().equals("0")){
+        		if(activitydatalist.get(g).getDeleteflag().equals("0")){
+        			if(activitydatalist.get(g).getCreatedatetime()!=null && activitydatalist.get(g).getCreatedatetime()!=""){
+        				activitydataObject.put("createdatetime",activitydatalist.get(g).getCreatedatetime());
+        				flag0JsonArray.put(activitydataObject);
+        					
+        			}else {
+        						activitydataObject.put("createdatetime","");
+        						flag0JsonArray.put(activitydataObject);
+        					}
+        		}
+        		
+        		if(activitydatalist.get(g).getDeleteflag().equals("1")){
+        			if(activitydatalist.get(g).getDeleteflag()!=null && activitydatalist.get(g).getDeleteflag()!=""){
+        				activitydataObject.put("deletedatetime", activitydatalist.get(g).getDeletedatetime());
+        				flag1JsonArray.put(activitydataObject);
         				
-        				if(activitydatalist.get(g).getCreatedatetime()!=null || activitydatalist.get(g).getCreatedatetime()!= ""){
-        					activitydataObject.put("createdatetime", activitydatalist.get(g).getCreatedatetime());
-            				flag0JsonArray.put(activitydataObject);
-        				}else if(activitydatalist.get(g).getCreatedatetime()==null && activitydatalist.get(g).getCreatedatetime()!= ""){
-        					activitydataObject.put("createdatetime", "");
-
-            				flag0JsonArray.put(activitydataObject);
-        				}
-            			
-                		
-        			}else{
-        				if(activitydatalist.get(g).getDeletedatetime()!=null || activitydatalist.get(g).getDeletedatetime()!= ""){
-        					activitydataObject.put("deletedatetime", activitydatalist.get(g).getDeletedatetime());
+        				}else {
+        					activitydataObject.put("deletedatetime", "");
             				flag1JsonArray.put(activitydataObject);
-        				}else{
-        					activitydataObject.put("deletedatetime","");
-            				flag1JsonArray.put(activitydataObject);
+            				
         				}
-        
-        			}
+        		}
+        	
         			
         	  	}
         	  	
-
-    		}
+        		}	
+        	  	
         	  	jsonObject.put("Flag0", flag0JsonArray);
         	  	jsonObject.put("Flag1", flag1JsonArray);
+        	  	
         		jsonObject.put("Flag", flagJsonArray);
         		jsonObject.put("activitydata", ActivitydataJsonArray);
         		jsonObject.put("activitygroups", ActivitygroupsJsonArray);
