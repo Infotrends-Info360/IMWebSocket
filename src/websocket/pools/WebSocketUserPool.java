@@ -11,6 +11,7 @@ import java.util.Map;
 import java.util.Set;
 import java.util.Timer;
 import java.util.concurrent.BlockingQueue;
+import java.util.concurrent.Callable;
 import java.util.concurrent.LinkedBlockingQueue;
 
 import org.java_websocket.WebSocket;
@@ -18,6 +19,7 @@ import org.java_websocket.exceptions.WebsocketNotConnectedException;
 
 import util.Util;
 import websocket.bean.UserInfo;
+import websocket.thread.findAgent.FindAgentCallable;
 
 //此類別給AgentFunction.java共同使用
 //此類別給ClientFunction.java共同使用
@@ -32,7 +34,8 @@ public class WebSocketUserPool {
 	 * 								WebSocketTypePool.TYPEconnections.get("Agent");
 	 */
 	private static final Map<WebSocket, UserInfo> userallconnections = new HashMap<WebSocket,UserInfo>();	
-	private static final BlockingQueue<String> readyAgentQueue = new LinkedBlockingQueue<>(); // (進行中)用在ClientFunction::getOnlineLongestUserinTYPE()
+	private static final BlockingQueue<String> readyAgentQueue = new LinkedBlockingQueue<>(); // 用在ClientFunction::getOnlineLongestUserinTYPE()
+	private static final BlockingQueue<FindAgentCallable> ClientFindAgentQueue = new LinkedBlockingQueue<>(); // (進行中)用在ClientFunction::getOnlineLongestUserinTYPE()
 	
 	/** * Get User ID By Key * @param session */ /* Done */
 	public static String getUserByKey(WebSocket conn) {
@@ -244,6 +247,10 @@ public class WebSocketUserPool {
 
 	public static BlockingQueue<String> getReadyAgentQueue() {
 		return readyAgentQueue;
+	}
+
+	public static BlockingQueue<FindAgentCallable> getClientfindagentqueue() {
+		return ClientFindAgentQueue;
 	}
 	
 	

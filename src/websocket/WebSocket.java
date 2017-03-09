@@ -15,7 +15,9 @@ import java.util.Set;
 
 
 
+import java.util.concurrent.BlockingQueue;
 import java.util.concurrent.Callable;
+import java.util.concurrent.ExecutionException;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.Future;
@@ -45,9 +47,11 @@ import websocket.function.CommonFunction;
 import websocket.pools.WebSocketRoomPool;
 import websocket.pools.WebSocketTypePool;
 import websocket.pools.WebSocketUserPool;
+import websocket.thread.findAgent.FindAgentCallable;
+import websocket.thread.findAgent.FindAgentThread;
  
 public class WebSocket extends WebSocketServer {
-	
+		
 	public WebSocket(InetSocketAddress address) {
 		super(address);
 		Util.getConsoleLogger().info("WebSocket IP address initialized: " + address);
@@ -59,11 +63,11 @@ public class WebSocket extends WebSocketServer {
 		Util.getConsoleLogger().info("WebSocket Port initialized: " + port);
 		Util.getFileLogger().info("WebSocket Port initialized: " + port);
 		
-		Logger logger2 = LogManager.getLogger(SystemListener.class);
-    	logger2.error("filter pkg logger test");
+		//啟動FindAgentThread
+		Thread findAgentThread = new FindAgentThread();
+		findAgentThread.start();
+		Util.getFileLogger().info("findAgentThread started");
 		
-//		Logger log = LogManager.getLogger(WebSocket.class);
-//		log.printf(Level.INFO,"%s *********************************************%n",5);
 	}
 
 	/** * trigger close Event */
@@ -121,7 +125,6 @@ public class WebSocket extends WebSocketServer {
 	public void onMessage(final org.java_websocket.WebSocket conn, final String message) {
 		Util.getConsoleLogger().trace("WebSocket :\n " +message);
 		Util.getFileLogger().trace("WebSocket :\n " +message);
-		Callable<Object> task = null;
 		JSONObject obj = new JSONObject(message);
 		switch (obj.getString("type").trim()) {
 		case "message":
@@ -164,18 +167,19 @@ public class WebSocket extends WebSocketServer {
 			AgentFunction.RejectEvent(message.toString(), conn);
 			break;
 		case "findAgent":
-			task = new Callable<Object>(){
-				@Override
-				public Object call() throws Exception {
-					// TODO Auto-generated method stub
-					ClientFunction.findAgent(message.toString(), conn);
-					return null;
-				}
-			};
-			ExecutorService service = Executors.newCachedThreadPool();
-			Future<?> taskResult = service.submit(task);
+			//確保client進線找Agent的順序性 ,將requesy物件化後放入queue中處理
+			FindAgentCallable task = new FindAgentCallable(message,conn);
+			BlockingQueue<FindAgentCallable> queue = WebSocketUserPool.getClientfindagentqueue();
+			Util.getFileLogger().info("findAgent - add task to queue - " + "before queue size: " + queue.size());
+			// 將請求放入queue
+			if(queue.offer(task)){
+				Util.getFileLogger().info("findAgent - add task to queue - succeed - " + " queue after size: " + queue.size());
+			}else{;
+				Util.getFileLogger().info("findAgent - add task to queue - failed - " + " queue after size: " + queue.size());			
+			}
+			// 將此請求放入Client UserInfo中,onClose()清理時使用
 			UserInfo userInfo = WebSocketUserPool.getUserInfoByKey(conn);
-			userInfo.setFindAgentTaskResult(taskResult);
+			userInfo.setFindAgentCallable(task);
 			
 			break;
 		case "findAgentEvent":
@@ -250,7 +254,17 @@ public class WebSocket extends WebSocketServer {
 		
 		// 清Client-findAgentTaskResult
 		if (WebSocketTypePool.isClient(conn)){
-			WebSocketUserPool.getUserInfoByKey(conn).getFindAgentTaskResult().cancel(true);
+			// 若有正在執行的findAgent sub thread正在等待,中斷它
+			UserInfo clientUserInfo = WebSocketUserPool.getUserInfoByKey(conn);
+			if (clientUserInfo.getFindAgentTaskResult() != null){
+				clientUserInfo.getFindAgentTaskResult().cancel(true);
+			}
+			// 若此Client曾經寄出的請求,仍然在queue排隊,移除它
+			if (WebSocketUserPool.getClientfindagentqueue().contains(clientUserInfo.getFindAgentCallable())){
+				Util.getFileLogger().info(FindAgentThread.TAG + " onClose - before queue size: " + WebSocketUserPool.getClientfindagentqueue().size());
+				WebSocketUserPool.getClientfindagentqueue().remove(clientUserInfo.getFindAgentCallable());
+				Util.getFileLogger().info(FindAgentThread.TAG + " onClose - after queue size: " + WebSocketUserPool.getClientfindagentqueue().size());
+			}
 		}
 
 		
@@ -486,6 +500,14 @@ public class WebSocket extends WebSocketServer {
 		AgentFunction.RecordActivitylog(interactionid, activitydataids, comment);
 	}
 
+	private void processReqQueue(){
+//		BlockingQueue<Callable<Object>> queue = WebSocketUserPool.getClientfindagentqueue();
+//		queue.offer(task);
+//		while(!queue.isEmpty()){
+//			Callable<Object> currTask;
+//			try {
+//				currTask = queue.take();
+	}
 	
 	
 	private void test() {

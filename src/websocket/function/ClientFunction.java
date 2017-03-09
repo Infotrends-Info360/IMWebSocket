@@ -31,6 +31,7 @@ import websocket.bean.UpdateStatusBean;
 import websocket.pools.WebSocketRoomPool;
 import websocket.pools.WebSocketTypePool;
 import websocket.pools.WebSocketUserPool;
+import websocket.thread.findAgent.FindAgentThread;
 
 //此類別給WebSocjet.java使用
 public class ClientFunction {
@@ -63,8 +64,10 @@ public class ClientFunction {
 		} catch (Exception e) {
 			AgentID = null;
 			e.printStackTrace();
+			Util.getFileLogger().info(FindAgentThread.TAG + "agent not found");
 			Util.getFileLogger().error(e.getMessage());
 		}
+		Util.getFileLogger().info(FindAgentThread.TAG + "agent found - agentID: " + AgentID);
 //				Util.getConsoleLogger().debug("findAgent : " + Agent);
 		
 		// 在這邊執行senduserdata

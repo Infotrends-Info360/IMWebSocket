@@ -13,8 +13,10 @@ import java.util.concurrent.atomic.AtomicBoolean;
 import org.java_websocket.WebSocket;
   
 
+
 import util.StatusEnum;
 import util.Util;
+import websocket.thread.findAgent.FindAgentCallable;
       
   
 //此類別給WebSocketPool.userallconnections使用
@@ -37,6 +39,7 @@ public class UserInfo {
 	private String roomOwner;
 	
 	private Future<?> findAgentTaskResult;
+	private FindAgentCallable findAgentCallable;
 	
 	// 狀態更新使用 - 存放status log dbid - "end"時寫入DB用
 	private Map<StatusEnum, String> statusDBIDMap = new HashMap<>();
@@ -137,6 +140,12 @@ public class UserInfo {
 	}
 	public void setFindAgentTaskResult(Future<?> findAgentTaskResult) {
 		this.findAgentTaskResult = findAgentTaskResult;
+	}
+	public FindAgentCallable getFindAgentCallable() {
+		return findAgentCallable;
+	}
+	public void setFindAgentCallable(FindAgentCallable findAgentCallable) {
+		this.findAgentCallable = findAgentCallable;
 	}
 	
 	
