@@ -432,6 +432,7 @@ public class WebSocket extends WebSocketServer {
 		Util.getConsoleLogger().debug("addRoomForMany() called");
 		JsonObject msgJson = Util.getGJsonObject(aMsg);
 		String agentID = WebSocketUserPool.getUserID(aConn);
+		UserInfo userInfo = WebSocketUserPool.getUserInfoByKey(aConn);
 		Util.getConsoleLogger().trace("addRoomForMany - msgJson: " + msgJson);
 		// hardcoded - 之後想想看如何改善"none"這樣寫死的判斷方式
 		String roomID = "";
@@ -446,10 +447,12 @@ public class WebSocket extends WebSocketServer {
 		Util.getConsoleLogger().trace("addRoomForMany() - userIDJsonAry: " + userIDJsonAry);
 		String clientID = null;
 		
+		// 將成員一一加入到rooom中 (memberListToJoin為一個JsonArray)
 		for (JsonElement userIDJsonE : userIDJsonAry){
 			JsonObject userIDJsonObj = userIDJsonE.getAsJsonObject();
 			String userID = userIDJsonObj.get("ID").getAsString();
 			org.java_websocket.WebSocket userConn = WebSocketUserPool.getWebSocketByUser(userID);
+			
 			// 處理於Client登入後 到 Agent按下AcceptEvent期間, 有人登出的狀況:
 			if (userConn == null || userConn.isClosed() || userConn.isClosing()){
 				String ACType = WebSocketUserPool.getACTypeByKey(userConn);
@@ -472,21 +475,35 @@ public class WebSocket extends WebSocketServer {
 			String username = WebSocketUserPool.getUserNameByKey(userConn);
 			String joinMsg = "[Server]" + username + " join " + roomID + " room";
 			
+			// 最後進行資料更新
 			WebSocketRoomPool.addUserInRoom(roomID, username, userID, userConn); //重要步驟
 			WebSocketUserPool.addUserRoom(roomID, userConn); //重要步驟
 			WebSocketRoomPool.sendMessageinroom(roomID, joinMsg);
 			WebSocketRoomPool.sendMessageinroom(roomID, "room people: "
 					+ WebSocketRoomPool.getOnlineUserNameinroom(roomID).toString());
 			
-			// 更新room list
-//			String ACtype = WebSocketUserPool.getACTypeByKey(userConn);
-//			if ("Agent".equals(ACtype)){
-//				Util.getConsoleLogger().debug("userjointoroom - one Agent joined");
-//				CommonFunction.refreshRoomList(userConn);
-//			}else if ("Client".equals(ACtype)){
-//				clientID = userID;
-//			}
-		}
+			/*** 更新狀態 ***/
+			if (WebSocketTypePool.isAgent(userConn)){
+				// RING狀態結束
+				userInfo.setStopRing(true);
+				
+				// IESTABLISHED狀態開始 
+				UpdateStatusBean usb = new UpdateStatusBean();
+				usb.setStatus(StatusEnum.IESTABLISHED.getDbid());
+				usb.setStartORend("start");
+				usb.setRoomID(roomID);
+				CommonFunction.updateStatus(new Gson().toJson(usb), aConn);
+				
+				// 更新room list
+//				String ACtype = WebSocketUserPool.getACTypeByKey(userConn);
+//				if ("Agent".equals(ACtype)){
+//					Util.getConsoleLogger().debug("userjointoroom - one Agent joined");
+//					CommonFunction.refreshRoomList(userConn);
+//				}else if ("Client".equals(ACtype)){
+//					clientID = userID;
+//				}
+			}// end of 更新狀態
+		}// end of 將成員一一加入到rooom中
 		
 		// 更新roomInfo - owner資訊
 		RoomInfo roomInfo = WebSocketRoomPool.getRoomInfo(roomID);
@@ -514,7 +531,7 @@ public class WebSocket extends WebSocketServer {
 			sendJson.addProperty("channel", channel);
 			sendJson.addProperty("EstablishedStatus", Util.getEstablishedStatus()); //增加AfterCallStatus變數 20170222 Lin
 			sendJson.add("roomList", roomIDListJson);
-
+			
 			WebSocketUserPool.sendMessageToUser(
 					userConn,sendJson.toString());	
 		}

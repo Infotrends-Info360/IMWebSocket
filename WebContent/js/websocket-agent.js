@@ -247,8 +247,8 @@ function Login() {
 //					alert("AcceptEvent - obj.roomID: " + obj.roomID);
 //					status_g = StatusEnum.IESTABLISHED;
 					switchStatus(StatusEnum.IESTABLISHED);
-					StatusEnum.ring_dbid = StatusEnum.updateStatus(StatusEnum.RING, "end", StatusEnum.ring_dbid);
-					StatusEnum.updateStatus(StatusEnum.IESTABLISHED, "start", null, obj.roomID);
+//					StatusEnum.ring_dbid = StatusEnum.updateStatus(StatusEnum.RING, "end", StatusEnum.ring_dbid);
+//					StatusEnum.updateStatus(StatusEnum.IESTABLISHED, "start", null, obj.roomID);
 					
 					
 					// 在這邊興建roomList與其room bean
