@@ -122,7 +122,12 @@ public class Query_Servlet {
 									testobj.put("Thecomment", interactionlist.get(a).getThecomment());
 									testobj.put("Startdate", interactionlist.get(a).getStartdate());
 									testobj.put("Enddate", interactionlist.get(a).getEnddate());
-									testobj.put("Codename",name.substring(0, name.length()-1));
+									if(name.length()>0){
+										testobj.put("Codename",name.substring(0, name.length()-1));
+									}else{
+										testobj.put("Codename",name);
+									}
+									
 									testobj.put("ixnid", interactionlist.get(a).getIxnid());
 									
 									if(interactionlist.get(a).getEntitytypeid().equals("2")){
