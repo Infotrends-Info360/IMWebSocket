@@ -542,8 +542,18 @@ public class WebSocket extends WebSocketServer {
 		JsonObject jsonIn = Util.getGJsonObject(aMsg);
 		String interactionid = Util.getGString(jsonIn, "interactionid");
 		String activitydataids = Util.getGString(jsonIn, "activitydataids");
-		String comment = Util.getGString(jsonIn, "comment"); 
+		String comment = Util.getGString(jsonIn, "comment");
+		UserInfo settingUserInfo = WebSocketUserPool.getUserInfoByKey(aConn);
 		AgentFunction.RecordActivitylog(interactionid, activitydataids, comment);
+		
+		/*** Agent - 更新狀態 ***/
+		UpdateStatusBean usb = null;
+		// AFTERCALLWORK狀態結束
+		usb = new UpdateStatusBean();
+		usb.setStatus(StatusEnum.AFTERCALLWORK.getDbid());
+		usb.setDbid(settingUserInfo.getStatusDBIDMap().get(StatusEnum.AFTERCALLWORK));
+		usb.setStartORend("end");
+		CommonFunction.updateStatus(new Gson().toJson(usb), aConn);
 	}
 
 	private void processReqQueue(){

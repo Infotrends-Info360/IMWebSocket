@@ -140,17 +140,19 @@ public class CommonFunction {
 		heartbeat.heartbeating(aConn);
 		
 		/*** Agent - 更新狀態 ***/
-		UpdateStatusBean usb = null;
-		// LOGIN狀態開始
-		usb = new UpdateStatusBean();
-		usb.setStatus(StatusEnum.LOGIN.getDbid());
-		usb.setStartORend("start");
-		CommonFunction.updateStatus(new Gson().toJson(usb), aConn);	
-		// NOTREADY狀態開始
-		usb = new UpdateStatusBean();
-		usb.setStatus(StatusEnum.NOTREADY.getDbid());
-		usb.setStartORend("start");
-		CommonFunction.updateStatus(new Gson().toJson(usb), aConn);
+		if(WebSocketTypePool.isAgent(aConn)) {
+			UpdateStatusBean usb = null;
+			// LOGIN狀態開始
+			usb = new UpdateStatusBean();
+			usb.setStatus(StatusEnum.LOGIN.getDbid());
+			usb.setStartORend("start");
+			CommonFunction.updateStatus(new Gson().toJson(usb), aConn);	
+			// NOTREADY狀態開始
+			usb = new UpdateStatusBean();
+			usb.setStatus(StatusEnum.NOTREADY.getDbid());
+			usb.setStartORend("start");
+			CommonFunction.updateStatus(new Gson().toJson(usb), aConn);
+		}// end of if (WebSocketTypePool.isAgent(...))
 	}
 	
 	/** ask online people **/

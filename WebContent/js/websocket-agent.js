@@ -1533,7 +1533,7 @@ function sendComment(aInteractionid, aActivitydataids, aComment){
 	
 	// 更新AFTERCALLWORK狀態結束時間
 //	alert("StatusEnum.aftercallwork_dbid: " + StatusEnum.aftercallwork_dbid);
-	StatusEnum.aftercallwork_dbid = StatusEnum.updateStatus(StatusEnum.AFTERCALLWORK, "end", StatusEnum.aftercallwork_dbid);
+//	StatusEnum.aftercallwork_dbid = StatusEnum.updateStatus(StatusEnum.AFTERCALLWORK, "end", StatusEnum.aftercallwork_dbid);
 	
 	// 關閉ACW按鈕功能
 	var roomInfo = roomInfoMap_g.get(aInteractionid);
