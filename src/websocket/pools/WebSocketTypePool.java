@@ -109,7 +109,7 @@ public class WebSocketTypePool{
 	}
 	
 	/** * Get Online Longest User(Agent) * @return */
-	synchronized public static String getOnlineLongestUserinTYPE(WebSocket aConn, String aTYPE) {
+	public static String getOnlineLongestUserinTYPE(WebSocket aConn, String aTYPE) {
 //		Util.getConsoleLogger().debug("getOnlineLongestUserinTYPE() called");
 		String poppedAgentID = null;
 		UserInfo settingUserInfo = null;
@@ -136,17 +136,11 @@ public class WebSocketTypePool{
 		settingUserInfo.setStatusEnum(StatusEnum.NOTREADY); // 直接改了,避免一個以上Client找到同一個Agent
 		Gson gson = new Gson();
 		WebSocket agentConn = WebSocketUserPool.getWebSocketByUser(settingUserInfo.getUserid());
-		// 1. READY狀態結束
+		// NOTREADY狀態開始
+		Util.getStatusFileLogger().info("###### [findAgent]");
 		UpdateStatusBean usb = new UpdateStatusBean();
-		usb.setStatus(StatusEnum.READY.getDbid());
-		usb.setDbid(settingUserInfo.getStatusDBIDMap().get(StatusEnum.READY));
-		usb.setStartORend("end");
-		CommonFunction.updateStatus(gson.toJson(usb), agentConn);
-		// 2. NOTREADY狀態開始
-		usb = new UpdateStatusBean();
 		usb.setStatus(StatusEnum.NOTREADY.getDbid());
 		usb.setStartORend("start");
-		usb.setReason_dbid("9"); // 先暫時這樣
 		CommonFunction.updateStatus(gson.toJson(usb), agentConn);				
 
 //		ExecutorService service = Executors.newCachedThreadPool();

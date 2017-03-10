@@ -108,10 +108,21 @@ public class WebSocket extends WebSocketServer {
 			usb.setStatus(currStatusEnum.getDbid());
 			usb.setStartORend("end");
 			
+			if (StatusEnum.RING == currStatusEnum){
+				agentUserInfo.setStopRing(true);
+				continue;
+			}
+			
+			if (StatusEnum.IESTABLISHED == currStatusEnum){
+				// removeUserinroom(...)會負責處理removeUserinroom
+				continue;
+			}
+			
 			if (StatusEnum.NOTREADY == currStatusEnum){
 				// 可於此處設定系統Logout或中斷離線時,預設的notreadyreason
 			}
 			
+			Util.getStatusFileLogger().info("###### [onClose()]");
 			CommonFunction.updateStatus(new Gson().toJson(usb), aConn);	
 		}
 		// 如果有dbid在,則寫入結束時間
@@ -215,6 +226,13 @@ public class WebSocket extends WebSocketServer {
 			ClientFunction.findAgentEvent(message.toString(), conn);
 			break;
 		case "updateStatus":
+			JsonObject tmpObj = Util.getGJsonObject(message);
+			String status_dbid = Util.getGString(tmpObj, "status");
+			if (StatusEnum.READY.getDbid().equals(status_dbid))
+				Util.getStatusFileLogger().info("###### [User request] ######");
+			if (StatusEnum.NOTREADY.getDbid().equals(status_dbid))
+				Util.getStatusFileLogger().info("###### [User request] ######");
+			
 			CommonFunction.updateStatus(message.toString(), conn);
 			break;
 		case "getUserStatus":
@@ -297,7 +315,7 @@ public class WebSocket extends WebSocketServer {
 		}
 
 		
-		// 清GROUP:
+		// 清ROOM:
 		// 取得一個user所屬的所有roomid
 		List<String> roomids = WebSocketUserPool.getUserRoomByKey(conn);
 		List<String> tmpRoomids = new ArrayList<String>(roomids); // 重要: 為了接下來要動態移除掉UserInfo.userRoom List, 為了在跑迴圈時仍保留著reference variable, 故須用light copy建立另一相對物件, 這樣就能實現動態刪除
@@ -484,26 +502,31 @@ public class WebSocket extends WebSocketServer {
 			
 			/*** 更新狀態 ***/
 			if (WebSocketTypePool.isAgent(userConn)){
-				// RING狀態結束
+				// RING狀態結束			
 				userInfo.setStopRing(true);
 				
 				// IESTABLISHED狀態開始 
+				Util.getStatusFileLogger().info("###### [addRoomForMany]");
 				UpdateStatusBean usb = new UpdateStatusBean();
 				usb.setStatus(StatusEnum.IESTABLISHED.getDbid());
 				usb.setStartORend("start");
 				usb.setRoomID(roomID);
-				CommonFunction.updateStatus(new Gson().toJson(usb), aConn);
+				CommonFunction.updateStatus(new Gson().toJson(usb), userConn);
 				
-				// 更新room list
-//				String ACtype = WebSocketUserPool.getACTypeByKey(userConn);
-//				if ("Agent".equals(ACtype)){
-//					Util.getConsoleLogger().debug("userjointoroom - one Agent joined");
-//					CommonFunction.refreshRoomList(userConn);
-//				}else if ("Client".equals(ACtype)){
-//					clientID = userID;
-//				}
+				
+				// READY狀態開始
+				Util.getStatusFileLogger().info("###### [addRoomForMany]");
+//				Util.getConsoleLogger().debug("userInfo.isNotReady(): " + userInfo.isNotReady());
+				if (Util.getEstablishedStatus().equals(StatusEnum.READY.getDbid()) &&
+						userInfo.isNotReady()){
+					usb = new UpdateStatusBean();
+					usb.setStatus(StatusEnum.READY.getDbid());
+					usb.setStartORend("start");
+					CommonFunction.updateStatus(new Gson().toJson(usb), userConn);	
+				}// end of if (需要更新狀態)
 			}// end of 更新狀態
 		}// end of 將成員一一加入到rooom中
+		
 		
 		// 更新roomInfo - owner資訊
 		RoomInfo roomInfo = WebSocketRoomPool.getRoomInfo(roomID);
@@ -524,29 +547,6 @@ public class WebSocket extends WebSocketServer {
 				roomIDListJson.add(tmpRoomID);
 			}
 			
-			/*** Agent - 更新狀態 ***/
-			if (WebSocketTypePool.isAgent(userConn)){
-//				Util.getConsoleLogger().debug("updateStatus - Util.getEstablishedStatus(): " + Util.getEstablishedStatus());
-//				Util.getConsoleLogger().debug("updateStatus - StatusEnum.READY.getDbid(): " + StatusEnum.READY.getDbid());
-//				Util.getConsoleLogger().debug("updateStatus - currUserInfo.isNotReady(): " + currUserInfo.isNotReady());
-				if (Util.getEstablishedStatus().equals(StatusEnum.READY.getDbid()) &&
-						currUserInfo.isNotReady()){
-					UpdateStatusBean usb = null;
-					// NOTREADY狀態結束
-					usb = new UpdateStatusBean();
-					usb.setStatus(StatusEnum.NOTREADY.getDbid());
-					usb.setDbid(currUserInfo.getStatusDBIDMap().get(StatusEnum.NOTREADY));
-					usb.setStartORend("end");
-					CommonFunction.updateStatus(new Gson().toJson(usb), userConn);
-					// READY狀態開始
-					usb = new UpdateStatusBean();
-					usb.setStatus(StatusEnum.READY.getDbid());
-					usb.setStartORend("start");
-					CommonFunction.updateStatus(new Gson().toJson(usb), userConn);					
-					
-				}// end of if (需要更新狀態)
-			}// end of if (WebSocketTypePool.isAgent(...)
-			
 			/*** 通知已處理完"AcceptEvent"事件 ***/
 			JsonObject sendJson = new JsonObject();
 			sendJson.addProperty("Event", "AcceptEvent");
@@ -559,6 +559,8 @@ public class WebSocket extends WebSocketServer {
 			
 			WebSocketUserPool.sendMessageToUser(userConn,sendJson.toString());	
 		}
+		
+		Util.getConsoleLogger().debug("here3");
 	}
 	
 	private void sendComment(String aMsg, org.java_websocket.WebSocket aConn) {
@@ -571,6 +573,7 @@ public class WebSocket extends WebSocketServer {
 		AgentFunction.RecordActivitylog(interactionid, activitydataids, comment);
 		
 		/*** Agent - 更新狀態 ***/
+		Util.getStatusFileLogger().info("###### [sendComment()]");
 		UpdateStatusBean usb = null;
 		// AFTERCALLWORK狀態結束
 		usb = new UpdateStatusBean();

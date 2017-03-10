@@ -132,6 +132,13 @@ function loginValidate() {
 // 連上websocket
 function Login() {
 	console.log("Agent Login() function");
+	
+	// 清空waittingClientIDList_g
+	waittingClientIDList_g = [];
+	// 清空waittingClientIDList_g		
+	waittingAgentIDList_g = [];
+	
+	
 	//20170222 Lin
 	// 登入使用者
 //	parent.UserName_g = document.getElementById('Account').value;
@@ -324,15 +331,17 @@ function Login() {
 					// 在這邊取代原本findAgentEvent事件所做的事情
 					console.log("senduserdata - ")
 //					alert("senduserdata - obj.clientID: " + obj.clientID)
-//					alert("senduserdata - obj.userdata.id: " + obj.userdata.id)
+					alert("here?");
+					alert("senduserdata - obj.userdata.id: " + obj.userdata.id);
 					console.log("obj.clientName: " + obj.clientName);
 					console.log("obj.clientID: " + obj.clientID);
 					var clientID = obj.clientID; 
 					var clientName = obj.clientName; 
-					
-					waittingClientIDList_g.push( new function(){
-						this.clientID = obj.userdata.id
-					});
+					waittingClientIDList_g.push(obj.userdata.id);
+					alert("waittingClientIDList_g.length: " + waittingClientIDList_g.length);
+//					waittingClientIDList_g.push( new function(){
+//						this.clientID = obj.userdata.id
+//					});
 //					console.log("**********waittingClientIDMap.length: " + waittingClientIDList_g.length);
 //					console.log("**********waittingClientIDMap: " + waittingClientIDList_g);
 //					console.log("**********waittingClientIDMap: " + JSON.stringify( waittingClientIDList_g ));
@@ -670,8 +679,8 @@ function Login() {
 				} else if ("agentLeftThirdParty" == obj.Event){
 					alert("agentLeftThirdParty - agent " + obj.id + " left ");
 				} else if ("updateStatus" == obj.Event){
-					alert("obj.startORend: " + obj.startORend);
-					alert("obj.currStatusEnum: " + obj.currStatusEnum);
+					alert("obj.startORend: " + obj.startORend + " - " + obj.currStatusEnum);
+//					alert("obj.currStatusEnum: " + obj.currStatusEnum);
 					var startORend = obj.startORend;
 					var currStatusEnum = StatusEnum.getStatusEnum(obj.currStatusEnum);
 //					switchStatusV2(startORend, currStatusEnum); // 後續再做
@@ -756,7 +765,7 @@ function Logoutaction() {
 //	StatusEnum.ring_dbid = StatusEnum.updateStatus(StatusEnum.RING, "end", StatusEnum.ring_dbid);
 	// 下列改由後端處理 - WebSocketRoomPool.removeUserinroom()
 //	StatusEnum.ring_dbid = StatusEnum.updateStatus(StatusEnum.IESTABLISHED, "end",JSON.stringify(StatusEnum.iestablished_dbid)); // 須用list
-	
+	alert("waittingClientIDList_g.length: " + waittingClientIDList_g.length);
 	// 登出動作
 	var now = new Date();
 	var msg = {
@@ -793,7 +802,7 @@ function ready() {
 	// 更新頁面
 //	status_g = StatusEnum.READY;
 	switchStatus(StatusEnum.READY);
-	StatusEnum.notready_dbid = StatusEnum.updateStatus(StatusEnum.NOTREADY, "end", StatusEnum.notready_dbid);
+//	StatusEnum.notready_dbid = StatusEnum.updateStatus(StatusEnum.NOTREADY, "end", StatusEnum.notready_dbid);
 	StatusEnum.updateStatus(StatusEnum.READY, "start");
 	
 }
@@ -802,7 +811,7 @@ function notready() {
 	// 更新頁面
 //	status_g = StatusEnum.NOTREADY;
 	switchStatus(StatusEnum.NOTREADY);
-	StatusEnum.ready_dbid = StatusEnum.updateStatus(StatusEnum.READY, "end", StatusEnum.ready_dbid);
+//	StatusEnum.ready_dbid = StatusEnum.updateStatus(StatusEnum.READY, "end", StatusEnum.ready_dbid);
 //	alert("notreadyreason_dbid_g: " + notreadyreason_dbid_g);
 	StatusEnum.updateStatus(StatusEnum.NOTREADY, "start", null, null, null, notreadyreason_dbid_g);
 //	StatusEnum.updateStatus(StatusEnum.NOTREADY, "start");
@@ -1222,10 +1231,10 @@ function switchStatus(aStatusEnum){
 		// 清空AgentList
 		$("#agentList").empty();
 		
-		// 清空waittingClientIDList_g
-		waittingClientIDList_g = [];
-		// 清空waittingClientIDList_g		
-		waittingAgentIDList_g = [];
+//		// 清空waittingClientIDList_g
+//		waittingClientIDList_g = [];
+//		// 清空waittingClientIDList_g		
+//		waittingAgentIDList_g = [];
 
         // code block
         break;

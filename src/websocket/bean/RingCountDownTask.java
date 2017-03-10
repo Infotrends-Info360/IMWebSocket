@@ -3,10 +3,12 @@ package websocket.bean;
 import java.util.Timer;
 import java.util.TimerTask;
 
+import org.apache.logging.log4j.Level;
 import org.java_websocket.WebSocket;
 
 import com.google.gson.JsonObject;
 
+import util.StatusEnum;
 import util.Util;
 import websocket.function.AgentFunction;
 import websocket.pools.WebSocketUserPool;
@@ -53,6 +55,14 @@ public class RingCountDownTask extends TimerTask {
 			}
 			
 			// 寫入DB
+			Util.getStatusFileLogger().info("###### [RingCountDownTask] stopped ######");
+			Util.getStatusFileLogger().info("updateStatus: " + "end" + " - " + StatusEnum.RING + " - " + agentUserInfo.getUsername());
+
+			Util.getStatusFileLogger().info("" + StatusEnum.RING + ": ");
+			Util.getStatusFileLogger().printf(Level.INFO,"%10s	%10s %10s %10s %10s %10s" , "status", "startORend", "dbid", "roomID", "clientID", "reason");
+			Util.getStatusFileLogger().info("----------------------------------------------------------------------------");
+			Util.getStatusFileLogger().printf(Level.INFO,"%10s	%10s %10s %10s %10s %10s" , StatusEnum.RING.getDbid(), "end" , this.ring_dbid, null, WebSocketUserPool.getUserID(clientConn), null);
+			
 			AgentFunction.RecordStatusEnd(this.ring_dbid);
 			
 			return;

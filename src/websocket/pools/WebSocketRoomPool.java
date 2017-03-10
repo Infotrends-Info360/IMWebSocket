@@ -9,6 +9,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
+import org.apache.logging.log4j.Level;
 import org.java_websocket.WebSocket;
 import org.json.JSONObject;
 
@@ -116,8 +117,9 @@ public class WebSocketRoomPool{
 					WebSocketUserPool.removeUserRoom(conn, aRoomID);
 					/*** Agent - 更新狀態 ***/
 					if (WebSocketTypePool.isAgent(conn)){
-						UpdateStatusBean usb = null;
+						Util.getStatusFileLogger().info("###### [removeUserinroom()] called ######");
 						// AFTERCALLWORK狀態開始 (三方/轉接-可能有多個ACW開始狀態要建立)
+						UpdateStatusBean usb = null;
 						usb = new UpdateStatusBean();
 						usb.setStatus(StatusEnum.AFTERCALLWORK.getDbid());
 						usb.setStartORend("start");
@@ -125,25 +127,15 @@ public class WebSocketRoomPool{
 						
 						// AFTERCALLSTATUS切換 (可直接竊換,若有重複更新同一狀態,會由CommonFunction.updateStatus負責防止)
 						if (StatusEnum.READY.getDbid().equals(Util.getAfterCallStatus())){
-							// NOTREADY狀態結束
-							usb = new UpdateStatusBean();
-							usb.setStatus(StatusEnum.NOTREADY.getDbid());
-							usb.setDbid(currUserInfo.getStatusDBIDMap().get(StatusEnum.NOTREADY));
-							usb.setStartORend("end");
-							CommonFunction.updateStatus(new Gson().toJson(usb), conn);
 							// READY狀態開始
+							Util.getStatusFileLogger().info("###### [removeUserinroom()] called ######");
 							usb = new UpdateStatusBean();
 							usb.setStatus(StatusEnum.READY.getDbid());
 							usb.setStartORend("start");
 							CommonFunction.updateStatus(new Gson().toJson(usb), conn);							
 						}else if(StatusEnum.NOTREADY.getDbid().equals(Util.getAfterCallStatus())){
-							// READY狀態結束
-							usb = new UpdateStatusBean();
-							usb.setStatus(StatusEnum.READY.getDbid());
-							usb.setDbid(currUserInfo.getStatusDBIDMap().get(StatusEnum.READY));
-							usb.setStartORend("end");
-							CommonFunction.updateStatus(new Gson().toJson(usb), conn);
 							// NOTREADY狀態開始
+							Util.getStatusFileLogger().info("###### [removeUserinroom()] called ######");
 							usb = new UpdateStatusBean();
 							usb.setStatus(StatusEnum.NOTREADY.getDbid());
 							usb.setStartORend("start");
@@ -183,8 +175,13 @@ public class WebSocketRoomPool{
 			// 須在最後面做,因為還需要通知connsInRoomMap裡面的人有人離開/關閉房間了
 			if (connsInRoomMap.size() == 0){
 				// 1. 將此roomID所擁有的iEstablised_dbid寫入結束時間
-//				Util.getConsoleLogger().debug("insert endtime iestablished");
-//				Util.getConsoleLogger().debug("roomInfo.getIestablish_dbid(): " + roomInfo.getIestablish_dbid());
+				Util.getStatusFileLogger().info("###### removeUserinroom() called ######");
+				Util.getStatusFileLogger().info("updateStatus: " + "end" + " - " + StatusEnum.IESTABLISHED + " - " + WebSocketUserPool.getUserNameByKey(aConn) + " closed it");
+
+				Util.getStatusFileLogger().info("" + StatusEnum.IESTABLISHED + ": ");
+				Util.getStatusFileLogger().printf(Level.INFO,"%10s	%10s %10s %10s %10s %10s" , "status", "startORend", "dbid", "roomID", "clientID", "reason");
+				Util.getStatusFileLogger().info("----------------------------------------------------------------------------");
+				Util.getStatusFileLogger().printf(Level.INFO,"%10s	%10s %10s %10s %10s %10s" , StatusEnum.IESTABLISHED.getDbid(), "end" , roomInfo.getIestablish_dbid(), roomInfo.getRoomID(), null, null);
 				AgentFunction.RecordStatusEnd(roomInfo.getIestablish_dbid());
 				// 2. 如果一個room都空了,就把它從Map中清掉
 				roomMap.remove(aRoomID);
