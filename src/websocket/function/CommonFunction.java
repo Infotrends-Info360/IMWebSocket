@@ -17,10 +17,12 @@ import org.json.JSONObject;
 import com.google.gson.Gson;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
+import com.google.gson.JsonNull;
 import com.google.gson.JsonObject;
 
 import util.StatusEnum;
 import util.Util;
+
 
 
 
@@ -507,13 +509,6 @@ public class CommonFunction {
 				WebSocketUserPool.getReadyAgentQueue().offer(userid);
 				Util.getConsoleLogger().debug("(READY)WebSocketUserPool.getReadyAgentQueue().size(): " + WebSocketUserPool.getReadyAgentQueue().size());
 			}
-			
-			
-
-			// 先只有新增時寄送EVENT,讓前端能拿到相對應的dbid
-			obj.addProperty("Event", "updateStatus");
-			WebSocketUserPool.sendMessageToUser(aConn, obj.toString());
-
 		}else if ("end".equals(startORend)){ 
 			if (dbid != null){
 				
@@ -529,10 +524,11 @@ public class CommonFunction {
 //				StatusEnum currStatusEnum = StatusEnum.getStatusEnumByDbid(status_dbid);
 				userInfo.getStatusDBIDMap().remove(currStatusEnum);
 			}
-		}
+		}// end of if "start" or "end"
 		
-		
-		
+		// "start"時dbid_key會對應到值, 寄送EVENT,讓前端能拿到相對應的dbid
+		obj.addProperty("Event", "updateStatus");
+		WebSocketUserPool.sendMessageToUser(aConn, obj.toString());
 		
 	}
 	
