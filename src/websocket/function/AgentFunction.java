@@ -55,6 +55,14 @@ public class AgentFunction {
 		JSONObject obj = new JSONObject(message);
 		org.java_websocket.WebSocket sendto = WebSocketUserPool
 				.getWebSocketByUser(obj.getString("sendto"));
+		UserInfo agentUserInfo = WebSocketUserPool.getUserInfoByKey(aConn);
+		
+		/*** Agent - 更新狀態 ***/
+		UpdateStatusBean usb = null;
+		// RING狀態結束
+		agentUserInfo.setStopRing(true);
+		
+		/*** 通知已處理完成RejectEvent ***/
 		JSONObject sendjson = new JSONObject();
 		sendjson.put("Event", "RejectEvent");
 		sendjson.put("from", obj.getString("id"));
