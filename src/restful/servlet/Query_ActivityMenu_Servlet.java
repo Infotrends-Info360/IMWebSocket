@@ -90,7 +90,7 @@ public class Query_ActivityMenu_Servlet {
         	  	if(activitygroupslist.get(a).getDeleteflag().equals("0")){
         	  		
         	  		if(activitygroupslist.get(a).getCreatedatetime()!=null && activitygroupslist.get(a).getCreatedatetime()!=""){
-        	  			activitygroupsObject.put("createdatetime",activitygroupslist.get(a).getCreatedatetime());
+        	  			activitygroupsObject.put("createdatetime",activitygroupslist.get(a).getCreatedatetime().substring(0, 19));
         	  			Flag0groupsJsonArray.put(activitygroupsObject);
         					
         			}else {
@@ -104,7 +104,7 @@ public class Query_ActivityMenu_Servlet {
         	  	
         	  	if(activitygroupslist.get(a).getDeleteflag().equals("1")){
         	  		if(activitygroupslist.get(a).getDeletedatetime()!=null && activitygroupslist.get(a).getDeletedatetime()!=""){
-        	  			activitygroupsObject.put("deletedatetime",activitygroupslist.get(a).getDeletedatetime());
+        	  			activitygroupsObject.put("deletedatetime",activitygroupslist.get(a).getDeletedatetime().substring(0, 19));
         	  			Flag1groupsJsonArray.put(activitygroupsObject);
         					
         			}else {

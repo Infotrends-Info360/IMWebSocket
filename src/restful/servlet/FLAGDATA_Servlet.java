@@ -123,7 +123,7 @@ public class FLAGDATA_Servlet {
         			
         		if(activitydatalist.get(g).getDeleteflag().equals("0")){
         			if(activitydatalist.get(g).getCreatedatetime()!=null && activitydatalist.get(g).getCreatedatetime()!=""){
-        				activitydataObject.put("createdatetime",activitydatalist.get(g).getCreatedatetime());
+        				activitydataObject.put("createdatetime",activitydatalist.get(g).getCreatedatetime().substring(0, 19));
         				flag0JsonArray.put(activitydataObject);
         					
         			}else {
@@ -134,7 +134,7 @@ public class FLAGDATA_Servlet {
         		
         		if(activitydatalist.get(g).getDeleteflag().equals("1")){
         			if(activitydatalist.get(g).getDeleteflag()!=null && activitydatalist.get(g).getDeleteflag()!=""){
-        				activitydataObject.put("deletedatetime", activitydatalist.get(g).getDeletedatetime());
+        				activitydataObject.put("deletedatetime", activitydatalist.get(g).getDeletedatetime().substring(0, 19));
         				flag1JsonArray.put(activitydataObject);
         				
         				}else {
