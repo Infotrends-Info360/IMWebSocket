@@ -670,7 +670,12 @@ function Login() {
 				} else if ("agentLeftThirdParty" == obj.Event){
 					alert("agentLeftThirdParty - agent " + obj.id + " left ");
 				} else if ("updateStatus" == obj.Event){
-					StatusEnum.updateDbid(obj);
+					alert("obj.startORend: " + obj.startORend);
+					alert("obj.currStatusEnum: " + obj.currStatusEnum);
+					var startORend = obj.startORend;
+					var currStatusEnum = StatusEnum.getStatusEnum(obj.currStatusEnum);
+//					switchStatusV2(startORend, currStatusEnum); // 後續再做
+					
 				} else if ("ringTimeout" == obj.Event){
 					alert("ringTimeout");
 					var currClientID = obj.clientID;

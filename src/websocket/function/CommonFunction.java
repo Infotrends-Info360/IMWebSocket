@@ -408,10 +408,10 @@ public class CommonFunction {
 	}
 	
 	/** * update Agent Status */
-	public static void updateStatus(String message, org.java_websocket.WebSocket aConn) {
+	public static void updateStatus(String aMsg, org.java_websocket.WebSocket aConn) {
 		Util.getConsoleLogger().debug("updateStatus() called");
 		Util.getStatusFileLogger().info("###### updateStatus() called ######");
-		JsonObject obj = Util.getGJsonObject(message);
+		JsonObject obj = Util.getGJsonObject(aMsg);
 //		JSONObject obj = new JSONObject(message); 
 		String ACtype = WebSocketTypePool.getUserType(aConn);
 		String username = WebSocketUserPool.getUserNameByKey(aConn);
@@ -528,6 +528,7 @@ public class CommonFunction {
 		
 		// "start"時dbid_key會對應到值, 寄送EVENT,讓前端能拿到相對應的dbid
 		obj.addProperty("Event", "updateStatus");
+		obj.addProperty("currStatusEnum", currStatusEnum.toString());
 		WebSocketUserPool.sendMessageToUser(aConn, obj.toString());
 		
 	}
