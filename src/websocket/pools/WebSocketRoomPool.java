@@ -12,12 +12,16 @@ import java.util.Set;
 import org.java_websocket.WebSocket;
 import org.json.JSONObject;
 
+import com.google.gson.Gson;
 import com.google.gson.JsonObject;
 
+import util.StatusEnum;
 import util.Util;
 import websocket.bean.RoomInfo;
+import websocket.bean.UpdateStatusBean;
 import websocket.bean.UserInfo;
 import websocket.function.AgentFunction;
+import websocket.function.CommonFunction;
 
 //此類別給AgentFunction.java共同使用
 //此類別給ClientFunction.java共同使用
@@ -105,20 +109,44 @@ public class WebSocketRoomPool{
 			if ("Client".equals(currACType)){
 				Util.getConsoleLogger().debug("Client 全清");
 				//全清:
+				WebSocket agentConn = null;
 				for (WebSocket conn: tmpConnsInRoom){
 					WebSocketUserPool.removeUserRoom(conn, aRoomID);
+					/*** Agent - 更新狀態 ***/
+					if (WebSocketTypePool.isAgent(conn)){
+						UpdateStatusBean usb = null;
+						// AFTERCALLWORK狀態開始 (三方/轉接-可能有多個ACW開始狀態要建立)
+						usb = new UpdateStatusBean();
+						usb.setStatus(StatusEnum.AFTERCALLWORK.getDbid());
+						usb.setStartORend("start");
+						CommonFunction.updateStatus(new Gson().toJson(usb), conn);	
+					}
 				}
 				connsInRoomMap.clear();
 				sendJson.put("result", WebSocketUserPool.getUserNameByKey(aConn) + " closed the room" + aRoomID);
+				
+				
 			// 之後可將一二條件式合併:
 			}else if (connsInRoomMap.size() == 2){ 
 				Util.getConsoleLogger().debug("connsInRoom.size() == 2 全清");
 				//也全清:
 				for (WebSocket conn: tmpConnsInRoom){
 					WebSocketUserPool.removeUserRoom(conn, aRoomID);
+					/*** Agent - 更新狀態 ***/
+					if (WebSocketTypePool.isAgent(conn)){
+						UpdateStatusBean usb = null;
+						// AFTERCALLWORK狀態開始 (三方/轉接-可能有多個ACW開始狀態要建立)
+						usb = new UpdateStatusBean();
+						usb.setStatus(StatusEnum.AFTERCALLWORK.getDbid());
+						usb.setStartORend("start");
+						CommonFunction.updateStatus(new Gson().toJson(usb), conn);	
+					}
 				}
 				connsInRoomMap.clear();
-				sendJson.put("result", WebSocketUserPool.getUserNameByKey(aConn) + " closed the room" + aRoomID);				
+				sendJson.put("result", WebSocketUserPool.getUserNameByKey(aConn) + " closed the room" + aRoomID);
+				// 更新狀態 ACW開始時間
+				
+				
 			}else if (connsInRoomMap.size() > 2){
 				Util.getConsoleLogger().debug("connsInRoom.size() > 2  清自己");
 				//清Agent自己

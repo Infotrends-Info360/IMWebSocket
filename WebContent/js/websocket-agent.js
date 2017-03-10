@@ -633,7 +633,7 @@ function Login() {
 				
 					// ACW
 					// 新增ACW開始時間
-					StatusEnum.updateStatus(StatusEnum.AFTERCALLWORK, "start");
+//					StatusEnum.updateStatus(StatusEnum.AFTERCALLWORK, "start");
 
 					
 				} else if ("clientLeft" == obj.Event){
