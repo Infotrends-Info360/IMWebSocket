@@ -612,16 +612,16 @@ function Login() {
 					// 20170222 Lin
 					// 判斷當通話結束後,要將狀態切為READY或是NOTREADY
 					if(obj.AfterCallStatus == StatusEnum.READY.dbid){ //如果AfterCallStatus == ready
-						if(StatusEnum.ready_dbid == null){
+//						if(StatusEnum.ready_dbid == null){
 							$('#notready')[0].disabled = true;
 							$('#ready')[0].disabled = false;
 //								status_g = StatusEnum.READY;
 							switchStatus(StatusEnum.READY);
 //							StatusEnum.notready_dbid = StatusEnum.updateStatus(StatusEnum.NOTREADY, "end", StatusEnum.notready_dbid);
 //							StatusEnum.updateStatus(StatusEnum.READY, "start");
-						}
+//						}
 					}else if(obj.AfterCallStatus == StatusEnum.NOTREADY.dbid){ //如果AfterCallStatus == not ready
-						if(StatusEnum.notready_dbid == null){
+//						if(StatusEnum.notready_dbid == null){
 							$('#notready')[0].disabled = false;
 							$('#ready')[0].disabled = true;
 //								status_g = StatusEnum.NOTREADY;
@@ -629,7 +629,7 @@ function Login() {
 //							StatusEnum.ready_dbid = StatusEnum.updateStatus(StatusEnum.READY, "end", StatusEnum.ready_dbid);
 //							StatusEnum.updateStatus(StatusEnum.NOTREADY, "start", null, null, null, notreadyreason_dbid_g);
 //								StatusEnum.updateStatus(StatusEnum.NOTREADY, "start");
-						}
+//						}
 					}
 					// 20170222 Lin
 				

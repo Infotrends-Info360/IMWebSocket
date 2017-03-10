@@ -112,6 +112,7 @@ public class WebSocketRoomPool{
 				
 				//全清:
 				for (WebSocket conn: tmpConnsInRoom){
+					UserInfo currUserInfo = WebSocketUserPool.getUserInfoByKey(conn);
 					WebSocketUserPool.removeUserRoom(conn, aRoomID);
 					/*** Agent - 更新狀態 ***/
 					if (WebSocketTypePool.isAgent(conn)){
@@ -121,6 +122,33 @@ public class WebSocketRoomPool{
 						usb.setStatus(StatusEnum.AFTERCALLWORK.getDbid());
 						usb.setStartORend("start");
 						CommonFunction.updateStatus(new Gson().toJson(usb), conn);
+						
+						// AFTERCALLSTATUS切換 (可直接竊換,若有重複更新同一狀態,會由CommonFunction.updateStatus負責防止)
+						if (StatusEnum.READY.getDbid().equals(Util.getAfterCallStatus())){
+							// NOTREADY狀態結束
+							usb = new UpdateStatusBean();
+							usb.setStatus(StatusEnum.NOTREADY.getDbid());
+							usb.setDbid(currUserInfo.getStatusDBIDMap().get(StatusEnum.NOTREADY));
+							usb.setStartORend("end");
+							CommonFunction.updateStatus(new Gson().toJson(usb), conn);
+							// READY狀態開始
+							usb = new UpdateStatusBean();
+							usb.setStatus(StatusEnum.READY.getDbid());
+							usb.setStartORend("start");
+							CommonFunction.updateStatus(new Gson().toJson(usb), conn);							
+						}else if(StatusEnum.NOTREADY.getDbid().equals(Util.getAfterCallStatus())){
+							// READY狀態結束
+							usb = new UpdateStatusBean();
+							usb.setStatus(StatusEnum.READY.getDbid());
+							usb.setDbid(currUserInfo.getStatusDBIDMap().get(StatusEnum.READY));
+							usb.setStartORend("end");
+							CommonFunction.updateStatus(new Gson().toJson(usb), conn);
+							// NOTREADY狀態開始
+							usb = new UpdateStatusBean();
+							usb.setStatus(StatusEnum.NOTREADY.getDbid());
+							usb.setStartORend("start");
+							CommonFunction.updateStatus(new Gson().toJson(usb), conn);								
+						}// end of AFTERCALLSTATUS切換 
 						
 					}// end of if
 				}// end of for
