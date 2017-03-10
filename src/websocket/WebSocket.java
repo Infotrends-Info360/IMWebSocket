@@ -516,6 +516,7 @@ public class WebSocket extends WebSocketServer {
 			JsonObject userIDJsonObj = userIDJsonE.getAsJsonObject();
 			String userID = userIDJsonObj.get("ID").getAsString();
 			org.java_websocket.WebSocket userConn = WebSocketUserPool.getWebSocketByUser(userID);
+			UserInfo currUserInfo = WebSocketUserPool.getUserInfoByKey(userConn);
 			
 			JsonArray roomIDListJson = new JsonArray();
 			List<String> roomIDList = WebSocketUserPool.getUserRoomByKey(aConn);
@@ -523,6 +524,30 @@ public class WebSocket extends WebSocketServer {
 				roomIDListJson.add(tmpRoomID);
 			}
 			
+			/*** Agent - 更新狀態 ***/
+			if (WebSocketTypePool.isAgent(userConn)){
+//				Util.getConsoleLogger().debug("updateStatus - Util.getEstablishedStatus(): " + Util.getEstablishedStatus());
+//				Util.getConsoleLogger().debug("updateStatus - StatusEnum.READY.getDbid(): " + StatusEnum.READY.getDbid());
+//				Util.getConsoleLogger().debug("updateStatus - currUserInfo.isNotReady(): " + currUserInfo.isNotReady());
+				if (Util.getEstablishedStatus().equals(StatusEnum.READY.getDbid()) &&
+						currUserInfo.isNotReady()){
+					UpdateStatusBean usb = null;
+					// NOTREADY狀態結束
+					usb = new UpdateStatusBean();
+					usb.setStatus(StatusEnum.NOTREADY.getDbid());
+					usb.setDbid(currUserInfo.getStatusDBIDMap().get(StatusEnum.NOTREADY));
+					usb.setStartORend("end");
+					CommonFunction.updateStatus(new Gson().toJson(usb), userConn);
+					// READY狀態開始
+					usb = new UpdateStatusBean();
+					usb.setStatus(StatusEnum.READY.getDbid());
+					usb.setStartORend("start");
+					CommonFunction.updateStatus(new Gson().toJson(usb), userConn);					
+					
+				}// end of if (需要更新狀態)
+			}// end of if (WebSocketTypePool.isAgent(...)
+			
+			/*** 通知已處理完"AcceptEvent"事件 ***/
 			JsonObject sendJson = new JsonObject();
 			sendJson.addProperty("Event", "AcceptEvent");
 			sendJson.addProperty("from",  WebSocketUserPool.getUserID(aConn));
@@ -532,8 +557,7 @@ public class WebSocket extends WebSocketServer {
 			sendJson.addProperty("EstablishedStatus", Util.getEstablishedStatus()); //增加AfterCallStatus變數 20170222 Lin
 			sendJson.add("roomList", roomIDListJson);
 			
-			WebSocketUserPool.sendMessageToUser(
-					userConn,sendJson.toString());	
+			WebSocketUserPool.sendMessageToUser(userConn,sendJson.toString());	
 		}
 	}
 	

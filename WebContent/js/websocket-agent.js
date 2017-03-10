@@ -279,13 +279,15 @@ function Login() {
 //					}else if (afterCallStatus_g == 'WORKHARD'){ //20170222 Lin
 						
 					//20170222 Lin 
-					//Ring時已切換為NOTREADY，如設定為READY才做切換動作
-					}else if (obj.EstablishedStatus == StatusEnum.READY.dbid){
+					//Ring時已預設會切換為NOTREADY,故僅須考慮到當EstablishedStatus設定為要切換成READY時的狀況。
+					//然而假若使用者在收到RING-收到"AcceptEvent"事件期間,有主動切換回READY,則不再轉變
+					}
+					else if (obj.EstablishedStatus == StatusEnum.READY.dbid){
 						// 更新狀態(唯一在RING事件之後會將狀態切換為READY的情況)
 //						status_g = StatusEnum.READY;
 						switchStatus(StatusEnum.READY);
-						StatusEnum.notready_dbid = StatusEnum.updateStatus(StatusEnum.NOTREADY, "end", StatusEnum.notready_dbid);
-						StatusEnum.updateStatus(StatusEnum.READY, "start");
+//						StatusEnum.notready_dbid = StatusEnum.updateStatus(StatusEnum.NOTREADY, "end", StatusEnum.notready_dbid);
+//						StatusEnum.updateStatus(StatusEnum.READY, "start");
 					}
 //					else if (obj.EstablishedStatus == StatusEnum.NOTREADY.dbid){
 //						// 更新狀態(唯一在RING事件之後會將狀態切換為NOTREADY的情況)
@@ -895,7 +897,7 @@ function RejectEvent() {
 
 }
 
-// 關閉交談
+// 關閉交談 (此方法已沒在使用)
 function ReleaseEvent(aRoomID) {
 	if (aRoomID === undefined) aRoomID = RoomID_g;
 	// 切換為未就緒
