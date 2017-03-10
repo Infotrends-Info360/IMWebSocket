@@ -617,8 +617,8 @@ function Login() {
 							$('#ready')[0].disabled = false;
 //								status_g = StatusEnum.READY;
 							switchStatus(StatusEnum.READY);
-							StatusEnum.notready_dbid = StatusEnum.updateStatus(StatusEnum.NOTREADY, "end", StatusEnum.notready_dbid);
-							StatusEnum.updateStatus(StatusEnum.READY, "start");
+//							StatusEnum.notready_dbid = StatusEnum.updateStatus(StatusEnum.NOTREADY, "end", StatusEnum.notready_dbid);
+//							StatusEnum.updateStatus(StatusEnum.READY, "start");
 						}
 					}else if(obj.AfterCallStatus == StatusEnum.NOTREADY.dbid){ //如果AfterCallStatus == not ready
 						if(StatusEnum.notready_dbid == null){
@@ -626,8 +626,8 @@ function Login() {
 							$('#ready')[0].disabled = true;
 //								status_g = StatusEnum.NOTREADY;
 							switchStatus(StatusEnum.NOTREADY);
-							StatusEnum.ready_dbid = StatusEnum.updateStatus(StatusEnum.READY, "end", StatusEnum.ready_dbid);
-							StatusEnum.updateStatus(StatusEnum.NOTREADY, "start", null, null, null, notreadyreason_dbid_g);
+//							StatusEnum.ready_dbid = StatusEnum.updateStatus(StatusEnum.READY, "end", StatusEnum.ready_dbid);
+//							StatusEnum.updateStatus(StatusEnum.NOTREADY, "start", null, null, null, notreadyreason_dbid_g);
 //								StatusEnum.updateStatus(StatusEnum.NOTREADY, "start");
 						}
 					}

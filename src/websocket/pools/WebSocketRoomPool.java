@@ -106,10 +106,11 @@ public class WebSocketRoomPool{
 			String currACType = WebSocketUserPool.getACTypeByKey(aConn);
 			
 			/** 清除room相關資料 **/
-			if ("Client".equals(currACType)){
-				Util.getConsoleLogger().debug("Client 全清");
+			if ("Client".equals(currACType) || connsInRoomMap.size() == 2){
+				if ("Client".equals(currACType)) Util.getConsoleLogger().debug("Client 全清");
+				if (connsInRoomMap.size() == 2) Util.getConsoleLogger().debug("connsInRoom.size() == 2 全清");
+				
 				//全清:
-				WebSocket agentConn = null;
 				for (WebSocket conn: tmpConnsInRoom){
 					WebSocketUserPool.removeUserRoom(conn, aRoomID);
 					/*** Agent - 更新狀態 ***/
@@ -119,34 +120,12 @@ public class WebSocketRoomPool{
 						usb = new UpdateStatusBean();
 						usb.setStatus(StatusEnum.AFTERCALLWORK.getDbid());
 						usb.setStartORend("start");
-						CommonFunction.updateStatus(new Gson().toJson(usb), conn);	
-					}
-				}
+						CommonFunction.updateStatus(new Gson().toJson(usb), conn);
+						
+					}// end of if
+				}// end of for
 				connsInRoomMap.clear();
-				sendJson.put("result", WebSocketUserPool.getUserNameByKey(aConn) + " closed the room" + aRoomID);
-				
-				
-			// 之後可將一二條件式合併:
-			}else if (connsInRoomMap.size() == 2){ 
-				Util.getConsoleLogger().debug("connsInRoom.size() == 2 全清");
-				//也全清:
-				for (WebSocket conn: tmpConnsInRoom){
-					WebSocketUserPool.removeUserRoom(conn, aRoomID);
-					/*** Agent - 更新狀態 ***/
-					if (WebSocketTypePool.isAgent(conn)){
-						UpdateStatusBean usb = null;
-						// AFTERCALLWORK狀態開始 (三方/轉接-可能有多個ACW開始狀態要建立)
-						usb = new UpdateStatusBean();
-						usb.setStatus(StatusEnum.AFTERCALLWORK.getDbid());
-						usb.setStartORend("start");
-						CommonFunction.updateStatus(new Gson().toJson(usb), conn);	
-					}
-				}
-				connsInRoomMap.clear();
-				sendJson.put("result", WebSocketUserPool.getUserNameByKey(aConn) + " closed the room" + aRoomID);
-				// 更新狀態 ACW開始時間
-				
-				
+				sendJson.put("result", WebSocketUserPool.getUserNameByKey(aConn) + " closed the room" + aRoomID);				
 			}else if (connsInRoomMap.size() > 2){
 				Util.getConsoleLogger().debug("connsInRoom.size() > 2  清自己");
 				//清Agent自己
@@ -154,6 +133,7 @@ public class WebSocketRoomPool{
 				connsInRoomMap.remove(aConn);
 				sendJson.put("result", WebSocketUserPool.getUserNameByKey(aConn) + " left the room" + aRoomID);				
 			}
+			
 			Util.getConsoleLogger().debug("roomId: " + aRoomID + " size: " + connsInRoomMap.size());
 			sendJson.put("roomMembers", getOnlineUserNameinroom(aRoomID).toString());
 			sendJson.put("roomMemberIDs", getOnlineUserIDinroom(aRoomID).toString());
@@ -182,7 +162,7 @@ public class WebSocketRoomPool{
 				roomMap.remove(aRoomID);
 			}
 //			Util.getConsoleLogger().debug("roomMap.size() - after: " + roomMap.size());
-		}
+		}// end of if
 	}
 	
 	/** * Send Message to all of User in Room * @param message */
