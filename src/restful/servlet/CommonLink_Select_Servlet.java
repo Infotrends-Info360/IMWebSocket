@@ -61,6 +61,7 @@ public class CommonLink_Select_Servlet {
 
 	    	PARNETIDJsonObject.put("text", commonlinklist2.get(0).getNodetext());
 	    	
+	    	
 	    	parnetJsonArray.put(PARNETIDJsonObject);
 	    	jsonObject.put("Tree", parnetJsonArray);
 	    	
