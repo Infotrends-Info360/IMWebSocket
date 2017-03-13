@@ -42,7 +42,7 @@ public class UserInfo {
 	private FindAgentCallable findAgentCallable;
 	
 	// 狀態更新使用 - 存放status log dbid - "end"時寫入DB用
-	private Map<StatusEnum, String> statusDBIDMap = new HashMap<>();
+	private Map<StatusEnum, String> statusDBIDMap = Collections.synchronizedMap(new HashMap<StatusEnum, String>());
 	
 	public String getUserid() {
 		return userid;
@@ -148,6 +148,19 @@ public class UserInfo {
 		this.findAgentCallable = findAgentCallable;
 	}
 	
+	public boolean isReady(){
+		if (this.statusDBIDMap.get(StatusEnum.READY) != null){
+			return true;
+		}
+		return false;
+	}
+	
+	public boolean isNotReady(){
+		if (this.statusDBIDMap.get(StatusEnum.NOTREADY) != null){
+			return true;
+		}
+		return false;
+	}
 	
 	
 }

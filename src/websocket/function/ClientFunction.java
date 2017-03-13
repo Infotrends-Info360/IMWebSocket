@@ -67,7 +67,8 @@ public class ClientFunction {
 			Util.getFileLogger().info(FindAgentThread.TAG + "agent not found");
 			Util.getFileLogger().error(e.getMessage());
 		}
-		Util.getFileLogger().info(FindAgentThread.TAG + "agent found - agentID: " + AgentID);
+		Util.getFileLogger().info(FindAgentThread.TAG + " ************ agent found - agentID: " + AgentID);
+		Util.getConsoleLogger().info(FindAgentThread.TAG + " ************ agent found - agentID: " + AgentID);
 //				Util.getConsoleLogger().debug("findAgent : " + Agent);
 		
 		// 在這邊執行senduserdata
@@ -185,6 +186,9 @@ public class ClientFunction {
 		// 之後若熟悉RESTful,則可試著將抓取contactID與找到Agent後通知兩方這兩件事情分開處理
 		org.java_websocket.WebSocket sendtoConn = null;
 		sendtoConn = WebSocketUserPool.getWebSocketByUser(sendto);
+		Util.getConsoleLogger().debug("sendtoConn: " + sendtoConn);
+		Util.getConsoleLogger().debug("WebSocketUserPool.getUserNameByKey(sendtoConn): " + WebSocketUserPool.getUserNameByKey(sendtoConn));
+		
 		if (sendtoConn != null){
 			sendjson.put("clientID", WebSocketUserPool.getUserID(conn).trim());
 			sendjson.put("clientName", WebSocketUserPool.getUserNameByKey(conn).trim());
@@ -192,6 +196,7 @@ public class ClientFunction {
 			
 			// 開始RING倒數機制
 //				// 3. RING狀態開始
+			Util.getStatusFileLogger().info("###### [findAgent]");
 			UpdateStatusBean usb = new UpdateStatusBean();
 			usb.setStatus(StatusEnum.RING.getDbid());
 			usb.setStartORend("start");

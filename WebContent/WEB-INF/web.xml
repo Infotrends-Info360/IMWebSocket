@@ -47,10 +47,14 @@
 		<param-value>12</param-value>
 	</context-param>
 	<context-param>
+	<!-- 3: READY -->
+	<!-- 4: NOTREADY -->
 		<param-name>AfterCallStatus</param-name>
 		<param-value>4</param-value>
 	</context-param>
 	<context-param>
+	<!-- 3: READY -->
+	<!-- 4: NOTREADY -->
 		<param-name>EstablishedStatus</param-name>
 		<param-value>3</param-value>
 	</context-param>

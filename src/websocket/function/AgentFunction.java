@@ -16,8 +16,11 @@ import org.java_websocket.WebSocket;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
+import com.google.gson.Gson;
+
 import util.StatusEnum;
 import util.Util;
+import websocket.bean.UpdateStatusBean;
 import websocket.bean.UserInfo;
 import websocket.pools.WebSocketRoomPool;
 import websocket.pools.WebSocketTypePool;
@@ -27,12 +30,16 @@ import websocket.pools.WebSocketUserPool;
 public class AgentFunction {
 
 	/** * send Accept Event */
+	// (此方法已沒在使用)
 	public static void AcceptEvent(String message,
 			org.java_websocket.WebSocket conn) {
+		Util.getConsoleLogger().debug("AcceptEvent() called");
 		JSONObject obj = new JSONObject(message);
 		String roomID = obj.getString("roomID");
 		org.java_websocket.WebSocket sendto = WebSocketUserPool
 				.getWebSocketByUser(obj.getString("sendto"));
+				
+		/*** 寄送"AcceptEvent"事件 ***/
 		JSONObject sendjson = new JSONObject();
 		sendjson.put("Event", "AcceptEvent");
 		sendjson.put("from", obj.getString("id"));
@@ -48,6 +55,14 @@ public class AgentFunction {
 		JSONObject obj = new JSONObject(message);
 		org.java_websocket.WebSocket sendto = WebSocketUserPool
 				.getWebSocketByUser(obj.getString("sendto"));
+		UserInfo agentUserInfo = WebSocketUserPool.getUserInfoByKey(aConn);
+		
+		/*** Agent - 更新狀態 ***/
+		UpdateStatusBean usb = null;
+		// RING狀態結束
+		agentUserInfo.setStopRing(true);
+		
+		/*** 通知已處理完成RejectEvent ***/
 		JSONObject sendjson = new JSONObject();
 		sendjson.put("Event", "RejectEvent");
 		sendjson.put("from", obj.getString("id"));
@@ -231,7 +246,7 @@ public class AgentFunction {
 	
 	//寫入狀態結束時間，狀態開始時會回傳dbid，請記住並回入在此
 	public static String RecordStatusEnd(String dbid) {
-		
+		Util.getConsoleLogger().debug("RecordStatusEnd() called");
 		StringBuilder responseSB = null;
 		
 		String postData = "dbid=" + dbid;

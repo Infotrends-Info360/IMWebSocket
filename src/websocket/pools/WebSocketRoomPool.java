@@ -9,15 +9,20 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
+import org.apache.logging.log4j.Level;
 import org.java_websocket.WebSocket;
 import org.json.JSONObject;
 
+import com.google.gson.Gson;
 import com.google.gson.JsonObject;
 
+import util.StatusEnum;
 import util.Util;
 import websocket.bean.RoomInfo;
+import websocket.bean.UpdateStatusBean;
 import websocket.bean.UserInfo;
 import websocket.function.AgentFunction;
+import websocket.function.CommonFunction;
 
 //此類別給AgentFunction.java共同使用
 //此類別給ClientFunction.java共同使用
@@ -102,21 +107,43 @@ public class WebSocketRoomPool{
 			String currACType = WebSocketUserPool.getACTypeByKey(aConn);
 			
 			/** 清除room相關資料 **/
-			if ("Client".equals(currACType)){
-				Util.getConsoleLogger().debug("Client 全清");
+			if ("Client".equals(currACType) || connsInRoomMap.size() == 2){
+				if ("Client".equals(currACType)) Util.getConsoleLogger().debug("Client 全清");
+				if (connsInRoomMap.size() == 2) Util.getConsoleLogger().debug("connsInRoom.size() == 2 全清");
+				
 				//全清:
 				for (WebSocket conn: tmpConnsInRoom){
+					UserInfo currUserInfo = WebSocketUserPool.getUserInfoByKey(conn);
 					WebSocketUserPool.removeUserRoom(conn, aRoomID);
-				}
-				connsInRoomMap.clear();
-				sendJson.put("result", WebSocketUserPool.getUserNameByKey(aConn) + " closed the room" + aRoomID);
-			// 之後可將一二條件式合併:
-			}else if (connsInRoomMap.size() == 2){ 
-				Util.getConsoleLogger().debug("connsInRoom.size() == 2 全清");
-				//也全清:
-				for (WebSocket conn: tmpConnsInRoom){
-					WebSocketUserPool.removeUserRoom(conn, aRoomID);
-				}
+					/*** Agent - 更新狀態 ***/
+					if (WebSocketTypePool.isAgent(conn)){
+						Util.getStatusFileLogger().info("###### [removeUserinroom()] called ######");
+						// AFTERCALLWORK狀態開始 (三方/轉接-可能有多個ACW開始狀態要建立)
+						UpdateStatusBean usb = null;
+						usb = new UpdateStatusBean();
+						usb.setStatus(StatusEnum.AFTERCALLWORK.getDbid());
+						usb.setStartORend("start");
+						CommonFunction.updateStatus(new Gson().toJson(usb), conn);
+						
+						// AFTERCALLSTATUS切換 (可直接竊換,若有重複更新同一狀態,會由CommonFunction.updateStatus負責防止)
+						if (StatusEnum.READY.getDbid().equals(Util.getAfterCallStatus())){
+							// READY狀態開始
+							Util.getStatusFileLogger().info("###### [removeUserinroom()] called ######");
+							usb = new UpdateStatusBean();
+							usb.setStatus(StatusEnum.READY.getDbid());
+							usb.setStartORend("start");
+							CommonFunction.updateStatus(new Gson().toJson(usb), conn);							
+						}else if(StatusEnum.NOTREADY.getDbid().equals(Util.getAfterCallStatus())){
+							// NOTREADY狀態開始
+							Util.getStatusFileLogger().info("###### [removeUserinroom()] called ######");
+							usb = new UpdateStatusBean();
+							usb.setStatus(StatusEnum.NOTREADY.getDbid());
+							usb.setStartORend("start");
+							CommonFunction.updateStatus(new Gson().toJson(usb), conn);								
+						}// end of AFTERCALLSTATUS切換 
+						
+					}// end of if
+				}// end of for
 				connsInRoomMap.clear();
 				sendJson.put("result", WebSocketUserPool.getUserNameByKey(aConn) + " closed the room" + aRoomID);				
 			}else if (connsInRoomMap.size() > 2){
@@ -126,6 +153,7 @@ public class WebSocketRoomPool{
 				connsInRoomMap.remove(aConn);
 				sendJson.put("result", WebSocketUserPool.getUserNameByKey(aConn) + " left the room" + aRoomID);				
 			}
+			
 			Util.getConsoleLogger().debug("roomId: " + aRoomID + " size: " + connsInRoomMap.size());
 			sendJson.put("roomMembers", getOnlineUserNameinroom(aRoomID).toString());
 			sendJson.put("roomMemberIDs", getOnlineUserIDinroom(aRoomID).toString());
@@ -147,14 +175,19 @@ public class WebSocketRoomPool{
 			// 須在最後面做,因為還需要通知connsInRoomMap裡面的人有人離開/關閉房間了
 			if (connsInRoomMap.size() == 0){
 				// 1. 將此roomID所擁有的iEstablised_dbid寫入結束時間
-//				Util.getConsoleLogger().debug("insert endtime iestablished");
-//				Util.getConsoleLogger().debug("roomInfo.getIestablish_dbid(): " + roomInfo.getIestablish_dbid());
+				Util.getStatusFileLogger().info("###### removeUserinroom() called ######");
+				Util.getStatusFileLogger().info("updateStatus: " + "end" + " - " + StatusEnum.IESTABLISHED + " - " + WebSocketUserPool.getUserNameByKey(aConn) + " closed it");
+
+				Util.getStatusFileLogger().info("" + StatusEnum.IESTABLISHED + ": ");
+				Util.getStatusFileLogger().printf(Level.INFO,"%10s	%10s %10s %10s %10s %10s" , "status", "startORend", "dbid", "roomID", "clientID", "reason");
+				Util.getStatusFileLogger().info("----------------------------------------------------------------------------");
+				Util.getStatusFileLogger().printf(Level.INFO,"%10s	%10s %10s %10s %10s %10s" , StatusEnum.IESTABLISHED.getDbid(), "end" , roomInfo.getIestablish_dbid(), roomInfo.getRoomID(), null, null);
 				AgentFunction.RecordStatusEnd(roomInfo.getIestablish_dbid());
 				// 2. 如果一個room都空了,就把它從Map中清掉
 				roomMap.remove(aRoomID);
 			}
 //			Util.getConsoleLogger().debug("roomMap.size() - after: " + roomMap.size());
-		}
+		}// end of if
 	}
 	
 	/** * Send Message to all of User in Room * @param message */

@@ -14,12 +14,19 @@ import org.java_websocket.WebSocket;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
+import com.google.gson.Gson;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
+import com.google.gson.JsonNull;
 import com.google.gson.JsonObject;
 
 import util.StatusEnum;
 import util.Util;
+
+
+
+
+
 
 
 
@@ -42,6 +49,7 @@ import com.google.gson.JsonParser;
 import websocket.HeartBeat;
 import websocket.bean.RingCountDownTask;
 import websocket.bean.RoomInfo;
+import websocket.bean.UpdateStatusBean;
 import websocket.bean.UserInfo;
 //import websocket.HeartBeat;
 import websocket.pools.WebSocketRoomPool;
@@ -134,6 +142,23 @@ public class CommonFunction {
 		/*** 讓Agent與Client都有Heartbeat ***/
 		HeartBeat heartbeat = new HeartBeat();
 		heartbeat.heartbeating(aConn);
+		
+		/*** Agent - 更新狀態 ***/
+		if(WebSocketTypePool.isAgent(aConn)) {
+			UpdateStatusBean usb = null;
+			// LOGIN狀態開始
+			Util.getStatusFileLogger().info("###### [userjoin()]");
+			usb = new UpdateStatusBean();
+			usb.setStatus(StatusEnum.LOGIN.getDbid());
+			usb.setStartORend("start");
+			CommonFunction.updateStatus(new Gson().toJson(usb), aConn);	
+			// NOTREADY狀態開始
+			Util.getStatusFileLogger().info("###### [userjoin()]");
+			usb = new UpdateStatusBean();
+			usb.setStatus(StatusEnum.NOTREADY.getDbid());
+			usb.setStartORend("start");
+			CommonFunction.updateStatus(new Gson().toJson(usb), aConn);
+		}// end of if (WebSocketTypePool.isAgent(...))
 	}
 	
 	/** ask online people **/
@@ -155,9 +180,8 @@ public class CommonFunction {
 			timer.cancel();			
 		}
 		
-		// Client
-		// 若已經有Agent正在決定是否Accept此通通話, 若Client先離開了, 則告知此Agent此Client已經離開, 不用再等了
-//		String waittingAgent = jsonIn.get("waittingAgent").getAsBoolean();
+		// for Client
+		// waittingAgent - 當有Agent正在決定是否Accept此通通話, 若Client先離開了, 則告知此Agent此Client已經離開, 不用再等了
 		if ( WebSocketTypePool.isClient(aConn) && jsonIn.get("waittingAgent") != null){
 //			Util.getConsoleLogger().debug("userExit() - waittingAgent: " + jsonIn.get("waittingAgent").getAsBoolean());
 			if (jsonIn.get("waittingAgent").getAsBoolean()){
@@ -173,8 +197,9 @@ public class CommonFunction {
 			}			
 		}
 		
-		// Agent
-//		waittingClientIDList
+		// for Agent
+		// 1. waittingClientIDList - 當Agent離開後,若有Clinet在等待其回應,則告知此Client此Agent已經離開, 不用再等了, 請他再繼續找其他人
+		// 2. waittingAgentIDList - 當Agent離開後,若有其他Agent在等待其回應,如三方/轉接,則告知另一個Agent此Agent已經離開, 不用再等了
 		if (WebSocketTypePool.isAgent(aConn)){
 			if (!"[]".equals(jsonIn.get("waittingClientIDList"))){
 //				Util.getConsoleLogger().debug("userExit() - waittingClientIDList got here");
@@ -185,7 +210,8 @@ public class CommonFunction {
 //				Util.getConsoleLogger().debug("userExit() - " + waittingClientIDList.length);
 //				Util.getConsoleLogger().debug("userExit() - clientIDJsonAry: " + clientIDJsonAry);
 				for(final JsonElement clientID_je : clientIDJsonAry) {
-				    String clientID = clientID_je.getAsJsonObject().get("clientID").getAsString();
+//				    String clientID = clientID_je.getAsJsonObject().get("clientID").getAsString();
+				    String clientID = clientID_je.getAsString();
 				    WebSocket clientConn = WebSocketUserPool.getWebSocketByUser(clientID);
 				    Util.getConsoleLogger().debug("userExit() - waitting clientID: " + clientID);
 				    jsonIn.addProperty("Event", "agentLeft");
@@ -387,10 +413,12 @@ public class CommonFunction {
 	}
 	
 	/** * update Agent Status */
-	public static void updateStatus(String message, org.java_websocket.WebSocket aConn) {
+	synchronized public static void updateStatus(String aMsg, org.java_websocket.WebSocket aConn) {
 		Util.getConsoleLogger().debug("updateStatus() called");
+		if (!WebSocketTypePool.isAgent(aConn)) return; // 防呆
+		
 		Util.getStatusFileLogger().info("###### updateStatus() called ######");
-		JsonObject obj = Util.getGJsonObject(message);
+		JsonObject obj = Util.getGJsonObject(aMsg);
 //		JSONObject obj = new JSONObject(message); 
 		String ACtype = WebSocketTypePool.getUserType(aConn);
 		String username = WebSocketUserPool.getUserNameByKey(aConn);
@@ -400,8 +428,9 @@ public class CommonFunction {
 		
 		String status_dbid = Util.getGString(obj, "status"); // 以數字代表 dbid
 		String startORend = Util.getGString(obj, "startORend"); 
-		String dbid = Util.getGString(obj, "dbid"); // 所有值,代表此次是要寫end的 // for "end"
+		String dbid = Util.getGString(obj, "dbid"); // 若有值,代表此次是要寫end的 // for "end"
 		String reason_dbid =  Util.getGString(obj, "reason_dbid"); // for NOTREADY
+		if (reason_dbid == null) reason_dbid = "0"; // 設定reason預設值為'0'
 		String roomID = Util.getGString(obj, "roomID");  // for IESTABLISHED
 		String clientID = Util.getGString(obj, "clientID"); // for RING
 		UserInfo userInfo = WebSocketUserPool.getUserInfoByKey(aConn);
@@ -425,65 +454,116 @@ public class CommonFunction {
 		if ("start".equals(startORend)){
 //			String userID = Util.getTmpID(userid);
 			// 將開始時間寫入DB
-				// 若為NOTREADY,則會多reason_dbid參數
-			if (StatusEnum.NOTREADY.getDbid().equals(status_dbid)){
-				dbid = AgentFunction.RecordStatusStart(userid, status_dbid, reason_dbid);
-				// 去除ReadyAgent
-				boolean result = WebSocketUserPool.getReadyAgentQueue().remove(userid);
-				Util.getConsoleLogger().debug("(NOTREADY)WebSocketUserPool.getReadyAgentQueue().remove(userid): " + result);
-				Util.getConsoleLogger().debug("(NOTREADY)WebSocketUserPool.getReadyAgentQueue().size(): " + WebSocketUserPool.getReadyAgentQueue().size());
-			}else{
-				dbid = AgentFunction.RecordStatusStart(userid, status_dbid, "0");
-			}
-			// 將xxxx_dbid值傳給前端
-//			StatusEnum currStatusEnum = StatusEnum.getStatusEnumByDbid(status_dbid);
-//			Util.getConsoleLogger().debug("currStatusEnum: " + currStatusEnum);
-			String dbid_key = currStatusEnum.toString().toLowerCase() + "_dbid";
-//			Util.getConsoleLogger().debug("dbid_key: " + dbid_key);
-			obj.addProperty(dbid_key, dbid); // ex. login_dbid
-			userInfo.getStatusDBIDMap().put(currStatusEnum, dbid); // 更新Bean
 			
-			// 若為iEstablished狀態,則交由RoomInfo來處理結束時間點
-			// 結束時間點 - 由WebSocketRoomPool.removeUserinroom裡面判斷式進行
-			if (StatusEnum.IESTABLISHED.getDbid().equals(status_dbid)){
-				Util.getConsoleLogger().debug("IESTABLISHED - roomID: " + roomID);
-				RoomInfo roomInfo = WebSocketRoomPool.getRoomInfo(roomID);
-				roomInfo.setIestablish_dbid(dbid);
-			}
+			if (StatusEnum.READY.getDbid().equals(status_dbid) &&
+				userInfo.isReady()){
+				Util.getConsoleLogger().debug("Agent is READY already. No update is processed to DB");
+				return;
+			}else if (StatusEnum.READY.getDbid().equals(status_dbid)){
+				dbid = AgentFunction.RecordStatusStart(userid, status_dbid, "0"); // 重要				
+				// NOTREADY狀態結束(須排除初次登入狀況)
+				if (userInfo.getStatusDBIDMap().get(StatusEnum.NOTREADY) != null){
+
+					Util.getStatusFileLogger().info("updateStatus: " + "end" + " - " + StatusEnum.NOTREADY + " - " + username);
+					Util.getStatusFileLogger().info("" + currStatusEnum + ": ");
+					Util.getStatusFileLogger().printf(Level.INFO,"%10s	%10s %10s %10s %10s %10s" , "status", "startORend", "dbid", "roomID", "clientID", "reason");
+					Util.getStatusFileLogger().info("----------------------------------------------------------------------------");
+					Util.getStatusFileLogger().printf(Level.INFO,"%10s	%10s %10s %10s %10s %10s" , StatusEnum.NOTREADY, "end", userInfo.getStatusDBIDMap().get(StatusEnum.NOTREADY), null, null, null);
+					
+					// 直接處理,不再呼叫一次本方法
+					AgentFunction.RecordStatusEnd(userInfo.getStatusDBIDMap().get(StatusEnum.NOTREADY));
+					// 清理Bean
+//					StatusEnum currStatusEnum = StatusEnum.getStatusEnumByDbid(status_dbid);
+					userInfo.getStatusDBIDMap().remove(StatusEnum.NOTREADY);
+					
+//					UpdateStatusBean usb = new UpdateStatusBean();
+//					usb.setStatus(StatusEnum.NOTREADY.getDbid());
+//					usb.setDbid(userInfo.getStatusDBIDMap().get(StatusEnum.NOTREADY));
+//					usb.setStartORend("end");
+//					CommonFunction.updateStatus(new Gson().toJson(usb), aConn);
+				}
+				
+				// 將Agent加入到ReadyAgentQueue
+				WebSocketUserPool.getReadyAgentQueue().offer(userid);
+				Util.getConsoleLogger().debug("(READY)WebSocketUserPool.getReadyAgentQueue().size(): " + WebSocketUserPool.getReadyAgentQueue().size());
+
+				
+				
+			}// end of READY
 			
-			// 若為RING狀態,則交由RingCountDownTask來處理結束時間點
-			// 結束時間點 - 由RingCountDownTask - run()判斷式決定
+			if (StatusEnum.NOTREADY.getDbid().equals(status_dbid) &&
+					userInfo.isNotReady()){
+					Util.getConsoleLogger().debug("Agent is NOTREADY already. No update is processed to DB");
+					return;
+			}else if(StatusEnum.NOTREADY.getDbid().equals(status_dbid)){
+					dbid = AgentFunction.RecordStatusStart(userid, status_dbid, reason_dbid); // 重要
+					// 去除ReadyAgent
+					boolean result = WebSocketUserPool.getReadyAgentQueue().remove(userid); // 重要
+					Util.getConsoleLogger().debug("(NOTREADY)WebSocketUserPool.getReadyAgentQueue().remove(userid): " + result);
+					Util.getConsoleLogger().debug("(NOTREADY)WebSocketUserPool.getReadyAgentQueue().size(): " + WebSocketUserPool.getReadyAgentQueue().size());				
+					
+					// READY狀態結束(須排除初次登入狀況)
+					if (userInfo.getStatusDBIDMap().get(StatusEnum.READY) != null){
+						
+						Util.getStatusFileLogger().info("updateStatus: " + "end" + " - " + StatusEnum.READY + " - " + username);
+						Util.getStatusFileLogger().info("" + currStatusEnum + ": ");
+						Util.getStatusFileLogger().printf(Level.INFO,"%10s	%10s %10s %10s %10s %10s" , "status", "startORend", "dbid", "roomID", "clientID", "reason");
+						Util.getStatusFileLogger().info("----------------------------------------------------------------------------");
+						Util.getStatusFileLogger().printf(Level.INFO,"%10s	%10s %10s %10s %10s %10s" , StatusEnum.READY, "end", userInfo.getStatusDBIDMap().get(StatusEnum.READY), null, null, null);
+
+						// 直接處理,不再呼叫一次本方法
+						AgentFunction.RecordStatusEnd(userInfo.getStatusDBIDMap().get(StatusEnum.READY));
+						// 清理Bean
+//						StatusEnum currStatusEnum = StatusEnum.getStatusEnumByDbid(status_dbid);
+						userInfo.getStatusDBIDMap().remove(StatusEnum.READY);
+//						
+//						UpdateStatusBean usb = new UpdateStatusBean();
+//						usb.setStatus(StatusEnum.READY.getDbid());
+//						usb.setDbid(userInfo.getStatusDBIDMap().get(StatusEnum.READY));
+//						usb.setStartORend("end");
+//						CommonFunction.updateStatus(new Gson().toJson(usb), aConn);
+					}
+			}// end of NOTREADY			
+
+			if (StatusEnum.LOGIN.getDbid().equals(status_dbid)){
+				dbid = AgentFunction.RecordStatusStart(userid, status_dbid, "0"); // 重要
+			}// end of LOGIN
+
+			if (StatusEnum.LOGOUT.getDbid().equals(status_dbid)){
+				dbid = AgentFunction.RecordStatusStart(userid, status_dbid, "0"); // 重要
+			}// end of LOGOUT
+			
 			if (StatusEnum.RING.getDbid().equals(status_dbid)){
-				//將RINGHEARTBEAT放進UserInfo
+				dbid = AgentFunction.RecordStatusStart(userid, status_dbid, "0"); // 重要
 				userInfo.setStopRing(false); // 回復為預設false
 				userInfo.setTimeout(false); // 回復為預設false
 				WebSocket clientConn = WebSocketUserPool.getWebSocketByUser(clientID);
 				RingCountDownTask ringCountDownTask = new RingCountDownTask(clientConn, dbid, userInfo);
 				ringCountDownTask.operate();
-				 //agentUserInfo
-			}
+			}// end of RING
 			
-			// 如果是READY,則多將readytime重置
-			if (StatusEnum.READY.getDbid().equals(status_dbid)){
-				// 重置Agent readytime
-//				SimpleDateFormat tmpSdf = new SimpleDateFormat( Util.getSdfTimeFormat() );
-//				String nowDate = tmpSdf.format(new java.util.Date());
-//				userInfo.setReadyTime(nowDate);
-//				Util.getConsoleLogger().debug("update Agent ready time: ");
-//				Util.getConsoleLogger().debug("Agent name: " + userInfo.getUsername() + " set readytime to " + userInfo.getReadyTime());
-//				Util.getStatusFileLogger().info("update Agent ready time: ");
-//				Util.getStatusFileLogger().info("Agent name: " + userInfo.getUsername() + " set readytime to " + userInfo.getReadyTime());
-				
-				WebSocketUserPool.getReadyAgentQueue().offer(userid);
-				Util.getConsoleLogger().debug("(READY)WebSocketUserPool.getReadyAgentQueue().size(): " + WebSocketUserPool.getReadyAgentQueue().size());
-			}
+			if (StatusEnum.IESTABLISHED.getDbid().equals(status_dbid)){
+				dbid = AgentFunction.RecordStatusStart(userid, status_dbid, "0"); // 重要
+				Util.getConsoleLogger().debug("IESTABLISHED - roomID: " + roomID);
+				RoomInfo roomInfo = WebSocketRoomPool.getRoomInfo(roomID);
+				roomInfo.setIestablish_dbid(dbid);
+			}// end of IESTABLISHED
 			
+			if (StatusEnum.AFTERCALLWORK.getDbid().equals(status_dbid)){
+				dbid = AgentFunction.RecordStatusStart(userid, status_dbid, "0"); // 重要
+			}// end of AFTERCALLWORK
 			
-
-			// 先只有新增時寄送EVENT,讓前端能拿到相對應的dbid
-			obj.addProperty("Event", "updateStatus");
-			WebSocketUserPool.sendMessageToUser(aConn, obj.toString());
-
+			if (StatusEnum.OESTABLISHED.getDbid().equals(status_dbid)){
+				dbid = AgentFunction.RecordStatusStart(userid, status_dbid, "0"); // 重要
+			}// end of OESTABLISHED
+			
+			// for all
+			String dbid_key = currStatusEnum.toString().toLowerCase() + "_dbid";
+//			Util.getConsoleLogger().debug("dbid_key: " + dbid_key);
+			obj.addProperty(dbid_key, dbid); // ex. login_dbid
+			userInfo.getStatusDBIDMap().put(currStatusEnum, dbid); // 更新Bean
+			Util.getConsoleLogger().debug("userInfo.getStatusDBIDMap().get(currStatusEnum): " + userInfo.getStatusDBIDMap().get(currStatusEnum));
+			
 		}else if ("end".equals(startORend)){ 
 			if (dbid != null){
 				
@@ -497,12 +577,15 @@ public class CommonFunction {
 				
 				// 清理Bean
 //				StatusEnum currStatusEnum = StatusEnum.getStatusEnumByDbid(status_dbid);
-				userInfo.getStatusDBIDMap().remove(currStatusEnum); 
+				userInfo.getStatusDBIDMap().remove(currStatusEnum);
 			}
-		}
+		}// end of if "start" or "end"
 		
-		
-		
+		// "start"時dbid_key會對應到值, 寄送EVENT,讓前端能拿到相對應的dbid
+		obj.addProperty("Event", "updateStatus");
+		obj.addProperty("currStatusEnum", currStatusEnum.toString());
+		if (aConn.isClosing() || aConn.isClosed()) return;
+		WebSocketUserPool.sendMessageToUser(aConn, obj.toString());
 		
 	}
 	
