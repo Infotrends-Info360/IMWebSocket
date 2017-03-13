@@ -649,14 +649,6 @@ function Login() {
 				} else if ("clientLeft" == obj.Event){
 					// 在這邊進行一連串的善後處理
 					alert("Client left : " + obj.from);
-					
-					document.getElementById("AcceptEvent").disabled = true;
-					document.getElementById("RejectEvent").disabled = true;
-					document.getElementById("Eventfrom").value = obj.from;
-					document.getElementById("Event").innerHTML = obj.Event;
-					document.getElementById("userdata").innerHTML = ""; // 清掉userdata
-					document.getElementById("clientID").innerHTML = "";
-					
 					ready();
 				} else if ("refreshAgentList" == obj.Event){
 //					alert(obj.fromAgentID + " logined!");

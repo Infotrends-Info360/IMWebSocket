@@ -188,7 +188,12 @@ public class CommonFunction {
 				String waittingAgentID = jsonIn.get("waittingAgentID").getAsString();
 				WebSocket agentConn = WebSocketUserPool.getWebSocketByUser(waittingAgentID);
 //				Util.getConsoleLogger().debug("userExit() - waittingAgentID: " + waittingAgentID);
-				// "clientLeft"
+				
+				// 關閉RING
+				UserInfo agentUserInfo = WebSocketUserPool.getUserInfoByKey(agentConn);
+				agentUserInfo.setStopRing(true);
+				
+				// 寄出"clientLeft",告知Agent有人離開了
 				JsonObject jsonTo = new JsonObject();
 				jsonTo.addProperty("Event", "clientLeft");
 				jsonTo.addProperty("from", WebSocketUserPool.getUserID(aConn));
