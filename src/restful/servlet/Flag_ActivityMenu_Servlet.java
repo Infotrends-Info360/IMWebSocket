@@ -57,40 +57,55 @@ public class Flag_ActivityMenu_Servlet {
 		List<Activitymenu> activitymenulist = maintainservice.Flag_activitymenu(activitymenu);
 		
 		if(deleteflag.equals("0")){
+			  for (int a = 0; a < activitymenulist.size(); a++) {
+		  		  	JSONObject activitymenuObject = new JSONObject();
+		  	  		activitymenuObject.put("dbid", activitymenulist.get(a).getDbid());
+		  	  		activitymenuObject.put("deleteflag", activitymenulist.get(a).getDeleteflag());
+		  	  		activitymenuObject.put("menuname", activitymenulist.get(a).getMenuname());
+		  	  		activitymenuObject.put("sort", activitymenulist.get(a).getSort());
+		  	  	
+        			if(activitymenulist.get(a).getCreatedatetime()!=null && activitymenulist.get(a).getCreatedatetime()!=""){
+        				
+        				activitymenuObject.put("createdatetime", activitymenulist.get(a).getCreatedatetime().substring(0, 19));
+        				ActivitymenuJsonArray.put(activitymenuObject);
+        					
+        			}else {
+        						activitymenuObject.put("createdatetime", "");
+        						ActivitymenuJsonArray.put(activitymenuObject);
+        					}
+		  	  }
+			
+		}
+		
+		
+		if(deleteflag.equals("1")){
+			
 			  for (int i = 0; i < activitymenulist.size(); i++) {
 		  		  	JSONObject activitymenuObject = new JSONObject();
 		  	  		activitymenuObject.put("dbid", activitymenulist.get(i).getDbid());
-		  	  		activitymenuObject.put("createdatetime", activitymenulist.get(i).getCreatedatetime().substring(0, 19));
-//		  	  		activitymenuObject.put("deletedatetime", activitymenulist.get(i).getDeletedatetime().substring(0, 19));
 		  	  		activitymenuObject.put("deleteflag", activitymenulist.get(i).getDeleteflag());
 		  	  		activitymenuObject.put("menuname", activitymenulist.get(i).getMenuname());
 		  	  		activitymenuObject.put("sort", activitymenulist.get(i).getSort());
 		  	  	
-		  	  		ActivitymenuJsonArray.put(activitymenuObject);
+		  	  	if(activitymenulist.get(i).getDeletedatetime()!=null && activitymenulist.get(i).getDeletedatetime()!=""){
+    				activitymenuObject.put("deletedatetime", activitymenulist.get(i).getDeletedatetime().substring(0, 19));
+    				ActivitymenuJsonArray.put(activitymenuObject);
+    					
+    			}else {
+    						activitymenuObject.put("deletedatetime", "");
+    						ActivitymenuJsonArray.put(activitymenuObject);
+    					}
+		  	  		
+		  	  		
 		  	  }
-		    		jsonObject.put("activitymenu", ActivitymenuJsonArray);
-			
-		}else if(deleteflag.equals("1")){
-			
-			  for (int i = 0; i < activitymenulist.size(); i++) {
-		  		  	JSONObject activitymenuObject = new JSONObject();
-		  	  		activitymenuObject.put("dbid", activitymenulist.get(i).getDbid());
-		  	  		activitymenuObject.put("createdatetime", activitymenulist.get(i).getCreatedatetime().substring(0, 19));
-		  	  		activitymenuObject.put("deletedatetime", activitymenulist.get(i).getDeletedatetime().substring(0, 19));
-		  	  		activitymenuObject.put("deleteflag", activitymenulist.get(i).getDeleteflag());
-		  	  		activitymenuObject.put("menuname", activitymenulist.get(i).getMenuname());
-		  	  		activitymenuObject.put("sort", activitymenulist.get(i).getSort());
-		  	  	
-		  	  		ActivitymenuJsonArray.put(activitymenuObject);
-		  	  }
-		    		jsonObject.put("activitymenu", ActivitymenuJsonArray);
 			
 			
 		}
 	    
   	
   	  	
-    	
+		jsonObject.put("activitymenu", ActivitymenuJsonArray);
+
 
 		return Response.status(200).entity(jsonObject.toString())
 				.header("Access-Control-Allow-Origin", "*")

@@ -60,7 +60,8 @@ public class Rpt_Activitylog_Insert_Servlet {
 		for(int i = 0; i < activitydataidArray.length ;i++){
 			activitylog.setActivitydataid(activitydataidArray[i]);
 			int insert = maintainservice.Insert_rpt_activitylog(activitylog);
-			jsonObject.put("activitydataids_insertcount", insert);
+			jsonObject.put("activitydataids_insertcount["+activitydataidArray[i]+"]", insert);
+			
 		}
 		Interaction interaction = new Interaction();
 		interaction.setIxnid(interactionid);

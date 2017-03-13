@@ -48,17 +48,24 @@ public class AgentReason_Select_Servlet {
   		 for(int a = 0; a < agentreasonlist.size(); a++){
     		
 	    	JSONObject agentreasonObject = new JSONObject();
-	    
+	    	String ss = agentreasonlist.get(a).getAlarmduration();
+	    	
+	    	int i=ss.indexOf(".");
+	    	ss= ss.substring(0, i);
+	    	
 	    	agentreasonObject.put("dbid", agentreasonlist.get(a).getDbid());
 	    	agentreasonObject.put("statusname", agentreasonlist.get(a).getStatusname());
 	    	agentreasonObject.put("statusname_cn", agentreasonlist.get(a).getStatusname_cn());
 	    	agentreasonObject.put("statusname_en", agentreasonlist.get(a).getStatusname_en());
 	    	agentreasonObject.put("statusname_tw", agentreasonlist.get(a).getStatusname_tw());
 	    	agentreasonObject.put("description", agentreasonlist.get(a).getDescription());
-	    	agentreasonObject.put("alarmduration", agentreasonlist.get(a).getAlarmduration());
+	    	agentreasonObject.put("alarmduration", ss);
 	    	agentreasonObject.put("alarmcolor", agentreasonlist.get(a).getAlarmcolor());
 	    	agentreasonObject.put("createdatetime", agentreasonlist.get(a).getCreatedatetime());
 	    	agentreasonObject.put("createuserid", agentreasonlist.get(a).getCreateuserid());
+	    	
+	    	
+	    	
 	    	
 	    	if(agentreasonlist.get(a).getFlag()==2){
 		    	agentreasonObject.put("flag", "鎖定");
