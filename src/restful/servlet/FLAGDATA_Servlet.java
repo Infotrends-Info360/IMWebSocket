@@ -64,8 +64,8 @@ public class FLAGDATA_Servlet {
     			
         	  	  	JSONObject activitygroupsObject = new JSONObject();
         	  	activitygroupsObject.put("dbid", activitygroupslist.get(a).getDbid());
-        	  	activitygroupsObject.put("createdatetime", activitygroupslist.get(a).getCreatedatetime());
-        	  	activitygroupsObject.put("deletedatetime", activitygroupslist.get(a).getDeletedatetime());
+//        	  	activitygroupsObject.put("createdatetime", activitygroupslist.get(a).getCreatedatetime());
+//        	  	activitygroupsObject.put("deletedatetime", activitygroupslist.get(a).getDeletedatetime());
         	  	activitygroupsObject.put("activitymenuid", activitygroupslist.get(a).getActivitymenuid());
         	  	activitygroupsObject.put("groupname", activitygroupslist.get(a).getGroupname());
         	  	activitygroupsObject.put("sort", activitygroupslist.get(a).getSort());
@@ -83,8 +83,8 @@ public class FLAGDATA_Servlet {
         	  		
         	  		JSONObject activitydataObject = new JSONObject();
         			activitydataObject.put("dbid", activitydatalist.get(g).getDbid());
-        			activitydataObject.put("createdatetime", activitydatalist.get(g).getCreatedatetime());
-        			activitydataObject.put("deletedatetime", activitydatalist.get(g).getDeletedatetime());
+//        			activitydataObject.put("createdatetime", activitydatalist.get(g).getCreatedatetime());
+//        			activitydataObject.put("deletedatetime", activitydatalist.get(g).getDeletedatetime());
         			activitydataObject.put("activitygroupsid", activitydatalist.get(g).getActivitygroupsid());
         			activitydataObject.put("codename", activitydatalist.get(g).getCodename());
         			activitydataObject.put("color", activitydatalist.get(g).getColor());
