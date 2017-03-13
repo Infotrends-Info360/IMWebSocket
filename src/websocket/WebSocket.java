@@ -560,7 +560,6 @@ public class WebSocket extends WebSocketServer {
 			WebSocketUserPool.sendMessageToUser(userConn,sendJson.toString());	
 		}
 		
-		Util.getConsoleLogger().debug("here3");
 	}
 	
 	private void sendComment(String aMsg, org.java_websocket.WebSocket aConn) {

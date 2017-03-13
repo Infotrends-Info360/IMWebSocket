@@ -331,14 +331,13 @@ function Login() {
 					// 在這邊取代原本findAgentEvent事件所做的事情
 					console.log("senduserdata - ")
 //					alert("senduserdata - obj.clientID: " + obj.clientID)
-					alert("here?");
-					alert("senduserdata - obj.userdata.id: " + obj.userdata.id);
+//					alert("senduserdata - obj.userdata.id: " + obj.userdata.id);
 					console.log("obj.clientName: " + obj.clientName);
 					console.log("obj.clientID: " + obj.clientID);
 					var clientID = obj.clientID; 
 					var clientName = obj.clientName; 
 					waittingClientIDList_g.push(obj.userdata.id);
-					alert("waittingClientIDList_g.length: " + waittingClientIDList_g.length);
+//					alert("waittingClientIDList_g.length: " + waittingClientIDList_g.length);
 //					waittingClientIDList_g.push( new function(){
 //						this.clientID = obj.userdata.id
 //					});
@@ -765,7 +764,7 @@ function Logoutaction() {
 //	StatusEnum.ring_dbid = StatusEnum.updateStatus(StatusEnum.RING, "end", StatusEnum.ring_dbid);
 	// 下列改由後端處理 - WebSocketRoomPool.removeUserinroom()
 //	StatusEnum.ring_dbid = StatusEnum.updateStatus(StatusEnum.IESTABLISHED, "end",JSON.stringify(StatusEnum.iestablished_dbid)); // 須用list
-	alert("waittingClientIDList_g.length: " + waittingClientIDList_g.length);
+//	alert("waittingClientIDList_g.length: " + waittingClientIDList_g.length);
 	// 登出動作
 	var now = new Date();
 	var msg = {

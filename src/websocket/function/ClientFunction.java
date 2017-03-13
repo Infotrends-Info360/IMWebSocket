@@ -211,6 +211,7 @@ public class ClientFunction {
 	
 	/** * send entry log */
 	public static void entrylog(String message, org.java_websocket.WebSocket conn) {
+		Util.getConsoleLogger().debug("entrylog() called");
 		JSONObject obj = new JSONObject(message);
 		String userid = obj.getString("userid");
 		String username = obj.getString("username");
@@ -220,6 +221,7 @@ public class ClientFunction {
 		String channel = obj.getString("channel");
 		String language = obj.getString("language");
 		String enterkey = obj.getString("enterkey");
+		String contactid = obj.getString("contactid");
 
 		SimpleDateFormat sdf = new SimpleDateFormat("yyyy/MM/dd HH:mm:ss");
 		Date now = new Date();
@@ -231,7 +233,7 @@ public class ClientFunction {
 					+ "&entertime=" + entertime + "&ipaddress=" + ipaddress
 					+ "&browser=" + browser + "&platfrom=" + platfrom
 					+ "&channel=" + channel + "&language=" + language
-					+ "&enterkey=" + enterkey;
+					+ "&enterkey=" + enterkey + "&contactid=" + contactid;
 			// Connect to URL
 			String hostURL = Util.getHostURLStr("IMWebSocket");
 //			Util.getConsoleLogger().debug("hostURL: " + hostURL);

@@ -182,7 +182,13 @@ function Login() {
 					if (obj.userdata.SetContactLog != null){
 						contactID_g = obj.userdata.SetContactLog.contactID;
 //						setinteractionDemo(ixnstatus, ixnactivitycode);	
-						setinteraction(ixnstatus_g, ixnactivitycode_g); 
+						setinteraction(ixnstatus_g, ixnactivitycode_g);
+						
+						/** 寫入Log **/
+						// 組成寫入entry log指令,發送消息給WebSocket
+						var myEntrylogJson = new entrylogJson(contactID_g, contactID_g, UserName_g);
+						ws_g.send(JSON.stringify(myEntrylogJson));
+						
 					}else{
 						console.log("senduserdata - " + "contactID not found! ");
 						setinteraction(ixnstatus_g, ixnactivitycode_g); 
@@ -199,7 +205,7 @@ function Login() {
 					document.getElementById("Event").innerHTML = obj.Event;
 					UserID_g = obj.from;
 					/** 成功登入後,先寫上第一筆log **/
-					// 寫入log
+					// 去server抓取user資訊
 					senduserdata(); // 此處不須傳入AgentID
 					
 					/** 成功登入後,開始找尋Agent **/
@@ -218,23 +224,7 @@ function Login() {
 					// 發送消息給WebSocket
 					ws_g.send(JSON.stringify(findAgentmsg));
 					
-					/** 寫入Log **/
-					now = new Date();
-					// 組成寫入entry log指令
-					var entrylogmsg = {
-						type : "entrylog",
-						userid : UserID_g,
-						username : UserName_g,
-						ipaddress : '127.0.0.1',
-						browser : 'IE',
-						platfrom : 'Windows',
-						channel : 'Web', // 使用管道
-						language : 'chiname',
-						enterkey : 'Phone'
-					};
 
-					// 發送消息給WebSocket
-					ws_g.send(JSON.stringify(entrylogmsg));
 					
 					/** 更新前端資料 **/
 					document.getElementById('Status').innerHTML = StatusEnum.FIND_AGENT;

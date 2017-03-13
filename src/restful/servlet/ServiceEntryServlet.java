@@ -33,7 +33,8 @@ public class ServiceEntryServlet {
 			@FormParam("platfrom")String platfrom,
 			@FormParam("channel")String channel,
 			@FormParam("language")String language,
-			@FormParam("enterkey")String enterkey
+			@FormParam("enterkey")String enterkey,
+			@FormParam("contactid")String contactid
 			) throws IOException {
 			
 		JSONObject jsonObject = new JSONObject();
@@ -47,6 +48,7 @@ public class ServiceEntryServlet {
 		serviceentry.setChanneltype(channel);
 		serviceentry.setLanguage(language);
 		serviceentry.setEnterkey(enterkey);
+		serviceentry.setContactid(contactid);
 		//serviceentry.setContactid("123");
 		jsonObject.put("status", Variable.POST_STATUS);
 		
