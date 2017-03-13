@@ -27,6 +27,7 @@ import com.google.gson.JsonObject;
 import util.StatusEnum;
 import util.Util;
 import websocket.bean.RoomInfo;
+import websocket.bean.SystemInfo;
 import websocket.bean.UpdateStatusBean;
 import websocket.pools.WebSocketRoomPool;
 import websocket.pools.WebSocketTypePool;
@@ -94,6 +95,10 @@ public class ClientFunction {
 			senduserdataObj.addProperty("channel", "chat");
 			
 			ClientFunction.senduserdata(senduserdataObj.toString(), aConn);
+			
+			// 新增系統訊息
+			org.java_websocket.WebSocket agentConn = WebSocketUserPool.getWebSocketByUser(AgentID);
+			sendjson.put(SystemInfo.TAG_SYS_MSG, SystemInfo.getWaitingForAgentMsg(WebSocketUserPool.getUserNameByKey(agentConn)));
 		}
 		
 		

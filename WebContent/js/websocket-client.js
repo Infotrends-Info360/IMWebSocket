@@ -144,16 +144,19 @@ function Login() {
 					if ("null" == obj.Agent || null == obj.Agent) {
 //						//20170308 - 此段可省略 - 後端已改為ReadyAgentQueue機制,只需發出一次請求即可
 						//只有找到Agent才會收到此"findAgent"事件,因此不再有找不到的狀況
-//						if (parent.isonline_g) {
-//							console.log(UserName_g + " is looking for an agent ... ");
-//							findingAgent();
-//						}
+						if (parent.isonline_g) {
+							console.log(UserName_g + " is looking for an agent ... ");
+							findingAgent();
+						}
 					// 若找到Agent, 則進入等待Agent回應狀態	
 					} else {
+						var chatRoomMsg = obj.chatRoomMsg; // 接收系統訊息
 						// 控制前端傳值
 						document.getElementById("AgentIDs").innerHTML = obj.Agent;
 						document.getElementById("AgentNames").innerHTML = obj.AgentName;
 						document.getElementById("Event").innerHTML = obj.Event;
+						document.getElementById("chatroom").innerHTML += chatRoomMsg + "<br>";
+						
 						waittingAgent_g = true;
 						waittingAgentID_g = obj.Agent;
 
@@ -164,7 +167,7 @@ function Login() {
 //						console.log("senduserdata done ******************* ");						
 						
 						// 告知Agent, Client這邊知道找到一個Agent了
-						find(waittingAgentID_g); // 省略 - senduserdata已經能做到這件事情
+						find(waittingAgentID_g); // 已可省略 - senduserdata已經能做到這件事情
 					}
 					// 收到群組訊息
 				} else if ("messagetoRoom" == obj.Event) {
@@ -198,11 +201,15 @@ function Login() {
 					// document.getElementById("userdata").innerHTML =
 					// JSON.stringify(obj.userdata);
 				} else if ("userjoin" == obj.Event) {
+//					alert("obj.chatRoomMsg: " + obj.chatRoomMsg);
+					var chatRoomMsg = obj.chatRoomMsg; // 接收系統訊息
 					
 					// 控制前端傳值
 //					document.getElementById("UserID").value = obj.from;
 					document.getElementById("UserID").innerHTML = obj.from;
 					document.getElementById("Event").innerHTML = obj.Event;
+					document.getElementById("chatroom").innerHTML += chatRoomMsg + "<br>";
+					
 					UserID_g = obj.from;
 					/** 成功登入後,先寫上第一筆log **/
 					// 去server抓取user資訊
