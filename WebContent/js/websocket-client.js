@@ -244,6 +244,7 @@ function Login() {
 //					document.getElementById("currUsers").innerHTML = obj.roomMembers;
 					
 				}  else if ("removeUserinroom" == obj.Event){
+					var chatRoomMsg = obj.chatRoomMsg; // 接收系統訊息
 					updateAgentInfo(obj.roomMemberIDs, obj.roomMembers, obj.roomSize); //格式為[agentid, clientid]
 					if (obj.roomSize == 0){
 						alert("room empty - \n" + obj.result);
@@ -251,6 +252,7 @@ function Login() {
 					}else{
 						alert("some left - \n" + obj.result);
 					}
+					document.getElementById("chatroom").innerHTML += chatRoomMsg + "<br>";
 				} else if ("addUserInRoom" == obj.Event){
 					console.log("obj.roomMemberIDs: " + obj.roomMemberIDs);
 					console.log("obj.roomMembers: " + obj.roomMembers);

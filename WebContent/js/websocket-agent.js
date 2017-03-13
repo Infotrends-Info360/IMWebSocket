@@ -577,6 +577,7 @@ function Login() {
 					
 				} else if ("removeUserinroom" == obj.Event){
 					alert(obj.result);
+					var chatRoomMsg = obj.chatRoomMsg; // 接收系統訊息
 					// 如果還沒關,就不往下走
 					if (obj.roomSize != 0) return;
 					
@@ -624,12 +625,9 @@ function Login() {
 //								StatusEnum.updateStatus(StatusEnum.NOTREADY, "start");
 //						}
 					}
-					// 20170222 Lin
-				
-					// ACW
-					// 新增ACW開始時間
-//					StatusEnum.updateStatus(StatusEnum.AFTERCALLWORK, "start");
-
+					
+					// 更新前端畫面
+					document.getElementById("chatroom").innerHTML += chatRoomMsg + "<br>"; // 更新系統訊息
 					
 				} else if ("clientLeft" == obj.Event){
 					// 在這邊進行一連串的善後處理
