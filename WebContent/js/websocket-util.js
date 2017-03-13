@@ -11,6 +11,15 @@ if(typeof String.prototype.trim !== 'function') {
 /********** bean *************/
 //目的: 將Json請求字串物件化 (持續進行中)
 
+function exitJson(aUserID, aUserName, aWaittingAgent_g, aWaittingAgentID_g){
+	this.type = "Exit";
+	this.id = aUserID;
+	this.UserName = aUserName;
+	this.channel = "chat";
+	this.waittingAgent = aWaittingAgent_g;
+	this.waittingAgentID = aWaittingAgentID_g;
+} 
+
 function findAgentJson(aUserID, aUserName){
 		this.type = "findAgent";
 		this.id = aUserID;

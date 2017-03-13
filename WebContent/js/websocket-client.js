@@ -295,18 +295,9 @@ function Logoutaction() {
 	// 在登出前,將要存入的log資訊先放到userallconnections中,此方法最後會呼叫adduserinteraction() 
 //	setinteractionDemo(ixnstatus, ixnactivitycode, 'client');
 	setinteraction(ixnstatus_g, ixnactivitycode_g, 'client');
-	// 組成離開WebSocket Pool列表JSON指令
-	var msg = {
-		type : "Exit",
-		id : UserID_g,
-		UserName : UserName_g,
-		channel: "chat",
-		waittingAgent: waittingAgent_g, // global variable 
-		waittingAgentID: waittingAgentID_g // global variable 
-	};
-	
-	// 發送消息給WebSocket
-	ws_g.send(JSON.stringify(msg));
+	// 組成離開WebSocket Pool列表JSON指令,並發送消息給WebSocket
+	var myExitJson = new exitJson(UserID_g, UserName_g, waittingAgent_g, waittingAgentID_g);
+	ws_g.send(JSON.stringify(myExitJson));
 }
 
 function findingAgent() {
