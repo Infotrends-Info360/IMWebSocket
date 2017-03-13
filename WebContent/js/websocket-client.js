@@ -113,7 +113,7 @@ function Login() {
 					console.log("AcceptEvent: obj.fromName: " + obj.fromName);
 					AgentIDList_g = [];
 					AgentIDList_g.push(obj.from);
-					RoomOwnerAgentID_g = obj.from;
+					RoomOwnerAgentID_g = obj.from; // 開啟房間後更新roomOwner
 //					alert("RoomOwnerAgentID_g: " + RoomOwnerAgentID_g);
 
 					// 顯現對話視窗
@@ -224,7 +224,7 @@ function Login() {
 					console.log("obj.invitedAgentID: " + obj.invitedAgentID);
 					AgentIDList_g.push(obj.invitedAgentID);
 					if (obj.inviteType == "transfer"){
-						RoomOwnerAgentID_g = obj.invitedAgentID;
+						RoomOwnerAgentID_g = obj.invitedAgentID; // 若為轉接,更新roomOwner
 					}
 //					alert("RoomOwnerAgentID_g: " + RoomOwnerAgentID_g);
 //					document.getElementById("currRoomID").innerHTML = obj.roomID;
@@ -465,6 +465,7 @@ function setinteraction(aStatus, aActivitycode, aClosefrom, aThecomment, aStoppe
 //	if (aThecomment === undefined) aThecomment = 'thecomment';
 //	if (aStoppedreason === undefined) aStoppedreason = 'stoppedreason';
 	
+	// 更新interactionlog
 	var msg = {
 		type : 'setinteraction',
 		contactid : contactID_g,
