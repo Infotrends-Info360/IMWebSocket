@@ -7,7 +7,7 @@ import util.Util;
 public class SystemInfo {
 	public static final String TAG_SYS_MSG = "chatRoomMsg";
 	
-	public static final String SYS_NAME = "系統:";
+	public static final String SYS_NAME = "系統通知:";
 	public static final String WELCOME_MSG = "歡迎使用玉O客服系統";
 	public static final String LOOKING_FOR_AGENT_MSG = "正在為您尋找客服人員...";
 	public static final String WAITING_FOR_AGENT_MSG = "正在為您接通客服人員";
@@ -21,38 +21,38 @@ public class SystemInfo {
 	}
 	
 	public static String getWelcomeMsg() {
-		return getFormattedMsgDate(WELCOME_MSG);
+		return getFormattedMsg(WELCOME_MSG);
 	}
 	public static String getLookingForAgentMsg() {
-		return getFormattedMsgDate(LOOKING_FOR_AGENT_MSG);
+		return getFormattedMsg(LOOKING_FOR_AGENT_MSG);
 	}
 	public static String getWaitingForAgentMsg(String aAgentName) {
-		return getFormattedMsgDate(WAITING_FOR_AGENT_MSG + " " + "<b>" + aAgentName + "</b>");
+		return getFormattedMsg(WAITING_FOR_AGENT_MSG + " " + "<b>" + aAgentName + "</b>");
 	}
 	public static String getCancelLedReqMsg() {
-		return getFormattedMsgDate(CANCELLED_REQ_MSG);
+		return getFormattedMsg(CANCELLED_REQ_MSG);
 	}
 	public static String getJoinedRoomMsg(String aUserName) {
-		return getFormattedMsgDate(aUserName + " " + JOINED_ROOM_MSG);
+		return getFormattedMsg(aUserName + " " + JOINED_ROOM_MSG);
 	}
 	public static String getLeftRoomMsg(String aUserName) {
-		return getFormattedMsgDate(aUserName + " " + LEFT_ROOM_MSG);
+		return getFormattedMsg(aUserName + " " + LEFT_ROOM_MSG);
 	}
 	public static String getClosedRoomMsg(String aUserName) {
-		return getFormattedMsgDate(aUserName + " " + CLOSED_ROOM_MSG);
+		return getFormattedMsg(aUserName + " " + CLOSED_ROOM_MSG);
 	}
 	
 	private static String getFormattedMsgDate(String aMsg){
 		String tmpMsg = getFormattedMsg(aMsg);
-		tmpMsg = tmpMsg.substring(0, tmpMsg.length()-1);
+//		tmpMsg = tmpMsg.substring(1, tmpMsg.length()-1);
 		
-		SimpleDateFormat sdf = new SimpleDateFormat(Util.getSdfDateTimeFormat());
+		SimpleDateFormat sdf = new SimpleDateFormat(Util.getSdfTimeFormat());
 		String currTime = sdf.format(new java.util.Date());
-		return String.format("%s %s]", tmpMsg, currTime);
+		return String.format("%s %s", currTime, tmpMsg);
 	}
 	
 	private static String getFormattedMsg(String aMsg){
-		return String.format("[%s %s]", SYS_NAME, aMsg);
+		return String.format("%s %s", SYS_NAME, aMsg);
 	}
 	
 }

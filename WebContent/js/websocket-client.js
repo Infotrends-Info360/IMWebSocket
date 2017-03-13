@@ -104,6 +104,7 @@ function Login() {
 				// 收到同意交談指令
 				if ("AcceptEvent" == obj.Event) {
 					var myUpdateStatusJson = new updateStatusJson("Client", UserID_g, UserName_g, "chat", "chatting");
+					var chatRoomMsg = obj.chatRoomMsg; // 接收系統訊息
 					ws_g.send(JSON.stringify(myUpdateStatusJson));
 					waittingAgent_g = false;
 					waittingAgentID_g = "none";
@@ -125,6 +126,7 @@ function Login() {
 					document.getElementById("RoomID").innerHTML = RoomID_g;
 					document.getElementById("Event").innerHTML = obj.Event;
 					document.getElementById("Status").innerHTML = StatusEnum.JOIN_ROOM;
+					document.getElementById("chatroom").innerHTML += chatRoomMsg + "<br>";
 					
 					// 將focus移到寄送訊息欄
 					$('#message').focus();

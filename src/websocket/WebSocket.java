@@ -42,6 +42,7 @@ import filter.startFilter;
 import util.StatusEnum;
 import util.Util;
 import websocket.bean.RoomInfo;
+import websocket.bean.SystemInfo;
 import websocket.bean.UpdateStatusBean;
 import websocket.bean.UserInfo;
 import websocket.function.AgentFunction;
@@ -451,6 +452,7 @@ public class WebSocket extends WebSocketServer {
 		JsonObject msgJson = Util.getGJsonObject(aMsg);
 		String agentID = WebSocketUserPool.getUserID(aConn);
 		UserInfo userInfo = WebSocketUserPool.getUserInfoByKey(aConn);
+		List<String> userNameList = new ArrayList<>(); // 儲存房間成員,給系統訊息使用
 		Util.getConsoleLogger().trace("addRoomForMany - msgJson: " + msgJson);
 		// hardcoded - 之後想想看如何改善"none"這樣寫死的判斷方式
 		String roomID = "";
@@ -492,6 +494,7 @@ public class WebSocket extends WebSocketServer {
 			}
 			String username = WebSocketUserPool.getUserNameByKey(userConn);
 			String joinMsg = "[Server]" + username + " join " + roomID + " room";
+			userNameList.add(username);
 			
 			// 最後進行資料更新
 			WebSocketRoomPool.addUserInRoom(roomID, username, userID, userConn); //重要步驟
@@ -555,8 +558,9 @@ public class WebSocket extends WebSocketServer {
 			sendJson.addProperty("roomID",  roomID);
 			sendJson.addProperty("channel", channel);
 			sendJson.addProperty("EstablishedStatus", Util.getEstablishedStatus()); //增加AfterCallStatus變數 20170222 Lin
+			String userNameListStr = userNameList.toString();
+			sendJson.addProperty(SystemInfo.TAG_SYS_MSG, SystemInfo.getJoinedRoomMsg(userNameListStr.substring(1,userNameListStr.length()-1))); // 增加系統訊息
 			sendJson.add("roomList", roomIDListJson);
-			
 			WebSocketUserPool.sendMessageToUser(userConn,sendJson.toString());	
 		}
 		

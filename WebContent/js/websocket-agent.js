@@ -248,6 +248,7 @@ function Login() {
 				} else if ("AcceptEvent" == obj.Event){
 					// 拿取資料 + 為之後建立roomList做準備
 					console.log("AcceptEvent: *****");
+					var chatRoomMsg = obj.chatRoomMsg; // 接收系統訊息
 //					seeAllKV(obj);
 				
 					// 更新狀態
@@ -267,7 +268,6 @@ function Login() {
 					);
 					roomInfoMap_g.set(obj.roomID, tmpRoomInfo);
 					console.log("roomInfoMap_g.size: " + roomInfoMap_g.size);
-					// 1. 研究一下這個map的json長什麼樣 2. 看怎麼拿值
 					updateRoomIDList(obj.roomID);
 					
 					// maxCount機制
@@ -282,28 +282,13 @@ function Login() {
 						$('#notready')[0].disabled = true;
 						$('#ready')[0].disabled = true;
 						// 若未達上限,判斷是否要切換為READY
-						
-//					}else if (afterCallStatus_g == 'WORKHARD'){ //20170222 Lin
-						
-					//20170222 Lin 
-					//Ring時已預設會切換為NOTREADY,故僅須考慮到當EstablishedStatus設定為要切換成READY時的狀況。
-					//然而假若使用者在收到RING-收到"AcceptEvent"事件期間,有主動切換回READY,則不再轉變
-					}
-					else if (obj.EstablishedStatus == StatusEnum.READY.dbid){
+					}else if (obj.EstablishedStatus == StatusEnum.READY.dbid){
 						// 更新狀態(唯一在RING事件之後會將狀態切換為READY的情況)
-//						status_g = StatusEnum.READY;
 						switchStatus(StatusEnum.READY);
-//						StatusEnum.notready_dbid = StatusEnum.updateStatus(StatusEnum.NOTREADY, "end", StatusEnum.notready_dbid);
-//						StatusEnum.updateStatus(StatusEnum.READY, "start");
 					}
-//					else if (obj.EstablishedStatus == StatusEnum.NOTREADY.dbid){
-//						// 更新狀態(唯一在RING事件之後會將狀態切換為NOTREADY的情況)
-////					status_g = StatusEnum.NOTREADY;
-//						switchStatus(StatusEnum.NOTREADY);
-//						StatusEnum.ready_dbid = StatusEnum.updateStatus(StatusEnum.READY, "end", StatusEnum.ready_dbid);
-//						StatusEnum.updateStatus(StatusEnum.NOTREADY, "start");
-//					}
-					//20170222 Lin
+					
+					// 更新前端畫面
+					document.getElementById("chatroom").innerHTML += chatRoomMsg + "<br>";
 					
 				}else if ("RejectEvent" == obj.Event){
 //					alert("RejectEvent received");
