@@ -574,7 +574,7 @@ function Login() {
 					document.getElementById("text").innerHTML += obj.UserName + ": " + obj.text + "&#13;&#10" + "<br>";
 					
 				} else if ("removeUserinroom" == obj.Event){
-					alert(obj.result);
+//					alert(obj.result);
 					var chatRoomMsg = obj.chatRoomMsg; // 接收系統訊息
 					var roomInfo = roomInfoMap_g.get(obj.roomID);
 					roomInfo.text += chatRoomMsg + "<br>"; // 更新系統訊息

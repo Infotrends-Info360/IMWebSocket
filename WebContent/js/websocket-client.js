@@ -247,10 +247,10 @@ function Login() {
 					var chatRoomMsg = obj.chatRoomMsg; // 接收系統訊息
 					updateAgentInfo(obj.roomMemberIDs, obj.roomMembers, obj.roomSize); //格式為[agentid, clientid]
 					if (obj.roomSize == 0){
-						alert("room empty - \n" + obj.result);
+//						alert("room empty - \n" + obj.result);
 						Logout();
 					}else{
-						alert("some left - \n" + obj.result);
+//						alert("some left - \n" + obj.result);
 					}
 					document.getElementById("chatroom").innerHTML += chatRoomMsg + "<br>";
 				} else if ("addUserInRoom" == obj.Event){
