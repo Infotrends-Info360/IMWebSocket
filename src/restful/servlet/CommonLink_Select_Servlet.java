@@ -31,11 +31,17 @@ import com.Info360.service.MaintainService;
 public class CommonLink_Select_Servlet {
 	
 
+	/**
+	 * @param nodeid
+	 * @return
+	 * @throws IOException
+	 */
 	@POST
 	@Produces("application/json")
 	public Response PostFromPath(
 		
-			
+			@FormParam("nodeid") String nodeid
+
 			) throws IOException {
 		
 		JSONObject jsonObject = new JSONObject();
@@ -45,6 +51,22 @@ public class CommonLink_Select_Servlet {
 		
 		
 		MaintainService maintainservice = new MaintainService();		
+		
+		if(nodeid!=null && nodeid!=""){
+		  	  JSONArray parnetJsonArray = new JSONArray();
+
+		  	commonlink.setNodeid(Integer.valueOf(nodeid));
+			List<CommonLink> commonlinklist2 = maintainservice.Select_PARNETID_commonlink(commonlink);
+	    	JSONObject PARNETIDJsonObject = new JSONObject();
+
+	    	PARNETIDJsonObject.put("text", commonlinklist2.get(0).getNodetext());
+	    	
+	    	parnetJsonArray.put(PARNETIDJsonObject);
+	    	jsonObject.put("Tree", parnetJsonArray);
+	    	
+	    	
+		}else{
+		
 		List<CommonLink> commonlinklist = maintainservice.Select_commonlink(commonlink);
 	    
   	  JSONArray TreeJsonArray = new JSONArray();
@@ -80,6 +102,11 @@ public class CommonLink_Select_Servlet {
     	
     		jsonObject.put("Tree", TreeJsonArray);
     		jsonObject.put("count", count);
+    		
+		}
+
+    		
+    		
   	  
 		return Response.status(200).entity(jsonObject.toString())
 				.header("Access-Control-Allow-Origin", "*")

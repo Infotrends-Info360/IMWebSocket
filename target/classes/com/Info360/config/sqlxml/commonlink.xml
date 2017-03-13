@@ -26,6 +26,11 @@
  ORDER BY SORT
 </select>
 
+<select id="Select_PARNETID_commonlink" parameterType="com.Info360.bean.CommonLink"  resultMap="commonlinkResult">
+ Select NODEID,PARNETID,NODETEXT,NODEURL,NODETYPE,SORT,CREATEDATETIME,CREATEUSERID,COLOR from tblCfg_CommonLink
+ where NODEID=#{nodeid};
+</select>
+
 <insert id="Insert_commonlink" parameterType="com.Info360.bean.CommonLink">
 insert into tblCfg_CommonLink (parnetid,nodetext,nodeurl,createuserid,color,sort,createdatetime) 
        values (#{parnetid},#{nodetext},#{nodeurl},#{createuserid},#{color},#{sort},#{createdatetime})
