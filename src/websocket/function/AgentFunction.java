@@ -20,6 +20,7 @@ import com.google.gson.Gson;
 
 import util.StatusEnum;
 import util.Util;
+import websocket.bean.SystemInfo;
 import websocket.bean.UpdateStatusBean;
 import websocket.bean.UserInfo;
 import websocket.pools.WebSocketRoomPool;
@@ -68,6 +69,7 @@ public class AgentFunction {
 		sendjson.put("from", obj.getString("id"));
 		sendjson.put("fromName", obj.getString("UserName"));
 		sendjson.put("channel", obj.getString("channel"));
+		sendjson.put(SystemInfo.TAG_SYS_MSG, SystemInfo.getCancelLedReqMsg()); // 增加系統訊息
 		WebSocketUserPool.sendMessageToUser(sendto, sendjson.toString());
 		WebSocketUserPool.sendMessageToUser(aConn, sendjson.toString());
 	}

@@ -132,6 +132,10 @@ function Login() {
 				// 收到拒絕交談指令
 				} else if ("RejectEvent" == obj.Event) {
 					alert("Agent reject");
+					var chatRoomMsg = obj.chatRoomMsg; // 接收系統訊息
+					// 更新前端畫面
+					document.getElementById("chatroom").innerHTML += chatRoomMsg + "<br>";
+					
 					switchStatus(StatusEnum.FIND_AGENT);
 					findingAgent();
 					// 控制前端傳值
