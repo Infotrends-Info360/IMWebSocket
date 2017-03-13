@@ -32,7 +32,7 @@ var layim;
 /*********** type list (接收的) ************/
 /* "AcceptEvent", "RejectEvent", "findAgent", 
  * "messagetoRoom", "senduserdata", "userjoin",
- * "responseThirdParty", "removeUserinroom", 
+ * "", "removeUserinroom", 
  * 
  * */
 
@@ -235,13 +235,13 @@ function Login() {
 					
 				}  else if ("responseThirdParty" == obj.Event){
 					console.log("obj.invitedAgentID: " + obj.invitedAgentID);
+					var chatRoomMsg = obj.chatRoomMsg; // 接收系統訊息
 					AgentIDList_g.push(obj.invitedAgentID);
 					if (obj.inviteType == "transfer"){
 						RoomOwnerAgentID_g = obj.invitedAgentID; // 若為轉接,更新roomOwner
 					}
-//					alert("RoomOwnerAgentID_g: " + RoomOwnerAgentID_g);
-//					document.getElementById("currRoomID").innerHTML = obj.roomID;
-//					document.getElementById("currUsers").innerHTML = obj.roomMembers;
+					// 更新前端畫面
+					document.getElementById("chatroom").innerHTML += chatRoomMsg + "<br>"; // 更新系統訊息
 					
 				}  else if ("removeUserinroom" == obj.Event){
 					var chatRoomMsg = obj.chatRoomMsg; // 接收系統訊息

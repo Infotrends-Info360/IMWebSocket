@@ -147,14 +147,16 @@ public class WebSocketRoomPool{
 					}// end of if
 				}// end of for
 				connsInRoomMap.clear();
-				sendJson.put(SystemInfo.TAG_SYS_MSG, SystemInfo.getLeftRoomMsg(userName)); // 增加系統訊息
+				sendJson.put(SystemInfo.TAG_SYS_MSG, SystemInfo.getLeftRoomMsg(userName) + "<br>"
+													 + SystemInfo.getClosedRoomMsg(userName)); // 送出系統訊息
 				sendJson.put("result", WebSocketUserPool.getUserNameByKey(aConn) + " closed the room" + aRoomID);				
 			}else if (connsInRoomMap.size() > 2){
 				Util.getConsoleLogger().debug("connsInRoom.size() > 2  清自己");
 				//清Agent自己
 				WebSocketUserPool.removeUserRoom(aConn, aRoomID);
 				connsInRoomMap.remove(aConn);
-				sendJson.put("result", WebSocketUserPool.getUserNameByKey(aConn) + " left the room" + aRoomID);				
+				sendJson.put("result", WebSocketUserPool.getUserNameByKey(aConn) + " left the room" + aRoomID);
+				sendJson.put(SystemInfo.TAG_SYS_MSG, SystemInfo.getLeftRoomMsg(userName)); // 送出系統訊息
 			}
 			
 			Util.getConsoleLogger().debug("roomId: " + aRoomID + " size: " + connsInRoomMap.size());
@@ -170,6 +172,7 @@ public class WebSocketRoomPool{
 				if (conn.isClosed() || conn.isClosing()){
 					continue;
 				}
+				Util.getConsoleLogger().debug("WebSocketUserPool.getUserNameByKey(conn): " + WebSocketUserPool.getUserNameByKey(conn));
 				
 				WebSocketUserPool.sendMessageToUser(conn, sendJson.toString());
 			}

@@ -407,6 +407,8 @@ public class WebSocket extends WebSocketServer {
 		String ACtype = obj.getString("ACtype");
 		String roomID = obj.getString("roomID");
 		String fromAgentID = obj.getString("fromAgentID");
+		org.java_websocket.WebSocket fromAgentConn = WebSocketUserPool.getWebSocketByUser(fromAgentID);
+		String fromAgentName = WebSocketUserPool.getUserNameByKey(fromAgentConn);
 		String invitedAgentID = obj.getString("invitedAgentID");
 		String invitedAgentName = WebSocketUserPool.getUserNameByKey(aConn);
 		String response = obj.getString("response");
@@ -432,12 +434,16 @@ public class WebSocket extends WebSocketServer {
 				//roomInfo.setRoomOwnerAgentID(invitedAgentID);
 				UserInfo clientUserInfo = WebSocketUserPool.getUserInfoByKey(roomInfo.getClientConn());
 				clientUserInfo.setRoomOwner(invitedAgentID);
+				obj.put(SystemInfo.TAG_SYS_MSG, SystemInfo.getLeftRoomMsg(fromAgentName) + "<br>" 
+												+ SystemInfo.getJoinedRoomMsg(invitedAgentName)); // 傳出系統訊息
 				
-				// 通知使用者清除前端頁面
+				// 通知要離開的使用者清除前端頁面
 				WebSocketUserPool.sendMessageToUser(WebSocketUserPool.getWebSocketByUser(fromAgentID), obj.toString());
 				WebSocketRoomPool.removeUserinroom(roomID, WebSocketUserPool.getWebSocketByUser(fromAgentID));
+			}else if("thirdParty".equals(inviteType)){
+				obj.put(SystemInfo.TAG_SYS_MSG, SystemInfo.getJoinedRoomMsg(invitedAgentName)); // 傳出系統訊息
 			}
-			// 通知各房間成員成員數改變了
+			// 通知剩下的各房間成員成員數改變了
 			WebSocketRoomPool.sendMessageinroom(roomID, obj.toString());
 			
 		}else if("reject".equals(response)){

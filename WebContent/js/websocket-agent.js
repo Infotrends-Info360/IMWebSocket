@@ -200,8 +200,6 @@ function Login() {
 						updateRoomInfo(roomInfo);	
 					}
 						
-					
-
 					// 接收到離開Agent列表的訊息
 				} else if ("userExitfromTYPE" == obj.Event) {
 					layui.use('layim', function(layim) {
@@ -266,7 +264,9 @@ function Login() {
 							$('#Accept')[0].userdata,
 							''
 					);
+					tmpRoomInfo.text += chatRoomMsg + "<br>"; // 加入系統訊息
 					roomInfoMap_g.set(obj.roomID, tmpRoomInfo);
+					
 					console.log("roomInfoMap_g.size: " + roomInfoMap_g.size);
 					updateRoomIDList(obj.roomID);
 					
@@ -286,9 +286,6 @@ function Login() {
 						// 更新狀態(唯一在RING事件之後會將狀態切換為READY的情況)
 						switchStatus(StatusEnum.READY);
 					}
-					
-					// 更新前端畫面
-					document.getElementById("chatroom").innerHTML += chatRoomMsg + "<br>";
 					
 				}else if ("RejectEvent" == obj.Event){
 //					alert("RejectEvent received");
@@ -515,21 +512,22 @@ function Login() {
 					}; // 設定 AcceptEventInit
 
 				} else if ("responseThirdParty" == obj.Event){
-					
+					var chatRoomMsg = obj.chatRoomMsg; // 接收系統訊息
 					var userdata = JSON.stringify( obj.userdata );
-					var text = obj.text;
+					var text = obj.text + chatRoomMsg + "<br>";
 					var inviteType = obj.inviteType;
 					var fromAgentID = obj.fromAgentID;
 					var roomID = obj.roomID;
 					var response = obj.response;
 					var invitedAgentID = obj.invitedAgentID;
-
+					
+					// 若回應為拒絕,則不需再往下進行頁面更新
 					if("reject" == response){
 						alert( "Agent " + invitedAgentID + " rejected " + inviteType +  " invitation");
 						return;
 					}
 					
-					
+					// 如果轉接成功,則自己將已經被移出房間,現在是後端要求前端更新頁面
 					if ("transfer" == inviteType && fromAgentID == parent.UserID_g){
 						alert("transfer");
 						var roomInfo = roomInfoMap_g.get(roomID);
@@ -578,7 +576,14 @@ function Login() {
 				} else if ("removeUserinroom" == obj.Event){
 					alert(obj.result);
 					var chatRoomMsg = obj.chatRoomMsg; // 接收系統訊息
-					// 如果還沒關,就不往下走
+					var roomInfo = roomInfoMap_g.get(obj.roomID);
+					roomInfo.text += chatRoomMsg + "<br>"; // 更新系統訊息
+					var currRoomID = $('#roomList').val();
+					if (currRoomID == obj.roomID){
+						updateRoomInfo(roomInfo);
+					}
+					
+					// 如果還沒關,就不往下走(要注意!)
 					if (obj.roomSize != 0) return;
 					
 					// 若此房間已經關了, 則更新roomInfo
@@ -600,34 +605,21 @@ function Login() {
 					}
 					currRoomCount_g--;
 					$('#maxRoomCount')[0].innerHTML = currRoomCount_g + " / " + maxRoomCount_g;
-//						alert("currRoomCount_g: " + currRoomCount_g);
 					
-//						alert(obj.AfterCallStatus);
 					// 20170222 Lin
 					// 判斷當通話結束後,要將狀態切為READY或是NOTREADY
 					if(obj.AfterCallStatus == StatusEnum.READY.dbid){ //如果AfterCallStatus == ready
-//						if(StatusEnum.ready_dbid == null){
 							$('#notready')[0].disabled = true;
 							$('#ready')[0].disabled = false;
-//								status_g = StatusEnum.READY;
 							switchStatus(StatusEnum.READY);
-//							StatusEnum.notready_dbid = StatusEnum.updateStatus(StatusEnum.NOTREADY, "end", StatusEnum.notready_dbid);
-//							StatusEnum.updateStatus(StatusEnum.READY, "start");
 //						}
 					}else if(obj.AfterCallStatus == StatusEnum.NOTREADY.dbid){ //如果AfterCallStatus == not ready
-//						if(StatusEnum.notready_dbid == null){
 							$('#notready')[0].disabled = false;
 							$('#ready')[0].disabled = true;
-//								status_g = StatusEnum.NOTREADY;
 							switchStatus(StatusEnum.NOTREADY);
-//							StatusEnum.ready_dbid = StatusEnum.updateStatus(StatusEnum.READY, "end", StatusEnum.ready_dbid);
-//							StatusEnum.updateStatus(StatusEnum.NOTREADY, "start", null, null, null, notreadyreason_dbid_g);
-//								StatusEnum.updateStatus(StatusEnum.NOTREADY, "start");
-//						}
 					}
 					
-					// 更新前端畫面
-					document.getElementById("chatroom").innerHTML += chatRoomMsg + "<br>"; // 更新系統訊息
+
 					
 				} else if ("clientLeft" == obj.Event){
 					// 在這邊進行一連串的善後處理
