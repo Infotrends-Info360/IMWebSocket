@@ -95,7 +95,11 @@ public class FLAGDATA_Servlet {
         				ActivitydataJsonArray.put(activitydataObject);
                 		
         			}else{
-        				flagJsonArray.put(activitydataObject);
+        				if(activitydatalist.get(g).getDeleteflag().equals("0")){
+        					
+        					flagJsonArray.put(activitydataObject);
+        				}
+        				
         			}
         			
         	  	}
