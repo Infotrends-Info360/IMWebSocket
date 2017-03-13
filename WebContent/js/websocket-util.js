@@ -11,6 +11,13 @@ if(typeof String.prototype.trim !== 'function') {
 /********** bean *************/
 //目的: 將Json請求字串物件化 (持續進行中)
 
+function findAgentJson(aUserID, aUserName){
+		this.type = "findAgent";
+		this.id = aUserID;
+		this.UserName = aUserName;
+		this.channel = "chat";
+}
+
 function entrylogJson(aContactID, aUserID, aUserName){
 	this.type = "entrylog";
 	this.contactid = aContactID;

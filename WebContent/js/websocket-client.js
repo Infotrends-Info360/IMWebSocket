@@ -209,22 +209,9 @@ function Login() {
 					senduserdata(); // 此處不須傳入AgentID
 					
 					/** 成功登入後,開始找尋Agent **/
-					var now = new Date();
-					// 組成找尋Agent JSON指令
-					var findAgentmsg = {
-						type : "findAgent",
-						id : UserID_g,
-						UserName : UserName_g,
-						channel : "chat",
-						// Event: "findAgent",
-						date : now.getHours() + ":" + now.getMinutes() + ":"
-								+ now.getSeconds()
-					};
-
-					// 發送消息給WebSocket
-					ws_g.send(JSON.stringify(findAgentmsg));
-					
-
+					// 組成找尋Agent JSON指令,並發送消息給WebSocket
+					var myFindAgentJson = new findAgentJson(UserID_g, UserName_g);
+					ws_g.send(JSON.stringify(myFindAgentJson));
 					
 					/** 更新前端資料 **/
 					document.getElementById('Status').innerHTML = StatusEnum.FIND_AGENT;
