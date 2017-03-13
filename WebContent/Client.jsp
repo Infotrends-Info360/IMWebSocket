@@ -109,7 +109,7 @@ WEB_SOCKET_SWF_LOCATION = "WebSocketMain.swf";
 			</div>	
 		</div>
 		<!-- Chat Dialogue -->
-		<div class="col-xs-6 col-sm-6 col-md-6 col-lg-6 center hidden" id="chatDialogue">
+		<div class="col-xs-6 col-sm-6 col-md-6 col-lg-6 center" id="chatDialogue">
 			<div class="col-xs-12 col-sm-12 col-md-12 col-lg-12 container panel panel-default center nopadding ">
 				<div class="col-xs-12 col-sm-12 col-md-12 col-lg-12 panel-heading nopadding">
 					<h3>Chat Dialogue:</h3>
@@ -148,7 +148,7 @@ WEB_SOCKET_SWF_LOCATION = "WebSocketMain.swf";
 				</div>
 			</div> <!-- end of container -->
 		</div>
-		<div class="col-xs-6 col-sm-6 col-md-6 col-lg-6 center" id="chatDialogueReverse"></div>
+<!-- 		<div class="col-xs-6 col-sm-6 col-md-6 col-lg-6 center" id="chatDialogueReverse"></div> -->
 
 		<!-- Log -->
 		<div class="col-xs-3 col-sm-3 col-md-3 col-lg-3 panel panel-default center nopadding">

@@ -19,6 +19,7 @@ import com.google.gson.JsonObject;
 import util.StatusEnum;
 import util.Util;
 import websocket.bean.RoomInfo;
+import websocket.bean.SystemInfo;
 import websocket.bean.UpdateStatusBean;
 import websocket.bean.UserInfo;
 import websocket.function.AgentFunction;
@@ -94,6 +95,7 @@ public class WebSocketRoomPool{
 		// 2. 若是Agent離開 && 剩餘人數 > 1 -> 自己退出就好
 		// 3. 若是Agent離開 && 剩餘人數 == 1 -> 則把所有人都踢出此room
 		RoomInfo roomInfo = roomMap.get(aRoomID);
+		String userName = WebSocketUserPool.getUserNameByKey(aConn);
 //		Set<WebSocket> tmpMemberConns = new HashSet(roommap.keySet());
 		Map<WebSocket, UserInfo> connsInRoomMap = roomInfo.getUserConns();
 		Set<WebSocket> tmpConnsInRoom = new HashSet<>(connsInRoomMap.keySet()); // 通知用,可避免出現concurrent Exception
@@ -145,13 +147,16 @@ public class WebSocketRoomPool{
 					}// end of if
 				}// end of for
 				connsInRoomMap.clear();
+				sendJson.put(SystemInfo.TAG_SYS_MSG, SystemInfo.getLeftRoomMsg(userName) + "<br>"
+													 + SystemInfo.getClosedRoomMsg(userName)); // 送出系統訊息
 				sendJson.put("result", WebSocketUserPool.getUserNameByKey(aConn) + " closed the room" + aRoomID);				
 			}else if (connsInRoomMap.size() > 2){
 				Util.getConsoleLogger().debug("connsInRoom.size() > 2  清自己");
 				//清Agent自己
 				WebSocketUserPool.removeUserRoom(aConn, aRoomID);
 				connsInRoomMap.remove(aConn);
-				sendJson.put("result", WebSocketUserPool.getUserNameByKey(aConn) + " left the room" + aRoomID);				
+				sendJson.put("result", WebSocketUserPool.getUserNameByKey(aConn) + " left the room" + aRoomID);
+				sendJson.put(SystemInfo.TAG_SYS_MSG, SystemInfo.getLeftRoomMsg(userName)); // 送出系統訊息
 			}
 			
 			Util.getConsoleLogger().debug("roomId: " + aRoomID + " size: " + connsInRoomMap.size());
@@ -167,6 +172,7 @@ public class WebSocketRoomPool{
 				if (conn.isClosed() || conn.isClosing()){
 					continue;
 				}
+				Util.getConsoleLogger().debug("WebSocketUserPool.getUserNameByKey(conn): " + WebSocketUserPool.getUserNameByKey(conn));
 				
 				WebSocketUserPool.sendMessageToUser(conn, sendJson.toString());
 			}

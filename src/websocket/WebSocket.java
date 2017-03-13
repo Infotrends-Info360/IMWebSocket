@@ -42,6 +42,7 @@ import filter.startFilter;
 import util.StatusEnum;
 import util.Util;
 import websocket.bean.RoomInfo;
+import websocket.bean.SystemInfo;
 import websocket.bean.UpdateStatusBean;
 import websocket.bean.UserInfo;
 import websocket.function.AgentFunction;
@@ -406,6 +407,8 @@ public class WebSocket extends WebSocketServer {
 		String ACtype = obj.getString("ACtype");
 		String roomID = obj.getString("roomID");
 		String fromAgentID = obj.getString("fromAgentID");
+		org.java_websocket.WebSocket fromAgentConn = WebSocketUserPool.getWebSocketByUser(fromAgentID);
+		String fromAgentName = WebSocketUserPool.getUserNameByKey(fromAgentConn);
 		String invitedAgentID = obj.getString("invitedAgentID");
 		String invitedAgentName = WebSocketUserPool.getUserNameByKey(aConn);
 		String response = obj.getString("response");
@@ -431,12 +434,16 @@ public class WebSocket extends WebSocketServer {
 				//roomInfo.setRoomOwnerAgentID(invitedAgentID);
 				UserInfo clientUserInfo = WebSocketUserPool.getUserInfoByKey(roomInfo.getClientConn());
 				clientUserInfo.setRoomOwner(invitedAgentID);
+				obj.put(SystemInfo.TAG_SYS_MSG, SystemInfo.getLeftRoomMsg(fromAgentName) + "<br>" 
+												+ SystemInfo.getJoinedRoomMsg(invitedAgentName)); // 傳出系統訊息
 				
-				// 通知使用者清除前端頁面
+				// 通知要離開的使用者清除前端頁面
 				WebSocketUserPool.sendMessageToUser(WebSocketUserPool.getWebSocketByUser(fromAgentID), obj.toString());
 				WebSocketRoomPool.removeUserinroom(roomID, WebSocketUserPool.getWebSocketByUser(fromAgentID));
+			}else if("thirdParty".equals(inviteType)){
+				obj.put(SystemInfo.TAG_SYS_MSG, SystemInfo.getJoinedRoomMsg(invitedAgentName)); // 傳出系統訊息
 			}
-			// 通知各房間成員成員數改變了
+			// 通知剩下的各房間成員成員數改變了
 			WebSocketRoomPool.sendMessageinroom(roomID, obj.toString());
 			
 		}else if("reject".equals(response)){
@@ -451,6 +458,7 @@ public class WebSocket extends WebSocketServer {
 		JsonObject msgJson = Util.getGJsonObject(aMsg);
 		String agentID = WebSocketUserPool.getUserID(aConn);
 		UserInfo userInfo = WebSocketUserPool.getUserInfoByKey(aConn);
+		List<String> userNameList = new ArrayList<>(); // 儲存房間成員,給系統訊息使用
 		Util.getConsoleLogger().trace("addRoomForMany - msgJson: " + msgJson);
 		// hardcoded - 之後想想看如何改善"none"這樣寫死的判斷方式
 		String roomID = "";
@@ -492,6 +500,7 @@ public class WebSocket extends WebSocketServer {
 			}
 			String username = WebSocketUserPool.getUserNameByKey(userConn);
 			String joinMsg = "[Server]" + username + " join " + roomID + " room";
+			userNameList.add(username);
 			
 			// 最後進行資料更新
 			WebSocketRoomPool.addUserInRoom(roomID, username, userID, userConn); //重要步驟
@@ -555,12 +564,12 @@ public class WebSocket extends WebSocketServer {
 			sendJson.addProperty("roomID",  roomID);
 			sendJson.addProperty("channel", channel);
 			sendJson.addProperty("EstablishedStatus", Util.getEstablishedStatus()); //增加AfterCallStatus變數 20170222 Lin
+			String userNameListStr = userNameList.toString();
+			sendJson.addProperty(SystemInfo.TAG_SYS_MSG, SystemInfo.getJoinedRoomMsg(userNameListStr.substring(1,userNameListStr.length()-1))); // 增加系統訊息
 			sendJson.add("roomList", roomIDListJson);
-			
 			WebSocketUserPool.sendMessageToUser(userConn,sendJson.toString());	
 		}
 		
-		Util.getConsoleLogger().debug("here3");
 	}
 	
 	private void sendComment(String aMsg, org.java_websocket.WebSocket aConn) {

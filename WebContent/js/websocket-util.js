@@ -11,6 +11,35 @@ if(typeof String.prototype.trim !== 'function') {
 /********** bean *************/
 //目的: 將Json請求字串物件化 (持續進行中)
 
+function exitJson(aUserID, aUserName, aWaittingAgent_g, aWaittingAgentID_g){
+	this.type = "Exit";
+	this.id = aUserID;
+	this.UserName = aUserName;
+	this.channel = "chat";
+	this.waittingAgent = aWaittingAgent_g;
+	this.waittingAgentID = aWaittingAgentID_g;
+} 
+
+function findAgentJson(aUserID, aUserName){
+		this.type = "findAgent";
+		this.id = aUserID;
+		this.UserName = aUserName;
+		this.channel = "chat";
+}
+
+function entrylogJson(aContactID, aUserID, aUserName){
+	this.type = "entrylog";
+	this.contactid = aContactID;
+	this.userid = aUserID;
+	this.username = aUserName;
+	this.ipaddress = '127.0.0.1';
+	this.browser = 'IE';
+	this.platfrom = 'Windows';
+	this.channel = 'Web'; // 使用管道
+	this.language = 'chiname';
+	this.enterkey = 'Phone';  
+}
+
 function RoomInfo(aRoomID, aUserdata, aText){
 	this.roomID = aRoomID;
 	this.userdata = aUserdata;

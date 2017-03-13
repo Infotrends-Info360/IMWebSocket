@@ -38,8 +38,8 @@
 
 	<insert id="Insert_ServiceEntry" parameterType="com.Info360.bean.ServiceEntry">
   	
-  	insert into tblServiceEntry (enterkey,userid,username,entertime,ipaddress,browserversion,platfrom,channeltype,language) 
-  	values (#{enterkey},#{userid},#{username},#{entertime},#{ipaddress},#{browserversion},#{platfrom},#{channeltype},#{language})
+  	insert into tblServiceEntry (contactid,enterkey,userid,username,entertime,ipaddress,browserversion,platfrom,channeltype,language) 
+  	values (#{contactid},#{enterkey},#{userid},#{username},#{entertime},#{ipaddress},#{browserversion},#{platfrom},#{channeltype},#{language})
                         
   	</insert>
   

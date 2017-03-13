@@ -24,8 +24,8 @@ public class RingCountDownTask extends TimerTask {
 	private Timer timer;
 	private static long delay = 1000;
 	private static long period = 1000;
-//	public static Integer maxRingTime = Integer.parseInt(Util.getMaxRingTime()); // 正式用
-	public static Integer maxRingTime = 10; // 測試用
+	public static Integer maxRingTime = Integer.parseInt(Util.getMaxRingTime()); // 正式用
+//	public static Integer maxRingTime = 10; // 測試用
 	private Integer currCount = 0;
 	// RING status所需屬性
 	private WebSocket clientConn;
@@ -50,6 +50,7 @@ public class RingCountDownTask extends TimerTask {
 				JsonObject jsonTo = new JsonObject();
 				jsonTo.addProperty("Event", "ringTimeout");
 				jsonTo.addProperty("clientID", WebSocketUserPool.getUserID(this.clientConn));
+				jsonTo.addProperty(SystemInfo.TAG_SYS_MSG, SystemInfo.getCancelLedReqMsg()); // 增加系統訊息
 				WebSocketUserPool.sendMessageToUser(this.clientConn, jsonTo.toString());
 				WebSocketUserPool.sendMessageToUser(WebSocketUserPool.getWebSocketByUser(this.agentUserInfo.getUserid()), jsonTo.toString());
 			}

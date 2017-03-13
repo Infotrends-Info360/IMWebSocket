@@ -44,11 +44,13 @@ import util.Util;
 
 
 
+
 import com.google.gson.JsonParser;
 
 import websocket.HeartBeat;
 import websocket.bean.RingCountDownTask;
 import websocket.bean.RoomInfo;
+import websocket.bean.SystemInfo;
 import websocket.bean.UpdateStatusBean;
 import websocket.bean.UserInfo;
 //import websocket.HeartBeat;
@@ -107,11 +109,10 @@ public class CommonFunction {
 		sendjson.put("from", userId);
 		sendjson.put("channel", channel);
 		sendjson.put("statusList", Util.getAgentStatus());
-//		sendjson.put("login_dbid", login_dbid); // 此key-value只須Agent接就好(先不做過濾)
-//		sendjson.put("notready_dbid", notready_dbid); // 此key-value只須Agent接就好(先不做過濾)
 		sendjson.put("MaxCount", MaxCount); // 此key-value只須Agent接就好(先不做過濾)
 		AgentFunction.GetAgentReasonInfo("0");
 		sendjson.put("reasonList", Util.getAgentReason()); // 此key-value只須Agent接就好(先不做過濾) ; 此內容已於伺服器啟動時拿取
+		sendjson.put(SystemInfo.TAG_SYS_MSG, SystemInfo.getLoginMsg()); // 加上系統訊息
 		Util.getConsoleLogger().debug("Util.getAgentReason(): " + Util.getAgentReason());
 		Util.getFileLogger().info("Util.getAgentReason(): " + Util.getAgentReason());
 		Util.getConsoleLogger().debug("Util.getAgentStatus(): " + Util.getAgentStatus());
@@ -188,7 +189,12 @@ public class CommonFunction {
 				String waittingAgentID = jsonIn.get("waittingAgentID").getAsString();
 				WebSocket agentConn = WebSocketUserPool.getWebSocketByUser(waittingAgentID);
 //				Util.getConsoleLogger().debug("userExit() - waittingAgentID: " + waittingAgentID);
-				// "clientLeft"
+				
+				// 關閉RING
+				UserInfo agentUserInfo = WebSocketUserPool.getUserInfoByKey(agentConn);
+				agentUserInfo.setStopRing(true);
+				
+				// 寄出"clientLeft",告知Agent有人離開了
 				JsonObject jsonTo = new JsonObject();
 				jsonTo.addProperty("Event", "clientLeft");
 				jsonTo.addProperty("from", WebSocketUserPool.getUserID(aConn));
@@ -297,30 +303,29 @@ public class CommonFunction {
 	/** * Get Message from Room */
 	public static void getMessageinRoom(String message,
 			org.java_websocket.WebSocket conn) {
-		
 		// 拿取資料(gson)
 		JsonObject msgJsonNew = Util.getGJsonObject(message);
 		RoomInfo roomInfo = WebSocketRoomPool.getRoomInfo(msgJsonNew.get("roomID").getAsString());
 		org.java_websocket.WebSocket clientConn = roomInfo.getClientConn();
 		
-			// 更新UserInteraction 
+		/*** 更新UserInteraction ***/ 
 		String userinteractionMsg = WebSocketUserPool.getUserInteractionByKey(clientConn);
 		JsonObject userinteractionJsonMsg = Util.getGJsonObject(userinteractionMsg);
 //		Util.getConsoleLogger().debug("getMessageinRoom() - userinteractionMsg: " + userinteractionMsg);
 		// 因此方法只有Client呼叫,故最多一個Client也就只有一個roomID,若有再更新即可
-				//更新text
+		// 更新text
 		String text = "";
 		if (userinteractionJsonMsg.get("text") != null){
 			text = userinteractionJsonMsg.get("text").getAsString();
 		}
 		text += msgJsonNew.get("UserName").getAsString() + ": " + msgJsonNew.get("text").getAsString() + "\n";
 		userinteractionJsonMsg.addProperty("text", text);
-				// 更新structuredtext
+		// 更新structuredtext
 		JsonArray structuredtext = new JsonArray();
 		if (userinteractionJsonMsg.get("structuredtext") != null){
 			structuredtext = userinteractionJsonMsg.get("structuredtext").getAsJsonArray();
 		}
-					// 更新時間
+		// 更新時間
 		SimpleDateFormat sdf = new SimpleDateFormat(Util.getSdfDateTimeFormat());
 		String dateStr = sdf.format(new java.util.Date()); 
 		msgJsonNew.addProperty("date", dateStr);
@@ -330,7 +335,7 @@ public class CommonFunction {
 		WebSocketUserPool.addUserInteraction(userinteractionJsonMsg.toString(), clientConn); // final step
 //		Util.getConsoleLogger().debug("after - getMessageinRoom() - userinteractionMsg: " + WebSocketUserPool.getUserInteractionByKey(roomInfo.getClientConn()));
 
-		// 將訊息寄給room線上使用者:
+		/*** 將訊息寄給room線上使用者 ***/  
 		if (msgJsonNew.get("roomID") == null) return;
 		msgJsonNew.addProperty("Event", "messagetoRoom");
 		WebSocketRoomPool.sendMessageinroom(msgJsonNew.get("roomID").getAsString(), msgJsonNew.toString());
