@@ -117,8 +117,8 @@ function Login() {
 //					alert("RoomOwnerAgentID_g: " + RoomOwnerAgentID_g);
 
 					// 顯現對話視窗
-					document.getElementById("chatDialogue").classList.remove("hidden");
-					document.getElementById("chatDialogueReverse").classList.add("hidden");
+//					document.getElementById("chatDialogue").classList.remove("hidden");
+//					document.getElementById("chatDialogueReverse").classList.add("hidden");
 
 					// 控制前端傳值
 					RoomID_g = obj.roomID;
@@ -515,8 +515,8 @@ function switchStatus(aStatus){
 //      alert('StatusEnum.LOGOUT matched');
       document.getElementById("Status").innerHTML = StatusEnum.LOGOUT;
 		// 顯現對話視窗
-		document.getElementById("chatDialogue").classList.add("hidden");
-		document.getElementById("chatDialogueReverse").classList.remove("hidden");
+//		document.getElementById("chatDialogue").classList.add("hidden");
+//		document.getElementById("chatDialogueReverse").classList.remove("hidden");
 		// 啟用openChat功能
 		document.getElementById("openChat").disabled = false;
 		document.getElementById("closeChat").disabled = true;
