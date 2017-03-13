@@ -256,6 +256,10 @@ function Login() {
 
 				} else if ("ringTimeout" == obj.Event){
 					alert("ringTimeout");
+					var chatRoomMsg = obj.chatRoomMsg; // 接收系統訊息
+					// 更新前端畫面
+					document.getElementById("chatroom").innerHTML += chatRoomMsg + "<br>";
+					
 					switchStatus(StatusEnum.FIND_AGENT);
 					findingAgent();
 				}

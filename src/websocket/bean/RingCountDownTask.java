@@ -50,6 +50,7 @@ public class RingCountDownTask extends TimerTask {
 				JsonObject jsonTo = new JsonObject();
 				jsonTo.addProperty("Event", "ringTimeout");
 				jsonTo.addProperty("clientID", WebSocketUserPool.getUserID(this.clientConn));
+				jsonTo.addProperty(SystemInfo.TAG_SYS_MSG, SystemInfo.getCancelLedReqMsg()); // 增加系統訊息
 				WebSocketUserPool.sendMessageToUser(this.clientConn, jsonTo.toString());
 				WebSocketUserPool.sendMessageToUser(WebSocketUserPool.getWebSocketByUser(this.agentUserInfo.getUserid()), jsonTo.toString());
 			}
