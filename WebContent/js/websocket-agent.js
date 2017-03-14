@@ -575,20 +575,23 @@ function Login() {
 					
 				} else if ("removeUserinroom" == obj.Event){
 //					alert(obj.result);
-					var chatRoomMsg = obj.chatRoomMsg; // 接收系統訊息
+					var fromUserID = obj.fromUserID;
 					var roomInfo = roomInfoMap_g.get(obj.roomID);
-					roomInfo.text += chatRoomMsg + "<br>"; // 更新系統訊息
-					var currRoomID = $('#roomList').val();
-					if (currRoomID == obj.roomID){
-						updateRoomInfo(roomInfo);
-					}
+					// 只收取他人所產生的系統訊息
+					if (fromUserID != parent.UserID_g){
+						var chatRoomMsg = obj.chatRoomMsg; // 接收系統訊息
+						roomInfo.text += chatRoomMsg + "<br>"; // 更新系統訊息
+						var currRoomID = $('#roomList').val();
+						if (currRoomID == obj.roomID){
+							updateRoomInfo(roomInfo);
+						}
+					}// end of if 
 					
-					// 如果還沒關,就不往下走(要注意!)
+					// 如果還沒關,就不往下走(要注意!) ****** 
 					if (obj.roomSize != 0) return;
 					
 					// 若此房間已經關了, 則更新roomInfo
 					// 將對應到的roomInfo標示為close
-					var roomInfo = roomInfoMap_g.get(obj.roomID);
 					roomInfo.close = true;
 						// 若為當前頁面,則更新roomInfo
 					var currRoomID = $('#roomList').val();
@@ -596,7 +599,7 @@ function Login() {
 						updateRoomInfo(roomInfo);
 					}
 					
-					// maxCount機制
+					/*** maxCount機制 ***/
 					// 若前一次達到最大roomCount值,則恢復其狀態,且確認若會進入到此區塊,則目前狀態一定為NOTREADY
 					if(currRoomCount_g == maxRoomCount_g){
 						$('#notready')[0].disabled = true;
@@ -645,7 +648,7 @@ function Login() {
 				} else if ("agentLeftThirdParty" == obj.Event){
 					alert("agentLeftThirdParty - agent " + obj.id + " left ");
 				} else if ("updateStatus" == obj.Event){
-					alert("obj.startORend: " + obj.startORend + " - " + obj.currStatusEnum);
+//					alert("obj.startORend: " + obj.startORend + " - " + obj.currStatusEnum);
 //					alert("obj.currStatusEnum: " + obj.currStatusEnum);
 					var startORend = obj.startORend;
 					var currStatusEnum = StatusEnum.getStatusEnum(obj.currStatusEnum);
