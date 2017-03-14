@@ -52,7 +52,7 @@ function onloadFunctionClient(){
 	
 }
 
-// 控制例外離開動作(如: 刷新頁面、關閉視窗)
+// 控制例外離開動作(如: 刷新頁面、關閉視窗)(此方法暫時沒使用)
 function checktoLeave() {
 	// 離開WebSocket Pool列表
 	Logoutaction(); // 這邊會全部清: Group, Type, User conn
@@ -241,22 +241,15 @@ function Login() {
 					var msgToShow = obj.UserName + ": " + obj.text;
 					document.getElementById("chatroom").innerHTML += msgToShow + "<br>";
 					
-					// 控制前端傳值
-//					document.getElementById("Event").innerHTML = obj.Event;
-//					document.getElementById("text").innerHTML += obj.UserName
-//							+ ": " + obj.text + "<br>";
-
 				} else if ("removeUserinroom" == obj.Event){
 					var chatRoomMsg = obj.chatRoomMsg; // 接收系統訊息
 					var leftRoomMsg = chatRoomMsg.leftRoomMsg;
 					var closedRoomMsg = chatRoomMsg.closedRoomMsg;
 					updateAgentInfo(obj.roomMemberIDs, obj.roomMembers, obj.roomSize); //格式為[agentid, clientid]
 					if (obj.roomSize == 0){
-//						alert("room empty - \n" + obj.result);
 						Logout();
-					}else{
-//						alert("some left - \n" + obj.result);
 					}
+					
 					document.getElementById("chatroom").innerHTML += leftRoomMsg + "<br>";
 					if (closedRoomMsg != undefined){
 						document.getElementById("chatroom").innerHTML += closedRoomMsg + "<br>";
@@ -285,14 +278,14 @@ function Login() {
 
 		// 當websocket關閉時
 		ws_g.onclose = function() {
+//			alert("websocket 連接關閉");
 			console.log("websocket 連接關閉");
-			// ixnstatus = 3;
-			// ixnactivitycode = "異常離開: websocket unlink";
 			// checktoLeave();
 		};
 
 		// 當websocket出現錯誤時
 		ws_g.onerror = function() {
+			alert("出現錯誤");
 			console.log("出現錯誤");
 		};
 	}
@@ -301,11 +294,9 @@ function Login() {
 
 // 離開WebSocket
 function Logout() {
-	// 關閉socket
-	// ws.close()
-	// 離開WebSocket Pool列表
 	Logoutaction(); // 這邊會全部清: Group, Type, User conn
-	// 控制前端傳值
+//	// 關閉socket
+//	 ws.close()
 }
 
 

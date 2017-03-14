@@ -351,19 +351,22 @@ public class WebSocket extends WebSocketServer {
 		
 		// 目前只有client端會再登入時、登出時、重整時寫入Log
 		if (message != null){
-			JSONObject obj = new JSONObject(message);
-			String closefrom = obj.getString("closefrom");
-			if (closefrom.equals("default")) {
-				obj.put("status", 3);
-				obj.put("stoppedreason", "server:HeartBeatLose"); // 看之後是否考慮更改為變數reason
-				obj.put("closefrom", "server:HeartBeatLose"); 
+			JsonObject obj = Util.getGJsonObject(message);
+			String closefrom = Util.getGString(obj, "closefrom");
+			Util.getConsoleLogger().debug("closefrom: " + closefrom);
+			// 正常登出是"client", 重整離開是"default"
+			if (closefrom == null || closefrom.equals("default")) {
+				obj.addProperty("status", 3);
+				obj.addProperty("stoppedreason", "server:HeartBeatLose"); // 看之後是否考慮更改為變數reason
+				obj.addProperty("closefrom", "server:HeartBeatLose"); 
 			}
 //			// 更新RoomOwnerAgentID
 //			String roomID =  obj.getString("ixnid"); // ixnid 就是 roomID
 //			obj.put("agentid", WebSocketRoomPool.getRoomInfo(roomID).getRoomOwnerAgentID()); // 取代前端傳入值
 			if (WebSocketTypePool.isClient(conn)){
 				UserInfo clientUserInfo = WebSocketUserPool.getUserInfoByKey(conn);
-				obj.put("agentid", clientUserInfo.getRoomOwner()); // 取代前端傳入值
+				if (clientUserInfo.getRoomOwner() != null)
+					obj.addProperty("agentid", clientUserInfo.getRoomOwner()); 
 			}
 			
 			// 最後寫入
