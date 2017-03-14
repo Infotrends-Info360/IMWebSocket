@@ -16,6 +16,7 @@ public class SystemInfo {
 	public static final String LEFT_ROOM_MSG = "離開聊天視窗";
 	public static final String CLOSED_ROOM_MSG = "關閉聊天視窗";
 	
+	// 考慮之後猜成兩個,用JsonObject包
 	public static String getLoginMsg(){
 		return getFormattedMsg(WELCOME_MSG) + "<br>" + getFormattedMsg(LOOKING_FOR_AGENT_MSG);
 	}
