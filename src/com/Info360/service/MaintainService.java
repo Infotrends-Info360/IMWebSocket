@@ -41,6 +41,27 @@ import com.Info360.dao.CFG_personDao;
 public class MaintainService {
 	
 	/**
+	 * 
+	 * Select_commonlink
+	 * 
+	 * @param Select_commonlink
+	 */
+	public List<CommonLink> Select_PARNETID_commonlink(CommonLink commonlink) {
+
+		List<CommonLink> commonlinklist = new ArrayList<CommonLink>();
+		try {
+			CommonlinkDao commonlinkdao = new CommonlinkDao();
+			commonlinklist = commonlinkdao.Select_PARNETID_commonlink(commonlink);
+		} catch (Exception e) {
+			IsError.GET_EXCEPTION = e.getMessage();
+			e.printStackTrace();
+			Util.getFileLogger().error(e.getMessage());
+		}
+		return commonlinklist;
+	}
+	
+	
+	/**
 
 	 * @param Query_AMenu_DBID
 	 */

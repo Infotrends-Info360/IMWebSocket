@@ -54,7 +54,7 @@
 insert into tblCfg_ActivityMenu 
 (MENUNAME,DELETEFLAG,CREATEDATETIME,SORT) 
 values
-(#{menuname},#{deleteflag},#{createdatetime},#{sort})
+(#{menuname},#{deleteflag},#{createdatetime},(Select top 1 SORT from tblCfg_ActivityMenu order by sort desc)+1)
 </insert>
 
 <update id="Update_activitymenu" parameterType="com.Info360.bean.Activitymenu">

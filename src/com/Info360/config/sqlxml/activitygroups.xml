@@ -30,7 +30,7 @@
 insert into tblCfg_ActivityGroups 
 (ACTIVITYMENUID,GROUPNAME,CREATEDATETIME,SORT) 
 values
-(#{activitymenuid},#{groupname},#{createdatetime},#{sort})
+(#{activitymenuid},#{groupname},#{createdatetime},(Select top 1 SORT from tblCfg_ActivityGroups order by sort desc)+1)
 </insert>
 
 <update id="Update_activitygroups" parameterType="com.Info360.bean.Activitygroups">

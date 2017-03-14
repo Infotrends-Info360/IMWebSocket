@@ -91,11 +91,15 @@ public class FLAGDATA_Servlet {
         			activitydataObject.put("titleflag", activitydatalist.get(g).getTitleflag());
         			activitydataObject.put("sort", activitydatalist.get(g).getSort());
 
-        			if(activitydatalist.get(g).getTitlegroup()==0){
+        			if(activitydatalist.get(g).getTitleflag()==0){
         				ActivitydataJsonArray.put(activitydataObject);
                 		
         			}else{
-        				flagJsonArray.put(activitydataObject);
+        				if(activitydatalist.get(g).getDeleteflag().equals("0")){
+        					
+        					flagJsonArray.put(activitydataObject);
+        				}
+        				
         			}
         			
         	  	}
@@ -150,7 +154,7 @@ public class FLAGDATA_Servlet {
         	  	jsonObject.put("Flag0", flag0JsonArray);
         	  	jsonObject.put("Flag1", flag1JsonArray);
         	  	
-//        		jsonObject.put("Flag", flagJsonArray);
+        		jsonObject.put("Title", flagJsonArray);
 //        		jsonObject.put("activitydata", ActivitydataJsonArray);
         		jsonObject.put("activitygroups", ActivitygroupsJsonArray);
     		}
