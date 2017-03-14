@@ -580,7 +580,14 @@ function Login() {
 					// 只收取他人所產生的系統訊息
 					if (fromUserID != parent.UserID_g){
 						var chatRoomMsg = obj.chatRoomMsg; // 接收系統訊息
-						roomInfo.text += chatRoomMsg + "<br>"; // 更新系統訊息
+						var leftRoomMsg = chatRoomMsg.leftRoomMsg;
+						var closedRoomMsg = chatRoomMsg.closedRoomMsg;
+//						alert("obj.chatRoomMsg.leftRoomMsg: " + obj.chatRoomMsg.leftRoomMsg);
+//						alert("obj.chatRoomMsg.closedRoomMsg: " + obj.chatRoomMsg.closedRoomMsg);
+						roomInfo.text += leftRoomMsg + "<br>"; // 更新系統訊息
+						if (closedRoomMsg != undefined)
+							roomInfo.text += closedRoomMsg + "<br>"; // 更新系統訊息
+						
 						var currRoomID = $('#roomList').val();
 						if (currRoomID == obj.roomID){
 							updateRoomInfo(roomInfo);

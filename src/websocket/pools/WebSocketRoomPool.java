@@ -99,11 +99,12 @@ public class WebSocketRoomPool{
 //		Set<WebSocket> tmpMemberConns = new HashSet(roommap.keySet());
 		Map<WebSocket, UserInfo> connsInRoomMap = roomInfo.getUserConns();
 		Set<WebSocket> tmpConnsInRoom = new HashSet<>(connsInRoomMap.keySet()); // 通知用,可避免出現concurrent Exception
-		JSONObject sendJson = new JSONObject();
-		sendJson.put("Event", "removeUserinroom");
-		sendJson.put("roomID", aRoomID);
-		sendJson.put("fromUserID", WebSocketUserPool.getUserID(aConn));
-		sendJson.put("AfterCallStatus", Util.getAfterCallStatus()); //增加AfterCallStatus變數 20170222 Lin
+		JsonObject sendJson = new JsonObject();
+		sendJson.addProperty("Event", "removeUserinroom");
+		sendJson.addProperty("roomID", aRoomID);
+		sendJson.addProperty("fromUserID", WebSocketUserPool.getUserID(aConn));
+		sendJson.addProperty("AfterCallStatus", Util.getAfterCallStatus()); //增加AfterCallStatus變數 20170222 Lin
+		JsonObject systemMsgs = new JsonObject();
 		
 		if (connsInRoomMap != null && connsInRoomMap.containsKey(aConn)) {
 			String currACType = WebSocketUserPool.getACTypeByKey(aConn);
@@ -147,22 +148,27 @@ public class WebSocketRoomPool{
 					}// end of if
 				}// end of for
 				connsInRoomMap.clear();
-				sendJson.put(SystemInfo.TAG_SYS_MSG, SystemInfo.getLeftRoomMsg(userName) + "<br>"
-													 + SystemInfo.getClosedRoomMsg(userName)); // 送出系統訊息
-				sendJson.put("result", WebSocketUserPool.getUserNameByKey(aConn) + " closed the room" + aRoomID);				
+				// 送出系統訊息
+				systemMsgs.addProperty("leftRoomMsg", SystemInfo.getLeftRoomMsg(userName));
+				systemMsgs.addProperty("closedRoomMsg", SystemInfo.getClosedRoomMsg(userName));
+				sendJson.add(SystemInfo.TAG_SYS_MSG, systemMsgs); 
+				
+				sendJson.addProperty("result", WebSocketUserPool.getUserNameByKey(aConn) + " closed the room" + aRoomID);				
 			}else if (connsInRoomMap.size() > 2){
 				Util.getConsoleLogger().debug("connsInRoom.size() > 2  清自己");
 				//清Agent自己
 				WebSocketUserPool.removeUserRoom(aConn, aRoomID);
 				connsInRoomMap.remove(aConn);
-				sendJson.put("result", WebSocketUserPool.getUserNameByKey(aConn) + " left the room" + aRoomID);
-				sendJson.put(SystemInfo.TAG_SYS_MSG, SystemInfo.getLeftRoomMsg(userName)); // 送出系統訊息
+				sendJson.addProperty("result", WebSocketUserPool.getUserNameByKey(aConn) + " left the room" + aRoomID);
+				// 送出系統訊息
+				systemMsgs.addProperty("leftRoomMsg", SystemInfo.getLeftRoomMsg(userName));
+				sendJson.add(SystemInfo.TAG_SYS_MSG, systemMsgs);
 			}
 			
 			Util.getConsoleLogger().debug("roomId: " + aRoomID + " size: " + connsInRoomMap.size());
-			sendJson.put("roomMembers", getOnlineUserNameinroom(aRoomID).toString());
-			sendJson.put("roomMemberIDs", getOnlineUserIDinroom(aRoomID).toString());
-			sendJson.put("roomSize", connsInRoomMap.size());
+			sendJson.addProperty("roomMembers", getOnlineUserNameinroom(aRoomID).toString());
+			sendJson.addProperty("roomMemberIDs", getOnlineUserIDinroom(aRoomID).toString());
+			sendJson.addProperty("roomSize", connsInRoomMap.size());
 			
 //			Util.getConsoleLogger().debug("removeUserinroom() - sendJson: " + sendJson);
 			
