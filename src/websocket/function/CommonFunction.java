@@ -112,7 +112,7 @@ public class CommonFunction {
 		sendjson.put("MaxCount", MaxCount); // 此key-value只須Agent接就好(先不做過濾)
 		AgentFunction.GetAgentReasonInfo("0");
 		sendjson.put("reasonList", Util.getAgentReason()); // 此key-value只須Agent接就好(先不做過濾) ; 此內容已於伺服器啟動時拿取
-		sendjson.put(SystemInfo.TAG_SYS_MSG, SystemInfo.getLoginMsg()); // 加上系統訊息
+		sendjson.put(SystemInfo.TAG_SYS_MSG, SystemInfo.getLoginMsg()); // 加上系統訊息(目前前端客戶端版本仍為一次訊息全送,故暫解不將此改為JsonObject物件)
 		Util.getConsoleLogger().debug("Util.getAgentReason(): " + Util.getAgentReason());
 		Util.getFileLogger().info("Util.getAgentReason(): " + Util.getAgentReason());
 		Util.getConsoleLogger().debug("Util.getAgentStatus(): " + Util.getAgentStatus());
