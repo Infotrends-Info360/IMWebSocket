@@ -131,15 +131,6 @@ public class CommonFunction {
 			AgentFunction.refreshAgentList();
 		}
 		
-//		/** 告訴Agent開啟layui **/
-//		JSONObject sendjson2 = new JSONObject();
-//		sendjson2.put("Event", "userjointoTYPE");
-//		sendjson2.put("from", userId);
-//		sendjson2.put("username",  username);
-//		sendjson2.put("ACtype", ACtype);
-//		sendjson2.put("channel", channel);
-//		WebSocketUserPool.sendMessage(sendjson2.toString());
-		
 		/*** 讓Agent與Client都有Heartbeat ***/
 		HeartBeat heartbeat = new HeartBeat();
 		heartbeat.heartbeating(aConn);

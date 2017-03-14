@@ -354,7 +354,7 @@ public class WebSocket extends WebSocketServer {
 			JsonObject obj = Util.getGJsonObject(message);
 			String closefrom = Util.getGString(obj, "closefrom");
 			Util.getConsoleLogger().debug("closefrom: " + closefrom);
-			// 正常登出是"client", 重整離開是"default"
+			// 正常登出是"client", 重整是空值, "default"待確認
 			if (closefrom == null || closefrom.equals("default")) {
 				obj.addProperty("status", 3);
 				obj.addProperty("stoppedreason", "server:HeartBeatLose"); // 看之後是否考慮更改為變數reason
