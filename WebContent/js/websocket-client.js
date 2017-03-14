@@ -102,10 +102,89 @@ function Login() {
 			if ("{" == e.data.substring(0, 1)) {
 				var obj = jQuery.parseJSON(e.data);
 				// 收到同意交談指令
-				if ("AcceptEvent" == obj.Event) {
-					var myUpdateStatusJson = new updateStatusJson("Client", UserID_g, UserName_g, "chat", "chatting");
+				if ("userjoin" == obj.Event) {
+//						alert("obj.chatRoomMsg: " + obj.chatRoomMsg);
+						var chatRoomMsg = obj.chatRoomMsg; // 接收系統訊息
+						
+						// 控制前端傳值
+//						document.getElementById("UserID").value = obj.from;
+						document.getElementById("UserID").innerHTML = obj.from;
+						document.getElementById("Event").innerHTML = obj.Event;
+						document.getElementById("chatroom").innerHTML += chatRoomMsg + "<br>";
+						
+						UserID_g = obj.from;
+						/** 成功登入後,先寫上第一筆log **/
+						// 去server抓取user資訊
+						senduserdata(); // 此處不須傳入AgentID
+						
+						/** 成功登入後,開始找尋Agent **/
+						// 組成找尋Agent JSON指令,並發送消息給WebSocket
+						var myFindAgentJson = new findAgentJson(UserID_g, UserName_g);
+						ws_g.send(JSON.stringify(myFindAgentJson));
+						
+						/** 更新前端資料 **/
+						document.getElementById('Status').innerHTML = StatusEnum.FIND_AGENT;
+						document.getElementById("openChat").disabled = true;
+						document.getElementById("closeChat").disabled = false;
+
+						parent.isonline_g = true;
+						
+				} else if ("senduserdata" == obj.Event) {
+//						alert("obj.userdata.SetContactLog: "+JSON.stringify(obj.userdata.SetContactLog));
+						if (obj.userdata.SetContactLog != null){
+							contactID_g = obj.userdata.SetContactLog.contactID;
+//							setinteractionDemo(ixnstatus, ixnactivitycode);	
+							setinteraction(ixnstatus_g, ixnactivitycode_g);
+							
+							/** 寫入Log **/
+							// 組成寫入entry log指令,發送消息給WebSocket
+							var myEntrylogJson = new entrylogJson(contactID_g, contactID_g, UserName_g);
+							ws_g.send(JSON.stringify(myEntrylogJson));
+							
+						}else{
+							console.log("senduserdata - " + "contactID not found! ");
+							setinteraction(ixnstatus_g, ixnactivitycode_g); 
+						}
+						console.log("senduserdata done from WS ******************* ");	
+						// alert(obj.userdata.SetContactLog.contactID);
+						// document.getElementById("userdata").innerHTML =
+						// JSON.stringify(obj.userdata);
+				} else if ("findAgent" == obj.Event) {
+
+						// 若仍未找到Agent, 則再找
+						if ("null" == obj.Agent || null == obj.Agent) {
+//							//20170308 - 此段可省略 - 後端已改為ReadyAgentQueue機制,只需發出一次請求即可
+							//只有找到Agent才會收到此"findAgent"事件,因此不再有找不到的狀況
+							if (parent.isonline_g) {
+								console.log(UserName_g + " is looking for an agent ... ");
+								findingAgent();
+							}
+						// 若找到Agent, 則進入等待Agent回應狀態	
+						} else {
+							var chatRoomMsg = obj.chatRoomMsg; // 接收系統訊息
+							// 控制前端傳值
+							document.getElementById("AgentIDs").innerHTML = obj.Agent;
+							document.getElementById("AgentNames").innerHTML = obj.AgentName;
+							document.getElementById("Event").innerHTML = obj.Event;
+							document.getElementById("chatroom").innerHTML += chatRoomMsg + "<br>";
+							
+							waittingAgent_g = true;
+							waittingAgentID_g = obj.Agent;
+
+							// 更新資訊
+							switchStatus(StatusEnum.WAIT_AGENT);
+							// 寫入log(告知雙方彼此的資訊)
+//							senduserdata(obj.Agent); // 交由Server處理
+//							console.log("senduserdata done ******************* ");						
+							
+							// 告知Agent, Client這邊知道找到一個Agent了
+							find(waittingAgentID_g); // 已可省略 - senduserdata已經能做到這件事情
+						}
+						// 收到群組訊息
+				} else if ("AcceptEvent" == obj.Event) {
+//					var myUpdateStatusJson = new updateStatusJson("Client", UserID_g, UserName_g, "chat", "chatting");
+//					ws_g.send(JSON.stringify(myUpdateStatusJson));
 					var chatRoomMsg = obj.chatRoomMsg; // 接收系統訊息
-					ws_g.send(JSON.stringify(myUpdateStatusJson));
 					waittingAgent_g = false;
 					waittingAgentID_g = "none";
 					
@@ -144,38 +223,19 @@ function Login() {
 //					document.getElementById("Event").value = obj.Event;
 //					document.getElementById("Eventfrom").value = obj.from;
 				// 收到尋找Agent的指令
-				} else if ("findAgent" == obj.Event) {
+				} else if ("ringTimeout" == obj.Event){
+					alert("ringTimeout");
+					var chatRoomMsg = obj.chatRoomMsg; // 接收系統訊息
+					// 更新前端畫面
+					document.getElementById("chatroom").innerHTML += chatRoomMsg + "<br>";
+					
+					switchStatus(StatusEnum.FIND_AGENT);
+					findingAgent();
+				} else if ("agentLeft" == obj.Event ){
+					alert("agent left!");
+					switchStatus(StatusEnum.FIND_AGENT);
+					findingAgent();
 
-					// 若仍未找到Agent, 則再找
-					if ("null" == obj.Agent || null == obj.Agent) {
-//						//20170308 - 此段可省略 - 後端已改為ReadyAgentQueue機制,只需發出一次請求即可
-						//只有找到Agent才會收到此"findAgent"事件,因此不再有找不到的狀況
-						if (parent.isonline_g) {
-							console.log(UserName_g + " is looking for an agent ... ");
-							findingAgent();
-						}
-					// 若找到Agent, 則進入等待Agent回應狀態	
-					} else {
-						var chatRoomMsg = obj.chatRoomMsg; // 接收系統訊息
-						// 控制前端傳值
-						document.getElementById("AgentIDs").innerHTML = obj.Agent;
-						document.getElementById("AgentNames").innerHTML = obj.AgentName;
-						document.getElementById("Event").innerHTML = obj.Event;
-						document.getElementById("chatroom").innerHTML += chatRoomMsg + "<br>";
-						
-						waittingAgent_g = true;
-						waittingAgentID_g = obj.Agent;
-
-						// 更新資訊
-						switchStatus(StatusEnum.WAIT_AGENT);
-						// 寫入log(告知雙方彼此的資訊)
-//						senduserdata(obj.Agent); // 交由Server處理
-//						console.log("senduserdata done ******************* ");						
-						
-						// 告知Agent, Client這邊知道找到一個Agent了
-						find(waittingAgentID_g); // 已可省略 - senduserdata已經能做到這件事情
-					}
-					// 收到群組訊息
 				} else if ("messagetoRoom" == obj.Event) {
 //					var UserID = document.getElementById('UserID').value;
 					var msgToShow = obj.UserName + ": " + obj.text;
@@ -186,64 +246,7 @@ function Login() {
 //					document.getElementById("text").innerHTML += obj.UserName
 //							+ ": " + obj.text + "<br>";
 
-				} else if ("senduserdata" == obj.Event) {
-//					alert("obj.userdata.SetContactLog: "+JSON.stringify(obj.userdata.SetContactLog));
-					if (obj.userdata.SetContactLog != null){
-						contactID_g = obj.userdata.SetContactLog.contactID;
-//						setinteractionDemo(ixnstatus, ixnactivitycode);	
-						setinteraction(ixnstatus_g, ixnactivitycode_g);
-						
-						/** 寫入Log **/
-						// 組成寫入entry log指令,發送消息給WebSocket
-						var myEntrylogJson = new entrylogJson(contactID_g, contactID_g, UserName_g);
-						ws_g.send(JSON.stringify(myEntrylogJson));
-						
-					}else{
-						console.log("senduserdata - " + "contactID not found! ");
-						setinteraction(ixnstatus_g, ixnactivitycode_g); 
-					}
-					console.log("senduserdata done from WS ******************* ");	
-					// alert(obj.userdata.SetContactLog.contactID);
-					// document.getElementById("userdata").innerHTML =
-					// JSON.stringify(obj.userdata);
-				} else if ("userjoin" == obj.Event) {
-//					alert("obj.chatRoomMsg: " + obj.chatRoomMsg);
-					var chatRoomMsg = obj.chatRoomMsg; // 接收系統訊息
-					
-					// 控制前端傳值
-//					document.getElementById("UserID").value = obj.from;
-					document.getElementById("UserID").innerHTML = obj.from;
-					document.getElementById("Event").innerHTML = obj.Event;
-					document.getElementById("chatroom").innerHTML += chatRoomMsg + "<br>";
-					
-					UserID_g = obj.from;
-					/** 成功登入後,先寫上第一筆log **/
-					// 去server抓取user資訊
-					senduserdata(); // 此處不須傳入AgentID
-					
-					/** 成功登入後,開始找尋Agent **/
-					// 組成找尋Agent JSON指令,並發送消息給WebSocket
-					var myFindAgentJson = new findAgentJson(UserID_g, UserName_g);
-					ws_g.send(JSON.stringify(myFindAgentJson));
-					
-					/** 更新前端資料 **/
-					document.getElementById('Status').innerHTML = StatusEnum.FIND_AGENT;
-					document.getElementById("openChat").disabled = true;
-					document.getElementById("closeChat").disabled = false;
-
-					parent.isonline_g = true;
-					
-				}  else if ("responseThirdParty" == obj.Event){
-					console.log("obj.invitedAgentID: " + obj.invitedAgentID);
-					var chatRoomMsg = obj.chatRoomMsg; // 接收系統訊息
-					AgentIDList_g.push(obj.invitedAgentID);
-					if (obj.inviteType == "transfer"){
-						RoomOwnerAgentID_g = obj.invitedAgentID; // 若為轉接,更新roomOwner
-					}
-					// 更新前端畫面
-					document.getElementById("chatroom").innerHTML += chatRoomMsg + "<br>"; // 更新系統訊息
-					
-				}  else if ("removeUserinroom" == obj.Event){
+				} else if ("removeUserinroom" == obj.Event){
 					var chatRoomMsg = obj.chatRoomMsg; // 接收系統訊息
 					var leftRoomMsg = chatRoomMsg.leftRoomMsg;
 					var closedRoomMsg = chatRoomMsg.closedRoomMsg;
@@ -262,20 +265,17 @@ function Login() {
 					console.log("obj.roomMemberIDs: " + obj.roomMemberIDs);
 					console.log("obj.roomMembers: " + obj.roomMembers);
 					updateAgentInfo(obj.roomMemberIDs, obj.roomMembers, obj.roomSize);
-				} else if ("agentLeft" == obj.Event ){
-					alert("agent left!");
-					switchStatus(StatusEnum.FIND_AGENT);
-					findingAgent();
-
-				} else if ("ringTimeout" == obj.Event){
-					alert("ringTimeout");
+				} else if ("responseThirdParty" == obj.Event){
+					console.log("obj.invitedAgentID: " + obj.invitedAgentID);
 					var chatRoomMsg = obj.chatRoomMsg; // 接收系統訊息
-					// 更新前端畫面
-					document.getElementById("chatroom").innerHTML += chatRoomMsg + "<br>";
 					
-					switchStatus(StatusEnum.FIND_AGENT);
-					findingAgent();
-				}
+					AgentIDList_g.push(obj.invitedAgentID);
+					if (obj.inviteType == "transfer"){
+						RoomOwnerAgentID_g = obj.invitedAgentID; // 若為轉接,更新roomOwner
+					}
+					// 更新前端畫面
+					document.getElementById("chatroom").innerHTML += chatRoomMsg + "<br>"; // 更新系統訊息
+				}  
 			} else {
 				// 控制前端傳值
 				document.getElementById("text").innerHTML += e.data + "<br>";
