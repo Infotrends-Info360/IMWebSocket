@@ -68,7 +68,7 @@ public class CommonFunction {
 		/*** 原方法內容 ***/
 		String username = obj.getString("UserName");
 		org.java_websocket.WebSocket sendto = WebSocketUserPool
-				.getWebSocketByUser(obj.getString("sendto"));
+				.getWebSocketByUserID(obj.getString("sendto"));
 		
 		WebSocketUserPool.sendMessageToUser(sendto,
 				username + " private message to " + obj.getString("sendto")
@@ -94,11 +94,27 @@ public class CommonFunction {
 		String ACtype = obj.getString("ACtype");
 		String channel = obj.getString("channel");
 		String userId = null;
+		
+		
+		/*** 檢查是否已經登入過 ***/		
 		if(ACtype.equals("Agent")){
 			userId = obj.get("id").toString(); //20170222 Lin
 		}else if(ACtype.equals("Client")){
 			userId = java.util.UUID.randomUUID().toString();
 		}
+//		Util.getConsoleLogger().debug("userId: " + userId);
+//		if (ACtype.equals("Agent")){
+//			WebSocket oldAgentConn = WebSocketUserPool.getWebSocketByUserID(userId);
+//			if (oldAgentConn != null){
+//				Util.getConsoleLogger().debug("oldAgentConn exists");
+//				// 這邊關掉,並告知雙方相對應的訊息
+//				
+//				// 清理相關資料
+//				oldAgentConn.close();
+//			}
+//		}
+
+		/*** 開始新增使用者 ***/
 		WebSocketUserPool.addUser(username, userId, aConn, ACtype); // 在此刻,已將user conn加入倒Pool中
 //		String joinMsg = "[Server]" + username + " Online";
 //		WebSocketUserPool.sendMessage(joinMsg);
@@ -178,7 +194,7 @@ public class CommonFunction {
 //			Util.getConsoleLogger().debug("userExit() - waittingAgent: " + jsonIn.get("waittingAgent").getAsBoolean());
 			if (jsonIn.get("waittingAgent").getAsBoolean()){
 				String waittingAgentID = jsonIn.get("waittingAgentID").getAsString();
-				WebSocket agentConn = WebSocketUserPool.getWebSocketByUser(waittingAgentID);
+				WebSocket agentConn = WebSocketUserPool.getWebSocketByUserID(waittingAgentID);
 //				Util.getConsoleLogger().debug("userExit() - waittingAgentID: " + waittingAgentID);
 				
 				// 關閉RING
@@ -209,7 +225,7 @@ public class CommonFunction {
 				for(final JsonElement clientID_je : clientIDJsonAry) {
 //				    String clientID = clientID_je.getAsJsonObject().get("clientID").getAsString();
 				    String clientID = clientID_je.getAsString();
-				    WebSocket clientConn = WebSocketUserPool.getWebSocketByUser(clientID);
+				    WebSocket clientConn = WebSocketUserPool.getWebSocketByUserID(clientID);
 				    Util.getConsoleLogger().debug("userExit() - waitting clientID: " + clientID);
 				    jsonIn.addProperty("Event", "agentLeft");
 					WebSocketUserPool.sendMessageToUser(clientConn, jsonIn.toString());
@@ -227,7 +243,7 @@ public class CommonFunction {
 //				Util.getConsoleLogger().debug("userExit() - agentIDJsonAry: " + agentIDJsonAry);
 				for(final JsonElement agentID_je : agentIDJsonAry) {
 				    String agentID = agentID_je.getAsJsonObject().get("agentID").getAsString();
-				    WebSocket agentConn = WebSocketUserPool.getWebSocketByUser(agentID);
+				    WebSocket agentConn = WebSocketUserPool.getWebSocketByUserID(agentID);
 //				    Util.getConsoleLogger().debug("userExit() - agentID: " + agentID);
 				    jsonIn.addProperty("Event", "agentLeftThirdParty");
 					WebSocketUserPool.sendMessageToUser(agentConn, jsonIn.toString());
@@ -533,7 +549,7 @@ public class CommonFunction {
 				dbid = AgentFunction.RecordStatusStart(userid, status_dbid, "0"); // 重要
 				userInfo.setStopRing(false); // 回復為預設false
 				userInfo.setTimeout(false); // 回復為預設false
-				WebSocket clientConn = WebSocketUserPool.getWebSocketByUser(clientID);
+				WebSocket clientConn = WebSocketUserPool.getWebSocketByUserID(clientID);
 				RingCountDownTask ringCountDownTask = new RingCountDownTask(clientConn, dbid, userInfo);
 				ringCountDownTask.operate();
 			}// end of RING

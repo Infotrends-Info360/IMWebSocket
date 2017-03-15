@@ -87,7 +87,7 @@ public class WebSocketUserPool {
 	}
 
 	/** * Get WebSocket By User ID * @param user */ /* Done */
-	public static WebSocket getWebSocketByUser(String user) {
+	public static WebSocket getWebSocketByUserID(String user) {
 		Set<WebSocket> conns = userallconnections.keySet();
 		synchronized (conns) {
 			for (WebSocket conn : conns) {

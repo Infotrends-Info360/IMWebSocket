@@ -130,7 +130,7 @@ public class WebSocketTypePool{
 		if (poppedAgentID == null) return poppedAgentID;
 		
 		// 拿取相對應UserInfo資訊
-		WebSocket poppedAgentConn = WebSocketUserPool.getWebSocketByUser(poppedAgentID);
+		WebSocket poppedAgentConn = WebSocketUserPool.getWebSocketByUserID(poppedAgentID);
 		settingUserInfo = WebSocketUserPool.getUserInfoByKey(poppedAgentConn);
 		Util.getConsoleLogger().debug("agentUserInfo.getUsername(): " + settingUserInfo.getUsername() + " popped out");
 		Util.getConsoleLogger().debug("WebSocketUserPool.getReadyAgentQueue().size(): " + WebSocketUserPool.getReadyAgentQueue().size());			
@@ -138,7 +138,7 @@ public class WebSocketTypePool{
 		// 開始更新狀態: 
 		settingUserInfo.setStatusEnum(StatusEnum.NOTREADY); // 直接改了,避免一個以上Client找到同一個Agent
 		Gson gson = new Gson();
-		WebSocket agentConn = WebSocketUserPool.getWebSocketByUser(settingUserInfo.getUserid());
+		WebSocket agentConn = WebSocketUserPool.getWebSocketByUserID(settingUserInfo.getUserid());
 		// NOTREADY狀態開始
 		Util.getStatusFileLogger().info("###### [findAgent]");
 		UpdateStatusBean usb = new UpdateStatusBean();

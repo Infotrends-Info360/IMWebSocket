@@ -42,7 +42,7 @@ public class ClientFunction {
 		Util.getConsoleLogger().debug("findAgentEvent() called");
 		JSONObject obj = new JSONObject(message);
 		org.java_websocket.WebSocket sendto = WebSocketUserPool
-				.getWebSocketByUser(obj.getString("sendto"));
+				.getWebSocketByUserID(obj.getString("sendto"));
 		JSONObject sendjson = new JSONObject();
 		sendjson.put("Event", "findAgentEvent");
 		sendjson.put("from", obj.getString("id"));
@@ -61,7 +61,7 @@ public class ClientFunction {
 		JSONObject sendjson = new JSONObject();
 		try {
 			AgentID = WebSocketTypePool.getOnlineLongestUserinTYPE(aConn, "Agent"); // this method will block current thread if readyAgentQueue is empty
-			sendjson.put("AgentName", WebSocketUserPool.getUserNameByKey(WebSocketUserPool.getWebSocketByUser(AgentID)));
+			sendjson.put("AgentName", WebSocketUserPool.getUserNameByKey(WebSocketUserPool.getWebSocketByUserID(AgentID)));
 		} catch (Exception e) {
 			AgentID = null;
 			e.printStackTrace();
@@ -84,7 +84,7 @@ public class ClientFunction {
 			ClientFunction.senduserdata(senduserdataObj.toString(), aConn);
 			
 			// 新增系統訊息
-			org.java_websocket.WebSocket agentConn = WebSocketUserPool.getWebSocketByUser(AgentID);
+			org.java_websocket.WebSocket agentConn = WebSocketUserPool.getWebSocketByUserID(AgentID);
 			sendjson.put(SystemInfo.TAG_SYS_MSG, SystemInfo.getWaitingForAgentMsg(WebSocketUserPool.getUserNameByKey(agentConn)));
 		}
 		
@@ -171,7 +171,7 @@ public class ClientFunction {
 		// 若尚未找到Agent,則會出現JSONException
 		// 之後若熟悉RESTful,則可試著將抓取contactID與找到Agent後通知兩方這兩件事情分開處理
 		org.java_websocket.WebSocket sendtoConn = null;
-		sendtoConn = WebSocketUserPool.getWebSocketByUser(sendto);
+		sendtoConn = WebSocketUserPool.getWebSocketByUserID(sendto);
 		Util.getConsoleLogger().debug("sendtoConn: " + sendtoConn);
 		Util.getConsoleLogger().debug("WebSocketUserPool.getUserNameByKey(sendtoConn): " + WebSocketUserPool.getUserNameByKey(sendtoConn));
 		

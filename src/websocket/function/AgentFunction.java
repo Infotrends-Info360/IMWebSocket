@@ -38,7 +38,7 @@ public class AgentFunction {
 		JSONObject obj = new JSONObject(message);
 		String roomID = obj.getString("roomID");
 		org.java_websocket.WebSocket sendto = WebSocketUserPool
-				.getWebSocketByUser(obj.getString("sendto"));
+				.getWebSocketByUserID(obj.getString("sendto"));
 				
 		/*** 寄送"AcceptEvent"事件 ***/
 		JSONObject sendjson = new JSONObject();
@@ -55,7 +55,7 @@ public class AgentFunction {
 			org.java_websocket.WebSocket aConn) {
 		JSONObject obj = new JSONObject(message);
 		org.java_websocket.WebSocket sendto = WebSocketUserPool
-				.getWebSocketByUser(obj.getString("sendto"));
+				.getWebSocketByUserID(obj.getString("sendto"));
 		UserInfo agentUserInfo = WebSocketUserPool.getUserInfoByKey(aConn);
 		
 		/*** Agent - 更新狀態 ***/

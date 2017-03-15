@@ -393,7 +393,7 @@ public class WebSocket extends WebSocketServer {
 		obj.put("Event", "inviteAgentThirdParty");
 		
 		// 寄給invitedAgent:
-		org.java_websocket.WebSocket invitedAgent_conn = WebSocketUserPool.getWebSocketByUser(invitedAgentID);
+		org.java_websocket.WebSocket invitedAgent_conn = WebSocketUserPool.getWebSocketByUserID(invitedAgentID);
 		WebSocketUserPool.sendMessageToUser(invitedAgent_conn, obj.toString());
 		
 //		type : "inviteAgentThirdParty",
@@ -410,7 +410,7 @@ public class WebSocket extends WebSocketServer {
 		String ACtype = obj.getString("ACtype");
 		String roomID = obj.getString("roomID");
 		String fromAgentID = obj.getString("fromAgentID");
-		org.java_websocket.WebSocket fromAgentConn = WebSocketUserPool.getWebSocketByUser(fromAgentID);
+		org.java_websocket.WebSocket fromAgentConn = WebSocketUserPool.getWebSocketByUserID(fromAgentID);
 		String fromAgentName = WebSocketUserPool.getUserNameByKey(fromAgentConn);
 		String invitedAgentID = obj.getString("invitedAgentID");
 		String invitedAgentName = WebSocketUserPool.getUserNameByKey(aConn);
@@ -441,8 +441,8 @@ public class WebSocket extends WebSocketServer {
 												+ SystemInfo.getJoinedRoomMsg(invitedAgentName)); // 傳出系統訊息
 				
 				// 通知要離開的使用者清除前端頁面
-				WebSocketUserPool.sendMessageToUser(WebSocketUserPool.getWebSocketByUser(fromAgentID), obj.toString());
-				WebSocketRoomPool.removeUserinroom(roomID, WebSocketUserPool.getWebSocketByUser(fromAgentID));
+				WebSocketUserPool.sendMessageToUser(WebSocketUserPool.getWebSocketByUserID(fromAgentID), obj.toString());
+				WebSocketRoomPool.removeUserinroom(roomID, WebSocketUserPool.getWebSocketByUserID(fromAgentID));
 			}else if("thirdParty".equals(inviteType)){
 				obj.put(SystemInfo.TAG_SYS_MSG, SystemInfo.getJoinedRoomMsg(invitedAgentName)); // 傳出系統訊息
 			}
@@ -451,7 +451,7 @@ public class WebSocket extends WebSocketServer {
 			
 		}else if("reject".equals(response)){
 			Util.getConsoleLogger().debug("responseThirdParty() - reject");			
-			WebSocketUserPool.sendMessageToUser(WebSocketUserPool.getWebSocketByUser(fromAgentID), obj.toString());
+			WebSocketUserPool.sendMessageToUser(WebSocketUserPool.getWebSocketByUserID(fromAgentID), obj.toString());
 		}
 	
 	}
@@ -480,7 +480,7 @@ public class WebSocket extends WebSocketServer {
 		for (JsonElement userIDJsonE : userIDJsonAry){
 			JsonObject userIDJsonObj = userIDJsonE.getAsJsonObject();
 			String userID = userIDJsonObj.get("ID").getAsString();
-			org.java_websocket.WebSocket userConn = WebSocketUserPool.getWebSocketByUser(userID);
+			org.java_websocket.WebSocket userConn = WebSocketUserPool.getWebSocketByUserID(userID);
 			
 			// 處理於Client登入後 到 Agent按下AcceptEvent期間, 有人登出的狀況:
 			if (userConn == null || userConn.isClosed() || userConn.isClosing()){
@@ -550,7 +550,7 @@ public class WebSocket extends WebSocketServer {
 		for (JsonElement userIDJsonE : userIDJsonAry){
 			JsonObject userIDJsonObj = userIDJsonE.getAsJsonObject();
 			String userID = userIDJsonObj.get("ID").getAsString();
-			org.java_websocket.WebSocket userConn = WebSocketUserPool.getWebSocketByUser(userID);
+			org.java_websocket.WebSocket userConn = WebSocketUserPool.getWebSocketByUserID(userID);
 			UserInfo currUserInfo = WebSocketUserPool.getUserInfoByKey(userConn);
 			
 			JsonArray roomIDListJson = new JsonArray();

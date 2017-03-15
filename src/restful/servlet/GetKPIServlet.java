@@ -45,7 +45,7 @@ public class GetKPIServlet {
 		for (String userid : CollectionUsers) {
 			JSONObject usersjsonobject = new JSONObject();
 			usersjsonobject.put("userid", userid);
-			WebSocket websocket = WebSocketUserPool.getWebSocketByUser(userid);
+			WebSocket websocket = WebSocketUserPool.getWebSocketByUserID(userid);
 			usersjsonobject.put("websocket", websocket);
 			usersjsonobject.put("username", WebSocketUserPool.getUserNameByKey(websocket));
 			usersjsonarray.put(usersjsonobject);
@@ -68,7 +68,7 @@ public class GetKPIServlet {
 		for (String agent : CollectionAgents) {
 			JSONObject agentsjsonobject = new JSONObject();
 			agentsjsonobject.put("agentid", agent);
-			WebSocket websocket = WebSocketUserPool.getWebSocketByUser(agent);
+			WebSocket websocket = WebSocketUserPool.getWebSocketByUserID(agent);
 			agentsjsonobject.put("websocket", websocket);
 			agentsjsonobject.put("agentname", WebSocketUserPool.getUserNameByKey(websocket));
 			agentsjsonobject.put("agentstatus", WebSocketTypePool.getUserStatusByKeyinTYPE("Agent", websocket));
@@ -80,7 +80,7 @@ public class GetKPIServlet {
 		for (String client : CollectionClients) {
 			JSONObject clientsjsonobject = new JSONObject();
 			clientsjsonobject.put("clientid", client);
-			WebSocket websocket = WebSocketUserPool.getWebSocketByUser(client);
+			WebSocket websocket = WebSocketUserPool.getWebSocketByUserID(client);
 			clientsjsonobject.put("websocket", websocket);
 			clientsjsonobject.put("clientname", WebSocketUserPool.getUserNameByKey(websocket));
 			clientsjsonobject.put("cliententstatus", WebSocketTypePool.getUserStatusByKeyinTYPE("Client", websocket));
@@ -102,7 +102,7 @@ public class GetKPIServlet {
 		
 		if(user!=null && !"".equals(user)){
 			JSONObject userroomjsonObject = new JSONObject();
-			WebSocket conn = WebSocketUserPool.getWebSocketByUser(user);
+			WebSocket conn = WebSocketUserPool.getWebSocketByUserID(user);
 			//WebSocketUserPool.getUserroomCount(conn);
 			jsonObject.put("userid", user);
 			jsonObject.put("username", WebSocketUserPool.getUserNameByKey(conn));
