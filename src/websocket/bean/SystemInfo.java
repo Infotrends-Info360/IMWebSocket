@@ -24,7 +24,7 @@ public class SystemInfo {
 	
 	// 考慮之後猜成兩個,用JsonObject包
 	public static String getLoginMsg(){
-		return getFormattedMsg(sysMsgsMap.get("Sysmsg_welcome")) + "<br>" + sysMsgsMap.get("Sysmsg_finding");
+		return getFormattedMsg(sysMsgsMap.get("Sysmsg_welcome")) + "<br>" + getFormattedMsg(sysMsgsMap.get("Sysmsg_finding"));
 	}
 	
 	public static String getWelcomeMsg() {
