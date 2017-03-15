@@ -56,7 +56,7 @@
     
 	<foreach item="value" index="key" collection="userdata"
      open="," separator="," close="">
-        ${key}=#{value}
+     	<if test="key!='dbid'">${key}=#{value}</if>
    	</foreach>
     
     where contactid=#{contactid} and ${pkey}=#{pvalue}

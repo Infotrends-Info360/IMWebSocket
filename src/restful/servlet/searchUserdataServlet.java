@@ -146,6 +146,12 @@ public class searchUserdataServlet {
 					Date now = new Date();
 					String date = sdf.format(now);
 					jsonObject.put("date", date);
+//					Util.getConsoleLogger().debug("searchkey: " + searchkey);
+//					Util.getConsoleLogger().debug("pkey: " + pkey);
+//					Util.getConsoleLogger().debug("date: " + date);
+//					Util.getConsoleLogger().debug("CustomerLeveljsonarray: " + CustomerLeveljsonarray
+//							.getJSONObject(j).toString());
+					
 					JSONObject SetContactLogjsonObject = SetContactLog(
 							searchkey, pkey, date, CustomerLeveljsonarray
 									.getJSONObject(j).toString());
