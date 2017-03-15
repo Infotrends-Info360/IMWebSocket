@@ -32,6 +32,9 @@ import websocket.function.CommonFunction;
 //此類別給HeartBeat.java使用
 //此類別給GetKPIServlet.java使用
 public class WebSocketTypePool{
+	public static final String AGENT = "Agent";
+	public static final String CLIENT = "Client";
+	
 	/**********************************************************************************/
 	/**
 	 * Agent & Client Members Map

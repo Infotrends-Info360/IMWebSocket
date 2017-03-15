@@ -7,6 +7,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Properties;
+import java.util.Set;
 import java.util.TreeMap;
 
 import javax.servlet.ServletContext;
@@ -14,6 +15,10 @@ import javax.servlet.ServletContextEvent;
 import javax.servlet.ServletContextListener;
 import javax.servlet.annotation.WebListener;
  
+
+
+
+
 
 
 
@@ -60,7 +65,12 @@ import util.StatusEnum;
 
 
 
+
+
+
+
 import org.apache.commons.lang.StringEscapeUtils;
+import org.java_websocket.WebSocket;
 
 import com.Info360.bean.Cfg_AgentReason;
 import com.Info360.bean.Cfg_AgentStatus;
@@ -73,6 +83,8 @@ import com.google.gson.GsonBuilder;
 
 import util.Util;
 import websocket.bean.SystemInfo;
+import websocket.bean.UserInfo;
+import websocket.pools.WebSocketTypePool;
  
 @WebListener("application context listener")
 public class SystemListener implements ServletContextListener {
@@ -128,7 +140,7 @@ public class SystemListener implements ServletContextListener {
         Gson gson = new GsonBuilder().setPrettyPrinting().create();
         String propertiesJson = gson.toJson(propertiesMap);
 //        System.out.println("Ready, converts " + prop.size() + " entries.");        
-        Util.getConsoleLogger().debug("propertiesJson: " + propertiesJson );        
+//        Util.getConsoleLogger().debug("propertiesJson: " + propertiesJson );        
         Util.getFileLogger().info("propertiesJson: " + propertiesJson );        
         context.setAttribute("systemParam", propertiesJson); // 將此物件放入大廳中,讓前端使用者可取得相關URL資訊
 
@@ -155,7 +167,7 @@ public class SystemListener implements ServletContextListener {
 			 }
 		 }
 		 Util.setAgentStatus(agentstatusmap);
-		 Util.getConsoleLogger().debug("agentstatusmap: "+agentstatusmap);
+//		 Util.getConsoleLogger().debug("agentstatusmap: "+agentstatusmap);
 		 
 		 // 更新Systeminfo
 		 
@@ -163,14 +175,14 @@ public class SystemListener implements ServletContextListener {
 		 //測試區
 		 SystemCfgDao dao = new SystemCfgDao();
 		 List<SystemCfg> SystemCfgs = dao.selectAll_SystemCfg();
-		 Util.getConsoleLogger().debug("SystemCfgs.size(): " + SystemCfgs.size());
+//		 Util.getConsoleLogger().debug("SystemCfgs.size(): " + SystemCfgs.size());
 		 Map<String, String> sysMsgsMap = SystemInfo.getSysMsgsMap();
 		 for (SystemCfg systemCfg : SystemCfgs){
 			 if (systemCfg.getParameter().indexOf("Sys") < 0 ) continue;
 			 // 更新SystemInfo
 			 sysMsgsMap.put(systemCfg.getParameter(), systemCfg.getValue());
-			 Util.getConsoleLogger().debug("systemCfg.getParameter(): " + systemCfg.getParameter());
-			 Util.getConsoleLogger().debug("systemCfg.getValue(): " + systemCfg.getValue());
+//			 Util.getConsoleLogger().debug("systemCfg.getParameter(): " + systemCfg.getParameter());
+//			 Util.getConsoleLogger().debug("systemCfg.getValue(): " + systemCfg.getValue());
 		 }// end of for
 		 
     }
@@ -178,6 +190,12 @@ public class SystemListener implements ServletContextListener {
     @Override
     public void contextDestroyed(ServletContextEvent event) {
         // do nothing
+//    	Util.getFileLogger().info("contextDestroyed() called");
+//    	Map<WebSocket, UserInfo> agentConnsMap = WebSocketTypePool.getTypeconnections().get(WebSocketTypePool.AGENT);
+//    	Set<WebSocket> agebtConns = agentConnsMap.keySet();
+//    	for (WebSocket conn: agebtConns){
+//    		conn.close();
+//    	}
     }  
     
     
