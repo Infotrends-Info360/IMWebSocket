@@ -289,14 +289,18 @@ public class searchUserdataServlet {
 		jsonObject.put("CustomerDataCount", count);
 
 		JSONArray jsonarray = new JSONArray();
-		JSONObject infojsonObject = new JSONObject();
+		
+		Util.getConsoleLogger().debug("count:"+count);
 		for (int j = 0; j < count; j++) {
+			JSONObject infojsonObject = new JSONObject();
 			int c = j + 1;
 			int CustomerDataChildcount = ((Number) xpath.evaluate(
 					"count(DataSet/diffgram/NewDataSet/CustomerData[" + c
 							+ "]/*)", doc,
 					javax.xml.xpath.XPathConstants.NUMBER)).intValue();
+			Util.getConsoleLogger().debug("CustomerDataChildcount:"+CustomerDataChildcount);
 			for (int k = 0; k < CustomerDataChildcount; k++) {
+				
 				Object CustomerDatasO = (xpath
 						.evaluate("DataSet/diffgram/NewDataSet/CustomerData["
 								+ c + "]/*", doc,
@@ -306,12 +310,15 @@ public class searchUserdataServlet {
 						.getNodeName();
 				String CustomerDatasvalue = (String) CustomerDatasn.item(k)
 						.getTextContent();
-				infojsonObject.put(CustomerDataskey, CustomerDatasvalue);
+				if(!CustomerDataskey.toLowerCase().equals("dbid")){
+					infojsonObject.put(CustomerDataskey, CustomerDatasvalue);
+				}
+				
 			}
 
 			jsonarray.put(infojsonObject);
 
-			return jsonarray;
+			//return jsonarray;
 		}
 		return jsonarray;
 	}

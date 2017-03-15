@@ -40,12 +40,14 @@
 		insert into TBLCONTACTDATA (contactid,createdate
  	<foreach item="value" index="key" collection="userdata"
      open="," separator="," close="">
-        ${key}
+     <if test="key!='dbid'">${key}</if>
+        
    	</foreach>
      ) values (#{contactid},#{createdate}
     <foreach item="value" index="key" collection="userdata"
      open="," separator="," close="">
-        #{value}
+     <if test="key!='dbid'">#{value}</if>
+        
    	</foreach>
    	 )
   	</insert>
