@@ -47,11 +47,9 @@ public class searchUserdataServlet {
 	@POST
 	@Produces("application/json")
 	public Response PostFromPath(
-			// @FormParam("searchkey")String searchkey,
-			// @FormParam("pkey")String pkey,
 			@FormParam("searchtype") String searchtype,
-			@FormParam("attributes") String attributes,
-			@FormParam("attributenames") String attributenames,
+			@FormParam("userID") String userID,
+			@FormParam("userName") String userName,
 			@FormParam("lang") String lang) throws IOException {
 		
 		jsonObject.put("searchtype", searchtype);
@@ -86,96 +84,86 @@ public class searchUserdataServlet {
 		jsonObject.put("searchkey", searchkey);
 		jsonObject.put("pkey", pkey);
 		
-		/** 拿取CustomerData - 透過GetCustomerLevel() **/
-		/** 拿取mapping - 透過GetServiceNameCache() **/
-		/** 拿取SetContactLog - 透過SetContactLog() **/
-		JSONObject attributesjsonObject = new JSONObject(attributes);
-		// 可考慮是否將attributenames傳入參數省去,改用keys替代就好，程式碼較好維護
-//		Set<String> keys = attributesjsonObject.keySet();
-//		for (String s : keys){
-//			System.out.println("s: " + s);
-//		}
-
-		String[] attributenamesArray = attributenames.split(",");
+		/*** 將所有attributes key-value放入jsonObject中 ***/
+		// 組出attributes物件
+		JsonObject attributes = new JsonObject();
+		attributes.addProperty("attributenames", searchkey + "," + "id");
+		attributes.addProperty(searchkey,userName); // 特別注意一下名稱並沒對到
+		attributes.addProperty("id",userID);
+		
+		String attributeNames = attributes.get("attributenames").getAsString();
+		String[] attributenamesArray = attributeNames.split(",");
 		for (int i = 0; i < attributenamesArray.length; i++) {
-			JSONArray CustomerLeveljsonarray = null;
-			// 待詢問: attributenamesArray[i].equals(searchkey)的必要性?
-			// 可否將for迴圈省略,直接使用searchkey作為GetCustomerLevel的引數與回傳物件的key-value
-			if (attributenamesArray[i].equals(searchkey)) {
-				// GetCustomerLevel
-				startTime = System.currentTimeMillis();
-				try {
-					// String sID = "A123456789";
-					// String sCustLevel = "A";
-					String bSelect = "false";
-					CustomerLeveljsonarray = GetCustomerLevel(
-							attributesjsonObject.get(attributenamesArray[i])
-									.toString(), searchtype, bSelect);
-					jsonObject.put("CustomerData", CustomerLeveljsonarray);
-				} catch (Exception e) {
-					// e.printStackTrace();
-					jsonObject.put("error", e.getMessage());
-				}
-				endTime = System.currentTimeMillis();
-				Util.getConsoleLogger().info("RESTful GetCustomerLevel time: " + (endTime - startTime)/1000 + "s" );
-				Util.getFileLogger().info("RESTful GetCustomerLevel time: " + (endTime - startTime)/1000 + "s" );
-
-
-				// GetServiceNameCache
-				startTime = System.currentTimeMillis();
-				try {
-					JSONObject ServiceNameCachejsonObj = GetServiceNameCache(searchtype);
-					jsonObject.put("mapping", ServiceNameCachejsonObj);
-				} catch (Exception e) {
-					// e.printStackTrace();
-					jsonObject.put("error", e.getMessage());
-				}
-				endTime = System.currentTimeMillis();
-				Util.getConsoleLogger().info("RESTful GetServiceNameCache time: " + (endTime - startTime)/1000 + "s" );
-				Util.getFileLogger().info("RESTful GetServiceNameCache time: " + (endTime - startTime)/1000 + "s" );
-				
-				// Set Contact Log
-				// 使用CustomerLeveljsonarray迴圈內資料
-				// 疑問: 什麼時候 CustomerLeveljsonarray.length() > 1
-				startTime = System.currentTimeMillis();
-				try {
-					for (int j = 0; j < CustomerLeveljsonarray.length(); j++) {
-						Util.getConsoleLogger().debug("CustomerLeveljsonarray: "
-								+ CustomerLeveljsonarray);
-						JsonObject jsonObj = Util.getGJsonObject(CustomerLeveljsonarray
-								.getJSONObject(j).toString());
-						Util.getConsoleLogger().debug("jsonObj: "+jsonObj);
-						if(jsonObj.get(searchkey) != null){
-
-							SimpleDateFormat sdf = new SimpleDateFormat(
-									"yyyy/MM/dd HH:mm:ss");
-							Date now = new Date();
-							String date = sdf.format(now);
-							jsonObject.put("date", date);
-							JSONObject SetContactLogjsonObject = SetContactLog(
-									searchkey, pkey, date, CustomerLeveljsonarray
-											.getJSONObject(j).toString());
-							jsonObject
-									.put("SetContactLog", SetContactLogjsonObject);
-							
-						}
-					}
-				} catch (Exception e) {
-					// e.printStackTrace();
-					jsonObject.put("error", e.getMessage());
-				}
-				endTime = System.currentTimeMillis();
-				Util.getConsoleLogger().info("RESTful SetContactLog time: " + (endTime - startTime)/1000 + "s" );
-				Util.getFileLogger().info("RESTful SetContactLog time: " + (endTime - startTime)/1000 + "s" );
-
-
-			}// end of if
-			
-			/** 將所有attributes key-value放入 **/
-			jsonObject.put(attributenamesArray[i],
-					attributesjsonObject.get(attributenamesArray[i]));
+			String currAttriName = attributenamesArray[i];
+			jsonObject.put(currAttriName, attributes.get(currAttriName).getAsString());
 		}// end of for
+		
+		/*** GetCustomerLevel - 拿取CustomerData***/
+		JSONArray CustomerLeveljsonarray = null;
+		startTime = System.currentTimeMillis();
+		try {
+			// String sID = "A123456789";
+			// String sCustLevel = "A";
+			String bSelect = "false";
+			CustomerLeveljsonarray = GetCustomerLevel(attributes.get(searchkey).getAsString(), searchtype, bSelect);
+			jsonObject.put("CustomerData", CustomerLeveljsonarray);
+		} catch (Exception e) {
+			// e.printStackTrace();
+			jsonObject.put("error", e.getMessage());
+		}
+		endTime = System.currentTimeMillis();
+		Util.getConsoleLogger().info("RESTful GetCustomerLevel time: " + (endTime - startTime)/1000 + "s" );
+		Util.getFileLogger().info("RESTful GetCustomerLevel time: " + (endTime - startTime)/1000 + "s" );
 
+		/*** GetServiceNameCache - 拿取mapping***/
+		startTime = System.currentTimeMillis();
+		try {
+			JSONObject ServiceNameCachejsonObj = GetServiceNameCache(searchtype);
+			jsonObject.put("mapping", ServiceNameCachejsonObj);
+		} catch (Exception e) {
+			// e.printStackTrace();
+			jsonObject.put("error", e.getMessage());
+		}
+		endTime = System.currentTimeMillis();
+		Util.getConsoleLogger().info("RESTful GetServiceNameCache time: " + (endTime - startTime)/1000 + "s" );
+		Util.getFileLogger().info("RESTful GetServiceNameCache time: " + (endTime - startTime)/1000 + "s" );
+		
+		/*** Set Contact Log - 拿取SetContactLog***/
+		// 使用CustomerLeveljsonarray迴圈內資料
+		// 疑問: 什麼時候 CustomerLeveljsonarray.length() > 1
+		startTime = System.currentTimeMillis();
+		try {
+			for (int j = 0; j < CustomerLeveljsonarray.length(); j++) {
+				Util.getConsoleLogger().debug("CustomerLeveljsonarray: "
+						+ CustomerLeveljsonarray);
+				JsonObject jsonObj = Util.getGJsonObject(CustomerLeveljsonarray
+						.getJSONObject(j).toString());
+				Util.getConsoleLogger().debug("jsonObj: "+jsonObj);
+				if(jsonObj.get(searchkey) != null){
+
+					SimpleDateFormat sdf = new SimpleDateFormat(
+							"yyyy/MM/dd HH:mm:ss");
+					Date now = new Date();
+					String date = sdf.format(now);
+					jsonObject.put("date", date);
+					JSONObject SetContactLogjsonObject = SetContactLog(
+							searchkey, pkey, date, CustomerLeveljsonarray
+									.getJSONObject(j).toString());
+					jsonObject
+							.put("SetContactLog", SetContactLogjsonObject);
+					
+				}
+			}
+		} catch (Exception e) {
+			// e.printStackTrace();
+			jsonObject.put("error", e.getMessage());
+		}
+		endTime = System.currentTimeMillis();
+		Util.getConsoleLogger().info("RESTful SetContactLog time: " + (endTime - startTime)/1000 + "s" );
+		Util.getFileLogger().info("RESTful SetContactLog time: " + (endTime - startTime)/1000 + "s" );
+
+		
+		
 		return Response
 				.status(200)
 				.entity(jsonObject.toString())

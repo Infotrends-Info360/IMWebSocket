@@ -79,19 +79,6 @@ public class ClientFunction {
 			senduserdataObj.addProperty("lang", "chiname");
 			senduserdataObj.addProperty("sendto", AgentID); // 重點
 			senduserdataObj.addProperty("searchtype", "A");
-			JsonObject attributes = new JsonObject();
-			// localhost, 192.168.10.42版本:
-			attributes.addProperty("attributenames", "Phone,id,service1,service2");
-			attributes.addProperty("Phone",userName); // 特別注意一下名稱並沒對到
-			attributes.addProperty("id",userID);
-			attributes.addProperty("service1","service one");
-			attributes.addProperty("service2","service two");
-			// 客戶端版本:
-//					attributes.addProperty("attributenames", "IDNO_");
-//					attributes.addProperty("IDNO_",userName);
-//					attributes.addProperty("id",userID);
-			
-			senduserdataObj.add("attributes", attributes);
 			senduserdataObj.addProperty("channel", "chat");
 			
 			ClientFunction.senduserdata(senduserdataObj.toString(), aConn);
@@ -101,18 +88,11 @@ public class ClientFunction {
 			sendjson.put(SystemInfo.TAG_SYS_MSG, SystemInfo.getWaitingForAgentMsg(WebSocketUserPool.getUserNameByKey(agentConn)));
 		}
 		
-		
 		sendjson.put("Event", "findAgent");
 		sendjson.put("from", obj.getString("id"));
 		sendjson.put("Agent",  AgentID);
 		sendjson.put("channel", obj.getString("channel"));
 		WebSocketUserPool.sendMessageToUser(aConn, sendjson.toString());
-				
-		// execute Callable
-//		ExecutorService service = Executors.newCachedThreadPool();
-//		Future<?> taskResult = service.submit(task);
-		
-
 	}
 	
 	/** * Get user data */
@@ -123,18 +103,19 @@ public class ClientFunction {
 		JSONObject obj = new JSONObject(message);
 		String lang = obj.getString("lang");
 		String searchtype = obj.getString("searchtype");
-		JSONObject attributes = obj.getJSONObject("attributes");
-		String attributenames = attributes.getString("attributenames");
-		String channel = obj.getString("channel");
 		String sendto = obj.getString("sendto");
+		String channel = obj.getString("channel");
+		String userID = WebSocketUserPool.getUserID(conn);
+		String userName = WebSocketUserPool.getUserNameByKey(conn);
+		
 		StringBuilder responseSB = null;
 		long startTime = System.currentTimeMillis();
 		try {
 			// Encode the query
 			String postData = 
 					"&searchtype=" + searchtype
-					+ "&attributes=" + attributes.toString()
-					+ "&attributenames=" + attributenames
+					+ "&userID=" + userID
+					+ "&userName=" + userName
 					+ "&lang=" + lang;
 			// Connect to URL
 			String hostURL = Util.getHostURLStr("IMWebSocket");
@@ -180,7 +161,7 @@ public class ClientFunction {
 		JSONObject sendjson = new JSONObject();
 		
 		sendjson.put("Event", "senduserdata");
-		sendjson.put("from", attributes.getString("id"));
+		sendjson.put("from", userID);
 		sendjson.put("userdata",  responseSBjson);
 		sendjson.put("channel", channel);
 //		Util.getConsoleLogger().debug("senduserdata() - sendjson" + sendjson);

@@ -364,25 +364,13 @@ function find(aAgentFound) {
 function senduserdata(aSendto) {
 	if (aSendto === undefined) aSendto = "";
 	
-	var now = new Date();
 	// 組成userdata JSON
 	var msg = {
 		type : "senduserdata",
-		ACtype : "Client",
 		sendto : aSendto,
 		lang : "chiname",
-		//searchkey: "Phone",
-		//pkey: "id",
 		searchtype : "A",
 		channel : "chat",
-		date : now.getHours() + ":" + now.getMinutes() + ":" + now.getSeconds(),
-		attributes : {
-			attributenames : "Phone,id,service1,service2",
-			Phone : UserName_g,
-			id : UserID_g,
-			service1 : "service one",
-			service2 : "service two"
-		}
 	};
 
 	// 發送消息給WebSocket
