@@ -28,7 +28,19 @@ import javax.servlet.annotation.WebListener;
 
 
 
+
+
+
+
+
+
 import util.StatusEnum;
+
+
+
+
+
+
 
 
 
@@ -50,12 +62,17 @@ import util.StatusEnum;
 
 import org.apache.commons.lang.StringEscapeUtils;
 
+import com.Info360.bean.Cfg_AgentReason;
 import com.Info360.bean.Cfg_AgentStatus;
+import com.Info360.bean.SystemCfg;
+import com.Info360.dao.AgentReasonDao;
+import com.Info360.dao.SystemCfgDao;
 import com.Info360.service.MaintainService;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 
 import util.Util;
+import websocket.bean.SystemInfo;
  
 @WebListener("application context listener")
 public class SystemListener implements ServletContextListener {
@@ -140,9 +157,21 @@ public class SystemListener implements ServletContextListener {
 		 Util.setAgentStatus(agentstatusmap);
 		 Util.getConsoleLogger().debug("agentstatusmap: "+agentstatusmap);
 		 
+		 // 更新Systeminfo
+		 
 		  
 		 //測試區
-		 
+		 SystemCfgDao dao = new SystemCfgDao();
+		 List<SystemCfg> SystemCfgs = dao.selectAll_SystemCfg();
+		 Util.getConsoleLogger().debug("SystemCfgs.size(): " + SystemCfgs.size());
+		 Map<String, String> sysMsgsMap = SystemInfo.getSysMsgsMap();
+		 for (SystemCfg systemCfg : SystemCfgs){
+			 if (systemCfg.getParameter().indexOf("Sys") < 0 ) continue;
+			 // 更新SystemInfo
+			 sysMsgsMap.put(systemCfg.getParameter(), systemCfg.getValue());
+			 Util.getConsoleLogger().debug("systemCfg.getParameter(): " + systemCfg.getParameter());
+			 Util.getConsoleLogger().debug("systemCfg.getValue(): " + systemCfg.getValue());
+		 }// end of for
 		 
     }
      

@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!DOCTYPE mapper
+    PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+    "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="systemCfg">
+
+	<resultMap type="com.Info360.bean.SystemCfg" id="systemCfgResult">
+
+		<id column="DBID" jdbcType="INTEGER" property="DBID" />
+		<result column="APP_Name" jdbcType="VARCHAR" property="APP_Name" />
+		<result column="Parameter" jdbcType="VARCHAR" property="Parameter" />
+		<result column="Name" jdbcType="VARCHAR" property="Name" />
+		<result column="Value" jdbcType="VARCHAR" property="Value" />
+		<result column="UpdateTime" jdbcType="DATE" property="UpdateTime" />
+
+	</resultMap>
+
+	<select 
+		id="SelectAll_SystemCfg" 
+		resultMap="systemCfgResult">
+		SELECT
+			DBID,APP_Name,Parameter,Name,Value,UpdateTime
+		FROM tblSystemCfg
+	</select>
+
+</mapper>
