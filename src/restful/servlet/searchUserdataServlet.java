@@ -8,6 +8,7 @@ import java.io.StringReader;
 import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.URL;
+import java.net.URLEncoder;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Set;
@@ -375,7 +376,7 @@ public class searchUserdataServlet {
 		StringBuilder responseSB = null;
 		// Encode the query
 		String postData = "searchkey=" + searchkey + "&pkey=" + pkey + "&date="
-				+ date + "&userdata=" + userdata;
+				+ date + "&userdata=" + URLEncoder.encode(userdata, "utf-8");
 
 		// Connect to URL
 		String hostURL = Util.getHostURLStr("IMWebSocket");
