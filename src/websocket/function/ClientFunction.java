@@ -365,13 +365,17 @@ public class ClientFunction {
 //			Util.getConsoleLogger().debug("obj.get(\"text\")" + obj.get("text"));
 //			Util.getConsoleLogger().debug("obj.get(\"structuredtext\")" + obj.get("structuredtext"));
 			// 將RoomInfo對話歷史訊息更新上去
+			String structuredtextStr = null;
 			if (obj.get("text") != null &&
 				obj.get("structuredtext") != null){
 				text = obj.get("text").getAsString();
 				structuredtext = obj.get("structuredtext").getAsJsonArray();
+				structuredtextStr = URLEncoder.encode(structuredtext.toString(), "utf-8");
+				
 			}else{
 				text = "";
-				structuredtext = null;				
+				structuredtext = null;			
+				structuredtextStr = "";
 			}
 			
 			String postData = "contactid=" + contactid + "&ixnid=" + ixnid
@@ -379,7 +383,7 @@ public class ClientFunction {
 					+ "&enddate=" + enddate + "&status=" + status + "&typeid="
 					+ typeid + "&entitytypeid=" + entitytypeid + "&subtypeid="
 					+ subtypeid + "&text=" + URLEncoder.encode(text, "utf-8") + "&structuredtext="
-					+ URLEncoder.encode(structuredtext.toString(), "utf-8") + "&thecomment=" + thecomment
+					+ structuredtextStr + "&thecomment=" + thecomment
 					+ "&stoppedreason=" + stoppedreason + "&activitycode="
 					+ activitycode + "&structuredmimetype="
 					+ structuredmimetype + "&subject=" + subject;
