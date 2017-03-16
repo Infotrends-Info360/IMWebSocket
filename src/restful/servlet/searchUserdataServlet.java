@@ -29,6 +29,7 @@ import org.w3c.dom.Document;
 import org.w3c.dom.NodeList;
 import org.xml.sax.InputSource;
 
+import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
 
 import util.Util;
@@ -132,6 +133,7 @@ public class searchUserdataServlet {
 		// 使用CustomerLeveljsonarray迴圈內資料
 		// 疑問: 什麼時候 CustomerLeveljsonarray.length() > 1
 		startTime = System.currentTimeMillis();
+		JSONArray SetContactLogjsonarray = new JSONArray();
 		try {
 			for (int j = 0; j < CustomerLeveljsonarray.length(); j++) {
 				Util.getConsoleLogger().debug("CustomerLeveljsonarray: "
@@ -156,9 +158,13 @@ public class searchUserdataServlet {
 							searchkey, pkey, date, CustomerLeveljsonarray
 									.getJSONObject(j).toString());
 					jsonObject
-							.put("SetContactLog", SetContactLogjsonObject);
+					.put("SetContactLog", SetContactLogjsonObject); //改為抓取Contact陣列 請關閉
+//					SetContactLogjsonarray.put(SetContactLogjsonObject); //改為抓取Contact陣列 請開啟
+					
 					
 				}
+//				jsonObject
+//				.put("SetContactLog", SetContactLogjsonarray); //改為抓取Contact陣列 請開啟
 			}
 		} catch (Exception e) {
 			// e.printStackTrace();
