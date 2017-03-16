@@ -158,14 +158,12 @@ public class searchUserdataServlet {
 					JSONObject SetContactLogjsonObject = SetContactLog(
 							searchkey, pkey, date, CustomerLeveljsonarray
 									.getJSONObject(j).toString());
-					jsonObject
-					.put("SetContactLog", SetContactLogjsonObject); //改為抓取Contact陣列 請關閉
-//					SetContactLogjsonarray.put(SetContactLogjsonObject); //改為抓取Contact陣列 請開啟
+//					jsonObject.put("SetContactLog", SetContactLogjsonObject); //改為抓取Contact陣列 請關閉
+					SetContactLogjsonarray.put(SetContactLogjsonObject); //改為抓取Contact陣列 請開啟
 					
 					
 				}
-//				jsonObject
-//				.put("SetContactLog", SetContactLogjsonarray); //改為抓取Contact陣列 請開啟
+				jsonObject.put("SetContactLog", SetContactLogjsonarray); //改為抓取Contact陣列 請開啟
 			}
 		} catch (Exception e) {
 			// e.printStackTrace();

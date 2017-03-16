@@ -131,8 +131,9 @@ function Login() {
 						
 				} else if ("senduserdata" == obj.Event) {
 //						alert("obj.userdata.SetContactLog: "+JSON.stringify(obj.userdata.SetContactLog));
-						if (obj.userdata.SetContactLog != null){
-							contactID_g = obj.userdata.SetContactLog.contactID;
+						if (obj.userdata.SetContactLog[0] != null){
+//							alert("obj.userdata.SetContactLog[0].contactID: " + obj.userdata.SetContactLog[0].contactID);
+							contactID_g = obj.userdata.SetContactLog[0].contactID;
 //							setinteractionDemo(ixnstatus, ixnactivitycode);	
 							setinteraction(ixnstatus_g, ixnactivitycode_g);
 							

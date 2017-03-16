@@ -82,6 +82,10 @@ public class WebSocket extends WebSocketServer {
 		//userLeave(conn);
 		Util.getConsoleLogger().info( WebSocketUserPool.getUserNameByKey(conn) + " is disconnected. (onClose)");
 		Util.getFileLogger().info( WebSocketUserPool.getUserNameByKey(conn) + " is disconnected. (onClose)");
+		UserInfo userInfo = WebSocketUserPool.getUserInfoByKey(conn);
+		if (WebSocketTypePool.isAgent(conn)){
+			userInfo.setClosing(true);
+		}
 		// 將Heartbeat功能移轉到這裡:
 		inputInteractionLog(conn,reason);
 		updateStatus(conn);
@@ -347,6 +351,7 @@ public class WebSocket extends WebSocketServer {
 		
 		// only Client stores userInteraction
 		String message = WebSocketUserPool.getUserInteractionByKey(conn); // 一定取得到: 1. 在user login時就會呼叫setUserInteraction, 2. 在user logut or 重整時也會呼叫setUserInteraction
+//		Util.getConsoleLogger().debug("message: " + message);
 		String username = WebSocketUserPool.getUserNameByKey(conn);
 		
 		// 目前只有client端會再登入時、登出時、重整時寫入Log
