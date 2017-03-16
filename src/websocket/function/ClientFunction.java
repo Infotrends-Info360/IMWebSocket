@@ -156,6 +156,7 @@ public class ClientFunction {
 		
 		
 		JSONObject responseSBjson = new JSONObject(responseSB.toString());
+		Util.getConsoleLogger().debug("senduserdata result: " + responseSBjson);
 		Util.getFileLogger().debug("senduserdata result: " + responseSBjson);
 		
 		JSONObject sendjson = new JSONObject();
