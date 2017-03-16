@@ -102,17 +102,17 @@ public class CommonFunction {
 		}else if(ACtype.equals("Client")){
 			userId = java.util.UUID.randomUUID().toString();
 		}
-//		Util.getConsoleLogger().debug("userId: " + userId);
-//		if (ACtype.equals("Agent")){
-//			WebSocket oldAgentConn = WebSocketUserPool.getWebSocketByUserID(userId);
-//			if (oldAgentConn != null){
-//				Util.getConsoleLogger().debug("oldAgentConn exists");
-//				// 這邊關掉,並告知雙方相對應的訊息
-//				
-//				// 清理相關資料
-//				oldAgentConn.close();
-//			}
-//		}
+		Util.getConsoleLogger().debug("userId: " + userId);
+		if (ACtype.equals("Agent")){
+			WebSocket oldAgentConn = WebSocketUserPool.getWebSocketByUserID(userId);
+			if (oldAgentConn != null){
+				Util.getConsoleLogger().debug("oldAgentConn exists");
+				// 這邊關掉,並告知雙方相對應的訊息
+				
+				// 清理相關資料
+				oldAgentConn.close();
+			}
+		}
 
 		/*** 開始新增使用者 ***/
 		WebSocketUserPool.addUser(username, userId, aConn, ACtype); // 在此刻,已將user conn加入倒Pool中

@@ -2,7 +2,7 @@ package util;
 
 public enum StatusEnum {
 	LOGIN(), LOGOUT(), READY(), NOTREADY(), AFTERCALLWORK(), RING(), 
-	IESTABLISHED(), OESTABLISHED();
+	IESTABLISHED(), OESTABLISHED(), REJECT();
 	private String dbid; // ex. 3
 	private String description; // ex. 準備就緒
 	public String getDbid() {
@@ -37,6 +37,8 @@ public enum StatusEnum {
 			return IESTABLISHED;
 		}else if (OESTABLISHED.toString().equals(aStatusname)){
 			return OESTABLISHED;
+		}else if (REJECT.toString().equals(aStatusname)){
+			return REJECT;
 		}
 		Util.getConsoleLogger().debug("StatusEnmu - getStatusEnumByDescription: " + " no match");
 		return null;
@@ -60,6 +62,8 @@ public enum StatusEnum {
 			return IESTABLISHED;
 		}else if (OESTABLISHED.getDbid().equals(aDbid)){
 			return OESTABLISHED;
+		}else if (REJECT.getDbid().equals(aDbid)){
+			return REJECT;
 		}
 		Util.getConsoleLogger().debug("StatusEnmu - getStatusEnumByDbid: " + " no match");
 		return null;
