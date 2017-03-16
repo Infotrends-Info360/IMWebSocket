@@ -6,6 +6,7 @@ import java.io.InputStreamReader;
 import java.io.OutputStream;
 import java.net.HttpURLConnection;
 import java.net.URL;
+import java.net.URLEncoder;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
@@ -366,7 +367,7 @@ public class ClientFunction {
 			if (obj.get("text") != null &&
 				obj.get("structuredtext") != null){
 				text = obj.get("text").getAsString();
-				structuredtext = obj.get("structuredtext").getAsJsonArray();				
+				structuredtext = obj.get("structuredtext").getAsJsonArray();
 			}else{
 				text = "";
 				structuredtext = null;				
@@ -376,11 +377,12 @@ public class ClientFunction {
 					+ "&agentid=" + agentid + "&startdate=" + startdate
 					+ "&enddate=" + enddate + "&status=" + status + "&typeid="
 					+ typeid + "&entitytypeid=" + entitytypeid + "&subtypeid="
-					+ subtypeid + "&text=" + text + "&structuredtext="
-					+ structuredtext + "&thecomment=" + thecomment
+					+ subtypeid + "&text=" + URLEncoder.encode(text, "utf-8") + "&structuredtext="
+					+ URLEncoder.encode(structuredtext.toString(), "utf-8") + "&thecomment=" + thecomment
 					+ "&stoppedreason=" + stoppedreason + "&activitycode="
 					+ activitycode + "&structuredmimetype="
 					+ structuredmimetype + "&subject=" + subject;
+			
 
 			// Connect to URL
 			String hostURL = Util.getHostURLStr("IMWebSocket");

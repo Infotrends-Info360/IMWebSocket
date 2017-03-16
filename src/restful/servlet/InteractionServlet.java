@@ -1,9 +1,13 @@
 package restful.servlet;
 
 import java.io.IOException;
+import java.net.URLDecoder;
+import java.net.URLEncoder;
+import java.nio.charset.Charset;
 import java.util.HashMap;
 import java.util.Map;
 
+import javax.ws.rs.Consumes;
 import javax.ws.rs.FormParam;
 import javax.ws.rs.POST;
 import javax.ws.rs.Path;
@@ -28,7 +32,7 @@ import com.Info360.util.Variable;
 public class InteractionServlet {
 	
 	@POST
-	@Produces("application/json;charset=utf-8")
+	@Produces("application/json;charset=UTF-8")
 	public Response PostFromPath(@FormParam("contactid")String contactid, //客戶ID
 			@FormParam("ixnid")String ixnid, //Room ID
 			@FormParam("agentid")String agentid, //Agent的ID
@@ -48,6 +52,13 @@ public class InteractionServlet {
 			) throws IOException {
 		
 		Util.getFileLogger().info("text: " + text);
+		Util.getFileLogger().info("structuredtext: " + structuredtext);
+		
+//		text = URLDecoder.decode(text, "UTF-8");
+//		structuredtext = URLDecoder.decode(structuredtext, "UTF-8");
+//		thecomment = URLDecoder.decode(thecomment, "UTF-8");
+//		subject = URLDecoder.decode(subject, "UTF-8");
+		
 		
 		JSONObject jsonObject = new JSONObject();
 		Interaction interaction = new Interaction();
