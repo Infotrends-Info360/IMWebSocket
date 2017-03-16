@@ -63,6 +63,11 @@ public class AgentFunction {
 		// RING狀態結束
 		agentUserInfo.setStopRing(true);
 		// 寫入REJECT狀態開始與結束
+		Util.getStatusFileLogger().info("###### [RejectEvent()]");
+		usb = new UpdateStatusBean();
+		usb.setStatus(StatusEnum.REJECT.getDbid());
+		usb.setStartORend("start");
+		CommonFunction.updateStatus(new Gson().toJson(usb), aConn);	
 		
 		
 		/*** 通知已處理完成RejectEvent ***/

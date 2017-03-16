@@ -568,6 +568,14 @@ public class CommonFunction {
 			if (StatusEnum.OESTABLISHED.getDbid().equals(status_dbid)){
 				dbid = AgentFunction.RecordStatusStart(userid, status_dbid, "0"); // 重要
 			}// end of OESTABLISHED
+
+			if (StatusEnum.REJECT.getDbid().equals(status_dbid)){
+				// REJECT開始狀態
+				dbid = AgentFunction.RecordStatusStart(userid, status_dbid, "0"); // 重要
+				// REJECT結束狀態
+				AgentFunction.RecordStatusEnd(dbid);
+			}// end of OESTABLISHED
+			
 			
 			// for all
 			String dbid_key = currStatusEnum.toString().toLowerCase() + "_dbid";
