@@ -261,6 +261,8 @@ public class ClientFunction {
 		// 可考慮去除在client.js儲存的多於資訊,只讓client.js傳入重要key值,如ixnid, contactid,
 		// 其餘資料皆由server保存,在透過key值去取用,如取得typeid, status, text等,之後整理可考慮進行
 		Util.getConsoleLogger().debug("interactionlog() called");
+		Util.getConsoleLogger().debug("interactionlog - message: " + message);
+		Util.getFileLogger().info("interactionlog - message: " + message);
 //		JSONObject obj = new JSONObject(message);
 		JsonObject obj = Util.getGJsonObject(message);
 
@@ -392,12 +394,13 @@ public class ClientFunction {
 			connection.setDoOutput(true);
 			connection.setRequestMethod("POST");
 			connection.setRequestProperty("Content-Type",
-					"application/x-www-form-urlencoded");
+					"application/x-www-form-urlencoded; charset=utf-8");
 			connection.setRequestProperty("Content-Length",
 					String.valueOf(postData.length()));
 			// Write data
 			OutputStream os = connection.getOutputStream();
 			os.write(postData.getBytes());
+			
 			// Read response
 			responseSB = new StringBuilder();
 			BufferedReader br = new BufferedReader(new InputStreamReader(

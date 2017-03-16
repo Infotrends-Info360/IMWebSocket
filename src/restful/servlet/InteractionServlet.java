@@ -12,6 +12,8 @@ import javax.ws.rs.core.Response;
 
 import org.json.JSONObject;
 
+import util.Util;
+
 import com.Info360.bean.Interaction;
 import com.Info360.service.MaintainService;
 import com.Info360.util.IsError;
@@ -26,7 +28,7 @@ import com.Info360.util.Variable;
 public class InteractionServlet {
 	
 	@POST
-	@Produces("application/json")
+	@Produces("application/json;charset=utf-8")
 	public Response PostFromPath(@FormParam("contactid")String contactid, //客戶ID
 			@FormParam("ixnid")String ixnid, //Room ID
 			@FormParam("agentid")String agentid, //Agent的ID
@@ -44,6 +46,8 @@ public class InteractionServlet {
 			@FormParam("stoppedreason")String stoppedreason,//異常理由(server)
 			@FormParam("activitycode")String activitycode //處理原因
 			) throws IOException {
+		
+		Util.getFileLogger().info("text: " + text);
 		
 		JSONObject jsonObject = new JSONObject();
 		Interaction interaction = new Interaction();
@@ -115,6 +119,11 @@ public class InteractionServlet {
 		interaction.setInteractionlist(interactionlist);
 		jsonObject.put("interactionlist", interaction.getInteractionlist());
 		jsonObject.put("status", Variable.POST_STATUS);
+		
+//		Util.getConsoleLogger().debug("interaction final: " + interaction.toString());
+//		Util.getFileLogger().info("interaction final: " + interaction.toString());
+		Util.getFileLogger().info("interaction.getText(): " + interaction.getText());
+		Util.getFileLogger().info("interaction.getStructuredtext(): " + interaction.getStructuredtext());
 		
 		try{
 			MaintainService maintainService = new MaintainService();
