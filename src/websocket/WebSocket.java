@@ -273,6 +273,9 @@ public class WebSocket extends WebSocketServer {
 		case "sendComment":
 			sendComment(message.toString(), conn);
 			break;
+		case "updateClientContactID":
+			updateClientContactID(message.toString(), conn);
+			break;
 		case "test":
 			this.test();
 			break;
@@ -280,6 +283,20 @@ public class WebSocket extends WebSocketServer {
 		
 
 		
+	}
+
+	/** * 更新ClientContactID */
+	private void updateClientContactID(String aMsg, org.java_websocket.WebSocket aConn) {
+		JsonObject jsonIn = Util.getGJsonObject(aMsg);
+		String contactID = Util.getGString(jsonIn, "contactID");
+		String roomID = Util.getGString(jsonIn, "roomID");
+		RoomInfo roomInfo = WebSocketRoomPool.getRoomInfo(roomID);
+		org.java_websocket.WebSocket clientConn = roomInfo.getClientConn();
+		
+		String interaction = WebSocketUserPool.getUserInteractionByKey(clientConn);
+		JsonObject interactionJsonMsg = Util.getGJsonObject(interaction);
+		interactionJsonMsg.addProperty("contactid", contactID);
+		WebSocketUserPool.addUserInteraction(interactionJsonMsg.toString(), clientConn);
 	}
 
 	/** * user leave websocket (Demo) */
@@ -351,7 +368,7 @@ public class WebSocket extends WebSocketServer {
 		
 		// only Client stores userInteraction
 		String message = WebSocketUserPool.getUserInteractionByKey(conn); // 一定取得到: 1. 在user login時就會呼叫setUserInteraction, 2. 在user logut or 重整時也會呼叫setUserInteraction
-//		Util.getConsoleLogger().debug("message: " + message);
+		Util.getConsoleLogger().debug("message: " + message);
 		String username = WebSocketUserPool.getUserNameByKey(conn);
 		
 		// 目前只有client端會再登入時、登出時、重整時寫入Log
