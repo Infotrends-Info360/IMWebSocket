@@ -62,6 +62,8 @@ public class AgentFunction {
 		UpdateStatusBean usb = null;
 		// RING狀態結束
 		agentUserInfo.setStopRing(true);
+		// 寫入REJECT狀態開始與結束
+		
 		
 		/*** 通知已處理完成RejectEvent ***/
 		JSONObject sendjson = new JSONObject();
