@@ -1150,6 +1150,7 @@ var StatusEnum = {
 	RING: { statusname : 'RING', dbid : '0',description : '中文'}, 
 	IESTABLISHED: { statusname : 'IESTABLISHED', dbid : '0',description : '中文'}, 
 	OESTABLISHED: { statusname : 'OESTABLISHED', dbid : '0',description : '中文'}, 
+	REJECT: { statusname : 'REJECT', dbid : '0',description : '中文'}, 
 	
 	currStatusEnum : '',
 	
@@ -1161,6 +1162,7 @@ var StatusEnum = {
 	ring_dbid : null,
 	iestablished_dbid : [],
 	oestablished_dbid : null,
+	reject_dbid : null,
 	
 	getStatusEnum : function(aStatusname){
 		aStatusname = aStatusname.toUpperCase();
@@ -1181,6 +1183,8 @@ var StatusEnum = {
 			return StatusEnum.IESTABLISHED;
 		}else if (StatusEnum.OESTABLISHED.statusname == aStatusname){
 			return StatusEnum.OESTABLISHED;
+		}else if (StatusEnum.REJECT.statusname == aStatusname){
+			return StatusEnum.REJECT;
 		}
 //		Util.getConsoleLogger().debug("StatusEnmu - getStatusEnum: " + " no match");
 		return null;
@@ -1203,6 +1207,8 @@ var StatusEnum = {
 			StatusEnum.iestablished_dbid.push(aObj.iestablished_dbid); 
 		if (aObj.oestablished_dbid != null)
 			StatusEnum.oestablished_dbid = aObj.oestablished_dbid; 
+		if (aObj.reject_dbid != null)
+			StatusEnum.reject_dbid = aObj.reject_dbid;
 	},
 	
 	updateStatus : function( aStatusEnum , aStartORend, aDbid, aRoomID, aClientID, aReason_dbid){
