@@ -41,6 +41,8 @@ public class UserInfo {
 	private Future<?> findAgentTaskResult;
 	private FindAgentCallable findAgentCallable;
 	
+	private boolean isClosing = false;
+	
 	// 狀態更新使用 - 存放status log dbid - "end"時寫入DB用
 	private Map<StatusEnum, String> statusDBIDMap = Collections.synchronizedMap(new HashMap<StatusEnum, String>());
 	
@@ -161,6 +163,14 @@ public class UserInfo {
 		}
 		return false;
 	}
+	public boolean isClosing() {
+		return isClosing;
+	}
+	
+	public void setClosing(boolean isClosing) {
+		this.isClosing = isClosing;
+	}
+	
 	
 	
 }

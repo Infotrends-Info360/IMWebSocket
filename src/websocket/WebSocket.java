@@ -82,6 +82,10 @@ public class WebSocket extends WebSocketServer {
 		//userLeave(conn);
 		Util.getConsoleLogger().info( WebSocketUserPool.getUserNameByKey(conn) + " is disconnected. (onClose)");
 		Util.getFileLogger().info( WebSocketUserPool.getUserNameByKey(conn) + " is disconnected. (onClose)");
+		UserInfo userInfo = WebSocketUserPool.getUserInfoByKey(conn);
+		if (WebSocketTypePool.isAgent(conn)){
+			userInfo.setClosing(true);
+		}
 		// 將Heartbeat功能移轉到這裡:
 		inputInteractionLog(conn,reason);
 		updateStatus(conn);

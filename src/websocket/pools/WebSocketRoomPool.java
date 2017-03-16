@@ -119,7 +119,7 @@ public class WebSocketRoomPool{
 					UserInfo currUserInfo = WebSocketUserPool.getUserInfoByKey(conn);
 					WebSocketUserPool.removeUserRoom(conn, aRoomID);
 					/*** Agent - 更新狀態 ***/
-					if (WebSocketTypePool.isAgent(conn)){
+					if (WebSocketTypePool.isAgent(conn) && !currUserInfo.isClosing()){
 						Util.getStatusFileLogger().info("###### [removeUserinroom()] called ######");
 						// AFTERCALLWORK狀態開始 (三方/轉接-可能有多個ACW開始狀態要建立)
 						UpdateStatusBean usb = null;
