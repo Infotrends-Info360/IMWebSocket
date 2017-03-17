@@ -149,11 +149,14 @@ public class searchUserdataServlet {
 					Date now = new Date();
 					String date = sdf.format(now);
 					jsonObject.put("date", date);
-//					Util.getConsoleLogger().debug("searchkey: " + searchkey);
-//					Util.getConsoleLogger().debug("pkey: " + pkey);
-//					Util.getConsoleLogger().debug("date: " + date);
-//					Util.getConsoleLogger().debug("CustomerLeveljsonarray: " + CustomerLeveljsonarray
-//							.getJSONObject(j).toString());
+					Util.getConsoleLogger().debug("searchkey: " + searchkey);
+					Util.getConsoleLogger().debug("pkey: " + pkey);
+					Util.getConsoleLogger().debug("date: " + date);
+					Util.getConsoleLogger().debug("CustomerLeveljsonarray: " + CustomerLeveljsonarray.getJSONObject(j).toString());
+					Util.getFileLogger().info("***** SetContactLog(param) - searchkey: " + searchkey);
+					Util.getFileLogger().info("***** SetContactLog(param) - pkey: " + pkey);
+					Util.getFileLogger().info("***** SetContactLog(param) - date: " + date);
+					Util.getFileLogger().info("***** SetContactLog(param) - CustomerLeveljsonarray: " + CustomerLeveljsonarray.getJSONObject(j).toString());
 					
 					JSONObject SetContactLogjsonObject = SetContactLog(
 							searchkey, pkey, date, CustomerLeveljsonarray
@@ -374,6 +377,8 @@ public class searchUserdataServlet {
 	public JSONObject SetContactLog(String searchkey, String pkey, String date,
 			String userdata) throws Exception {
 		StringBuilder responseSB = null;
+		Util.getConsoleLogger().info("***** SetContactLog userdata: " + userdata);
+		Util.getFileLogger().info("***** SetContactLog userdata: " + userdata);
 		// Encode the query
 		String postData = "searchkey=" + searchkey + "&pkey=" + pkey + "&date="
 				+ date + "&userdata=" + URLEncoder.encode(userdata, "utf-8");
