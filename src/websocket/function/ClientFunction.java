@@ -27,6 +27,7 @@ import org.json.JSONObject;
 import com.google.gson.Gson;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
+import com.google.gson.JsonNull;
 import com.google.gson.JsonObject;
 
 import util.StatusEnum;
@@ -263,7 +264,7 @@ public class ClientFunction {
 		}
 	}
 	
-	/** * send interaction log */
+	/** * send interaction log */ 
 	public static void interactionlog(String message, org.java_websocket.WebSocket conn) {
 		// 可考慮去除在client.js儲存的多於資訊,只讓client.js傳入重要key值,如ixnid, contactid,
 		// 其餘資料皆由server保存,在透過key值去取用,如取得typeid, status, text等,之後整理可考慮進行
@@ -273,144 +274,47 @@ public class ClientFunction {
 //		JSONObject obj = new JSONObject(message);
 		JsonObject obj = Util.getGJsonObject(message);
 
-		String contactid = "";
-		String ixnid = "";
-		String agentid = "";
-		int status = 0;
-		String typeid = "";
-		int entitytypeid = 0;
-		String subtypeid = "";
-		String text = "";
-//		String structuredtext = null;
-		JsonArray structuredtext = null;
-		String structuredtextStr = "";
-		String thecomment = "";
-		String stoppedreason = "";
-		String activitycode = "";
-		String structuredmimetype = "";
-		String subject = "";
-		String closefrom = "";
-
-		Set<Map.Entry<String, JsonElement>> entriesSet = obj.entrySet(); //will return members of your object
-//		for (Map.Entry<String, JsonElement> entry: entrieSet) {
-//		    Util.getConsoleLogger().debug(entry.getKey());
-//		}				
-//		Set<String> keySet = obj. .keySet();
-		synchronized (entriesSet) {
-			for (Map.Entry<String, JsonElement> entry : entriesSet) {
-				switch (entry.getKey()) {
-				case "contactid":
-					contactid = entry.getValue().getAsString();
-					break;
-				case "ixnid":
-					ixnid = entry.getValue().getAsString();
-					break;
-				case "agentid":
-					Util.getConsoleLogger().debug("entry.getValue().getAsString(): " + entry.getValue().getAsString());
-//					agentid = entry.getValue().getAsString();
-					agentid = entry.getValue().getAsString();
-					break;
-				case "status":
-					status = entry.getValue().getAsInt();
-					break;
-				case "typeid":
-					typeid = entry.getValue().getAsString();
-					break;
-				case "entitytypeid":
-					entitytypeid = entry.getValue().getAsInt();
-					break;
-				case "subtypeid":
-					subtypeid = entry.getValue().getAsString();
-					break;
-//				case "text":
-//					text = obj.getString(key);
-//					break;
-//				case "structuredtext":
-////					structuredtext = obj.getString(key);
-//					structuredtext = obj.getJSONArray(key);
-//					break;
-				case "thecomment":
-					thecomment = entry.getValue().getAsString();
-					break;
-				case "stoppedreason":
-					stoppedreason = entry.getValue().getAsString();
-					break;
-				case "activitycode":
-					activitycode = entry.getValue().getAsString();
-					break;
-				case "structuredmimetype":
-					structuredmimetype = entry.getValue().getAsString();
-					break;
-				case "subject":
-					subject = entry.getValue().getAsString();
-					break;
-				case "closefrom":
-					closefrom = entry.getValue().getAsString();
-					break;
-				}
-			}
-		}
-		
-		if(closefrom.equals("server:heartbeatlose")){
-			status=3;
-			activitycode=closefrom;
-		}
-
 		SimpleDateFormat sdf = new SimpleDateFormat( Util.getSdfDateTimeFormat());
-		Date now = new Date();
-		String enddate = sdf.format(now);
 		// 抓取使用者登入時間
 		String startdate = sdf.format(WebSocketUserPool.getStartdateByKey(conn));
+		obj.addProperty("startdate", startdate);
+		// 放入使用者登出時間
+		Date now = new Date();
+		String enddate = sdf.format(now);
+		obj.addProperty("enddate", enddate);
+		
+		/** 開始建立請求Json物件List **/
+		Set<Map.Entry<String, JsonElement>> entriesSet = obj.entrySet(); //will return members of your object
+		List<AbstractMap.SimpleEntry<String, String>> params = new ArrayList<>();
+		synchronized (entriesSet) {
+			for (Map.Entry<String, JsonElement> entry : entriesSet) {
+				// "structuredtext" value 為JsonArray型態,故須特別處理
+				if (entry.getKey().equals("structuredtext")) {
+					params.add(new AbstractMap.SimpleEntry<String, String>(entry.getKey(), entry.getValue().toString()));
+					continue;
+				}
+				// 進行新增
+				params.add(new AbstractMap.SimpleEntry<String, String>(entry.getKey(), entry.getValue().getAsString()));
+				// 特殊處理-若closefrom為"server:heartbeatlose",則連帶更新status,activitycode
+				if (entry.getKey().equals("closefrom") && entry.getValue().equals("server:heartbeatlose")){
+					params.add(new AbstractMap.SimpleEntry<String, String>("status","3"));
+					params.add(new AbstractMap.SimpleEntry<String, String>("activitycode", entry.getValue().getAsString()));
+				}				
+			}// end of for
+		}// end of synchronized
 
 		StringBuilder responseSB = null;
 		try {
-			// Encode the query
-//			Util.getConsoleLogger().debug("obj.get(\"text\")" + obj.get("text"));
-//			Util.getConsoleLogger().debug("obj.get(\"structuredtext\")" + obj.get("structuredtext"));
-			// 將RoomInfo對話歷史訊息更新上去
-			if (obj.get("text") != null &&
-				obj.get("structuredtext") != null){
-				text = obj.get("text").getAsString();
-				structuredtext = obj.get("structuredtext").getAsJsonArray();
-//				structuredtextStr = URLEncoder.encode(structuredtext.toString(), "utf-8");
-				
-			}else{
-				
-			}
-			
-			List<AbstractMap.SimpleEntry<String, String>> params = new ArrayList<>();
-			params.add(new AbstractMap.SimpleEntry<String, String>("contactid", contactid));
-			params.add(new AbstractMap.SimpleEntry<String, String>("ixnid", ixnid));
-			params.add(new AbstractMap.SimpleEntry<String, String>("agentid", agentid));
-			params.add(new AbstractMap.SimpleEntry<String, String>("startdate", startdate));
-			params.add(new AbstractMap.SimpleEntry<String, String>("enddate", enddate));
-			params.add(new AbstractMap.SimpleEntry<String, String>("status", Integer.toString(status)));
-			params.add(new AbstractMap.SimpleEntry<String, String>("typeid", typeid));
-			params.add(new AbstractMap.SimpleEntry<String, String>("entitytypeid", Integer.toString(entitytypeid)));
-			params.add(new AbstractMap.SimpleEntry<String, String>("subtypeid", subtypeid));
-			params.add(new AbstractMap.SimpleEntry<String, String>("text", text));
-			params.add(new AbstractMap.SimpleEntry<String, String>("structuredtext", structuredtext.toString()));
-			params.add(new AbstractMap.SimpleEntry<String, String>("thecomment", thecomment));
-			params.add(new AbstractMap.SimpleEntry<String, String>("subtypeid", subtypeid));
-			params.add(new AbstractMap.SimpleEntry<String, String>("stoppedreason", stoppedreason));
-			params.add(new AbstractMap.SimpleEntry<String, String>("activitycode", activitycode));
-			params.add(new AbstractMap.SimpleEntry<String, String>("structuredmimetype", structuredmimetype));
-			params.add(new AbstractMap.SimpleEntry<String, String>("subject", subject));
-
-			// Connect to URL
+			// 連線建立設定
 			String hostURL = Util.getHostURLStr("IMWebSocket");
 //			Util.getConsoleLogger().debug("hostURL: " + hostURL);
 			URL url = new URL( hostURL + "/IMWebSocket/RESTful/Interaction");
-//			URL url = new URL(
-//					"http://127.0.0.1:8080/IMWebSocket/RESTful/Interaction");
-
 			HttpURLConnection connection = (HttpURLConnection) url.openConnection();
 			connection.setDoOutput(true);
 			connection.setRequestMethod("POST");
-			connection.setRequestProperty("Content-Type",
-					"application/x-www-form-urlencoded; charset=utf-8");
+			connection.setRequestProperty("Content-Type", "application/x-www-form-urlencoded; charset=utf-8");
 			connection.setRequestProperty("Content-Length",  Integer.toString(util.Util.getQuery(params).length()));
-			// Write data
+			// 將請求資訊寫入request中
 			OutputStream os = connection.getOutputStream();
 			BufferedWriter writer = new BufferedWriter( new OutputStreamWriter(os, "UTF-8"));
 			writer.write(util.Util.getQuery(params));
@@ -419,14 +323,12 @@ public class ClientFunction {
 			os.close();
 			// 建立連線
 			connection.connect();
-			
-			// Read response
+			// 拿取結果(下面暫時沒用到)
 			responseSB = new StringBuilder();
 			BufferedReader br = new BufferedReader(new InputStreamReader(connection.getInputStream(), "UTF-8"));
 			String line;
 			while ((line = br.readLine()) != null)
 				responseSB.append(line);
-			// Close streams
 			br.close();
 			// Util.getConsoleLogger().debug(responseSB);
 		} catch (IOException e) {
