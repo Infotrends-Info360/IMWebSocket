@@ -15,6 +15,8 @@ import javax.ws.rs.core.Response;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
+import util.Util;
+
 import com.Info360.bean.ContactData;
 import com.Info360.service.MaintainService;
 import com.Info360.util.IsError;
@@ -36,7 +38,7 @@ public class ContactDataServlet {
 			@FormParam("date")String date,
 			@FormParam("userdata")String userdata
 			) throws IOException {
-			
+		Util.getFileLogger().info("***** ContactDataServlet userdata: " + userdata);
 		JSONObject userdatajsonobject= new JSONObject(userdata);
 		
 		JSONObject jsonObject = new JSONObject();
@@ -69,6 +71,7 @@ public class ContactDataServlet {
 					}
 					contactdata.setUserdata(userdatamap);
 				int insertcontactdataInt = maintainService.insert_ContactData(contactdata);
+				Util.getFileLogger().info("***** ContactDataServlet insertcontactdataInt: " + insertcontactdataInt);
 				jsonObject.put("insertcontactdatacount", insertcontactdataInt);
 			}else{
 				jsonObject.put("contactID", contactID);
@@ -87,6 +90,7 @@ public class ContactDataServlet {
 					}
 					contactdata.setUserdata(userdatamap);
 				int updatecontactdataInt = maintainService.update_ContactData(contactdata);
+				Util.getFileLogger().info("***** ContactDataServlet updatecontactdataInt: " + updatecontactdataInt);
 				jsonObject.put("updatecontactdatacount", updatecontactdataInt);
 			}
 			
