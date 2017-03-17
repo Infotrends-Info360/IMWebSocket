@@ -1,6 +1,14 @@
 package util;
  
+import java.io.UnsupportedEncodingException;
+import java.net.URLEncoder;
+import java.util.AbstractMap;
+import java.util.List;
 import java.util.Map;
+
+
+
+
 
 
 
@@ -82,6 +90,26 @@ public class Util {
 //	public static String getTmpID(String aID){
 //		return aID.replaceAll( "[^\\d]", "" ).substring(0,6);
 //	}
+	
+	public static String getQuery(List<AbstractMap.SimpleEntry<String,String>> params) throws UnsupportedEncodingException
+	{
+	    StringBuilder result = new StringBuilder();
+	    boolean first = true;
+
+	    for (AbstractMap.SimpleEntry<String,String> pair : params)
+	    {
+	        if (first)
+	            first = false;
+	        else
+	            result.append("&");
+
+	        result.append(URLEncoder.encode(pair.getKey(), "UTF-8"));
+	        result.append("=");
+	        result.append(URLEncoder.encode(pair.getValue(), "UTF-8"));
+	    }
+
+	    return result.toString();
+	}
 
 	private static class Attr {
 		private static final String sdfDateFormat = "yyyy-MM-dd";
