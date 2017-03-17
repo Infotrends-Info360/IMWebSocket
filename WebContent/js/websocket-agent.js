@@ -871,7 +871,7 @@ function send(aSendto,aMessage) {
 		type : "message",
 		text : aMessage,
 		sendto : aSendto,
-		channel : "chat",
+		channel : "chat"
 	};
 	// 發送消息
 	parent.ws_g.send(JSON.stringify(msg));

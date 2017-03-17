@@ -77,6 +77,8 @@ public class CommonFunction {
 		obj.put("Event", "privateMsg");
 //		Util.getConsoleLogger().debug("conn" +  conn);
 //		Util.getConsoleLogger().debug("sendto" +  sendto);
+		obj.put("UserID", userID);
+		obj.put("UserName", username);
 		WebSocketUserPool.sendMessageToUser(conn, obj.toString());
 		WebSocketUserPool.sendMessageToUser(sendto, obj.toString());
 	}
