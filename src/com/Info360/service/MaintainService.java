@@ -680,6 +680,8 @@ public class MaintainService {
 	 */
 
 	public int insert_ServiceEntry(ServiceEntry serviceentry) {
+		Util.getConsoleLogger().debug("insert_ServiceEntry() called");
+		Util.getFileLogger().info("insert_ServiceEntry() called");
 		int count = 0;
 		try {
 			ServiceEntryDao serviceentrydao = new ServiceEntryDao();
