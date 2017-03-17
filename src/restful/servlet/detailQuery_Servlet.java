@@ -73,7 +73,7 @@ public class detailQuery_Servlet {
 		
 
   	    	String name = "";
-  	    	System.out.println(interactionlist.get(0).getIxnid());
+  	    	System.out.println("Ixn: "+interactionlist.get(0).getIxnid());
   	    	rpt_activitylog.setInteractionid(interactionlist.get(0).getIxnid());
   	    	List<Rpt_Activitylog> rpt_activityloglist = maintainservice.Selcet_activitylog(rpt_activitylog);
   	    	
@@ -81,6 +81,9 @@ public class detailQuery_Servlet {
 	  	    		if(rpt_activityloglist.get(g).getActivitydataid()!=null &&
 	  					!rpt_activityloglist.get(g).getActivitydataid().equals("") &&
 	  						!rpt_activityloglist.get(g).getActivitydataid().equals("null")){
+	  	    			
+	  	    	    	System.out.println("Activitydataid: "+Integer.valueOf(rpt_activityloglist.get(g).getActivitydataid()));
+
 	  	    				activitydata.setDbid(Integer.valueOf(rpt_activityloglist.get(g).getActivitydataid()));
 	  	  	    			List<Activitydata> activitydatalist = maintainservice.IXN_activitydata(activitydata);
 	  	  	    			if(activitydatalist.size()>0){
@@ -90,7 +93,6 @@ public class detailQuery_Servlet {
 	  	  	    			}
 	  	    		}
 	  	    	}	
-	  	    	
 	  	    	
 	  	    	
 	  	    	
@@ -132,6 +134,7 @@ public class detailQuery_Servlet {
 							testobj.put("Enddate", interactionlist.get(0).getEnddate().substring(0, 19));
 							testobj.put("BasicINF", contactidmap);
 							testobj.put("Structuredtext", interactionlist.get(0).getStructuredtext());
+//							testobj.put("pp",);
 
 
 							if(name.length()>0){
