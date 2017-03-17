@@ -269,22 +269,23 @@ public class ClientFunction {
 //		JSONObject obj = new JSONObject(message);
 		JsonObject obj = Util.getGJsonObject(message);
 
-		String contactid = null;
-		String ixnid = null;
-		String agentid = null;
+		String contactid = "";
+		String ixnid = "";
+		String agentid = "";
 		int status = 0;
-		String typeid = null;
+		String typeid = "";
 		int entitytypeid = 0;
-		String subtypeid = null;
-		String text = null;
+		String subtypeid = "";
+		String text = "";
 //		String structuredtext = null;
 		JsonArray structuredtext = null;
-		String thecomment = null;
-		String stoppedreason = null;
-		String activitycode = null;
-		String structuredmimetype = null;
-		String subject = null;
-		String closefrom = null;
+		String structuredtextStr = "";
+		String thecomment = "";
+		String stoppedreason = "";
+		String activitycode = "";
+		String structuredmimetype = "";
+		String subject = "";
+		String closefrom = "";
 
 		Set<Map.Entry<String, JsonElement>> entriesSet = obj.entrySet(); //will return members of your object
 //		for (Map.Entry<String, JsonElement> entry: entrieSet) {
@@ -366,7 +367,6 @@ public class ClientFunction {
 //			Util.getConsoleLogger().debug("obj.get(\"text\")" + obj.get("text"));
 //			Util.getConsoleLogger().debug("obj.get(\"structuredtext\")" + obj.get("structuredtext"));
 			// 將RoomInfo對話歷史訊息更新上去
-			String structuredtextStr = null;
 			if (obj.get("text") != null &&
 				obj.get("structuredtext") != null){
 				text = obj.get("text").getAsString();
@@ -374,9 +374,7 @@ public class ClientFunction {
 				structuredtextStr = URLEncoder.encode(structuredtext.toString(), "utf-8");
 				
 			}else{
-				text = "";
-				structuredtext = null;			
-				structuredtextStr = "";
+				
 			}
 			
 			String postData = "contactid=" + contactid + "&ixnid=" + ixnid
