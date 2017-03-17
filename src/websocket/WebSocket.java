@@ -293,6 +293,9 @@ public class WebSocket extends WebSocketServer {
 		RoomInfo roomInfo = WebSocketRoomPool.getRoomInfo(roomID);
 		org.java_websocket.WebSocket clientConn = roomInfo.getClientConn();
 		
+		UserInfo userInfo = WebSocketUserPool.getUserInfoByKey(clientConn);
+		userInfo.setContactIDupdatedByAgent(true);
+		
 		String interaction = WebSocketUserPool.getUserInteractionByKey(clientConn);
 		JsonObject interactionJsonMsg = Util.getGJsonObject(interaction);
 		interactionJsonMsg.addProperty("contactid", contactID);

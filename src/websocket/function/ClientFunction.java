@@ -30,6 +30,7 @@ import util.Util;
 import websocket.bean.RoomInfo;
 import websocket.bean.SystemInfo;
 import websocket.bean.UpdateStatusBean;
+import websocket.bean.UserInfo;
 import websocket.pools.WebSocketRoomPool;
 import websocket.pools.WebSocketTypePool;
 import websocket.pools.WebSocketUserPool;
@@ -427,6 +428,7 @@ public class ClientFunction {
 	
 	public static void setinteraction(String aMsg, org.java_websocket.WebSocket aConn){
 		Util.getConsoleLogger().debug("setinteraction() called");
+		UserInfo userInfo = WebSocketUserPool.getUserInfoByKey(aConn);
 		// 在此更新RoomInfo中的text, structuredtext到interaction log中
 			// 拿取需要物件
 		JsonObject msgJson = Util.getGJsonObject(aMsg);
@@ -439,8 +441,15 @@ public class ClientFunction {
 				msgJson.addProperty("text", msgJsonOld.get("text").getAsString());
 				msgJson.add("structuredtext", msgJsonOld.get("structuredtext").getAsJsonArray());							
 			}
+			
+			// 若曾經有Agent更改過Client ContactID,則用舊的就好(暫時處理方案,之後須整理interaction相關流程與傳輸資料)
+			if (userInfo.isContactIDupdatedByAgent()){
+				msgJson.addProperty("contactid", msgJsonOld.get("contactid").getAsString());
+			}
+			
 		}
 		
+
 //		List<String> roomID = WebSocketUserPool.getUserRoomByKey(aConn);
 //			// 因此方法只有Client呼叫,故最多一個Client也就只有一個roomID,若有再更新即可
 //		if (roomID.size() == 1){
