@@ -1,13 +1,17 @@
 package websocket.function;
 
 import java.io.BufferedReader;
+import java.io.BufferedWriter;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.OutputStream;
+import java.io.OutputStreamWriter;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.net.URLEncoder;
 import java.text.SimpleDateFormat;
+import java.util.AbstractMap;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.Map;
@@ -269,22 +273,23 @@ public class ClientFunction {
 //		JSONObject obj = new JSONObject(message);
 		JsonObject obj = Util.getGJsonObject(message);
 
-		String contactid = null;
-		String ixnid = null;
-		String agentid = null;
+		String contactid = "";
+		String ixnid = "";
+		String agentid = "";
 		int status = 0;
-		String typeid = null;
+		String typeid = "";
 		int entitytypeid = 0;
-		String subtypeid = null;
-		String text = null;
+		String subtypeid = "";
+		String text = "";
 //		String structuredtext = null;
 		JsonArray structuredtext = null;
-		String thecomment = null;
-		String stoppedreason = null;
-		String activitycode = null;
-		String structuredmimetype = null;
-		String subject = null;
-		String closefrom = null;
+		String structuredtextStr = "";
+		String thecomment = "";
+		String stoppedreason = "";
+		String activitycode = "";
+		String structuredmimetype = "";
+		String subject = "";
+		String closefrom = "";
 
 		Set<Map.Entry<String, JsonElement>> entriesSet = obj.entrySet(); //will return members of your object
 //		for (Map.Entry<String, JsonElement> entry: entrieSet) {
@@ -351,12 +356,9 @@ public class ClientFunction {
 			activitycode=closefrom;
 		}
 
-		SimpleDateFormat sdf = new SimpleDateFormat("yyyy/MM/dd HH:mm:ss");
+		SimpleDateFormat sdf = new SimpleDateFormat( Util.getSdfDateTimeFormat());
 		Date now = new Date();
 		String enddate = sdf.format(now);
-
-		SimpleDateFormat getsdf = new SimpleDateFormat(
-				"yyyy-MM-dd'T'HH:mm:ss.SSS'Z'");
 		// 抓取使用者登入時間
 		String startdate = sdf.format(WebSocketUserPool.getStartdateByKey(conn));
 
@@ -366,29 +368,34 @@ public class ClientFunction {
 //			Util.getConsoleLogger().debug("obj.get(\"text\")" + obj.get("text"));
 //			Util.getConsoleLogger().debug("obj.get(\"structuredtext\")" + obj.get("structuredtext"));
 			// 將RoomInfo對話歷史訊息更新上去
-			String structuredtextStr = null;
 			if (obj.get("text") != null &&
 				obj.get("structuredtext") != null){
 				text = obj.get("text").getAsString();
 				structuredtext = obj.get("structuredtext").getAsJsonArray();
-				structuredtextStr = URLEncoder.encode(structuredtext.toString(), "utf-8");
+//				structuredtextStr = URLEncoder.encode(structuredtext.toString(), "utf-8");
 				
 			}else{
-				text = "";
-				structuredtext = null;			
-				structuredtextStr = "";
+				
 			}
 			
-			String postData = "contactid=" + contactid + "&ixnid=" + ixnid
-					+ "&agentid=" + agentid + "&startdate=" + startdate
-					+ "&enddate=" + enddate + "&status=" + status + "&typeid="
-					+ typeid + "&entitytypeid=" + entitytypeid + "&subtypeid="
-					+ subtypeid + "&text=" + URLEncoder.encode(text, "utf-8") + "&structuredtext="
-					+ structuredtextStr + "&thecomment=" + thecomment
-					+ "&stoppedreason=" + stoppedreason + "&activitycode="
-					+ activitycode + "&structuredmimetype="
-					+ structuredmimetype + "&subject=" + subject;
-			
+			List<AbstractMap.SimpleEntry<String, String>> params = new ArrayList<>();
+			params.add(new AbstractMap.SimpleEntry<String, String>("contactid", contactid));
+			params.add(new AbstractMap.SimpleEntry<String, String>("ixnid", ixnid));
+			params.add(new AbstractMap.SimpleEntry<String, String>("agentid", agentid));
+			params.add(new AbstractMap.SimpleEntry<String, String>("startdate", startdate));
+			params.add(new AbstractMap.SimpleEntry<String, String>("enddate", enddate));
+			params.add(new AbstractMap.SimpleEntry<String, String>("status", Integer.toString(status)));
+			params.add(new AbstractMap.SimpleEntry<String, String>("typeid", typeid));
+			params.add(new AbstractMap.SimpleEntry<String, String>("entitytypeid", Integer.toString(entitytypeid)));
+			params.add(new AbstractMap.SimpleEntry<String, String>("subtypeid", subtypeid));
+			params.add(new AbstractMap.SimpleEntry<String, String>("text", text));
+			params.add(new AbstractMap.SimpleEntry<String, String>("structuredtext", structuredtext.toString()));
+			params.add(new AbstractMap.SimpleEntry<String, String>("thecomment", thecomment));
+			params.add(new AbstractMap.SimpleEntry<String, String>("subtypeid", subtypeid));
+			params.add(new AbstractMap.SimpleEntry<String, String>("stoppedreason", stoppedreason));
+			params.add(new AbstractMap.SimpleEntry<String, String>("activitycode", activitycode));
+			params.add(new AbstractMap.SimpleEntry<String, String>("structuredmimetype", structuredmimetype));
+			params.add(new AbstractMap.SimpleEntry<String, String>("subject", subject));
 
 			// Connect to URL
 			String hostURL = Util.getHostURLStr("IMWebSocket");
@@ -397,28 +404,30 @@ public class ClientFunction {
 //			URL url = new URL(
 //					"http://127.0.0.1:8080/IMWebSocket/RESTful/Interaction");
 
-			HttpURLConnection connection = (HttpURLConnection) url
-					.openConnection();
+			HttpURLConnection connection = (HttpURLConnection) url.openConnection();
 			connection.setDoOutput(true);
 			connection.setRequestMethod("POST");
 			connection.setRequestProperty("Content-Type",
 					"application/x-www-form-urlencoded; charset=utf-8");
-			connection.setRequestProperty("Content-Length",
-					String.valueOf(postData.length()));
+			connection.setRequestProperty("Content-Length",  Integer.toString(util.Util.getQuery(params).length()));
 			// Write data
 			OutputStream os = connection.getOutputStream();
-			os.write(postData.getBytes());
+			BufferedWriter writer = new BufferedWriter( new OutputStreamWriter(os, "UTF-8"));
+			writer.write(util.Util.getQuery(params));
+			writer.flush();
+			writer.close();
+			os.close();
+			// 建立連線
+			connection.connect();
 			
 			// Read response
 			responseSB = new StringBuilder();
-			BufferedReader br = new BufferedReader(new InputStreamReader(
-					connection.getInputStream(), "UTF-8"));
+			BufferedReader br = new BufferedReader(new InputStreamReader(connection.getInputStream(), "UTF-8"));
 			String line;
 			while ((line = br.readLine()) != null)
 				responseSB.append(line);
 			// Close streams
 			br.close();
-			os.close();
 			// Util.getConsoleLogger().debug(responseSB);
 		} catch (IOException e) {
 			// TODO Auto-generated catch block

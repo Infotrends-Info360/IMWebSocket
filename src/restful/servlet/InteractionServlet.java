@@ -53,6 +53,7 @@ public class InteractionServlet {
 		
 		Util.getFileLogger().info("text: " + text);
 		Util.getFileLogger().info("structuredtext: " + structuredtext);
+		Util.getFileLogger().info("stoppedreason: " + stoppedreason);
 		
 //		text = URLDecoder.decode(text, "UTF-8");
 //		structuredtext = URLDecoder.decode(structuredtext, "UTF-8");
@@ -131,12 +132,11 @@ public class InteractionServlet {
 		jsonObject.put("interactionlist", interaction.getInteractionlist());
 		jsonObject.put("status", Variable.POST_STATUS);
 		
-//		Util.getConsoleLogger().debug("interaction final: " + interaction.toString());
-//		Util.getFileLogger().info("interaction final: " + interaction.toString());
+		
 		Util.getFileLogger().info("interaction.getText(): " + interaction.getText());
 		Util.getFileLogger().info("interaction.getStructuredtext(): " + interaction.getStructuredtext());
 		
-		try{
+		try{ 
 			MaintainService maintainService = new MaintainService();
 			int interactionInt = maintainService.insert_Interaction(interaction);
 //			Util.getConsoleLogger().debug("interaction insertcount: "+interactionInt);
