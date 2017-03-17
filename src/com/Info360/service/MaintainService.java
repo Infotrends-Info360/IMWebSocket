@@ -12,6 +12,8 @@ import com.Info360.bean.Activitygroups;
 import com.Info360.bean.Activitymenu;
 import com.Info360.bean.Cfg_AgentReason;
 import com.Info360.bean.Cfg_AgentStatus;
+import com.Info360.bean.CaseComments;
+import com.Info360.bean.Cfg_CaseStatus;
 import com.Info360.bean.Cfg_ServiceName_Setting;
 import com.Info360.bean.CommonLink;
 import com.Info360.bean.ContactData;
@@ -24,6 +26,8 @@ import com.Info360.dao.ActivitygroupsDao;
 import com.Info360.dao.ActivitymenuDao;
 import com.Info360.dao.AgentReasonDao;
 import com.Info360.dao.Cfg_AgentStatusDao;
+import com.Info360.dao.CaseCommentsDao;
+import com.Info360.dao.Cfg_CaseStatusDao;
 import com.Info360.dao.Cfg_ServiceName_SettingDao;
 import com.Info360.dao.CommonlinkDao;
 import com.Info360.dao.ContactDataDao;
@@ -41,6 +45,70 @@ import com.Info360.dao.CFG_personDao;
  * @author Lin
  */
 public class MaintainService {
+	
+	
+
+	/**
+	 * 
+	 * insert
+	 * 
+	 * @param Insert_casecomments
+	 */
+
+	public int Insert_casecomments(CaseComments casecomments) {
+		int count = 0;
+		try {
+			CaseCommentsDao casecommentsdao = new CaseCommentsDao();
+			count = casecommentsdao.Insert_casecomments(casecomments);
+		} catch (Exception e) {
+			IsError.GET_EXCEPTION = e.getMessage();
+			e.printStackTrace();
+			Util.getFileLogger().error(e.getMessage());
+		}
+		return count;
+	}
+	
+	
+	/**
+	 * 
+	 * IXN_cfg_commonlink
+	 * 
+	 * @param IXN_cfg_commonlink
+	 */
+	public List<Cfg_CaseStatus> Select_IXN_cfg_casestatus(Cfg_CaseStatus cfg_casestatus) {
+
+		List<Cfg_CaseStatus> cfg_casestatuslist = new ArrayList<Cfg_CaseStatus>();
+		try {
+			Cfg_CaseStatusDao cfg_casestatusdaodao = new Cfg_CaseStatusDao();
+			cfg_casestatuslist = cfg_casestatusdaodao.Select_IXN_cfg_casestatus(cfg_casestatus);
+		} catch (Exception e) {
+			IsError.GET_EXCEPTION = e.getMessage();
+			e.printStackTrace();
+			Util.getFileLogger().error(e.getMessage());
+		}
+		return cfg_casestatuslist;
+	}
+	
+	
+	/**
+	 * 
+	 * Select_IXN_cfg_casecomments
+	 * 
+	 * @param Select_IXN_cfg_casecomments
+	 */
+	public List<CaseComments> Select_IXN_casecomments(CaseComments casecomments) {
+
+		List<CaseComments> casecommentslist = new ArrayList<CaseComments>();
+		try {
+			CaseCommentsDao casecommentsdao = new CaseCommentsDao();
+			casecommentslist = casecommentsdao.Select_IXN_casecomments(casecomments);
+		} catch (Exception e) {
+			IsError.GET_EXCEPTION = e.getMessage();
+			e.printStackTrace();
+			Util.getFileLogger().error(e.getMessage());
+		}
+		return casecommentslist;
+	}
 	
 	
 	/**

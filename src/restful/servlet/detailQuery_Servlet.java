@@ -1,9 +1,17 @@
 package restful.servlet;
 
+import java.io.BufferedReader;
+import java.io.BufferedWriter;
 import java.io.IOException;
 
 
 
+import java.io.InputStreamReader;
+import java.io.OutputStream;
+import java.io.OutputStreamWriter;
+import java.net.HttpURLConnection;
+import java.net.URL;
+import java.util.AbstractMap;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -17,8 +25,12 @@ import javax.ws.rs.core.Response;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
+import util.Util;
+
 import com.Info360.bean.Activitydata;
 import com.Info360.bean.CFG_person;
+import com.Info360.bean.CaseComments;
+import com.Info360.bean.Cfg_CaseStatus;
 import com.Info360.bean.ContactData;
 import com.Info360.bean.Interaction;
 import com.Info360.bean.Rpt_Activitylog;
@@ -38,10 +50,8 @@ public class detailQuery_Servlet {
 	@POST
 	@Produces("application/json")
 	public Response PostFromPath(
-			
-			@FormParam("startdate") String startdate,
-			@FormParam("enddate") String enddate,
-			@FormParam("agentid") String agentid
+		
+			@FormParam("ixnid") String ixnid
 			
 			
 //			@FormParam("interactionid") String interactionid
@@ -55,12 +65,11 @@ public class detailQuery_Servlet {
 		Activitydata activitydata = new Activitydata();
 		CFG_person cfg_person = new CFG_person();
 		ContactData contactdata = new ContactData();
+
+		CaseComments casecomments = new CaseComments(); 
+		Cfg_CaseStatus cfg_casestatus = new Cfg_CaseStatus(); 
 		
-		interaction.setStartdate(startdate);
-		interaction.setEnddate(enddate);
-		if(agentid!=null){
-			interaction.setAgentid(agentid);
-		}
+		interaction.setIxnid(ixnid);
 		
 		
 		MaintainService maintainservice = new MaintainService();		
@@ -68,7 +77,7 @@ public class detailQuery_Servlet {
 		
 		JSONArray PersonJsonArray = new JSONArray();
 		JSONArray testArray = new JSONArray();
-		JSONArray ContactDataArray = new JSONArray();
+		
 		
 		
 
@@ -93,6 +102,7 @@ public class detailQuery_Servlet {
 	  	  	    			}
 	  	    		}
 	  	    	}	
+	  		
 	  	    	
 	  	    	
 	  	    	
@@ -105,6 +115,16 @@ public class detailQuery_Servlet {
 				  						!interactionlist.get(0).getContactid().equals("null")		
 	  	    			
 	  	    			){	
+	  	    		
+  	    			System.out.println("Ixnid:  "+interactionlist.get(0).getIxnid());
+  	    			
+  	    			
+
+	  	    		
+	  	    		
+	  	    		
+	  	    		
+	  	    		
 		    		Integer bb = Integer.valueOf(interactionlist.get(0).getAgentid());
 					cfg_person.setDbid(bb);
 					
@@ -123,17 +143,78 @@ public class detailQuery_Servlet {
 //						    		JSONObject contactdataObject = new JSONObject();
 //						    		contactdataObject.put("userdata", contactidmap);
 //						    		ContactDataArray.put(contactdataObject);
-						
-							
-							
+					    			JSONArray structuredtextarray = new JSONArray(interactionlist.get(0).getStructuredtext());
+					    			
+					    			
 							
 							JSONObject testobj = new JSONObject();
 							testobj.put("Agentname", cfg_personlist.get(0).getUser_name());
-							testobj.put("Thecomment", interactionlist.get(0).getThecomment());
 							testobj.put("Startdate", interactionlist.get(0).getStartdate().substring(0, 19));
 							testobj.put("Enddate", interactionlist.get(0).getEnddate().substring(0, 19));
 							testobj.put("BasicINF", contactidmap);
-							testobj.put("Structuredtext", interactionlist.get(0).getStructuredtext());
+							
+							
+
+							
+							testobj.put("Structuredtext", structuredtextarray);
+							JSONArray commentsarray = new JSONArray();
+							if(interactionlist.get(0).getThecomment()!=null&&interactionlist.get(0).getThecomment()!=""&&!interactionlist.get(0).getThecomment().equals("null")){
+//								testobj.put("Thecomment", interactionlist.get(0).getThecomment());
+								
+								JSONObject jsonobject = new JSONObject();
+								jsonobject.put("comment", interactionlist.get(0).getThecomment());
+								jsonobject.put("agent", cfg_personlist.get(0).getUser_name());
+								jsonobject.put("datetime", interactionlist.get(0).getEnddate().substring(0, 19));
+								jsonobject.put("statusname", "備註");
+								
+								commentsarray.put(jsonobject);
+							}
+							
+//							else{
+//								testobj.put("Thecomment", "");
+//							}
+							
+							casecomments.setIxnid(ixnid);
+		  	    			List<CaseComments> cfg_casecommentslist = maintainservice.Select_IXN_casecomments(casecomments);
+		  	    			
+		  	    			for(int i = 0; i<cfg_casecommentslist.size() ; i++){
+		  	    				//System.out.println("status:  "+cfg_casecommentslist.get(i).getStatus());
+			  	    			cfg_casestatus.setDbid(Integer.valueOf(cfg_casecommentslist.get(i).getStatus()));
+			  	    			List<Cfg_CaseStatus> cfg_casestatuslist = maintainservice.Select_IXN_cfg_casestatus(cfg_casestatus);
+				    			//System.out.println("statusname:  "+cfg_casestatuslist.get(0).getStatusName());
+				    			
+				    			JSONObject jsonobject = new JSONObject();
+								jsonobject.put("comment", cfg_casecommentslist.get(0).getComment());
+								
+								cfg_person.setDbid(Integer.valueOf(cfg_casecommentslist.get(0).getAgentid()));
+						    	List<CFG_person> cfg_personlist2 = maintainservice.query_Person_DBID(cfg_person);
+								
+								jsonobject.put("agent", cfg_personlist2.get(0).getUser_name());
+								jsonobject.put("datetime", cfg_casecommentslist.get(0).getDatetime());
+								jsonobject.put("statusname", cfg_casestatuslist.get(0).getStatusName());
+								
+								commentsarray.put(jsonobject);
+		  	    			}
+		  	    			
+			    			
+			    			
+			    			
+			    			
+			    			testobj.put("Thecomment", commentsarray);
+							
+							JSONObject ServiceNameCachejsonObj;
+							try {
+								ServiceNameCachejsonObj = GetServiceNameCache("A");
+//				    			jsonObject.put("mapping", ServiceNameCachejsonObj);
+				    			
+								testobj.put("mapping", ServiceNameCachejsonObj);
+
+							} catch (Exception e) {
+								// TODO Auto-generated catch block
+								e.printStackTrace();
+							}
+							
+							
 //							testobj.put("pp",);
 
 
@@ -160,5 +241,50 @@ public class detailQuery_Servlet {
 			    .header("Access-Control-Allow-Methods", "POST, GET, PUT, UPDATE, OPTIONS")
 			    .header("Access-Control-Allow-Headers", "Content-Type, Accept, X-Requested-With").build();
 	}
+
+	public JSONObject GetServiceNameCache(String searchtype) throws Exception {
+		StringBuilder responseSB = null;
+		// Encode the query
+		String GetData = "typeid=" + searchtype + "&method=get" + "&key=all";
+
+		// Connect to URL
+		String hostURL = Util.getHostURLStr("ServiceNameCache");
+		Util.getConsoleLogger().debug("hostURL(ServiceNameCache): " + hostURL);
+		URL url = new URL( hostURL + "/ServiceNameCache/RESTful/datacache?"+ GetData);
+//		URL url = new URL(
+//				"http://ws.crm.com.tw:8080/ServiceNameCache/RESTful/datacache?"
+//						+ GetData);
+		HttpURLConnection connection = (HttpURLConnection) url.openConnection();
+		connection.setDoOutput(true);
+		connection.setRequestMethod("GET");
+		// connection.setRequestProperty("Content-Type",
+		// "application/x-www-form-urlencoded");
+		// connection.setRequestProperty("Content-Length",
+		// String.valueOf(postData.length()));
+
+		// Write data
+		// OutputStream os = connection.getOutputStream();
+		// os.write(postData.getBytes());
+
+		// Read response
+		responseSB = new StringBuilder();
+		BufferedReader br = new BufferedReader(new InputStreamReader(
+				connection.getInputStream(), "UTF-8"));
+
+		String line;
+		while ((line = br.readLine()) != null)
+			responseSB.append(line.trim());
+
+		// Close streams
+		br.close();
+		// os.close();
+
+		// Util.getConsoleLogger().debug("responseSB: "+responseSB.toString().trim());
+		JSONObject ServiceNameCachejsonObj = new JSONObject(
+				responseSB.toString());
+		return ServiceNameCachejsonObj;
+	}
+	
 	
 }
+

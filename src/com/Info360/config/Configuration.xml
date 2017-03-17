@@ -60,6 +60,9 @@
     <mapper	resource="com/Info360/config/sqlxml/rpt_activitylog.xml"/>
     <mapper	resource="com/Info360/config/sqlxml/cfg_person.xml"/>
     <mapper	resource="com/Info360/config/sqlxml/systemCfg.xml"/>
+    
+    <mapper resource="com/Info360/config/sqlxml/CaseComments.xml"/>
+    <mapper resource="com/Info360/config/sqlxml/Cfg_CaseStatus.xml"/>
   </mappers>
 
 </configuration>

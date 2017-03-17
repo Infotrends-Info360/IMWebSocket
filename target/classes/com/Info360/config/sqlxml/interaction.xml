@@ -88,21 +88,9 @@ FROM tblInteraction where 1=1
 
 select  DBID,CONTACTID,IXNID,AGENTID,STARTDATE,ENDDATE,STATUS,TYPEID,ENTITYTYPEID,SUBTYPEID,SUBJECT,TEXT,STRUCTUREDTEXT,STRUCTUREDMIMETYPE,THECOMMENT
 
-FROM tblInteraction where 1=1
+FROM tblInteraction where IXNID =#{ixnid}
 
-<if test="agentid!=&quot;&quot; &amp;&amp;agentid!=null ">
- 	and 
- 		AGENTID =#{agentid}
-</if>
 
-<if test="startdate!=&quot;&quot;&amp;&amp;agentid!=null">
-	and
- 		<![CDATA[ Convert(DateTime,StartDate) >=Convert(DateTime,#{startdate})]]>
-</if>
-<if test="enddate!=&quot;&quot;&amp;&amp;agentid!=null">
-    and  
-   		<![CDATA[ Convert(DateTime,EndDate) <= Convert(DateTime,DATEADD(day,1,#{enddate})) ]]>
-</if>
 
 </select>
 
