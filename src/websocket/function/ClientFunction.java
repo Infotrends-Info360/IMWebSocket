@@ -372,7 +372,7 @@ public class ClientFunction {
 				obj.get("structuredtext") != null){
 				text = obj.get("text").getAsString();
 				structuredtext = obj.get("structuredtext").getAsJsonArray();
-				structuredtextStr = URLEncoder.encode(structuredtext.toString(), "utf-8");
+//				structuredtextStr = URLEncoder.encode(structuredtext.toString(), "utf-8");
 				
 			}else{
 				
@@ -389,7 +389,7 @@ public class ClientFunction {
 			params.add(new AbstractMap.SimpleEntry<String, String>("entitytypeid", Integer.toString(entitytypeid)));
 			params.add(new AbstractMap.SimpleEntry<String, String>("subtypeid", subtypeid));
 			params.add(new AbstractMap.SimpleEntry<String, String>("text", text));
-			params.add(new AbstractMap.SimpleEntry<String, String>("structuredtext", structuredtextStr));
+			params.add(new AbstractMap.SimpleEntry<String, String>("structuredtext", structuredtext.toString()));
 			params.add(new AbstractMap.SimpleEntry<String, String>("thecomment", thecomment));
 			params.add(new AbstractMap.SimpleEntry<String, String>("subtypeid", subtypeid));
 			params.add(new AbstractMap.SimpleEntry<String, String>("stoppedreason", stoppedreason));
@@ -407,11 +407,12 @@ public class ClientFunction {
 			HttpURLConnection connection = (HttpURLConnection) url.openConnection();
 			connection.setDoOutput(true);
 			connection.setRequestMethod("POST");
-			connection.setRequestProperty("Content-Type", "application/x-www-form-urlencoded; charset=utf-8");
+			connection.setRequestProperty("Content-Type",
+					"application/x-www-form-urlencoded; charset=utf-8");
 			connection.setRequestProperty("Content-Length",  Integer.toString(util.Util.getQuery(params).length()));
 			// Write data
 			OutputStream os = connection.getOutputStream();
-			BufferedWriter writer = new BufferedWriter(new OutputStreamWriter(os, "UTF-8"));
+			BufferedWriter writer = new BufferedWriter( new OutputStreamWriter(os, "UTF-8"));
 			writer.write(util.Util.getQuery(params));
 			writer.flush();
 			writer.close();
