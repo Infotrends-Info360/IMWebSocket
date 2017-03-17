@@ -62,6 +62,11 @@ function checktoLeave() {
 function Login() {
 	// startdate = new Date();
 	UserName_g = document.getElementById('UserName').value;
+	
+	/** 更新前端頁面(防呆機制) **/
+	document.getElementById("openChat").disabled = true;
+	document.getElementById("closeChat").disabled = false;
+	
 	if (null == UserName_g || "" == UserName_g) {
 		alert("請輸入UserName");
 	} else {
