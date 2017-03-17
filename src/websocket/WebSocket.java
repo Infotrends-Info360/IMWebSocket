@@ -296,7 +296,10 @@ public class WebSocket extends WebSocketServer {
 		String interaction = WebSocketUserPool.getUserInteractionByKey(clientConn);
 		JsonObject interactionJsonMsg = Util.getGJsonObject(interaction);
 		interactionJsonMsg.addProperty("contactid", contactID);
+		Util.getConsoleLogger().debug("contactID: " + contactID);
+		Util.getConsoleLogger().debug("roomID: " + roomID);
 		WebSocketUserPool.addUserInteraction(interactionJsonMsg.toString(), clientConn);
+		Util.getConsoleLogger().debug("WebSocketUserPool.getUserInteractionByKey(clientConn): " + WebSocketUserPool.getUserInteractionByKey(clientConn));
 	}
 
 	/** * user leave websocket (Demo) */
