@@ -64,22 +64,21 @@ public class CommonFunction {
 	/** get private messages **/
 	public static void getMessage(String message, org.java_websocket.WebSocket conn) {
 		JSONObject obj = new JSONObject(message);
+		String userID = WebSocketUserPool.getUserID(conn);
+		String username = WebSocketUserPool.getUserNameByKey(conn);
 		
 		/*** 原方法內容 ***/
-		String username = obj.getString("UserName");
-		org.java_websocket.WebSocket sendto = WebSocketUserPool
-				.getWebSocketByUserID(obj.getString("sendto"));
-		
+		org.java_websocket.WebSocket sendto = WebSocketUserPool.getWebSocketByUserID(
+											  obj.getString("sendto"));
 		WebSocketUserPool.sendMessageToUser(sendto,
-				username + " private message to " + obj.getString("sendto")
-						+ ": " + obj.getString("text"));
-		WebSocketUserPool.sendMessageToUser(conn, username + " private message to "
-				+ obj.getString("sendto") + ": " + obj.getString("text"));
-		
+											username + " private message to " + obj.getString("sendto")
+											+ ": " + obj.getString("text"));		
 		/*** 三方-私訊: A2A ***/
 		obj.put("Event", "privateMsg");
 //		Util.getConsoleLogger().debug("conn" +  conn);
 //		Util.getConsoleLogger().debug("sendto" +  sendto);
+		obj.put("UserID", userID);
+		obj.put("UserName", username);
 		WebSocketUserPool.sendMessageToUser(conn, obj.toString());
 		WebSocketUserPool.sendMessageToUser(sendto, obj.toString());
 	}

@@ -867,15 +867,11 @@ function send(aSendto,aMessage) {
 	if (aMessage === undefined) aMessage = document.getElementById('message').value;
 	
 	// 向websocket送出私訊指令
-	var now = new Date();
 	var msg = {
 		type : "message",
 		text : aMessage,
-		id : parent.UserID_g,
-		UserName : parent.UserName_g,
 		sendto : aSendto,
-		channel : "chat",
-		date : now.getHours() + ":" + now.getMinutes() + ":" + now.getSeconds()
+		channel : "chat"
 	};
 	// 發送消息
 	parent.ws_g.send(JSON.stringify(msg));

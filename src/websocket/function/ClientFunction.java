@@ -302,7 +302,8 @@ public class ClientFunction {
 				}				
 			}// end of for
 		}// end of synchronized
-
+		
+		/** 建立連線 **/
 		StringBuilder responseSB = null;
 		try {
 			// 連線建立設定
