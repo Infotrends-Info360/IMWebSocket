@@ -1,7 +1,9 @@
 package com.Info360.service;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import util.Util;
 
@@ -39,6 +41,28 @@ import com.Info360.dao.CFG_personDao;
  * @author Lin
  */
 public class MaintainService {
+	
+	
+	/**
+	 * 
+	 * Query_Contactdata
+	 * 
+	 * @param Query_Contactdata
+	 */
+	public Map<String, String> Query_Contactdata(String contactid) {
+		Map<String, String> contactdatamap = new HashMap<String, String>();
+		//List<ContactData> contactdatalist = new ArrayList<ContactData>();
+		try {
+			ContactDataDao contactdatadao = new ContactDataDao();
+			contactdatamap = contactdatadao.Query_Contactdata(contactid);
+		} catch (Exception e) {
+			IsError.GET_EXCEPTION = e.getMessage();
+			e.printStackTrace();
+			Util.getFileLogger().error(e.getMessage());
+		}
+		return contactdatamap;
+	}
+	
 	
 	/**
 	 * 
@@ -589,6 +613,28 @@ public class MaintainService {
 		return count;
 	}
 
+	/**
+	 * 
+	 * Selcet_interaction
+	 * 
+	 * @param Selcet_interaction
+	 */
+	public List<Interaction> Selcet_Detail_interaction(Interaction interaction) {
+
+		List<Interaction> interactionlist = new ArrayList<Interaction>();
+		try {
+			InteractionDao interactiondao = new InteractionDao();
+			interactionlist = interactiondao.Selcet_Detail_interaction(interaction);
+		} catch (Exception e) {
+			IsError.GET_EXCEPTION = e.getMessage();
+			e.printStackTrace();
+			Util.getFileLogger().error(e.getMessage());
+		}
+		return interactionlist;
+
+	}
+	
+	
 	/**
 	 * 
 	 * Selcet_interaction

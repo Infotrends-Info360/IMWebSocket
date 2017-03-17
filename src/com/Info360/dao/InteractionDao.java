@@ -23,6 +23,34 @@ public class InteractionDao {
 	 * Selcet_interaction
 	 * @param interaction
 	 */
+	
+	
+	public List<Interaction> Selcet_Detail_interaction(Interaction interaction){
+		List<Interaction> interactionList = new ArrayList<Interaction>();
+		SqlSession sqlSession = null;
+
+		try {
+			sqlSession = DBAccess.getSqlSession();
+			//通過sqlSession執行SQL語句
+			interactionList = sqlSession.selectList("interaction.Selcet_Detail_interaction", interaction);
+			sqlSession.commit();
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+			IsError.GET_EXCEPTION = e.getMessage();
+			Util.getFileLogger().error(e.getMessage());
+		} finally {
+			if(sqlSession != null){
+			   sqlSession.close();
+				DBAccess.sessonCount.decrementAndGet();
+				Util.getFileLogger().debug("DB session count: " + DBAccess.sessonCount.get());
+			}
+		}
+		return interactionList;
+	}
+	
+	
+	
 	public List<Interaction> Selcet_interaction(Interaction interaction){
 		List<Interaction> interactionList = new ArrayList<Interaction>();
 		SqlSession sqlSession = null;

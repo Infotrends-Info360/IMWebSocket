@@ -2,7 +2,9 @@ package com.Info360.dao;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import org.apache.ibatis.session.SqlSession;
 import org.json.JSONArray;
@@ -10,6 +12,7 @@ import org.json.JSONArray;
 import util.Util;
 
 import com.Info360.bean.ContactData;
+import com.Info360.bean.Interaction;
 import com.Info360.bean.ServiceEntry;
 import com.Info360.db.DBAccess;
 import com.Info360.util.IsError;
@@ -19,6 +22,36 @@ import com.Info360.util.IsError;
  * @author Lin
  */
 public class ContactDataDao {
+	
+	
+	public Map<String, String> Query_Contactdata(String contactid){
+		List<Map<String, String>> contactdataList = new ArrayList<Map<String, String>>();
+		Map<String, String> contactdatamap = new HashMap<String, String>();
+		Object contactdataobject;
+		SqlSession sqlSession = null;
+
+		try {
+			sqlSession = DBAccess.getSqlSession();
+			//通過sqlSession執行SQL語句
+			contactdataList = sqlSession.selectList("contactdata.Query_Contactdata", contactid);
+			contactdatamap = contactdataList.get(0);
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+			IsError.GET_EXCEPTION = e.getMessage();
+			Util.getFileLogger().error(e.getMessage());
+		} finally {
+			if(sqlSession != null){
+			   sqlSession.close();
+				DBAccess.sessonCount.decrementAndGet();
+				Util.getFileLogger().debug("DB session count: " + DBAccess.sessonCount.get());
+			}
+		}
+		return contactdatamap;
+	}
+	
+	
+	
 	
 	/**
 	 * 

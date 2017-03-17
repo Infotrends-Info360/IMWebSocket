@@ -23,11 +23,18 @@
 <mapper namespace="contactdata">
 
   <resultMap type="com.Info360.bean.ContactData" id="contactdataResult">
-    <id     column="DBID" jdbcType="INTEGER" property="dbid"/>
-    <result column="CONTACTID" jdbcType="VARCHAR" property="contactid"/>
-    <result column="CREATEDATE" jdbcType="VARCHAR" property="createdate"/>
-    <result column="MODIFIEDDATE"     jdbcType="VARCHAR" property="modifieddate"/>
+    <id     column="DBID" 			jdbcType="INTEGER" property="dbid"/>
+    <result column="CONTACTID" 		jdbcType="VARCHAR" property="contactid"/>
+    <result column="CREATEDATE" 	jdbcType="VARCHAR" property="createdate"/>
+    <result column="MODIFIEDDATE"   jdbcType="VARCHAR" property="modifieddate"/>
+    
+    
+    
   </resultMap>
+  
+  <select id="Query_Contactdata" parameterType="String"  resultType="hashmap">
+  		Select * from tblContactData where contactid=#{value}
+  	</select>
   
  	<select id="Query_ContactID" parameterType="com.Info360.bean.ContactData"  resultType="string">
   		SELECT CONTACTID FROM TBLCONTACTDATA WHERE ${searchkey} = #{searchvalue} and ${pkey} = #{pvalue}
