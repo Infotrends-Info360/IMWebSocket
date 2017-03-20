@@ -161,32 +161,9 @@ public class detailQuery_Servlet {
 							testobj.put("BasicINF", contactidmap);
 							
 							
-//							if(structuredtextarray==null){
-//								testobj.put("Structuredtext", "");
-//							}else{
-								testobj.put("Structuredtext", structuredtextarray);
-//							}
+							testobj.put("Structuredtext", structuredtextarray);
 							
 							JSONArray commentsarray = new JSONArray();
-							if(interactionlist.get(0).getThecomment()!=null&&interactionlist.get(0).getThecomment()!=""&&!interactionlist.get(0).getThecomment().equals("null")){
-//								testobj.put("Thecomment", interactionlist.get(0).getThecomment());
-								
-								JSONObject jsonobject = new JSONObject();
-								String comment = interactionlist.get(0).getThecomment();
-								if(comment==null){
-									comment = "";
-								}
-								jsonobject.put("comment", comment);
-								jsonobject.put("agent", cfg_personlist.get(0).getUser_name());
-								jsonobject.put("datetime", interactionlist.get(0).getEnddate().substring(0, 19));
-								jsonobject.put("statusname", "備註");
-								
-								commentsarray.put(jsonobject);
-							}
-							
-//							else{
-//								testobj.put("Thecomment", "");
-//							}
 							
 							casecomments.setIxnid(ixnid);
 		  	    			List<CaseComments> cfg_casecommentslist = maintainservice.Select_IXN_casecomments(casecomments);
@@ -209,6 +186,22 @@ public class detailQuery_Servlet {
 								
 								commentsarray.put(jsonobject);
 		  	    			}
+		  	    			
+		  	    			if(interactionlist.get(0).getThecomment()!=null&&interactionlist.get(0).getThecomment()!=""&&!interactionlist.get(0).getThecomment().equals("null")){
+//								testobj.put("Thecomment", interactionlist.get(0).getThecomment());
+								
+								JSONObject jsonobject = new JSONObject();
+								String comment = interactionlist.get(0).getThecomment();
+								if(comment==null){
+									comment = "";
+								}
+								jsonobject.put("comment", comment);
+								jsonobject.put("agent", cfg_personlist.get(0).getUser_name());
+								jsonobject.put("datetime", interactionlist.get(0).getEnddate().substring(0, 19));
+								jsonobject.put("statusname", "備註");
+								
+								commentsarray.put(jsonobject);
+							}
 		  	    			
 			    			
 			    			
