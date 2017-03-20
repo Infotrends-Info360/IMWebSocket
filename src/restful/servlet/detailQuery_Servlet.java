@@ -198,13 +198,13 @@ public class detailQuery_Servlet {
 				    			//System.out.println("statusname:  "+cfg_casestatuslist.get(0).getStatusName());
 				    			
 				    			JSONObject jsonobject = new JSONObject();
-								jsonobject.put("comment", cfg_casecommentslist.get(0).getComment());
+								jsonobject.put("comment", cfg_casecommentslist.get(i).getComment());
 								
-								cfg_person.setDbid(Integer.valueOf(cfg_casecommentslist.get(0).getAgentid()));
+								cfg_person.setDbid(Integer.valueOf(cfg_casecommentslist.get(i).getAgentid()));
 						    	List<CFG_person> cfg_personlist2 = maintainservice.query_Person_DBID(cfg_person);
 								
 								jsonobject.put("agent", cfg_personlist2.get(0).getUser_name());
-								jsonobject.put("datetime", cfg_casecommentslist.get(0).getDatetime().substring(0, 19));
+								jsonobject.put("datetime", cfg_casecommentslist.get(i).getDatetime().substring(0, 19));
 								jsonobject.put("statusname", cfg_casestatuslist.get(0).getStatusName());
 								
 								commentsarray.put(jsonobject);

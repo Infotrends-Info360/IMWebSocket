@@ -22,7 +22,8 @@
 </resultMap>
 
 <select id="Select_IXN_casecomments" parameterType="com.Info360.bean.CaseComments"  resultMap="casecommentsResult">
- Select DBID,IXNID,CONTACTID,AGENTID,COMMENT,STATUS,MEDIATYPE,SOURCE,DATETIME from tblCaseComments where IXNID=#{ixnid}
+ Select DBID,IXNID,CONTACTID,AGENTID,COMMENT,STATUS,MEDIATYPE,SOURCE,DATETIME from tblCaseComments where IXNID=#{ixnid} 
+ ORDER BY DATETIME DESC
 </select>
 
 
