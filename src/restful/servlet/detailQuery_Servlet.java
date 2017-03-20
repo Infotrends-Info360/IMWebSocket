@@ -143,7 +143,14 @@ public class detailQuery_Servlet {
 //						    		JSONObject contactdataObject = new JSONObject();
 //						    		contactdataObject.put("userdata", contactidmap);
 //						    		ContactDataArray.put(contactdataObject);
-					    			JSONArray structuredtextarray = new JSONArray(interactionlist.get(0).getStructuredtext());
+					    			System.out.println(interactionlist.get(0));
+					    			JSONArray structuredtextarray;
+					    			if(interactionlist.get(0).getStructuredtext()!=null){
+					    				structuredtextarray = new JSONArray(interactionlist.get(0).getStructuredtext());
+					    			}else{
+					    				structuredtextarray = new JSONArray();
+					    			}
+					    			
 					    			
 					    			
 							
@@ -154,15 +161,22 @@ public class detailQuery_Servlet {
 							testobj.put("BasicINF", contactidmap);
 							
 							
-
+//							if(structuredtextarray==null){
+//								testobj.put("Structuredtext", "");
+//							}else{
+								testobj.put("Structuredtext", structuredtextarray);
+//							}
 							
-							testobj.put("Structuredtext", structuredtextarray);
 							JSONArray commentsarray = new JSONArray();
 							if(interactionlist.get(0).getThecomment()!=null&&interactionlist.get(0).getThecomment()!=""&&!interactionlist.get(0).getThecomment().equals("null")){
 //								testobj.put("Thecomment", interactionlist.get(0).getThecomment());
 								
 								JSONObject jsonobject = new JSONObject();
-								jsonobject.put("comment", interactionlist.get(0).getThecomment());
+								String comment = interactionlist.get(0).getThecomment();
+								if(comment==null){
+									comment = "";
+								}
+								jsonobject.put("comment", comment);
 								jsonobject.put("agent", cfg_personlist.get(0).getUser_name());
 								jsonobject.put("datetime", interactionlist.get(0).getEnddate().substring(0, 19));
 								jsonobject.put("statusname", "備註");
@@ -190,7 +204,7 @@ public class detailQuery_Servlet {
 						    	List<CFG_person> cfg_personlist2 = maintainservice.query_Person_DBID(cfg_person);
 								
 								jsonobject.put("agent", cfg_personlist2.get(0).getUser_name());
-								jsonobject.put("datetime", cfg_casecommentslist.get(0).getDatetime());
+								jsonobject.put("datetime", cfg_casecommentslist.get(0).getDatetime().substring(0, 19));
 								jsonobject.put("statusname", cfg_casestatuslist.get(0).getStatusName());
 								
 								commentsarray.put(jsonobject);
