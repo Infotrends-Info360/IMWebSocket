@@ -59,7 +59,7 @@ public class SystemInfo {
 	}
 	
 	private static String getFormattedMsg(String aMsg){
-		return String.format("%s %s", sysMsgsMap.get("Sysname"), aMsg);
+		return String.format("%s: %s", sysMsgsMap.get("Sysname"), aMsg);
 	}
 
 	public static Map<String, String> getSysMsgsMap() {
