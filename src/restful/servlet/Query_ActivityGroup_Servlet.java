@@ -58,6 +58,7 @@ public class Query_ActivityGroup_Servlet {
         		
         		for(int a = 0; a < activitygroupslist.size(); a++){
     			
+        		
         	  	  	JSONObject activitygroupsObject = new JSONObject();
         	  	activitygroupsObject.put("dbid", activitygroupslist.get(a).getDbid());
         	  	activitygroupsObject.put("createdatetime", activitygroupslist.get(a).getCreatedatetime());
@@ -65,8 +66,15 @@ public class Query_ActivityGroup_Servlet {
         	  	activitygroupsObject.put("activitymenuid", activitygroupslist.get(a).getActivitymenuid());
         	  	activitygroupsObject.put("groupname", activitygroupslist.get(a).getGroupname());
         	  	activitygroupsObject.put("sort", activitygroupslist.get(a).getSort());
+        	  	        	  
+        	  	int a2 = Integer.valueOf(activitygroupslist.get(a).getDeleteflag().trim());
+        	  	if(a2==0){
+        	  		
+            	  	ActivitygroupsJsonArray.put(activitygroupsObject);
+
+        	  	}else{
+        	  	}
         	  	
-        	  	ActivitygroupsJsonArray.put(activitygroupsObject);
         	  	
         	 // 	Util.getConsoleLogger().debug("GroupDbid: "+activitygroupslist.get(a).getDbid());
         	  	
@@ -77,6 +85,7 @@ public class Query_ActivityGroup_Servlet {
         	  	for(int g = 0; g < activitydatalist.size(); g++){
         	  		
         	  		JSONObject activitydataObject = new JSONObject();
+        	
         			activitydataObject.put("dbid", activitydatalist.get(g).getDbid());
         			activitydataObject.put("createdatetime", activitydatalist.get(g).getCreatedatetime());
         			activitydataObject.put("deletedatetime", activitydatalist.get(g).getDeletedatetime());
@@ -102,8 +111,8 @@ public class Query_ActivityGroup_Servlet {
         		jsonObject.put("TitleFlag", TitleflagJsonArray);
         		jsonObject.put("activitydata", ActivitydataJsonArray);
         		jsonObject.put("activitygroups", ActivitygroupsJsonArray);
-    		}
-
+    		
+        		}
 
 		return Response.status(200).entity(jsonObject.toString())
 				.header("Access-Control-Allow-Origin", "*")
