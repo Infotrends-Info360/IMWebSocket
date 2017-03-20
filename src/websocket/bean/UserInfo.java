@@ -6,14 +6,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Timer;
-import java.util.TimerTask;
 import java.util.concurrent.Future;
 import java.util.concurrent.atomic.AtomicBoolean;
-
-import org.java_websocket.WebSocket;
-  
-
-
 import util.StatusEnum;
 import util.Util;
 import websocket.thread.findAgent.FindAgentCallable;
@@ -43,6 +37,9 @@ public class UserInfo {
 	
 	private boolean isClosing = false;
 	private boolean isContactIDupdatedByAgent = false;
+	
+	private int maxCount = 0;
+	
 	
 	// 狀態更新使用 - 存放status log dbid - "end"時寫入DB用
 	private Map<StatusEnum, String> statusDBIDMap = Collections.synchronizedMap(new HashMap<StatusEnum, String>());
@@ -177,7 +174,13 @@ public class UserInfo {
 	public void setContactIDupdatedByAgent(boolean isContactIDupdatedByAgent) {
 		this.isContactIDupdatedByAgent = isContactIDupdatedByAgent;
 	}
-	
+			
+	public int getMaxCount() {
+		return maxCount;
+	}
+	public void setMaxCount(int maxCount) {
+		this.maxCount = maxCount;
+	}
 	
 	
 }

@@ -104,13 +104,14 @@ public class WebSocketUserPool {
 	}
 
 	/** * Add User to WebSocket Pool* @param inbound */ /* Done */
-	public static void addUser(String username,String userid, WebSocket conn, String ACType) {
+	public static void addUser(String username,String userid, WebSocket conn, String ACType, int aMaxCount) {
 		UserInfo userinfo = new UserInfo();
 		userinfo.setUserid(userid);
 		userinfo.setUsername(username);
 		userinfo.setACType(ACType);
 		userinfo.setStartdate(new java.util.Date());
-		userallconnections.put(conn, userinfo); // 每一個client的connection配一個vo
+		userinfo.setMaxCount(aMaxCount);
+		userallconnections.put(conn, userinfo); // 每一個client的connection配一個
 	}
 	
 	/** * Add User to WebSocket Pool* @param inbound */ /* Done */

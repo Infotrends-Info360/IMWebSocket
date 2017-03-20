@@ -159,11 +159,14 @@ public class WebSocketRoomPool{
 				//清Agent自己
 				WebSocketUserPool.removeUserRoom(aConn, aRoomID);
 				connsInRoomMap.remove(aConn);
-				sendJson.addProperty("result", WebSocketUserPool.getUserNameByKey(aConn) + " left the room" + aRoomID);
+				
 				// 送出系統訊息
+				sendJson.addProperty("result", WebSocketUserPool.getUserNameByKey(aConn) + " left the room" + aRoomID);
 				systemMsgs.addProperty("leftRoomMsg", SystemInfo.getLeftRoomMsg(userName));
 				sendJson.add(SystemInfo.TAG_SYS_MSG, systemMsgs);
 			}
+			
+
 			
 			Util.getConsoleLogger().debug("roomId: " + aRoomID + " size: " + connsInRoomMap.size());
 			sendJson.addProperty("roomMembers", getOnlineUserNameinroom(aRoomID).toString());

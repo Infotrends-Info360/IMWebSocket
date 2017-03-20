@@ -86,12 +86,11 @@ public class CommonFunction {
 	/** * user join websocket * @param user */
 	public static void userjoin(String user, org.java_websocket.WebSocket aConn) {
 		Util.getConsoleLogger().debug("userjoin() called");
-		JSONObject obj = new JSONObject(user);
-		String username = obj.getString("UserName");
-		String MaxCount = obj.getString("MaxCount"); //新增 MaxCount
-//		Util.getConsoleLogger().debug("MaxCount: "+MaxCount);
-		String ACtype = obj.getString("ACtype");
-		String channel = obj.getString("channel");
+		JsonObject obj = Util.getGJsonObject(user);
+		String username = Util.getGString(obj, "UserName");
+		String maxCount = Util.getGString(obj, "maxCount");
+		String ACtype = Util.getGString(obj, "ACtype");
+		String channel = Util.getGString(obj, "channel");
 		String userId = null;
 		
 		
@@ -114,9 +113,11 @@ public class CommonFunction {
 		}
 
 		/*** 開始新增使用者 ***/
-		WebSocketUserPool.addUser(username, userId, aConn, ACtype); // 在此刻,已將user conn加入倒Pool中
-//		String joinMsg = "[Server]" + username + " Online";
-//		WebSocketUserPool.sendMessage(joinMsg);
+		if (ACtype.equals("Agent")){
+			WebSocketUserPool.addUser(username, userId, aConn, ACtype, Integer.parseInt(maxCount)); // 在此刻,已將user conn加入Pool中,並建立其UserInfo資訊物件
+		}else{
+			WebSocketUserPool.addUser(username, userId, aConn, ACtype, 0); // 在此刻,已將user conn加入Pool中,並建立其UserInfo資訊物件			
+		}
 		
 		/*** 告知user其成功登入的UserID ***/
 		JSONObject sendjson = new JSONObject();
@@ -124,7 +125,7 @@ public class CommonFunction {
 		sendjson.put("from", userId);
 		sendjson.put("channel", channel);
 		sendjson.put("statusList", Util.getAgentStatus());
-		sendjson.put("MaxCount", MaxCount); // 此key-value只須Agent接就好(先不做過濾)
+//		sendjson.put("maxCount", maxCount); // 此key-value只須Agent接就好(先不做過濾)
 		AgentFunction.GetAgentReasonInfo("0");
 		sendjson.put("reasonList", Util.getAgentReason()); // 此key-value只須Agent接就好(先不做過濾) ; 此內容已於伺服器啟動時拿取
 		sendjson.put(SystemInfo.TAG_SYS_MSG, SystemInfo.getLoginMsg()); // 加上系統訊息(目前前端客戶端版本仍為一次訊息全送,故暫解不將此改為JsonObject物件)
@@ -145,6 +146,7 @@ public class CommonFunction {
 		if ("Agent".equals(ACtype)){
 			AgentFunction.refreshAgentList();
 		}
+		
 		
 		/*** 讓Agent與Client都有Heartbeat ***/
 		HeartBeat heartbeat = new HeartBeat();
@@ -471,6 +473,21 @@ public class CommonFunction {
 				Util.getConsoleLogger().debug("Agent is READY already. No update is processed to DB");
 				return;
 			}else if (StatusEnum.READY.getDbid().equals(status_dbid)){
+				
+				// maxCount檢查 - 若達到,則立即中斷狀態更新,並寄出事件告知使用者,切換成READY狀態失敗
+				Util.getConsoleLogger().debug("WebSocketUserPool.getUserRoomCount(aConn): " + WebSocketUserPool.getUserRoomCount(aConn));
+				Util.getConsoleLogger().debug("userInfo.getMaxCount(): " + userInfo.getMaxCount());
+				if (WebSocketUserPool.getUserRoomCount(aConn) >= userInfo.getMaxCount()){
+					Util.getConsoleLogger().debug("maxCountReached");
+					JsonObject maxCountMsg = new JsonObject();
+					maxCountMsg.addProperty("Event", "updateStatus");
+					maxCountMsg.addProperty("maxCountReached", true);
+					maxCountMsg.addProperty("currStatusEnum", StatusEnum.NOTREADY.toString());
+					WebSocketUserPool.sendMessageToUser(aConn, maxCountMsg.toString());
+					return;
+				}
+				
+				// READY狀態開始
 				dbid = AgentFunction.RecordStatusStart(userid, status_dbid, "0"); // 重要				
 				// NOTREADY狀態結束(須排除初次登入狀況)
 				if (userInfo.getStatusDBIDMap().get(StatusEnum.NOTREADY) != null){
@@ -486,12 +503,6 @@ public class CommonFunction {
 					// 清理Bean
 //					StatusEnum currStatusEnum = StatusEnum.getStatusEnumByDbid(status_dbid);
 					userInfo.getStatusDBIDMap().remove(StatusEnum.NOTREADY);
-					
-//					UpdateStatusBean usb = new UpdateStatusBean();
-//					usb.setStatus(StatusEnum.NOTREADY.getDbid());
-//					usb.setDbid(userInfo.getStatusDBIDMap().get(StatusEnum.NOTREADY));
-//					usb.setStartORend("end");
-//					CommonFunction.updateStatus(new Gson().toJson(usb), aConn);
 				}
 				
 				// 將Agent加入到ReadyAgentQueue
@@ -527,12 +538,6 @@ public class CommonFunction {
 						// 清理Bean
 //						StatusEnum currStatusEnum = StatusEnum.getStatusEnumByDbid(status_dbid);
 						userInfo.getStatusDBIDMap().remove(StatusEnum.READY);
-//						
-//						UpdateStatusBean usb = new UpdateStatusBean();
-//						usb.setStatus(StatusEnum.READY.getDbid());
-//						usb.setDbid(userInfo.getStatusDBIDMap().get(StatusEnum.READY));
-//						usb.setStartORend("end");
-//						CommonFunction.updateStatus(new Gson().toJson(usb), aConn);
 					}
 			}// end of NOTREADY			
 
@@ -600,6 +605,7 @@ public class CommonFunction {
 			}
 		}// end of if "start" or "end"
 		
+		// 寄送訊息
 		// "start"時dbid_key會對應到值, 寄送EVENT,讓前端能拿到相對應的dbid
 		obj.addProperty("Event", "updateStatus");
 		obj.addProperty("currStatusEnum", currStatusEnum.toString());

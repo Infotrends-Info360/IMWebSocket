@@ -106,7 +106,8 @@ function loginValidate() {
 					} else {
 						// 驗證通過
 						//console.log(JSON.stringify(data));
-						maxCount = data.person[0].max_count;
+						maxRoomCount_g = "" + data.person[0].max_count;
+						console.log("maxRoomCount_g: " + maxRoomCount_g);
 						//console.log(data.person[0].max_count);
 						document.getElementById('UserName').value = data.person[0].user_name;
 						document.getElementById('UserID').value = data.person[0].dbid;
@@ -155,7 +156,7 @@ function Login() {
 			type : "login",
 			id: parent.UserID_g,
 			UserName : parent.UserName_g,
-			MaxCount: '2', //要改接收Login Event (動態)
+			maxCount: maxRoomCount_g, // 從loginValidate取得
 			ACtype : "Agent",
 			channel : "chat",
 			date : now.getHours() + ":" + now.getMinutes() + ":"
@@ -230,9 +231,6 @@ function Login() {
 			} else if ("AcceptEvent" == obj.Event){
 //				console.log("AcceptEvent: *****");
 				var chatRoomMsg = obj.chatRoomMsg; // 接收系統訊息
-			
-				// 更新狀態
-				switchStatus(StatusEnum.IESTABLISHED);
 				
 				// 建立RoomInfo資訊
 				RoomID_g = obj.roomID; // 之後要改成local variable
@@ -246,24 +244,7 @@ function Login() {
 				
 				console.log("roomInfoMap_g.size: " + roomInfoMap_g.size);
 				updateRoomIDList(obj.roomID);
-				
-				// maxCount機制
-				currRoomCount_g++ // here
-				$('#maxRoomCount')[0].innerHTML = currRoomCount_g + " / " + maxRoomCount_g;
-
-//					alert("currRoomCount_g: " + currRoomCount_g);
-					// 判斷是否已達上限
-				if (currRoomCount_g == maxRoomCount_g) {
-					alert("reach max count");
-					$('#maxRoomCount').css('color', 'red');
-					$('#notready')[0].disabled = true;
-					$('#ready')[0].disabled = true;
-					// 若未達上限,判斷是否要切換為READY
-				}else if (obj.EstablishedStatus == StatusEnum.READY.dbid){
-					// 更新狀態(唯一在RING事件之後會將狀態切換為READY的情況)
-					switchStatus(StatusEnum.READY);
-				}
-				
+								
 			}else if ("RejectEvent" == obj.Event){
 //					alert("RejectEvent received");
 				// 將此clientID從waittingClientIDList_g中去除
@@ -339,10 +320,7 @@ function Login() {
 					$('#Reject')[0].userID = this.getAttribute("userID");
 //						$('#Reject')[0].userdata = this.getAttribute("userdata");
 				}; 
-			    	
-				// 更新頁面狀態 - 更改架構為 - 最多一次只收一個ring
-				switchStatus(StatusEnum.RING);
-				
+			    				
 			} else if ("userjointoTYPE" == obj.Event) {
 				// 此區塊已沒再使用
 				
@@ -352,13 +330,13 @@ function Login() {
 //					console.log("userjoin!");
 				// 拿取參數
 				parent.UserID_g = obj.from;
-				maxRoomCount_g = obj.MaxCount; // 正式用
+//				maxRoomCount_g = obj.MaxCount; // 正式用 // 已於loginValidate取得maxRoomCount_g
 //					maxRoomCount_g = 2; // 測試用
 				var statusList = obj.statusList;
 				var reasonList = obj.reasonList;
 				
 				// 更新maxCount畫面
-				$('#maxRoomCount')[0].innerHTML = currRoomCount_g + " / " + maxRoomCount_g;
+//				$('#maxRoomCount')[0].innerHTML = currRoomCount_g + " / " + maxRoomCount_g;
 				
 				//20170222 Lin
 				for(var key in reasonList){
@@ -385,9 +363,6 @@ function Login() {
 					tmpStatusEnum.description = val.description;
 				});
 				
-				// 更新狀態
-				switchStatus(StatusEnum.LOGIN);
-									
 			} else if ("refreshRoomList" == obj.Event) {
 				// debug: 確認全部key-value:
 				console.log("refreshRoomList");
@@ -491,16 +466,9 @@ function Login() {
 						updateRoomInfo(roomInfo);
 					}
 					return;
-				}
-				
-//					alert("responseThirdParty - obj.text: " + obj.text);
-//					alert("responseThirdParty - obj.text: " + JSON.stringify( obj.text ));
-				console.log("userdata: " + userdata);
+				}				
+//				console.log("userdata: " + userdata);
 
-				// 更新狀態
-//					status_g = StatusEnum.IESTABLISHED;
-				switchStatus(StatusEnum.IESTABLISHED);
-				
 				// 在這邊興建roomList與其room bean
 				RoomID_g = roomID; // 之後要改成local variable
 				var tmpRoomInfo = new RoomInfo(
@@ -551,31 +519,6 @@ function Login() {
 					updateRoomInfo(roomInfo);
 				}
 				
-				/*** maxCount機制 ***/
-				// 若前一次達到最大roomCount值,則恢復其狀態,且確認若會進入到此區塊,則目前狀態一定為NOTREADY
-				if(currRoomCount_g == maxRoomCount_g){
-					$('#notready')[0].disabled = true;
-					$('#ready')[0].disabled = false; // 讓Agent可以再使用這個功能
-					$('#maxRoomCount').css('color', 'black');
-				}
-				currRoomCount_g--;
-				$('#maxRoomCount')[0].innerHTML = currRoomCount_g + " / " + maxRoomCount_g;
-				
-				// 20170222 Lin
-				// 判斷當通話結束後,要將狀態切為READY或是NOTREADY
-				if(obj.AfterCallStatus == StatusEnum.READY.dbid){ //如果AfterCallStatus == ready
-						$('#notready')[0].disabled = true;
-						$('#ready')[0].disabled = false;
-						switchStatus(StatusEnum.READY);
-//						}
-				}else if(obj.AfterCallStatus == StatusEnum.NOTREADY.dbid){ //如果AfterCallStatus == not ready
-						$('#notready')[0].disabled = false;
-						$('#ready')[0].disabled = true;
-						switchStatus(StatusEnum.NOTREADY);
-				}
-				
-
-				
 			} else if ("clientLeft" == obj.Event){
 				// 在這邊進行一連串的善後處理
 				alert("Client left : " + obj.from);
@@ -600,11 +543,13 @@ function Login() {
 			} else if ("agentLeftThirdParty" == obj.Event){
 				alert("agentLeftThirdParty - agent " + obj.id + " left ");
 			} else if ("updateStatus" == obj.Event){
-//					alert("obj.startORend: " + obj.startORend + " - " + obj.currStatusEnum);
-//					alert("obj.currStatusEnum: " + obj.currStatusEnum);
+				console.log("obj.maxCountReached: " + obj.maxCountReached);
+				if (obj.maxCountReached){
+					alert("maxCountReached!");
+				}
 				var startORend = obj.startORend;
 				var currStatusEnum = StatusEnum.getStatusEnum(obj.currStatusEnum);
-//					switchStatusV2(startORend, currStatusEnum); // 後續再做
+				switchStatus(currStatusEnum); // 更新畫面
 				
 			} else if ("ringTimeout" == obj.Event){
 				alert("ringTimeout");
@@ -772,7 +717,7 @@ function AcceptEventInit() {
 	$('#' + userID).remove(); // <tr>的id
 	
 	// 開啟ready功能:
-	switchStatus(StatusEnum.NOTREADY); //
+//	switchStatus(StatusEnum.NOTREADY); //
 }
 
 // 拒絕交談
@@ -1038,6 +983,9 @@ function RefreshRoomList(){
 
 /** 2017/02/15 - 新增方法 **/
 function switchStatus(aStatusEnum){
+	// 更新狀態資訊
+	parent.document.getElementById("status").value = aStatusEnum.description;	
+	
 	switch(aStatusEnum) {
     case StatusEnum.LOGIN:
 		var frames = window.parent.frames; // or // var frames = window.parent.frames;
@@ -1116,9 +1064,6 @@ function switchStatus(aStatusEnum){
     	break;
     case StatusEnum.RING: // 當有RING事件時,同時也會切換為NOTREADY,故畫面更新同NOTREADY
     	switchStatus(StatusEnum.NOTREADY);
-//      document.getElementById("ready").disabled = false;
-//    	document.getElementById("notready").disabled = true;
- 
     	//code block
     	break;
     case StatusEnum.IESTABLISHED:
@@ -1412,6 +1357,7 @@ function sendComment(aInteractionid, aActivitydataids, aComment){
 	if (aActivitydataids === undefined) aActivitydataids = '0';
 	if (aComment === undefined) aComment = $('#commentContent').val();
 	
+//	alert("aComment: " + aComment);
 	var mySendCommentJson = new sendCommentJson(aInteractionid, aActivitydataids, aComment);
 	parent.ws_g.send(JSON.stringify(mySendCommentJson));	
 	
