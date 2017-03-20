@@ -103,7 +103,12 @@ public class Query_Servlet {
 							PersonJsonArray.put(cfg_personObject);
 							JSONObject testobj = new JSONObject();
 							testobj.put("Agentname", cfg_personlist.get(0).getUser_name());
-							testobj.put("Thecomment", interactionlist.get(a).getThecomment());
+							if(interactionlist.get(a).getThecomment()!=null){
+								testobj.put("Thecomment", interactionlist.get(a).getThecomment());
+							}else{
+								testobj.put("Thecomment", "");
+							}
+							
 							testobj.put("Startdate", interactionlist.get(a).getStartdate().substring(0, 19));
 							testobj.put("Enddate", interactionlist.get(a).getEnddate().substring(0, 19));
 							if(name.length()>0){

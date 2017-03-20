@@ -45,9 +45,6 @@ public class Insert_CaseComments_Servlet {
 			@FormParam("mediatype") String mediatype,
 			@FormParam("source") String source,
 			@FormParam("agentid") String agentid
-
-			
-			
 			) throws IOException {
 		
 		JSONObject jsonObject = new JSONObject();
