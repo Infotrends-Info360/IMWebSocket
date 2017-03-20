@@ -123,6 +123,7 @@ public class WebSocketRoomPool{
 						Util.getStatusFileLogger().info("###### [removeUserinroom()] called ######");						
 						// AFTERCALLSTATUS切換 (可直接竊換,若有重複更新同一狀態,會由CommonFunction.updateStatus負責防止)
 						UpdateStatusBean usb = null;
+						Util.getConsoleLogger().info("Util.getAfterCallStatus(): " + Util.getAfterCallStatus());
 						if (StatusEnum.READY.getDbid().equals(Util.getAfterCallStatus())){
 							// READY狀態開始
 							Util.getStatusFileLogger().info("###### [removeUserinroom()] called ######");
