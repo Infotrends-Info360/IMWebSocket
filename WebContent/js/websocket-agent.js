@@ -547,7 +547,7 @@ function Login() {
 				if (obj.maxCountReached){
 					alert("maxCountReached!");
 				}
-				alert("obj.currStatusEnum: " + obj.currStatusEnum);
+//				alert("obj.currStatusEnum: " + obj.currStatusEnum);
 				var startORend = obj.startORend;
 				var currStatusEnum = StatusEnum.getStatusEnum(obj.currStatusEnum);
 				switchStatus(currStatusEnum); // 更新畫面
