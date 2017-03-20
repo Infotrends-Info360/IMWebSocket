@@ -599,6 +599,19 @@ public class CommonFunction {
 				
 				AgentFunction.RecordStatusEnd(dbid);
 				
+				// 若是AFTERCALLWORK,則告知前端將狀態更新為DB設定狀態
+				if (StatusEnum.AFTERCALLWORK.getDbid().equals(status_dbid)){
+					JsonObject ACWCountMsg = new JsonObject();
+					ACWCountMsg.addProperty("Event", "updateStatus");
+					if (userInfo.isReady()){
+						ACWCountMsg.addProperty("currStatusEnum", StatusEnum.READY.toString());
+					}else if (userInfo.isNotReady()){
+						ACWCountMsg.addProperty("currStatusEnum", StatusEnum.NOTREADY.toString());
+					}
+					WebSocketUserPool.sendMessageToUser(aConn, ACWCountMsg.toString());
+//					return; // 先於此停住,若以後需要回傳結束事件時,再加上去
+				}
+								
 				// 清理Bean
 //				StatusEnum currStatusEnum = StatusEnum.getStatusEnumByDbid(status_dbid);
 				userInfo.getStatusDBIDMap().remove(currStatusEnum);
