@@ -440,7 +440,7 @@ public class CommonFunction {
 		JsonObject obj = Util.getGJsonObject(aMsg);
 //		JSONObject obj = new JSONObject(message); 
 		String ACtype = WebSocketTypePool.getUserType(aConn);
-		String username = WebSocketUserPool.getUserNameByKey(aConn);
+		String username = WebSocketUserPool.getUserNameByKey(aConn); 
 		String userid = WebSocketUserPool.getUserID(aConn);
 		SimpleDateFormat sdf = new SimpleDateFormat( Util.getSdfDateFormat() );
 		String date = sdf.format(new java.util.Date());
