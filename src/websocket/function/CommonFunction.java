@@ -93,6 +93,7 @@ public class CommonFunction {
 		String channel = Util.getGString(obj, "channel");
 		String userId = null;
 		
+		JSONObject sendjson = new JSONObject();
 		
 		/*** 檢查是否已經登入過 ***/		
 		if(ACtype.equals("Agent")){
@@ -105,8 +106,14 @@ public class CommonFunction {
 			WebSocket oldAgentConn = WebSocketUserPool.getWebSocketByUserID(userId);
 			if (oldAgentConn != null){
 				Util.getConsoleLogger().debug("oldAgentConn exists");
-				// 這邊關掉,並告知雙方相對應的訊息
-				
+				// 更新原JsonObject
+				sendjson.put("isLoggedIn", true);
+				sendjson.put("isLoggedInText", "已經前一個使用者剔除");
+				// 這邊關掉,並告知前一個連線有人將其剔除
+				JSONObject loggedInAgainJson = new JSONObject();
+				loggedInAgainJson.put("Event", "userjoinAgain");
+				loggedInAgainJson.put("text", "你已被其他使用者剔除");
+				WebSocketUserPool.sendMessageToUser(oldAgentConn, loggedInAgainJson.toString());
 				// 清理相關資料
 				oldAgentConn.close();
 			}
@@ -120,7 +127,6 @@ public class CommonFunction {
 		}
 		
 		/*** 告知user其成功登入的UserID ***/
-		JSONObject sendjson = new JSONObject();
 		sendjson.put("Event", "userjoin");
 		sendjson.put("from", userId);
 		sendjson.put("channel", channel);
