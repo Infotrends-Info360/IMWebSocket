@@ -107,9 +107,9 @@ public class SystemListener implements ServletContextListener {
         
         // 更新系統參數
         Map<String, String> systemParam = new HashMap<String, String>();
-        systemParam.put("MaxRingTime", maxRingTime);
-        systemParam.put("AfterCallStatus", afterCallStatus);
-        systemParam.put("EstablishedStatus", establishedStatus);
+//        systemParam.put("MaxRingTime", maxRingTime);
+//        systemParam.put("AfterCallStatus", afterCallStatus);
+//        systemParam.put("EstablishedStatus", establishedStatus);
         	// 讀取IP, port的properties
 		Properties prop = new Properties();
 
@@ -133,6 +133,31 @@ public class SystemListener implements ServletContextListener {
 			Util.getConsoleLogger().trace("prop.getProperty(name): " + prop.getProperty(name));
 			systemParam.put(name.replace(".", "_"), prop.getProperty(name));
 		}		
+		
+		 // 從DB更新系統參數
+		 SystemCfgDao dao = new SystemCfgDao();
+		 List<SystemCfg> SystemCfgs = dao.selectAll_SystemCfg();
+//		 Util.getConsoleLogger().debug("SystemCfgs.size(): " + SystemCfgs.size());
+//		 Map<String, String> sysMsgsMap = SystemInfo.getSysMsgsMap();
+		 for (SystemCfg systemCfg : SystemCfgs){
+			 systemParam.put(systemCfg.getParameter(), systemCfg.getValue());
+//			 if (systemCfg.getParameter().indexOf("Sys") >= 0 ) {
+//				 // 更新SystemInfo
+////				 sysMsgsMap.put(systemCfg.getParameter(), systemCfg.getValue());
+//				 systemParam.put(systemCfg.getParameter(), systemCfg.getValue());
+//			 }else if(systemCfg.getParameter().indexOf("EstablishedStatus") >= 0){
+//				 systemParam.put("EstablishedStatus", systemCfg.getValue());
+//			 }else if(systemCfg.getParameter().indexOf("AfterCallStatus") >= 0){
+//				 systemParam.put("AfterCallStatus", systemCfg.getValue());
+//			 }else if(systemCfg.getParameter().indexOf("MaxRingTime") >= 0){
+//				 systemParam.put("MaxRingTime", systemCfg.getValue());
+//			 }
+			 Util.getConsoleLogger().debug("systemCfg.getParameter(): " + systemCfg.getParameter());
+			 Util.getConsoleLogger().debug("systemCfg.getValue(): " + systemCfg.getValue());
+		 }// end of for
+
+		
+		
         Util.setSystemParam(systemParam);
 
         // 將systemParam(ip,port) 資訊轉換為JSON格式,傳給前端頁面
@@ -176,20 +201,7 @@ public class SystemListener implements ServletContextListener {
 		 
 		 // 更新Systeminfo
 		 
-		  
-		 //測試區
-		 SystemCfgDao dao = new SystemCfgDao();
-		 List<SystemCfg> SystemCfgs = dao.selectAll_SystemCfg();
-//		 Util.getConsoleLogger().debug("SystemCfgs.size(): " + SystemCfgs.size());
-		 Map<String, String> sysMsgsMap = SystemInfo.getSysMsgsMap();
-		 for (SystemCfg systemCfg : SystemCfgs){
-			 if (systemCfg.getParameter().indexOf("Sys") < 0 ) continue;
-			 // 更新SystemInfo
-			 sysMsgsMap.put(systemCfg.getParameter(), systemCfg.getValue());
-//			 Util.getConsoleLogger().debug("systemCfg.getParameter(): " + systemCfg.getParameter());
-//			 Util.getConsoleLogger().debug("systemCfg.getValue(): " + systemCfg.getValue());
-		 }// end of for
-		 
+		  		 
     }
      
     @Override

@@ -20,33 +20,33 @@ public class SystemInfo {
 	
 	// 可拿取key值: Sysmsg_welcome, Sysmsg_finding, Sysmsg_waiting, Sysmsg_cancelled, 
 	// 			  Sysmsg_joined, Sysmsg_left, Sysmsg_closed, Sysname
-	private static Map<String, String> sysMsgsMap = new HashMap<>();
+//	private static Map<String, String> sysMsgsMap = new HashMap<>();
 	
 	// 考慮之後猜成兩個,用JsonObject包
 	public static String getLoginMsg(){
-		return getFormattedMsg(sysMsgsMap.get("Sysmsg_welcome")) + "<br>" + getFormattedMsg(sysMsgsMap.get("Sysmsg_finding"));
+		return getFormattedMsg( Util.getSystemParam().get("Sysmsg_welcome")) + "<br>" + getFormattedMsg( Util.getSystemParam().get("Sysmsg_finding"));
 	}
 	
 	public static String getWelcomeMsg() {
-		return getFormattedMsg(sysMsgsMap.get("Sysmsg_welcome"));
+		return getFormattedMsg( Util.getSystemParam().get("Sysmsg_welcome"));
 	}
 	public static String getLookingForAgentMsg() {
-		return getFormattedMsg(sysMsgsMap.get("Sysmsg_finding"));
+		return getFormattedMsg( Util.getSystemParam().get("Sysmsg_finding"));
 	}
 	public static String getWaitingForAgentMsg(String aAgentName) {
-		return getFormattedMsg(sysMsgsMap.get("Sysmsg_waiting") + " " + "<b>" + aAgentName + "</b>");
+		return getFormattedMsg( Util.getSystemParam().get("Sysmsg_waiting") + " " + "<b>" + aAgentName + "</b>");
 	}
 	public static String getCancelLedReqMsg() {
-		return getFormattedMsg(sysMsgsMap.get("Sysmsg_cancelled"));
+		return getFormattedMsg( Util.getSystemParam().get("Sysmsg_cancelled"));
 	}
 	public static String getJoinedRoomMsg(String aUserName) {
-		return getFormattedMsg(aUserName + " " + sysMsgsMap.get("Sysmsg_joined"));
+		return getFormattedMsg(aUserName + " " + Util.getSystemParam().get("Sysmsg_joined"));
 	}
 	public static String getLeftRoomMsg(String aUserName) {
-		return getFormattedMsg(aUserName + " " + sysMsgsMap.get("Sysmsg_left"));
+		return getFormattedMsg(aUserName + " " + Util.getSystemParam().get("Sysmsg_left"));
 	}
 	public static String getClosedRoomMsg(String aUserName) {
-		return getFormattedMsg(aUserName + " " + sysMsgsMap.get("Sysmsg_closed"));
+		return getFormattedMsg(aUserName + " " + Util.getSystemParam().get("Sysmsg_closed"));
 	}
 	
 	private static String getFormattedMsgDate(String aMsg){
@@ -59,12 +59,12 @@ public class SystemInfo {
 	}
 	
 	private static String getFormattedMsg(String aMsg){
-		return String.format("%s: %s", sysMsgsMap.get("Sysname"), aMsg);
+		return String.format("%s: %s", Util.getSystemParam().get("Sysname"), aMsg);
 	}
 
-	public static Map<String, String> getSysMsgsMap() {
-		return sysMsgsMap;
-	}
+//	public static Map<String, String> getSysMsgsMap() {
+//		return sysMsgsMap;
+//	}
 	
 	
 }
