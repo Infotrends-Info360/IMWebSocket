@@ -142,54 +142,59 @@ public class searchUserdataServlet {
 		// 疑問: 什麼時候 CustomerLeveljsonarray.length() > 1
 		startTime = System.currentTimeMillis();
 		JSONArray SetContactLogjsonarray = new JSONArray();
-		try {
+		// 若有拿到userdata, 代表此user曾經登入過,且有資料
+		if (CustomerLeveljsonarray.length() > 0){
 			for (int j = 0; j < CustomerLeveljsonarray.length(); j++) {
 //				Util.getConsoleLogger().debug("CustomerLeveljsonarray: "
 //						+ CustomerLeveljsonarray);
 				JsonObject jsonObj = Util.getGJsonObject(
 						CustomerLeveljsonarray.getJSONObject(j).toString()
-				);
+						);
 				Util.getConsoleLogger().debug("jsonObj: "+jsonObj);
 				if(jsonObj.get(searchkey) != null){
-
 					jsonObject.put("date", date);
-					Util.getConsoleLogger().debug("searchkey: " + searchkey);
-					Util.getConsoleLogger().debug("pkey: " + pkey);
-					Util.getConsoleLogger().debug("date: " + date);
-					Util.getConsoleLogger().debug("CustomerLeveljsonarray: " + CustomerLeveljsonarray.getJSONObject(j).toString());
-					Util.getFileLogger().info("***** SetContactLog(param) - searchkey: " + searchkey);
-					Util.getFileLogger().info("***** SetContactLog(param) - pkey: " + pkey);
-					Util.getFileLogger().info("***** SetContactLog(param) - date: " + date);
-					Util.getFileLogger().info("***** SetContactLog(param) - CustomerLeveljsonarray: " + CustomerLeveljsonarray.getJSONObject(j).toString());
+//					Util.getConsoleLogger().debug("SetContactLog(param) - searchkey: " + searchkey);
+//					Util.getConsoleLogger().debug("SetContactLog(param) - pkey: " + pkey);
+//					Util.getConsoleLogger().debug("SetContactLog(param) - date: " + date);
+//					Util.getConsoleLogger().debug("SetContactLog(param) - CustomerLeveljsonarray.getJSONObject(j).toString(): " + CustomerLeveljsonarray.getJSONObject(j).toString());
+					Util.getFileLogger().info("SetContactLog(param) - searchkey: " + searchkey);
+					Util.getFileLogger().info("SetContactLog(param) - pkey: " + pkey);
+					Util.getFileLogger().info("SetContactLog(param) - date: " + date);
+					Util.getFileLogger().info("SetContactLog(param) - CustomerLeveljsonarray.getJSONObject(j).toString(): " + CustomerLeveljsonarray.getJSONObject(j).toString());
 					
-					JSONObject SetContactLogjsonObject = SetContactLog(
-									searchkey, pkey, date, 
-									CustomerLeveljsonarray.getJSONObject(j).toString()
-					);
+					JSONObject SetContactLogjsonObject = null;
+					try{
+						SetContactLogjsonObject = SetContactLog(searchkey, pkey, date, CustomerLeveljsonarray.getJSONObject(j).toString());
+						SetContactLogjsonarray.put(SetContactLogjsonObject); //改為抓取Contact陣列 請開啟
+					}catch(Exception e){
+						e.printStackTrace();
+					}
 //					jsonObject.put("SetContactLog", SetContactLogjsonObject); //改為抓取Contact陣列 請關閉
-					SetContactLogjsonarray.put(SetContactLogjsonObject); //改為抓取Contact陣列 請開啟
-					
-					
-				}
-				jsonObject.put("SetContactLog", SetContactLogjsonarray); //改為抓取Contact陣列 請開啟
+				}// end of if
 			}// end of for
-			
-			// 若無抓取到任何userdata, 如使用C123456789登入時,則 SetContactLog裡面使用insert方法
-			if (CustomerLeveljsonarray.length() == 0){
-				
-				
-			}
-			
-			
-		} catch (Exception e) {
-			// e.printStackTrace();
-			jsonObject.put("error", e.getMessage());
+		// 若無userdata,則須再確認是否連contactLog也沒有此人資料	
+		}else if (CustomerLeveljsonarray.length() == 0){
+			JSONObject SetContactLogjsonObject = null;
+			try{
+				JsonObject jsonObjectForContactLog = new JsonObject();
+				jsonObjectForContactLog.addProperty(pkey, userName); // sql指令需求
+				jsonObjectForContactLog.addProperty(searchkey, userName); // sql指令需求
+				SetContactLogjsonObject = SetContactLog(searchkey, pkey, date, jsonObjectForContactLog.toString());
+				SetContactLogjsonarray.put(SetContactLogjsonObject); //改為抓取Contact陣列 請開啟
+			}catch(Exception e){
+				e.printStackTrace();
+			}			
 		}
+		
+		jsonObject.put("SetContactLog", SetContactLogjsonarray); //改為抓取Contact陣列 請開啟
+//		Util.getConsoleLogger().debug("SetContactLog(param) - searchkey: " + searchkey);
+//		Util.getConsoleLogger().debug("SetContactLog(param) - pkey: " + pkey);
+//		Util.getConsoleLogger().debug("SetContactLog(param) - date: " + date);
+//		Util.getConsoleLogger().debug("SetContactLog(param) - CustomerLeveljsonarray: " + CustomerLeveljsonarray.toString());
+			
 		endTime = System.currentTimeMillis();
 		Util.getConsoleLogger().info("RESTful SetContactLog time: " + (endTime - startTime)/1000 + "s" );
 		Util.getFileLogger().info("RESTful SetContactLog time: " + (endTime - startTime)/1000 + "s" );
-
-		
 		
 		return Response
 				.status(200)
@@ -390,8 +395,8 @@ public class searchUserdataServlet {
 	public JSONObject SetContactLog(String searchkey, String pkey, String date,
 			String userdata) throws Exception {
 		StringBuilder responseSB = null;
-		Util.getConsoleLogger().info("***** SetContactLog userdata: " + userdata);
-		Util.getFileLogger().info("***** SetContactLog userdata: " + userdata);
+//		Util.getConsoleLogger().info("***** SetContactLog userdata: " + userdata);
+//		Util.getFileLogger().info("***** SetContactLog userdata: " + userdata);
 		// Encode the query
 		String postData = "searchkey=" + searchkey + "&pkey=" + pkey + "&date="
 				+ date + "&userdata=" + URLEncoder.encode(userdata, "utf-8");
