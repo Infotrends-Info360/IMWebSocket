@@ -54,6 +54,11 @@ public class searchUserdataServlet {
 			@FormParam("userName") String userName,
 			@FormParam("lang") String lang) throws IOException {
 		
+		SimpleDateFormat sdf = new SimpleDateFormat(
+				"yyyy/MM/dd HH:mm:ss");
+		Date now = new Date();
+		String date = sdf.format(now);
+		
 		jsonObject.put("searchtype", searchtype);
 		jsonObject.put("lang", lang);
 		
@@ -108,6 +113,8 @@ public class searchUserdataServlet {
 			// String sCustLevel = "A";
 			String bSelect = "false";
 			CustomerLeveljsonarray = GetCustomerLevel(attributes.get(searchkey).getAsString(), searchtype, bSelect);
+			Util.getConsoleLogger().debug("CustomerLeveljsonarray.toString(): " + CustomerLeveljsonarray.toString());
+			Util.getConsoleLogger().debug("CustomerLeveljsonarray.length(): " + CustomerLeveljsonarray.length());
 			jsonObject.put("CustomerData", CustomerLeveljsonarray);
 		} catch (Exception e) {
 			// e.printStackTrace();
@@ -137,17 +144,14 @@ public class searchUserdataServlet {
 		JSONArray SetContactLogjsonarray = new JSONArray();
 		try {
 			for (int j = 0; j < CustomerLeveljsonarray.length(); j++) {
-				Util.getConsoleLogger().debug("CustomerLeveljsonarray: "
-						+ CustomerLeveljsonarray);
-				JsonObject jsonObj = Util.getGJsonObject(CustomerLeveljsonarray
-						.getJSONObject(j).toString());
+//				Util.getConsoleLogger().debug("CustomerLeveljsonarray: "
+//						+ CustomerLeveljsonarray);
+				JsonObject jsonObj = Util.getGJsonObject(
+						CustomerLeveljsonarray.getJSONObject(j).toString()
+				);
 				Util.getConsoleLogger().debug("jsonObj: "+jsonObj);
 				if(jsonObj.get(searchkey) != null){
 
-					SimpleDateFormat sdf = new SimpleDateFormat(
-							"yyyy/MM/dd HH:mm:ss");
-					Date now = new Date();
-					String date = sdf.format(now);
 					jsonObject.put("date", date);
 					Util.getConsoleLogger().debug("searchkey: " + searchkey);
 					Util.getConsoleLogger().debug("pkey: " + pkey);
@@ -159,15 +163,24 @@ public class searchUserdataServlet {
 					Util.getFileLogger().info("***** SetContactLog(param) - CustomerLeveljsonarray: " + CustomerLeveljsonarray.getJSONObject(j).toString());
 					
 					JSONObject SetContactLogjsonObject = SetContactLog(
-							searchkey, pkey, date, CustomerLeveljsonarray
-									.getJSONObject(j).toString());
+									searchkey, pkey, date, 
+									CustomerLeveljsonarray.getJSONObject(j).toString()
+					);
 //					jsonObject.put("SetContactLog", SetContactLogjsonObject); //改為抓取Contact陣列 請關閉
 					SetContactLogjsonarray.put(SetContactLogjsonObject); //改為抓取Contact陣列 請開啟
 					
 					
 				}
 				jsonObject.put("SetContactLog", SetContactLogjsonarray); //改為抓取Contact陣列 請開啟
+			}// end of for
+			
+			// 若無抓取到任何userdata, 如使用C123456789登入時,則 SetContactLog裡面使用insert方法
+			if (CustomerLeveljsonarray.length() == 0){
+				
+				
 			}
+			
+			
 		} catch (Exception e) {
 			// e.printStackTrace();
 			jsonObject.put("error", e.getMessage());
