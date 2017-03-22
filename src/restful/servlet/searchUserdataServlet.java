@@ -159,6 +159,7 @@ public class searchUserdataServlet {
 //					Util.getConsoleLogger().debug("SetContactLog(param) - pkey: " + pkey);
 //					Util.getConsoleLogger().debug("SetContactLog(param) - date: " + date);
 //					Util.getConsoleLogger().debug("SetContactLog(param) - CustomerLeveljsonarray.getJSONObject(j).toString(): " + CustomerLeveljsonarray.getJSONObject(j).toString());
+					Util.getFileLogger().info("SetContactLog(param) - j: " + j);
 					Util.getFileLogger().info("SetContactLog(param) - searchkey: " + searchkey);
 					Util.getFileLogger().info("SetContactLog(param) - pkey: " + pkey);
 					Util.getFileLogger().info("SetContactLog(param) - date: " + date);
@@ -191,7 +192,7 @@ public class searchUserdataServlet {
 			jsonObject.put("SetContactLog", SetContactLogjsonarray); //若為findAgent()事件-則抓取Contact陣列
 		}else{
 			Util.getConsoleLogger().debug("SetContactLog(param) - sendto2: " + sendto);
-			jsonObject.put("SetContactLog", SetContactLogjsonObject); //若為login()事件-則抓取 改為抓取Contact物件
+			jsonObject.put("SetContactLog", SetContactLogjsonarray.getJSONObject(0)); //若為login()事件-則抓取 改為抓取Contact物件
 		}
 //		Util.getConsoleLogger().debug("SetContactLog(param) - searchkey: " + searchkey);
 //		Util.getConsoleLogger().debug("SetContactLog(param) - pkey: " + pkey);
