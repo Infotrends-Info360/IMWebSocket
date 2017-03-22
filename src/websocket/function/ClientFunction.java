@@ -346,6 +346,8 @@ public class ClientFunction {
 		// 在此更新RoomInfo中的text, structuredtext到interaction log中
 			// 拿取需要物件
 		JsonObject msgJson = Util.getGJsonObject(aMsg);
+		msgJson.addProperty("userid", userInfo.getUserid()); // 注意: 先暫時這樣加, 讓interaction與serviceEntry能透過userid來連結
+		Util.getConsoleLogger().debug("setinteraction() - userID: " + Util.getGString(msgJson, "userID"));
 		// 如果有room歷史訊息,則更新上最新的interaction上 (這邊邏輯較特別,本應該是拿原本的來更新,但因為setinteraction欄位太多,暫時倒過來處理)
 		if (WebSocketUserPool.getUserInteractionByKey(aConn) != null){
 			JsonObject msgJsonOld = Util.getGJsonObject(WebSocketUserPool.getUserInteractionByKey(aConn));

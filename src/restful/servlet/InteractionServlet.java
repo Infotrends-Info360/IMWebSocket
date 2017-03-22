@@ -34,6 +34,7 @@ public class InteractionServlet {
 	@POST
 	@Produces("application/json;charset=UTF-8")
 	public Response PostFromPath(@FormParam("contactid")String contactid, //客戶ID
+			@FormParam("userid")String userid, //Room ID
 			@FormParam("ixnid")String ixnid, //Room ID
 			@FormParam("agentid")String agentid, //Agent的ID
 			@FormParam("startdate")String startdate, 
@@ -51,9 +52,10 @@ public class InteractionServlet {
 			@FormParam("activitycode")String activitycode //處理原因
 			) throws IOException {
 		
-		Util.getFileLogger().info("text: " + text);
-		Util.getFileLogger().info("structuredtext: " + structuredtext);
-		Util.getFileLogger().info("stoppedreason: " + stoppedreason);
+		Util.getFileLogger().info("interaction.text: " + text);
+		Util.getFileLogger().info("interaction.structuredtext: " + structuredtext);
+		Util.getFileLogger().info("interaction.stoppedreason: " + stoppedreason);
+		Util.getFileLogger().info("interaction.userid: " + userid);
 		
 //		text = URLDecoder.decode(text, "UTF-8");
 //		structuredtext = URLDecoder.decode(structuredtext, "UTF-8");
@@ -64,6 +66,10 @@ public class InteractionServlet {
 		JSONObject jsonObject = new JSONObject();
 		Interaction interaction = new Interaction();
 		Map<String,String> interactionlist = new HashMap<String,String>();
+		if(userid!=null&&!"".equals(userid)){
+			interaction.setUserid(userid);
+			interactionlist.put("userid", userid);
+		}
 		if(contactid!=null&&!"".equals(contactid)){
 			interaction.setContactid(contactid);
 			interactionlist.put("contactid", contactid);
@@ -133,6 +139,8 @@ public class InteractionServlet {
 		jsonObject.put("status", Variable.POST_STATUS);
 		
 		
+		Util.getFileLogger().info("interaction.getUserid(): " + interaction.getUserid());
+		Util.getFileLogger().info("interactionlist.get(\"userid\"): " + interactionlist.get("userid"));
 		Util.getFileLogger().info("interaction.getText(): " + interaction.getText());
 		Util.getFileLogger().info("interaction.getStructuredtext(): " + interaction.getStructuredtext());
 		
