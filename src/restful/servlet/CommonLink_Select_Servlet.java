@@ -94,15 +94,15 @@ public class CommonLink_Select_Servlet {
 	    		String b = "#";
 	    		Pid = b;
 	    		TreeJsonObject.put("type", "root" );
-	    		TreeJsonObject.put("typenumber", "0" );
+	    
 
 	    	}else{
 	    		if(commonlinklist.get(a).getNodeurl()!=""&&commonlinklist.get(a).getNodeurl()!=null&&commonlinklist.get(a).getNodeurl().length()>1){
 			    	TreeJsonObject.put("type", "file" );
-			    	TreeJsonObject.put("typenumber", "2" );
+			    
 		        	}else{
 		        	TreeJsonObject.put("type", "default" );
-		        	TreeJsonObject.put("typenumber", "1" );
+		  
 		        	}
 	    	}
 	    
