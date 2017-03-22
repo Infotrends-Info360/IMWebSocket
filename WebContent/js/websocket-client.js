@@ -136,21 +136,21 @@ function Login() {
 						
 				} else if ("senduserdata" == obj.Event) {
 //						alert("obj.userdata.SetContactLog: "+JSON.stringify(obj.userdata.SetContactLog));
-						if (obj.userdata.SetContactLog[0] != null){
+						if (obj.userdata.SetContactLog != null && obj.userdata.SetContactLog[0] != null){
 //							alert("obj.userdata.SetContactLog[0].contactID: " + obj.userdata.SetContactLog[0].contactID);
 							contactID_g = obj.userdata.SetContactLog[0].contactID;
 //							setinteractionDemo(ixnstatus, ixnactivitycode);	
 							setinteraction(ixnstatus_g, ixnactivitycode_g);
-							
-							/** 寫入Log **/
-							// 組成寫入entry log指令,發送消息給WebSocket
-							var myEntrylogJson = new entrylogJson(contactID_g, contactID_g, UserName_g);
-							ws_g.send(JSON.stringify(myEntrylogJson));
-							
 						}else{
 							console.log("senduserdata - " + "contactID not found! ");
+							contactID_g = undefined;
 							setinteraction(ixnstatus_g, ixnactivitycode_g); 
 						}
+						/** 寫入Log **/
+						// 組成寫入entry log指令,發送消息給WebSocket
+						var myEntrylogJson = new entrylogJson(contactID_g, UserID_g, UserName_g);
+						ws_g.send(JSON.stringify(myEntrylogJson));
+						
 						console.log("senduserdata done from WS ******************* ");	
 						// alert(obj.userdata.SetContactLog.contactID);
 						// document.getElementById("userdata").innerHTML =

@@ -327,6 +327,10 @@ function Login() {
 				// 接收到有人登入的訊息
 			} else if ("userjoin" == obj.Event) {
 //					alert('userjoin'); // win
+//				alert("isLoggedIn: " + obj.isLoggedIn);
+				if (obj.isLoggedIn){
+					alert(obj.isLoggedInText);
+				}
 //					console.log("userjoin!");
 				// 拿取參數
 				parent.UserID_g = obj.from;
@@ -363,6 +367,11 @@ function Login() {
 					tmpStatusEnum.description = val.description;
 				});
 				
+				
+			} else if ("userjoinAgain" == obj.Event) {
+//				alert("someone logged in again");
+				alert(obj.text);
+				switchStatus(StatusEnum.LOGOUT);
 			} else if ("refreshRoomList" == obj.Event) {
 				// debug: 確認全部key-value:
 				console.log("refreshRoomList");
@@ -377,7 +386,7 @@ function Login() {
 				var inviteType = obj.inviteType;
 				var userdata = JSON.stringify( obj.userdata );
 				var text = obj.text;
-
+				
 				waittingAgentIDList_g.push( new function(){
 					this.agentID = fromAgentID
 				});
@@ -547,7 +556,7 @@ function Login() {
 				if (obj.maxCountReached){
 					alert("maxCountReached!");
 				}
-				alert("obj.currStatusEnum: " + obj.currStatusEnum);
+//				alert("obj.currStatusEnum: " + obj.currStatusEnum);
 				var startORend = obj.startORend;
 				var currStatusEnum = StatusEnum.getStatusEnum(obj.currStatusEnum);
 				switchStatus(currStatusEnum); // 更新畫面

@@ -206,16 +206,16 @@ public class ClientFunction {
 	/** * send entry log */
 	public static void entrylog(String message, org.java_websocket.WebSocket conn) {
 		Util.getConsoleLogger().debug("entrylog() called");
-		JSONObject obj = new JSONObject(message);
-		String userid = obj.getString("userid");
-		String username = obj.getString("username");
-		String ipaddress = obj.getString("ipaddress");
-		String browser = obj.getString("browser");
-		String platfrom = obj.getString("platfrom");
-		String channel = obj.getString("channel");
-		String language = obj.getString("language");
-		String enterkey = obj.getString("enterkey");
-		String contactid = obj.getString("contactid");
+		JsonObject obj = Util.getGJsonObject(message);
+		String userid = Util.getGString(obj, "userid");
+		String username = Util.getGString(obj, "username");
+		String ipaddress = Util.getGString(obj, "ipaddress");
+		String browser = Util.getGString(obj, "browser");
+		String platfrom = Util.getGString(obj, "platfrom");
+		String channel = Util.getGString(obj, "channel");
+		String language = Util.getGString(obj, "language");
+		String enterkey = Util.getGString(obj, "enterkey");
+		String contactid = Util.getGString(obj, "contactid");
 
 		SimpleDateFormat sdf = new SimpleDateFormat("yyyy/MM/dd HH:mm:ss");
 		Date now = new Date();
@@ -227,7 +227,9 @@ public class ClientFunction {
 					+ "&entertime=" + entertime + "&ipaddress=" + ipaddress
 					+ "&browser=" + browser + "&platfrom=" + platfrom
 					+ "&channel=" + channel + "&language=" + language
-					+ "&enterkey=" + enterkey + "&contactid=" + contactid;
+					+ "&enterkey=" + enterkey;
+			if (contactid != null)
+				postData += "&contactid=" + contactid;
 			// Connect to URL
 			String hostURL = Util.getHostURLStr("IMWebSocket");
 //			Util.getConsoleLogger().debug("hostURL: " + hostURL);
