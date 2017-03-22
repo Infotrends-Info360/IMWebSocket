@@ -23,6 +23,9 @@
  <if test="activitymenuid!=0">
   where activitymenuid=#{activitymenuid}
   </if>
+  <if test="dbid!=0">
+  where dbid=#{dbid}
+  </if>
    ORDER BY SORT
 </select>
 

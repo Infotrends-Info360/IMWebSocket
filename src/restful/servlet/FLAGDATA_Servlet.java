@@ -43,9 +43,8 @@ public class FLAGDATA_Servlet {
 		
 		JSONObject jsonObject = new JSONObject();
 		Activitygroups activitygroups = new Activitygroups();
-		
-		activitygroups.setDbid(dbid);
-	
+
+
 		MaintainService maintainservice = new MaintainService();	
 		
     			JSONArray ActivitygroupsJsonArray = new JSONArray();
@@ -56,8 +55,8 @@ public class FLAGDATA_Servlet {
         		
         		JSONArray flag0JsonArray = new JSONArray();
         		JSONArray flag1JsonArray = new JSONArray();
-
-        		activitygroups.setActivitymenuid(dbid);
+        		
+        		activitygroups.setDbid(dbid);
         		List<Activitygroups> activitygroupslist = maintainservice.Select_activitygroups(activitygroups);
         
         		for(int a = 0; a < activitygroupslist.size(); a++){
