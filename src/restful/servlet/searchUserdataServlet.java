@@ -52,7 +52,8 @@ public class searchUserdataServlet {
 			@FormParam("searchtype") String searchtype,
 			@FormParam("userID") String userID,
 			@FormParam("userName") String userName,
-			@FormParam("lang") String lang) throws IOException {
+			@FormParam("lang") String lang,
+			@FormParam("sendto") String sendto) throws IOException {
 		
 		SimpleDateFormat sdf = new SimpleDateFormat(
 				"yyyy/MM/dd HH:mm:ss");
@@ -142,6 +143,7 @@ public class searchUserdataServlet {
 		// 疑問: 什麼時候 CustomerLeveljsonarray.length() > 1
 		startTime = System.currentTimeMillis();
 		JSONArray SetContactLogjsonarray = new JSONArray();
+		JSONObject SetContactLogjsonObject = null;
 		// 若有拿到userdata, 代表此user曾經登入過,且有資料
 		if (CustomerLeveljsonarray.length() > 0){
 			for (int j = 0; j < CustomerLeveljsonarray.length(); j++) {
@@ -162,7 +164,6 @@ public class searchUserdataServlet {
 					Util.getFileLogger().info("SetContactLog(param) - date: " + date);
 					Util.getFileLogger().info("SetContactLog(param) - CustomerLeveljsonarray.getJSONObject(j).toString(): " + CustomerLeveljsonarray.getJSONObject(j).toString());
 					
-					JSONObject SetContactLogjsonObject = null;
 					try{
 						SetContactLogjsonObject = SetContactLog(searchkey, pkey, date, CustomerLeveljsonarray.getJSONObject(j).toString());
 						SetContactLogjsonarray.put(SetContactLogjsonObject); //改為抓取Contact陣列 請開啟
@@ -174,7 +175,6 @@ public class searchUserdataServlet {
 			}// end of for
 		// 若無userdata,則須再確認是否連contactLog也沒有此人資料	
 		}else if (CustomerLeveljsonarray.length() == 0){
-			JSONObject SetContactLogjsonObject = null;
 			try{
 				JsonObject jsonObjectForContactLog = new JsonObject();
 				jsonObjectForContactLog.addProperty(pkey, userName); // sql指令需求
@@ -185,8 +185,14 @@ public class searchUserdataServlet {
 				e.printStackTrace();
 			}			
 		}
-		
-		jsonObject.put("SetContactLog", SetContactLogjsonarray); //改為抓取Contact陣列 請開啟
+		// 暫時先這樣處理 20170322_sam
+		if (sendto != null && !sendto.isEmpty()){
+			Util.getConsoleLogger().debug("SetContactLog(param) - sendto1: " + sendto);
+			jsonObject.put("SetContactLog", SetContactLogjsonarray); //若為findAgent()事件-則抓取Contact陣列
+		}else{
+			Util.getConsoleLogger().debug("SetContactLog(param) - sendto2: " + sendto);
+			jsonObject.put("SetContactLog", SetContactLogjsonObject); //若為login()事件-則抓取 改為抓取Contact物件
+		}
 //		Util.getConsoleLogger().debug("SetContactLog(param) - searchkey: " + searchkey);
 //		Util.getConsoleLogger().debug("SetContactLog(param) - pkey: " + pkey);
 //		Util.getConsoleLogger().debug("SetContactLog(param) - date: " + date);

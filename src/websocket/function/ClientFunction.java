@@ -107,11 +107,11 @@ public class ClientFunction {
 //		Util.getConsoleLogger().debug("senduserdata()" + message);
 		Util.getConsoleLogger().debug("senduserdata() called ");
 		Util.getFileLogger().info("senduserdata() called ");
-		JSONObject obj = new JSONObject(message);
-		String lang = obj.getString("lang");
-		String searchtype = obj.getString("searchtype");
-		String sendto = obj.getString("sendto");
-		String channel = obj.getString("channel");
+		JsonObject obj = Util.getGJsonObject(message);
+		String lang = Util.getGString(obj, "lang");
+		String searchtype = Util.getGString(obj, "searchtype");
+		String sendto = Util.getGString(obj, "sendto");
+		String channel = Util.getGString(obj, "channel");
 		String userID = WebSocketUserPool.getUserID(conn);
 		String userName = WebSocketUserPool.getUserNameByKey(conn);
 		
@@ -124,6 +124,11 @@ public class ClientFunction {
 					+ "&userID=" + userID
 					+ "&userName=" + userName
 					+ "&lang=" + lang;
+			
+			if (sendto != null){
+				postData += "&sendto=" + sendto;
+			}
+			
 			// Connect to URL
 			String hostURL = Util.getHostURLStr("IMWebSocket");
 //			Util.getConsoleLogger().debug("hostURL: " + hostURL);
@@ -165,15 +170,15 @@ public class ClientFunction {
 		JSONObject responseSBjson = new JSONObject(responseSB.toString());
 		Util.getConsoleLogger().debug("senduserdata result: " + responseSBjson);
 		Util.getFileLogger().debug("senduserdata result: " + responseSBjson);
-		
+
+		/** 組出senduserdata送出JSON物件 **/
 		JSONObject sendjson = new JSONObject();
-		
 		sendjson.put("Event", "senduserdata");
 		sendjson.put("from", userID);
 		sendjson.put("userdata",  responseSBjson);
 		sendjson.put("channel", channel);
-//		Util.getConsoleLogger().debug("senduserdata() - sendjson" + sendjson);
-		WebSocketUserPool.sendMessageToUser(conn, sendjson.toString());
+		
+		/** 通知Agent, 其Client的userdata資料(loginj狀況) **/		
 		// 通知Agent,有新的通話請求 RING
 		// 掉換順序
 		// 若尚未找到Agent,則會出現JSONException
@@ -182,7 +187,7 @@ public class ClientFunction {
 		sendtoConn = WebSocketUserPool.getWebSocketByUserID(sendto);
 		Util.getConsoleLogger().debug("sendtoConn: " + sendtoConn);
 		Util.getConsoleLogger().debug("WebSocketUserPool.getUserNameByKey(sendtoConn): " + WebSocketUserPool.getUserNameByKey(sendtoConn));
-		
+
 		if (sendtoConn != null){
 			sendjson.put("clientID", WebSocketUserPool.getUserID(conn).trim());
 			sendjson.put("clientName", WebSocketUserPool.getUserNameByKey(conn).trim());
@@ -200,6 +205,14 @@ public class ClientFunction {
 //		String status_dbid = Util.getGString(obj, "status"); // 以數字代表 dbid
 //		String startORend = Util.getGString(obj, "startORend"); 
 //		String clientID = Util.getGString(obj, "clientID"); // for RING
+		
+		/** 通知client, 其userdata資料(loginj狀況) **/
+		if (sendtoConn == null){
+//		Util.getConsoleLogger().debug("senduserdata() - sendjson" + sendjson);
+			WebSocketUserPool.sendMessageToUser(conn, sendjson.toString());			
+		}
+
+		
 
 	}
 	
