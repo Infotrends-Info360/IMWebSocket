@@ -25,6 +25,7 @@
 <resultMap type="com.Info360.bean.Interaction" id="interactionResult">
   
     <id     column="DBID" 					jdbcType="INTEGER" property="dbid"/>
+    <result column="USERID" 				jdbcType="VARCHAR" property="userid"/>
     <result column="CONTACTID" 				jdbcType="VARCHAR" property="contactid"/>
     <result column="IXNID" 					jdbcType="VARCHAR" property="ixnid"/>
     <result column="AGENTID"     			jdbcType="VARCHAR" property="agentid"/>

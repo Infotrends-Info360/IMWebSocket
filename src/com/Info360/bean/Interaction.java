@@ -11,6 +11,8 @@ import java.util.Map;
 public class Interaction {
 	
 	private String dbid;
+
+	private String userid;
 	
 	private String contactid;
 	
@@ -200,5 +202,15 @@ public class Interaction {
 	public void setInteractionlist(Map<String, String> interactionlist) {
 		this.interactionlist = interactionlist;
 	}
+
+	public String getUserid() {
+		return userid;
+	}
+
+	public void setUserid(String userid) {
+		this.userid = userid;
+	}
+	
+	
 	
 }

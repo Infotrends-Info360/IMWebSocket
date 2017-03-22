@@ -136,13 +136,17 @@ function Login() {
 						
 				} else if ("senduserdata" == obj.Event) {
 //						alert("obj.userdata.SetContactLog: "+JSON.stringify(obj.userdata.SetContactLog));
-						if (obj.userdata.SetContactLog != null && obj.userdata.SetContactLog[0] != null){
+						// 調成senduserdata,讓其可銜接客戶端client.js版本
+						if (obj.userdata.SetContactLog != null){
+//						if (obj.userdata.SetContactLog != null && obj.userdata.SetContactLog[0] != null){
 //							alert("obj.userdata.SetContactLog[0].contactID: " + obj.userdata.SetContactLog[0].contactID);
-							contactID_g = obj.userdata.SetContactLog[0].contactID;
+							contactID_g = obj.userdata.SetContactLog.contactID;
 //							setinteractionDemo(ixnstatus, ixnactivitycode);	
+//							alert("contactID_g1: " + contactID_g);
 							setinteraction(ixnstatus_g, ixnactivitycode_g);
 						}else{
 							console.log("senduserdata - " + "contactID not found! ");
+//							alert("contactID_g2: " + contactID_g);
 							contactID_g = undefined;
 							setinteraction(ixnstatus_g, ixnactivitycode_g); 
 						}

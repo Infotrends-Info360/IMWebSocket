@@ -108,7 +108,7 @@ public class CommonFunction {
 				Util.getConsoleLogger().debug("oldAgentConn exists");
 				// 更新原JsonObject
 				sendjson.put("isLoggedIn", true);
-				sendjson.put("isLoggedInText", "已經前一個使用者剔除");
+				sendjson.put("isLoggedInText", "已將前一個使用者剔除");
 				// 這邊關掉,並告知前一個連線有人將其剔除
 				JSONObject loggedInAgainJson = new JSONObject();
 				loggedInAgainJson.put("Event", "userjoinAgain");
