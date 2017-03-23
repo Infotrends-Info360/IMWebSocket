@@ -493,7 +493,8 @@ function Login() {
 
 			} else if ("privateMsg" == obj.Event){
 //					console.log("onMessage - privateMsg" + obj.UserName + ": " + obj.text + "&#13;&#10");
-				document.getElementById("text").innerHTML += obj.UserName + ": " + obj.text + "&#13;&#10" + "<br>";
+				// 最新的訊息再最上面
+				document.getElementById("text").innerHTML = obj.UserName + ": " + obj.text + "&#13;&#10" + "<br>" + document.getElementById("text").innerHTML;
 				
 			} else if ("removeUserinroom" == obj.Event){
 //					alert(obj.result);

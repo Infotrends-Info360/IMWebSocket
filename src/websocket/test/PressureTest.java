@@ -5,6 +5,7 @@ import java.net.URISyntaxException;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
+import java.util.concurrent.atomic.AtomicInteger;
 
 import util.Util;
 
@@ -16,7 +17,7 @@ public class PressureTest extends Thread {
 	public static void main(String[] args) throws URISyntaxException, InterruptedException{
 		
 		// 哪取參數值
-		int round = 500;
+		int round = 1000;
 		int loginDurationMilleSecond = 5000;
 		for (int i = 0; i < args.length; i++){
 			if (i == 0) round = Integer.parseInt(args[i]);
@@ -26,7 +27,7 @@ public class PressureTest extends Thread {
 		// 每輪開啟一個websocket socket連線
 		for (int i = 0; i < round; i++){
 			System.out.println("使用者編號: " + i);
-			PressureTest.service.submit(new taskWrapper(loginDurationMilleSecond));
+			PressureTest.service.submit(new LoginLogoutWrapper(loginDurationMilleSecond));
 		}// end of for
 		
 
@@ -34,12 +35,12 @@ public class PressureTest extends Thread {
 
 }
 
-class taskWrapper implements Runnable{
+class LoginLogoutWrapper implements Runnable{
 //	private static final String wsServerURI = "ws:" + "//" + "localhost" + ":" + "8888";
 	private static final String wsServerURI = "ws:" + "//" + "ws.crm.com.tw" + ":" + "8888";
 	private int loginDurationMilleSecond = 0;
 	
-	public taskWrapper(int aLoginDurationMilleSecond){
+	public LoginLogoutWrapper(int aLoginDurationMilleSecond){
 		this.loginDurationMilleSecond = aLoginDurationMilleSecond;
 	}
 
@@ -57,13 +58,17 @@ class taskWrapper implements Runnable{
 					String event = Util.getGString(jsonObject, "Event");
 					if ("userjoin".equals(event)){
 //						System.out.println("here01");
-						/** 等待時間 **/
+						/** 登入後,每秒寄出一次訊息 **/
 						try {
-							PressureTest.service.submit(new suspendTask(taskWrapper.this.loginDurationMilleSecond)).get();
+							MsgTask msgTask = new MsgTask(clientEndPoint);
+							PressureTest.service.submit(msgTask).get();
 						} catch (InterruptedException | ExecutionException e1) {
 							// TODO Auto-generated catch block
 							e1.printStackTrace();
 						}
+						
+						/** 模擬持續連線中 **/
+//							PressureTest.service.submit(new suspendTask(LoginLogoutWrapper.this.loginDurationMilleSecond)).get();
 						
 						/** 寄送請求訊息 - 模擬登出 **/
 						try {
@@ -100,20 +105,37 @@ class taskWrapper implements Runnable{
 		
 	}// end of run()
 	
-	
-	private void login(ChatClientEndpoint aClientEndPoint){
-		JsonObject jsonObject = new JsonObject();
-		jsonObject.addProperty("type", "Exit");
-		jsonObject.addProperty("id", "");
-		jsonObject.addProperty("UserName", "A123456789");
-		jsonObject.addProperty("channel", "chat");
-		jsonObject.addProperty("waittingAgent", "");
-		jsonObject.addProperty("waittingAgentID", "");
-		aClientEndPoint.sendMessage(jsonObject.toString());
+}// end of class taskWrapper
+
+class MsgTask implements Runnable{
+	private ChatClientEndpoint clientEndPoint;
+	private static AtomicInteger msgCountOverview = new AtomicInteger(0);
+	public MsgTask(ChatClientEndpoint aClientEndPoint){
+		this.clientEndPoint = aClientEndPoint;
+	}
+	@Override
+	public void run() {
+		int msgCountMax = 20;
+		AtomicInteger msgCount = new AtomicInteger(0);
+		int tmpMsgCountOverview = msgCountOverview.incrementAndGet();
+		while(msgCount.get() < msgCountMax){
+			try {
+				Thread.sleep(1000);
+			} catch (InterruptedException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+			JsonObject jsonObject = new JsonObject();
+			jsonObject.addProperty("type", "message");
+			jsonObject.addProperty("text", new java.util.Date().toString() + " - " + msgCount.incrementAndGet() + "(" + tmpMsgCountOverview +")");
+			jsonObject.addProperty("sendto", "100"); // 寫死,寄給HollyLin
+			jsonObject.addProperty("channel", "chat");
+			this.clientEndPoint.sendMessage(jsonObject.toString()); // 此與網路請求有關,建議另開一個Thread來處理,否則由同一個Thread同時寄出上百次網路請求,很有可能會停住
+		}
+		
 	}
 	
-	
-}// end of class taskWrapper
+}
 
 class LogoutTask implements Runnable{
 	ChatClientEndpoint clientEndPoint;
@@ -135,7 +157,6 @@ class LogoutTask implements Runnable{
 	}
 	
 }
-
 
 
 
