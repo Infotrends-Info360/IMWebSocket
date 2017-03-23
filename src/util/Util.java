@@ -76,6 +76,9 @@ public class Util {
 	public static Logger getStatusFileLogger(){
 		return Attr.statusFileLogger;
 	}
+	public static Logger getPressureTestFileLogger(){
+		return Attr.pressureTestFileLogger;
+	}
 	public static String getHostURLStr(String aHost){
 //		systemParam.put("IMWebSocket_protocol", IMWebSocket_protocol);
 //		systemParam.put("IMWebSocket_hostname", IMWebSocket_hostname);
@@ -111,6 +114,7 @@ public class Util {
 	    return result.toString();
 	}
 
+	
 	private static class Attr {
 		private static final String sdfDateFormat = "yyyy-MM-dd";
 		private static final String sdfTimeFormat = "HH:mm:ss";
@@ -123,6 +127,7 @@ public class Util {
 //		private static final Logger consoleLogger = Logger.getLogger("consoleLogger");
 		private static final Logger consoleLogger = LogManager.getLogger("util.consoleLogger");
 		private static final Logger statusFileLogger = LogManager.getLogger("util.statusFileLogger");
+		private static final Logger pressureTestFileLogger = LogManager.getLogger("util.pressureTestFileLogger");
 
 	}
 

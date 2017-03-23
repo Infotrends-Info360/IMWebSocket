@@ -23,6 +23,13 @@
 				<Pattern>[%d{yy/MM/dd HH:mm:ss}][%5p][%-35C-%-5L] - %m%n</Pattern>
 			</PatternLayout>
 		</File>
+
+		<File name="pressureTestFile" fileName="log4j2/pressureTestFile.log">
+			<PatternLayout>
+				<Pattern>[%d{yy/MM/dd HH:mm:ss}][%5p][%-35C-%-5L] - %m%n</Pattern>
+			</PatternLayout>
+		</File>
+
 	</Appenders>
 	<Loggers>
 		<Root level="INFO"> <!-- INFO --> <!-- 若改成DEBUG,會印出許多非自行設定的資訊, ex mybatis -->
@@ -38,6 +45,9 @@
 		</logger>
 		<logger name="util.statusFileLogger" level="info" additivity="false">
 			<AppenderRef ref="statusFile" />
+		</logger>
+		<logger name="util.pressureTestFileLogger" level="info" additivity="false">
+			<AppenderRef ref="pressureTestFile" />
 		</logger>
 
 

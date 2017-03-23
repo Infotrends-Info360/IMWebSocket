@@ -53,7 +53,7 @@ import websocket.pools.WebSocketTypePool;
 import websocket.pools.WebSocketUserPool;
 import websocket.thread.findAgent.FindAgentCallable;
 import websocket.thread.findAgent.FindAgentThread;
- 
+
 public class WebSocket extends WebSocketServer {
 		
 	public WebSocket(InetSocketAddress address) {
