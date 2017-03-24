@@ -49,6 +49,59 @@ public class MaintainService {
 	
 	/**
 
+	 * @param Query_AGroup_DBID
+	 */
+
+	public List<Activitygroups> Query_AGroup_DBID(Activitygroups activitygroups) {
+		
+			List<Activitygroups> activitygroupslist = new ArrayList<Activitygroups>();
+			try {
+				ActivitygroupsDao activitygroupsdao = new ActivitygroupsDao();
+				activitygroupslist = activitygroupsdao.Query_AGroup_DBID(activitygroups);
+			} catch (Exception e) {
+				IsError.GET_EXCEPTION = e.getMessage();
+			}
+			return activitygroupslist;
+		
+	}
+	
+	/**
+
+	 * @param Query_AGroup_Sort
+	 */
+
+	public List<Activitygroups> Query_AGroup_Sort(Activitygroups activitygroups) {
+		
+			List<Activitygroups> activitygroupslist = new ArrayList<Activitygroups>();
+			try {
+				ActivitygroupsDao activitygroupsdao = new ActivitygroupsDao();
+				activitygroupslist = activitygroupsdao.Query_AGroup_Sort(activitygroups);
+			} catch (Exception e) {
+				IsError.GET_EXCEPTION = e.getMessage();
+			}
+			return activitygroupslist;
+		
+	}
+	
+	/**
+	 * AGroup_Sort
+	 * @param AGroup_Sort
+	 */
+	public int AGroup_Sort(Activitygroups activitygroups) {
+		int count = 0;
+		try {
+			ActivitygroupsDao activitygroupsdao = new ActivitygroupsDao();
+			count = activitygroupsdao.AGroup_Sort(activitygroups);
+		} catch (Exception e) {
+			IsError.GET_EXCEPTION = e.getMessage();
+			e.printStackTrace();
+			Util.getFileLogger().error(e.getMessage());
+		}
+		return count;
+	}
+	
+	/**
+
 	 * @param Query_AData_DBID
 	 */
 

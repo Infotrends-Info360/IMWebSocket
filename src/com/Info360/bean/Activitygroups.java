@@ -20,6 +20,7 @@ public class Activitygroups {
 	private String deleteflag;
 
 	private List<Integer> ActivityGroup_DBID_list = new ArrayList<Integer>();
+	private List<String> ActivityGroup_SORT_list = new ArrayList<String>();
 
 	
 	public List<Integer> getActivityGroup_DBID_list() {
