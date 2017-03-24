@@ -17,7 +17,7 @@ public class PressureTest extends Thread {
 	public static void main(String[] args) throws URISyntaxException, InterruptedException{
 		
 		// 哪取參數值
-		int round = 1000;
+		int round = 2000;
 		int loginDurationMilleSecond = 5000;
 		for (int i = 0; i < args.length; i++){
 			if (i == 0) round = Integer.parseInt(args[i]);

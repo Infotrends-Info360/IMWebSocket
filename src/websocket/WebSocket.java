@@ -134,9 +134,12 @@ public class WebSocket extends WebSocketServer {
 		Util.getConsoleLogger().trace("WebSocket :\n " +message);
 		Util.getFileLogger().trace("WebSocket :\n " +message);
 		JSONObject obj = new JSONObject(message);
+		// if fromSrc = "WeChat";
+		// List<MsgWrapper> msgWrapperList // 拿取各方法回傳物件(包含 傳給誰+回傳資訊)
 		switch (obj.getString("type").trim()) {
 		case "message":
 			CommonFunction.getMessage(message.toString(), conn);
+			// we will get MSG + sendToID			
 			break;
 		case "login":
 			CommonFunction.userjoin(message.toString(), conn);
@@ -244,6 +247,8 @@ public class WebSocket extends WebSocketServer {
 			break;
 		}
 		
+		// if fromSrc.equals("WeChat") -> use WeChatAPI to send msg
+		// if fromSrc.equals("js") -> use the same old way 
 
 		
 	}
