@@ -47,6 +47,59 @@ import com.Info360.dao.CFG_personDao;
 public class MaintainService {
 	
 	
+	/**
+
+	 * @param Query_AData_DBID
+	 */
+
+	public List<Activitydata> Query_AData_DBID(Activitydata activitydata) {
+		
+			List<Activitydata> activitydatalist = new ArrayList<Activitydata>();
+			try {
+				ActivitydataDao activitydatadao = new ActivitydataDao();
+				activitydatalist = activitydatadao.Query_AData_DBID(activitydata);
+			} catch (Exception e) {
+				IsError.GET_EXCEPTION = e.getMessage();
+			}
+			return activitydatalist;
+		
+	}
+	
+	/**
+
+	 * @param Query_AData_Sort
+	 */
+
+	public List<Activitydata> Query_AData_Sort(Activitydata activitydata) {
+		
+			List<Activitydata> activitydatalist = new ArrayList<Activitydata>();
+			try {
+				ActivitydataDao activitydatadao = new ActivitydataDao();
+				activitydatalist = activitydatadao.Query_AData_Sort(activitydata);
+			} catch (Exception e) {
+				IsError.GET_EXCEPTION = e.getMessage();
+			}
+			return activitydatalist;
+		
+	}
+	
+	/**
+	 * AData_Sort
+	 * @param AData_Sort
+	 */
+	public int AData_Sort(Activitydata activitydata) {
+		int count = 0;
+		try {
+			ActivitydataDao activitydatadao = new ActivitydataDao();
+			count = activitydatadao.AData_Sort(activitydata);
+		} catch (Exception e) {
+			IsError.GET_EXCEPTION = e.getMessage();
+			e.printStackTrace();
+			Util.getFileLogger().error(e.getMessage());
+		}
+		return count;
+	}
+	
 
 	/**
 	 * 
