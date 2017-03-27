@@ -166,6 +166,7 @@ public class ClientFunction {
 		Util.getConsoleLogger().debug("RESTful searchUserdata search time: " + (endTime - startTime)/1000 + "s" );
 		Util.getFileLogger().debug("RESTful searchUserdata search time: " + (endTime - startTime)/1000 + "s" );
 		
+		Util.getConsoleLogger().debug("responseSB.toString(): " + responseSB.toString());
 		
 		JSONObject responseSBjson = new JSONObject(responseSB.toString());
 		Util.getConsoleLogger().debug("senduserdata result: " + responseSBjson);
