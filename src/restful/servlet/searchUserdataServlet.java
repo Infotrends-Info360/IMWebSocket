@@ -5,6 +5,7 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.OutputStream;
 import java.io.StringReader;
+import java.io.UnsupportedEncodingException;
 import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.URL;
@@ -107,7 +108,7 @@ public class searchUserdataServlet {
 		}// end of for
 		
 		/*** GetCustomerLevel - 拿取CustomerData***/
-		JSONArray CustomerLeveljsonarray = null;
+		JSONArray CustomerLeveljsonarray = new JSONArray();
 		startTime = System.currentTimeMillis();
 		try {
 			// String sID = "A123456789";
@@ -118,7 +119,7 @@ public class searchUserdataServlet {
 			Util.getConsoleLogger().debug("CustomerLeveljsonarray.length(): " + CustomerLeveljsonarray.length());
 			jsonObject.put("CustomerData", CustomerLeveljsonarray);
 		} catch (Exception e) {
-			// e.printStackTrace();
+			 e.printStackTrace();
 			jsonObject.put("error", e.getMessage());
 		}
 		endTime = System.currentTimeMillis();
@@ -147,8 +148,10 @@ public class searchUserdataServlet {
 		// 若有拿到userdata, 代表此user曾經登入過,且有資料
 		if (CustomerLeveljsonarray.length() > 0){
 			for (int j = 0; j < CustomerLeveljsonarray.length(); j++) {
-//				Util.getConsoleLogger().debug("CustomerLeveljsonarray: "
-//						+ CustomerLeveljsonarray);
+				Util.getConsoleLogger().debug("CustomerLeveljsonarray > 0: "
+						+ CustomerLeveljsonarray);
+				Util.getFileLogger().info("CustomerLeveljsonarray > 0: "
+						+ CustomerLeveljsonarray);
 				JsonObject jsonObj = Util.getGJsonObject(
 						CustomerLeveljsonarray.getJSONObject(j).toString()
 						);
@@ -173,9 +176,18 @@ public class searchUserdataServlet {
 					}
 //					jsonObject.put("SetContactLog", SetContactLogjsonObject); //改為抓取Contact陣列 請關閉
 				}// end of if
+				else{
+					Util.getConsoleLogger().debug("Userdata Search Key Value Not Found: "+ searchkey);
+					Util.getFileLogger().info("Userdata Search Key Value Not Found: "+ searchkey);
+					throw new RuntimeException("Userdata Search Key Value Not Found: "+ searchkey);
+				}
 			}// end of for
 		// 若無userdata,則須再確認是否連contactLog也沒有此人資料	
 		}else if (CustomerLeveljsonarray.length() == 0){
+			Util.getConsoleLogger().debug("CustomerLeveljsonarray == 0: "
+					+ CustomerLeveljsonarray);
+			Util.getFileLogger().info("CustomerLeveljsonarray == 0: "
+					+ CustomerLeveljsonarray);
 			try{
 				JsonObject jsonObjectForContactLog = new JsonObject();
 				jsonObjectForContactLog.addProperty(pkey, userName); // sql指令需求
@@ -271,6 +283,7 @@ public class searchUserdataServlet {
 		String hostURL = Util.getHostURLStr("infoacd");
 		Util.getConsoleLogger().debug("hostURL(infoacd): " + hostURL);
 		URL url = new URL( hostURL + "/infoacd/infoCenterWebService.asmx/GetCustomerLevel");
+		
 //		URL url = new URL(
 //				"http://192.168.10.7/infoacd/infoCenterWebService.asmx/GetCustomerLevel");
 		// URL url = new
@@ -292,20 +305,38 @@ public class searchUserdataServlet {
 
 		// Read response
 		responseSB = new StringBuilder();
-		BufferedReader br = new BufferedReader(new InputStreamReader(
-				connection.getInputStream(), "UTF-8"));
+		BufferedReader br = null;
+		try {
+			br = new BufferedReader(new InputStreamReader(
+					connection.getInputStream(), "UTF-8"));
+			String line;
+			while ((line = br.readLine()) != null)
+				// responseSB.append(new
+				// String(line.toString().getBytes(),"UTF-8"));
+				responseSB.append(line.trim());
 
-		String line;
-		while ((line = br.readLine()) != null)
-			// responseSB.append(new
-			// String(line.toString().getBytes(),"UTF-8"));
-			responseSB.append(line.trim());
+		} catch (UnsupportedEncodingException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+			Util.getConsoleLogger().debug("UnsupportedEncodingException: "+e.getMessage());
+			Util.getFileLogger().info("UnsupportedEncodingException: "+e.getMessage());
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+			Util.getConsoleLogger().debug("IOException: "+e.getMessage());
+			Util.getFileLogger().info("IOException: "+e.getMessage());
+		} catch (Exception e) {
+			e.printStackTrace();
+			Util.getConsoleLogger().debug("OthersException: "+e.getMessage());
+			Util.getFileLogger().info("OthersException: "+e.getMessage());
+		} finally {
+			// Close streams
+			br.close();
+			os.close();
+		}
 
-		// Close streams
-		br.close();
-		os.close();
-
-		// Util.getConsoleLogger().debug("responseSB: "+responseSB.toString().trim());
+		Util.getConsoleLogger().debug("responseSB: "+responseSB.toString().trim());
+		Util.getFileLogger().info("responseSB: "+responseSB.toString().trim());
 
 		DocumentBuilderFactory factory_xpath = DocumentBuilderFactory
 				.newInstance();
@@ -402,7 +433,7 @@ public class searchUserdataServlet {
 	public JSONObject SetContactLog(String searchkey, String pkey, String date,
 			String userdata) throws Exception {
 		StringBuilder responseSB = null;
-//		Util.getConsoleLogger().info("***** SetContactLog userdata: " + userdata);
+		Util.getConsoleLogger().info("***** SetContactLog userdata: " + userdata);
 //		Util.getFileLogger().info("***** SetContactLog userdata: " + userdata);
 		// Encode the query
 		String postData = "searchkey=" + searchkey + "&pkey=" + pkey + "&date="
@@ -425,12 +456,16 @@ public class searchUserdataServlet {
 		// Write data
 		OutputStream os = connection.getOutputStream();
 		os.write(postData.getBytes());
-
+		
+		Util.getConsoleLogger().debug("SetContactLog1");
+		 
 		// Read response
 		responseSB = new StringBuilder();
 		BufferedReader br = new BufferedReader(new InputStreamReader(
 				connection.getInputStream(), "UTF-8"));
-
+		
+		Util.getConsoleLogger().debug("SetContactLog2");
+		 
 		String line;
 		while ((line = br.readLine()) != null)
 			responseSB.append(line.trim());
@@ -439,7 +474,7 @@ public class searchUserdataServlet {
 		br.close();
 		os.close();
 
-		// Util.getConsoleLogger().debug("responseSB: "+responseSB.toString().trim());
+		 Util.getConsoleLogger().debug("SetContactLog - responseSB: "+responseSB.toString().trim());
 		JSONObject SetContactLogjsonObject = new JSONObject(
 				responseSB.toString());
 		return SetContactLogjsonObject;
