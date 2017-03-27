@@ -72,7 +72,7 @@ public class Query_titlegroup_ActivityData_Servlet {
 
     		}
         		
-        		jsonObject.put("activitygroups", ActivitydataJsonArray);
+        		jsonObject.put("titlegroup", ActivitydataJsonArray);
     		
         		
 
