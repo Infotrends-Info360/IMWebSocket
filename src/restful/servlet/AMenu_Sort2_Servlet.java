@@ -30,7 +30,7 @@ import com.Info360.service.MaintainService;
  * @author Lin
  */
 
-@Path("/AMenu_Sort2")
+@Path("/AMenu_Sortup")
 public class AMenu_Sort2_Servlet {
 	
 	@POST
@@ -69,11 +69,13 @@ public class AMenu_Sort2_Servlet {
 		ActivityMenu_SORT_list.add(activitymenulist.get(0).getSort());
 
 		
-		System.out.println("dbid: "+ ActivityMenu_DBID_list);
-		System.out.println("sort: "+ ActivityMenu_SORT_list);
+//		System.out.println("dbid: "+ ActivityMenu_DBID_list);
+//		System.out.println("sort: "+ ActivityMenu_SORT_list);
 		
 		 activitymenu.setDbid(ActivityMenu_DBID_list.get(0));
 		 activitymenu.setSort(ActivityMenu_SORT_list.get(0));
+		 
+		 
 		
 		int update = maintainservice.AMenu_Sort(activitymenu);
 		
@@ -83,7 +85,7 @@ public class AMenu_Sort2_Servlet {
 		int update2 = maintainservice.AMenu_Sort(activitymenu);
     
 	    	jsonObject.put("AMenu_Sort", update);
-	    	jsonObject.put("AMenu_Sort", update2);
+	    	jsonObject.put("AMenu_Sort2", update2);
 	    	
 	    	
 		return Response.status(200).entity(jsonObject.toString())

@@ -68,4 +68,43 @@ where codename=#{codename} or dbid=#{dbid}
 </update>
 
 
+<update id="AData_Sort" parameterType="com.Info360.bean.Activitydata">
+update  tblCfg_ActivityData set SORT=#{sort}
+<if test="ActivityData_SORT_list.size() > 0">
+ 		<foreach item="value" index="key" collection="ActivityData_SORT_list"
+			open="," separator="," close="">
+ 	 		sort=#{value}
+		</foreach>
+	</if>
+where dbid=#{dbid} 
+	<if test="ActivityData_DBID_list.size() > 0">
+ 		<foreach item="value" index="key" collection="ActivityData_DBID_list"
+			open="or" separator="or" close="">
+ 	 		dbid=#{value}
+		</foreach>
+	</if>
+</update>
+
+<select id="Query_AData_Sort" parameterType="com.Info360.bean.Activitydata"  resultMap="activitydataResult">
+ Select DBID,SORT from tblCfg_ActivityData
+where sort=#{sort}
+<if test="ActivityData_SORT_list.size() > 0">
+ 		<foreach item="value" index="key" collection="ActivityData_SORT_list"
+			open="or" separator="or" close="">
+ 	 		sort=#{value}
+		</foreach>
+	</if>
+</select>
+
+<select id="Query_AData_DBID" parameterType="com.Info360.bean.Activitydata"  resultMap="activitydataResult">
+ Select DBID,SORT from tblCfg_ActivityData
+where dbid=#{dbid}
+<if test="ActivityData_DBID_list.size() > 0">
+ 		<foreach item="value" index="key" collection="ActivityData_DBID_list"
+			open="or" separator="or" close="">
+ 	 		dbid=#{value}
+		</foreach>
+	</if>
+</select>
+
 </mapper>

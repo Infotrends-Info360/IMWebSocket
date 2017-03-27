@@ -30,7 +30,7 @@ import com.Info360.service.MaintainService;
  * @author Lin
  */
 
-@Path("/AMenu_Sort")
+@Path("/AMenu_Sortdown")
 public class AMenu_Sort_Servlet {
 	
 	@POST

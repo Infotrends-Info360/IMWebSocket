@@ -47,6 +47,112 @@ import com.Info360.dao.CFG_personDao;
 public class MaintainService {
 	
 	
+	/**
+
+	 * @param Query_AGroup_DBID
+	 */
+
+	public List<Activitygroups> Query_AGroup_DBID(Activitygroups activitygroups) {
+		
+			List<Activitygroups> activitygroupslist = new ArrayList<Activitygroups>();
+			try {
+				ActivitygroupsDao activitygroupsdao = new ActivitygroupsDao();
+				activitygroupslist = activitygroupsdao.Query_AGroup_DBID(activitygroups);
+			} catch (Exception e) {
+				IsError.GET_EXCEPTION = e.getMessage();
+			}
+			return activitygroupslist;
+		
+	}
+	
+	/**
+
+	 * @param Query_AGroup_Sort
+	 */
+
+	public List<Activitygroups> Query_AGroup_Sort(Activitygroups activitygroups) {
+		
+			List<Activitygroups> activitygroupslist = new ArrayList<Activitygroups>();
+			try {
+				ActivitygroupsDao activitygroupsdao = new ActivitygroupsDao();
+				activitygroupslist = activitygroupsdao.Query_AGroup_Sort(activitygroups);
+			} catch (Exception e) {
+				IsError.GET_EXCEPTION = e.getMessage();
+			}
+			return activitygroupslist;
+		
+	}
+	
+	/**
+	 * AGroup_Sort
+	 * @param AGroup_Sort
+	 */
+	public int AGroup_Sort(Activitygroups activitygroups) {
+		int count = 0;
+		try {
+			ActivitygroupsDao activitygroupsdao = new ActivitygroupsDao();
+			count = activitygroupsdao.AGroup_Sort(activitygroups);
+		} catch (Exception e) {
+			IsError.GET_EXCEPTION = e.getMessage();
+			e.printStackTrace();
+			Util.getFileLogger().error(e.getMessage());
+		}
+		return count;
+	}
+	
+	/**
+
+	 * @param Query_AData_DBID
+	 */
+
+	public List<Activitydata> Query_AData_DBID(Activitydata activitydata) {
+		
+			List<Activitydata> activitydatalist = new ArrayList<Activitydata>();
+			try {
+				ActivitydataDao activitydatadao = new ActivitydataDao();
+				activitydatalist = activitydatadao.Query_AData_DBID(activitydata);
+			} catch (Exception e) {
+				IsError.GET_EXCEPTION = e.getMessage();
+			}
+			return activitydatalist;
+		
+	}
+	
+	/**
+
+	 * @param Query_AData_Sort
+	 */
+
+	public List<Activitydata> Query_AData_Sort(Activitydata activitydata) {
+		
+			List<Activitydata> activitydatalist = new ArrayList<Activitydata>();
+			try {
+				ActivitydataDao activitydatadao = new ActivitydataDao();
+				activitydatalist = activitydatadao.Query_AData_Sort(activitydata);
+			} catch (Exception e) {
+				IsError.GET_EXCEPTION = e.getMessage();
+			}
+			return activitydatalist;
+		
+	}
+	
+	/**
+	 * AData_Sort
+	 * @param AData_Sort
+	 */
+	public int AData_Sort(Activitydata activitydata) {
+		int count = 0;
+		try {
+			ActivitydataDao activitydatadao = new ActivitydataDao();
+			count = activitydatadao.AData_Sort(activitydata);
+		} catch (Exception e) {
+			IsError.GET_EXCEPTION = e.getMessage();
+			e.printStackTrace();
+			Util.getFileLogger().error(e.getMessage());
+		}
+		return count;
+	}
+	
 
 	/**
 	 * 
