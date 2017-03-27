@@ -89,7 +89,8 @@ public class FLAGDATA_Servlet {
         			activitydataObject.put("titlegroup", activitydatalist.get(g).getTitlegroup());
         			activitydataObject.put("titleflag", activitydatalist.get(g).getTitleflag());
         			activitydataObject.put("sort", activitydatalist.get(g).getSort());
-
+        			activitydataObject.put("createdatetime", activitydatalist.get(g).getCreatedatetime());
+        			
         			if(activitydatalist.get(g).getTitleflag()==0){
         				ActivitydataJsonArray.put(activitydataObject);
                 		

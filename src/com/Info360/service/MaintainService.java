@@ -46,9 +46,23 @@ import com.Info360.dao.CFG_personDao;
  */
 public class MaintainService {
 	
+	/**
+	 * @param TITLEGROUP_activitydata
+	 */
+
+	public List<Activitydata> TITLEGROUP_activitydata(Activitydata activitydata) {
+		
+			List<Activitydata> activitydatalist = new ArrayList<Activitydata>();
+			try {
+				ActivitydataDao activitydatadao = new ActivitydataDao();
+				activitydatalist = activitydatadao.TITLEGROUP_activitydata(activitydata);
+			} catch (Exception e) {
+				IsError.GET_EXCEPTION = e.getMessage();
+			}
+			return activitydatalist;
+	}
 	
 	/**
-
 	 * @param Query_AGroup_DBID
 	 */
 
