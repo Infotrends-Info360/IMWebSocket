@@ -56,8 +56,6 @@ public class Query_titlegroup_ActivityData_Servlet {
         	  		JSONObject activitydataObject = new JSONObject();
         	
         			activitydataObject.put("dbid", activitydatalist.get(g).getDbid());
-        			activitydataObject.put("createdatetime", activitydatalist.get(g).getCreatedatetime());
-        			activitydataObject.put("deletedatetime", activitydatalist.get(g).getDeletedatetime());
         			activitydataObject.put("activitygroupsid", activitydatalist.get(g).getActivitygroupsid());
         			activitydataObject.put("codename", activitydatalist.get(g).getCodename());
         			activitydataObject.put("color", activitydatalist.get(g).getColor());
@@ -66,8 +64,17 @@ public class Query_titlegroup_ActivityData_Servlet {
         			activitydataObject.put("titleflag", activitydatalist.get(g).getTitleflag());
         			activitydataObject.put("sort", activitydatalist.get(g).getSort());
         			
-        			ActivitydataJsonArray.put(activitydataObject);
+        			int a = Integer.valueOf(activitydatalist.get(g).getDeleteflag().trim());
+        			if(a==0){
+        				if(activitydatalist.get(g).getCreatedatetime()!=null&&activitydatalist.get(g).getCreatedatetime()!=""){
+                			activitydataObject.put("createdatetime", activitydatalist.get(g).getCreatedatetime());
+                			ActivitydataJsonArray.put(activitydataObject);
 
+        				}else{
+                			activitydataObject.put("createdatetime", "");
+                			ActivitydataJsonArray.put(activitydataObject);
+        				}
+        			}
         	  	}
 
     		}
