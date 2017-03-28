@@ -80,8 +80,8 @@ class TimerTaskSendHeartBeat extends TimerTask {
 		}else{
 			Util.getConsoleLogger().info( WebSocketUserPool.getUserNameByKey(conn) + " is disconnected. (HeartBeat)");				
 			Util.getFileLogger().info( WebSocketUserPool.getUserNameByKey(conn) + " is disconnected. (HeartBeat)");				
-			if (conn.isClosing() || conn.isClosed()) return;
 			timer.cancel();
+			if (conn.isClosing() || conn.isClosed()) return;
 			conn.close();
 		}
 		
