@@ -36,20 +36,20 @@ public class Query_titlegroup_ActivityData_Servlet {
 	@POST
 	@Produces("application/json")
 	public Response PostFromPath(
-			@FormParam("dbid") int dbid
+			@FormParam("titlegroup") int titlegroup
 			
 			) throws IOException {
 		
 		JSONObject jsonObject = new JSONObject();
 		Activitydata activitydata = new Activitydata();
 		
-		activitydata.setDbid(dbid);
+		activitydata.setTitlegroup(titlegroup);;
 	
 		MaintainService maintainservice = new MaintainService();	
 		
     			JSONArray ActivitydataJsonArray = new JSONArray();
 
-        	  	if(dbid!=0){	
+        	  	if(titlegroup!=0){	
     	  		List<Activitydata> activitydatalist = maintainservice.TITLEGROUP_activitydata(activitydata);
         	  	for(int g = 0; g < activitydatalist.size(); g++){
         	  		
