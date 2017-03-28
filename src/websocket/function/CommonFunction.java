@@ -97,6 +97,7 @@ public class CommonFunction {
 	/** * user join websocket * @param user */
 	public static void userjoin(String user, org.java_websocket.WebSocket aConn) {
 		Util.getConsoleLogger().debug("userjoin() called");
+		Util.getFileLogger().info("userjoin() called");
 		JsonObject obj = Util.getGJsonObject(user);
 		String username = Util.getGString(obj, "UserName");
 		String maxCount = Util.getGString(obj, "maxCount");
@@ -117,6 +118,7 @@ public class CommonFunction {
 			WebSocket oldAgentConn = WebSocketUserPool.getWebSocketByUserID(userId);
 			if (oldAgentConn != null){
 				Util.getConsoleLogger().debug("oldAgentConn exists");
+				Util.getFileLogger().info("oldAgentConn exists");
 				// 更新原JsonObject
 				sendjson.put("isLoggedIn", true);
 				sendjson.put("isLoggedInText", "已將前一個使用者剔除");
@@ -731,10 +733,11 @@ public class CommonFunction {
 	}
 	
 	public static void onCloseHelper(org.java_websocket.WebSocket aConn, String aReason){
+		Util.getFileLogger().info("onCloseHelper() called - userName: " + WebSocketUserPool.getUserNameByKey(aConn));
+		Util.getConsoleLogger().info("onCloseHelper() called - userName: " + WebSocketUserPool.getUserNameByKey(aConn));
+		
 		// 此方法沒有用到,先放著,並不會影響到主流程
 		//userLeave(conn);
-		Util.getConsoleLogger().info( WebSocketUserPool.getUserNameByKey(aConn) + " is disconnected. (onClose)");
-		Util.getFileLogger().info( WebSocketUserPool.getUserNameByKey(aConn) + " is disconnected. (onClose)");
 		UserInfo userInfo = WebSocketUserPool.getUserInfoByKey(aConn);
 		if (WebSocketTypePool.isAgent(aConn)){
 			userInfo.setClosing(true);
@@ -866,8 +869,14 @@ public class CommonFunction {
 		Util.getConsoleLogger().debug("after - roomids.size(): " + roomids.size());
 
 		// 清TYPE:
+		if (WebSocketTypePool.isAgent(conn)){
+			WebSocketTypePool.removeUserinTYPE("Agent", conn);			
+		}else if(WebSocketTypePool.isClient(conn)){
+			WebSocketTypePool.removeUserinTYPE("Client", conn);			
+		}
+		
+		// 此段先不更動,暫時調整清TYPE,確保會清理到
 		String ACType = WebSocketUserPool.getACTypeByKey(conn);
-		WebSocketTypePool.removeUserinTYPE(ACType, conn);
 		/*** 更新Agent list - 私訊用 ***/
 		if ("Agent".equals(ACType)){
 			AgentFunction.refreshAgentList();

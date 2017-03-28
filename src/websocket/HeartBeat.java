@@ -54,6 +54,8 @@ public class HeartBeat {
 		try{
 			WebSocketUserPool.sendMessageToUser(conn, sendjson.toString()); // 透過此去偵測使用者連線sessiong是否還在
 		}catch(WebsocketNotConnectedException e){
+			Util.getFileLogger().info(e.getMessage());
+			Util.getConsoleLogger().info(e.getMessage());
 			healthStatusHolder.setHealthStatus("RED"); // 透過此flag關掉HeartBeat排程
 		}
 	}// end of heartbeattouser	
@@ -83,12 +85,13 @@ class TimerTaskSendHeartBeat extends TimerTask {
 			Util.getFileLogger().info( WebSocketUserPool.getUserNameByKey(conn) + " is disconnected. (HeartBeat)");				
 			timer.cancel();
 			
+			// 若使用heartbeat, 會出現 "遠端主機已關閉一個現有連線", 
 			// 若已經失去連線,則只清理資料面訊息
-			if (conn.isClosing() || conn.isClosed())
-				CommonFunction.onCloseHelper(conn, "heartbeatMissed");
-			// 若尚未失去連線,則同時清理資料並關閉連線
-			else
-				conn.close();
+//			if (conn.isClosing() || conn.isClosed())
+//				CommonFunction.onCloseHelper(conn, "heartbeatMissed");
+//			// 若尚未失去連線,則同時清理資料並關閉連線
+//			else
+//				conn.close();
 			
 			
 				

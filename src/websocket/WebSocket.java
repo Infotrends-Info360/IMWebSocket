@@ -78,6 +78,8 @@ public class WebSocket extends WebSocketServer {
 	@Override
 	public void onClose(org.java_websocket.WebSocket conn, int message,
 			String reason, boolean remote) {
+		Util.getFileLogger().info("onClose() called - userName: " + WebSocketUserPool.getUserNameByKey(conn));
+		Util.getConsoleLogger().info("onClose() called - userName: " + WebSocketUserPool.getUserNameByKey(conn));
 		CommonFunction.onCloseHelper(conn, reason);
 	}
 
