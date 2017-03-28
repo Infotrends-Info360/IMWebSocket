@@ -20,6 +20,38 @@ import com.Info360.util.IsError;
 
 
 public class ActivitydataDao {
+	/**
+	 * TITLEGROUP_activitydata
+	 * @param TITLEGROUP_activitydata
+	 */
+	public List<Activitydata> TITLEGROUP_activitydata(Activitydata activitydata){
+		List<Activitydata> activitydatalist = new ArrayList<Activitydata>();
+		SqlSession sqlSession = null;
+	
+		try {
+			sqlSession = DBAccess.getSqlSession();
+			//通過sqlSession執行SQL語句
+			activitydatalist = sqlSession.selectList("activitydata.TITLEGROUP_activitydata", activitydata);
+			sqlSession.commit();
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+			IsError.GET_EXCEPTION = e.getMessage();
+			Util.getFileLogger().error(e.getMessage());
+		} catch (Exception e){
+			e.printStackTrace();
+			IsError.GET_EXCEPTION = e.getMessage();
+			Util.getFileLogger().error(e.getMessage());
+		} finally {
+			if(sqlSession != null){
+			   sqlSession.close();
+				DBAccess.sessonCount.decrementAndGet();
+				Util.getFileLogger().debug("DB session count: " + DBAccess.sessonCount.get());
+			}
+		}
+		return activitydatalist;
+	}
+	
 	
 	/**
 	 * Query_AData_DBID
