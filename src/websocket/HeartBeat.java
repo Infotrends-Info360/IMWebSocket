@@ -49,7 +49,7 @@ public class HeartBeat {
 	}
 	
 	public static void heartbeattouser(org.java_websocket.WebSocket conn, HeartBeat healthStatusHolder){
-		Util.getConsoleLogger().debug("heartbeattouser - " + WebSocketUserPool.getUserNameByKey(conn));
+//		Util.getConsoleLogger().debug("heartbeattouser - " + WebSocketUserPool.getUserNameByKey(conn));
 		JSONObject sendjson = new JSONObject();
 		try{
 			WebSocketUserPool.sendMessageToUser(conn, sendjson.toString()); // 透過此去偵測使用者連線sessiong是否還在
