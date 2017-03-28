@@ -11,6 +11,7 @@ import org.apache.logging.log4j.Level;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.java_websocket.WebSocket;
+import org.java_websocket.exceptions.WebsocketNotConnectedException;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
@@ -22,6 +23,7 @@ import com.google.gson.JsonObject;
 
 import util.StatusEnum;
 import util.Util;
+
 
 
 
@@ -109,13 +111,20 @@ public class CommonFunction {
 				// 更新原JsonObject
 				sendjson.put("isLoggedIn", true);
 				sendjson.put("isLoggedInText", "已將前一個使用者剔除");
-				// 這邊關掉,並告知前一個連線有人將其剔除
-				JSONObject loggedInAgainJson = new JSONObject();
-				loggedInAgainJson.put("Event", "userjoinAgain");
-				loggedInAgainJson.put("text", "你已被其他使用者剔除");
-				WebSocketUserPool.sendMessageToUser(oldAgentConn, loggedInAgainJson.toString());
-				// 清理相關資料
-				oldAgentConn.close();
+				try{
+					// 這邊關掉,並告知前一個連線有人將其剔除
+					JSONObject loggedInAgainJson = new JSONObject();
+					loggedInAgainJson.put("Event", "userjoinAgain");
+					loggedInAgainJson.put("text", "你已被其他使用者剔除");
+					WebSocketUserPool.sendMessageToUser(oldAgentConn, loggedInAgainJson.toString());
+					// 清理相關資料
+					oldAgentConn.close();
+				}catch(WebsocketNotConnectedException e){
+					Util.getFileLogger().info("e.getMessage(): " + e.getMessage());
+					Util.getConsoleLogger().info("e.getMessage(): " + e.getMessage());
+				}
+				// 確保一定將此Agent排除掉(再持續觀察)
+				WebSocketUserPool.removeUser(oldAgentConn);
 			}
 		}
 
