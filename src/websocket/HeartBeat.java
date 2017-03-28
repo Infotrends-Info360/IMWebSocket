@@ -48,6 +48,7 @@ public class HeartBeat {
 	}
 	
 	public static void heartbeattouser(org.java_websocket.WebSocket conn, HeartBeat healthStatusHolder){
+		Util.getConsoleLogger().debug("heartbeattouser - " + WebSocketUserPool.getUserNameByKey(conn));
 		JSONObject sendjson = new JSONObject();
 		try{
 			WebSocketUserPool.sendMessageToUser(conn, sendjson.toString()); // 透過此去偵測使用者連線sessiong是否還在
@@ -77,10 +78,11 @@ class TimerTaskSendHeartBeat extends TimerTask {
 		if ("GREEN".equals(this.healthStatusHolder.getHealthStatus())){
 			HeartBeat.heartbeattouser(conn,this.healthStatusHolder);
 		}else{
-			if (conn.isClosing() || conn.isClosed()) return;
 			Util.getConsoleLogger().info( WebSocketUserPool.getUserNameByKey(conn) + " is disconnected. (HeartBeat)");				
 			Util.getFileLogger().info( WebSocketUserPool.getUserNameByKey(conn) + " is disconnected. (HeartBeat)");				
+			if (conn.isClosing() || conn.isClosed()) return;
 			timer.cancel();
+			conn.close();
 		}
 		
 	}
