@@ -62,6 +62,7 @@ public class WebSocketUserPool {
 	/** * Get User Interaction By Key * @param session */ /* Done */
 	public static String getUserInteractionByKey(WebSocket conn) {
 		UserInfo tmpUserInfo = userallconnections.get(conn);
+		if (tmpUserInfo == null) return null;
 		return tmpUserInfo.getUserinteraction();
 //		return userallconnections.get(conn).getUserinteraction();
 	}

@@ -788,6 +788,8 @@ public class CommonFunction {
 	
 	private static void onClose_inputInteractionLog(org.java_websocket.WebSocket conn, String reason) {
 		Util.getConsoleLogger().debug("inputInteractionLog() called");
+		// 若不是Client, 就離開此方法
+		if (!WebSocketTypePool.isClient(conn)) return;
 		
 		// only Client stores userInteraction
 		String message = WebSocketUserPool.getUserInteractionByKey(conn); // 一定取得到: 1. 在user login時就會呼叫setUserInteraction, 2. 在user logut or 重整時也會呼叫setUserInteraction
@@ -816,7 +818,7 @@ public class CommonFunction {
 			
 			// 最後寫入
 			ClientFunction.interactionlog(obj.toString(), conn);			
-		}
+		}// end of if
 
 	}// end of interaction
 	
