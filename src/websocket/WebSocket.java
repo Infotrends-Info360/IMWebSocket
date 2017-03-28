@@ -78,23 +78,7 @@ public class WebSocket extends WebSocketServer {
 	@Override
 	public void onClose(org.java_websocket.WebSocket conn, int message,
 			String reason, boolean remote) {
-		// 此方法沒有用到,先放著,並不會影響到主流程
-		//userLeave(conn);
-		Util.getConsoleLogger().info( WebSocketUserPool.getUserNameByKey(conn) + " is disconnected. (onClose)");
-		Util.getFileLogger().info( WebSocketUserPool.getUserNameByKey(conn) + " is disconnected. (onClose)");
-		UserInfo userInfo = WebSocketUserPool.getUserInfoByKey(conn);
-		if (WebSocketTypePool.isAgent(conn)){
-			userInfo.setClosing(true);
-		}
-		// 將Heartbeat功能移轉到這裡:
-		inputInteractionLog(conn,reason);
-		updateStatus(conn);
-		clearUserData(conn); // 包含removeUser, removerUserinTYPE, removeUserinroom
-		
-		// 確認最後資訊:
-		Util.getConsoleLogger().debug("WebSocketUserPool.getUserCount(): " + WebSocketUserPool.getUserCount());
-		Util.getConsoleLogger().debug("WebSocketUserPool.getUserCount(): " + WebSocketUserPool.getUserCount());
-		
+		CommonFunction.onCloseHelper(conn, reason);
 	}
 
 	/** * trigger Exception Event */
@@ -285,94 +269,6 @@ public class WebSocket extends WebSocketServer {
 		}
 	}
 	
-	public static void clearUserData(org.java_websocket.WebSocket conn) {
-		Util.getConsoleLogger().debug("clearUserData() called");
-		// 清ReadyAgentQueue
-		if (WebSocketTypePool.isAgent(conn)){
-			String userid = WebSocketUserPool.getUserID(conn);
-			boolean result = false;
-			if ( WebSocketUserPool.getReadyAgentQueue().contains(userid)){
-				result = WebSocketUserPool.getReadyAgentQueue().remove(userid);
-			}
-			Util.getConsoleLogger().debug("(onClose)WebSocketUserPool.getReadyAgentQueue().remove(userid): " + result);
-			Util.getConsoleLogger().debug("(onClose)WebSocketUserPool.getReadyAgentQueue().size(): " + WebSocketUserPool.getReadyAgentQueue().size());
-		}
-		
-		// 清Client-findAgentTaskResult
-		if (WebSocketTypePool.isClient(conn)){
-			// 若有正在執行的findAgent sub thread正在等待,中斷它
-			UserInfo clientUserInfo = WebSocketUserPool.getUserInfoByKey(conn);
-			if (clientUserInfo.getFindAgentTaskResult() != null){
-				clientUserInfo.getFindAgentTaskResult().cancel(true);
-			}
-			// 若此Client曾經寄出的請求,仍然在queue排隊,移除它
-			if (WebSocketUserPool.getClientfindagentqueue().contains(clientUserInfo.getFindAgentCallable())){
-				Util.getFileLogger().info(FindAgentThread.TAG + " onClose - before queue size: " + WebSocketUserPool.getClientfindagentqueue().size());
-				WebSocketUserPool.getClientfindagentqueue().remove(clientUserInfo.getFindAgentCallable());
-				Util.getFileLogger().info(FindAgentThread.TAG + " onClose - after queue size: " + WebSocketUserPool.getClientfindagentqueue().size());
-			}
-		}
-
-		
-		// 清ROOM:
-		// 取得一個user所屬的所有roomid
-		List<String> roomids = WebSocketUserPool.getUserRoomByKey(conn);
-		List<String> tmpRoomids = new ArrayList<String>(roomids); // 重要: 為了接下來要動態移除掉UserInfo.userRoom List, 為了在跑迴圈時仍保留著reference variable, 故須用light copy建立另一相對物件, 這樣就能實現動態刪除
-		Util.getConsoleLogger().debug("before - roomids.size(): " + roomids.size());
-		Iterator<String> itr = tmpRoomids.iterator();
-		while(itr.hasNext()){
-			String roomid = itr.next();
-			Util.getConsoleLogger().debug("***** get roomid: " + roomid);
-			//使用每個roomid,並找出相對應的room,再將其中的conn remove掉
-			WebSocketRoomPool.removeUserinroom(roomid, conn); // 當room裡面user為 <=1 時,會把room從conatiner中去除掉,所以才需要light copy
-		}
-		Util.getConsoleLogger().debug("after - roomids.size(): " + roomids.size());
-
-		// 清TYPE:
-		String ACType = WebSocketUserPool.getACTypeByKey(conn);
-		WebSocketTypePool.removeUserinTYPE(ACType, conn);
-		/*** 更新Agent list - 私訊用 ***/
-		if ("Agent".equals(ACType)){
-			AgentFunction.refreshAgentList();
-		}
-		
-		// 清USER:
-		WebSocketUserPool.removeUser(conn);
-	}
-	
-	private void inputInteractionLog(org.java_websocket.WebSocket conn, String reason) {
-		Util.getConsoleLogger().debug("inputInteractionLog() called");
-		
-		// only Client stores userInteraction
-		String message = WebSocketUserPool.getUserInteractionByKey(conn); // 一定取得到: 1. 在user login時就會呼叫setUserInteraction, 2. 在user logut or 重整時也會呼叫setUserInteraction
-		Util.getConsoleLogger().debug("message: " + message);
-		String username = WebSocketUserPool.getUserNameByKey(conn);
-		
-		// 目前只有client端會再登入時、登出時、重整時寫入Log
-		if (message != null){
-			JsonObject obj = Util.getGJsonObject(message);
-			String closefrom = Util.getGString(obj, "closefrom");
-			Util.getConsoleLogger().debug("closefrom: " + closefrom);
-			// 正常登出是"client", 重整是空值, "default"待確認
-			if (closefrom == null || closefrom.equals("default")) {
-				obj.addProperty("status", 3);
-				obj.addProperty("stoppedreason", "server:HeartBeatLose"); // 看之後是否考慮更改為變數reason
-				obj.addProperty("closefrom", "server:HeartBeatLose"); 
-			}
-//			// 更新RoomOwnerAgentID
-//			String roomID =  obj.getString("ixnid"); // ixnid 就是 roomID
-//			obj.put("agentid", WebSocketRoomPool.getRoomInfo(roomID).getRoomOwnerAgentID()); // 取代前端傳入值
-			if (WebSocketTypePool.isClient(conn)){
-				UserInfo clientUserInfo = WebSocketUserPool.getUserInfoByKey(conn);
-				if (clientUserInfo.getRoomOwner() != null)
-					obj.addProperty("agentid", clientUserInfo.getRoomOwner()); 
-			}
-			
-			// 最後寫入
-			ClientFunction.interactionlog(obj.toString(), conn);			
-		}
-
-	}
 	
 	private void inviteAgentThirdParty(String message, org.java_websocket.WebSocket conn){
 		// 讀出送進來的JSON物件
@@ -602,46 +498,6 @@ public class WebSocket extends WebSocketServer {
 //			try {
 //				currTask = queue.take();
 	}
-	
-
-	private void updateStatus(org.java_websocket.WebSocket aConn) { // here
-		if (!WebSocketTypePool.isAgent(aConn)) return;
-		
-		UserInfo agentUserInfo = WebSocketUserPool.getUserInfoByKey(aConn);
-		Map<StatusEnum, String> statusDBIDMap = agentUserInfo.getStatusDBIDMap();
-		Set<StatusEnum> keys = new HashSet<>( statusDBIDMap.keySet() ); // 因為於更新end後,會將此StatusEnum key從map中移除->使用shallow copy避免出現concurrent Exception
-		UpdateStatusBean usb = null;
-		for (StatusEnum currStatusEnum : keys){ 
-			if (currStatusEnum.getDbid() == null) continue;
-			Util.getConsoleLogger().debug("currStatusEnum: " + currStatusEnum + " update end time");
-			usb = new UpdateStatusBean();
-			usb.setDbid(statusDBIDMap.get(currStatusEnum));
-			usb.setStatus(currStatusEnum.getDbid());
-			usb.setStartORend("end");
-			
-			if (StatusEnum.RING == currStatusEnum){
-				agentUserInfo.setStopRing(true);
-				Util.getConsoleLogger().debug("RING set to Stopped");
-				continue;
-			}
-			
-			if (StatusEnum.IESTABLISHED == currStatusEnum){
-				// removeUserinroom(...)會負責處理removeUserinroom
-				continue;
-			}
-			
-			if (StatusEnum.NOTREADY == currStatusEnum){
-				// 可於此處設定系統Logout或中斷離線時,預設的notreadyreason
-			}
-			
-			Util.getStatusFileLogger().info("###### [onClose()]");
-			CommonFunction.updateStatus(new Gson().toJson(usb), aConn);	
-		}
-		// 如果有dbid在,則寫入結束時間
-		
-	}
-
-
 	
 	private void test() {
 		Util.getConsoleLogger().debug("test() called");

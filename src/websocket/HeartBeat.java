@@ -11,6 +11,7 @@ import org.json.JSONObject;
 
 import util.Util;
 import websocket.function.ClientFunction;
+import websocket.function.CommonFunction;
 import websocket.pools.WebSocketRoomPool;
 import websocket.pools.WebSocketTypePool;
 import websocket.pools.WebSocketUserPool;
@@ -81,8 +82,16 @@ class TimerTaskSendHeartBeat extends TimerTask {
 			Util.getConsoleLogger().info( WebSocketUserPool.getUserNameByKey(conn) + " is disconnected. (HeartBeat)");				
 			Util.getFileLogger().info( WebSocketUserPool.getUserNameByKey(conn) + " is disconnected. (HeartBeat)");				
 			timer.cancel();
-			if (conn.isClosing() || conn.isClosed()) return;
-			conn.close();
+			
+			// 若已經失去連線,則只清理資料面訊息
+			if (conn.isClosing() || conn.isClosed())
+				CommonFunction.onCloseHelper(conn, "heartbeatMissed");
+			// 若尚未失去連線,則同時清理資料並關閉連線
+			else
+				conn.close();
+			
+			
+				
 		}
 		
 	}
