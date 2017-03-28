@@ -618,6 +618,7 @@ public class WebSocket extends WebSocketServer {
 			
 			if (StatusEnum.RING == currStatusEnum){
 				agentUserInfo.setStopRing(true);
+				Util.getConsoleLogger().debug("RING set to Stopped");
 				continue;
 			}
 			

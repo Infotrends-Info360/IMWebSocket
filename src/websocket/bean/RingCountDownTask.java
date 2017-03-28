@@ -29,6 +29,7 @@ public class RingCountDownTask extends TimerTask {
 	private Integer currCount = 0;
 	// RING status所需屬性
 	private WebSocket clientConn;
+	private String clientID;
 	private String ring_dbid;
 	// 讓所有物件皆牽連於特定一個UserInfo(composition)
 	private UserInfo agentUserInfo;
@@ -37,6 +38,8 @@ public class RingCountDownTask extends TimerTask {
 		this.clientConn = aConn;
 		this.ring_dbid = aRing_dbid;
 		this.agentUserInfo = aAgentUserInfo;
+		
+		clientID = WebSocketUserPool.getUserID(aConn);
 	}
 	
 	@Override
@@ -62,7 +65,7 @@ public class RingCountDownTask extends TimerTask {
 			Util.getStatusFileLogger().info("" + StatusEnum.RING + ": ");
 			Util.getStatusFileLogger().printf(Level.INFO,"%10s	%10s %10s %10s %10s %10s" , "status", "startORend", "dbid", "roomID", "clientID", "reason");
 			Util.getStatusFileLogger().info("----------------------------------------------------------------------------");
-			Util.getStatusFileLogger().printf(Level.INFO,"%10s	%10s %10s %10s %10s %10s" , StatusEnum.RING.getDbid(), "end" , this.ring_dbid, null, WebSocketUserPool.getUserID(clientConn), null);
+			Util.getStatusFileLogger().printf(Level.INFO,"%10s	%10s %10s %10s %10s %10s" , StatusEnum.RING.getDbid(), "end" , this.ring_dbid, null, this.clientID, null);
 			
 			AgentFunction.RecordStatusEnd(this.ring_dbid);
 			
