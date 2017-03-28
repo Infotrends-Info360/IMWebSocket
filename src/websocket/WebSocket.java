@@ -285,12 +285,15 @@ public class WebSocket extends WebSocketServer {
 		}
 	}
 	
-	private void clearUserData(org.java_websocket.WebSocket conn) {
+	public static void clearUserData(org.java_websocket.WebSocket conn) {
 		Util.getConsoleLogger().debug("clearUserData() called");
 		// 清ReadyAgentQueue
 		if (WebSocketTypePool.isAgent(conn)){
 			String userid = WebSocketUserPool.getUserID(conn);
-			boolean result = WebSocketUserPool.getReadyAgentQueue().remove(userid);
+			boolean result = false;
+			if ( WebSocketUserPool.getReadyAgentQueue().contains(userid)){
+				result = WebSocketUserPool.getReadyAgentQueue().remove(userid);
+			}
 			Util.getConsoleLogger().debug("(onClose)WebSocketUserPool.getReadyAgentQueue().remove(userid): " + result);
 			Util.getConsoleLogger().debug("(onClose)WebSocketUserPool.getReadyAgentQueue().size(): " + WebSocketUserPool.getReadyAgentQueue().size());
 		}

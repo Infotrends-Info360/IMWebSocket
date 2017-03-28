@@ -124,7 +124,8 @@ public class CommonFunction {
 					Util.getConsoleLogger().info("e.getMessage(): " + e.getMessage());
 				}
 				// 確保一定將此Agent排除掉(再持續觀察)
-				WebSocketUserPool.removeUser(oldAgentConn);
+				websocket.WebSocket.clearUserData(oldAgentConn);
+//				WebSocketUserPool.removeUser(oldAgentConn);
 			}
 		}
 
