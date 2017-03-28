@@ -129,22 +129,24 @@ public class CommonFunction {
 					loggedInAgainJson.put("text", "你已被其他使用者剔除");
 					WebSocketUserPool.sendMessageToUser(oldAgentConn, loggedInAgainJson.toString());
 					// 清理相關資料
-					oldAgentConn.close();
+//					oldAgentConn.close();
 				}catch(WebsocketNotConnectedException e){
 					Util.getFileLogger().info("e.getMessage(): " + e.getMessage());
 					Util.getConsoleLogger().info("e.getMessage(): " + e.getMessage());
-				}
-				// 確保一定將此Agent排除掉(再持續觀察)
-				// 若已經失去連線,則只清理資料面訊息
-				if (oldAgentConn.isClosing() || oldAgentConn.isClosed())
-					CommonFunction.onCloseHelper(oldAgentConn, "repeatedLogin");
-				// 若尚未失去連線,則同時清理資料並關閉連線
-				else
-					oldAgentConn.close();
+				}finally{
+					// 確保一定將此Agent排除掉(再持續觀察)
+					// 若已經失去連線,則只清理資料面訊息
+					if (oldAgentConn.isClosing() || oldAgentConn.isClosed())
+						CommonFunction.onCloseHelper(oldAgentConn, "repeatedLogin");
+					// 若尚未失去連線,則同時清理資料並關閉連線
+					else
+						oldAgentConn.close();
 //				clearUserData(oldAgentConn);
-//				WebSocketUserPool.removeUser(oldAgentConn);
-			}
-		}
+//				WebSocketUserPool.removeUser(oldAgentConn);					
+				}// end of try-catch-finally
+				
+			}// end of if (oldAgentConn != null)
+		}// end of if
 
 		/*** 開始新增使用者 ***/
 		if (ACtype.equals("Agent")){
