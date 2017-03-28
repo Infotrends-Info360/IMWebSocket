@@ -753,6 +753,7 @@ public class CommonFunction {
 	}
 	
 	private static void onClose_updateStatus(org.java_websocket.WebSocket aConn) { // here
+		Util.getConsoleLogger().debug("onClose_updateStatus() called");
 		if (!WebSocketTypePool.isAgent(aConn)) return;
 		
 		UserInfo agentUserInfo = WebSocketUserPool.getUserInfoByKey(aConn);
@@ -790,7 +791,7 @@ public class CommonFunction {
 	}// end of updateStatus()
 	
 	private static void onClose_inputInteractionLog(org.java_websocket.WebSocket conn, String reason) {
-		Util.getConsoleLogger().debug("inputInteractionLog() called");
+		Util.getConsoleLogger().debug("onClose_inputInteractionLog() called");
 		// 若不是Client, 就離開此方法
 		if (!WebSocketTypePool.isClient(conn)) return;
 		
@@ -826,7 +827,7 @@ public class CommonFunction {
 	}// end of interaction
 	
 	public static void onClose_clearUserData(org.java_websocket.WebSocket conn) {
-		Util.getConsoleLogger().debug("clearUserData() called");
+		Util.getConsoleLogger().debug("onClose_clearUserData() called");
 		// 清ReadyAgentQueue
 		if (WebSocketTypePool.isAgent(conn)){
 			String userid = WebSocketUserPool.getUserID(conn);
