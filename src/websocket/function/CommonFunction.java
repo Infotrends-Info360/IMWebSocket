@@ -217,6 +217,8 @@ public class CommonFunction {
 		JsonObject jsonIn = Util.getGJsonObject(aMsg);
 		String id = jsonIn.get("id").getAsString();
 		String UserName = jsonIn.get("UserName").getAsString();
+		UserInfo userInfo = WebSocketUserPool.getUserInfoByKey(aConn);
+		userInfo.setRingEndExpected(true);
 				
 		// 關係Heartbeat
 		Timer timer = WebSocketUserPool.getUserHeartbeatTimerByKey(aConn);
@@ -235,6 +237,7 @@ public class CommonFunction {
 				
 				// 關閉RING
 				UserInfo agentUserInfo = WebSocketUserPool.getUserInfoByKey(agentConn);
+				agentUserInfo.setRingEndExpected(true);
 				agentUserInfo.setStopRing(true);
 				
 				// 寄出"clientLeft",告知Agent有人離開了
@@ -589,6 +592,7 @@ public class CommonFunction {
 				dbid = AgentFunction.RecordStatusStart(userid, status_dbid, "0"); // 重要
 				userInfo.setStopRing(false); // 回復為預設false
 				userInfo.setTimeout(false); // 回復為預設false
+				userInfo.setRingEndExpected(false); // 回復為預設false
 				WebSocket clientConn = WebSocketUserPool.getWebSocketByUserID(clientID);
 				RingCountDownTask ringCountDownTask = new RingCountDownTask(clientConn, dbid, userInfo);
 				ringCountDownTask.operate();
@@ -629,6 +633,7 @@ public class CommonFunction {
 				
 				// 如果是RING結束,現在交由後端統一處理
 				if (StatusEnum.RING.getDbid().equals(status_dbid)){
+					userInfo.setRingEndExpected(true);
 					userInfo.setStopRing(true);
 					return;
 				}
@@ -772,6 +777,7 @@ public class CommonFunction {
 			usb.setStartORend("end");
 			
 			if (StatusEnum.RING == currStatusEnum){
+				// 若到了此處,agentUserInfo.setRingEndExpected(true);仍然未設定,則表示此次RING關閉並非預期內
 				agentUserInfo.setStopRing(true);
 				Util.getConsoleLogger().debug("RING set to Stopped");
 				continue;

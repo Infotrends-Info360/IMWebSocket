@@ -412,6 +412,7 @@ public class WebSocket extends WebSocketServer {
 			/*** 更新狀態 ***/
 			if (WebSocketTypePool.isAgent(userConn)){
 				// RING狀態結束			
+				userInfo.setRingEndExpected(true);
 				userInfo.setStopRing(true);
 				
 				// IESTABLISHED狀態開始 

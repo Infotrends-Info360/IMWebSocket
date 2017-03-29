@@ -46,16 +46,24 @@ public class RingCountDownTask extends TimerTask {
 	public void run() {
 		if (this.agentUserInfo.isStopRing()) {
 			Util.getConsoleLogger().info("TimerTaskRingHeartBeat - "  + "RING STOPPED");
-			Util.getFileLogger().info("TimerTaskRingHeartBeat - "  + "RING STOPPED");
+			Util.getConsoleLogger().info("TimerTaskRingHeartBeat - "  + "RING STOPPED");
+			Util.getFileLogger().info("TimerTaskRingHeartBeat - "  + this.agentUserInfo.isRingEndExpected());
 			this.timer.cancel();
 			// 若為超過時間狀況,告知Client,此通通話已經超過等待時間,請繼續找下一位Agent
+			JsonObject jsonTo = new JsonObject();
 			if (this.agentUserInfo.getTimeout()){
-				JsonObject jsonTo = new JsonObject();
 				jsonTo.addProperty("Event", "ringTimeout");
 				jsonTo.addProperty("clientID", WebSocketUserPool.getUserID(this.clientConn));
 				jsonTo.addProperty(SystemInfo.TAG_SYS_MSG, SystemInfo.getCancelLedReqMsg()); // 增加系統訊息
 				WebSocketUserPool.sendMessageToUser(this.clientConn, jsonTo.toString());
 				WebSocketUserPool.sendMessageToUser(WebSocketUserPool.getWebSocketByUserID(this.agentUserInfo.getUserid()), jsonTo.toString());
+			// 若為Agent按下重新整理,沒有正常透過Exit()方法結束,則需額外告知Client不要再等此為Agent了
+			}else if(!this.agentUserInfo.isRingEndExpected()){
+				jsonTo.addProperty("Event", "ringTimeout");
+				jsonTo.addProperty("clientID", WebSocketUserPool.getUserID(this.clientConn));
+				jsonTo.addProperty(SystemInfo.TAG_SYS_MSG, SystemInfo.getCancelLedReqMsg()); // 增加系統訊息
+				WebSocketUserPool.sendMessageToUser(this.clientConn, jsonTo.toString());
+				WebSocketUserPool.sendMessageToUser(WebSocketUserPool.getWebSocketByUserID(this.agentUserInfo.getUserid()), jsonTo.toString());				
 			}
 			
 			// 寫入DB
@@ -81,6 +89,7 @@ public class RingCountDownTask extends TimerTask {
 		if (this.currCount >= this.maxRingTime){
 			Util.getConsoleLogger().debug("TimerTaskRingHeartBeat - "  + "RING TIMEOUT");
 			Util.getFileLogger().info("TimerTaskRingHeartBeat - "  + "RING TIMEOUT");
+			this.agentUserInfo.setRingEndExpected(true);
 			this.agentUserInfo.setStopRing(true);
 			this.agentUserInfo.setTimeout(true);
 		}

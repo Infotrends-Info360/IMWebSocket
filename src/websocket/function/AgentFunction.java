@@ -61,6 +61,7 @@ public class AgentFunction {
 		/*** Agent - 更新狀態 ***/
 		UpdateStatusBean usb = null;
 		// RING狀態結束
+		agentUserInfo.setRingEndExpected(true);
 		agentUserInfo.setStopRing(true);
 		// 寫入REJECT狀態開始與結束
 		Util.getStatusFileLogger().info("###### [RejectEvent()]");

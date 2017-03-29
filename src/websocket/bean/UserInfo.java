@@ -37,6 +37,7 @@ public class UserInfo {
 	
 	private boolean isClosing = false;
 	private boolean isContactIDupdatedByAgent = false;
+	private boolean isRingEndExpected = false;
 	
 	private int maxCount = 0;
 	
@@ -181,6 +182,14 @@ public class UserInfo {
 	public void setMaxCount(int maxCount) {
 		this.maxCount = maxCount;
 	}
+	public boolean isRingEndExpected() {
+		return isRingEndExpected;
+	}
+	public void setRingEndExpected(boolean isRingEndNormally) {
+		this.isRingEndExpected = isRingEndNormally;
+	}
+	
+	
 	
 	
 }
