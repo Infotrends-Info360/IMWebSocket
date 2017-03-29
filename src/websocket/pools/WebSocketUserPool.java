@@ -204,9 +204,7 @@ public class WebSocketUserPool {
 //		Util.getConsoleLogger().debug("sendMessageToUser() called - to - conn: " + conn);
 		
 		try{
-			if (null != conn) {
-				conn.send(message);
-			}
+			sendMessageToUser(conn, message);
 		}catch(WebsocketNotConnectedException e){
 			Util.getConsoleLogger().debug(e.getMessage());
 			Util.getFileLogger().info(e.getMessage());
