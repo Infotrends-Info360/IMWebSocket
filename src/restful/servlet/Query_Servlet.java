@@ -97,6 +97,7 @@ public class Query_Servlet {
 	  	    	if(interactionlist.get(a).getAgentid()!=null &&
 		  					!interactionlist.get(a).getAgentid().equals("") &&
 		  						!interactionlist.get(a).getAgentid().equals("null")&&
+		  						interactionlist.get(a).getIxnid()!=null&&
 		  						!interactionlist.get(a).getIxnid().equals("")&&
 		  						!interactionlist.get(a).getIxnid().equals("null")){	
 		    		Integer bb = Integer.valueOf(interactionlist.get(a).getAgentid());
