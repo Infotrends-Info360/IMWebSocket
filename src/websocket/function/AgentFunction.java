@@ -47,7 +47,7 @@ public class AgentFunction {
 		sendjson.put("fromName", obj.getString("UserName"));
 		sendjson.put("roomID", roomID);
 		sendjson.put("channel", obj.getString("channel"));
-		WebSocketUserPool.sendMessageToUser(sendto, sendjson.toString());
+		WebSocketUserPool.sendMessageToUserWithTryCatch(sendto, sendjson.toString());
 	}
 
 	/** * RejectEvent */
@@ -77,8 +77,8 @@ public class AgentFunction {
 		sendjson.put("fromName", obj.getString("UserName"));
 		sendjson.put("channel", obj.getString("channel"));
 		sendjson.put(SystemInfo.TAG_SYS_MSG, SystemInfo.getCancelLedReqMsg()); // 增加系統訊息
-		WebSocketUserPool.sendMessageToUser(sendto, sendjson.toString());
-		WebSocketUserPool.sendMessageToUser(aConn, sendjson.toString());
+		WebSocketUserPool.sendMessageToUserWithTryCatch(sendto, sendjson.toString());
+		WebSocketUserPool.sendMessageToUserWithTryCatch(aConn, sendjson.toString());
 	}
 
 	/** * get Agent Status */
@@ -95,7 +95,7 @@ public class AgentFunction {
 		sendjson.put("Status", statusEnum.getDbid());
 		sendjson.put("Reason", reason);
 		sendjson.put("channel", obj.getString("channel"));
-		WebSocketUserPool.sendMessageToUser(conn, sendjson.toString());
+		WebSocketUserPool.sendMessageToUserWithTryCatch(conn, sendjson.toString());
 	}
 
 	/** * create a roomId * @param message */
@@ -105,7 +105,7 @@ public class AgentFunction {
 		JSONObject sendjson = new JSONObject();
 		sendjson.put("Event", "createroomId");
 		sendjson.put("roomId", roomId);
-		WebSocketUserPool.sendMessageToUser(conn, sendjson.toString());
+		WebSocketUserPool.sendMessageToUserWithTryCatch(conn, sendjson.toString());
 	}
 
 	/** * Get Message from Agent or Client list */
@@ -133,7 +133,7 @@ public class AgentFunction {
 			sendjson02.put("Event", "refreshAgentList");
 			sendjson02.put("agentIDList", agentIDList);
 			if (tmpConn.isClosed() || tmpConn.isClosing()) continue;
-			WebSocketUserPool.sendMessageToUser(tmpConn, sendjson02.toString());
+			WebSocketUserPool.sendMessageToUserWithTryCatch(tmpConn, sendjson02.toString());
 		}
 	}
 	

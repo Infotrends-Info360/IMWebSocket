@@ -185,7 +185,7 @@ public class WebSocketRoomPool{
 				}
 				Util.getConsoleLogger().debug("WebSocketUserPool.getUserNameByKey(conn): " + WebSocketUserPool.getUserNameByKey(conn));
 				
-				WebSocketUserPool.sendMessageToUser(conn, sendJson.toString());
+				WebSocketUserPool.sendMessageToUserWithTryCatch(conn, sendJson.toString());
 			}
 			
 //			Util.getConsoleLogger().debug("roomMap.size() - before: " + roomMap.size());

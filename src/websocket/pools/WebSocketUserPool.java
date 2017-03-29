@@ -189,7 +189,7 @@ public class WebSocketUserPool {
 		
 	}
 
-	/** * Send Message to a User * @param user * @param message */ /* Done */
+	/** * Send Message to a User * @param user * @param message */ /* 給Heartbeat使用 */
 	public static void sendMessageToUser(WebSocket conn, String message) throws WebsocketNotConnectedException{
 //		Util.getConsoleLogger().debug("sendMessageToUser() called - to - conn: " + conn);
 		if (null != conn) {
@@ -198,6 +198,24 @@ public class WebSocketUserPool {
 		}
 	}
 
+	
+	/** * Send Message to a User * @param user * @param message */ /* Done */
+	public static void sendMessageToUserWithTryCatch(WebSocket conn, String message){
+//		Util.getConsoleLogger().debug("sendMessageToUser() called - to - conn: " + conn);
+		
+		try{
+			if (null != conn) {
+				conn.send(message);
+			}
+		}catch(WebsocketNotConnectedException e){
+			Util.getConsoleLogger().debug(e.getMessage());
+			Util.getFileLogger().info(e.getMessage());
+		}
+		
+		
+	}
+	
+	
 	/** * Send Message to all of User * @param message */ /* Done */
 	public static void sendMessage(String message) {	
 		Set<WebSocket> conns = userallconnections.keySet();

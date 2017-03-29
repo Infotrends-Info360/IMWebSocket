@@ -291,7 +291,7 @@ public class WebSocket extends WebSocketServer {
 		
 		// 寄給invitedAgent:
 		org.java_websocket.WebSocket invitedAgent_conn = WebSocketUserPool.getWebSocketByUserID(invitedAgentID);
-		WebSocketUserPool.sendMessageToUser(invitedAgent_conn, obj.toString());
+		WebSocketUserPool.sendMessageToUserWithTryCatch(invitedAgent_conn, obj.toString());
 		
 //		type : "inviteAgentThirdParty",
 //		ACtype : "Agent",
@@ -338,7 +338,7 @@ public class WebSocket extends WebSocketServer {
 												+ SystemInfo.getJoinedRoomMsg(invitedAgentName)); // 傳出系統訊息
 				
 				// 通知要離開的使用者清除前端頁面
-				WebSocketUserPool.sendMessageToUser(WebSocketUserPool.getWebSocketByUserID(fromAgentID), obj.toString());
+				WebSocketUserPool.sendMessageToUserWithTryCatch(WebSocketUserPool.getWebSocketByUserID(fromAgentID), obj.toString());
 				WebSocketRoomPool.removeUserinroom(roomID, WebSocketUserPool.getWebSocketByUserID(fromAgentID));
 			}else if("thirdParty".equals(inviteType)){
 				obj.put(SystemInfo.TAG_SYS_MSG, SystemInfo.getJoinedRoomMsg(invitedAgentName)); // 傳出系統訊息
@@ -348,7 +348,7 @@ public class WebSocket extends WebSocketServer {
 			
 		}else if("reject".equals(response)){
 			Util.getConsoleLogger().debug("responseThirdParty() - reject");			
-			WebSocketUserPool.sendMessageToUser(WebSocketUserPool.getWebSocketByUserID(fromAgentID), obj.toString());
+			WebSocketUserPool.sendMessageToUserWithTryCatch(WebSocketUserPool.getWebSocketByUserID(fromAgentID), obj.toString());
 		}
 	
 	}
@@ -467,7 +467,7 @@ public class WebSocket extends WebSocketServer {
 			String userNameListStr = userNameList.toString();
 			sendJson.addProperty(SystemInfo.TAG_SYS_MSG, SystemInfo.getJoinedRoomMsg(userNameListStr.substring(1,userNameListStr.length()-1))); // 增加系統訊息
 			sendJson.add("roomList", roomIDListJson);
-			WebSocketUserPool.sendMessageToUser(userConn,sendJson.toString());	
+			WebSocketUserPool.sendMessageToUserWithTryCatch(userConn,sendJson.toString());	
 		}
 		
 	}

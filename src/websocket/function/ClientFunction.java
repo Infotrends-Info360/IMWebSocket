@@ -55,7 +55,7 @@ public class ClientFunction {
 		sendjson.put("from", obj.getString("id"));
 		sendjson.put("fromName",  obj.getString("UserName"));
 		sendjson.put("channel", obj.getString("channel"));
-		WebSocketUserPool.sendMessageToUser(sendto, sendjson.toString());
+		WebSocketUserPool.sendMessageToUserWithTryCatch(sendto, sendjson.toString());
 	}
 	
 	/** * find online Longest Agent */
@@ -99,7 +99,7 @@ public class ClientFunction {
 		sendjson.put("from", obj.getString("id"));
 		sendjson.put("Agent",  AgentID);
 		sendjson.put("channel", obj.getString("channel"));
-		WebSocketUserPool.sendMessageToUser(aConn, sendjson.toString());
+		WebSocketUserPool.sendMessageToUserWithTryCatch(aConn, sendjson.toString());
 	}
 	
 	/** * Get user data */
@@ -192,7 +192,7 @@ public class ClientFunction {
 		if (sendtoConn != null){
 			sendjson.put("clientID", WebSocketUserPool.getUserID(conn).trim());
 			sendjson.put("clientName", WebSocketUserPool.getUserNameByKey(conn).trim());
-			WebSocketUserPool.sendMessageToUser(sendtoConn, sendjson.toString());			
+			WebSocketUserPool.sendMessageToUserWithTryCatch(sendtoConn, sendjson.toString());			
 			
 			// 開始RING倒數機制
 //				// 3. RING狀態開始
@@ -210,7 +210,7 @@ public class ClientFunction {
 		/** 通知client, 其userdata資料(loginj狀況) **/
 		if (sendtoConn == null){
 //		Util.getConsoleLogger().debug("senduserdata() - sendjson" + sendjson);
-			WebSocketUserPool.sendMessageToUser(conn, sendjson.toString());			
+			WebSocketUserPool.sendMessageToUserWithTryCatch(conn, sendjson.toString());			
 		}
 
 		

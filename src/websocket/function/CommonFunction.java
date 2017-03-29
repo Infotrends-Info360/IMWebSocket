@@ -81,7 +81,7 @@ public class CommonFunction {
 		/*** 原方法內容 ***/
 		org.java_websocket.WebSocket sendto = WebSocketUserPool.getWebSocketByUserID(
 											  obj.getString("sendto"));
-		WebSocketUserPool.sendMessageToUser(sendto,
+		WebSocketUserPool.sendMessageToUserWithTryCatch(sendto,
 											username + " private message to " + obj.getString("sendto")
 											+ ": " + obj.getString("text"));		
 		/*** 三方-私訊: A2A ***/
@@ -90,8 +90,8 @@ public class CommonFunction {
 //		Util.getConsoleLogger().debug("sendto" +  sendto);
 		obj.put("UserID", userID);
 		obj.put("UserName", username);
-		WebSocketUserPool.sendMessageToUser(conn, obj.toString());
-		WebSocketUserPool.sendMessageToUser(sendto, obj.toString());
+		WebSocketUserPool.sendMessageToUserWithTryCatch(conn, obj.toString());
+		WebSocketUserPool.sendMessageToUserWithTryCatch(sendto, obj.toString());
 	}
 	
 	/** * user join websocket * @param user */
@@ -127,7 +127,7 @@ public class CommonFunction {
 					JSONObject loggedInAgainJson = new JSONObject();
 					loggedInAgainJson.put("Event", "userjoinAgain");
 					loggedInAgainJson.put("text", "你已被其他使用者剔除");
-					WebSocketUserPool.sendMessageToUser(oldAgentConn, loggedInAgainJson.toString());
+					WebSocketUserPool.sendMessageToUserWithTryCatch(oldAgentConn, loggedInAgainJson.toString());
 					// 清理相關資料
 //					oldAgentConn.close();
 				}catch(WebsocketNotConnectedException e){
@@ -168,7 +168,7 @@ public class CommonFunction {
 		Util.getFileLogger().info("Util.getAgentReason(): " + Util.getAgentReason());
 		Util.getConsoleLogger().debug("Util.getAgentStatus(): " + Util.getAgentStatus());
 		Util.getFileLogger().info("Util.getAgentStatus(): " + Util.getAgentStatus());
-		WebSocketUserPool.sendMessageToUser(aConn, sendjson.toString());
+		WebSocketUserPool.sendMessageToUserWithTryCatch(aConn, sendjson.toString());
 //		WebSocketUserPool.sendMessage("online people: "
 //				+ WebSocketUserPool.getOnlineUser().toString());
 		
@@ -207,7 +207,7 @@ public class CommonFunction {
 	
 	/** ask online people **/
 	public static void online(String message, org.java_websocket.WebSocket conn) {
-		WebSocketUserPool.sendMessageToUser(conn, "online people: "
+		WebSocketUserPool.sendMessageToUserWithTryCatch(conn, "online people: "
 				+ WebSocketUserPool.getOnlineUser().toString());
 	}
 	
@@ -242,7 +242,7 @@ public class CommonFunction {
 				jsonTo.addProperty("Event", "clientLeft");
 				jsonTo.addProperty("from", WebSocketUserPool.getUserID(aConn));
 				
-				WebSocketUserPool.sendMessageToUser(agentConn, jsonTo.toString());
+				WebSocketUserPool.sendMessageToUserWithTryCatch(agentConn, jsonTo.toString());
 			}			
 		}
 		
@@ -264,7 +264,8 @@ public class CommonFunction {
 				    WebSocket clientConn = WebSocketUserPool.getWebSocketByUserID(clientID);
 				    Util.getConsoleLogger().debug("userExit() - waitting clientID: " + clientID);
 				    jsonIn.addProperty("Event", "agentLeft");
-					WebSocketUserPool.sendMessageToUser(clientConn, jsonIn.toString());
+				    jsonIn.addProperty(SystemInfo.TAG_SYS_MSG, SystemInfo.getCancelLedReqMsg()); // 增加系統訊息
+					WebSocketUserPool.sendMessageToUserWithTryCatch(clientConn, jsonIn.toString());
 				    
 				}				
 			}
@@ -282,7 +283,7 @@ public class CommonFunction {
 				    WebSocket agentConn = WebSocketUserPool.getWebSocketByUserID(agentID);
 //				    Util.getConsoleLogger().debug("userExit() - agentID: " + agentID);
 				    jsonIn.addProperty("Event", "agentLeftThirdParty");
-					WebSocketUserPool.sendMessageToUser(agentConn, jsonIn.toString());
+					WebSocketUserPool.sendMessageToUserWithTryCatch(agentConn, jsonIn.toString());
 				}
 			}
 //			for(String clientID: waittingClientIDList){
@@ -293,11 +294,11 @@ public class CommonFunction {
 		// 寄送Exit訊息回去,告知server已處理好,可以關閉連線了
 	    JsonObject jsonOut = new JsonObject();
 		jsonOut.addProperty("Event", "Exit");
-		WebSocketUserPool.sendMessageToUser(aConn, jsonOut.toString());
+		WebSocketUserPool.sendMessageToUserWithTryCatch(aConn, jsonOut.toString());
 
 		//Billy哥部分前端需求:
 		String joinMsg = "[Server] - " + UserName + " Offline";
-		WebSocketUserPool.sendMessageToUser(aConn, joinMsg); // 只須原登出Agent收到此訊息即可
+		WebSocketUserPool.sendMessageToUserWithTryCatch(aConn, joinMsg); // 只須原登出Agent收到此訊息即可
 		
 		
 //		Util.getConsoleLogger().debug("before close: " + WebSocketUserPool.getUserID(aConn));
@@ -391,7 +392,7 @@ public class CommonFunction {
 	public static void onlineinRoom(String message, org.java_websocket.WebSocket conn) {
 		JSONObject obj = new JSONObject(message);
 		String roomID = obj.getString("roomID");
-		WebSocketUserPool.sendMessageToUser(conn, "room people: "
+		WebSocketUserPool.sendMessageToUserWithTryCatch(conn, "room people: "
 				+ WebSocketRoomPool.getOnlineUserNameinroom(roomID).toString());
 	}
 	
@@ -403,7 +404,7 @@ public class CommonFunction {
 
 		/**** 告知現在在線Agent有誰 - 放在訊息中 ****/
 		Collection<String> agentNameList = WebSocketTypePool.getOnlineUserNameinTYPE(ACtype);
-		WebSocketUserPool.sendMessageToUser(conn, ACtype + " people: " + agentNameList.toString());
+		WebSocketUserPool.sendMessageToUserWithTryCatch(conn, ACtype + " people: " + agentNameList.toString());
 		
 		/**** 告知現在在線Agent有誰 - 顯示在'線上Agents'表格中 ****/
 		JSONObject sendjson = new JSONObject();
@@ -415,7 +416,7 @@ public class CommonFunction {
 		sendjson.put("ACtype", ACtype);
 		sendjson.put("channel", obj.getString("channel"));
 		// 修正為只跟要求知道現在在線人員的user就好,而非整個user都要知道:
-		WebSocketUserPool.sendMessageToUser(conn, sendjson.toString());
+		WebSocketUserPool.sendMessageToUserWithTryCatch(conn, sendjson.toString());
 //		WebSocketTypePool.sendMessageinTYPE(ACtype,sendjson.toString());
 	}
 	
@@ -518,7 +519,7 @@ public class CommonFunction {
 					maxCountMsg.addProperty("Event", "updateStatus");
 					maxCountMsg.addProperty("maxCountReached", true);
 					maxCountMsg.addProperty("currStatusEnum", StatusEnum.NOTREADY.toString());
-					WebSocketUserPool.sendMessageToUser(aConn, maxCountMsg.toString());
+					WebSocketUserPool.sendMessageToUserWithTryCatch(aConn, maxCountMsg.toString());
 					return;
 				}
 				
@@ -643,7 +644,7 @@ public class CommonFunction {
 					}else if (userInfo.isNotReady()){
 						ACWCountMsg.addProperty("currStatusEnum", StatusEnum.NOTREADY.toString());
 					}
-					WebSocketUserPool.sendMessageToUser(aConn, ACWCountMsg.toString());
+					WebSocketUserPool.sendMessageToUserWithTryCatch(aConn, ACWCountMsg.toString());
 //					return; // 先於此停住,若以後需要回傳結束事件時,再加上去
 				}
 								
@@ -658,7 +659,7 @@ public class CommonFunction {
 		obj.addProperty("Event", "updateStatus");
 		obj.addProperty("currStatusEnum", currStatusEnum.toString());
 		if (aConn.isClosing() || aConn.isClosed()) return;
-		WebSocketUserPool.sendMessageToUser(aConn, obj.toString());
+		WebSocketUserPool.sendMessageToUserWithTryCatch(aConn, obj.toString());
 		
 	}
 	
@@ -715,7 +716,7 @@ public class CommonFunction {
 		
 		
 		// end of 將此Agent所屬的Room list塞入json中
-		WebSocketUserPool.sendMessageToUser(conn, sendJson.toString());
+		WebSocketUserPool.sendMessageToUserWithTryCatch(conn, sendJson.toString());
 	}
 	
 	private static void refreshClientList(String user){
