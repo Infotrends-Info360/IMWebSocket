@@ -45,6 +45,31 @@ public class CFG_personDao {
 		return cfg_personList;
 	}
 	
+	/**
+	 * @param Query_PersonInfo_STATE
+	 */
+	public List<CFG_person> Query_PersonInfo_STATE(CFG_person   cfg_person){
+		List<CFG_person> cfg_personList = new ArrayList<CFG_person>();
+		SqlSession sqlSession = null;
+		
+		
+		try {
+			sqlSession = DBAccess.getSqlSession();
+			//通過sqlSession執行SQL語句
+			cfg_personList = sqlSession.selectList("cfg_person.Query_PersonInfo_STATE", cfg_person);
+			sqlSession.commit();
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			//e.printStackTrace();
+			IsError.GET_EXCEPTION = e.getMessage();
+		} finally {
+			if(sqlSession != null){
+			   sqlSession.close();
+			}
+		}
+		return cfg_personList;
+	}
+	
 	
 	
 }

@@ -39,7 +39,9 @@ public class Query_Servlet {
 			
 			@FormParam("startdate") String startdate,
 			@FormParam("enddate") String enddate,
-			@FormParam("agentid") String agentid
+			@FormParam("agentid") String agentid,
+			@FormParam("contactid") String contactid
+
 			
 			
 //			@FormParam("interactionid") String interactionid
@@ -57,6 +59,9 @@ public class Query_Servlet {
 		interaction.setEnddate(enddate);
 		if(agentid!=null){
 			interaction.setAgentid(agentid);
+		}
+		if(contactid!=null){
+			interaction.setContactid(contactid);
 		}
 		
 		
@@ -91,7 +96,9 @@ public class Query_Servlet {
 	  	    	
 	  	    	if(interactionlist.get(a).getAgentid()!=null &&
 		  					!interactionlist.get(a).getAgentid().equals("") &&
-		  						!interactionlist.get(a).getAgentid().equals("null")){	
+		  						!interactionlist.get(a).getAgentid().equals("null")&&
+		  						!interactionlist.get(a).getIxnid().equals("")&&
+		  						!interactionlist.get(a).getIxnid().equals("null")){	
 		    		Integer bb = Integer.valueOf(interactionlist.get(a).getAgentid());
 					cfg_person.setDbid(bb);
 					

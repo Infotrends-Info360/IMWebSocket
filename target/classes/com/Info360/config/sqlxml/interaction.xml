@@ -70,6 +70,10 @@ FROM tblInteraction where 1=1
  	and 
  		AGENTID =#{agentid}
 </if>
+<if test="contactid!=&quot;&quot; &amp;&amp;contactid!=null ">
+ 	and 
+ 		CONTACTID =#{contactid}
+</if>
 <if test="startdate!=&quot;&quot;&amp;&amp;agentid!=null">
 	and
  		<![CDATA[ Convert(DateTime,StartDate) >=Convert(DateTime,#{startdate})]]>

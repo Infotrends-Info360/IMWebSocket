@@ -47,6 +47,23 @@ import com.Info360.dao.CFG_personDao;
 public class MaintainService {
 	
 	/**
+	 * @param Query_PersonInfo_STATE
+	 */
+	public List<CFG_person> Query_PersonInfo_STATE(CFG_person cfg_person) {
+		
+			List<CFG_person> cfg_personlist = new ArrayList<CFG_person>();
+			try {
+				CFG_personDao cfg_persondao = new CFG_personDao();
+				cfg_personlist = cfg_persondao.Query_PersonInfo_STATE(cfg_person);
+			} catch (Exception e) {
+				IsError.GET_EXCEPTION = e.getMessage();
+			}
+			return cfg_personlist;
+	}
+	
+	
+	
+	/**
 	 * @param TITLEGROUP_activitydata
 	 */
 

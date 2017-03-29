@@ -28,7 +28,7 @@ import com.Info360.service.MaintainService;
  * @author Lin
  */
 
-@Path("/Query_All[erson")
+@Path("/Query_Allperson")
 public class Query_Allperson_Servlet {
 	
 
@@ -37,96 +37,40 @@ public class Query_Allperson_Servlet {
 	@Produces("application/json")
 	public Response PostFromPath(
 			
-			@FormParam("startdate") String startdate,
-			@FormParam("enddate") String enddate,
-			@FormParam("agentid") String agentid
-			
-			
-//			@FormParam("interactionid") String interactionid
+			@FormParam("state") int state
+//			@FormParam("dbid") int dbid
+
 			
 			) throws IOException {
 		
 		JSONObject jsonObject = new JSONObject();
-		
-		Interaction interaction = new Interaction();
-		Rpt_Activitylog rpt_activitylog = new Rpt_Activitylog();
-		Activitydata activitydata = new Activitydata();
 		CFG_person cfg_person = new CFG_person();
 		
-		interaction.setStartdate(startdate);
-		interaction.setEnddate(enddate);
-		if(agentid!=null){
-			interaction.setAgentid(agentid);
-		}
-		
-		
-		MaintainService maintainservice = new MaintainService();		
-		List<Interaction> interactionlist = maintainservice.Selcet_interaction(interaction);
-		
+		List<String> personname = new ArrayList<String>();
+		List<Integer> persondbid = new ArrayList<Integer>();
+
 		JSONArray PersonJsonArray = new JSONArray();
-		JSONArray testArray = new JSONArray();
+		MaintainService maintainservice = new MaintainService();		
+
+		cfg_person.setState(state);
+		List<CFG_person> personlist = maintainservice.Query_PersonInfo_STATE(cfg_person);
+	    	for(int a = 0; a < personlist.size(); a++){
+				JSONObject cfg_personObject = new JSONObject();
+
+	    		personname.add(personlist.get(a).getAccount());
+	    		persondbid.add(personlist.get(a).getDbid());
+				cfg_personObject.put("username", personlist.get(a).getAccount());
+				cfg_personObject.put("dbid", personlist.get(a).getDbid());
+
+				PersonJsonArray.put(cfg_personObject);
+	    	}
 		
-		
+//	    	for(int b = 0; b<persondbid.size();b++){
+//	    		List<CFG_person> personlist = maintainservice.Query_PersonInfo_STATE(cfg_person);
+//
+//	    	}
 
-  	    	for(int a = 0; a < interactionlist.size(); a++){
-
-  	    	String name = "";
-  	    		
-  	    	rpt_activitylog.setInteractionid(interactionlist.get(a).getIxnid());
-  	    	List<Rpt_Activitylog> rpt_activityloglist = maintainservice.Selcet_activitylog(rpt_activitylog);
-  	    	
-	  	    	for(int g = 0; g < rpt_activityloglist.size(); g++){
-	  	    		if(rpt_activityloglist.get(g).getActivitydataid()!=null &&
-	  					!rpt_activityloglist.get(g).getActivitydataid().equals("") &&
-	  						!rpt_activityloglist.get(g).getActivitydataid().equals("null")){
-	  	    				activitydata.setDbid(Integer.valueOf(rpt_activityloglist.get(g).getActivitydataid()));
-	  	  	    			List<Activitydata> activitydatalist = maintainservice.IXN_activitydata(activitydata);
-	  	  	    			if(activitydatalist.size()>0){
-	  	  	    				name+=activitydatalist.get(0).getCodename()+",";
-	  	  	    			}else{
-	  	  	    				name+=rpt_activityloglist.get(g).getActivitydataid()+"[無此代碼],";
-	  	  	    			}
-	  	    		}
-	  	    	}	
-	  	    	
-	  	    	if(interactionlist.get(a).getAgentid()!=null &&
-		  					!interactionlist.get(a).getAgentid().equals("") &&
-		  						!interactionlist.get(a).getAgentid().equals("null")){	
-		    		Integer bb = Integer.valueOf(interactionlist.get(a).getAgentid());
-					cfg_person.setDbid(bb);
-					
-
-			    	List<CFG_person> cfg_personlist = maintainservice.query_Person_DBID(cfg_person);
-					//for(int d = 0; d < cfg_personlist.size(); d++){
-							JSONObject cfg_personObject = new JSONObject();
-							cfg_personObject.put("username", cfg_personlist.get(0).getUser_name());
-							PersonJsonArray.put(cfg_personObject);
-							JSONObject testobj = new JSONObject();
-							testobj.put("Agentname", cfg_personlist.get(0).getUser_name());
-							if(interactionlist.get(a).getThecomment()!=null){
-								testobj.put("Thecomment", interactionlist.get(a).getThecomment());
-							}else{
-								testobj.put("Thecomment", "");
-							}
-							
-							testobj.put("Startdate", interactionlist.get(a).getStartdate().substring(0, 19));
-							testobj.put("Enddate", interactionlist.get(a).getEnddate().substring(0, 19));
-							if(name.length()>0){
-								testobj.put("Codename",name.substring(0, name.length()-1));
-							}else{
-								testobj.put("Codename",name);
-							}
-							testobj.put("ixnid", interactionlist.get(a).getIxnid());
-							if(interactionlist.get(a).getEntitytypeid().equals("2")){
-								testobj.put("src", "chat");
-							}
-							testArray.put(testobj);
-					//}
-		    		
-	  	    	}
-	  	    	
-  	    	}
-  	    jsonObject.put("data", testArray);
+  	    jsonObject.put("allperson", PersonJsonArray);
 
   	  
 		return Response.status(200).entity(jsonObject.toString())
