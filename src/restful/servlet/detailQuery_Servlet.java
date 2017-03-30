@@ -53,9 +53,6 @@ public class detailQuery_Servlet {
 		
 			@FormParam("ixnid") String ixnid
 			
-			
-//			@FormParam("interactionid") String interactionid
-			
 			) throws IOException {
 		
 		JSONObject jsonObject = new JSONObject();
@@ -77,9 +74,6 @@ public class detailQuery_Servlet {
 		
 		JSONArray PersonJsonArray = new JSONArray();
 		JSONArray testArray = new JSONArray();
-		
-		
-		
 
   	    	String name = "";
   	    	System.out.println("Ixn: "+interactionlist.get(0).getIxnid());
@@ -118,13 +112,6 @@ public class detailQuery_Servlet {
 	  	    		
   	    			System.out.println("Ixnid:  "+interactionlist.get(0).getIxnid());
   	    			
-  	    			
-
-	  	    		
-	  	    		
-	  	    		
-	  	    		
-	  	    		
 		    		Integer bb = Integer.valueOf(interactionlist.get(0).getAgentid());
 					cfg_person.setDbid(bb);
 					

@@ -6,6 +6,8 @@ import java.io.IOException;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
+import java.util.Set;
 
 import javax.ws.rs.FormParam;
 import javax.ws.rs.POST;
@@ -18,6 +20,7 @@ import org.json.JSONObject;
 
 import com.Info360.bean.Activitydata;
 import com.Info360.bean.CFG_person;
+import com.Info360.bean.ContactData;
 import com.Info360.bean.Interaction;
 import com.Info360.bean.Rpt_Activitylog;
 import com.Info360.service.MaintainService;
@@ -41,8 +44,6 @@ public class Query_Servlet {
 			@FormParam("enddate") String enddate,
 			@FormParam("agentid") String agentid,
 			@FormParam("contactid") String contactid
-
-			
 			
 //			@FormParam("interactionid") String interactionid
 			
@@ -54,6 +55,8 @@ public class Query_Servlet {
 		Rpt_Activitylog rpt_activitylog = new Rpt_Activitylog();
 		Activitydata activitydata = new Activitydata();
 		CFG_person cfg_person = new CFG_person();
+		ContactData contactdata = new ContactData();
+
 		
 		interaction.setStartdate(startdate);
 		interaction.setEnddate(enddate);
@@ -71,8 +74,6 @@ public class Query_Servlet {
 		JSONArray PersonJsonArray = new JSONArray();
 		JSONArray testArray = new JSONArray();
 		
-		
-
   	    	for(int a = 0; a < interactionlist.size(); a++){
 
   	    	String name = "";
@@ -94,6 +95,14 @@ public class Query_Servlet {
 	  	    		}
 	  	    	}	
 	  	    	
+//	  	    	String Contactid = interactionlist.get(a).getContactid().trim();
+//	    		contactdata.setContactid(Contactid);
+//	    		System.out.println("Contactid: "+Contactid);
+//	    			Map<String, String> contactidmap = maintainservice.Query_Contactdata(Contactid);
+
+	    		
+	    			
+	  	    	
 	  	    	if(interactionlist.get(a).getAgentid()!=null &&
 		  					!interactionlist.get(a).getAgentid().equals("") &&
 		  						!interactionlist.get(a).getAgentid().equals("null")&&
@@ -110,15 +119,30 @@ public class Query_Servlet {
 							cfg_personObject.put("username", cfg_personlist.get(0).getUser_name());
 							PersonJsonArray.put(cfg_personObject);
 							JSONObject testobj = new JSONObject();
-							testobj.put("Agentname", cfg_personlist.get(0).getUser_name());
-							if(interactionlist.get(a).getThecomment()!=null){
+							if(cfg_personlist.get(0).getUser_name()!=""&&cfg_personlist.get(0).getUser_name()!=null){
+								testobj.put("Agentname", cfg_personlist.get(0).getUser_name());
+							}else{
+								testobj.put("Agentname", "");
+							}
+							
+							
+							if(interactionlist.get(a).getThecomment()!=null&&interactionlist.get(a).getThecomment()!=""){
 								testobj.put("Thecomment", interactionlist.get(a).getThecomment());
 							}else{
 								testobj.put("Thecomment", "");
 							}
 							
-							testobj.put("Startdate", interactionlist.get(a).getStartdate().substring(0, 19));
-							testobj.put("Enddate", interactionlist.get(a).getEnddate().substring(0, 19));
+							if(interactionlist.get(a).getStartdate()!=""&&interactionlist.get(a).getStartdate()!=null){
+								testobj.put("Startdate", interactionlist.get(a).getStartdate().substring(0, 19));
+							}else{
+								testobj.put("Startdate", "");
+							}
+							
+							if(interactionlist.get(a).getStartdate()!=""&&interactionlist.get(a).getStartdate()!=null){
+								testobj.put("Enddate", interactionlist.get(a).getEnddate().substring(0, 19));
+							}else{
+								testobj.put("Enddate", "");
+							}
 							if(name.length()>0){
 								testobj.put("Codename",name.substring(0, name.length()-1));
 							}else{
@@ -127,7 +151,12 @@ public class Query_Servlet {
 							testobj.put("ixnid", interactionlist.get(a).getIxnid());
 							if(interactionlist.get(a).getEntitytypeid().equals("2")){
 								testobj.put("src", "chat");
+							}else{
+								testobj.put("src", "");
 							}
+							
+//			    			testobj.put("BasicINF", contactidmap);
+
 							testArray.put(testobj);
 					//}
 		    		
