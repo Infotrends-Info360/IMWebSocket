@@ -63,6 +63,8 @@
     
     <mapper resource="com/Info360/config/sqlxml/CaseComments.xml"/>
     <mapper resource="com/Info360/config/sqlxml/Cfg_CaseStatus.xml"/>
+    <mapper resource="com/Info360/config/sqlxml/cfg_servicename_mapping.xml"/>
+    
   </mappers>
 
 </configuration>

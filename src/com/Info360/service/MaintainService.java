@@ -14,6 +14,7 @@ import com.Info360.bean.Cfg_AgentReason;
 import com.Info360.bean.Cfg_AgentStatus;
 import com.Info360.bean.CaseComments;
 import com.Info360.bean.Cfg_CaseStatus;
+import com.Info360.bean.Cfg_ServiceName_Mapping;
 import com.Info360.bean.Cfg_ServiceName_Setting;
 import com.Info360.bean.CommonLink;
 import com.Info360.bean.ContactData;
@@ -28,6 +29,7 @@ import com.Info360.dao.AgentReasonDao;
 import com.Info360.dao.Cfg_AgentStatusDao;
 import com.Info360.dao.CaseCommentsDao;
 import com.Info360.dao.Cfg_CaseStatusDao;
+import com.Info360.dao.Cfg_ServiceName_MappingDao;
 import com.Info360.dao.Cfg_ServiceName_SettingDao;
 import com.Info360.dao.CommonlinkDao;
 import com.Info360.dao.ContactDataDao;
@@ -45,6 +47,20 @@ import com.Info360.dao.CFG_personDao;
  * @author Lin
  */
 public class MaintainService {
+	/**
+	 * @param Query_PersonInfo_STATE
+	 */
+	public List<Cfg_ServiceName_Mapping> Query_Cfg_ServiceName_MappingInfo(Cfg_ServiceName_Mapping cfg_servicename_mapping) {
+		
+			List<Cfg_ServiceName_Mapping> cfg_servicename_mappinglist = new ArrayList<Cfg_ServiceName_Mapping>();
+			try {
+				Cfg_ServiceName_MappingDao cfg_servicename_mappingdao = new Cfg_ServiceName_MappingDao();
+				cfg_servicename_mappinglist = cfg_servicename_mappingdao.Query_Cfg_ServiceName_MappingInfo(cfg_servicename_mapping);
+			} catch (Exception e) {
+				IsError.GET_EXCEPTION = e.getMessage();
+			}
+			return cfg_servicename_mappinglist;
+	}
 	
 	/**
 	 * @param Query_PersonInfo_STATE
