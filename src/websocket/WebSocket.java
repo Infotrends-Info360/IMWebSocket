@@ -354,6 +354,7 @@ public class WebSocket extends WebSocketServer {
 	}
 	
 	private void addRoomForMany(String aMsg, org.java_websocket.WebSocket aConn) {
+		boolean stopNow = false;
 		Util.getConsoleLogger().debug("addRoomForMany() called");
 		JsonObject msgJson = Util.getGJsonObject(aMsg);
 		String agentID = WebSocketUserPool.getUserID(aConn);
@@ -372,6 +373,53 @@ public class WebSocket extends WebSocketServer {
 		JsonArray userIDJsonAry = msgJson.getAsJsonArray("memberListToJoin");
 		Util.getConsoleLogger().trace("addRoomForMany() - userIDJsonAry: " + userIDJsonAry);
 		String clientID = null;
+		
+		// 若此客戶已經被接通,則無法再被第二個Agent接起
+		for (JsonElement userIDJsonE : userIDJsonAry){
+			JsonObject userIDJsonObj = userIDJsonE.getAsJsonObject();
+			String userID = userIDJsonObj.get("ID").getAsString();
+			org.java_websocket.WebSocket userConn = WebSocketUserPool.getWebSocketByUserID(userID);
+			if (WebSocketTypePool.isClient(userConn)){
+				if (WebSocketUserPool.getUserRoomCount(userConn) > 0){
+					Util.getConsoleLogger().debug("stopNow: " + stopNow);
+					stopNow = true;
+					break;
+				}
+			}
+		}// end of for
+		if (stopNow){
+			for (JsonElement userIDJsonE : userIDJsonAry){
+				JsonObject userIDJsonObj = userIDJsonE.getAsJsonObject();
+				String userID = userIDJsonObj.get("ID").getAsString();
+				org.java_websocket.WebSocket userConn = WebSocketUserPool.getWebSocketByUserID(userID);
+				if (WebSocketTypePool.isAgent(userConn)){
+					// RING狀態結束			
+					userInfo.setRingEndExpected(true);
+					userInfo.setStopRing(true);
+					
+					// READY狀態開始
+					Util.getStatusFileLogger().info("###### [addRoomForMany-client_serverd]");
+//					Util.getConsoleLogger().debug("userInfo.isNotReady(): " + userInfo.isNotReady());
+					if (Util.getEstablishedStatus().equals(StatusEnum.READY.getDbid()) &&
+							userInfo.isNotReady()){
+						UpdateStatusBean usb = new UpdateStatusBean();
+						usb = new UpdateStatusBean();
+						usb.setStatus(StatusEnum.READY.getDbid());
+						usb.setStartORend("start");
+						CommonFunction.updateStatus(new Gson().toJson(usb), userConn);
+					}
+					
+					// 寄出事件通知Agent
+					JsonObject sendJson = new JsonObject();
+					sendJson.addProperty("Event", "clientServerd");
+					sendJson.addProperty("text",  "client already server!");
+					WebSocketUserPool.sendMessageToUserWithTryCatch(userConn,sendJson.toString());					
+				}//	 end of if	(WebSocketTypePool.isAgent(userConn))
+			}// end of for (JsonElement userIDJsonE : userIDJsonAry)
+			return; // 在此結束
+		}// end of if (stopNow)
+		
+		/** 若Client沒有任何房間,才會往下跑 **/
 		
 		// 將成員一一加入到rooom中 (memberListToJoin為一個JsonArray)
 		for (JsonElement userIDJsonE : userIDJsonAry){
@@ -469,9 +517,9 @@ public class WebSocket extends WebSocketServer {
 			sendJson.addProperty(SystemInfo.TAG_SYS_MSG, SystemInfo.getJoinedRoomMsg(userNameListStr.substring(1,userNameListStr.length()-1))); // 增加系統訊息
 			sendJson.add("roomList", roomIDListJson);
 			WebSocketUserPool.sendMessageToUserWithTryCatch(userConn,sendJson.toString());	
-		}
+		}// end of for
 		
-	}
+	}// end of addRoomForMany()
 	
 	private void sendComment(String aMsg, org.java_websocket.WebSocket aConn) {
 		Util.getConsoleLogger().debug("sendComment() called");
