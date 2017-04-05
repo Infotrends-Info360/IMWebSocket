@@ -47,7 +47,11 @@ public class QueryContactData_Servlet {
 
 			) throws IOException {
 		
+		System.out.println("Contactid: " + Contactid);
+		System.out.println("inputcontactdata: " + inputcontactdata);
+		
 		JSONObject jsonObject = new JSONObject();
+		
 		ContactData contactdata = new ContactData();
 		MaintainService maintainservice = new MaintainService();		
 		JSONArray contactdataArray = new JSONArray();
@@ -64,42 +68,51 @@ public class QueryContactData_Servlet {
 				for(int a = 0; a<allcontactdata.size(); a++){
 					JSONObject contactdataObject = new JSONObject();
 					String Contactkey = allcontactdata.get(a).trim();
-//    				System.out.println("Contactkey:  "+Contactkey);
+    				System.out.println("Contactkey:  "+Contactkey);
 
 	    			contactdata.setContactid(Contactkey);
 	    			Map<String, String> contactidmap = maintainservice.Query_Contactdata(Contactkey);
-//	    			System.out.println(contactidmap);
+	    			System.out.println(contactidmap);
 	    			
 //	    			contactdataObject.put("BasicINF", contactidmap);
 //	    			contactdataArray.put(contactdataObject);
 	    			
 	    		    JSONObject datajsonObj = new JSONObject(contactidmap);
-
 	    		    JSONObject inputjsonObj = new JSONObject(inputcontactdata);
 	    		    String[] inputjsonObjkeys = JSONObject.getNames(inputjsonObj);
 	    		    String[] datajsonObjkeys = JSONObject.getNames(inputjsonObj);
 
-//	    		    System.out.println("inputjsonObj: "+inputjsonObj);
+	    		    System.out.println("inputjsonObj: "+inputjsonObj);
 //	    		    System.out.println("datajsonObj: "+datajsonObj);
 	    		    
 	    		    int count=0;
 	    		    for(int i = 0; i<inputjsonObjkeys.length;i++){
 	    		    		if(inputjsonObj.has(inputjsonObjkeys[i])&&datajsonObj.has(datajsonObjkeys[i])){
-	    		    			if(inputjsonObjkeys[i].equals(datajsonObjkeys[i])){
+//	    		    			System.out.println(inputjsonObj.get(inputjsonObjkeys[i]));
+//	    		    			System.out.println(datajsonObj.get(datajsonObjkeys[i]));
+
+	    		    			if(inputjsonObj.get(inputjsonObjkeys[i]).equals(datajsonObj.get(inputjsonObjkeys[i]))){
 	    		    				count++;
 	    		    			}
 		    		    	
 	    		    		}
 	    		    } 
+	    		    
+	    		    
+	    		    System.out.println("count: "+count);
+	    		    System.out.println("inputjsonObjkeys: "+inputjsonObjkeys.length);
+
 	    		    if(count==inputjsonObjkeys.length){
-				  	    jsonObject.put("data", Contactkey);
+	    		  	  contactdataObject.put("contactid", Contactkey);
+				  	  contactdataArray.put(contactdataObject);
+	    		  	    jsonObject.put("contactid", contactdataArray);
 	    		    }
 
 				}
 
 
 
-  	  
+				System.out.println("jsonObject.toString(): " + jsonObject.toString());
 		return Response.status(200).entity(jsonObject.toString())
 				.header("Access-Control-Allow-Origin", "*")
 			    .header("Access-Control-Allow-Methods", "POST, GET, PUT, UPDATE, OPTIONS")
