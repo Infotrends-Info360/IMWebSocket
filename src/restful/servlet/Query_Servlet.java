@@ -46,9 +46,7 @@ public class Query_Servlet {
 			@FormParam("contactid") String contactid,
 			@FormParam("inputcontactdata") String inputcontactdata
 
-			
-//			@FormParam("interactionid") String interactionid
-			
+
 			) throws IOException {
 		
 		JSONObject jsonObject = new JSONObject();
@@ -109,8 +107,10 @@ public class Query_Servlet {
 		if(agentid!=null){
 			interaction.setAgentid(agentid);
 		}
-		
-		
+		if(contactid!=null){
+			interaction.setContactid(contactid);
+		}
+
 		List<Interaction> interactionlist = maintainservice.Selcet_interaction(interaction);
 		
 		JSONArray PersonJsonArray = new JSONArray();
