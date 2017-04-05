@@ -1,9 +1,13 @@
 package restful.servlet;
 
+import java.io.BufferedReader;
 import java.io.IOException;
 
 
 
+import java.io.InputStreamReader;
+import java.net.HttpURLConnection;
+import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -17,6 +21,8 @@ import javax.ws.rs.core.Response;
 
 import org.json.JSONArray;
 import org.json.JSONObject;
+
+import util.Util;
 
 import com.Info360.bean.Activitydata;
 import com.Info360.bean.CFG_person;
@@ -74,40 +80,46 @@ public class Query_Servlet {
 			for(int a = 0; a<allcontactdata.size(); a++){
 				JSONObject contactdataObject = new JSONObject();
 				String Contactkey = allcontactdata.get(a).trim();
-				System.out.println("Contactkey:  "+Contactkey);
 
     			contactdata.setContactid(Contactkey);
     			Map<String, String> contactidmap = maintainservice.Query_Contactdata(Contactkey);
-    			System.out.println(contactidmap);
+//    			System.out.println(contactidmap);
 
     		    JSONObject datajsonObj = new JSONObject(contactidmap);
     		    JSONObject inputjsonObj = new JSONObject(inputcontactdata);
     		    String[] inputjsonObjkeys = JSONObject.getNames(inputjsonObj);
     		    String[] datajsonObjkeys = JSONObject.getNames(inputjsonObj);
 
-    		    System.out.println("inputjsonObj: "+inputjsonObj);
+//    		    System.out.println("inputjsonObj: "+inputjsonObj);
     		    
     		    int count=0;
     		    for(int i = 0; i<inputjsonObjkeys.length;i++){
     		    		if(inputjsonObj.has(inputjsonObjkeys[i])&&datajsonObj.has(datajsonObjkeys[i])){
-    		    			
-    		    			if(inputjsonObj.get(inputjsonObjkeys[i]).equals(datajsonObj.get(inputjsonObjkeys[i]))){
+//    		    			
+//    		    			if(inputjsonObj.get(inputjsonObjkeys[i]).equals(datajsonObj.get(inputjsonObjkeys[i]))){
+//    		    				count++;
+//    		    			}
+    		    			int x =0;
+    		    			x = datajsonObj.get(inputjsonObjkeys[i]).toString().indexOf(inputjsonObj.get(inputjsonObjkeys[i]).toString());
+    		    			if(x>=0){
     		    				count++;
     		    			}
     		    		}
     		    } 
 
     		    if(count==inputjsonObjkeys.length){
+    				System.out.println("Contactkey:  "+Contactkey);
+
     		  	  contactdataObject.put("contactid", Contactkey);
     				interaction.setContactid(Contactkey);
     		    }
-
 			}
 		}
-		if(agentid!=null){
+		
+		if(agentid!=null&&agentid!=""){
 			interaction.setAgentid(agentid);
 		}
-		if(contactid!=null){
+		if(contactid!=null&&contactid!=""){
 			interaction.setContactid(contactid);
 		}
 
@@ -213,5 +225,47 @@ public class Query_Servlet {
 			    .header("Access-Control-Allow-Methods", "POST, GET, PUT, UPDATE, OPTIONS")
 			    .header("Access-Control-Allow-Headers", "Content-Type, Accept, X-Requested-With").build();
 	}
-	
+
+	public JSONObject GetServiceNameCache(String searchtype) throws Exception {
+		StringBuilder responseSB = null;
+		// Encode the query
+		String GetData = "typeid=" + searchtype + "&method=get" + "&key=all";
+
+		// Connect to URL
+		String hostURL = Util.getHostURLStr("ServiceNameCache");
+		Util.getConsoleLogger().debug("hostURL(ServiceNameCache): " + hostURL);
+		URL url = new URL( hostURL + "/ServiceNameCache/RESTful/datacache?"+ GetData);
+//		URL url = new URL(
+//				"http://ws.crm.com.tw:8080/ServiceNameCache/RESTful/datacache?"
+//						+ GetData);
+		HttpURLConnection connection = (HttpURLConnection) url.openConnection();
+		connection.setDoOutput(true);
+		connection.setRequestMethod("GET");
+		// connection.setRequestProperty("Content-Type",
+		// "application/x-www-form-urlencoded");
+		// connection.setRequestProperty("Content-Length",
+		// String.valueOf(postData.length()));
+
+		// Write data
+		// OutputStream os = connection.getOutputStream();
+		// os.write(postData.getBytes());
+
+		// Read response
+		responseSB = new StringBuilder();
+		BufferedReader br = new BufferedReader(new InputStreamReader(
+				connection.getInputStream(), "UTF-8"));
+
+		String line;
+		while ((line = br.readLine()) != null)
+			responseSB.append(line.trim());
+
+		// Close streams
+		br.close();
+		// os.close();
+
+		// Util.getConsoleLogger().debug("responseSB: "+responseSB.toString().trim());
+		JSONObject ServiceNameCachejsonObj = new JSONObject(
+				responseSB.toString());
+		return ServiceNameCachejsonObj;
+	}
 }
