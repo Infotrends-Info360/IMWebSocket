@@ -47,6 +47,9 @@ public class QueryContactData_Servlet {
 
 			) throws IOException {
 		
+		System.out.println("Contactid: " + Contactid);
+		System.out.println("inputcontactdata: " + inputcontactdata);
+		
 		JSONObject jsonObject = new JSONObject();
 		
 		ContactData contactdata = new ContactData();
@@ -108,7 +111,7 @@ public class QueryContactData_Servlet {
 
 
 
-  	  
+				System.out.println("jsonObject.toString(): " + jsonObject.toString());
 		return Response.status(200).entity(jsonObject.toString())
 				.header("Access-Control-Allow-Origin", "*")
 			    .header("Access-Control-Allow-Methods", "POST, GET, PUT, UPDATE, OPTIONS")
