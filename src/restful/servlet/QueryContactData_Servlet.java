@@ -48,6 +48,7 @@ public class QueryContactData_Servlet {
 			) throws IOException {
 		
 		JSONObject jsonObject = new JSONObject();
+		
 		ContactData contactdata = new ContactData();
 		MaintainService maintainservice = new MaintainService();		
 		JSONArray contactdataArray = new JSONArray();
@@ -85,14 +86,22 @@ public class QueryContactData_Servlet {
 	    		    int count=0;
 	    		    for(int i = 0; i<inputjsonObjkeys.length;i++){
 	    		    		if(inputjsonObj.has(inputjsonObjkeys[i])&&datajsonObj.has(datajsonObjkeys[i])){
-	    		    			if(inputjsonObjkeys[i].equals(datajsonObjkeys[i])){
+//	    		    			System.out.println(inputjsonObj.get(inputjsonObjkeys[i]));
+//	    		    			System.out.println(datajsonObj.get(datajsonObjkeys[i]));
+
+	    		    			if(inputjsonObj.get(inputjsonObjkeys[i]).equals(datajsonObj.get(inputjsonObjkeys[i]))){
 	    		    				count++;
 	    		    			}
 		    		    	
 	    		    		}
 	    		    } 
+	    		    
+	    		    
+	    		    
 	    		    if(count==inputjsonObjkeys.length){
-				  	    jsonObject.put("data", Contactkey);
+	    		  	  contactdataObject.put("contactid", Contactkey);
+				  	  contactdataArray.put(contactdataObject);
+	    		  	    jsonObject.put("contactid", contactdataArray);
 	    		    }
 
 				}
