@@ -47,6 +47,22 @@ import com.Info360.dao.CFG_personDao;
  * @author Lin
  */
 public class MaintainService {
+	
+	/**
+	 * @param Query_All_Contactdata
+	 */
+	public List<ContactData> Query_All_Contactdata(ContactData contactdata) {
+		
+			List<ContactData> contactdatalist = new ArrayList<ContactData>();
+			try {
+				ContactDataDao contactdatadao = new ContactDataDao();
+				contactdatalist = contactdatadao.Query_All_Contactdata(contactdata);
+			} catch (Exception e) {
+				IsError.GET_EXCEPTION = e.getMessage();
+			}
+			return contactdatalist;
+	}
+	
 	/**
 	 * @param Query_PersonInfo_STATE
 	 */

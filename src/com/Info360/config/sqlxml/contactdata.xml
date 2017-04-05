@@ -27,15 +27,17 @@
     <result column="CONTACTID" 		jdbcType="VARCHAR" property="contactid"/>
     <result column="CREATEDATE" 	jdbcType="VARCHAR" property="createdate"/>
     <result column="MODIFIEDDATE"   jdbcType="VARCHAR" property="modifieddate"/>
-    
-    
-    
+
   </resultMap>
   
   	<select id="Query_Contactdata" parameterType="String"  resultType="hashmap">
   		Select * from tblContactData where contactid=#{value}
   	</select>
-  
+  	
+  	<select id="Query_All_Contactdata" parameterType="com.Info360.bean.ContactData" resultMap="contactdataResult">
+  		Select CONTACTID from tblContactData
+  	</select>
+
  	<select id="Query_ContactID" parameterType="com.Info360.bean.ContactData"  resultType="string">
   		SELECT CONTACTID FROM TBLCONTACTDATA WHERE ${searchkey} = #{searchvalue} and ${pkey} = #{pvalue}
   	</select>

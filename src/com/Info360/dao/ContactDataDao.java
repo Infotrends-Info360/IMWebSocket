@@ -11,6 +11,7 @@ import org.json.JSONArray;
 
 import util.Util;
 
+import com.Info360.bean.Activitymenu;
 import com.Info360.bean.ContactData;
 import com.Info360.bean.Interaction;
 import com.Info360.bean.ServiceEntry;
@@ -23,6 +24,38 @@ import com.Info360.util.IsError;
  */
 public class ContactDataDao {
 	
+	/**
+	 * Query_All_Contactdata
+	 * @param Query_All_Contactdata
+	 */
+	public List<ContactData> Query_All_Contactdata(ContactData contactdata){
+		List<ContactData> contactdatalist = new ArrayList<ContactData>();
+		SqlSession sqlSession = null;
+	
+		try {
+			sqlSession = DBAccess.getSqlSession();
+			//通過sqlSession執行SQL語句
+			contactdatalist = sqlSession.selectList("contactdata.Query_All_Contactdata", contactdata);
+			sqlSession.commit();
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+			IsError.GET_EXCEPTION = e.getMessage();
+			Util.getFileLogger().error(e.getMessage());
+		} catch (Exception e){
+			e.printStackTrace();
+			IsError.GET_EXCEPTION = e.getMessage();
+			Util.getFileLogger().error(e.getMessage());
+		} finally {
+			if(sqlSession != null){
+			   sqlSession.close();
+				DBAccess.sessonCount.decrementAndGet();
+				Util.getFileLogger().debug("DB session count: " + DBAccess.sessonCount.get());
+			}
+		}
+		return contactdatalist;
+	}
+	
 	
 	public Map<String, String> Query_Contactdata(String contactid){
 		List<Map<String, String>> contactdataList = new ArrayList<Map<String, String>>();
@@ -34,7 +67,9 @@ public class ContactDataDao {
 			sqlSession = DBAccess.getSqlSession();
 			//通過sqlSession執行SQL語句
 			contactdataList = sqlSession.selectList("contactdata.Query_Contactdata", contactid);
-			contactdatamap = contactdataList.get(0);
+			for(int i =0 ;i<contactdataList.size();i++){
+				contactdatamap = contactdataList.get(i);
+			}
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -62,8 +97,6 @@ public class ContactDataDao {
 		//List<String> contactdatalist = new ArrayList<String>();
 		String contactID = null;
 		SqlSession sqlSession = null;
-		
-		
 		try {
 			sqlSession = DBAccess.getSqlSession();
 			//通過sqlSession執行SQL語句
