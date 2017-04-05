@@ -147,14 +147,13 @@ public class AgentFunction {
 
 		try {
 			// Connect to URL
-			String hostURL = Util.getHostURLStr("IMWebSocket");
-//			Util.getConsoleLogger().debug("hostURL: " + hostURL);
-			URL url = new URL( hostURL + "/IMWebSocket/RESTful/Select_agentreason");
-//			URL url = new URL(
-//					"http://127.0.0.1:8080/IMWebSocket/RESTful/Select_agentreason");
+			String hostURL = Util.getHostURLStr("RESTful");
+			String projectName = Util.getProjectStr("RESTful");
+			Util.getConsoleLogger().debug("hostURL: " + hostURL);
+			URL url = new URL( hostURL + projectName + "/RESTful/Select_agentreason");
+			Util.getConsoleLogger().debug("url: " + url.toString() );			
 
-			HttpURLConnection connection = (HttpURLConnection) url
-					.openConnection();
+			HttpURLConnection connection = (HttpURLConnection) url.openConnection();
 			connection.setDoOutput(true);
 			connection.setRequestMethod("POST");
 			connection.setRequestProperty("Content-Type",
@@ -211,14 +210,13 @@ public class AgentFunction {
 
 		try {
 			// Connect to URL
-			String hostURL = Util.getHostURLStr("IMWebSocket");
-//			Util.getConsoleLogger().debug("hostURL: " + hostURL);
-			URL url = new URL( hostURL + "/IMWebSocket/RESTful/Insert_rpt_agentstatus");
-//			URL url = new URL(
-//					"http://127.0.0.1:8080/IMWebSocket/RESTful/Insert_rpt_agentstatus");
-
-			HttpURLConnection connection = (HttpURLConnection) url
-					.openConnection();
+			String hostURL = Util.getHostURLStr("RESTful");
+			String projectName = Util.getProjectStr("RESTful");
+			Util.getConsoleLogger().debug("hostURL: " + hostURL);
+			URL url = new URL( hostURL + projectName + "/RESTful/Insert_rpt_agentstatus");
+			Util.getConsoleLogger().debug("url: " + url.toString());			
+			
+			HttpURLConnection connection = (HttpURLConnection) url.openConnection();
 			connection.setDoOutput(true);
 			connection.setRequestMethod("POST");
 			connection.setRequestProperty("Content-Type",
@@ -263,12 +261,12 @@ public class AgentFunction {
 
 		try {
 			// Connect to URL
-			String hostURL = Util.getHostURLStr("IMWebSocket");
-//			Util.getConsoleLogger().debug("hostURL: " + hostURL);
-			URL url = new URL( hostURL + "/IMWebSocket/RESTful/Update_rpt_agentstatus");
-//			URL url = new URL(
-//					"http://127.0.0.1:8080/IMWebSocket/RESTful/Update_rpt_agentstatus");
-
+			String hostURL = Util.getHostURLStr("RESTful");
+			String projectName = Util.getProjectStr("RESTful");
+			Util.getConsoleLogger().debug("hostURL: " + hostURL);
+			URL url = new URL( hostURL + projectName + "/RESTful/Update_rpt_agentstatus");
+			Util.getConsoleLogger().debug("url: " + url.toString());			
+			
 			HttpURLConnection connection = (HttpURLConnection) url
 					.openConnection();
 			connection.setDoOutput(true);
@@ -312,14 +310,13 @@ public class AgentFunction {
 
 			try {
 				// Connect to URL
-				String hostURL = Util.getHostURLStr("IMWebSocket");
-//				Util.getConsoleLogger().debug("hostURL: " + hostURL);
-				URL url = new URL( hostURL + "/IMWebSocket/RESTful/Insert_rpt_activitylog");
-//				URL url = new URL(
-//						"http://127.0.0.1:8080/IMWebSocket/RESTful/Insert_rpt_activitylog");
+				String hostURL = Util.getHostURLStr("RESTful");
+				String projectName = Util.getProjectStr("RESTful");
+				Util.getConsoleLogger().debug("hostURL: " + hostURL);
+				URL url = new URL( hostURL + projectName + "/RESTful/Insert_rpt_activitylog");
+				Util.getConsoleLogger().debug("url: " + url.toString());					
 
-				HttpURLConnection connection = (HttpURLConnection) url
-						.openConnection();
+				HttpURLConnection connection = (HttpURLConnection) url.openConnection();
 				connection.setDoOutput(true);
 				connection.setRequestMethod("POST");
 				connection.setRequestProperty("Content-Type",

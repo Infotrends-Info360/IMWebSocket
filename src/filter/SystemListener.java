@@ -129,8 +129,8 @@ public class SystemListener implements ServletContextListener {
 		}
 		
 		for (final String name: prop.stringPropertyNames()){
-			Util.getConsoleLogger().trace("name: " + name);
-			Util.getConsoleLogger().trace("prop.getProperty(name): " + prop.getProperty(name));
+			Util.getConsoleLogger().debug("name: " + name);
+			Util.getConsoleLogger().debug("prop.getProperty(name): " + prop.getProperty(name));
 			systemParam.put(name.replace(".", "_"), prop.getProperty(name));
 		}		
 		

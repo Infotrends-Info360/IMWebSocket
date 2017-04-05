@@ -130,14 +130,13 @@ public class ClientFunction {
 			}
 			
 			// Connect to URL
-			String hostURL = Util.getHostURLStr("IMWebSocket");
-//			Util.getConsoleLogger().debug("hostURL: " + hostURL);
-			URL url = new URL( hostURL + "/IMWebSocket/RESTful/searchUserdata");
-//			URL url = new URL(
-//					"http://127.0.0.1:8080/IMWebSocket/RESTful/searchUserdata");
-
-			HttpURLConnection connection = (HttpURLConnection) url
-					.openConnection();
+			String hostURL = Util.getHostURLStr("RESTful");
+			String projectName = Util.getProjectStr("RESTful");
+			Util.getConsoleLogger().debug("hostURL: " + hostURL);
+			URL url = new URL( hostURL + projectName + "/RESTful/searchUserdata");
+			Util.getConsoleLogger().debug("url: " + url.toString());			
+			
+			HttpURLConnection connection = (HttpURLConnection)url.openConnection();
 			connection.setDoOutput(true);
 			connection.setRequestMethod("POST");
 			connection.setRequestProperty("Content-Type",
@@ -245,15 +244,14 @@ public class ClientFunction {
 			if (contactid != null)
 				postData += "&contactid=" + contactid;
 			// Connect to URL
-			String hostURL = Util.getHostURLStr("IMWebSocket");
-//			Util.getConsoleLogger().debug("hostURL: " + hostURL);
-			URL url = new URL( hostURL + "/IMWebSocket/RESTful/ServiceEntry");			
-//			URL url = new URL(
-//					"http://127.0.0.1:8080/IMWebSocket/RESTful/ServiceEntry");
-
+			String hostURL = Util.getHostURLStr("RESTful");
+			String projectName = Util.getProjectStr("RESTful");
+			Util.getConsoleLogger().debug("hostURL: " + hostURL);
+			URL url = new URL( hostURL + projectName + "/RESTful/ServiceEntry");
+			Util.getConsoleLogger().debug("url: " + url.toString());			
 			
-			HttpURLConnection connection = (HttpURLConnection) url
-					.openConnection();
+			
+			HttpURLConnection connection = (HttpURLConnection) url.openConnection();
 			connection.setDoOutput(true);
 			connection.setRequestMethod("POST");
 			connection.setRequestProperty("Content-Type",
@@ -323,9 +321,12 @@ public class ClientFunction {
 		StringBuilder responseSB = null;
 		try {
 			// 連線建立設定
-			String hostURL = Util.getHostURLStr("IMWebSocket");
-//			Util.getConsoleLogger().debug("hostURL: " + hostURL);
-			URL url = new URL( hostURL + "/IMWebSocket/RESTful/Interaction");
+			String hostURL = Util.getHostURLStr("RESTful");
+			String projectName = Util.getProjectStr("RESTful");
+			Util.getConsoleLogger().debug("hostURL: " + hostURL);
+			URL url = new URL( hostURL + projectName + "/RESTful/Interaction");
+			Util.getConsoleLogger().debug("url: " + url.toString());			
+			
 			HttpURLConnection connection = (HttpURLConnection) url.openConnection();
 			connection.setDoOutput(true);
 			connection.setRequestMethod("POST");

@@ -233,11 +233,12 @@ public class searchUserdataServlet {
 		String postData = "typeid=" + typeid;
 
 		// Connect to URL (是否可考慮在此直接呼叫DAO即可,可省去網路請求,提升效能)
-		String hostURL = Util.getHostURLStr("IMWebSocket");
+		String hostURL = Util.getHostURLStr("RESTful");
+		String projectName = Util.getProjectStr("RESTful");
 		Util.getConsoleLogger().debug("hostURL: " + hostURL);
-		URL url = new URL( hostURL + "/IMWebSocket/RESTful/Cfg_ServiceName_Setting");
-//		URL url = new URL(
-//				"http://127.0.0.1:8080/IMWebSocket/RESTful/Cfg_ServiceName_Setting");
+		URL url = new URL( hostURL + projectName + "/RESTful/Cfg_ServiceName_Setting");
+		Util.getConsoleLogger().debug("url: " + url.toString() );
+		
 		HttpURLConnection connection = (HttpURLConnection) url.openConnection();
 		connection.setDoOutput(true);
 		connection.setRequestMethod("POST");
@@ -440,11 +441,12 @@ public class searchUserdataServlet {
 				+ date + "&userdata=" + URLEncoder.encode(userdata, "utf-8");
 
 		// Connect to URL
-		String hostURL = Util.getHostURLStr("IMWebSocket");
+		String hostURL = Util.getHostURLStr("RESTful");
+		String projectName = Util.getProjectStr("RESTful");
 		Util.getConsoleLogger().debug("hostURL: " + hostURL);
-		URL url = new URL( hostURL + "/IMWebSocket/RESTful/ContactData");
-//		URL url = new URL(
-//				"http://127.0.0.1:8080/IMWebSocket/RESTful/ContactData");
+		URL url = new URL( hostURL + projectName + "/RESTful/ContactData");
+		Util.getConsoleLogger().debug("url: " + url.toString() );		
+		
 		HttpURLConnection connection = (HttpURLConnection) url.openConnection();
 		connection.setDoOutput(true);
 		connection.setRequestMethod("POST");

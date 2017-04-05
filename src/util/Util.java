@@ -80,15 +80,17 @@ public class Util {
 		return Attr.pressureTestFileLogger;
 	}
 	public static String getHostURLStr(String aHost){
-//		systemParam.put("IMWebSocket_protocol", IMWebSocket_protocol);
-//		systemParam.put("IMWebSocket_hostname", IMWebSocket_hostname);
-//		systemParam.put("IMWebSocket_port", IMWebSocket_port);		
 		
 		String protocol = Attr.SystemParam.get(aHost + "_protocol");
 		String hostname = Attr.SystemParam.get(aHost + "_hostname");
 		String port = Attr.SystemParam.get(aHost + "_port");
 		
 		return protocol + "//" + hostname + ":" + port;
+	}
+	
+	public static String getProjectStr(String aHost){
+		String projectName = Attr.SystemParam.get(aHost + "_project");
+		return projectName;
 	}
 //	public static String getTmpID(String aID){
 //		return aID.replaceAll( "[^\\d]", "" ).substring(0,6);

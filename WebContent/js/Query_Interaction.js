@@ -10,7 +10,7 @@ function SelectSumit(){
 			
 	//ServiceEntry console log
 		     $.ajax({
-		         //告訴程式表單要傳送到哪裡                                         
+		         //告訴程式表單要傳送到哪裡    // 20170405_RESTful已於config.properties中抓取動態IP,此方法SelectSumit目前找不到使用的來源,但之後若要用要注意須調整去抓取動態IP                                     
 		         url:"/IMWebSocket/RESTful/ServiceEntry",
 		         //需要傳送的資料
 		         data:{

@@ -139,14 +139,12 @@ public class GetKPIServlet {
 
 				try {
 					// Connect to URL
-					String hostURL = Util.getHostURLStr("IMWebSocket");
-//					Util.getConsoleLogger().debug("hostURL: " + hostURL);
-					URL url = new URL( hostURL + "/IMWebSocket/RESTful/Select_rpt_agentstatus_usetime");
-//					URL url = new URL(
-//							"http://127.0.0.1:8080/IMWebSocket/RESTful/Select_rpt_agentstatus_usetime");
+					String hostURL = Util.getHostURLStr("RESTful");
+					String projectName = Util.getProjectStr("RESTful");
+					Util.getConsoleLogger().debug("hostURL: " + hostURL);
+					URL url = new URL( hostURL + projectName + "/RESTful/Select_rpt_agentstatus_usetime");					
 
-					HttpURLConnection connection = (HttpURLConnection) url
-							.openConnection();
+					HttpURLConnection connection = (HttpURLConnection) url.openConnection();
 					connection.setDoOutput(true);
 					connection.setRequestMethod("POST");
 					connection.setRequestProperty("Content-Type",
@@ -200,14 +198,12 @@ public class GetKPIServlet {
 
 			try {
 				// Connect to URL
-				String hostURL = Util.getHostURLStr("IMWebSocket");
-//				Util.getConsoleLogger().debug("hostURL: " + hostURL);
-				URL url = new URL( hostURL + "/IMWebSocket/RESTful/Select_rpt_agentstatus_usetime_avg");
-//				URL url = new URL(
-//						"http://127.0.0.1:8080/IMWebSocket/RESTful/Select_rpt_agentstatus_usetime_avg");
-
-				HttpURLConnection connection = (HttpURLConnection) url
-						.openConnection();
+				String hostURL = Util.getHostURLStr("RESTful");
+				String projectName = Util.getProjectStr("RESTful");
+				Util.getConsoleLogger().debug("hostURL: " + hostURL);
+				URL url = new URL( hostURL + projectName + "/RESTful/Select_rpt_agentstatus_usetime_avg");
+				
+				HttpURLConnection connection = (HttpURLConnection) url.openConnection();
 				connection.setDoOutput(true);
 				connection.setRequestMethod("POST");
 				connection.setRequestProperty("Content-Type",
