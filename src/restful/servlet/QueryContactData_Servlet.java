@@ -68,22 +68,21 @@ public class QueryContactData_Servlet {
 				for(int a = 0; a<allcontactdata.size(); a++){
 					JSONObject contactdataObject = new JSONObject();
 					String Contactkey = allcontactdata.get(a).trim();
-//    				System.out.println("Contactkey:  "+Contactkey);
+    				System.out.println("Contactkey:  "+Contactkey);
 
 	    			contactdata.setContactid(Contactkey);
 	    			Map<String, String> contactidmap = maintainservice.Query_Contactdata(Contactkey);
-//	    			System.out.println(contactidmap);
+	    			System.out.println(contactidmap);
 	    			
 //	    			contactdataObject.put("BasicINF", contactidmap);
 //	    			contactdataArray.put(contactdataObject);
 	    			
 	    		    JSONObject datajsonObj = new JSONObject(contactidmap);
-
 	    		    JSONObject inputjsonObj = new JSONObject(inputcontactdata);
 	    		    String[] inputjsonObjkeys = JSONObject.getNames(inputjsonObj);
 	    		    String[] datajsonObjkeys = JSONObject.getNames(inputjsonObj);
 
-//	    		    System.out.println("inputjsonObj: "+inputjsonObj);
+	    		    System.out.println("inputjsonObj: "+inputjsonObj);
 //	    		    System.out.println("datajsonObj: "+datajsonObj);
 	    		    
 	    		    int count=0;
@@ -100,7 +99,9 @@ public class QueryContactData_Servlet {
 	    		    } 
 	    		    
 	    		    
-	    		    
+	    		    System.out.println("count: "+count);
+	    		    System.out.println("inputjsonObjkeys: "+inputjsonObjkeys.length);
+
 	    		    if(count==inputjsonObjkeys.length){
 	    		  	  contactdataObject.put("contactid", Contactkey);
 				  	  contactdataArray.put(contactdataObject);
