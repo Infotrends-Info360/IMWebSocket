@@ -321,6 +321,7 @@
                 </div>
             </div>
         </div>
+        <input type='hidden' id="systemParam" value='${systemParam}' disabled>
     </body>
 
     <!-- 彈跳對話視窗-->
@@ -403,13 +404,16 @@
  	<script src="js/demo/bootstrap-table-demo.js"></script>
 
     <script>
+    var systemParam_g = JSON.parse( document.getElementById('systemParam').value );
     
     function play(callback) {
     	
    	 function state(){
    		
+   		var url = systemParam_g.RESTful.protocol + "//" + systemParam_g.RESTful.hostname + ":" + systemParam_g.RESTful.port;
+		var project = systemParam_g.RESTful.project;   		
    			  $.ajax({                              
-   		          url:"/IMWebSocket/RESTful/Query_ActivityGroup",
+   		          	 url: url + project + "/RESTful/Query_ActivityGroup",
    			         data:{
    			        	 dbid:0
    			        	 },
@@ -455,8 +459,10 @@
     	
     	 function group(){
     	 		var dbid = document.getElementById("menu").value
+    	   		var url = systemParam_g.RESTful.protocol + "//" + systemParam_g.RESTful.hostname + ":" + systemParam_g.RESTful.port;
+    			var project = systemParam_g.RESTful.project;   		
     			  $.ajax({                              
-    		          url:"/IMWebSocket/RESTful/FLAGDATA",
+    				  url: url + project + "/RESTful/FLAGDATA",
     			         data:{
     			        	 dbid:dbid
     			        	 },
@@ -646,9 +652,11 @@
 			var in_titlegroup = document.getElementById("in_titlegroup").value;
 			var in_deleteflag = document.getElementById("in_deleteflag").value;
 			var in_sort = document.getElementById("in_sort").value;
-				
-			 $.ajax({                              
-		          url:"/IMWebSocket/RESTful/Insert_ActivityData",
+
+	   		var url = systemParam_g.RESTful.protocol + "//" + systemParam_g.RESTful.hostname + ":" + systemParam_g.RESTful.port;
+			var project = systemParam_g.RESTful.project;   		
+			  $.ajax({                              
+				  	 url: url + project + "/RESTful/Insert_ActivityData",
 			         data:{
 			        	 activitygroupsid:in_activitygroupsid,
 			        	 codename:in_codename,
@@ -688,9 +696,11 @@
             var up_color = document.getElementById("up_color").value;
             var up_dbid = document.getElementById("up_dbid").value;
             var up_sort = document.getElementById("up_sort").value;
-           
-			 $.ajax({                              
-		          url:"/IMWebSocket/RESTful/Update_ActivityData",
+
+	   		var url = systemParam_g.RESTful.protocol + "//" + systemParam_g.RESTful.hostname + ":" + systemParam_g.RESTful.port;
+			var project = systemParam_g.RESTful.project;   		
+			  $.ajax({                              
+				  	 url: url + project + "/RESTful/Update_ActivityData",            
 			         data:{
 			        	 codename:up_codename,
 			        	 color:up_color,
@@ -776,10 +786,11 @@
         function showToastError(message) {
         	
     			// var flag = document.getElementById('Delete_flag').value;
-    			 var dbid = document.getElementById('Delete_id').value;
- 
-    			 $.ajax({                              
-    		          url:"/IMWebSocket/RESTful/LogicDelete_ActivityData",
+    			var dbid = document.getElementById('Delete_id').value;
+   		   		var url = systemParam_g.RESTful.protocol + "//" + systemParam_g.RESTful.hostname + ":" + systemParam_g.RESTful.port;
+   				var project = systemParam_g.RESTful.project;   		
+   				  $.ajax({                              
+   					  	 url: url + project + "/RESTful/LogicDelete_ActivityData",  
     			         data:{
     			        	 deleteflag:1,
     			        	 codename:dbid,

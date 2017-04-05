@@ -350,6 +350,7 @@
                 </div>
             </div>
         </div>
+        <input type='hidden' id="systemParam" value='${systemParam}' disabled>
     </body>
 
     <!-- 彈跳對話視窗-->

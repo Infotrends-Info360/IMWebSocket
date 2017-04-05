@@ -331,8 +331,7 @@ td {
             </div>
         </div><!-- end of 右方區塊 -->
     </div>
-<input type='hidden' id="systemParam" value='${systemParam}' disabled>
-
+	<input type='hidden' id="systemParam" value='${systemParam}' disabled>
 </body>
 </html>
 

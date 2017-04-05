@@ -24,9 +24,10 @@
 <body> 
 
 
-<div id="tree" onclick="link()"></div>
-
-<button onclick="page()"> ~長樹~ </button>
+	<div id="tree" onclick="link()"></div>
+	
+	<button onclick="page()"> ~長樹~ </button>
+	<input type='hidden' id="systemParam" value='${systemParam}' disabled>
 </body> 
 	
 	 <script type="text/javascript">
