@@ -43,7 +43,9 @@ public class Query_Servlet {
 			@FormParam("startdate") String startdate,
 			@FormParam("enddate") String enddate,
 			@FormParam("agentid") String agentid,
-			@FormParam("contactid") String contactid
+			@FormParam("contactid") String contactid,
+			@FormParam("inputcontactdata") String inputcontactdata
+
 			
 //			@FormParam("interactionid") String interactionid
 			
@@ -57,18 +59,58 @@ public class Query_Servlet {
 		CFG_person cfg_person = new CFG_person();
 		ContactData contactdata = new ContactData();
 
-		
 		interaction.setStartdate(startdate);
 		interaction.setEnddate(enddate);
+		
+		MaintainService maintainservice = new MaintainService();		
+
+		if(inputcontactdata!=""&&inputcontactdata!=null){
+
+		//select全部contactdataID
+		List<String> allcontactdata = new ArrayList<String>();
+		List<ContactData> contactdatalist = maintainservice.Query_All_Contactdata(contactdata);
+			for(int i = 0;i<contactdatalist.size();i++){
+				allcontactdata.add(contactdatalist.get(i).getContactid().trim());
+			}
+			//帶出全部contactdataID的資訊
+			for(int a = 0; a<allcontactdata.size(); a++){
+				JSONObject contactdataObject = new JSONObject();
+				String Contactkey = allcontactdata.get(a).trim();
+				System.out.println("Contactkey:  "+Contactkey);
+
+    			contactdata.setContactid(Contactkey);
+    			Map<String, String> contactidmap = maintainservice.Query_Contactdata(Contactkey);
+    			System.out.println(contactidmap);
+
+    		    JSONObject datajsonObj = new JSONObject(contactidmap);
+    		    JSONObject inputjsonObj = new JSONObject(inputcontactdata);
+    		    String[] inputjsonObjkeys = JSONObject.getNames(inputjsonObj);
+    		    String[] datajsonObjkeys = JSONObject.getNames(inputjsonObj);
+
+    		    System.out.println("inputjsonObj: "+inputjsonObj);
+    		    
+    		    int count=0;
+    		    for(int i = 0; i<inputjsonObjkeys.length;i++){
+    		    		if(inputjsonObj.has(inputjsonObjkeys[i])&&datajsonObj.has(datajsonObjkeys[i])){
+    		    			
+    		    			if(inputjsonObj.get(inputjsonObjkeys[i]).equals(datajsonObj.get(inputjsonObjkeys[i]))){
+    		    				count++;
+    		    			}
+    		    		}
+    		    } 
+
+    		    if(count==inputjsonObjkeys.length){
+    		  	  contactdataObject.put("contactid", Contactkey);
+    				interaction.setContactid(Contactkey);
+    		    }
+
+			}
+		}
 		if(agentid!=null){
 			interaction.setAgentid(agentid);
 		}
-		if(contactid!=null){
-			interaction.setContactid(contactid);
-		}
 		
 		
-		MaintainService maintainservice = new MaintainService();		
 		List<Interaction> interactionlist = maintainservice.Selcet_interaction(interaction);
 		
 		JSONArray PersonJsonArray = new JSONArray();
