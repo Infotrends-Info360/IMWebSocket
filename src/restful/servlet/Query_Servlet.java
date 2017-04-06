@@ -91,17 +91,23 @@ public class Query_Servlet {
 
 //    		    System.out.println("inputjsonObj: "+inputjsonObj);   
 							int count=0;
+							System.out.println("=================");
 							for(int i = 0; i<inputjsonObjkeys.length;i++){
+							
 								if(inputjsonObj.has(inputjsonObjkeys[i])&&datajsonObj.has(datajsonObjkeys[i])){
-//    		    			if(inputjsonObj.get(inputjsonObjkeys[i]).equals(datajsonObj.get(inputjsonObjkeys[i]))){
-//    		    				count++;
-//    		    			}
-									int x =0;
-										x = inputjsonObj.get(inputjsonObjkeys[i]).toString().indexOf(datajsonObj.get(inputjsonObjkeys[i]).toString());
-										if(x>=0){
-			    		    				count++;
-												
+									
+									System.out.println(inputjsonObj.get(inputjsonObjkeys[i]).toString());
+									System.out.println(datajsonObj.get(inputjsonObjkeys[i]).toString());
+//										x = inputjsonObj.get(inputjsonObjkeys[i]).toString().indexOf(datajsonObj.get(inputjsonObjkeys[i]).toString());
+									if(!inputjsonObj.get(inputjsonObjkeys[i]).toString().trim().equals("")&&inputjsonObj.get(inputjsonObjkeys[i]).toString().trim()!=null){
+										
+								int	x = datajsonObj.get(inputjsonObjkeys[i]).toString().trim().indexOf(inputjsonObj.get(inputjsonObjkeys[i]).toString().trim());
+									System.out.println(x);
+									if(x>=0){
+										count++;
+										}
 									}
+										
 									
 								}
 							} 
