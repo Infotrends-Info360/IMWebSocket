@@ -97,10 +97,12 @@ public class Query_Servlet {
 //    		    				count++;
 //    		    			}
 									int x =0;
-									x = datajsonObj.get(inputjsonObjkeys[i]).toString().indexOf(inputjsonObj.get(inputjsonObjkeys[i]).toString());
-									if(x>=0){
-    		    				count++;
+										x = inputjsonObj.get(inputjsonObjkeys[i]).toString().indexOf(datajsonObj.get(inputjsonObjkeys[i]).toString());
+										if(x>=0){
+			    		    				count++;
+												
 									}
+									
 								}
 							} 
 
