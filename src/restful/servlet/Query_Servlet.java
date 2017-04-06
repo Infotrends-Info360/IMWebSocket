@@ -41,8 +41,6 @@ import com.Info360.service.MaintainService;
 @Path("/Query")
 public class Query_Servlet {
 	
-
-	
 	@POST
 	@Produces("application/json")
 	public Response PostFromPath(
@@ -53,8 +51,6 @@ public class Query_Servlet {
 			@FormParam("contactid") String contactid,
 			@FormParam("inputcontactdata") String inputcontactdata
 
-
-			
 			) throws IOException {
 		
 		JSONObject jsonObject = new JSONObject();
@@ -70,10 +66,9 @@ public class Query_Servlet {
 		
 		List<String> contactidlist = new ArrayList<String>();
 		MaintainService maintainservice = new MaintainService();
-		
-//		System.out.println("inputcontactdata: "+inputcontactdata);
+//		System.out.println("start");
 
-			if(inputcontactdata.trim()!=null&& !inputcontactdata.trim().isEmpty()){
+			if(inputcontactdata!=null && !inputcontactdata.isEmpty()){
 //				System.out.println("inputcontactdata if");
 				//select全部contactdataID
 				List<String> allcontactdata = new ArrayList<String>();
