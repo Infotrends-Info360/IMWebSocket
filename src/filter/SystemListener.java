@@ -124,13 +124,13 @@ public class SystemListener implements ServletContextListener {
 				e.printStackTrace();
 			}
 		} else {
-			Util.getConsoleLogger().warn("property file '" + propFileName + "' not found in the classpath");
-			Util.getFileLogger().warn("property file '" + propFileName + "' not found in the classpath");
+//			Util.getConsoleLogger().warn("property file '" + propFileName + "' not found in the classpath");
+//			Util.getFileLogger().warn("property file '" + propFileName + "' not found in the classpath");
 		}
 		
 		for (final String name: prop.stringPropertyNames()){
-			Util.getConsoleLogger().debug("name: " + name);
-			Util.getConsoleLogger().debug("prop.getProperty(name): " + prop.getProperty(name));
+//			Util.getConsoleLogger().debug("name: " + name);
+//			Util.getConsoleLogger().debug("prop.getProperty(name): " + prop.getProperty(name));
 			systemParam.put(name.replace(".", "_"), prop.getProperty(name));
 		}		
 		
@@ -152,8 +152,8 @@ public class SystemListener implements ServletContextListener {
 //			 }else if(systemCfg.getParameter().indexOf("MaxRingTime") >= 0){
 //				 systemParam.put("MaxRingTime", systemCfg.getValue());
 //			 }
-			 Util.getConsoleLogger().debug("systemCfg.getParameter(): " + systemCfg.getParameter());
-			 Util.getConsoleLogger().debug("systemCfg.getValue(): " + systemCfg.getValue());
+//			 Util.getConsoleLogger().debug("systemCfg.getParameter(): " + systemCfg.getParameter());
+//			 Util.getConsoleLogger().debug("systemCfg.getValue(): " + systemCfg.getValue());
 		 }// end of for
 
 		
@@ -175,7 +175,7 @@ public class SystemListener implements ServletContextListener {
 		List<Cfg_AgentStatus> agentstatuslist = maintainservice.Select_cfg_agentstatus(agentstatus);
 //		Util.getConsoleLogger().debug("agentstatuslist: " + agentstatuslist);
 		for (Cfg_AgentStatus agentStatus: agentstatuslist){
-			Util.getConsoleLogger().debug("agentStatus.getStatusname(): " + agentStatus.getStatusname());
+//			Util.getConsoleLogger().debug("agentStatus.getStatusname(): " + agentStatus.getStatusname());
 		}
 		
 		Map<String, Map<String, String>> agentstatusmap = new HashMap<String, Map<String, String>>();
