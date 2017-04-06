@@ -105,7 +105,10 @@ public class Query_Servlet {
 							} 
 
 							if(count>=0){
-//    							System.out.println("Contactkey:  "+Contactkey);
+    							System.out.println("x count  :  "+count);
+
+    							System.out.println("Contactkey:  "+Contactkey);
+
 								contactidlist.add(Contactkey);
 //    		  	  				contactdataObject.put("contactid", Contactkey);
 //    							interaction.setContactid(Contactkey);
@@ -117,18 +120,18 @@ public class Query_Servlet {
 		}
 
 		if(agentid!=null&& !agentid.isEmpty()){
-//			System.out.println("agentid if");
+			System.out.println("agentid if");
 			interaction.setAgentid(agentid);
 		}
 		if(contactid!=null&& !contactid.isEmpty()){
-//			System.out.println("contactid if");
+			System.out.println("contactid if");
 			interaction.setContactid(contactid);
 		}
 		int oo = 0;
 		JSONArray PersonJsonArray = new JSONArray();
 		JSONArray testArray = new JSONArray();
 		if(contactidlist.size()>0){
-//			System.out.println("contactidlist: "+contactidlist);
+			System.out.println("contactidlist: "+contactidlist);
 				for(int i = 0; i<contactidlist.size();i++){
 					
 					interaction.setContactid(contactidlist.get(i));
@@ -223,17 +226,18 @@ public class Query_Servlet {
 								//}
 					    		
 				  	    	}
-//				  	    	oo++;
+				  	    	oo++;
 			  	    	}
 				}
 		}else{
-//	    		System.out.println("else");
+	    		System.out.println("else");
 
 		List<Interaction> interactionlist = maintainservice.Selcet_interaction(interaction);
 
   	    	for(int a = 0; a < interactionlist.size(); a++){
   	    	String name = "";
-  	    		
+//	    		System.out.println("interactionlist");
+
   	    	rpt_activitylog.setInteractionid(interactionlist.get(a).getIxnid());
   	    	List<Rpt_Activitylog> rpt_activityloglist = maintainservice.Selcet_activitylog(rpt_activitylog);
   	    	
@@ -314,12 +318,12 @@ public class Query_Servlet {
 					//}
 		    		
 	  	    	}
-//	  	    	oo++;
+	  	    	oo++;
   	    	}
   	    	
 		}
 			jsonObject.put("data", testArray);
-//	  	    System.out.println(oo);
+	  	    System.out.println(oo);
   	  
 		return Response.status(200).entity(jsonObject.toString())
 				.header("Access-Control-Allow-Origin", "*")
