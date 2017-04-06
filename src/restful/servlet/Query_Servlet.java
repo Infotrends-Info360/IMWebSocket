@@ -98,13 +98,13 @@ public class Query_Servlet {
 //    		    			}
 									int x =0;
 									x = datajsonObj.get(inputjsonObjkeys[i]).toString().indexOf(inputjsonObj.get(inputjsonObjkeys[i]).toString());
-									if(x>=0){
+									if(x>0){
     		    				count++;
 									}
 								}
 							} 
 
-							if(count>=0){
+							if(count>0){
     							System.out.println("x count  :  "+count);
 
     							System.out.println("Contactkey:  "+Contactkey);
