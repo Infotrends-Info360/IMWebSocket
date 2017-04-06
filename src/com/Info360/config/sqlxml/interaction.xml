@@ -65,7 +65,6 @@ select  DBID,CONTACTID,IXNID,AGENTID,STARTDATE,ENDDATE,STATUS,TYPEID,ENTITYTYPEI
 
 FROM tblInteraction where 1=1
 
-
 <if test="agentid!=&quot;&quot; &amp;&amp;agentid!=null ">
  	and 
  		AGENTID =#{agentid}
@@ -74,6 +73,12 @@ FROM tblInteraction where 1=1
  	and 
  		CONTACTID =#{contactid}
 </if>
+<!-- <if test="contactidlist.size() > 0"> -->
+<!-- 	<foreach item="value" index="key" collection="contactidlist" -->
+<!-- 		open="and" separator="and" close=""> -->
+<!--  	 contactid=#{value} -->
+<!-- 	</foreach> -->
+<!-- </if> -->
 <if test="startdate!=&quot;&quot;&amp;&amp;agentid!=null">
 	and
  		<![CDATA[ Convert(DateTime,StartDate) >=Convert(DateTime,#{startdate})]]>

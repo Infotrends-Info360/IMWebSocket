@@ -1,6 +1,8 @@
 package com.Info360.bean;
 
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -44,6 +46,18 @@ public class Interaction {
 	
 	private int page;
 	
+	private List<String> contactidlist = new ArrayList<String>();
+	
+
+	
+	
+	public List<String> getContactidlist() {
+		return contactidlist;
+	}
+
+	public void setContactidlist(List<String> contactidlist) {
+		this.contactidlist = contactidlist;
+	}
 
 	public int getPage() {
 		return page;
