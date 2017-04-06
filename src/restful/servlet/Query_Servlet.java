@@ -69,7 +69,7 @@ public class Query_Servlet {
 //		System.out.println("start");
 
 			if(inputcontactdata!=null && !inputcontactdata.isEmpty()){
-//				System.out.println("inputcontactdata if");
+				System.out.println("inputcontactdata if");
 				//select全部contactdataID
 				List<String> allcontactdata = new ArrayList<String>();
 				List<ContactData> contactdatalist = maintainservice.Query_All_Contactdata(contactdata);
@@ -98,7 +98,7 @@ public class Query_Servlet {
 //    		    			}
 									int x =0;
 									x = datajsonObj.get(inputjsonObjkeys[i]).toString().indexOf(inputjsonObj.get(inputjsonObjkeys[i]).toString());
-									if(x>0){
+									if(x>=0){
     		    				count++;
 									}
 								}
