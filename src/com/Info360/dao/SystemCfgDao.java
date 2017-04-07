@@ -8,7 +8,6 @@ import org.apache.ibatis.session.SqlSession;
 
 import util.Util;
 
-import com.Info360.bean.Cfg_AgentReason;
 import com.Info360.bean.SystemCfg;
 import com.Info360.db.DBAccess;
 import com.Info360.util.IsError;

@@ -46,25 +46,8 @@
   </environments>
 
   <mappers>
-    <mapper resource="com/Info360/config/sqlxml/serviceentry.xml"/>
-    <mapper resource="com/Info360/config/sqlxml/contactdata.xml"/>
-    <mapper resource="com/Info360/config/sqlxml/interaction.xml"/>
-    <mapper resource="com/Info360/config/sqlxml/cfg_servicename_setting.xml"/>
-    <mapper resource="com/Info360/config/sqlxml/commonlink.xml"/>
-    <mapper	resource="com/Info360/config/sqlxml/agentreason.xml"/>
-    <mapper	resource="com/Info360/config/sqlxml/cfg_agentstatus.xml"/>
-    <mapper	resource="com/Info360/config/sqlxml/rpt_agentstatus.xml"/>
-    <mapper	resource="com/Info360/config/sqlxml/activitymenu.xml"/>
-    <mapper	resource="com/Info360/config/sqlxml/activitydata.xml"/>
-    <mapper	resource="com/Info360/config/sqlxml/activitygroups.xml"/>
-    <mapper	resource="com/Info360/config/sqlxml/rpt_activitylog.xml"/>
-    <mapper	resource="com/Info360/config/sqlxml/cfg_person.xml"/>
     <mapper	resource="com/Info360/config/sqlxml/systemCfg.xml"/>
-    
-    <mapper resource="com/Info360/config/sqlxml/CaseComments.xml"/>
-    <mapper resource="com/Info360/config/sqlxml/Cfg_CaseStatus.xml"/>
-    <mapper resource="com/Info360/config/sqlxml/cfg_servicename_mapping.xml"/>
-    
+    <mapper	resource="com/Info360/config/sqlxml/cfg_agentstatus.xml"/>
   </mappers>
 
 </configuration>
