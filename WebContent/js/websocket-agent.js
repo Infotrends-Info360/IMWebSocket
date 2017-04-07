@@ -542,7 +542,7 @@ function Login() {
 					var agentID = agentUserInfo.userid;
 					var agentName = agentUserInfo.username;
 					var isReady = agentUserInfo.ready; // "true" or "false" // 可用來判斷是否加入list, demo版本上未使用
-					alert("isReady: " + isReady);
+//					alert("isReady: " + isReady);
 					// ID
 					console.log("agentID: " + agentID);
 					console.log("parent.UserID_g: " + parent.UserID_g);
