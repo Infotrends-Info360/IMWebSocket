@@ -68,19 +68,12 @@ function onloadFunctionAgent(){
 function loginValidate() {
 	console.log("document.getElementById('systemParam').value: " + document.getElementById('systemParam').value);
 	var systemParam = JSON.parse( document.getElementById('systemParam').value );
-//	alert("systemParam.Info360_Setting: " + systemParam.Info360_Setting);
-//	alert("systemParam.Info360_Setting.protocol: " + systemParam.Info360_Setting.protocol);
-//	alert("systemParam.Info360_Setting.hostname: " + systemParam.Info360_Setting.hostname);
-//	alert("systemParam.Info360_Setting.port: " + systemParam.Info360_Setting.port);
-//	var url = systemParam_g.Info360_Setting.protocol + "//" + systemParam_g.Info360_Setting.hostname + ":" + systemParam_g.Info360_Setting.port;
 	var url = systemParam_g.RESTful.protocol + "//" + systemParam_g.RESTful.hostname + ":" + systemParam_g.RESTful.port + systemParam_g.RESTful.project;
 //	alert("url: " + url);
 	var account = document.getElementById('Account').value;
 	var password = document.getElementById('Password').value;
 	$
 			.ajax({
-//				url : aUrl,
-//				url : url + "/Info360_Setting/RESTful/Login",
 				url : url + "/RESTful/Login",
 				data : {
 					account : account,
