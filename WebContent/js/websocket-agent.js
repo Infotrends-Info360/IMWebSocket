@@ -437,7 +437,7 @@ function Login() {
 				}; // 設定 AcceptEventInit
 
 			} else if ("responseThirdParty" == obj.Event){
-				alert("responseThirdParty - obj: " + JSON.stringify( obj ));
+//				alert("responseThirdParty - obj: " + JSON.stringify( obj ));
 				var chatRoomMsg = obj.chatRoomMsg; // 接收系統訊息
 				var userdata = JSON.stringify( obj.userdata );
 				var text = obj.text + chatRoomMsg + "<br>";
