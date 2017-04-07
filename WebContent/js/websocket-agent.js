@@ -1382,6 +1382,17 @@ function sendComment(aInteractionid, aActivitydataids, aComment){
 	}
 }
 
+function refreshAgentList_request(){
+	
+	var msg = {
+			type : "refreshAgentList"
+		};
+	// 發送消息
+	parent.ws_g.send(JSON.stringify(msg));	
+	
+	
+}
+
 // 測試按鈕
 function account01(){
 	$('#Account')[0].value = 'Holylin';

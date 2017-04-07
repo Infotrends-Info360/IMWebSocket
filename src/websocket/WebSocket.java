@@ -228,6 +228,9 @@ public class WebSocket extends WebSocketServer {
 		case "updateClientContactID":
 			updateClientContactID(message.toString(), conn);
 			break;
+		case "refreshAgentList":
+			AgentFunction.refreshAgentList();
+			break;
 		case "test":
 			this.test();
 			break;

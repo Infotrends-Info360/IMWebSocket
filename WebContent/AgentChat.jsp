@@ -304,7 +304,7 @@ td {
 	                    <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12" style="padding-left: 10px;">私訊: </div>
 	                </div>
 	                <div class="row col-xs-12 col-sm-12 col-md-12 col-lg-12 panel-body center">
-	                	<div class="col-xs-12 col-sm-12 col-md-12 col-lg-12 ">
+	                	<div class="col-xs-6 col-sm-6 col-md-6 col-lg-6 ">
 	                        <select id="agentList" class="form-control">
 <!-- 		                        <option disabled selected value> -- select an agent -- </option> -->
 <!-- 	                            <option value="agent01">agent01</option> -->
@@ -312,6 +312,9 @@ td {
 <!-- 	                            <option value="agent03">agent03</option> -->
 	                        </select>
 	                	</div>
+	                	<div class="col-xs-3 col-sm-3 col-md-3 col-lg-3 ">
+	                		<button id="privateMsg" class="btn btn-primary" onclick="refreshAgentList_request(this.agentID);">REFRESH</button>
+	                	</div>	                	
 		                <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12 spacer10"></div>
                 		<div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
 		                	<div class="col-xs-9 col-sm-9 col-md-9 col-lg-9 nopadding">
