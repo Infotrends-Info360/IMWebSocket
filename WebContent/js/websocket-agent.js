@@ -1390,7 +1390,7 @@ function account01(){
 
 function account02(){
 	$('#Account')[0].value = 'lintsai';
-	$('#Password')[0].value = '123123';
+	$('#Password')[0].value = '1111';
 }
 
 // 測試按鈕
