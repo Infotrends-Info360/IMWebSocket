@@ -176,11 +176,7 @@ public class CommonFunction {
 		SimpleDateFormat sdf = new SimpleDateFormat(Util.getSdfTimeFormat());
 		String date = sdf.format(new java.util.Date());
 		WebSocketTypePool.addUserinTYPE(ACtype, username, userId, date, aConn);
-		
-		/*** 更新Agent list - 私訊用 ***/
-		if ("Agent".equals(ACtype)){
-			AgentFunction.refreshAgentList();
-		}
+	
 		
 		
 		/*** 讓Agent與Client都有Heartbeat ***/
@@ -203,6 +199,13 @@ public class CommonFunction {
 			usb.setStartORend("start");
 			CommonFunction.updateStatus(new Gson().toJson(usb), aConn);
 		}// end of if (WebSocketTypePool.isAgent(...))
+		
+		
+		/*** 更新Agent list - 私訊用 ***/
+		if ("Agent".equals(ACtype)){
+			AgentFunction.refreshAgentList();
+		}
+		
 	}
 	
 	/** ask online people **/

@@ -313,7 +313,7 @@ td {
 	                        </select>
 	                	</div>
 	                	<div class="col-xs-3 col-sm-3 col-md-3 col-lg-3 ">
-	                		<button id="privateMsg" class="btn btn-primary" onclick="refreshAgentList_request(this.agentID);">REFRESH</button>
+	                		<button id="refreshAgentList_request" class="btn btn-primary" onclick="refreshAgentList_request(this.agentID);">REFRESH</button>
 	                	</div>	                	
 		                <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12 spacer10"></div>
                 		<div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">

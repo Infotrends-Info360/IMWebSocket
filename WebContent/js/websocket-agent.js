@@ -3,6 +3,7 @@ var ws_g; // websocket
 var UserName_g; // 使用者名稱全域變數
 var UserID_g; // 使用者ID全域變數
 var agentIDMap_g = new Map(); // 用於私訊部分, 更新現在在線的Agent清單
+var agentNameMap_g = new Map(); // 用於私訊部分, 更新現在在線的Agent清單
 var waittingClientIDList_g = []; // 用處: 當LOGOUT時,告知所有有寄給此Agent請求的其他Client不用再等了
 var waittingAgentIDList_g = []; // 用處: 當LOGOUT時,告知所有有寄給此Agent請求的其他Agents不用再等了
 var systemParam_g;
@@ -531,20 +532,32 @@ function Login() {
 				ready();
 			} else if ("refreshAgentList" == obj.Event){
 //					alert(obj.fromAgentID + " logined!");
-				console.log("refreshAgentList - agentIDList: " + obj.agentIDList);
-				var tmpAgentIDList = "" + obj.agentIDList;
-				var agentIDList = tmpAgentIDList.split(",");
-			    var i;			
+				console.log("refreshAgentList - agentList: " + obj.agentList);
+				var agentListJsonArray = obj.agentList;
 			    agentIDMap_g.clear();
-				for (i = 0; i < agentIDList.length; i++) {
-					var agentID = agentIDList[i].trim();
+			    agentNameMap_g.clear();
+			    var i;			
+				for (i = 0; i < agentListJsonArray.length; i++) {
+					var agentUserInfo = agentListJsonArray[i];
+					var agentID = agentUserInfo.userid;
+					var agentName = agentUserInfo.username;
+					var isReady = agentUserInfo.ready; // "true" or "false" // 可用來判斷是否加入list, demo版本上未使用
+					alert("isReady: " + isReady);
+					// ID
 					console.log("agentID: " + agentID);
 					console.log("parent.UserID_g: " + parent.UserID_g);
 					if (agentID == parent.UserID_g) continue;
 					agentIDMap_g.set(agentID, agentID);
+					// Name
+					console.log("agentName: " + agentName);
+					console.log("parent.UserName_g: " + parent.UserName_g);
+					if (agentName == parent.UserName_g) continue;
+					agentNameMap_g.set(agentID, agentName);
 					
 				}
 				console.log("refreshAgentList - agentIDMap_g: " + agentIDMap_g);
+				console.log("refreshAgentList - agentNameMap_g: " + agentNameMap_g);
+				// 更新頁面
 				updateAgentIDList();
 			} else if ("agentLeftThirdParty" == obj.Event){
 				alert("agentLeftThirdParty - agent " + obj.id + " left ");
@@ -1295,9 +1308,9 @@ function updateAgentIDList(){
 	
 	agentIDMap_g.forEach(function(value, AgentID) {
 		if (selectedAgentID != AgentID){
-			rows += '<option value=' + '"'+ AgentID +'"' + '>' + '"'+ AgentID +'"' + '</option>';
+			rows += '<option value=' + '"'+ AgentID +'"' + '>' + '"'+ agentNameMap_g.get(AgentID) +'"' + '</option>';
 		}else{
-			rows += '<option value=' + '"'+ AgentID +'"' + ' selected>' + '"'+ AgentID +'"' + '</option>';			
+			rows += '<option value=' + '"'+ AgentID +'"' + ' selected>' + '"'+ agentNameMap_g.get(AgentID) +'"' + '</option>';			
 		}
 		
 	});		

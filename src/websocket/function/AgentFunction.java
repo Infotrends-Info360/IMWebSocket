@@ -7,8 +7,10 @@ import java.io.OutputStream;
 import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.URL;
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
@@ -17,6 +19,7 @@ import org.json.JSONArray;
 import org.json.JSONObject;
 
 import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
 
 import util.StatusEnum;
 import util.Util;
@@ -122,20 +125,21 @@ public class AgentFunction {
 
 	public static void refreshAgentList() {
 		Util.getConsoleLogger().debug("refreshAgentList() called");
-		Map<WebSocket, UserInfo> agentMap = WebSocketTypePool
-				.getTypeconnections().get("Agent");
-		Collection<String> agentIDList = WebSocketTypePool
-				.getOnlineUserIDinTYPE("Agent");
-//		Util.getConsoleLogger().debug("refreshAgentList() - agentIDList.size(): " 	+ agentIDList.size());
-		Set<WebSocket> agentConnList = agentMap.keySet();
-		for (WebSocket tmpConn : agentConnList) {
+		Map<WebSocket, UserInfo> agentMap = WebSocketTypePool.getTypeconnections().get("Agent");
+		Gson gson = new Gson();
+		
+		// 通知用
+		Collection<UserInfo> agentUserInfoCollection = agentMap.values();
+		JSONArray jsArray = new JSONArray(agentUserInfoCollection);
+		Util.getConsoleLogger().debug("refreshAgentList() - jsArray: " + jsArray);
+		for (WebSocket tmpConn : agentMap.keySet()) {
+			if (tmpConn.isClosed() || tmpConn.isClosing()) continue;
 
 			JSONObject sendjson02 = new JSONObject();
 			sendjson02.put("Event", "refreshAgentList");
-			sendjson02.put("agentIDList", agentIDList);
-			if (tmpConn.isClosed() || tmpConn.isClosing()) continue;
+			sendjson02.put("agentList", jsArray);
 			WebSocketUserPool.sendMessageToUserWithTryCatch(tmpConn, sendjson02.toString());
-		}
+		}// end of for
 	}
 	
 	//從DB撈取出AgentReason,並塞入Util.setAgentReason Bean，flag請塞"0"
