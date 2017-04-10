@@ -30,6 +30,10 @@ public class UserInfo {
 	private AtomicBoolean stopRing = new AtomicBoolean(false); // 處理concurrent問題
 	private AtomicBoolean timeout = new AtomicBoolean(false); // 處理concurrent問題
 	
+	/** 三方轉接的Timeout **/
+	private AtomicBoolean stopConfRing = new AtomicBoolean(false);
+	private AtomicBoolean timeoutConf = new AtomicBoolean(false);
+	
 	private String roomOwner;
 	
 	private Future<?> findAgentTaskResult;
@@ -189,8 +193,22 @@ public class UserInfo {
 		this.isRingEndExpected = isRingEndNormally;
 	}
 	
+	public boolean isStopConfRing(){
+		return this.stopConfRing.get();
+	}
 	
+	public void setStopConfRing(boolean aStopConfRing){
+		this.stopConfRing.set(aStopConfRing);
+	}
+
 	
+	public boolean isTimeoutConf(){
+		return this.timeoutConf.get();
+	}
+	
+	public void setTimeoutConf(boolean aTimeoutConf){
+		this.timeoutConf.set(aTimeoutConf);
+	}	
 	
 }
 
