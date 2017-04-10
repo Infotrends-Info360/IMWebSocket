@@ -6,6 +6,13 @@
 	<artifactId>IMWebSocket</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
 	<packaging>war</packaging>
+
+
+
+	<properties>
+		<jdk.version>1.8</jdk.version>
+	</properties>	
+
 	<build>
 		<sourceDirectory>src</sourceDirectory>
 		<plugins>
@@ -13,8 +20,8 @@
 				<artifactId>maven-compiler-plugin</artifactId>
 				<version>3.1</version>
 				<configuration>
-					<source>1.7</source>
-					<target>1.7</target>
+					<source>${jdk.version}</source>
+					<target>${jdk.version}</target>
 				</configuration>
 			</plugin>
 			<plugin>
@@ -27,6 +34,8 @@
 			
 		</plugins>
 	</build>
+	
+	
 	<dependencies>
 		<dependency>
 			<groupId>asm</groupId>

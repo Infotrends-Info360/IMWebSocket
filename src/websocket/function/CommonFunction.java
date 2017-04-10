@@ -55,10 +55,10 @@ import util.Util;
 
 
 
+
 import com.google.gson.JsonParser;
 
 import websocket.HeartBeat;
-import websocket.bean.RingCountDownTask;
 import websocket.bean.RoomInfo;
 import websocket.bean.SystemInfo;
 import websocket.bean.UpdateStatusBean;
@@ -68,6 +68,7 @@ import websocket.pools.WebSocketRoomPool;
 import websocket.pools.WebSocketTypePool;
 import websocket.pools.WebSocketUserPool;
 import websocket.thread.findAgent.FindAgentThread;
+import websocket.thread.rings.RingCountDownTask;
 
 //此類別給WebSocjet.java使用
 public class CommonFunction {

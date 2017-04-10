@@ -26,7 +26,6 @@ import com.google.gson.reflect.TypeToken;
 
 import util.StatusEnum;
 import util.Util;
-import websocket.bean.RingCountDownConfTask;
 import websocket.bean.RoomInfo;
 import websocket.bean.SystemInfo;
 import websocket.bean.ThirdPartyBean;
@@ -35,6 +34,7 @@ import websocket.bean.UserInfo;
 import websocket.pools.WebSocketRoomPool;
 import websocket.pools.WebSocketTypePool;
 import websocket.pools.WebSocketUserPool;
+import websocket.thread.rings.RingCountDownConfTask;
 
 //此類別給WebSocjet.java使用
 public class AgentFunction {

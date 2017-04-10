@@ -1,4 +1,4 @@
-package websocket.bean;
+package websocket.thread.rings;
 
 import java.util.Timer;
 import java.util.TimerTask;
@@ -10,6 +10,8 @@ import com.google.gson.JsonObject;
 
 import util.StatusEnum;
 import util.Util;
+import websocket.bean.SystemInfo;
+import websocket.bean.UserInfo;
 import websocket.function.AgentFunction;
 import websocket.pools.WebSocketUserPool;
 
