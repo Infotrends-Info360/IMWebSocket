@@ -382,52 +382,52 @@ public class AgentFunction {
 
 	static public void responseThirdParty(String message, org.java_websocket.WebSocket aConn) {
 		Util.getConsoleLogger().debug("responseThirdParty() called");
-		JSONObject obj = new JSONObject(message);
-		String ACtype = obj.getString("ACtype");
-		String roomID = obj.getString("roomID");
-		String fromAgentID = obj.getString("fromAgentID");
-		org.java_websocket.WebSocket fromAgentConn = WebSocketUserPool.getWebSocketByUserID(fromAgentID);
+		Gson gson = new Gson();
+		ThirdPartyBean thirdPartyBeanIn = gson.fromJson(message, ThirdPartyBean.class);
+		org.java_websocket.WebSocket fromAgentConn = WebSocketUserPool.getWebSocketByUserID(thirdPartyBeanIn.getFromAgentID());
 		String fromAgentName = WebSocketUserPool.getUserNameByKey(fromAgentConn);
-		String invitedAgentID = obj.getString("invitedAgentID");
 		String invitedAgentName = WebSocketUserPool.getUserNameByKey(aConn);
-		String response = obj.getString("response");
-		String inviteType = obj.getString("inviteType");
-//		String userdata = obj.getString("userdata");
-		JSONObject userdata = obj.getJSONObject("userdata");
-		String text = obj.getString("text");
 		
-		obj.put("Event", "responseThirdParty");		
-		if ("accept".equals(response)){
+		thirdPartyBeanIn.setEvent("responseThirdParty");
+		// 為了讓field是動態的,這邊仍然得轉為JsonObject
+		JsonObject jsonOut	= (JsonObject)gson.toJsonTree(thirdPartyBeanIn);
+		if ("accept".equals(thirdPartyBeanIn.getResponse())){
 			Util.getConsoleLogger().debug("responseThirdParty() - accept");
 			/** 新增room成員 **/
-			WebSocketRoomPool.addUserInRoom(roomID, invitedAgentName, invitedAgentID, aConn);
+			WebSocketRoomPool.addUserInRoom(thirdPartyBeanIn.getRoomID(), invitedAgentName, thirdPartyBeanIn.getInvitedAgentID(), aConn);
 			/** 新增user所加入的room list **/
-			WebSocketUserPool.addUserRoom(roomID, aConn);
+			WebSocketUserPool.addUserRoom(thirdPartyBeanIn.getRoomID(), aConn);
 			
 			// 通知更新roomList
 			// 若是屬於轉接的要求,則將原Agent(邀請者)踢出
-			if ("transfer".equals(inviteType)){
+			if ("transfer".equals(thirdPartyBeanIn.getInviteType())){
 				Util.getConsoleLogger().debug("responseThirdParty() - transfer");
 				// 更新roomInfo - owner資訊
-				RoomInfo roomInfo = WebSocketRoomPool.getRoomInfo(roomID);
+				RoomInfo roomInfo = WebSocketRoomPool.getRoomInfo(thirdPartyBeanIn.getRoomID());
 				//roomInfo.setRoomOwnerAgentID(invitedAgentID);
 				UserInfo clientUserInfo = WebSocketUserPool.getUserInfoByKey(roomInfo.getClientConn());
-				clientUserInfo.setRoomOwner(invitedAgentID);
-				obj.put(SystemInfo.TAG_SYS_MSG, SystemInfo.getLeftRoomMsg(fromAgentName) + "<br>" 
+				clientUserInfo.setRoomOwner(thirdPartyBeanIn.getInvitedAgentID());
+				
+				jsonOut.addProperty(SystemInfo.TAG_SYS_MSG, SystemInfo.getLeftRoomMsg(fromAgentName) + "<br>" 
 												+ SystemInfo.getJoinedRoomMsg(invitedAgentName)); // 傳出系統訊息
 				
 				// 通知要離開的使用者清除前端頁面
-				WebSocketUserPool.sendMessageToUserWithTryCatch(WebSocketUserPool.getWebSocketByUserID(fromAgentID), obj.toString());
-				WebSocketRoomPool.removeUserinroom(roomID, WebSocketUserPool.getWebSocketByUserID(fromAgentID));
-			}else if("thirdParty".equals(inviteType)){
-				obj.put(SystemInfo.TAG_SYS_MSG, SystemInfo.getJoinedRoomMsg(invitedAgentName)); // 傳出系統訊息
+				WebSocketUserPool.sendMessageToUserWithTryCatch(
+					WebSocketUserPool.getWebSocketByUserID(thirdPartyBeanIn.getFromAgentID()), 
+					jsonOut.toString()
+				);
+				WebSocketRoomPool.removeUserinroom(thirdPartyBeanIn.getRoomID(), WebSocketUserPool.getWebSocketByUserID(thirdPartyBeanIn.getFromAgentID()));
+			}else if("thirdParty".equals(thirdPartyBeanIn.getInviteType())){
+				
+				jsonOut.addProperty(SystemInfo.TAG_SYS_MSG, SystemInfo.getJoinedRoomMsg(invitedAgentName)); // 傳出系統訊息
 			}
 			// 通知剩下的各房間成員成員數改變了
-			WebSocketRoomPool.sendMessageinroom(roomID, obj.toString());
+			WebSocketRoomPool.sendMessageinroom(thirdPartyBeanIn.getRoomID(), jsonOut.toString());
 			
-		}else if("reject".equals(response)){
-			Util.getConsoleLogger().debug("responseThirdParty() - reject");			
-			WebSocketUserPool.sendMessageToUserWithTryCatch(WebSocketUserPool.getWebSocketByUserID(fromAgentID), obj.toString());
+		}else if("reject".equals(thirdPartyBeanIn.getResponse())){
+			Util.getConsoleLogger().debug("responseThirdParty() - reject");
+			// 通知邀請者
+			WebSocketUserPool.sendMessageToUserWithTryCatch(WebSocketUserPool.getWebSocketByUserID(thirdPartyBeanIn.getFromAgentID()), jsonOut.toString());
 		}
 	
 	}	
