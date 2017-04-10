@@ -360,41 +360,24 @@ public class AgentFunction {
 	
 	
 	static public void inviteAgentThirdParty(String message, org.java_websocket.WebSocket aConn){
-		// 讀出送進來的JSON物件
+		/** 讀出送進來的JSON物件 **/
 		Util.getConsoleLogger().debug("inviteAgentThirdParty() called");
 		Gson gson = new Gson();
 		ThirdPartyBean thirdPartyBeanIn = gson.fromJson(message, ThirdPartyBean.class);
-//		JSONObject obj = new JSONObject(message);
-//		String ACtype = obj.getString("ACtype");
-//		String roomID = obj.getString("roomID");
-//		String fromAgentID = obj.getString("fromAgentID");
-//		String invitedAgentID = obj.getString("invitedAgentID");
-//		String fromAgentName = obj.getString("fromAgentName");
-//		String inviteType = obj.getString("inviteType");
-//		String userdata = obj.getJSONObject("userdata").toString();
-//		String text = obj.getString("text");
 		UserInfo invitingAgentUserInfo = WebSocketUserPool.getUserInfoByKey(aConn);
 		org.java_websocket.WebSocket invitedAgentIDConn = WebSocketUserPool.getWebSocketByUserID(thirdPartyBeanIn.getInvitedAgentID());
 		UserInfo invitedAgentUserInfo = WebSocketUserPool.getUserInfoByKey(invitedAgentIDConn);
 		Util.getConsoleLogger().trace("inviteAgentThirdParty - userdata: " + thirdPartyBeanIn.getUserdata().toString());
 		
-		// 籌備要寄出的JSON物件
+		/** 籌備要寄出的JSON物件 **/
 		thirdPartyBeanIn.setEvent("inviteAgentThirdParty");
-//		obj.put("Event", "inviteAgentThirdParty");
 		
-		// 寄給invitedAgent:
+		/** 寄給invitedAgent **/
 		org.java_websocket.WebSocket invitedAgent_conn = WebSocketUserPool.getWebSocketByUserID(thirdPartyBeanIn.getInvitedAgentID());
 		WebSocketUserPool.sendMessageToUserWithTryCatch(invitedAgent_conn, gson.toJson(thirdPartyBeanIn, ThirdPartyBean.class));
 		
 		/** 建立timeout機制 **/
 		new RingCountDownConfTask(invitingAgentUserInfo, invitedAgentUserInfo).operate();
-		
-//		type : "inviteAgentThirdParty",
-//		ACtype : "Agent",
-//		roomID : RoomID, //先預設目前每個Agent最多也就只有一個RoomID,之後會再調整
-//		fromAgentID : UserID,
-//		invitedAgentID : myInvitedAgentID,
-//		fromAgentName : UserName
 	}
 
 	static public void responseThirdParty(String message, org.java_websocket.WebSocket aConn) {
