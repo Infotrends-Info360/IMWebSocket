@@ -26,8 +26,10 @@ import com.google.gson.reflect.TypeToken;
 
 import util.StatusEnum;
 import util.Util;
+import websocket.bean.RingCountDownConfTask;
 import websocket.bean.RoomInfo;
 import websocket.bean.SystemInfo;
+import websocket.bean.ThirdPartyBean;
 import websocket.bean.UpdateStatusBean;
 import websocket.bean.UserInfo;
 import websocket.pools.WebSocketRoomPool;
@@ -357,26 +359,35 @@ public class AgentFunction {
 	
 	
 	
-	static public void inviteAgentThirdParty(String message, org.java_websocket.WebSocket conn){
+	static public void inviteAgentThirdParty(String message, org.java_websocket.WebSocket aConn){
 		// 讀出送進來的JSON物件
 		Util.getConsoleLogger().debug("inviteAgentThirdParty() called");
-		JSONObject obj = new JSONObject(message);
-		String ACtype = obj.getString("ACtype");
-		String roomID = obj.getString("roomID");
-		String fromAgentID = obj.getString("fromAgentID");
-		String invitedAgentID = obj.getString("invitedAgentID");
-		String fromAgentName = obj.getString("fromAgentName");
-		String inviteType = obj.getString("inviteType");
-		String userdata = obj.getJSONObject("userdata").toString();
-		String text = obj.getString("text");
-		Util.getConsoleLogger().trace("inviteAgentThirdParty - userdata: " + userdata);
-				
-		//籌備要寄出的JSON物件
-		obj.put("Event", "inviteAgentThirdParty");
+		Gson gson = new Gson();
+		ThirdPartyBean thirdPartyBeanIn = gson.fromJson(message, ThirdPartyBean.class);
+//		JSONObject obj = new JSONObject(message);
+//		String ACtype = obj.getString("ACtype");
+//		String roomID = obj.getString("roomID");
+//		String fromAgentID = obj.getString("fromAgentID");
+//		String invitedAgentID = obj.getString("invitedAgentID");
+//		String fromAgentName = obj.getString("fromAgentName");
+//		String inviteType = obj.getString("inviteType");
+//		String userdata = obj.getJSONObject("userdata").toString();
+//		String text = obj.getString("text");
+		UserInfo invitingAgentUserInfo = WebSocketUserPool.getUserInfoByKey(aConn);
+		org.java_websocket.WebSocket invitedAgentIDConn = WebSocketUserPool.getWebSocketByUserID(thirdPartyBeanIn.getInvitedAgentID());
+		UserInfo invitedAgentUserInfo = WebSocketUserPool.getUserInfoByKey(invitedAgentIDConn);
+		Util.getConsoleLogger().trace("inviteAgentThirdParty - userdata: " + thirdPartyBeanIn.getUserdata().toString());
+		
+		// 籌備要寄出的JSON物件
+		thirdPartyBeanIn.setEvent("inviteAgentThirdParty");
+//		obj.put("Event", "inviteAgentThirdParty");
 		
 		// 寄給invitedAgent:
-		org.java_websocket.WebSocket invitedAgent_conn = WebSocketUserPool.getWebSocketByUserID(invitedAgentID);
-		WebSocketUserPool.sendMessageToUserWithTryCatch(invitedAgent_conn, obj.toString());
+		org.java_websocket.WebSocket invitedAgent_conn = WebSocketUserPool.getWebSocketByUserID(thirdPartyBeanIn.getInvitedAgentID());
+		WebSocketUserPool.sendMessageToUserWithTryCatch(invitedAgent_conn, gson.toJson(thirdPartyBeanIn, ThirdPartyBean.class));
+		
+		/** 建立timeout機制 **/
+		new RingCountDownConfTask(invitingAgentUserInfo, invitedAgentUserInfo).operate();
 		
 //		type : "inviteAgentThirdParty",
 //		ACtype : "Agent",
