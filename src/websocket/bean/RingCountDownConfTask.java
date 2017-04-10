@@ -24,8 +24,8 @@ public class RingCountDownConfTask extends TimerTask {
 	private Timer timer;
 	private static long delay = 1000;
 	private static long period = 1000;
-	public static Integer maxRingTime = Integer.parseInt(Util.getMaxRingTime()); // 正式用
-//	public static Integer maxRingTime = 10; // 測試用
+//	public static Integer maxRingTime = Integer.parseInt(Util.getMaxRingTime()); // 正式用
+	public static Integer maxRingTime = 7; // 測試用
 	private Integer currCount = 0;
 	// 讓所有物件皆牽連於特定一個UserInfo(composition)
 	private UserInfo invitingAgentUserInfo;
@@ -35,6 +35,10 @@ public class RingCountDownConfTask extends TimerTask {
 	public RingCountDownConfTask(UserInfo aInvitingAgentUserInfo, UserInfo aInvitedAgentInfo){
 		this.invitingAgentUserInfo = aInvitingAgentUserInfo;
 		this.invitedAgentUserInfo = aInvitedAgentInfo;
+		
+		this.invitingAgentUserInfo.setStopConfRing(false);
+		this.invitedAgentUserInfo.setStopConfRing(false);
+		
 	}
 	
 	@Override

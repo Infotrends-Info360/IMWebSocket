@@ -387,9 +387,14 @@ public class AgentFunction {
 		org.java_websocket.WebSocket fromAgentConn = WebSocketUserPool.getWebSocketByUserID(thirdPartyBeanIn.getFromAgentID());
 		String fromAgentName = WebSocketUserPool.getUserNameByKey(fromAgentConn);
 		String invitedAgentName = WebSocketUserPool.getUserNameByKey(aConn);
+		UserInfo invitedAgentUserInfo = WebSocketUserPool.getUserInfoByKey(aConn);
 		
+		/** 終止timeout機制 **/
+		invitedAgentUserInfo.setStopConfRing(true);
+		
+		/** 根據response,建立回應事件 **/
 		thirdPartyBeanIn.setEvent("responseThirdParty");
-		// 為了讓field是動態的,這邊仍然得轉為JsonObject
+		// 為了讓SystemInfo.TAG_SYS_MSG field是動態的,這邊仍然得轉為JsonObject
 		JsonObject jsonOut	= (JsonObject)gson.toJsonTree(thirdPartyBeanIn);
 		if ("accept".equals(thirdPartyBeanIn.getResponse())){
 			Util.getConsoleLogger().debug("responseThirdParty() - accept");

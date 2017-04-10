@@ -448,6 +448,12 @@ function Login() {
 				var invitedAgentID = obj.invitedAgentID;
 				
 				// 若回應為拒絕,則不需再往下進行頁面更新
+				if("timeout" == response){
+					alert( "Agent " + invitedAgentID + " timeout " + inviteType +  " invitation");
+					return;
+				}				
+				
+				// 若回應為拒絕,則不需再往下進行頁面更新
 				if("reject" == response){
 					alert( "Agent " + invitedAgentID + " rejected " + inviteType +  " invitation");
 					return;

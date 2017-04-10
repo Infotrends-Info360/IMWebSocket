@@ -14,6 +14,8 @@ public class ThirdPartyBean {
 	JSONObject userdata;
 	String text;
 	
+	String response;
+	
 	public String getACtype() {
 		return ACtype;
 	}
@@ -67,6 +69,12 @@ public class ThirdPartyBean {
 	}
 	public void setEvent(String event) {
 		Event = event;
+	}
+	public String getResponse() {
+		return response;
+	}
+	public void setResponse(String response) {
+		this.response = response;
 	}
 	
 	

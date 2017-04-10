@@ -840,7 +840,13 @@ public class CommonFunction {
 	
 	public static void onClose_clearUserData(org.java_websocket.WebSocket conn) {
 		Util.getConsoleLogger().debug("onClose_clearUserData() called");
-		// 清ReadyAgentQueue
+		
+		/** 清RingCountDownConfTask **/
+		if (WebSocketTypePool.isAgent(conn)){
+			UserInfo agentUserInfo = WebSocketUserPool.getUserInfoByKey(conn);
+			agentUserInfo.setStopConfRing(true);			
+		}
+		/** 清ReadyAgentQueue **/
 		if (WebSocketTypePool.isAgent(conn)){
 			String userid = WebSocketUserPool.getUserID(conn);
 			boolean result = false;
@@ -851,7 +857,7 @@ public class CommonFunction {
 			Util.getConsoleLogger().debug("(onClose)WebSocketUserPool.getReadyAgentQueue().size(): " + WebSocketUserPool.getReadyAgentQueue().size());
 		}
 		
-		// 清Client-findAgentTaskResult
+		/** 清Client-findAgentTaskResult **/
 		if (WebSocketTypePool.isClient(conn)){
 			// 若有正在執行的findAgent sub thread正在等待,中斷它
 			UserInfo clientUserInfo = WebSocketUserPool.getUserInfoByKey(conn);
@@ -866,8 +872,7 @@ public class CommonFunction {
 			}
 		}
 
-		
-		// 清ROOM:
+		/** 清ROOM **/
 		// 取得一個user所屬的所有roomid
 		List<String> roomids = WebSocketUserPool.getUserRoomByKey(conn);
 		List<String> tmpRoomids = new ArrayList<String>(roomids); // 重要: 為了接下來要動態移除掉UserInfo.userRoom List, 為了在跑迴圈時仍保留著reference variable, 故須用light copy建立另一相對物件, 這樣就能實現動態刪除
@@ -881,7 +886,7 @@ public class CommonFunction {
 		}
 		Util.getConsoleLogger().debug("after - roomids.size(): " + roomids.size());
 
-		// 清TYPE:
+		/** 清TYPE **/
 		if (WebSocketTypePool.isAgent(conn)){
 			WebSocketTypePool.removeUserinTYPE("Agent", conn);			
 		}else if(WebSocketTypePool.isClient(conn)){
