@@ -377,7 +377,7 @@ public class AgentFunction {
 		WebSocketUserPool.sendMessageToUserWithTryCatch(invitedAgent_conn, gson.toJson(thirdPartyBeanIn, ThirdPartyBean.class));
 		
 		/** 建立timeout機制 **/
-		new RingCountDownConfTask(invitingAgentUserInfo, invitedAgentUserInfo).operate();
+		new RingCountDownConfTask(invitingAgentUserInfo, invitedAgentUserInfo, thirdPartyBeanIn).operate();
 	}
 
 	static public void responseThirdParty(String message, org.java_websocket.WebSocket aConn) {

@@ -6,6 +6,7 @@ import java.util.TimerTask;
 import org.apache.logging.log4j.Level;
 import org.java_websocket.WebSocket;
 
+import com.google.gson.Gson;
 import com.google.gson.JsonObject;
 
 import util.StatusEnum;
@@ -30,14 +31,18 @@ public class RingCountDownConfTask extends TimerTask {
 	// 讓所有物件皆牽連於特定一個UserInfo(composition)
 	private UserInfo invitingAgentUserInfo;
 	private UserInfo invitedAgentUserInfo;
+	private ThirdPartyBean thirdPartyBean;
 	
 	
-	public RingCountDownConfTask(UserInfo aInvitingAgentUserInfo, UserInfo aInvitedAgentInfo){
+	public RingCountDownConfTask(UserInfo aInvitingAgentUserInfo, UserInfo aInvitedAgentInfo, ThirdPartyBean aThirdPartyBean){
 		this.invitingAgentUserInfo = aInvitingAgentUserInfo;
 		this.invitedAgentUserInfo = aInvitedAgentInfo;
+		this.thirdPartyBean = aThirdPartyBean;
 		
 		this.invitingAgentUserInfo.setStopConfRing(false);
 		this.invitedAgentUserInfo.setStopConfRing(false);
+		this.invitingAgentUserInfo.setTimeoutConf(false);
+		this.invitedAgentUserInfo.setTimeoutConf(false);
 		
 	}
 	
@@ -50,11 +55,16 @@ public class RingCountDownConfTask extends TimerTask {
 			this.timer.cancel();
 			// 若為超過時間狀況,告知雙方Agent
 			JsonObject jsonTo = new JsonObject();
-			if (this.invitingAgentUserInfo.isTimeoutConf()){
-				jsonTo.addProperty("Event", "responseThirdParty");
-				jsonTo.addProperty("response", "timeout");
-				WebSocketUserPool.sendMessageToUser(WebSocketUserPool.getWebSocketByUserID(this.invitingAgentUserInfo.getUserid()), jsonTo.toString());
-				WebSocketUserPool.sendMessageToUser(WebSocketUserPool.getWebSocketByUserID(this.invitedAgentUserInfo.getUserid()), jsonTo.toString());
+			if (this.invitingAgentUserInfo.isTimeoutConf() || this.invitedAgentUserInfo.isTimeoutConf()){
+				Gson gson = new Gson();
+				this.thirdPartyBean.setEvent("responseThirdParty");
+				this.thirdPartyBean.setResponse("timeout");
+				
+//				jsonTo.addProperty("Event", "responseThirdParty");
+//				jsonTo.addProperty("response", "timeout");
+				
+				WebSocketUserPool.sendMessageToUser(WebSocketUserPool.getWebSocketByUserID(this.invitingAgentUserInfo.getUserid()), gson.toJson(this.thirdPartyBean, ThirdPartyBean.class));
+				WebSocketUserPool.sendMessageToUser(WebSocketUserPool.getWebSocketByUserID(this.invitedAgentUserInfo.getUserid()), gson.toJson(this.thirdPartyBean, ThirdPartyBean.class));
 			}
 			
 			return;
@@ -68,6 +78,7 @@ public class RingCountDownConfTask extends TimerTask {
 			Util.getFileLogger().info("TimerTaskRingHeartBeat - "  + "CONF RING TIMEOUT");
 			this.invitingAgentUserInfo.setStopConfRing(true);
 			this.invitingAgentUserInfo.setTimeoutConf(true);
+			this.invitedAgentUserInfo.setTimeoutConf(true);
 		}
 	}
 	
