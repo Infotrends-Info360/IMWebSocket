@@ -362,6 +362,7 @@ public class AgentFunction {
 	static public void inviteAgentThirdParty(String message, org.java_websocket.WebSocket aConn){
 		/** 讀出送進來的JSON物件 **/
 		Util.getConsoleLogger().debug("inviteAgentThirdParty() called");
+		
 		Gson gson = new Gson();
 		ThirdPartyBean thirdPartyBeanIn = gson.fromJson(message, ThirdPartyBean.class);
 		UserInfo invitingAgentUserInfo = WebSocketUserPool.getUserInfoByKey(aConn);
@@ -589,6 +590,15 @@ public class AgentFunction {
 					CommonFunction.updateStatus(new Gson().toJson(usb), userConn);	
 				}// end of if (需要更新狀態)
 			}// end of 更新狀態
+			
+			/** 當下更新interaction,避免當Client網路斷掉後,interaction漏掉了IxnID欄位資料 **/
+			if (WebSocketTypePool.isClient(userConn)){
+				JsonObject ixnJson = Util.getGJsonObject(WebSocketUserPool.getUserInteractionByKey(userConn));
+				ixnJson.addProperty("ixnid", roomID);
+				WebSocketUserPool.addUserInteraction(ixnJson.toString(), userConn);
+			}// end of if
+			
+			
 		}// end of 將成員一一加入到rooom中
 		
 		
