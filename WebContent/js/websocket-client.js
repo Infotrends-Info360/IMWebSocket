@@ -39,6 +39,8 @@ var layim;
 // 網頁載入後第一個動作
 function onloadFunctionClient(){
 	console.log("onloadFunction() called");
+
+	
 	/** 建立傳送訊息enter事件 **/
 	$("#message").keypress(function(e) {
 	    if(e.which == 13) {
@@ -60,6 +62,28 @@ function checktoLeave() {
 
 // 連上websocket
 function Login() {
+	/** 將全域變數皆設回預設值 **/
+	ws_g = null;
+	UserID_g = null;
+	UserName_g = null;
+	RoomID_g = null;
+	contactID_g = null;
+	isonline_g = false;
+	startdate_g = new Date();
+	ixnstatus_g = 0;
+	ixnactivitycode_g = null;
+	waittingAgent_g = false;
+	waittingAgentID_g = "none";
+
+	AgentIDList_g = null; // 後端資料處理已經沒在使用,僅前端顯示用
+	RoomOwnerAgentID_g = null; // 紀錄當下Room的Owner,當三方為transfer時,owner才會轉變
+
+//	var systemParam_g = null; // 系統參數,主要為URL相關資訊
+
+	layimswitch = false; // layim開關參數
+	layim = null;
+	
+	
 	// startdate = new Date();
 	UserName_g = document.getElementById('UserName').value;
 	

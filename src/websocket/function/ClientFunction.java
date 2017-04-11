@@ -302,6 +302,11 @@ public class ClientFunction {
 		List<AbstractMap.SimpleEntry<String, String>> params = new ArrayList<>();
 		synchronized (entriesSet) {
 			for (Map.Entry<String, JsonElement> entry : entriesSet) {
+				// 若值為空值,則不用把它放入params中
+				if ((entry.getValue() instanceof JsonNull)){
+					continue;
+				}
+
 				// "structuredtext" value 為JsonArray型態,故須特別處理
 				if (entry.getKey().equals("structuredtext")) {
 					params.add(new AbstractMap.SimpleEntry<String, String>(entry.getKey(), entry.getValue().toString()));
