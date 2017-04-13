@@ -2,6 +2,8 @@ package websocket.bean;
 
 import org.json.JSONObject;
 
+import com.google.gson.JsonObject;
+
 public class ThirdPartyBean {
 	
 	String Event;
@@ -11,7 +13,7 @@ public class ThirdPartyBean {
 	String invitedAgentID;
 	String fromAgentName;
 	String inviteType;
-	JSONObject userdata;
+	JsonObject userdata;
 	String text;
 	
 	String response;
@@ -52,10 +54,10 @@ public class ThirdPartyBean {
 	public void setInviteType(String inviteType) {
 		this.inviteType = inviteType;
 	}
-	public JSONObject getUserdata() {
+	public JsonObject getUserdata() {
 		return userdata;
 	}
-	public void setUserdata(JSONObject userdata) {
+	public void setUserdata(JsonObject userdata) {
 		this.userdata = userdata;
 	}
 	public String getText() {

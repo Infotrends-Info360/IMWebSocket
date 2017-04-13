@@ -362,13 +362,14 @@ public class AgentFunction {
 	static public void inviteAgentThirdParty(String message, org.java_websocket.WebSocket aConn){
 		/** 讀出送進來的JSON物件 **/
 		Util.getConsoleLogger().debug("inviteAgentThirdParty() called");
+		Util.getConsoleLogger().debug("message: " + message);
 		
 		Gson gson = new Gson();
 		ThirdPartyBean thirdPartyBeanIn = gson.fromJson(message, ThirdPartyBean.class);
 		UserInfo invitingAgentUserInfo = WebSocketUserPool.getUserInfoByKey(aConn);
 		org.java_websocket.WebSocket invitedAgentIDConn = WebSocketUserPool.getWebSocketByUserID(thirdPartyBeanIn.getInvitedAgentID());
 		UserInfo invitedAgentUserInfo = WebSocketUserPool.getUserInfoByKey(invitedAgentIDConn);
-		Util.getConsoleLogger().trace("inviteAgentThirdParty - userdata: " + thirdPartyBeanIn.getUserdata().toString());
+		Util.getConsoleLogger().debug("inviteAgentThirdParty - userdata: " + thirdPartyBeanIn.getUserdata().toString());
 		
 		/** 籌備要寄出的JSON物件 **/
 		thirdPartyBeanIn.setEvent("inviteAgentThirdParty");
