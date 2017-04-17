@@ -196,42 +196,43 @@ public class WebSocketTypePool{
 	}
 	
 	/** * Get User Status in Agent or Client * ready * not ready * established * party remove * @param session */
+	// KPI要用時需要再改寫-取得狀態 (KPI使用)
 	public static StatusEnum getUserStatusByKeyinTYPE(String aTYPE, WebSocket aConn) {
 		Map<WebSocket,  UserInfo> TYPEmap = TYPEconnections.get(aTYPE);
 		return TYPEmap.get(aConn).getStatusEnum();
 	}
 	
-	/** * Get User Status in Agent or Client * ready * not ready * established * party remove * @param session */
-	public static String getUserReasonByKeyinTYPE(String aTYPE, WebSocket aConn) {
-		Map<WebSocket,  UserInfo> TYPEmap = TYPEconnections.get(aTYPE);
-		return TYPEmap.get(aConn).getReason();
-	}
+	/** * Get User Status in Agent or Client * ready * not ready * established * party remove * @param session */ //(沒在使用)
+//	public static String getUserReasonByKeyinTYPE(String aTYPE, WebSocket aConn) {
+//		Map<WebSocket,  UserInfo> TYPEmap = TYPEconnections.get(aTYPE);
+//		return TYPEmap.get(aConn).getReason();
+//	}
 	
-	/** * Get User ID By Key in Agent or Client * @param session */
-	public static String getUserByKeyinTYPE(String aTYPE, WebSocket aConn) {
-		Map<WebSocket,  UserInfo> TYPEmap = TYPEconnections.get(aTYPE);
-		return TYPEmap.get(aConn).getUserid();
-	}
+	/** * Get User ID By Key in Agent or Client * @param session */ //(沒在使用)
+//	public static String getUserByKeyinTYPE(String aTYPE, WebSocket aConn) {
+//		Map<WebSocket,  UserInfo> TYPEmap = TYPEconnections.get(aTYPE);
+//		return TYPEmap.get(aConn).getUserid();
+//	}
 
-	/** * Get Agent or Client Count * @param */
-	public static int getUserTYPECount(String aTYPE) {
-		return TYPEconnections.size();
-	}
+	/** * Get Agent or Client Count * @param */ //(沒在使用)
+//	public static int getUserTYPECount(String aTYPE) {
+//		return TYPEconnections.size();
+//	}
 
-	/** * Get WebSocket By User ID in Agent or Client * @param user */
-	public static WebSocket getWebSocketByUserinTYPE(String aTYPE,String aUser) {
-		Map<WebSocket,  UserInfo> TYPEmap = TYPEconnections.get(aTYPE);
-		Set<WebSocket> keySet = TYPEmap.keySet();
-		synchronized (keySet) {
-			for (WebSocket conn : keySet) {
-				String cuser = TYPEmap.get(conn).getUserid();
-				if (cuser.equals(aUser)) {
-					return conn;
-				}
-			}
-		}
-		return null;
-	}
+	/** * Get WebSocket By User ID in Agent or Client * @param user */ //(沒在使用)
+//	public static WebSocket getWebSocketByUserinTYPE(String aTYPE,String aUser) {
+//		Map<WebSocket,  UserInfo> TYPEmap = TYPEconnections.get(aTYPE);
+//		Set<WebSocket> keySet = TYPEmap.keySet();
+//		synchronized (keySet) {
+//			for (WebSocket conn : keySet) {
+//				String cuser = TYPEmap.get(conn).getUserid();
+//				if (cuser.equals(aUser)) {
+//					return conn;
+//				}
+//			}
+//		}
+//		return null;
+//	}
 	
 	private static int leaveClient = 0;
 	

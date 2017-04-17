@@ -72,7 +72,7 @@ public class GetKPIServlet {
 			agentsjsonobject.put("websocket", websocket);
 			agentsjsonobject.put("agentname", WebSocketUserPool.getUserNameByKey(websocket));
 			// 此方法已不準確,之後須討論調整何謂使User當下的Status
-			agentsjsonobject.put("agentstatus", WebSocketTypePool.getUserStatusByKeyinTYPE("Agent", websocket));
+//			agentsjsonobject.put("agentstatus", WebSocketTypePool.getUserStatusByKeyinTYPE("Agent", websocket));
 			agentsjsonarray.put(agentsjsonobject);
 		}
 		
@@ -85,7 +85,7 @@ public class GetKPIServlet {
 			clientsjsonobject.put("websocket", websocket);
 			clientsjsonobject.put("clientname", WebSocketUserPool.getUserNameByKey(websocket));
 			// 此方法已不準確,之後須討論調整何謂使User當下的Status
-			clientsjsonobject.put("cliententstatus", WebSocketTypePool.getUserStatusByKeyinTYPE("Client", websocket));
+//			clientsjsonobject.put("cliententstatus", WebSocketTypePool.getUserStatusByKeyinTYPE("Client", websocket));
 			clientsjsonarray.put(clientsjsonobject);
 		}
 		
