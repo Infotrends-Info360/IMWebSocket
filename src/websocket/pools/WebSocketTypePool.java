@@ -53,28 +53,10 @@ public class WebSocketTypePool{
 		
 		// 拿取對應的userInfo,並對其資料做更新
 		UserInfo userInfo = WebSocketUserPool.getUserallconnections().get(aConn);
-//		if(aTYPE.equals("Agent")){
-//			userInfo.setStatusEnum(StatusEnum.NOTREADY);
-//		}else if(aTYPE.equals("Client")){
-////			userInfo.setStatusEnum("wait"); // 應該用不到吧,觀察一下
-//		}
-//		userInfo.setReadyTime(aDate);
 		// 放入Map
 		TYPEMap.put(aConn, userInfo);
 		TYPEconnections.put(aTYPE, TYPEMap);
 	}
-	
-	/** * Agent or Client User Information Update */ //(不再使用)
-//	public static void UserUpdate(String aTYPE,String aUsername, String aUserid,String aDate,StatusEnum aStatusEnum,String aReason, WebSocket aConn) {
-//		Util.getConsoleLogger().debug("UserUpdate() called");
-//		Map<WebSocket, UserInfo> TYPEmap = TYPEconnections.get(aTYPE);
-//		UserInfo userInfo = TYPEmap.get(aConn);
-//		userInfo.setStatusEnum(aStatusEnum);
-//		userInfo.setReason(aReason);
-////		userInfo.setReadyTime(aDate); // 更新時間?離開時間?->登入時間是否會被覆蓋掉 ?還是這是專給Agent用的,算等待時間的?
-//		TYPEmap.put(aConn, userInfo);
-//		TYPEconnections.put(aTYPE, TYPEmap);
-//	}
 	
 	/** * Remove User from Agent or Client* @param inbound */
 	public static void removeUserinTYPE(String aTYPE,WebSocket aConn) {
@@ -88,26 +70,6 @@ public class WebSocketTypePool{
 		
 		if (TYPEmap != null && TYPEmap.containsKey(aConn)) {
 			TYPEmap.remove(aConn);
-		}
-	}
-	
-	/** * Send Message to all of User in Agent or Client * @param message */
-	public static void sendMessageinTYPE(String aTYPE,String aMessage) {
-		Map<WebSocket,  UserInfo> TYPEmap = TYPEconnections.get(aTYPE);
-		Set<WebSocket> connsInType = TYPEmap.keySet();
-		synchronized (connsInType) {
-			for (WebSocket conn : connsInType) {
-				/*
-				String user = TYPEmap.get(conn).get("userid").toString();
-				if (user != null) {
-					conn.send(message);
-				}
-				*/
-				UserInfo userInfo = TYPEmap.get(conn);
-				if (userInfo != null) {
-					conn.send(aMessage);
-				}
-			}
 		}
 	}
 	
@@ -202,38 +164,6 @@ public class WebSocketTypePool{
 		return TYPEmap.get(aConn).getStatusEnum();
 	}
 	
-	/** * Get User Status in Agent or Client * ready * not ready * established * party remove * @param session */ //(沒在使用)
-//	public static String getUserReasonByKeyinTYPE(String aTYPE, WebSocket aConn) {
-//		Map<WebSocket,  UserInfo> TYPEmap = TYPEconnections.get(aTYPE);
-//		return TYPEmap.get(aConn).getReason();
-//	}
-	
-	/** * Get User ID By Key in Agent or Client * @param session */ //(沒在使用)
-//	public static String getUserByKeyinTYPE(String aTYPE, WebSocket aConn) {
-//		Map<WebSocket,  UserInfo> TYPEmap = TYPEconnections.get(aTYPE);
-//		return TYPEmap.get(aConn).getUserid();
-//	}
-
-	/** * Get Agent or Client Count * @param */ //(沒在使用)
-//	public static int getUserTYPECount(String aTYPE) {
-//		return TYPEconnections.size();
-//	}
-
-	/** * Get WebSocket By User ID in Agent or Client * @param user */ //(沒在使用)
-//	public static WebSocket getWebSocketByUserinTYPE(String aTYPE,String aUser) {
-//		Map<WebSocket,  UserInfo> TYPEmap = TYPEconnections.get(aTYPE);
-//		Set<WebSocket> keySet = TYPEmap.keySet();
-//		synchronized (keySet) {
-//			for (WebSocket conn : keySet) {
-//				String cuser = TYPEmap.get(conn).getUserid();
-//				if (cuser.equals(aUser)) {
-//					return conn;
-//				}
-//			}
-//		}
-//		return null;
-//	}
-	
 	private static int leaveClient = 0;
 	
 	/** * Add a count to leaveClient* @param inbound */
@@ -270,14 +200,5 @@ public class WebSocketTypePool{
 		}
 		return false;
 	}	
-	
-//	public static String getUserType(WebSocket conn){
-//		if (isAgent(conn)){
-//			return "Agent";
-//		}else if (isClient(conn)){
-//			return "Client";
-//		}
-//		return null;
-//	}
 	
 }
