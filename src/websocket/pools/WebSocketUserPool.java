@@ -17,8 +17,13 @@ import java.util.concurrent.LinkedBlockingQueue;
 import org.java_websocket.WebSocket;
 import org.java_websocket.exceptions.WebsocketNotConnectedException;
 
+import com.google.gson.Gson;
+
+import util.StatusEnum;
 import util.Util;
+import websocket.bean.UpdateStatusBean;
 import websocket.bean.UserInfo;
+import websocket.function.CommonFunction;
 import websocket.thread.findAgent.FindAgentCallable;
 
 //此類別給AgentFunction.java共同使用
@@ -276,6 +281,58 @@ public class WebSocketUserPool {
 
 	public static BlockingQueue<FindAgentCallable> getClientfindagentqueue() {
 		return ClientFindAgentQueue;
+	}
+	
+	/** * Get Online Longest User(Agent) * @return */
+	public static String getOnlineLongestUserinTYPE(WebSocket aConn) {
+//		Util.getConsoleLogger().debug("getOnlineLongestUserinTYPE() called");
+		String poppedAgentID = null;
+		UserInfo settingUserInfo = null;
+		try {
+//				String poppedAgentID = WebSocketUserPool.getReadyAgentQueue().poll();
+			poppedAgentID = WebSocketUserPool.getReadyAgentQueue().take();// this will block the current Thread if the queue is empty
+		} catch (InterruptedException e) {
+			// if client logout or disconnect, this task in the current thread will be terminated
+			Util.getFileLogger().error("[Exception] Client " + WebSocketUserPool.getUserNameByKey(aConn) + " cancelled findAgent task");
+			Util.getConsoleLogger().error("[Exception] Client " + WebSocketUserPool.getUserNameByKey(aConn) + " cancelled findAgent task");
+//			e.printStackTrace();
+		} 
+		Util.getConsoleLogger().debug("poppedAgentID: " + poppedAgentID);
+		
+		if (poppedAgentID == null) return poppedAgentID;
+		
+		// 拿取相對應UserInfo資訊
+		WebSocket poppedAgentConn = WebSocketUserPool.getWebSocketByUserID(poppedAgentID);
+		settingUserInfo = WebSocketUserPool.getUserInfoByKey(poppedAgentConn);
+		Util.getConsoleLogger().debug("agentUserInfo.getUsername(): " + settingUserInfo.getUsername() + " popped out");
+		Util.getConsoleLogger().debug("WebSocketUserPool.getReadyAgentQueue().size(): " + WebSocketUserPool.getReadyAgentQueue().size());			
+		
+		// 開始更新狀態: 
+//		settingUserInfo.setStatusEnum(StatusEnum.NOTREADY); // 此方法已經不再有影響 // 直接改了,避免一個以上Client找到同一個Agent
+		Gson gson = new Gson();
+		WebSocket agentConn = WebSocketUserPool.getWebSocketByUserID(settingUserInfo.getUserid());
+		// NOTREADY狀態開始
+		Util.getStatusFileLogger().info("###### [findAgent]");
+		UpdateStatusBean usb = new UpdateStatusBean();
+		usb.setStatus(StatusEnum.NOTREADY.getDbid());
+		usb.setStartORend("start");
+		CommonFunction.updateStatus(gson.toJson(usb), agentConn);				
+
+//		ExecutorService service = Executors.newCachedThreadPool();
+//		Future<String> taskResult = service.submit(task);
+//		while(!taskResult.isDone()){
+//			// let current thread do something else
+////			Util.getConsoleLogger().debug("taskResult is not done yet");
+//		}
+//		Util.getConsoleLogger().debug("taskResult.getClass(): " + taskResult.getClass() + " is Done");
+//		
+//		try {
+//			poppedAgentID = taskResult.get(); // blocks if the result haven't come out
+//		} catch (InterruptedException | ExecutionException e) {
+//			e.printStackTrace();
+//		}
+
+		return poppedAgentID;
 	}
 	
 	

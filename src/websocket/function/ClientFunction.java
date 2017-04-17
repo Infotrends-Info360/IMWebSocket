@@ -66,7 +66,7 @@ public class ClientFunction {
 		String AgentID;
 		JSONObject sendjson = new JSONObject();
 		try {
-			AgentID = WebSocketTypePool.getOnlineLongestUserinTYPE(aConn, "Agent"); // this method will block current thread if readyAgentQueue is empty
+			AgentID = WebSocketUserPool.getOnlineLongestUserinTYPE(aConn); // this method will block current thread if readyAgentQueue is empty
 			sendjson.put("AgentName", WebSocketUserPool.getUserNameByKey(WebSocketUserPool.getWebSocketByUserID(AgentID)));
 		} catch (Exception e) {
 			AgentID = null;
