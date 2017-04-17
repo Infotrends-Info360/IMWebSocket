@@ -29,7 +29,6 @@ public class PressureTest extends Thread {
 			System.out.println("使用者編號: " + i);
 			PressureTest.service.submit(new LoginLogoutWrapper(loginDurationMilleSecond));
 		}// end of for
-		
 
 	}
 
