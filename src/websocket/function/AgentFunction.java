@@ -91,22 +91,21 @@ public class AgentFunction {
 		WebSocketUserPool.sendMessageToUserWithTryCatch(aConn, sendjson.toString());
 	}
 
-	/** * get Agent Status */
-	public static void getUserStatus(String message,
-			org.java_websocket.WebSocket conn) {
-		JSONObject obj = new JSONObject(message);
-		String ACtype = obj.getString("ACtype");
-		StatusEnum statusEnum = WebSocketTypePool.getUserStatusByKeyinTYPE(ACtype, conn);
-		String reason = WebSocketTypePool
-				.getUserReasonByKeyinTYPE(ACtype, conn);
-		JSONObject sendjson = new JSONObject();
-		sendjson.put("Event", "getUserStatus");
-		sendjson.put("from", obj.getString("id"));
-		sendjson.put("Status", statusEnum.getDbid());
-		sendjson.put("Reason", reason);
-		sendjson.put("channel", obj.getString("channel"));
-		WebSocketUserPool.sendMessageToUserWithTryCatch(conn, sendjson.toString());
-	}
+	/** * get Agent Status */ // (不再使用)
+//	public static void getUserStatus(String message,
+//			org.java_websocket.WebSocket conn) {
+//		JSONObject obj = new JSONObject(message);
+//		String ACtype = obj.getString("ACtype");
+//		StatusEnum statusEnum = WebSocketTypePool.getUserStatusByKeyinTYPE(ACtype, conn);
+//		String reason = WebSocketTypePool.getUserReasonByKeyinTYPE(ACtype, conn);
+//		JSONObject sendjson = new JSONObject();
+//		sendjson.put("Event", "getUserStatus");
+//		sendjson.put("from", obj.getString("id"));
+//		sendjson.put("Status", statusEnum.getDbid());
+//		sendjson.put("Reason", reason);
+//		sendjson.put("channel", obj.getString("channel"));
+//		WebSocketUserPool.sendMessageToUserWithTryCatch(conn, sendjson.toString());
+//	}
 
 	/** * create a roomId * @param message */
 	public static void createRoomId(String message,

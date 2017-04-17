@@ -53,28 +53,28 @@ public class WebSocketTypePool{
 		
 		// 拿取對應的userInfo,並對其資料做更新
 		UserInfo userInfo = WebSocketUserPool.getUserallconnections().get(aConn);
-		if(aTYPE.equals("Agent")){
-			userInfo.setStatusEnum(StatusEnum.NOTREADY);
-		}else if(aTYPE.equals("Client")){
-//			userInfo.setStatusEnum("wait"); // 應該用不到吧,觀察一下
-		}
+//		if(aTYPE.equals("Agent")){
+//			userInfo.setStatusEnum(StatusEnum.NOTREADY);
+//		}else if(aTYPE.equals("Client")){
+////			userInfo.setStatusEnum("wait"); // 應該用不到吧,觀察一下
+//		}
 //		userInfo.setReadyTime(aDate);
 		// 放入Map
 		TYPEMap.put(aConn, userInfo);
 		TYPEconnections.put(aTYPE, TYPEMap);
 	}
 	
-	/** * Agent or Client User Information Update */
-	public static void UserUpdate(String aTYPE,String aUsername, String aUserid,String aDate,StatusEnum aStatusEnum,String aReason, WebSocket aConn) {
-		Util.getConsoleLogger().debug("UserUpdate() called");
-		Map<WebSocket, UserInfo> TYPEmap = TYPEconnections.get(aTYPE);
-		UserInfo userInfo = TYPEmap.get(aConn);
-		userInfo.setStatusEnum(aStatusEnum);
-		userInfo.setReason(aReason);
-//		userInfo.setReadyTime(aDate); // 更新時間?離開時間?->登入時間是否會被覆蓋掉 ?還是這是專給Agent用的,算等待時間的?
-		TYPEmap.put(aConn, userInfo);
-		TYPEconnections.put(aTYPE, TYPEmap);
-	}
+	/** * Agent or Client User Information Update */ //(不再使用)
+//	public static void UserUpdate(String aTYPE,String aUsername, String aUserid,String aDate,StatusEnum aStatusEnum,String aReason, WebSocket aConn) {
+//		Util.getConsoleLogger().debug("UserUpdate() called");
+//		Map<WebSocket, UserInfo> TYPEmap = TYPEconnections.get(aTYPE);
+//		UserInfo userInfo = TYPEmap.get(aConn);
+//		userInfo.setStatusEnum(aStatusEnum);
+//		userInfo.setReason(aReason);
+////		userInfo.setReadyTime(aDate); // 更新時間?離開時間?->登入時間是否會被覆蓋掉 ?還是這是專給Agent用的,算等待時間的?
+//		TYPEmap.put(aConn, userInfo);
+//		TYPEconnections.put(aTYPE, TYPEmap);
+//	}
 	
 	/** * Remove User from Agent or Client* @param inbound */
 	public static void removeUserinTYPE(String aTYPE,WebSocket aConn) {
@@ -136,7 +136,7 @@ public class WebSocketTypePool{
 		Util.getConsoleLogger().debug("WebSocketUserPool.getReadyAgentQueue().size(): " + WebSocketUserPool.getReadyAgentQueue().size());			
 		
 		// 開始更新狀態: 
-		settingUserInfo.setStatusEnum(StatusEnum.NOTREADY); // 直接改了,避免一個以上Client找到同一個Agent
+//		settingUserInfo.setStatusEnum(StatusEnum.NOTREADY); // 此方法已經不再有影響 // 直接改了,避免一個以上Client找到同一個Agent
 		Gson gson = new Gson();
 		WebSocket agentConn = WebSocketUserPool.getWebSocketByUserID(settingUserInfo.getUserid());
 		// NOTREADY狀態開始
@@ -270,13 +270,13 @@ public class WebSocketTypePool{
 		return false;
 	}	
 	
-	public static String getUserType(WebSocket conn){
-		if (isAgent(conn)){
-			return "Agent";
-		}else if (isClient(conn)){
-			return "Client";
-		}
-		return null;
-	}
+//	public static String getUserType(WebSocket conn){
+//		if (isAgent(conn)){
+//			return "Agent";
+//		}else if (isClient(conn)){
+//			return "Client";
+//		}
+//		return null;
+//	}
 	
 }

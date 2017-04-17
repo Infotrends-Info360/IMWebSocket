@@ -151,12 +151,12 @@ public class WebSocket extends WebSocketServer {
 		case "typeonline":
 			CommonFunction.onlineinTYPE(message.toString(), conn);
 			break;
-		case "typein":
-			CommonFunction.userjointoTYPE(message.toString(), conn);
-			break;
-		case "typeout":
-			CommonFunction.userExitfromTYPE(message.toString(), conn);
-			break;
+//		case "typein":
+//			CommonFunction.userjointoTYPE(message.toString(), conn);
+//			break;
+//		case "typeout":
+//			CommonFunction.userExitfromTYPE(message.toString(), conn);
+//			break;
 		case "AcceptEvent":
 			AgentFunction.AcceptEvent(message.toString(), conn);
 			break;
@@ -192,9 +192,9 @@ public class WebSocket extends WebSocketServer {
 			
 			CommonFunction.updateStatus(message.toString(), conn);
 			break;
-		case "getUserStatus":
-			AgentFunction.getUserStatus(message.toString(), conn);
-			break;
+//		case "getUserStatus":
+//			AgentFunction.getUserStatus(message.toString(), conn);
+//			break;
 		case "createroomId":
 			AgentFunction.createRoomId(message.toString(), conn);
 			break;

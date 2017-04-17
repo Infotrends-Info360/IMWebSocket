@@ -33,7 +33,10 @@ public class WebSocketUserPool {
 	 * userallconnections在資料層級上 = WebSocketTypePool.TYPEconnections.get("Client") + 
 	 * 								WebSocketTypePool.TYPEconnections.get("Agent");
 	 */
-	private static final Map<WebSocket, UserInfo> userallconnections = new HashMap<WebSocket,UserInfo>();	
+	private static final Map<WebSocket, UserInfo> userallconnections = new HashMap<WebSocket,UserInfo>();
+	// 由userallconnections整理出來的map(尚未開始使用)
+	private static final Map<String, Map<WebSocket, UserInfo>> TYPEconnections = new HashMap<>();
+	
 	private static final BlockingQueue<String> readyAgentQueue = new LinkedBlockingQueue<>(); // 用在ClientFunction::getOnlineLongestUserinTYPE()
 	private static final BlockingQueue<FindAgentCallable> ClientFindAgentQueue = new LinkedBlockingQueue<>(); // (進行中)用在ClientFunction::getOnlineLongestUserinTYPE()
 	
@@ -113,6 +116,10 @@ public class WebSocketUserPool {
 		userinfo.setStartdate(new java.util.Date());
 		userinfo.setMaxCount(aMaxCount);
 		userallconnections.put(conn, userinfo); // 每一個client的connection配一個
+		
+		
+		
+		
 	}
 	
 	/** * Add User to WebSocket Pool* @param inbound */ /* Done */

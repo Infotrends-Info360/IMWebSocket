@@ -427,46 +427,46 @@ public class CommonFunction {
 //		WebSocketTypePool.sendMessageinTYPE(ACtype,sendjson.toString());
 	}
 	
-	/** * user join from Agent or Client list */
-	public static void userjointoTYPE(String message, org.java_websocket.WebSocket conn) {
-		JSONObject obj = new JSONObject(message);
-		String ACtype = obj.getString("ACtype");
-		String userid = obj.getString("id");
-		String username = obj.getString("UserName");
-		SimpleDateFormat sdf = new SimpleDateFormat(Util.getSdfTimeFormat());
-		String date = sdf.format(new java.util.Date());
-		String joinMsg = "[Server]" + username + " join " + ACtype;
-		WebSocketTypePool.addUserinTYPE(ACtype, username, userid, date, conn); // 
-		WebSocketTypePool.sendMessageinTYPE(ACtype, joinMsg);
-		WebSocketTypePool.sendMessageinTYPE(ACtype, ACtype + " people: "
-				+ WebSocketTypePool.getOnlineUserNameinTYPE(ACtype).toString());
-		JSONObject sendjson = new JSONObject();
-		sendjson.put("Event", "userjointoTYPE");
-		sendjson.put("from", userid);
-		sendjson.put("username",  username);
-		sendjson.put("ACtype", ACtype);
-		sendjson.put("channel", obj.getString("channel"));
-		WebSocketUserPool.sendMessage(sendjson.toString());
-	}
+	/** * user join from Agent or Client list */ // (沒在使用)
+//	public static void userjointoTYPE(String message, org.java_websocket.WebSocket conn) {
+//		JSONObject obj = new JSONObject(message);
+//		String ACtype = obj.getString("ACtype");
+//		String userid = obj.getString("id");
+//		String username = obj.getString("UserName");
+//		SimpleDateFormat sdf = new SimpleDateFormat(Util.getSdfTimeFormat());
+//		String date = sdf.format(new java.util.Date());
+//		String joinMsg = "[Server]" + username + " join " + ACtype;
+//		WebSocketTypePool.addUserinTYPE(ACtype, username, userid, date, conn); // 
+//		WebSocketTypePool.sendMessageinTYPE(ACtype, joinMsg);
+//		WebSocketTypePool.sendMessageinTYPE(ACtype, ACtype + " people: "
+//				+ WebSocketTypePool.getOnlineUserNameinTYPE(ACtype).toString());
+//		JSONObject sendjson = new JSONObject();
+//		sendjson.put("Event", "userjointoTYPE");
+//		sendjson.put("from", userid);
+//		sendjson.put("username",  username);
+//		sendjson.put("ACtype", ACtype);
+//		sendjson.put("channel", obj.getString("channel"));
+//		WebSocketUserPool.sendMessage(sendjson.toString());
+//	}
 	
-	/** * user leave from Agent or Client list */
-	public static void userExitfromTYPE(String message,
-			org.java_websocket.WebSocket conn) {
-		JSONObject obj = new JSONObject(message);
-		String ACtype = obj.getString("ACtype");
-		String userid = obj.getString("id");
-		String username = obj.getString("UserName");
-		String joinMsg = "[Server]" + username + " leave " + ACtype;
-		WebSocketTypePool.sendMessageinTYPE(ACtype, joinMsg);
-		JSONObject sendjson = new JSONObject();
-		sendjson.put("Event", "userExitfromTYPE");
-		sendjson.put("from", userid);
-		sendjson.put("username",  username);
-		sendjson.put("ACtype", ACtype);
-		sendjson.put("channel", obj.getString("channel"));
-		WebSocketTypePool.sendMessageinTYPE(ACtype,sendjson.toString());
-		WebSocketTypePool.removeUserinTYPE(ACtype, conn);
-	}
+	/** * user leave from Agent or Client list */ // (沒在使用)
+//	public static void userExitfromTYPE(String message,
+//			org.java_websocket.WebSocket conn) {
+//		JSONObject obj = new JSONObject(message);
+//		String ACtype = obj.getString("ACtype");
+//		String userid = obj.getString("id");
+//		String username = obj.getString("UserName");
+//		String joinMsg = "[Server]" + username + " leave " + ACtype;
+//		WebSocketTypePool.sendMessageinTYPE(ACtype, joinMsg);
+//		JSONObject sendjson = new JSONObject();
+//		sendjson.put("Event", "userExitfromTYPE");
+//		sendjson.put("from", userid);
+//		sendjson.put("username",  username);
+//		sendjson.put("ACtype", ACtype);
+//		sendjson.put("channel", obj.getString("channel"));
+//		WebSocketTypePool.sendMessageinTYPE(ACtype,sendjson.toString());
+//		WebSocketTypePool.removeUserinTYPE(ACtype, conn);
+//	}
 	
 	/** * update Agent Status */
 	synchronized public static void updateStatus(String aMsg, org.java_websocket.WebSocket aConn) {
@@ -476,7 +476,7 @@ public class CommonFunction {
 		Util.getStatusFileLogger().info("###### updateStatus() called ######");
 		JsonObject obj = Util.getGJsonObject(aMsg);
 //		JSONObject obj = new JSONObject(message); 
-		String ACtype = WebSocketTypePool.getUserType(aConn);
+//		String ACtype = WebSocketTypePool.getUserType(aConn);
 		String username = WebSocketUserPool.getUserNameByKey(aConn); 
 		String userid = WebSocketUserPool.getUserID(aConn);
 		SimpleDateFormat sdf = new SimpleDateFormat( Util.getSdfDateFormat() );
@@ -493,10 +493,10 @@ public class CommonFunction {
 		StatusEnum currStatusEnum = StatusEnum.getStatusEnumByDbid(status_dbid);
 				
 		// 原方法區塊 - 更新Agent UserInfo中的status
-		if(status_dbid.equals("lose")){
-			WebSocketTypePool.addleaveClient();
-		}
-		WebSocketTypePool.UserUpdate(ACtype, username, userid, date, StatusEnum.getStatusEnumByDbid(status_dbid), reason_dbid, aConn);
+//		if(status_dbid.equals("lose")){
+//			WebSocketTypePool.addleaveClient();
+//		}
+//		WebSocketTypePool.UserUpdate(ACtype, username, userid, date, StatusEnum.getStatusEnumByDbid(status_dbid), reason_dbid, aConn);
 		
 		// 更新DB狀態時間
 		Util.getConsoleLogger().info("updateStatus: " + startORend + " - " + currStatusEnum + " - " + username);

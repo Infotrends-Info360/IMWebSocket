@@ -63,7 +63,6 @@ public class ClientFunction {
 		JSONObject obj = new JSONObject(aMessage);
 		String userID = WebSocketUserPool.getUserID(aConn);
 		String userName = WebSocketUserPool.getUserNameByKey(aConn);
-		String ACType = WebSocketTypePool.getUserType(aConn);
 		String AgentID;
 		JSONObject sendjson = new JSONObject();
 		try {
