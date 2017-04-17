@@ -2,4 +2,5 @@ eclipse.preferences.version=1
 encoding//WebContent/Agent.jsp=UTF-8
 encoding//WebContent/AgentChat.jsp=UTF-8
 encoding//WebContent/Client.jsp=UTF-8
+encoding//WebContent/amqp_index.jsp=UTF-8
 encoding//src/filter/startFilter.java=UTF-8
