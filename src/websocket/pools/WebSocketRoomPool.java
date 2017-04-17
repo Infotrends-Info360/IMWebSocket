@@ -54,7 +54,7 @@ public class WebSocketRoomPool{
 			Date starttime = new Date();
 			roomInfo.setStarttime(starttime);
 			//拿ClientConn
-			if (WebSocketTypePool.isClient(conn)){
+			if (WebSocketUserPool.isClient(conn)){
 				roomInfo.setClientConn(conn);
 			}
 		}
@@ -119,7 +119,7 @@ public class WebSocketRoomPool{
 					UserInfo currUserInfo = WebSocketUserPool.getUserInfoByKey(conn);
 					WebSocketUserPool.removeUserRoom(conn, aRoomID);
 					/*** Agent - 更新狀態 ***/
-					if (WebSocketTypePool.isAgent(conn) && !currUserInfo.isClosing()){
+					if (WebSocketUserPool.isAgent(conn) && !currUserInfo.isClosing()){
 						Util.getStatusFileLogger().info("###### [removeUserinroom()] called ######");						
 						// AFTERCALLSTATUS切換 (可直接竊換,若有重複更新同一狀態,會由CommonFunction.updateStatus負責防止)
 						UpdateStatusBean usb = null;

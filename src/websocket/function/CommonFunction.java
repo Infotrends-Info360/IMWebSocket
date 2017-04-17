@@ -65,7 +65,7 @@ import websocket.bean.UpdateStatusBean;
 import websocket.bean.UserInfo;
 //import websocket.HeartBeat;
 import websocket.pools.WebSocketRoomPool;
-import websocket.pools.WebSocketTypePool;
+import websocket.pools.WebSocketUserPool;
 import websocket.pools.WebSocketUserPool;
 import websocket.thread.findAgent.FindAgentThread;
 import websocket.thread.rings.RingCountDownTask;
@@ -174,9 +174,9 @@ public class CommonFunction {
 //				+ WebSocketUserPool.getOnlineUser().toString());
 		
 		/*** 將user加入到各自的TYPEmap ***/
-		SimpleDateFormat sdf = new SimpleDateFormat(Util.getSdfTimeFormat());
-		String date = sdf.format(new java.util.Date());
-		WebSocketTypePool.addUserinTYPE(ACtype, username, userId, date, aConn);
+//		SimpleDateFormat sdf = new SimpleDateFormat(Util.getSdfTimeFormat());
+//		String date = sdf.format(new java.util.Date());
+//		WebSocketTypePool.addUserinTYPE(ACtype, username, userId, date, aConn);
 	
 		
 		
@@ -185,7 +185,7 @@ public class CommonFunction {
 		heartbeat.heartbeating(aConn);
 		
 		/*** Agent - 更新狀態 ***/
-		if(WebSocketTypePool.isAgent(aConn)) {
+		if(WebSocketUserPool.isAgent(aConn)) {
 			UpdateStatusBean usb = null;
 			// LOGIN狀態開始
 			Util.getStatusFileLogger().info("###### [userjoin()]");
@@ -232,7 +232,7 @@ public class CommonFunction {
 		
 		// for Client
 		// waittingAgent - 當有Agent正在決定是否Accept此通通話, 若Client先離開了, 則告知此Agent此Client已經離開, 不用再等了
-		if ( WebSocketTypePool.isClient(aConn) && jsonIn.get("waittingAgent") != null){
+		if ( WebSocketUserPool.isClient(aConn) && jsonIn.get("waittingAgent") != null){
 //			Util.getConsoleLogger().debug("userExit() - waittingAgent: " + jsonIn.get("waittingAgent").getAsBoolean());
 			if (jsonIn.get("waittingAgent").getAsBoolean()){
 				String waittingAgentID = jsonIn.get("waittingAgentID").getAsString();
@@ -256,7 +256,7 @@ public class CommonFunction {
 		// for Agent
 		// 1. waittingClientIDList - 當Agent離開後,若有Clinet在等待其回應,則告知此Client此Agent已經離開, 不用再等了, 請他再繼續找其他人
 		// 2. waittingAgentIDList - 當Agent離開後,若有其他Agent在等待其回應,如三方/轉接,則告知另一個Agent此Agent已經離開, 不用再等了
-		if (WebSocketTypePool.isAgent(aConn)){
+		if (WebSocketUserPool.isAgent(aConn)){
 			if (!"[]".equals(jsonIn.get("waittingClientIDList"))){
 //				Util.getConsoleLogger().debug("userExit() - waittingClientIDList got here");
 //				Util.getConsoleLogger().debug("userExit() - " + jsonIn.get("waittingClientIDList").toString());
@@ -410,15 +410,15 @@ public class CommonFunction {
 		String ACtype = obj.getString("ACtype"); // 請求者的TYPE
 
 		/**** 告知現在在線Agent有誰 - 放在訊息中 ****/
-		Collection<String> agentNameList = WebSocketTypePool.getOnlineUserNameinTYPE(ACtype);
+		Collection<String> agentNameList = WebSocketUserPool.getOnlineUserNameinTYPE(ACtype);
 		WebSocketUserPool.sendMessageToUserWithTryCatch(conn, ACtype + " people: " + agentNameList.toString());
 		
 		/**** 告知現在在線Agent有誰 - 顯示在'線上Agents'表格中 ****/
 		JSONObject sendjson = new JSONObject();
-		Collection<String> agentIDList = WebSocketTypePool.getOnlineUserIDinTYPE(ACtype);
+		Collection<String> agentIDList = WebSocketUserPool.getOnlineUserIDinTYPE(ACtype);
 		sendjson.put("Event", "onlineinTYPE");
 		sendjson.put("from", agentIDList.toString().replace("[", "").replace("]", ""));
-		sendjson.put("username",  WebSocketTypePool.getOnlineUserNameinTYPE(ACtype)
+		sendjson.put("username",  WebSocketUserPool.getOnlineUserNameinTYPE(ACtype)
 				.toString().replace("[", "").replace("]", ""));
 		sendjson.put("ACtype", ACtype);
 		sendjson.put("channel", obj.getString("channel"));
@@ -471,7 +471,7 @@ public class CommonFunction {
 	/** * update Agent Status */
 	synchronized public static void updateStatus(String aMsg, org.java_websocket.WebSocket aConn) {
 		Util.getConsoleLogger().debug("updateStatus() called");
-		if (!WebSocketTypePool.isAgent(aConn)) return; // 防呆
+		if (!WebSocketUserPool.isAgent(aConn)) return; // 防呆
 		
 		Util.getStatusFileLogger().info("###### updateStatus() called ######");
 		JsonObject obj = Util.getGJsonObject(aMsg);
@@ -728,21 +728,21 @@ public class CommonFunction {
 		WebSocketUserPool.sendMessageToUserWithTryCatch(conn, sendJson.toString());
 	}
 	
-	private static void refreshClientList(String user){
-		JSONObject obj = new JSONObject(user);
-//		String userId = java.util.UUID.randomUUID().toString();
-//		String username = obj.getString("UserName");
-//		String ACtype = obj.getString("ACtype");
-		// 再來把所有client list放入JsonArray
-		
-		// end of 再來把所有client list放入JsonArray
-		Collection<String> agentList = WebSocketTypePool.getOnlineUserIDinTYPE("Agent");
-		for (String agent : agentList){
-			Util.getConsoleLogger().debug("agent: " + agent);
-			// 再來跟每個Agent講要更新client list了
-		}
-		
-	}
+	// (方法沒在使用)
+//	private static void refreshClientList(String user){
+//		JSONObject obj = new JSONObject(user);
+////		String userId = java.util.UUID.randomUUID().toString();
+////		String username = obj.getString("UserName");
+////		String ACtype = obj.getString("ACtype");
+//		// 再來把所有client list放入JsonArray
+//		
+//		// end of 再來把所有client list放入JsonArray
+//		Collection<String> agentList = WebSocketUserPool.getOnlineUserIDinTYPE("Agent");
+//		for (String agent : agentList){
+//			Util.getConsoleLogger().debug("agent: " + agent);
+//			// 再來跟每個Agent講要更新client list了
+//		}
+//	}
 	
 	public static void onCloseHelper(org.java_websocket.WebSocket aConn, String aReason){
 		Util.getFileLogger().info("onCloseHelper() called - userName: " + WebSocketUserPool.getUserNameByKey(aConn));
@@ -751,7 +751,7 @@ public class CommonFunction {
 		// 此方法沒有用到,先放著,並不會影響到主流程
 		//userLeave(conn);
 		UserInfo userInfo = WebSocketUserPool.getUserInfoByKey(aConn);
-		if (WebSocketTypePool.isAgent(aConn)){
+		if (WebSocketUserPool.isAgent(aConn)){
 			userInfo.setClosing(true);
 		}
 		// 將Heartbeat功能移轉到這裡:
@@ -766,7 +766,7 @@ public class CommonFunction {
 	
 	private static void onClose_updateStatus(org.java_websocket.WebSocket aConn) { // here
 		Util.getConsoleLogger().debug("onClose_updateStatus() called");
-		if (!WebSocketTypePool.isAgent(aConn)) return;
+		if (!WebSocketUserPool.isAgent(aConn)) return;
 		
 		UserInfo agentUserInfo = WebSocketUserPool.getUserInfoByKey(aConn);
 		Map<StatusEnum, String> statusDBIDMap = agentUserInfo.getStatusDBIDMap();
@@ -806,7 +806,7 @@ public class CommonFunction {
 	private static void onClose_inputInteractionLog(org.java_websocket.WebSocket conn, String reason) {
 		Util.getConsoleLogger().debug("onClose_inputInteractionLog() called");
 		// 若不是Client, 就離開此方法
-		if (!WebSocketTypePool.isClient(conn)) return;
+		if (!WebSocketUserPool.isClient(conn)) return;
 		
 		// only Client stores userInteraction
 		String message = WebSocketUserPool.getUserInteractionByKey(conn); // 一定取得到: 1. 在user login時就會呼叫setUserInteraction, 2. 在user logut or 重整時也會呼叫setUserInteraction
@@ -827,7 +827,7 @@ public class CommonFunction {
 //			// 更新RoomOwnerAgentID
 //			String roomID =  obj.getString("ixnid"); // ixnid 就是 roomID
 //			obj.put("agentid", WebSocketRoomPool.getRoomInfo(roomID).getRoomOwnerAgentID()); // 取代前端傳入值
-			if (WebSocketTypePool.isClient(conn)){
+			if (WebSocketUserPool.isClient(conn)){
 				UserInfo clientUserInfo = WebSocketUserPool.getUserInfoByKey(conn);
 				if (clientUserInfo.getRoomOwner() != null)
 					obj.addProperty("agentid", clientUserInfo.getRoomOwner()); 
@@ -843,12 +843,12 @@ public class CommonFunction {
 		Util.getConsoleLogger().debug("onClose_clearUserData() called");
 		
 		/** 清RingCountDownConfTask **/
-		if (WebSocketTypePool.isAgent(conn)){
+		if (WebSocketUserPool.isAgent(conn)){
 			UserInfo agentUserInfo = WebSocketUserPool.getUserInfoByKey(conn);
 			agentUserInfo.setStopConfRing(true);			
 		}
 		/** 清ReadyAgentQueue **/
-		if (WebSocketTypePool.isAgent(conn)){
+		if (WebSocketUserPool.isAgent(conn)){
 			String userid = WebSocketUserPool.getUserID(conn);
 			boolean result = false;
 			if ( WebSocketUserPool.getReadyAgentQueue().contains(userid)){
@@ -859,7 +859,7 @@ public class CommonFunction {
 		}
 		
 		/** 清Client-findAgentTaskResult **/
-		if (WebSocketTypePool.isClient(conn)){
+		if (WebSocketUserPool.isClient(conn)){
 			// 若有正在執行的findAgent sub thread正在等待,中斷它
 			UserInfo clientUserInfo = WebSocketUserPool.getUserInfoByKey(conn);
 			if (clientUserInfo.getFindAgentTaskResult() != null){
@@ -887,12 +887,12 @@ public class CommonFunction {
 		}
 		Util.getConsoleLogger().debug("after - roomids.size(): " + roomids.size());
 
-		/** 清TYPE **/
-		if (WebSocketTypePool.isAgent(conn)){
-			WebSocketTypePool.removeUserinTYPE("Agent", conn);			
-		}else if(WebSocketTypePool.isClient(conn)){
-			WebSocketTypePool.removeUserinTYPE("Client", conn);			
-		}
+		/** 清TYPE **/ // (已由WSUserPool取代)
+//		if (WebSocketTypePool.isAgent(conn)){
+//			WebSocketTypePool.removeUserinTYPE("Agent", conn);			
+//		}else if(WebSocketTypePool.isClient(conn)){
+//			WebSocketTypePool.removeUserinTYPE("Client", conn);			
+//		}
 		
 		// 此段先不更動,暫時調整清TYPE,確保會清理到
 		String ACType = WebSocketUserPool.getACTypeByKey(conn);

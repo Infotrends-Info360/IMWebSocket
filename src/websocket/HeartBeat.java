@@ -13,7 +13,6 @@ import util.Util;
 import websocket.function.ClientFunction;
 import websocket.function.CommonFunction;
 import websocket.pools.WebSocketRoomPool;
-import websocket.pools.WebSocketTypePool;
 import websocket.pools.WebSocketUserPool;
 
 public class HeartBeat {

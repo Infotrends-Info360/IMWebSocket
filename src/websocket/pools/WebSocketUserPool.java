@@ -33,6 +33,11 @@ import websocket.thread.findAgent.FindAgentCallable;
 //此類別給HeartBeat.java使用
 //此類別給GetKPIServlet.java使用
 public class WebSocketUserPool {
+	public static final String AGENT = "Agent";
+	public static final String CLIENT = "Client";
+	
+	private static int leaveClient = 0; // KPI使用
+	
 	/**
 	 * online User ID/NAME Map
 	 * userallconnections在資料層級上 = WebSocketTypePool.TYPEconnections.get("Client") + 
@@ -122,8 +127,8 @@ public class WebSocketUserPool {
 		userinfo.setMaxCount(aMaxCount);
 		userallconnections.put(conn, userinfo); // 每一個client的connection配一個
 		
-		
-		
+		// 新增進type
+		addUserinTYPE(conn, ACType);
 		
 	}
 	
@@ -169,13 +174,21 @@ public class WebSocketUserPool {
 	}
 
 	/** * Remove User WebSocket from WebSocket Pool * @param inbound */ /* Done */
-	public static boolean removeUser(WebSocket conn){
-		if (userallconnections.containsKey(conn)) {
-			userallconnections.remove(conn); // 注意此處非用iterator刪除,所以不能一次刪兩個或以上的內容物件
+	public static boolean removeUser(WebSocket aConn){
+
+		// 清Type
+		removeUserinTYPE(aConn);
+		// 清userConn
+		if (userallconnections.containsKey(aConn)) {
+			userallconnections.remove(aConn); // 注意此處非用iterator刪除,所以不能一次刪兩個或以上的內容物件
 			return true;
 		} else {
 			return false;
-		}		
+		}
+		
+
+		
+		
 	}
 	
 	/** * Remove User Room from WebSocket Pool * @param inbound */ /* Done */
@@ -283,6 +296,9 @@ public class WebSocketUserPool {
 		return ClientFindAgentQueue;
 	}
 	
+	
+	/** 以下為WSTypePool轉移到這裡的程式碼 - 20170417 **/
+	
 	/** * Get Online Longest User(Agent) * @return */
 	public static String getOnlineLongestUserinTYPE(WebSocket aConn) {
 //		Util.getConsoleLogger().debug("getOnlineLongestUserinTYPE() called");
@@ -336,5 +352,120 @@ public class WebSocketUserPool {
 	}
 	
 	
+	private static void addUserinTYPE(WebSocket aConn, String aType){
+		Util.getConsoleLogger().debug("addUserinTYPE() called");
+		Map<WebSocket, UserInfo> TYPEMap = WebSocketUserPool.TYPEconnections.get(aType);
+		if (TYPEMap == null || TYPEMap.isEmpty()){
+			TYPEMap = new HashMap<>();
+		}
+		
+		// 拿取對應的userInfo,並對其資料做更新
+		UserInfo userInfo = WebSocketUserPool.getUserallconnections().get(aConn);
+		// 放入Map
+		TYPEMap.put(aConn, userInfo);
+		WebSocketUserPool.TYPEconnections.put(aType, TYPEMap);		
+	}
+	
+	/** * Remove User from Agent or Client* @param inbound */
+	public static void removeUserinTYPE(WebSocket aConn) {
+		
+		
+		Util.getConsoleLogger().debug("removeUserinTYPE() called");
+		Map<WebSocket,  UserInfo> TYPEmap = WebSocketUserPool.TYPEconnections.get(getACType(aConn));
+		if (TYPEmap == null){
+			Util.getConsoleLogger().warn("注意: " + " can not find TYPEmap for " + getACType(aConn));
+			Util.getFileLogger().warn("注意: " + " can not find TYPEmap for " + getACType(aConn));
+			return;
+		}
+		
+		if (TYPEmap != null && TYPEmap.containsKey(aConn)) {
+			TYPEmap.remove(aConn);
+		}		
+	}
+
+	public static boolean isAgent(WebSocket conn){
+		Map<WebSocket, UserInfo> TYPEmap = WebSocketUserPool.TYPEconnections.get(WebSocketUserPool.AGENT);
+		if (TYPEmap != null && TYPEmap.containsKey(conn)){
+			return true;
+		}
+		return false;
+	}
+	
+	public static boolean isClient(WebSocket conn){
+		Map<WebSocket, UserInfo> TYPEmap = WebSocketUserPool.TYPEconnections.get(WebSocketUserPool.CLIENT);
+		if (TYPEmap != null && TYPEmap.containsKey(conn)){
+			return true;
+		}
+		return false;
+	}	
+	
+	public static String getACType(WebSocket aConn){
+		String ACType = null;
+		if (isAgent(aConn)){
+			ACType = WebSocketUserPool.AGENT;
+		}else if(isClient(aConn)){
+			ACType = WebSocketUserPool.CLIENT;
+		}
+		return ACType;
+	}
+	
+	public static Map<String, Map<WebSocket, UserInfo>> getTypeconnections() {
+		return TYPEconnections;
+	}
+	
+
+	/** * Get Online User Name in Agent or Client * @return */
+	public static Collection<String> getOnlineUserNameinTYPE(String aTYPE) {
+		Map<WebSocket, UserInfo> TYPEmap = TYPEconnections.get(aTYPE);
+		List<String> setUsers = new ArrayList<String>();
+		Collection<UserInfo> setUser = TYPEmap.values();
+		for (UserInfo u : setUser) {
+			setUsers.add(u.getUsername());
+		}
+		return setUsers;
+	}
+	
+	/** * Get Online User ID in Agent or Client * @return */
+	public static Collection<String> getOnlineUserIDinTYPE(String aTYPE) {
+		Map<WebSocket,  UserInfo> TYPEmap = TYPEconnections.get(aTYPE);
+		List<String> setUsers = new ArrayList<String>();
+		if (TYPEmap != null && !TYPEmap.isEmpty()){
+			Collection<UserInfo> setUser = TYPEmap.values();
+			for (UserInfo u : setUser) {
+				setUsers.add(u.getUserid());
+			}			
+		}
+		return setUsers;
+	}	
+	
+	/** * Get Online count in Agent or Client * @return */
+	public static int getOnlineUserIDinTYPECount(String aTYPE) {
+		if (TYPEconnections.get(aTYPE) == null){
+			return 0;
+		}
+		return TYPEconnections.get(aTYPE).size();
+	}	
+	
+	/** * Add a count to leaveClient* @param inbound */ // KPI使用
+	public static void addleaveClient() {
+		leaveClient += 1;
+	}
+	
+	/** * clean leaveClient* @param inbound */ // KPI使用
+	public static void cleanleaveClient() {
+		leaveClient = 0;
+	}
+	
+	/** * Get leaveClient * @param */ // KPI使用
+	public static int getleaveClient() {
+		return leaveClient;
+	}	
+	
+	/** * Get User Status in Agent or Client * ready * not ready * established * party remove * @param session */
+	// KPI要用時需要再改寫-取得狀態 (KPI使用)
+//	public static StatusEnum getUserStatusByKeyinTYPE(String aTYPE, WebSocket aConn) {
+//		Map<WebSocket,  UserInfo> TYPEmap = TYPEconnections.get(aTYPE);
+//		return TYPEmap.get(aConn).getStatusEnum();
+//	}
 	
 }

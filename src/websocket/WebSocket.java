@@ -49,7 +49,6 @@ import websocket.function.AgentFunction;
 import websocket.function.ClientFunction;
 import websocket.function.CommonFunction;
 import websocket.pools.WebSocketRoomPool;
-import websocket.pools.WebSocketTypePool;
 import websocket.pools.WebSocketUserPool;
 import websocket.thread.findAgent.FindAgentCallable;
 import websocket.thread.findAgent.FindAgentThread;

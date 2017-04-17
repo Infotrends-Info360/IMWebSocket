@@ -32,7 +32,6 @@ import websocket.bean.ThirdPartyBean;
 import websocket.bean.UpdateStatusBean;
 import websocket.bean.UserInfo;
 import websocket.pools.WebSocketRoomPool;
-import websocket.pools.WebSocketTypePool;
 import websocket.pools.WebSocketUserPool;
 import websocket.thread.rings.RingCountDownConfTask;
 
@@ -119,7 +118,7 @@ public class AgentFunction {
 
 	public static void refreshAgentList() {
 		Util.getConsoleLogger().debug("refreshAgentList() called");
-		Map<WebSocket, UserInfo> agentMap = WebSocketTypePool.getTypeconnections().get("Agent");
+		Map<WebSocket, UserInfo> agentMap = WebSocketUserPool.getTypeconnections().get("Agent");
 		Gson gson = new Gson();
 		
 		// 通知用
@@ -475,7 +474,7 @@ public class AgentFunction {
 			JsonObject userIDJsonObj = userIDJsonE.getAsJsonObject();
 			String userID = userIDJsonObj.get("ID").getAsString();
 			org.java_websocket.WebSocket userConn = WebSocketUserPool.getWebSocketByUserID(userID);
-			if (WebSocketTypePool.isClient(userConn)){
+			if (WebSocketUserPool.isClient(userConn)){
 				if (WebSocketUserPool.getUserRoomCount(userConn) > 0){
 					Util.getConsoleLogger().debug("stopNow: " + stopNow);
 					stopNow = true;
@@ -488,7 +487,7 @@ public class AgentFunction {
 				JsonObject userIDJsonObj = userIDJsonE.getAsJsonObject();
 				String userID = userIDJsonObj.get("ID").getAsString();
 				org.java_websocket.WebSocket userConn = WebSocketUserPool.getWebSocketByUserID(userID);
-				if (WebSocketTypePool.isAgent(userConn)){
+				if (WebSocketUserPool.isAgent(userConn)){
 					// RING狀態結束			
 					userInfo.setRingEndExpected(true);
 					userInfo.setStopRing(true);
@@ -554,7 +553,7 @@ public class AgentFunction {
 					+ WebSocketRoomPool.getOnlineUserNameinroom(roomID).toString());
 			
 			/*** 更新狀態 ***/
-			if (WebSocketTypePool.isAgent(userConn)){
+			if (WebSocketUserPool.isAgent(userConn)){
 				// RING狀態結束			
 				userInfo.setRingEndExpected(true);
 				userInfo.setStopRing(true);
@@ -581,7 +580,7 @@ public class AgentFunction {
 			}// end of 更新狀態
 			
 			/** 當下更新interaction,避免當Client網路斷掉後,interaction漏掉了IxnID欄位資料 **/
-			if (WebSocketTypePool.isClient(userConn)){
+			if (WebSocketUserPool.isClient(userConn)){
 				JsonObject ixnJson = Util.getGJsonObject(WebSocketUserPool.getUserInteractionByKey(userConn));
 				ixnJson.addProperty("ixnid", roomID);
 				WebSocketUserPool.addUserInteraction(ixnJson.toString(), userConn);

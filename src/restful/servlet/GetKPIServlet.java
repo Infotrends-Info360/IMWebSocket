@@ -25,7 +25,6 @@ import org.java_websocket.WebSocket;
 import util.StatusEnum;
 import util.Util;
 import websocket.pools.WebSocketRoomPool;
-import websocket.pools.WebSocketTypePool;
 import websocket.pools.WebSocketUserPool;
 
 /**
@@ -63,7 +62,7 @@ public class GetKPIServlet {
 		}
 		
 		
-		Collection<String> CollectionAgents = WebSocketTypePool.getOnlineUserIDinTYPE("Agent");
+		Collection<String> CollectionAgents = WebSocketUserPool.getOnlineUserIDinTYPE("Agent");
 		JSONArray agentsjsonarray = new JSONArray();
 		for (String agent : CollectionAgents) {
 			JSONObject agentsjsonobject = new JSONObject();
@@ -76,7 +75,7 @@ public class GetKPIServlet {
 			agentsjsonarray.put(agentsjsonobject);
 		}
 		
-		Collection<String> CollectionClients = WebSocketTypePool.getOnlineUserIDinTYPE("Client");
+		Collection<String> CollectionClients = WebSocketUserPool.getOnlineUserIDinTYPE("Client");
 		JSONArray clientsjsonarray = new JSONArray();
 		for (String client : CollectionClients) {
 			JSONObject clientsjsonobject = new JSONObject();
@@ -96,11 +95,11 @@ public class GetKPIServlet {
 		jsonObject.put("Clients", clientsjsonarray);
 		jsonObject.put("usercount", WebSocketUserPool.getUserCount());
 		jsonObject.put("roomcount", WebSocketRoomPool.getRoomCount());
-		jsonObject.put("agentcount", WebSocketTypePool.getOnlineUserIDinTYPECount("Agent"));
-		jsonObject.put("clientcount", WebSocketTypePool.getOnlineUserIDinTYPECount("Client"));
+		jsonObject.put("agentcount", WebSocketUserPool.getOnlineUserIDinTYPECount("Agent"));
+		jsonObject.put("clientcount", WebSocketUserPool.getOnlineUserIDinTYPECount("Client"));
 		
 		
-		jsonObject.put("leaveclientcount", WebSocketTypePool.getleaveClient());
+		jsonObject.put("leaveclientcount", WebSocketUserPool.getleaveClient());
 		
 		if(user!=null && !"".equals(user)){
 			JSONObject userroomjsonObject = new JSONObject();

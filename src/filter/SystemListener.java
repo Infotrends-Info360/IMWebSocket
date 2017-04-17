@@ -35,7 +35,6 @@ import com.google.gson.GsonBuilder;
 import util.Util;
 import websocket.bean.SystemInfo;
 import websocket.bean.UserInfo;
-import websocket.pools.WebSocketTypePool;
  
 @WebListener("application context listener")
 public class SystemListener implements ServletContextListener {

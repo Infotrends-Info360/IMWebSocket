@@ -37,7 +37,6 @@ import websocket.bean.SystemInfo;
 import websocket.bean.UpdateStatusBean;
 import websocket.bean.UserInfo;
 import websocket.pools.WebSocketRoomPool;
-import websocket.pools.WebSocketTypePool;
 import websocket.pools.WebSocketUserPool;
 import websocket.thread.findAgent.FindAgentThread;
 
