@@ -18,6 +18,8 @@ import org.java_websocket.exceptions.WebsocketNotConnectedException;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
+import amqp.amqpUtil;
+
 import com.google.gson.Gson;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
@@ -26,6 +28,7 @@ import com.google.gson.JsonObject;
 
 import util.StatusEnum;
 import util.Util;
+
 
 
 
@@ -99,6 +102,8 @@ public class CommonFunction {
 	public static void userjoin(String user, org.java_websocket.WebSocket aConn) {
 		Util.getConsoleLogger().debug("userjoin() called");
 		Util.getFileLogger().info("userjoin() called");
+		Util.getConsoleLogger().debug("userjoin() - user: " + user);
+		
 		JsonObject obj = Util.getGJsonObject(user);
 		String username = Util.getGString(obj, "UserName");
 		String maxCount = Util.getGString(obj, "maxCount");
@@ -169,6 +174,14 @@ public class CommonFunction {
 		Util.getFileLogger().info("Util.getAgentReason(): " + Util.getAgentReason());
 		Util.getConsoleLogger().debug("Util.getAgentStatus(): " + Util.getAgentStatus());
 		Util.getFileLogger().info("Util.getAgentStatus(): " + Util.getAgentStatus());
+		
+		// 根據channel,寄到不同的queue
+//		if (Util.getWebchat_channel_name().equals(channel)){
+//			Util.getConsoleLogger().debug("userjoin() from " + Util.getWebchat_channel_name());
+//			Util.getTemplate().convertAndSend(amqpUtil.QUEUE_NAME.BACKEND_TO_JS_QUEUE, "user login!!!");
+//		}
+		
+		
 		WebSocketUserPool.sendMessageToUserWithTryCatch(aConn, sendjson.toString());
 //		WebSocketUserPool.sendMessage("online people: "
 //				+ WebSocketUserPool.getOnlineUser().toString());
