@@ -19,31 +19,31 @@ import websocket.WebSocket;
 public class startFilter implements Filter {
 	/** * initialization */
 	public void init(FilterConfig fc) throws ServletException {
-		this.startWebsocketOnline();
+//		this.startWebsocketOnline(); // 已經此工作統一移到SystemListener.java中
 	}
 
 	/** * Start Socket Service */
-	public void startWebsocketOnline() {
-
-		Util.getConsoleLogger().info("Starting websocket");
-		WebSocketImpl.DEBUG = false;
-		int port = Integer.parseInt(Util.getSystemParam().get("websocket_port"));
-//		Util.getConsoleLogger().debug("WebSocket port: " + port);
-//		int port = 8888;
-		WebSocket s = null;
-		try {
-			s = new WebSocket(port);
-			s.start();
-		} catch (UnknownHostException e) {
-			Util.getConsoleLogger().error("Starting websocket failed！");
-			Util.getConsoleLogger().error(e.getMessage());
-			e.printStackTrace();
-		}
-		Util.getConsoleLogger().info("Starting websocket success！");
-
-//		Log4jDemo();
-
-	}
+//	public void startWebsocketOnline() {
+//
+//		Util.getConsoleLogger().info("Starting websocket");
+//		WebSocketImpl.DEBUG = false;
+//		int port = Integer.parseInt(Util.getSystemParam().get("websocket_port"));
+////		Util.getConsoleLogger().debug("WebSocket port: " + port);
+////		int port = 8888;
+//		WebSocket s = null;
+//		try {
+//			s = new WebSocket(port);
+//			s.start();
+//		} catch (UnknownHostException e) {
+//			Util.getConsoleLogger().error("Starting websocket failed！");
+//			Util.getConsoleLogger().error(e.getMessage());
+//			e.printStackTrace();
+//		}
+//		Util.getConsoleLogger().info("Starting websocket success！");
+//
+////		Log4jDemo();
+//
+//	}
 
 	// 為Log4j熟悉API用,之後可刪除
 //	private void Log4jDemo() {

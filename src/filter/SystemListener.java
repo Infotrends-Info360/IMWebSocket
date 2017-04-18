@@ -2,6 +2,7 @@ package filter;
 
 import java.io.IOException;
 import java.io.InputStream;
+import java.net.UnknownHostException;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
@@ -15,8 +16,8 @@ import javax.servlet.ServletContextEvent;
 import javax.servlet.ServletContextListener;
 import javax.servlet.annotation.WebListener;
  
-
 import util.StatusEnum;
+
 
 
 
@@ -24,6 +25,7 @@ import util.StatusEnum;
 
 import org.apache.commons.lang.StringEscapeUtils;
 import org.java_websocket.WebSocket;
+import org.java_websocket.WebSocketImpl;
 
 import com.Info360.bean.Cfg_AgentStatus;
 import com.Info360.bean.SystemCfg;
@@ -46,6 +48,9 @@ public class SystemListener implements ServletContextListener {
     public void contextInitialized(ServletContextEvent event) {
 //         initialize log4j here
     	Util.getConsoleLogger().debug("System Config - contextInitialized() called");
+    	
+    	
+    	
         ServletContext context = event.getServletContext();
         String maxRingTime = context.getInitParameter("MaxRingTime");
         String afterCallStatus = context.getInitParameter("AfterCallStatus");
@@ -149,8 +154,9 @@ public class SystemListener implements ServletContextListener {
 		 Util.setAgentStatus(agentstatusmap);
 //		 Util.getConsoleLogger().debug("agentstatusmap: "+agentstatusmap);
 		 
-		 // 更新Systeminfo
 		 
+		 /** 建立websocket物件，並設定port **/
+	    startWebsocketOnline();
 		  		 
     }
      
@@ -200,4 +206,29 @@ public class SystemListener implements ServletContextListener {
         }
         return out;
     }
+    
+    
+	/** * Start Socket Service */
+	public void startWebsocketOnline() {
+
+		Util.getConsoleLogger().info("Starting websocket");
+		WebSocketImpl.DEBUG = false;
+		int port = Integer.parseInt(Util.getSystemParam().get("websocket_port"));
+//		Util.getConsoleLogger().debug("WebSocket port: " + port);
+//		int port = 8888;
+		websocket.WebSocket s = null;
+		try {
+			s = new websocket.WebSocket(port);
+			s.start();
+		} catch (UnknownHostException e) {
+			Util.getConsoleLogger().error("Starting websocket failed！");
+			Util.getConsoleLogger().error(e.getMessage());
+			e.printStackTrace();
+		}
+		Util.getConsoleLogger().info("Starting websocket success！");
+
+//		Log4jDemo();
+
+	}
+    
 }
