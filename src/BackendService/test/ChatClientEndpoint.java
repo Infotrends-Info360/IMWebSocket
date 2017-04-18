@@ -1,4 +1,4 @@
-package websocket.test;
+package BackendService.test;
 
 import java.net.URI;
 import java.util.concurrent.atomic.AtomicBoolean;

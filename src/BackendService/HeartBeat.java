@@ -1,4 +1,4 @@
-package websocket;
+package BackendService;
  
 import java.util.Calendar;
 import java.util.List;
@@ -9,11 +9,11 @@ import java.util.TimerTask;
 import org.java_websocket.exceptions.WebsocketNotConnectedException;
 import org.json.JSONObject;
 
+import BackendService.function.ClientFunction;
+import BackendService.function.CommonFunction;
+import BackendService.pools.WebSocketRoomPool;
+import BackendService.pools.WebSocketUserPool;
 import util.Util;
-import websocket.function.ClientFunction;
-import websocket.function.CommonFunction;
-import websocket.pools.WebSocketRoomPool;
-import websocket.pools.WebSocketUserPool;
 
 public class HeartBeat {
 	private String healthStatus = "GREEN";

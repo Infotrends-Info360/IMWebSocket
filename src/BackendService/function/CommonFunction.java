@@ -1,4 +1,4 @@
-package websocket.function;
+package BackendService.function;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -18,6 +18,15 @@ import org.java_websocket.exceptions.WebsocketNotConnectedException;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
+import BackendService.HeartBeat;
+import BackendService.bean.RoomInfo;
+import BackendService.bean.SystemInfo;
+import BackendService.bean.UpdateStatusBean;
+import BackendService.bean.UserInfo;
+import BackendService.pools.WebSocketRoomPool;
+import BackendService.pools.WebSocketUserPool;
+import BackendService.thread.findAgent.FindAgentThread;
+import BackendService.thread.rings.RingCountDownTask;
 import amqp.amqpUtil;
 
 import com.google.gson.Gson;
@@ -59,19 +68,10 @@ import util.Util;
 
 
 
+
 import com.google.gson.JsonParser;
 
-import websocket.HeartBeat;
-import websocket.bean.RoomInfo;
-import websocket.bean.SystemInfo;
-import websocket.bean.UpdateStatusBean;
-import websocket.bean.UserInfo;
 //import websocket.HeartBeat;
-import websocket.pools.WebSocketRoomPool;
-import websocket.pools.WebSocketUserPool;
-import websocket.pools.WebSocketUserPool;
-import websocket.thread.findAgent.FindAgentThread;
-import websocket.thread.rings.RingCountDownTask;
 
 //此類別給WebSocjet.java使用
 public class CommonFunction {
@@ -99,26 +99,26 @@ public class CommonFunction {
 	}
 	
 	/** * user join websocket * @param user */
-	public static void userjoin(String user, org.java_websocket.WebSocket aConn) {
+	public static void userjoin(String aMsg) {
 		Util.getConsoleLogger().debug("userjoin() called");
 		Util.getFileLogger().info("userjoin() called");
-		Util.getConsoleLogger().debug("userjoin() - user: " + user);
+		Util.getConsoleLogger().debug("userjoin() - user: " + aMsg);
 		
-		JsonObject obj = Util.getGJsonObject(user);
-		String username = Util.getGString(obj, "UserName");
-		String maxCount = Util.getGString(obj, "maxCount");
-		String ACtype = Util.getGString(obj, "ACtype");
-		String channel = Util.getGString(obj, "channel");
+		JsonObject jsonIn = Util.getGJsonObject(aMsg);
+		String username = Util.getGString(jsonIn, "UserName");
+		String maxCount = Util.getGString(jsonIn, "maxCount");
+		String ACtype = Util.getGString(jsonIn, "ACtype");
+		String channel = Util.getGString(jsonIn, "channel");
 		String userId = null;
 		
 		JSONObject sendjson = new JSONObject();
 		
-		/*** 檢查是否已經登入過 ***/		
 		if(ACtype.equals("Agent")){
-			userId = obj.get("id").toString(); //20170222 Lin
+			userId = jsonIn.get("id").toString(); //20170222 Lin
 		}else if(ACtype.equals("Client")){
 			userId = java.util.UUID.randomUUID().toString();
 		}
+		/*** 檢查是否已經登入過 ***/		
 		Util.getConsoleLogger().debug("userId: " + userId);
 		if (ACtype.equals("Agent")){
 			WebSocket oldAgentConn = WebSocketUserPool.getWebSocketByUserID(userId);
@@ -156,9 +156,9 @@ public class CommonFunction {
 
 		/*** 開始新增使用者 ***/
 		if (ACtype.equals("Agent")){
-			WebSocketUserPool.addUser(username, userId, aConn, ACtype, Integer.parseInt(maxCount)); // 在此刻,已將user conn加入Pool中,並建立其UserInfo資訊物件
+			WebSocketUserPool.addUser(username, userId, ACtype, Integer.parseInt(maxCount)); // 在此刻,已將user conn加入Pool中,並建立其UserInfo資訊物件
 		}else{
-			WebSocketUserPool.addUser(username, userId, aConn, ACtype, 0); // 在此刻,已將user conn加入Pool中,並建立其UserInfo資訊物件			
+			WebSocketUserPool.addUser(username, userId, ACtype, 0); // 在此刻,已將user conn加入Pool中,並建立其UserInfo資訊物件			
 		}
 		
 		/*** 告知user其成功登入的UserID ***/
@@ -181,44 +181,40 @@ public class CommonFunction {
 //			Util.getTemplate().convertAndSend(amqpUtil.QUEUE_NAME.BACKEND_TO_JS_QUEUE, "user login!!!");
 //		}
 		
-		
-		WebSocketUserPool.sendMessageToUserWithTryCatch(aConn, sendjson.toString());
+		/** 根據channel寄送到不同的queue中 **/
+		sendjson.put("endpointID", userId);
+		amqpUtil.sendReqToQueue(channel, sendjson.toString());
+//		WebSocketUserPool.sendMessageToUserWithTryCatch(aConn, sendjson.toString());
 //		WebSocketUserPool.sendMessage("online people: "
 //				+ WebSocketUserPool.getOnlineUser().toString());
 		
-		/*** 將user加入到各自的TYPEmap ***/
-//		SimpleDateFormat sdf = new SimpleDateFormat(Util.getSdfTimeFormat());
-//		String date = sdf.format(new java.util.Date());
-//		WebSocketTypePool.addUserinTYPE(ACtype, username, userId, date, aConn);
-	
 		
-		
-		/*** 讓Agent與Client都有Heartbeat ***/
-		HeartBeat heartbeat = new HeartBeat();
-		heartbeat.heartbeating(aConn);
+		/*** 讓Agent與Client都有Heartbeat ***/ // 此機制要移至每個channel上
+//		HeartBeat heartbeat = new HeartBeat();
+//		heartbeat.heartbeating(aConn);
 		
 		/*** Agent - 更新狀態 ***/
-		if(WebSocketUserPool.isAgent(aConn)) {
-			UpdateStatusBean usb = null;
-			// LOGIN狀態開始
-			Util.getStatusFileLogger().info("###### [userjoin()]");
-			usb = new UpdateStatusBean();
-			usb.setStatus(StatusEnum.LOGIN.getDbid());
-			usb.setStartORend("start");
-			CommonFunction.updateStatus(new Gson().toJson(usb), aConn);	
-			// NOTREADY狀態開始
-			Util.getStatusFileLogger().info("###### [userjoin()]");
-			usb = new UpdateStatusBean();
-			usb.setStatus(StatusEnum.NOTREADY.getDbid());
-			usb.setStartORend("start");
-			CommonFunction.updateStatus(new Gson().toJson(usb), aConn);
-		}// end of if (WebSocketTypePool.isAgent(...))
+//		if(WebSocketUserPool.isAgent(aConn)) {
+//			UpdateStatusBean usb = null;
+//			// LOGIN狀態開始
+//			Util.getStatusFileLogger().info("###### [userjoin()]");
+//			usb = new UpdateStatusBean();
+//			usb.setStatus(StatusEnum.LOGIN.getDbid());
+//			usb.setStartORend("start");
+//			CommonFunction.updateStatus(new Gson().toJson(usb), aConn);	
+//			// NOTREADY狀態開始
+//			Util.getStatusFileLogger().info("###### [userjoin()]");
+//			usb = new UpdateStatusBean();
+//			usb.setStatus(StatusEnum.NOTREADY.getDbid());
+//			usb.setStartORend("start");
+//			CommonFunction.updateStatus(new Gson().toJson(usb), aConn);
+//		}// end of if (WebSocketTypePool.isAgent(...))
 		
 		
 		/*** 更新Agent list - 私訊用 ***/
-		if ("Agent".equals(ACtype)){
-			AgentFunction.refreshAgentList();
-		}
+//		if ("Agent".equals(ACtype)){
+//			AgentFunction.refreshAgentList();
+//		}
 		
 	}
 	

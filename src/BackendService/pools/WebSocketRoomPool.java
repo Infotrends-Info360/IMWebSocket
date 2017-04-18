@@ -1,4 +1,4 @@
-package websocket.pools;
+package BackendService.pools;
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -13,17 +13,18 @@ import org.apache.logging.log4j.Level;
 import org.java_websocket.WebSocket;
 import org.json.JSONObject;
 
+import BackendService.bean.RoomInfo;
+import BackendService.bean.SystemInfo;
+import BackendService.bean.UpdateStatusBean;
+import BackendService.bean.UserInfo;
+import BackendService.function.AgentFunction;
+import BackendService.function.CommonFunction;
+
 import com.google.gson.Gson;
 import com.google.gson.JsonObject;
 
 import util.StatusEnum;
 import util.Util;
-import websocket.bean.RoomInfo;
-import websocket.bean.SystemInfo;
-import websocket.bean.UpdateStatusBean;
-import websocket.bean.UserInfo;
-import websocket.function.AgentFunction;
-import websocket.function.CommonFunction;
 
 //此類別給AgentFunction.java共同使用
 //此類別給ClientFunction.java共同使用

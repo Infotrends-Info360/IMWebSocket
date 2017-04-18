@@ -1,4 +1,4 @@
-package websocket.thread.rings;
+package BackendService.thread.rings;
 
 import java.util.Timer;
 import java.util.TimerTask;
@@ -6,14 +6,15 @@ import java.util.TimerTask;
 import org.apache.logging.log4j.Level;
 import org.java_websocket.WebSocket;
 
+import BackendService.bean.SystemInfo;
+import BackendService.bean.UserInfo;
+import BackendService.function.AgentFunction;
+import BackendService.pools.WebSocketUserPool;
+
 import com.google.gson.JsonObject;
 
 import util.StatusEnum;
 import util.Util;
-import websocket.bean.SystemInfo;
-import websocket.bean.UserInfo;
-import websocket.function.AgentFunction;
-import websocket.pools.WebSocketUserPool;
 
 /*
  *  重要架構: 此類別以composition的方式連接一個UserInfo。

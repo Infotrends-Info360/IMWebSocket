@@ -1,4 +1,4 @@
-package websocket.bean;
+package BackendService.bean;
 
 import java.util.ArrayList; 
 import java.util.Collections;
@@ -8,9 +8,10 @@ import java.util.Map;
 import java.util.Timer;
 import java.util.concurrent.Future;
 import java.util.concurrent.atomic.AtomicBoolean;
+
+import BackendService.thread.findAgent.FindAgentCallable;
 import util.StatusEnum;
 import util.Util;
-import websocket.thread.findAgent.FindAgentCallable;
       
   
 //此類別給WebSocketPool.userallconnections使用

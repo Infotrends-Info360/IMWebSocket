@@ -1,4 +1,4 @@
-package websocket.bean;
+package BackendService.bean;
 
 import util.Util;
 

@@ -166,7 +166,11 @@ function Login() {
 	parent.ws_g.onmessage = function(e) {
 		// e.data 是服務端發來的資料
 		if ("{" == e.data.substring(0, 1)) {
-			var obj = jQuery.parseJSON(e.data);
+			var obj = JSON.parse(e.data);
+			console.log("obj: " + obj);
+//			console.log("JSON.parse(obj): " + JSON.parse(obj));
+////			console.log("JSON.stringify(e): " + JSON.stringify(e));
+			console.log("obj.Event: " + obj.Event);
 			// 接收到Client邀請chat的event
 			if ("findAgentEvent" == obj.Event) {
 				// (此區塊已改由"senduserdata"區塊作替代)
@@ -322,7 +326,7 @@ function Login() {
 				
 				// 接收到有人登入的訊息
 			} else if ("userjoin" == obj.Event) {
-//					alert('userjoin'); // win
+				alert('userjoin'); // win
 //				alert("isLoggedIn: " + obj.isLoggedIn);
 				if (obj.isLoggedIn){
 					alert(obj.isLoggedInText);

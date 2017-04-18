@@ -1,4 +1,4 @@
-package websocket.bean;
+package BackendService.bean;
 
 import java.text.SimpleDateFormat;
 import java.util.HashMap;

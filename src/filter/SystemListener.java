@@ -16,7 +16,11 @@ import javax.servlet.ServletContextEvent;
 import javax.servlet.ServletContextListener;
 import javax.servlet.annotation.WebListener;
  
+
+
 import util.StatusEnum;
+
+
 
 
 
@@ -27,6 +31,10 @@ import org.apache.commons.lang.StringEscapeUtils;
 import org.java_websocket.WebSocket;
 import org.java_websocket.WebSocketImpl;
 
+import BackendService.bean.SystemInfo;
+import BackendService.bean.UserInfo;
+import amqp.channel.WebChatChannel;
+
 import com.Info360.bean.Cfg_AgentStatus;
 import com.Info360.bean.SystemCfg;
 import com.Info360.dao.SystemCfgDao;
@@ -35,8 +43,6 @@ import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 
 import util.Util;
-import websocket.bean.SystemInfo;
-import websocket.bean.UserInfo;
  
 @WebListener("application context listener")
 public class SystemListener implements ServletContextListener {
@@ -216,9 +222,9 @@ public class SystemListener implements ServletContextListener {
 		int port = Integer.parseInt(Util.getSystemParam().get("websocket_port"));
 //		Util.getConsoleLogger().debug("WebSocket port: " + port);
 //		int port = 8888;
-		websocket.WebSocket s = null;
+		WebChatChannel s = null;
 		try {
-			s = new websocket.WebSocket(port);
+			s = new WebChatChannel(port);
 			s.start();
 		} catch (UnknownHostException e) {
 			Util.getConsoleLogger().error("Starting websocket failed！");

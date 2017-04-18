@@ -1,4 +1,4 @@
-package websocket.function;
+package BackendService.function;
 
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
@@ -24,6 +24,14 @@ import java.util.concurrent.Future;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
+import BackendService.bean.RoomInfo;
+import BackendService.bean.SystemInfo;
+import BackendService.bean.UpdateStatusBean;
+import BackendService.bean.UserInfo;
+import BackendService.pools.WebSocketRoomPool;
+import BackendService.pools.WebSocketUserPool;
+import BackendService.thread.findAgent.FindAgentThread;
+
 import com.google.gson.Gson;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
@@ -32,13 +40,6 @@ import com.google.gson.JsonObject;
 
 import util.StatusEnum;
 import util.Util;
-import websocket.bean.RoomInfo;
-import websocket.bean.SystemInfo;
-import websocket.bean.UpdateStatusBean;
-import websocket.bean.UserInfo;
-import websocket.pools.WebSocketRoomPool;
-import websocket.pools.WebSocketUserPool;
-import websocket.thread.findAgent.FindAgentThread;
 
 //此類別給WebSocjet.java使用
 public class ClientFunction {

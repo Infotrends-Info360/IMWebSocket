@@ -1,4 +1,4 @@
-package websocket.thread.findAgent;
+package BackendService.thread.findAgent;
 
 import java.util.concurrent.BlockingQueue;
 import java.util.concurrent.ExecutionException;
@@ -6,10 +6,10 @@ import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.Future;
 
+import BackendService.bean.UserInfo;
+import BackendService.function.ClientFunction;
+import BackendService.pools.WebSocketUserPool;
 import util.Util;
-import websocket.bean.UserInfo;
-import websocket.function.ClientFunction;
-import websocket.pools.WebSocketUserPool;
 
 // ReadyAgentQueue background service
 // 此背景執行緒目的:

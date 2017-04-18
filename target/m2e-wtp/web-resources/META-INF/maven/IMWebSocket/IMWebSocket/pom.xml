@@ -11,7 +11,7 @@
 		<groupId>org.springframework.boot</groupId>
 		<artifactId>spring-boot-starter-parent</artifactId>
 		<version>1.5.2.RELEASE</version>
-		<relativePath/>
+		<relativePath />
 	</parent>
 
 	<properties>
@@ -23,23 +23,23 @@
 	<build>
 		<sourceDirectory>src</sourceDirectory>
 		<plugins>
-<!-- 		spring boot RabbitMQ 4 -->			
+			<!-- spring boot RabbitMQ 4 -->
 			<plugin>
 				<groupId>org.springframework.boot</groupId>
 				<artifactId>spring-boot-maven-plugin</artifactId>
 			</plugin>
-			
+
 		</plugins>
 	</build>
-	
-	
+
+
 	<dependencies>
 		<dependency>
 			<groupId>asm</groupId>
 			<artifactId>asm</artifactId>
 			<version>3.3.1</version>
 		</dependency>
-<!-- 		jersey -->
+		<!-- jersey -->
 		<dependency>
 			<groupId>com.sun.jersey</groupId>
 			<artifactId>jersey-bundle</artifactId>
@@ -70,7 +70,7 @@
 			<groupId>org.apache.logging.log4j</groupId>
 			<artifactId>log4j-core</artifactId>
 		</dependency>
-<!-- 		json -->
+		<!-- json -->
 		<dependency>
 			<groupId>org.json</groupId>
 			<artifactId>json</artifactId>
@@ -87,39 +87,39 @@
 			<artifactId>commons-lang</artifactId>
 			<version>2.6</version>
 		</dependency>
-	
-<!-- 		Websocket Client  - pressure test 1/3 -->
-<!-- 	Reference:	http://www.hascode.com/2014/11/creating-different-websocket-chat-clients-in-java/ -->
+
+		<!-- Websocket Client - pressure test 1/3 -->
+		<!-- Reference: http://www.hascode.com/2014/11/creating-different-websocket-chat-clients-in-java/ -->
 		<dependency>
 			<groupId>javax.websocket</groupId>
 			<artifactId>javax.websocket-client-api</artifactId>
 			<version>1.0</version>
 		</dependency>
-<!-- 		Websocket Client  - pressure test 2/3 -->
+		<!-- Websocket Client - pressure test 2/3 -->
 		<dependency>
 			<groupId>org.glassfish.tyrus</groupId>
 			<artifactId>tyrus-client</artifactId>
 			<version>1.1</version>
 		</dependency>
-<!-- 		Websocket Client  - pressure test 3/3 -->
+		<!-- Websocket Client - pressure test 3/3 -->
 		<dependency>
 			<groupId>org.glassfish.tyrus</groupId>
 			<artifactId>tyrus-container-grizzly</artifactId>
 			<version>1.1</version>
 		</dependency>
 
-<!-- 		spring boot RabbitMQ 1 -->
+		<!-- spring boot RabbitMQ 1 -->
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-starter-amqp</artifactId>
 		</dependency>
-<!-- 		spring boot RabbitMQ 2 -->
+		<!-- spring boot RabbitMQ 2 -->
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-starter-test</artifactId>
 			<scope>test</scope>
 		</dependency>
-<!-- 		spring boot RabbitMQ 3 -->
+		<!-- spring boot RabbitMQ 3 -->
 		<!-- https://mvnrepository.com/artifact/org.springframework.boot/spring-boot-starter-web -->
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
@@ -130,7 +130,18 @@
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-starter-tomcat</artifactId>
 			<scope>provided</scope>
-		</dependency>		
+		</dependency>
+		
+		
+<!-- 		biMap --> 
+		<!-- https://mvnrepository.com/artifact/com.google.collections/google-collections -->
+		<dependency>
+			<groupId>com.google.collections</groupId>
+			<artifactId>google-collections</artifactId>
+			<version>1.0-rc2</version>
+		</dependency>
+
+
 
 	</dependencies>
 </project>

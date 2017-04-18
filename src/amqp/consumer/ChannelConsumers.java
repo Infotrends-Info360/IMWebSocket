@@ -14,14 +14,7 @@ import static amqp.amqpUtil.*;
 @Component 
 public class ChannelConsumers {
         
-    /** BACKEND -> CHANNEL **/
-    @RabbitListener(queues = QUEUE_NAME.BACKEND_TO_WEBCHAT_QUEUE)
-    public void process_BACKEND_TO_WEBCHAT_QUEUE(String data) throws UnsupportedEncodingException {
-    	// ��byte - string �ഫ���D
-    	System.out.println("process_BACKEND_TO_WEBCHAT_QUEUE() called - [x] Received -  data: " + data);
-//    	String words = new String(data.getBytes(), "UTF-8");
-//    	System.out.println("words: " + words);
-    }    
+  
     
     @RabbitListener(queues = QUEUE_NAME.BACKEND_TO_LINE_QUEUE)
     public void process_BACKEND_TO_LINE_QUEUE(String data) throws UnsupportedEncodingException {

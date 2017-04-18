@@ -2,15 +2,17 @@ package amqp;
 
 import org.springframework.amqp.rabbit.connection.CachingConnectionFactory;
 
+import util.Util;
+
 public class amqpUtil {
 //	public final static String QUEUE_NAME_WORKERS = "durable_queue_fairDispatcher";
 	public final static String RABBIT_MQSERVER = "localhost";
-	public final static String ACCOUNT = "spring";
+	public final static String ACCOUNT = "spring"; 
 	public final static String PASSWORD = "123456";
 	public static CachingConnectionFactory cachingConnectionFactory;
 	
 	public static class QUEUE_NAME{
-		// Consumers - backend (distributed system design)
+		// Consumers - backUend (distributed system design)
 		public static final String CHANNEL_TO_BACKEND_QUEUE01 = "CHANNEL_TO_BACKEND_QUEUE01";
 //		public static final String CHANNEL_TO_BACKEND_QUEUE02 = "CHANNEL_TO_BACKEND_QUEUE02";
 		
@@ -23,6 +25,13 @@ public class amqpUtil {
 		// test js 
 		public static final String BACKEND_TO_JS_QUEUE = "BACKEND_TO_JS_QUEUE";
 	
+	}
+	
+	public static void sendReqToQueue(String aChannelName, String aMsg){
+		switch(aChannelName){
+		case "chat":
+			Util.getTemplate().convertSendAndReceive(QUEUE_NAME.BACKEND_TO_WEBCHAT_QUEUE, aMsg);
+		}
 	}
 	
 	

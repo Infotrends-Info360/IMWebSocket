@@ -1,4 +1,4 @@
-package websocket.pools;
+package BackendService.pools;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -17,14 +17,15 @@ import java.util.concurrent.LinkedBlockingQueue;
 import org.java_websocket.WebSocket;
 import org.java_websocket.exceptions.WebsocketNotConnectedException;
 
+import BackendService.bean.UpdateStatusBean;
+import BackendService.bean.UserInfo;
+import BackendService.function.CommonFunction;
+import BackendService.thread.findAgent.FindAgentCallable;
+
 import com.google.gson.Gson;
 
 import util.StatusEnum;
 import util.Util;
-import websocket.bean.UpdateStatusBean;
-import websocket.bean.UserInfo;
-import websocket.function.CommonFunction;
-import websocket.thread.findAgent.FindAgentCallable;
 
 //此類別給AgentFunction.java共同使用
 //此類別給ClientFunction.java共同使用
@@ -44,8 +45,10 @@ public class WebSocketUserPool {
 	 * 								WebSocketTypePool.TYPEconnections.get("Agent");
 	 */
 	private static final Map<WebSocket, UserInfo> userallconnections = new HashMap<WebSocket,UserInfo>();
+	private static final Map<String, UserInfo> userallconnections_modified = new HashMap<>();
 	// 由userallconnections整理出來的map(尚未開始使用)
 	private static final Map<String, Map<WebSocket, UserInfo>> TYPEconnections = new HashMap<>();
+	private static final Map<String, Map<String, UserInfo>> TYPEconnections_modified = new HashMap<>();
 	
 	private static final BlockingQueue<String> readyAgentQueue = new LinkedBlockingQueue<>(); // 用在ClientFunction::getOnlineLongestUserinTYPE()
 	private static final BlockingQueue<FindAgentCallable> ClientFindAgentQueue = new LinkedBlockingQueue<>(); // (進行中)用在ClientFunction::getOnlineLongestUserinTYPE()
@@ -118,17 +121,18 @@ public class WebSocketUserPool {
 	}
 
 	/** * Add User to WebSocket Pool* @param inbound */ /* Done */
-	public static void addUser(String username,String userid, WebSocket conn, String ACType, int aMaxCount) {
+	public static void addUser(String username,String userid, String ACType, int aMaxCount) {
 		UserInfo userinfo = new UserInfo();
 		userinfo.setUserid(userid);
 		userinfo.setUsername(username);
 		userinfo.setACType(ACType);
 		userinfo.setStartdate(new java.util.Date());
 		userinfo.setMaxCount(aMaxCount);
-		userallconnections.put(conn, userinfo); // 每一個client的connection配一個
+//		userallconnections.put(conn, userinfo); // 每一個client的connection配一個
+		userallconnections_modified.put(userid, userinfo);
 		
 		// 新增進type
-		addUserinTYPE(conn, ACType);
+		addUserinTYPE(userinfo, ACType);
 		
 	}
 	
@@ -352,18 +356,16 @@ public class WebSocketUserPool {
 	}
 	
 	
-	private static void addUserinTYPE(WebSocket aConn, String aType){
+	private static void addUserinTYPE(UserInfo aUserInfo, String aType){
 		Util.getConsoleLogger().debug("addUserinTYPE() called");
-		Map<WebSocket, UserInfo> TYPEMap = WebSocketUserPool.TYPEconnections.get(aType);
+		Map<String, UserInfo> TYPEMap = TYPEconnections_modified.get(aType);
 		if (TYPEMap == null || TYPEMap.isEmpty()){
 			TYPEMap = new HashMap<>();
 		}
 		
-		// 拿取對應的userInfo,並對其資料做更新
-		UserInfo userInfo = WebSocketUserPool.getUserallconnections().get(aConn);
 		// 放入Map
-		TYPEMap.put(aConn, userInfo);
-		WebSocketUserPool.TYPEconnections.put(aType, TYPEMap);		
+		TYPEMap.put(aUserInfo.getUserid(), aUserInfo);
+		TYPEconnections_modified.put(aType, TYPEMap);
 	}
 	
 	/** * Remove User from Agent or Client* @param inbound */

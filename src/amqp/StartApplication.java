@@ -8,7 +8,7 @@ import org.springframework.boot.web.support.SpringBootServletInitializer;
 import org.springframework.context.annotation.ComponentScan;
 
 @SpringBootApplication
-@ComponentScan({"amqp","util"})
+@ComponentScan({"amqp","util","BackendService"})
 public class StartApplication extends SpringBootServletInitializer{
 	
     @Override
