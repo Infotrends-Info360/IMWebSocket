@@ -14,9 +14,6 @@
 <link href="boostrap/bootstrap-theme.css" rel="stylesheet" />
 <script src="boostrap/bootstrap.js"></script>
 
-<!-- for password md5 converter -->
-<script type="text/javascript" src="js/md5.min.js"></script>
-
 <script type="text/javascript" src="js/swfobject.js"></script> <!-- for IE8 websocket compatibility -->
 <script type="text/javascript" src="js/web_socket.js"></script> <!-- for IE8 websocket compatibility -->
 <script type="text/javascript" src="js/websocket-util.js"></script>
