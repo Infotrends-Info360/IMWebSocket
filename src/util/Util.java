@@ -13,8 +13,15 @@ import java.util.Map;
 
 
 
+
+
+
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+import org.springframework.amqp.core.AmqpTemplate;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.ComponentScan;
+import org.springframework.stereotype.Component;
 
 import com.google.gson.JsonNull;
 import com.google.gson.JsonObject;
@@ -22,7 +29,24 @@ import com.google.gson.JsonParser;
 
 import filter.SystemListener;
 
+
+@Component
 public class Util {
+	
+	
+	private static AmqpTemplate template;
+	
+	@Autowired
+	public Util(AmqpTemplate template){
+		System.out.println("Util() called");
+		Util.template = template;
+	}	
+	
+	
+	public static AmqpTemplate getTemplate() {
+		return template;
+	}
+
 	public static String getSdfDateFormat(){
 		return Attr.sdfDateFormat;
 	}
@@ -96,6 +120,10 @@ public class Util {
 //		return aID.replaceAll( "[^\\d]", "" ).substring(0,6);
 //	}
 	
+	public static String getWebchat_channel_name(){
+		return Attr.webchat_channel_name;
+	}
+	
 	public static String getQuery(List<AbstractMap.SimpleEntry<String,String>> params) throws UnsupportedEncodingException
 	{
 	    StringBuilder result = new StringBuilder();
@@ -130,7 +158,9 @@ public class Util {
 		private static final Logger consoleLogger = LogManager.getLogger("util.consoleLogger");
 		private static final Logger statusFileLogger = LogManager.getLogger("util.statusFileLogger");
 		private static final Logger pressureTestFileLogger = LogManager.getLogger("util.pressureTestFileLogger");
-
+		
+		private static final String webchat_channel_name = "chat";
+		
 	}
 
 }
