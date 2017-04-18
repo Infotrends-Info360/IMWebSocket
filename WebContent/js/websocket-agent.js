@@ -148,16 +148,7 @@ function Login() {
 		/** 登入 **/
 		var now = new Date();
 		// 向websocket送出登入指令
-		var msg = {
-			type : "login",
-			id: parent.UserID_g,
-			UserName : parent.UserName_g,
-			maxCount: maxRoomCount_g, // 從loginValidate取得
-			ACtype : "Agent",
-			channel : "chat",
-			date : now.getHours() + ":" + now.getMinutes() + ":"
-					+ now.getSeconds()
-		};			
+		var msg = new loginJson(parent.UserID_g, parent.UserName_g, "Agent", maxRoomCount_g);
 		// 發送消息
 		parent.ws_g.send(JSON.stringify(msg));
 	};// end of parent.ws_g.onopen

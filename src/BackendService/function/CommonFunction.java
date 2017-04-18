@@ -19,6 +19,7 @@ import org.json.JSONArray;
 import org.json.JSONObject;
 
 import BackendService.HeartBeat;
+import BackendService.bean.LoginBean;
 import BackendService.bean.RoomInfo;
 import BackendService.bean.SystemInfo;
 import BackendService.bean.UpdateStatusBean;
@@ -37,6 +38,7 @@ import com.google.gson.JsonObject;
 
 import util.StatusEnum;
 import util.Util;
+
 
 
 
@@ -104,17 +106,19 @@ public class CommonFunction {
 		Util.getFileLogger().info("userjoin() called");
 		Util.getConsoleLogger().debug("userjoin() - user: " + aMsg);
 		
-		JsonObject jsonIn = Util.getGJsonObject(aMsg);
-		String username = Util.getGString(jsonIn, "UserName");
-		String maxCount = Util.getGString(jsonIn, "maxCount");
-		String ACtype = Util.getGString(jsonIn, "ACtype");
-		String channel = Util.getGString(jsonIn, "channel");
+		Gson gson = new Gson();
+		LoginBean loginBean = gson.fromJson(aMsg, LoginBean.class);
+//		JsonObject jsonIn = Util.getGJsonObject(aMsg);
+		String username = loginBean.getUserName();
+		String maxCount = loginBean.getMaxCount();
+		String ACtype = loginBean.getACtype();
+		String channel = loginBean.getChannel();
 		String userId = null;
 		
 		JSONObject sendjson = new JSONObject();
 		
 		if(ACtype.equals("Agent")){
-			userId = jsonIn.get("id").toString(); //20170222 Lin
+			userId = loginBean.getUserID(); //20170222 Lin
 		}else if(ACtype.equals("Client")){
 			userId = java.util.UUID.randomUUID().toString();
 		}
@@ -182,7 +186,7 @@ public class CommonFunction {
 //		}
 		
 		/** 根據channel寄送到不同的queue中 **/
-		sendjson.put("endpointID", userId);
+		sendjson.put("UserID", userId);
 		amqpUtil.sendReqToQueue(channel, sendjson.toString());
 //		WebSocketUserPool.sendMessageToUserWithTryCatch(aConn, sendjson.toString());
 //		WebSocketUserPool.sendMessage("online people: "

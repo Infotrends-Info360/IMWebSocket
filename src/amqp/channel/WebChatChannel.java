@@ -80,9 +80,10 @@ public class WebChatChannel extends WebSocketServer {
 	public void onMessage(final WebSocket conn,
 			final String message) {
 		Util.getConsoleLogger().debug("onMessage() - message: " + message);
+		Util.getConsoleLogger().debug("onMessage() - Thread.currentThread().getName(): " +Thread.currentThread().getName());
 		// 1. 接收從JS來的reqeust
 		JsonObject jsonIn = Util.getGJsonObject(message);
-		String userID = Util.getGString(jsonIn, "id");
+		String userID = Util.getGString(jsonIn, "UserID");
 		Util.getConsoleLogger().debug("onMessage() - userID: " + userID);
 		// 1.5 保留userid - conn map (其他channel ID給什麼之後再想)
 		connANDuserIDBiMap.put(userID, conn);
@@ -99,14 +100,15 @@ public class WebChatChannel extends WebSocketServer {
     public void process_BACKEND_TO_WEBCHAT_QUEUE(String aMsg) throws UnsupportedEncodingException {
     	// ��byte - string �ഫ���D
     	Util.getConsoleLogger().debug("process_BACKEND_TO_WEBCHAT_QUEUE() called - [x] Received -  aMsg: " + aMsg);
+    	Util.getConsoleLogger().debug("Thread.currentThread().getName(): " +Thread.currentThread().getName());
     	
     	// 3. 拿從RabbitMQ queue回來的資料
 		JsonObject jsonIn = Util.getGJsonObject(aMsg);
 		if (jsonIn.get("test") != null && jsonIn.get("test").getAsBoolean()){
 			return;
 		}
-		String endpointID = Util.getGString(jsonIn, "endpointID");	
-		WebSocket conn = connANDuserIDBiMap.get(endpointID);
+		String UserID = Util.getGString(jsonIn, "UserID");	
+		WebSocket conn = connANDuserIDBiMap.get(UserID);
 		// 4. 送回給當初寄過來的Client(使用WebSocket.conn.send(...))
 		Util.getConsoleLogger().debug("jsonIn.toString(): " + jsonIn.toString());
 		conn.send(jsonIn.toString());
