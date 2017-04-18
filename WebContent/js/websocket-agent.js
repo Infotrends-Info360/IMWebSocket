@@ -72,7 +72,7 @@ function loginValidate() {
 	var url = systemParam_g.RESTful.protocol + "//" + systemParam_g.RESTful.hostname + ":" + systemParam_g.RESTful.port + systemParam_g.RESTful.project;
 //	alert("url: " + url);
 	var account = document.getElementById('Account').value;
-	var password = document.getElementById('Password').value;
+	var password = md5(document.getElementById('Password').value);
 	$
 			.ajax({
 				url : url + "/RESTful/Login",
